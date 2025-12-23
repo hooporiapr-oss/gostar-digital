@@ -1,123 +1,53 @@
-require('dotenv').config();
 const express = require('express');
-const session = require('express-session');
-const bcrypt = require('bcryptjs');
 const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
+// Credentials from environment variables
+const USERNAME = process.env.AUTH_USER || 'admin';
+const PASSWORD = process.env.AUTH_PASS || 'GoStar2025';
 
-// Session configuration
-app.use(session({
-    secret: process.env.SESSION_SECRET || 'gostar-digital-secret-key-change-in-production',
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-        secure: process.env.NODE_ENV === 'production',
-        httpOnly: true,
-        maxAge: 24 * 60 * 60 * 1000 // 24 hours
+// Basic Auth middleware
+function basicAuth(req, res, next) {
+    const auth = req.headers.authorization;
+    
+    if (!auth || !auth.startsWith('Basic ')) {
+        res.setHeader('WWW-Authenticate', 'Basic realm="GoStar Digital"');
+        return res.status(401).send('Authentication required');
     }
-}));
-
-// In-memory users (replace with database in production)
-// Default credentials: admin / gostar2025
-const users = [
-    {
-        id: 1,
-        username: 'admin',
-        password: bcrypt.hashSync(process.env.ADMIN_PASSWORD || 'gostar2025', 10),
-        role: 'admin'
-    },
-    {
-        id: 2,
-        username: 'demo',
-        password: bcrypt.hashSync(process.env.DEMO_PASSWORD || 'demo123', 10),
-        role: 'user'
-    }
-];
-
-// Authentication middleware
-const requireAuth = (req, res, next) => {
-    if (req.session && req.session.userId) {
+    
+    const credentials = Buffer.from(auth.split(' ')[1], 'base64').toString();
+    const [user, pass] = credentials.split(':');
+    
+    if (user === USERNAME && pass === PASSWORD) {
         return next();
     }
-    res.redirect('/login');
-};
+    
+    res.setHeader('WWW-Authenticate', 'Basic realm="GoStar Digital"');
+    res.status(401).send('Invalid credentials');
+}
+
+// Health check (unprotected for Render)
+app.get('/health', (req, res) => {
+    res.json({ status: 'healthy' });
+});
+
+// Protect all other routes
+app.use(basicAuth);
+
+// Serve static files
+app.use(express.static(__dirname));
 
 // Routes
 app.get('/', (req, res) => {
-    if (req.session && req.session.userId) {
-        res.redirect('/dashboard');
-    } else {
-        res.redirect('/login');
-    }
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-app.get('/login', (req, res) => {
-    if (req.session && req.session.userId) {
-        return res.redirect('/dashboard');
-    }
-    res.sendFile(path.join(__dirname, 'login.html'));
-});
-
-app.post('/login', async (req, res) => {
-    const { username, password } = req.body;
-    
-    const user = users.find(u => u.username === username);
-    
-    if (user && bcrypt.compareSync(password, user.password)) {
-        req.session.userId = user.id;
-        req.session.username = user.username;
-        req.session.role = user.role;
-        
-        // Support both JSON and form submissions
-        if (req.headers['content-type'] && req.headers['content-type'].includes('application/json')) {
-            res.json({ success: true, redirect: '/dashboard' });
-        } else {
-            res.redirect('/dashboard');
-        }
-    } else {
-        if (req.headers['content-type'] && req.headers['content-type'].includes('application/json')) {
-            res.status(401).json({ success: false, message: 'Invalid credentials' });
-        } else {
-            res.redirect('/login?error=1');
-        }
-    }
-});
-
-app.get('/logout', (req, res) => {
-    req.session.destroy((err) => {
-        res.redirect('/login');
-    });
-});
-
-app.get('/dashboard', requireAuth, (req, res) => {
-    res.sendFile(path.join(__dirname, 'dashboard.html'));
-});
-
-app.get('/game/sequence-memory', requireAuth, (req, res) => {
+app.get('/sequence-memory', (req, res) => {
     res.sendFile(path.join(__dirname, 'sequence-memory.html'));
 });
 
-// API endpoint to get current user
-app.get('/api/user', requireAuth, (req, res) => {
-    res.json({
-        username: req.session.username,
-        role: req.session.role
-    });
-});
-
-// Health check for deployment
-app.get('/health', (req, res) => {
-    res.json({ status: 'healthy', timestamp: new Date().toISOString() });
-});
-
 app.listen(PORT, () => {
-    console.log(`🚀 GoStar Digital running on port ${PORT}`);
-    console.log(`📍 http://localhost:${PORT}`);
+    console.log(`GoStar Digital running on port ${PORT}`);
 });
