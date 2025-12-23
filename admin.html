@@ -15,20 +15,22 @@
         .header {
             background: rgba(255,255,255,0.03);
             border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding: 16px 32px;
+            padding: 12px 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
         }
-        .header-left { display: flex; align-items: center; gap: 16px; }
-        .logo { font-size: 20px; font-weight: 700; }
+        .header-left { display: flex; align-items: center; gap: 12px; }
+        .logo { font-size: 18px; font-weight: 700; }
         .logo span { color: #ffd700; }
         .badge {
             background: #ffd700;
             color: #0a0a1a;
-            padding: 4px 12px;
+            padding: 4px 10px;
             border-radius: 20px;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 700;
         }
         .lang-toggle {
@@ -50,22 +52,22 @@
             background: #ffd700;
             color: #0a0a1a;
         }
-        .main { max-width: 1000px; margin: 0 auto; padding: 32px; }
-        h2 { margin-bottom: 24px; font-weight: 400; }
+        .main { max-width: 1000px; margin: 0 auto; padding: 16px; }
+        h2 { margin-bottom: 20px; font-weight: 400; font-size: 1.3rem; }
         h2 strong { font-weight: 700; }
         
         .card {
             background: rgba(255,255,255,0.03);
             border: 1px solid rgba(255,255,255,0.1);
             border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 24px;
+            padding: 16px;
+            margin-bottom: 20px;
         }
-        .card h3 { margin-bottom: 16px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.5); }
+        .card h3 { margin-bottom: 16px; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.5); }
         
-        .form-row { display: flex; gap: 16px; margin-bottom: 16px; flex-wrap: wrap; }
-        .form-group { flex: 1; min-width: 150px; }
-        .form-group label { display: block; font-size: 12px; color: rgba(255,255,255,0.6); margin-bottom: 6px; }
+        .form-row { display: flex; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+        .form-group { flex: 1; min-width: 140px; }
+        .form-group label { display: block; font-size: 11px; color: rgba(255,255,255,0.6); margin-bottom: 6px; }
         .form-group input {
             width: 100%;
             padding: 12px;
@@ -78,7 +80,7 @@
         .form-group input:focus { outline: none; border-color: #ffd700; }
         
         .btn {
-            padding: 12px 24px;
+            padding: 12px 20px;
             background: linear-gradient(135deg, #ffd700, #ffaa00);
             border: none;
             border-radius: 8px;
@@ -86,23 +88,99 @@
             font-weight: 700;
             cursor: pointer;
             font-size: 14px;
+            width: 100%;
         }
         .btn:hover { opacity: 0.9; }
-        .btn.small { padding: 6px 12px; font-size: 12px; }
+        .btn.small { padding: 6px 10px; font-size: 11px; width: auto; }
         .btn.danger { background: #ff4444; color: #fff; }
         .btn.secondary { background: rgba(255,255,255,0.1); color: #fff; }
+        .btn.copy { background: #4cd964; color: #0a0a1a; }
         
-        table { width: 100%; border-collapse: collapse; }
-        th, td { text-align: left; padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        th { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.5); }
-        td { font-size: 14px; }
-        .key { font-family: monospace; background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 4px; }
-        .status { padding: 4px 8px; border-radius: 4px; font-size: 12px; }
-        .status.active { background: rgba(76,217,100,0.2); color: #4cd964; }
-        .status.expired { background: rgba(255,68,68,0.2); color: #ff4444; }
-        .actions { display: flex; gap: 8px; }
+        /* Mobile table replacement */
+        .license-list { display: flex; flex-direction: column; gap: 12px; }
         
-        .empty { text-align: center; color: rgba(255,255,255,0.5); padding: 40px; }
+        .license-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 16px;
+        }
+        .license-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .license-facility {
+            font-size: 16px;
+            font-weight: 700;
+            color: #fff;
+        }
+        .license-status { padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+        .license-status.active { background: rgba(76,217,100,0.2); color: #4cd964; }
+        .license-status.expired { background: rgba(255,68,68,0.2); color: #ff4444; }
+        
+        .license-key-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+        .key { 
+            font-family: monospace; 
+            background: rgba(255,215,0,0.15); 
+            color: #ffd700;
+            padding: 8px 12px; 
+            border-radius: 6px; 
+            font-size: 14px;
+            letter-spacing: 1px;
+            flex-shrink: 0;
+        }
+        .copy-btn {
+            padding: 8px 12px;
+            background: rgba(76,217,100,0.2);
+            border: 1px solid #4cd964;
+            color: #4cd964;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .copy-btn:hover { background: rgba(76,217,100,0.3); }
+        .copy-btn.copied { background: #4cd964; color: #0a0a1a; }
+        
+        .license-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .license-detail label {
+            font-size: 10px;
+            color: rgba(255,255,255,0.5);
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 2px;
+        }
+        .license-detail span {
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .license-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .license-actions .btn { flex: 1; min-width: 80px; }
+        
+        .empty { text-align: center; color: rgba(255,255,255,0.5); padding: 40px 20px; }
         
         .modal {
             display: none;
@@ -112,18 +190,50 @@
             align-items: center;
             justify-content: center;
             z-index: 100;
+            padding: 16px;
         }
         .modal.show { display: flex; }
         .modal-content {
             background: #1a1a2e;
             border: 1px solid rgba(255,255,255,0.1);
             border-radius: 16px;
-            padding: 32px;
+            padding: 24px;
             width: 100%;
             max-width: 400px;
         }
         .modal-content h3 { margin-bottom: 20px; }
         .modal-actions { display: flex; gap: 12px; margin-top: 20px; }
+        .modal-actions .btn { flex: 1; }
+        
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #4cd964;
+            color: #0a0a1a;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            z-index: 200;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .toast.show { opacity: 1; }
+        
+        @media (max-width: 480px) {
+            .header { padding: 10px 12px; }
+            .logo { font-size: 16px; }
+            .main { padding: 12px; }
+            h2 { font-size: 1.1rem; }
+            .card { padding: 14px; }
+            .form-group { min-width: 100%; }
+            .license-details { grid-template-columns: 1fr 1fr; gap: 8px; }
+            .license-detail span { font-size: 13px; }
+            .key { font-size: 12px; padding: 6px 10px; }
+        }
     </style>
 </head>
 <body>
@@ -147,11 +257,13 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label data-en="Facility Name" data-es="Nombre de Instalación">Facility Name</label>
-                        <input type="text" id="facilityName" required data-placeholder-en="e.g., Sunrise Care Center" data-placeholder-es="ej., Centro de Cuidado Aurora" placeholder="e.g., Sunrise Care Center">
+                        <input type="text" id="facilityName" required placeholder="Centro de Cuidado">
                     </div>
+                </div>
+                <div class="form-row">
                     <div class="form-group">
                         <label data-en="User Pool" data-es="Cantidad de Usuarios">User Pool</label>
-                        <input type="number" id="userPool" required data-placeholder-en="e.g., 50" data-placeholder-es="ej., 50" placeholder="e.g., 50" min="1">
+                        <input type="number" id="userPool" required placeholder="50" min="1">
                     </div>
                     <div class="form-group">
                         <label data-en="Expiration Date" data-es="Fecha de Expiración">Expiration Date</label>
@@ -164,7 +276,7 @@
         
         <div class="card">
             <h3 data-en="Active Licenses" data-es="Licencias Activas">Active Licenses</h3>
-            <div id="licenseList"></div>
+            <div id="licenseList" class="license-list"></div>
         </div>
     </main>
     
@@ -186,144 +298,171 @@
                     <input type="date" id="editExpirationDate" required>
                 </div>
                 <div class="modal-actions">
-                    <button type="submit" class="btn" data-en="Save Changes" data-es="Guardar Cambios">Save Changes</button>
+                    <button type="submit" class="btn" data-en="Save" data-es="Guardar">Save</button>
                     <button type="button" class="btn secondary" onclick="closeModal()" data-en="Cancel" data-es="Cancelar">Cancel</button>
                 </div>
             </form>
         </div>
     </div>
+    
+    <div class="toast" id="toast"></div>
 
     <script>
-        const T = {
+        var T = {
             en: {
-                facility: 'Facility',
-                licenseKey: 'License Key',
                 pool: 'Pool',
                 expires: 'Expires',
                 status: 'Status',
-                actions: 'Actions',
-                active: 'active',
-                expired: 'expired',
+                active: 'Active',
+                expired: 'Expired',
                 edit: 'Edit',
                 delete: 'Delete',
+                copy: 'Copy',
+                copied: 'Copied!',
                 noLicenses: 'No licenses created yet',
-                confirmDelete: 'Delete this license? All associated codes will also be deleted.'
+                confirmDelete: 'Delete this license? All associated codes will also be deleted.',
+                used: 'used'
             },
             es: {
-                facility: 'Instalación',
-                licenseKey: 'Clave de Licencia',
                 pool: 'Usuarios',
                 expires: 'Expira',
                 status: 'Estado',
-                actions: 'Acciones',
-                active: 'activa',
-                expired: 'expirada',
+                active: 'Activa',
+                expired: 'Expirada',
                 edit: 'Editar',
                 delete: 'Eliminar',
+                copy: 'Copiar',
+                copied: '¡Copiado!',
                 noLicenses: 'No hay licencias creadas',
-                confirmDelete: '¿Eliminar esta licencia? Todos los códigos asociados también serán eliminados.'
+                confirmDelete: '¿Eliminar esta licencia? Todos los códigos asociados también serán eliminados.',
+                used: 'usados'
             }
         };
         
-        let currentLang = localStorage.getItem('lang') || 'en';
+        var currentLang = localStorage.getItem('lang') || 'en';
         
         function setLang(lang) {
             currentLang = lang;
             localStorage.setItem('lang', lang);
-            document.querySelectorAll('[data-en]').forEach(el => {
-                el.textContent = el.getAttribute('data-' + lang);
-            });
-            document.querySelectorAll('[data-placeholder-en]').forEach(el => {
-                el.placeholder = el.getAttribute('data-placeholder-' + lang);
-            });
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.lang === lang);
-            });
+            var els = document.querySelectorAll('[data-en]');
+            for (var i = 0; i < els.length; i++) {
+                els[i].textContent = els[i].getAttribute('data-' + lang);
+            }
+            var btns = document.querySelectorAll('.lang-btn');
+            for (var j = 0; j < btns.length; j++) {
+                if (btns[j].dataset.lang === lang) {
+                    btns[j].classList.add('active');
+                } else {
+                    btns[j].classList.remove('active');
+                }
+            }
             loadLicenses();
         }
         
-        document.querySelectorAll('.lang-btn').forEach(btn => {
-            btn.addEventListener('click', () => setLang(btn.dataset.lang));
-        });
+        var langBtns = document.querySelectorAll('.lang-btn');
+        for (var k = 0; k < langBtns.length; k++) {
+            langBtns[k].addEventListener('click', function() { setLang(this.dataset.lang); });
+        }
         
         // Set default expiration to 1 year from now
-        const defaultDate = new Date();
+        var defaultDate = new Date();
         defaultDate.setFullYear(defaultDate.getFullYear() + 1);
         document.getElementById('expirationDate').value = defaultDate.toISOString().split('T')[0];
         
-        async function loadLicenses() {
-            const t = T[currentLang];
-            const res = await fetch('/api/admin/licenses');
-            const licenses = await res.json();
-            
-            const container = document.getElementById('licenseList');
-            
-            if (licenses.length === 0) {
-                container.innerHTML = `<p class="empty">${t.noLicenses}</p>`;
-                return;
-            }
-            
-            const now = new Date();
-            
-            container.innerHTML = `
-                <table>
-                    <thead>
-                        <tr>
-                            <th>${t.facility}</th>
-                            <th>${t.licenseKey}</th>
-                            <th>${t.pool}</th>
-                            <th>${t.expires}</th>
-                            <th>${t.status}</th>
-                            <th>${t.actions}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${licenses.map(lic => {
-                            const expired = new Date(lic.expirationDate) < now;
-                            const status = expired ? 'expired' : 'active';
-                            const statusText = expired ? t.expired : t.active;
-                            return `
-                                <tr>
-                                    <td>${lic.facilityName}</td>
-                                    <td><span class="key">${lic.key}</span></td>
-                                    <td>${lic.usedPool || 0} / ${lic.userPool}</td>
-                                    <td>${new Date(lic.expirationDate).toLocaleDateString()}</td>
-                                    <td><span class="status ${status}">${statusText}</span></td>
-                                    <td class="actions">
-                                        <button class="btn small secondary" onclick="editLicense('${lic.key}', '${lic.facilityName}', ${lic.userPool}, '${lic.expirationDate}')">${t.edit}</button>
-                                        <button class="btn small danger" onclick="deleteLicense('${lic.key}')">${t.delete}</button>
-                                    </td>
-                                </tr>
-                            `;
-                        }).join('')}
-                    </tbody>
-                </table>
-            `;
+        function showToast(message) {
+            var toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(function() {
+                toast.classList.remove('show');
+            }, 2000);
         }
         
-        document.getElementById('createForm').addEventListener('submit', async (e) => {
+        function copyKey(key, btn) {
+            navigator.clipboard.writeText(key).then(function() {
+                var t = T[currentLang];
+                btn.innerHTML = '✓ ' + t.copied;
+                btn.classList.add('copied');
+                showToast(t.copied + ' ' + key);
+                setTimeout(function() {
+                    btn.innerHTML = '📋 ' + t.copy;
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+        
+        function loadLicenses() {
+            var t = T[currentLang];
+            fetch('/api/admin/licenses')
+                .then(function(res) { return res.json(); })
+                .then(function(licenses) {
+                    var container = document.getElementById('licenseList');
+                    
+                    if (licenses.length === 0) {
+                        container.innerHTML = '<p class="empty">' + t.noLicenses + '</p>';
+                        return;
+                    }
+                    
+                    var now = new Date();
+                    var html = '';
+                    
+                    for (var i = 0; i < licenses.length; i++) {
+                        var lic = licenses[i];
+                        var expired = new Date(lic.expirationDate) < now;
+                        var status = expired ? 'expired' : 'active';
+                        var statusText = expired ? t.expired : t.active;
+                        var expDate = new Date(lic.expirationDate).toLocaleDateString();
+                        
+                        html += '<div class="license-card">';
+                        html += '<div class="license-header">';
+                        html += '<div class="license-facility">' + lic.facilityName + '</div>';
+                        html += '<span class="license-status ' + status + '">' + statusText + '</span>';
+                        html += '</div>';
+                        
+                        html += '<div class="license-key-row">';
+                        html += '<span class="key">' + lic.key + '</span>';
+                        html += '<button class="copy-btn" onclick="copyKey(\'' + lic.key + '\', this)">📋 ' + t.copy + '</button>';
+                        html += '</div>';
+                        
+                        html += '<div class="license-details">';
+                        html += '<div class="license-detail"><label>' + t.pool + '</label><span>' + (lic.usedPool || 0) + ' / ' + lic.userPool + ' ' + t.used + '</span></div>';
+                        html += '<div class="license-detail"><label>' + t.expires + '</label><span>' + expDate + '</span></div>';
+                        html += '</div>';
+                        
+                        html += '<div class="license-actions">';
+                        html += '<button class="btn small secondary" onclick="editLicense(\'' + lic.key + '\', \'' + lic.facilityName + '\', ' + lic.userPool + ', \'' + lic.expirationDate + '\')">' + t.edit + '</button>';
+                        html += '<button class="btn small danger" onclick="deleteLicense(\'' + lic.key + '\')">' + t.delete + '</button>';
+                        html += '</div>';
+                        html += '</div>';
+                    }
+                    
+                    container.innerHTML = html;
+                });
+        }
+        
+        document.getElementById('createForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const data = {
+            var data = {
                 facilityName: document.getElementById('facilityName').value,
                 userPool: document.getElementById('userPool').value,
                 expirationDate: document.getElementById('expirationDate').value
             };
             
-            const res = await fetch('/api/admin/licenses', {
+            fetch('/api/admin/licenses', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
+            })
+            .then(function(res) { return res.json(); })
+            .then(function(result) {
+                if (result.key) {
+                    document.getElementById('createForm').reset();
+                    document.getElementById('expirationDate').value = defaultDate.toISOString().split('T')[0];
+                    loadLicenses();
+                    showToast(T[currentLang].copied.replace('!', '') + ': ' + result.key);
+                }
             });
-            
-            if (res.ok) {
-                document.getElementById('createForm').reset();
-                document.getElementById('expirationDate').value = defaultDate.toISOString().split('T')[0];
-                loadLicenses();
-            } else {
-                const err = await res.json();
-                alert(err.error || 'Failed to create license');
-            }
         });
         
         function editLicense(key, name, pool, date) {
@@ -338,33 +477,34 @@
             document.getElementById('editModal').classList.remove('show');
         }
         
-        document.getElementById('editForm').addEventListener('submit', async (e) => {
+        document.getElementById('editForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const key = document.getElementById('editKey').value;
-            const data = {
+            var key = document.getElementById('editKey').value;
+            var data = {
                 facilityName: document.getElementById('editFacilityName').value,
                 userPool: document.getElementById('editUserPool').value,
                 expirationDate: document.getElementById('editExpirationDate').value
             };
             
-            const res = await fetch(`/api/admin/licenses/${key}`, {
+            fetch('/api/admin/licenses/' + key, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
+            })
+            .then(function(res) {
+                if (res.ok) {
+                    closeModal();
+                    loadLicenses();
+                }
             });
-            
-            if (res.ok) {
-                closeModal();
-                loadLicenses();
-            }
         });
         
-        async function deleteLicense(key) {
+        function deleteLicense(key) {
             if (!confirm(T[currentLang].confirmDelete)) return;
             
-            await fetch(`/api/admin/licenses/${key}`, { method: 'DELETE' });
-            loadLicenses();
+            fetch('/api/admin/licenses/' + key, { method: 'DELETE' })
+                .then(function() { loadLicenses(); });
         }
         
         setLang(currentLang);
