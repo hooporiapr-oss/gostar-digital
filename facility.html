@@ -14,6 +14,7 @@
             justify-content: center;
             background: linear-gradient(135deg, #0a0a1a, #1a1a3a);
             color: #fff;
+            padding: 20px;
         }
         .lang-toggle {
             position: fixed;
@@ -50,7 +51,8 @@
         .logo h1 { font-size: 28px; }
         .logo h1 span { color: #ffd700; }
         .logo p { color: rgba(255,255,255,0.5); font-size: 14px; margin-top: 8px; }
-        .form-group { margin-bottom: 20px; text-align: left; }
+        
+        .form-group { margin-bottom: 24px; text-align: left; }
         .form-group label { display: block; font-size: 12px; color: rgba(255,255,255,0.6); margin-bottom: 8px; }
         .form-group input[type="text"] {
             width: 100%;
@@ -65,41 +67,66 @@
             letter-spacing: 2px;
             text-align: center;
         }
-        .form-group input:focus { outline: none; border-color: #ffd700; }
+        .form-group input[type="text"]:focus { outline: none; border-color: #ffd700; }
         
-        /* Checkbox styling */
-        .checkbox-group {
-            margin-bottom: 16px;
+        .acceptance-section {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
             text-align: left;
         }
-        .checkbox-label {
+        
+        .acceptance-title {
+            font-size: 12px;
+            color: rgba(255,255,255,0.5);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        
+        .checkbox-row {
             display: flex;
             align-items: flex-start;
             gap: 12px;
+            margin-bottom: 14px;
             cursor: pointer;
-            font-size: 14px;
-            color: rgba(255,255,255,0.8);
-            line-height: 1.5;
         }
-        .checkbox-label input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            margin-top: 2px;
+        
+        .checkbox-row:last-child {
+            margin-bottom: 0;
+        }
+        
+        .checkbox-row input[type="checkbox"] {
+            width: 22px;
+            height: 22px;
+            margin: 0;
             accent-color: #ffd700;
             cursor: pointer;
             flex-shrink: 0;
         }
-        .checkbox-label a {
+        
+        .checkbox-text {
+            font-size: 14px;
+            color: rgba(255,255,255,0.85);
+            line-height: 1.5;
+        }
+        
+        .checkbox-text a {
             color: #ffd700;
             text-decoration: none;
+            font-weight: 600;
         }
-        .checkbox-label a:hover {
+        
+        .checkbox-text a:hover {
             text-decoration: underline;
         }
         
         .btn {
             width: 100%;
-            padding: 14px;
+            padding: 16px;
             background: linear-gradient(135deg, #ffd700, #ffaa00);
             border: none;
             border-radius: 10px;
@@ -107,15 +134,19 @@
             font-size: 16px;
             font-weight: 700;
             cursor: pointer;
-            margin-top: 10px;
-            transition: opacity 0.3s, transform 0.3s;
+            transition: all 0.3s ease;
         }
-        .btn:hover:not(:disabled) { opacity: 0.9; transform: translateY(-2px); }
+        .btn:hover:not(:disabled) { 
+            opacity: 0.9; 
+            transform: translateY(-2px); 
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+        }
         .btn:disabled {
-            opacity: 0.4;
+            opacity: 0.3;
             cursor: not-allowed;
             transform: none;
         }
+        
         .error {
             background: rgba(255,68,68,0.1);
             border: 1px solid rgba(255,68,68,0.3);
@@ -124,8 +155,10 @@
             border-radius: 8px;
             margin-bottom: 20px;
             display: none;
+            font-size: 14px;
         }
         .error.show { display: block; }
+        
         .back { margin-top: 24px; }
         .back a {
             color: rgba(255,255,255,0.5);
@@ -135,8 +168,10 @@
         .back a:hover { color: #fff; }
         
         @media (max-width: 480px) {
-            .container { padding: 30px 20px; margin: 15px; }
-            .checkbox-label { font-size: 13px; }
+            body { padding: 15px; }
+            .container { padding: 30px 20px; }
+            .checkbox-text { font-size: 13px; }
+            .acceptance-section { padding: 16px; }
         }
     </style>
 </head>
@@ -149,66 +184,107 @@
     <div class="container">
         <div class="logo">
             <h1>Go<span>Star</span> Digital</h1>
-            <p data-en="Facility Portal" data-es="Portal de Instalación">Facility Portal</p>
+            <p id="portalText">Facility Portal</p>
         </div>
         
         <div class="error" id="error"></div>
         
         <form id="loginForm">
             <div class="form-group">
-                <label data-en="LICENSE KEY" data-es="CLAVE DE LICENCIA">LICENSE KEY</label>
+                <label id="licenseLabel">LICENSE KEY</label>
                 <input type="text" id="licenseKey" required placeholder="LIC-XXXXXXXX" maxlength="12">
             </div>
             
-            <div class="checkbox-group">
-                <label class="checkbox-label">
-                    <input type="checkbox" id="acceptPrivacy" required>
-                    <span>
-                        <span data-en="I have read and accept the" data-es="He leído y acepto la">I have read and accept the</span>
-                        <a href="https://gostardigital.com/privacy.html" target="_blank" data-en="Privacy Policy" data-es="Política de Privacidad">Privacy Policy</a>
+            <div class="acceptance-section">
+                <div class="acceptance-title" id="acceptanceTitle">Required Acceptance</div>
+                
+                <label class="checkbox-row">
+                    <input type="checkbox" id="acceptPrivacy">
+                    <span class="checkbox-text">
+                        <span id="privacyText">I have read and accept the</span>
+                        <a href="https://gostardigital.com/privacy.html" target="_blank" id="privacyLink">Privacy Policy</a>
+                    </span>
+                </label>
+                
+                <label class="checkbox-row">
+                    <input type="checkbox" id="acceptTerms">
+                    <span class="checkbox-text">
+                        <span id="termsText">I have read and accept the</span>
+                        <a href="https://gostardigital.com/terms.html" target="_blank" id="termsLink">Terms of Use</a>
                     </span>
                 </label>
             </div>
             
-            <div class="checkbox-group">
-                <label class="checkbox-label">
-                    <input type="checkbox" id="acceptTerms" required>
-                    <span>
-                        <span data-en="I have read and accept the" data-es="He leído y acepto los">I have read and accept the</span>
-                        <a href="https://gostardigital.com/terms.html" target="_blank" data-en="Terms of Use" data-es="Términos de Uso">Terms of Use</a>
-                    </span>
-                </label>
-            </div>
-            
-            <button type="submit" class="btn" id="submitBtn" disabled data-en="Access Dashboard" data-es="Acceder al Panel">Access Dashboard</button>
+            <button type="submit" class="btn" id="submitBtn" disabled>Access Dashboard</button>
         </form>
         
-        <p class="back"><a href="https://gostardigital.com" data-en="← Back to Home" data-es="← Volver al Inicio">← Back to Home</a></p>
+        <p class="back"><a href="https://gostardigital.com" id="backLink">← Back to Home</a></p>
     </div>
     
     <script>
+        var T = {
+            en: {
+                portal: 'Facility Portal',
+                licenseLabel: 'LICENSE KEY',
+                acceptanceTitle: 'Required Acceptance',
+                privacyText: 'I have read and accept the',
+                privacyLink: 'Privacy Policy',
+                termsText: 'I have read and accept the',
+                termsLink: 'Terms of Use',
+                submitBtn: 'Access Dashboard',
+                backLink: '← Back to Home',
+                invalidKey: 'Invalid license key',
+                expiredKey: 'License has expired',
+                connectionError: 'Connection error'
+            },
+            es: {
+                portal: 'Portal de Instalación',
+                licenseLabel: 'CLAVE DE LICENCIA',
+                acceptanceTitle: 'Aceptación Requerida',
+                privacyText: 'He leído y acepto la',
+                privacyLink: 'Política de Privacidad',
+                termsText: 'He leído y acepto los',
+                termsLink: 'Términos de Uso',
+                submitBtn: 'Acceder al Panel',
+                backLink: '← Volver al Inicio',
+                invalidKey: 'Clave de licencia inválida',
+                expiredKey: 'La licencia ha expirado',
+                connectionError: 'Error de conexión'
+            }
+        };
+        
         var currentLang = localStorage.getItem('lang') || 'en';
         
         function setLang(lang) {
             currentLang = lang;
             localStorage.setItem('lang', lang);
-            var els = document.querySelectorAll('[data-en]');
-            for (var i = 0; i < els.length; i++) {
-                els[i].textContent = els[i].getAttribute('data-' + lang);
-            }
+            
+            var t = T[lang];
+            document.getElementById('portalText').textContent = t.portal;
+            document.getElementById('licenseLabel').textContent = t.licenseLabel;
+            document.getElementById('acceptanceTitle').textContent = t.acceptanceTitle;
+            document.getElementById('privacyText').textContent = t.privacyText;
+            document.getElementById('privacyLink').textContent = t.privacyLink;
+            document.getElementById('termsText').textContent = t.termsText;
+            document.getElementById('termsLink').textContent = t.termsLink;
+            document.getElementById('submitBtn').textContent = t.submitBtn;
+            document.getElementById('backLink').textContent = t.backLink;
+            
             var btns = document.querySelectorAll('.lang-btn');
-            for (var j = 0; j < btns.length; j++) {
-                if (btns[j].dataset.lang === lang) {
-                    btns[j].classList.add('active');
+            for (var i = 0; i < btns.length; i++) {
+                if (btns[i].dataset.lang === lang) {
+                    btns[i].classList.add('active');
                 } else {
-                    btns[j].classList.remove('active');
+                    btns[i].classList.remove('active');
                 }
             }
         }
         
         var langBtns = document.querySelectorAll('.lang-btn');
-        for (var k = 0; k < langBtns.length; k++) {
-            langBtns[k].addEventListener('click', function() { setLang(this.dataset.lang); });
+        for (var i = 0; i < langBtns.length; i++) {
+            langBtns[i].addEventListener('click', function() { 
+                setLang(this.dataset.lang); 
+            });
         }
         
         // Checkbox validation
@@ -223,12 +299,15 @@
         privacyCheckbox.addEventListener('change', checkAcceptance);
         termsCheckbox.addEventListener('change', checkAcceptance);
         
+        // Form submission
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
+            
             var error = document.getElementById('error');
             error.classList.remove('show');
             
             var licenseKey = document.getElementById('licenseKey').value.toUpperCase();
+            var t = T[currentLang];
             
             fetch('/api/facility/login', {
                 method: 'POST',
@@ -242,16 +321,21 @@
                     localStorage.setItem('facilityName', data.facilityName);
                     window.location.href = '/facility/dashboard';
                 } else {
-                    error.textContent = currentLang === 'es' ? 'Clave de licencia inválida' : 'Invalid license key';
+                    if (data.error && data.error.includes('expired')) {
+                        error.textContent = t.expiredKey;
+                    } else {
+                        error.textContent = t.invalidKey;
+                    }
                     error.classList.add('show');
                 }
             })
             .catch(function() {
-                error.textContent = currentLang === 'es' ? 'Error de conexión' : 'Connection error';
+                error.textContent = t.connectionError;
                 error.classList.add('show');
             });
         });
         
+        // Initialize
         setLang(currentLang);
     </script>
 </body>
