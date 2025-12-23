@@ -50,24 +50,26 @@
         .logo h1 { font-size: 28px; }
         .logo h1 span { color: #ffd700; }
         .logo p { color: rgba(255,255,255,0.5); font-size: 14px; margin-top: 8px; }
-        
-        .form-group { margin-bottom: 20px; }
+        .step { display: none; }
+        .step.active { display: block; }
+        .form-group { margin-bottom: 20px; text-align: left; }
         .form-group label { display: block; font-size: 12px; color: rgba(255,255,255,0.6); margin-bottom: 8px; }
         .form-group input {
             width: 100%;
-            padding: 16px;
+            padding: 14px;
             background: rgba(255,255,255,0.05);
             border: 1px solid rgba(255,255,255,0.1);
             border-radius: 10px;
             color: #fff;
-            font-size: 20px;
+            font-size: 16px;
+        }
+        .form-group input.code-input {
             font-family: monospace;
             text-transform: uppercase;
             letter-spacing: 3px;
             text-align: center;
         }
         .form-group input:focus { outline: none; border-color: #ffd700; }
-        
         .btn {
             width: 100%;
             padding: 14px;
@@ -78,9 +80,14 @@
             font-size: 16px;
             font-weight: 700;
             cursor: pointer;
+            margin-bottom: 12px;
         }
         .btn:hover { opacity: 0.9; }
-        
+        .btn.secondary {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+        }
+        .btn.secondary:hover { background: rgba(255,255,255,0.15); }
         .error {
             background: rgba(255,68,68,0.1);
             border: 1px solid rgba(255,68,68,0.3);
@@ -91,9 +98,39 @@
             display: none;
         }
         .error.show { display: block; }
-        
         .back { margin-top: 20px; }
-        .back a { color: rgba(255,255,255,0.5); font-size: 14px; }
+        .back a, .back button {
+            color: rgba(255,255,255,0.5);
+            font-size: 14px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .back button:hover, .back a:hover { color: #fff; }
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            color: rgba(255,255,255,0.3);
+            font-size: 12px;
+        }
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255,255,255,0.1);
+        }
+        .divider span { padding: 0 16px; }
+        .info-box {
+            background: rgba(255,215,0,0.1);
+            border: 1px solid rgba(255,215,0,0.3);
+            color: #ffd700;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
@@ -105,90 +142,242 @@
     <div class="container">
         <div class="logo">
             <h1>Go<span>Star</span> Digital</h1>
-            <p data-en="Enter your access code to play" data-es="Ingresa tu código de acceso para jugar">Enter your access code to play</p>
+            <p data-en="Cognitive Training Platform" data-es="Plataforma de Entrenamiento Cognitivo">Cognitive Training Platform</p>
         </div>
         
         <div class="error" id="error"></div>
         
-        <form id="accessForm">
-            <div class="form-group">
-                <label data-en="ACCESS CODE" data-es="CÓDIGO DE ACCESO">ACCESS CODE</label>
-                <input type="text" id="accessCode" required placeholder="ACC-XXXXXX" maxlength="12">
-            </div>
-            <button type="submit" class="btn" data-en="Play Now" data-es="Jugar Ahora">Play Now</button>
-        </form>
+        <!-- Step 1: Enter Access Code -->
+        <div class="step active" id="step1">
+            <p style="margin-bottom: 24px; color: rgba(255,255,255,0.7);" data-en="Enter your access code to continue" data-es="Ingresa tu codigo de acceso para continuar">Enter your access code to continue</p>
+            <form id="codeForm">
+                <div class="form-group">
+                    <label data-en="ACCESS CODE" data-es="CODIGO DE ACCESO">ACCESS CODE</label>
+                    <input type="text" id="accessCode" class="code-input" required placeholder="ACC-XXXXXX" maxlength="12">
+                </div>
+                <button type="submit" class="btn" data-en="Continue" data-es="Continuar">Continue</button>
+            </form>
+            <p class="back"><a href="/" data-en="Back to Home" data-es="Volver al Inicio">Back to Home</a></p>
+        </div>
         
-        <p class="back"><a href="/" data-en="← Back to Home" data-es="← Volver al Inicio">← Back to Home</a></p>
+        <!-- Step 2: Choose Login or Register -->
+        <div class="step" id="step2">
+            <div class="info-box" id="spotsInfo"></div>
+            <button class="btn" id="showLoginBtn" data-en="I have an account - Login" data-es="Tengo cuenta - Iniciar Sesion">I have an account - Login</button>
+            <div class="divider"><span data-en="or" data-es="o">or</span></div>
+            <button class="btn secondary" id="showRegisterBtn" data-en="Create new account" data-es="Crear cuenta nueva">Create new account</button>
+            <p class="back"><button onclick="goToStep(1)" data-en="Change access code" data-es="Cambiar codigo">Change access code</button></p>
+        </div>
+        
+        <!-- Step 3a: Login Form -->
+        <div class="step" id="step3login">
+            <p style="margin-bottom: 24px; color: rgba(255,255,255,0.7);" data-en="Login to your account" data-es="Inicia sesion en tu cuenta">Login to your account</p>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label data-en="USERNAME" data-es="USUARIO">USERNAME</label>
+                    <input type="text" id="loginUsername" required>
+                </div>
+                <div class="form-group">
+                    <label data-en="PASSWORD" data-es="CONTRASENA">PASSWORD</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <button type="submit" class="btn" data-en="Login" data-es="Iniciar Sesion">Login</button>
+            </form>
+            <p class="back"><button onclick="goToStep(2)" data-en="Back" data-es="Volver">Back</button></p>
+        </div>
+        
+        <!-- Step 3b: Register Form -->
+        <div class="step" id="step3register">
+            <p style="margin-bottom: 24px; color: rgba(255,255,255,0.7);" data-en="Create your account" data-es="Crea tu cuenta">Create your account</p>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label data-en="USERNAME" data-es="USUARIO">USERNAME</label>
+                    <input type="text" id="regUsername" required minlength="3">
+                </div>
+                <div class="form-group">
+                    <label data-en="PASSWORD" data-es="CONTRASENA">PASSWORD</label>
+                    <input type="password" id="regPassword" required minlength="4">
+                </div>
+                <div class="form-group">
+                    <label data-en="CONFIRM PASSWORD" data-es="CONFIRMAR CONTRASENA">CONFIRM PASSWORD</label>
+                    <input type="password" id="regPassword2" required minlength="4">
+                </div>
+                <button type="submit" class="btn" data-en="Create Account" data-es="Crear Cuenta">Create Account</button>
+            </form>
+            <p class="back"><button onclick="goToStep(2)" data-en="Back" data-es="Volver">Back</button></p>
+        </div>
     </div>
     
     <script>
-        const errors = {
+        var T = {
             en: {
-                invalid: 'Invalid access code',
+                invalidCode: 'Invalid access code',
                 expired: 'Access expired',
-                limit: 'User limit reached for this code'
+                spotsLeft: '{n} spots remaining',
+                noSpots: 'No spots remaining - login only',
+                usernameTaken: 'Username already taken',
+                limitReached: 'User limit reached',
+                passwordMismatch: 'Passwords do not match',
+                userNotFound: 'User not found',
+                invalidPassword: 'Invalid password',
+                error: 'An error occurred'
             },
             es: {
-                invalid: 'Código de acceso inválido',
+                invalidCode: 'Codigo de acceso invalido',
                 expired: 'Acceso expirado',
-                limit: 'Límite de usuarios alcanzado para este código'
+                spotsLeft: '{n} espacios disponibles',
+                noSpots: 'Sin espacios - solo login',
+                usernameTaken: 'Usuario ya existe',
+                limitReached: 'Limite de usuarios alcanzado',
+                passwordMismatch: 'Las contrasenas no coinciden',
+                userNotFound: 'Usuario no encontrado',
+                invalidPassword: 'Contrasena invalida',
+                error: 'Ocurrio un error'
             }
         };
         
-        let currentLang = localStorage.getItem('lang') || 'en';
+        var currentLang = localStorage.getItem('lang') || 'en';
+        var currentCode = '';
+        var hasSpots = true;
         
         function setLang(lang) {
             currentLang = lang;
             localStorage.setItem('lang', lang);
-            document.querySelectorAll('[data-en]').forEach(el => {
-                el.textContent = el.getAttribute('data-' + lang);
-            });
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.lang === lang);
-            });
-        }
-        
-        document.querySelectorAll('.lang-btn').forEach(btn => {
-            btn.addEventListener('click', () => setLang(btn.dataset.lang));
-        });
-        
-        // Generate or get visitor ID for tracking unique users
-        function getVisitorId() {
-            let id = localStorage.getItem('visitorId');
-            if (!id) {
-                id = 'v_' + Math.random().toString(36).substr(2, 9) + Date.now().toString(36);
-                localStorage.setItem('visitorId', id);
+            var els = document.querySelectorAll('[data-en]');
+            for (var i = 0; i < els.length; i++) {
+                els[i].textContent = els[i].getAttribute('data-' + lang);
             }
-            return id;
+            var btns = document.querySelectorAll('.lang-btn');
+            for (var j = 0; j < btns.length; j++) {
+                if (btns[j].dataset.lang === lang) {
+                    btns[j].classList.add('active');
+                } else {
+                    btns[j].classList.remove('active');
+                }
+            }
         }
         
-        document.getElementById('accessForm').addEventListener('submit', async (e) => {
+        var langBtns = document.querySelectorAll('.lang-btn');
+        for (var k = 0; k < langBtns.length; k++) {
+            langBtns[k].addEventListener('click', function() { setLang(this.dataset.lang); });
+        }
+        
+        function goToStep(step) {
+            var steps = document.querySelectorAll('.step');
+            for (var i = 0; i < steps.length; i++) {
+                steps[i].classList.remove('active');
+            }
+            document.getElementById('error').classList.remove('show');
+            
+            if (step === 1) {
+                document.getElementById('step1').classList.add('active');
+            } else if (step === 2) {
+                document.getElementById('step2').classList.add('active');
+                document.getElementById('showRegisterBtn').style.display = hasSpots ? 'block' : 'none';
+            } else if (step === '3login') {
+                document.getElementById('step3login').classList.add('active');
+            } else if (step === '3register') {
+                document.getElementById('step3register').classList.add('active');
+            }
+        }
+        
+        function showError(msg) {
+            var error = document.getElementById('error');
+            error.textContent = msg;
+            error.classList.add('show');
+        }
+        
+        document.getElementById('codeForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const error = document.getElementById('error');
-            const accessCode = document.getElementById('accessCode').value.toUpperCase();
-            const visitorId = getVisitorId();
+            document.getElementById('error').classList.remove('show');
+            currentCode = document.getElementById('accessCode').value.toUpperCase();
             
-            error.classList.remove('show');
-            
-            const res = await fetch('/api/play/verify', {
+            fetch('/api/play/verify', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ accessCode, visitorId })
-            });
+                body: JSON.stringify({ accessCode: currentCode })
+            })
+            .then(function(res) { return res.json().then(function(data) { return { ok: res.ok, data: data }; }); })
+            .then(function(result) {
+                if (result.ok) {
+                    hasSpots = result.data.hasSpots;
+                    var spotsText = hasSpots ? T[currentLang].spotsLeft.replace('{n}', result.data.spotsLeft) : T[currentLang].noSpots;
+                    document.getElementById('spotsInfo').textContent = spotsText;
+                    localStorage.setItem('accessCode', currentCode);
+                    localStorage.setItem('facilityName', result.data.facilityName);
+                    goToStep(2);
+                } else {
+                    var errKey = result.data.error.includes('expired') ? 'expired' : 'invalidCode';
+                    showError(T[currentLang][errKey]);
+                }
+            })
+            .catch(function() { showError(T[currentLang].error); });
+        });
+        
+        document.getElementById('showLoginBtn').addEventListener('click', function() {
+            goToStep('3login');
+        });
+        
+        document.getElementById('showRegisterBtn').addEventListener('click', function() {
+            goToStep('3register');
+        });
+        
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            document.getElementById('error').classList.remove('show');
             
-            const data = await res.json();
+            var username = document.getElementById('loginUsername').value;
+            var password = document.getElementById('loginPassword').value;
             
-            if (data.success) {
-                localStorage.setItem('accessCode', accessCode);
-                localStorage.setItem('facilityName', data.facilityName);
-                window.location.href = '/sequence-memory.html';
-            } else {
-                let errKey = 'invalid';
-                if (data.error.includes('expired')) errKey = 'expired';
-                if (data.error.includes('limit')) errKey = 'limit';
-                error.textContent = errors[currentLang][errKey];
-                error.classList.add('show');
+            fetch('/api/play/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ accessCode: currentCode, username: username, password: password })
+            })
+            .then(function(res) { return res.json().then(function(data) { return { ok: res.ok, data: data }; }); })
+            .then(function(result) {
+                if (result.ok) {
+                    localStorage.setItem('username', result.data.username);
+                    window.location.href = '/sequence-memory.html';
+                } else {
+                    var errKey = result.data.error.includes('not found') ? 'userNotFound' : 'invalidPassword';
+                    showError(T[currentLang][errKey]);
+                }
+            })
+            .catch(function() { showError(T[currentLang].error); });
+        });
+        
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            document.getElementById('error').classList.remove('show');
+            
+            var username = document.getElementById('regUsername').value;
+            var password = document.getElementById('regPassword').value;
+            var password2 = document.getElementById('regPassword2').value;
+            
+            if (password !== password2) {
+                showError(T[currentLang].passwordMismatch);
+                return;
             }
+            
+            fetch('/api/play/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ accessCode: currentCode, username: username, password: password })
+            })
+            .then(function(res) { return res.json().then(function(data) { return { ok: res.ok, data: data }; }); })
+            .then(function(result) {
+                if (result.ok) {
+                    localStorage.setItem('username', result.data.username);
+                    window.location.href = '/sequence-memory.html';
+                } else {
+                    var errKey = 'error';
+                    if (result.data.error.includes('taken')) errKey = 'usernameTaken';
+                    if (result.data.error.includes('limit')) errKey = 'limitReached';
+                    showError(T[currentLang][errKey]);
+                }
+            })
+            .catch(function() { showError(T[currentLang].error); });
         });
         
         setLang(currentLang);
