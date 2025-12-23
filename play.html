@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Play - GoStar Digital</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0a0a1a, #1a1a3a);
+            color: #fff;
+        }
+        .lang-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        .lang-btn {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            color: rgba(255,255,255,0.6);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .lang-btn.active {
+            background: #ffd700;
+            color: #0a0a1a;
+        }
+        .container {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .logo { margin-bottom: 32px; }
+        .logo h1 { font-size: 28px; }
+        .logo h1 span { color: #ffd700; }
+        .logo p { color: rgba(255,255,255,0.5); font-size: 14px; margin-top: 8px; }
+        
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-size: 12px; color: rgba(255,255,255,0.6); margin-bottom: 8px; }
+        .form-group input {
+            width: 100%;
+            padding: 16px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 20px;
+            font-family: monospace;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-align: center;
+        }
+        .form-group input:focus { outline: none; border-color: #ffd700; }
+        
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            border: none;
+            border-radius: 10px;
+            color: #0a0a1a;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .btn:hover { opacity: 0.9; }
+        
+        .error {
+            background: rgba(255,68,68,0.1);
+            border: 1px solid rgba(255,68,68,0.3);
+            color: #ff6b6b;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        .error.show { display: block; }
+        
+        .back { margin-top: 20px; }
+        .back a { color: rgba(255,255,255,0.5); font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class="lang-toggle">
+        <button class="lang-btn" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="es">ES</button>
+    </div>
+    
+    <div class="container">
+        <div class="logo">
+            <h1>Go<span>Star</span> Digital</h1>
+            <p data-en="Enter your access code to play" data-es="Ingresa tu código de acceso para jugar">Enter your access code to play</p>
+        </div>
+        
+        <div class="error" id="error"></div>
+        
+        <form id="accessForm">
+            <div class="form-group">
+                <label data-en="ACCESS CODE" data-es="CÓDIGO DE ACCESO">ACCESS CODE</label>
+                <input type="text" id="accessCode" required placeholder="ACC-XXXXXX" maxlength="12">
+            </div>
+            <button type="submit" class="btn" data-en="Play Now" data-es="Jugar Ahora">Play Now</button>
+        </form>
+        
+        <p class="back"><a href="/" data-en="← Back to Home" data-es="← Volver al Inicio">← Back to Home</a></p>
+    </div>
+    
+    <script>
+        const errors = {
+            en: {
+                invalid: 'Invalid access code',
+                expired: 'Access expired',
+                limit: 'User limit reached for this code'
+            },
+            es: {
+                invalid: 'Código de acceso inválido',
+                expired: 'Acceso expirado',
+                limit: 'Límite de usuarios alcanzado para este código'
+            }
+        };
+        
+        let currentLang = localStorage.getItem('lang') || 'en';
+        
+        function setLang(lang) {
+            currentLang = lang;
+            localStorage.setItem('lang', lang);
+            document.querySelectorAll('[data-en]').forEach(el => {
+                el.textContent = el.getAttribute('data-' + lang);
+            });
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.lang === lang);
+            });
+        }
+        
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', () => setLang(btn.dataset.lang));
+        });
+        
+        // Generate or get visitor ID for tracking unique users
+        function getVisitorId() {
+            let id = localStorage.getItem('visitorId');
+            if (!id) {
+                id = 'v_' + Math.random().toString(36).substr(2, 9) + Date.now().toString(36);
+                localStorage.setItem('visitorId', id);
+            }
+            return id;
+        }
+        
+        document.getElementById('accessForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const error = document.getElementById('error');
+            const accessCode = document.getElementById('accessCode').value.toUpperCase();
+            const visitorId = getVisitorId();
+            
+            error.classList.remove('show');
+            
+            const res = await fetch('/api/play/verify', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ accessCode, visitorId })
+            });
+            
+            const data = await res.json();
+            
+            if (data.success) {
+                localStorage.setItem('accessCode', accessCode);
+                localStorage.setItem('facilityName', data.facilityName);
+                window.location.href = '/game';
+            } else {
+                let errKey = 'invalid';
+                if (data.error.includes('expired')) errKey = 'expired';
+                if (data.error.includes('limit')) errKey = 'limit';
+                error.textContent = errors[currentLang][errKey];
+                error.classList.add('show');
+            }
+        });
+        
+        setLang(currentLang);
+    </script>
+</body>
+</html>
