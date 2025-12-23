@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facility Login - GoStar Digital</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0a0a1a, #1a1a3a);
+            color: #fff;
+        }
+        .lang-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        .lang-btn {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            color: rgba(255,255,255,0.6);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .lang-btn.active {
+            background: #ffd700;
+            color: #0a0a1a;
+        }
+        .container {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+        }
+        .logo { text-align: center; margin-bottom: 32px; }
+        .logo h1 { font-size: 28px; }
+        .logo h1 span { color: #ffd700; }
+        .logo p { color: rgba(255,255,255,0.5); font-size: 14px; margin-top: 8px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-size: 12px; color: rgba(255,255,255,0.6); margin-bottom: 8px; }
+        .form-group input {
+            width: 100%;
+            padding: 14px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 16px;
+            font-family: monospace;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-align: center;
+        }
+        .form-group input:focus { outline: none; border-color: #ffd700; }
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            border: none;
+            border-radius: 10px;
+            color: #0a0a1a;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .btn:hover { opacity: 0.9; }
+        .error {
+            background: rgba(255,68,68,0.1);
+            border: 1px solid rgba(255,68,68,0.3);
+            color: #ff6b6b;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
+        }
+        .error.show { display: block; }
+        .back { text-align: center; margin-top: 20px; }
+        .back a { color: rgba(255,255,255,0.5); font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class="lang-toggle">
+        <button class="lang-btn" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="es">ES</button>
+    </div>
+    
+    <div class="container">
+        <div class="logo">
+            <h1>Go<span>Star</span> Digital</h1>
+            <p data-en="Facility Dashboard" data-es="Panel de Instalación">Facility Dashboard</p>
+        </div>
+        <div class="error" id="error"></div>
+        <form id="loginForm">
+            <div class="form-group">
+                <label data-en="LICENSE KEY" data-es="CLAVE DE LICENCIA">LICENSE KEY</label>
+                <input type="text" id="licenseKey" required placeholder="LIC-XXXXXXXX">
+            </div>
+            <button type="submit" class="btn" data-en="Access Dashboard" data-es="Acceder al Panel">Access Dashboard</button>
+        </form>
+        <p class="back"><a href="/" data-en="← Back to Home" data-es="← Volver al Inicio">← Back to Home</a></p>
+    </div>
+    
+    <script>
+        const errors = {
+            en: { invalid: 'Invalid license key', expired: 'License expired' },
+            es: { invalid: 'Clave de licencia inválida', expired: 'Licencia expirada' }
+        };
+        
+        let currentLang = localStorage.getItem('lang') || 'en';
+        
+        function setLang(lang) {
+            currentLang = lang;
+            localStorage.setItem('lang', lang);
+            document.querySelectorAll('[data-en]').forEach(el => {
+                el.textContent = el.getAttribute('data-' + lang);
+            });
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.lang === lang);
+            });
+        }
+        
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', () => setLang(btn.dataset.lang));
+        });
+        
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const error = document.getElementById('error');
+            const licenseKey = document.getElementById('licenseKey').value.toUpperCase();
+            
+            error.classList.remove('show');
+            
+            const res = await fetch('/api/facility/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ licenseKey })
+            });
+            
+            const data = await res.json();
+            
+            if (data.success) {
+                localStorage.setItem('licenseKey', licenseKey);
+                window.location.href = '/facility/dashboard';
+            } else {
+                const errKey = data.error.includes('expired') ? 'expired' : 'invalid';
+                error.textContent = errors[currentLang][errKey];
+                error.classList.add('show');
+            }
+        });
+        
+        setLang(currentLang);
+    </script>
+</body>
+</html>
