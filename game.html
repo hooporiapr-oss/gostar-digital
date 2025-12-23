@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Games - GoStar Digital</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            background: #0a0a1a;
+            color: #fff;
+        }
+        .header {
+            background: rgba(255,255,255,0.03);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header-left { display: flex; align-items: center; gap: 16px; }
+        .logo { font-size: 20px; font-weight: 700; }
+        .logo span { color: #ffd700; }
+        .facility { color: rgba(255,255,255,0.6); font-size: 14px; }
+        .header-right { display: flex; align-items: center; gap: 16px; }
+        .lang-toggle {
+            display: flex;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        .lang-btn {
+            padding: 6px 12px;
+            border: none;
+            background: transparent;
+            color: rgba(255,255,255,0.6);
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .lang-btn.active {
+            background: #ffd700;
+            color: #0a0a1a;
+        }
+        .logout { color: #ffd700; text-decoration: none; font-size: 14px; }
+        .main { max-width: 800px; margin: 0 auto; padding: 40px 32px; }
+        h2 { font-weight: 400; margin-bottom: 8px; font-size: 28px; }
+        h2 strong { font-weight: 700; }
+        .subtitle { color: rgba(255,255,255,0.5); margin-bottom: 32px; }
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .game-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 28px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        .game-card:hover {
+            border-color: rgba(255,215,0,0.3);
+            transform: translateY(-2px);
+        }
+        .game-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 16px;
+        }
+        .game-card h3 { font-size: 18px; margin-bottom: 8px; }
+        .game-card p { color: rgba(255,255,255,0.5); font-size: 14px; line-height: 1.5; }
+        .coming-soon {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .coming-soon:hover {
+            transform: none;
+            border-color: rgba(255,255,255,0.1);
+        }
+        .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.1);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 12px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-left">
+            <div class="logo">Go<span>Star</span> Digital</div>
+            <div class="facility" id="facility"></div>
+        </div>
+        <div class="header-right">
+            <div class="lang-toggle">
+                <button class="lang-btn" data-lang="en">EN</button>
+                <button class="lang-btn" data-lang="es">ES</button>
+            </div>
+            <a href="/play" class="logout" onclick="localStorage.removeItem('accessCode')" data-en="Exit" data-es="Salir">Exit</a>
+        </div>
+    </header>
+    <main class="main">
+        <h2><strong data-en="Cognitive" data-es="Juegos de">Cognitive</strong> <span data-en="Training Games" data-es="Entrenamiento Cognitivo">Training Games</span></h2>
+        <p class="subtitle" data-en="Select a game to begin your training session" data-es="Selecciona un juego para comenzar tu sesion">Select a game to begin your training session</p>
+        <div class="games-grid">
+            <a href="/sequence-memory.html" class="game-card">
+                <div class="game-icon">&#129504;</div>
+                <h3 data-en="Sequence Memory" data-es="Memoria de Secuencia">Sequence Memory</h3>
+                <p data-en="Test your working memory by recalling increasingly complex sequences of tiles." data-es="Pon a prueba tu memoria recordando secuencias cada vez mas complejas.">Test your working memory by recalling increasingly complex sequences of tiles.</p>
+            </a>
+            <div class="game-card coming-soon">
+                <div class="game-icon" style="background: linear-gradient(135deg, #11998e, #38ef7d);">&#127919;</div>
+                <h3 data-en="N-Back Challenge" data-es="Desafio N-Back">N-Back Challenge</h3>
+                <p data-en="Enhance executive function and fluid intelligence with this classic cognitive task." data-es="Mejora la funcion ejecutiva con esta tarea cognitiva clasica.">Enhance executive function and fluid intelligence with this classic cognitive task.</p>
+                <span class="badge" data-en="Coming Soon" data-es="Proximamente">Coming Soon</span>
+            </div>
+            <div class="game-card coming-soon">
+                <div class="game-icon" style="background: linear-gradient(135deg, #f093fb, #f5576c);">&#128290;</div>
+                <h3 data-en="Digit Span" data-es="Retencion de Digitos">Digit Span</h3>
+                <p data-en="Challenge your short-term memory capacity by recalling number sequences." data-es="Desafia tu memoria a corto plazo recordando secuencias de numeros.">Challenge your short-term memory capacity by recalling number sequences.</p>
+                <span class="badge" data-en="Coming Soon" data-es="Proximamente">Coming Soon</span>
+            </div>
+        </div>
+    </main>
+    <script>
+        var accessCode = localStorage.getItem('accessCode');
+        var facilityName = localStorage.getItem('facilityName');
+        if (!accessCode) { window.location.href = '/play'; }
+        document.getElementById('facility').textContent = facilityName || '';
+        var currentLang = localStorage.getItem('lang') || 'en';
+        function setLang(lang) {
+            currentLang = lang;
+            localStorage.setItem('lang', lang);
+            var els = document.querySelectorAll('[data-en]');
+            for (var i = 0; i < els.length; i++) {
+                els[i].textContent = els[i].getAttribute('data-' + lang);
+            }
+            var btns = document.querySelectorAll('.lang-btn');
+            for (var j = 0; j < btns.length; j++) {
+                if (btns[j].dataset.lang === lang) {
+                    btns[j].classList.add('active');
+                } else {
+                    btns[j].classList.remove('active');
+                }
+            }
+        }
+        var langBtns = document.querySelectorAll('.lang-btn');
+        for (var k = 0; k < langBtns.length; k++) {
+            langBtns[k].addEventListener('click', function() { setLang(this.dataset.lang); });
+        }
+        setLang(currentLang);
+    </script>
+</body>
+</html>
