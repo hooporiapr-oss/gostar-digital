@@ -78,6 +78,68 @@
             font-size: 14px;
         }
         .form-group input:focus { outline: none; border-color: #ffd700; }
+        .form-group input:disabled { opacity: 0.5; }
+        
+        /* Trial Toggle */
+        .trial-toggle {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding: 12px;
+            background: rgba(104, 211, 145, 0.1);
+            border: 1px solid rgba(104, 211, 145, 0.3);
+            border-radius: 8px;
+        }
+        .trial-toggle.inactive {
+            background: rgba(255,255,255,0.02);
+            border-color: rgba(255,255,255,0.1);
+        }
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+            cursor: pointer;
+        }
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .toggle-slider {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255,255,255,0.2);
+            border-radius: 26px;
+            transition: 0.3s;
+        }
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background: white;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+        .toggle-switch input:checked + .toggle-slider {
+            background: #68d391;
+        }
+        .toggle-switch input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+        }
+        .toggle-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.8);
+        }
+        .toggle-info {
+            font-size: 12px;
+            color: rgba(255,255,255,0.5);
+            margin-left: auto;
+        }
         
         .btn {
             padding: 12px 20px;
@@ -94,7 +156,7 @@
         .btn.small { padding: 6px 10px; font-size: 11px; width: auto; }
         .btn.danger { background: #ff4444; color: #fff; }
         .btn.secondary { background: rgba(255,255,255,0.1); color: #fff; }
-        .btn.copy { background: #4cd964; color: #0a0a1a; }
+        .btn.trial-btn { background: linear-gradient(135deg, #68d391, #48bb78); }
         
         /* License cards */
         .license-list { display: flex; flex-direction: column; gap: 12px; }
@@ -295,6 +357,8 @@
             .license-detail span { font-size: 13px; }
             .key { font-size: 12px; padding: 6px 10px; }
             .stats { grid-template-columns: 1fr; }
+            .trial-toggle { flex-wrap: wrap; }
+            .toggle-info { width: 100%; margin-left: 0; margin-top: 8px; }
         }
     </style>
 </head>
@@ -331,10 +395,35 @@
         <div class="card">
             <h3 data-en="Create New License" data-es="Crear Nueva Licencia">Create New License</h3>
             <form id="createForm">
+                <div class="trial-toggle inactive" id="trialToggleBox">
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="isTrialToggle">
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <span class="toggle-label" data-en="Free Trial" data-es="Prueba Gratis">Free Trial</span>
+                    <span class="toggle-info" data-en="7 days, 10 users" data-es="7 días, 10 usuarios">7 days, 10 users</span>
+                </div>
+                
                 <div class="form-row">
                     <div class="form-group">
                         <label data-en="Facility Name" data-es="Nombre de Instalación">Facility Name</label>
                         <input type="text" id="facilityName" required placeholder="Centro de Cuidado">
+                    </div>
+                </div>
+                <div class="form-row" id="contactRow" style="display: none;">
+                    <div class="form-group">
+                        <label data-en="Contact Name" data-es="Nombre de Contacto">Contact Name</label>
+                        <input type="text" id="contactName" placeholder="John Smith">
+                    </div>
+                </div>
+                <div class="form-row" id="emailPhoneRow" style="display: none;">
+                    <div class="form-group">
+                        <label data-en="Email" data-es="Correo Electrónico">Email</label>
+                        <input type="email" id="email" placeholder="john@facility.com">
+                    </div>
+                    <div class="form-group">
+                        <label data-en="Phone" data-es="Teléfono">Phone</label>
+                        <input type="tel" id="phone" placeholder="(787) 555-1234">
                     </div>
                 </div>
                 <div class="form-row">
@@ -347,7 +436,7 @@
                         <input type="date" id="expirationDate" required>
                     </div>
                 </div>
-                <button type="submit" class="btn" data-en="Create License" data-es="Crear Licencia">Create License</button>
+                <button type="submit" class="btn" id="createBtn" data-en="Create License" data-es="Crear Licencia">Create License</button>
             </form>
         </div>
         
@@ -403,7 +492,9 @@
                 used: 'used',
                 contact: 'Contact',
                 email: 'Email',
-                phone: 'Phone'
+                phone: 'Phone',
+                createLicense: 'Create License',
+                createTrial: 'Create Free Trial'
             },
             es: {
                 pool: 'Usuarios',
@@ -422,11 +513,21 @@
                 used: 'usados',
                 contact: 'Contacto',
                 email: 'Correo',
-                phone: 'Teléfono'
+                phone: 'Teléfono',
+                createLicense: 'Crear Licencia',
+                createTrial: 'Crear Prueba Gratis'
             }
         };
         
         var currentLang = localStorage.getItem('lang') || 'en';
+        var isTrialMode = false;
+        
+        // Default dates
+        var defaultDate = new Date();
+        defaultDate.setFullYear(defaultDate.getFullYear() + 1);
+        
+        var trialDate = new Date();
+        trialDate.setDate(trialDate.getDate() + 7);
         
         function setLang(lang) {
             currentLang = lang;
@@ -443,6 +544,7 @@
                     btns[j].classList.remove('active');
                 }
             }
+            updateTrialToggle();
             loadLicenses();
         }
         
@@ -451,10 +553,54 @@
             langBtns[k].addEventListener('click', function() { setLang(this.dataset.lang); });
         }
         
-        // Set default expiration to 1 year from now
-        var defaultDate = new Date();
-        defaultDate.setFullYear(defaultDate.getFullYear() + 1);
-        document.getElementById('expirationDate').value = defaultDate.toISOString().split('T')[0];
+        // Trial toggle functionality
+        var trialToggle = document.getElementById('isTrialToggle');
+        var trialToggleBox = document.getElementById('trialToggleBox');
+        var userPoolInput = document.getElementById('userPool');
+        var expirationInput = document.getElementById('expirationDate');
+        var contactRow = document.getElementById('contactRow');
+        var emailPhoneRow = document.getElementById('emailPhoneRow');
+        var createBtn = document.getElementById('createBtn');
+        
+        function updateTrialToggle() {
+            var t = T[currentLang];
+            if (isTrialMode) {
+                trialToggleBox.classList.remove('inactive');
+                createBtn.textContent = t.createTrial;
+                createBtn.classList.add('trial-btn');
+            } else {
+                trialToggleBox.classList.add('inactive');
+                createBtn.textContent = t.createLicense;
+                createBtn.classList.remove('trial-btn');
+            }
+        }
+        
+        trialToggle.addEventListener('change', function() {
+            isTrialMode = this.checked;
+            
+            if (isTrialMode) {
+                // Set trial defaults
+                userPoolInput.value = 10;
+                userPoolInput.disabled = true;
+                expirationInput.value = trialDate.toISOString().split('T')[0];
+                expirationInput.disabled = true;
+                contactRow.style.display = 'flex';
+                emailPhoneRow.style.display = 'flex';
+            } else {
+                // Reset to normal
+                userPoolInput.value = '';
+                userPoolInput.disabled = false;
+                expirationInput.value = defaultDate.toISOString().split('T')[0];
+                expirationInput.disabled = false;
+                contactRow.style.display = 'none';
+                emailPhoneRow.style.display = 'none';
+            }
+            
+            updateTrialToggle();
+        });
+        
+        // Initialize expiration date
+        expirationInput.value = defaultDate.toISOString().split('T')[0];
         
         function showToast(message) {
             var toast = document.getElementById('toast');
@@ -568,8 +714,15 @@
             var data = {
                 facilityName: document.getElementById('facilityName').value,
                 userPool: document.getElementById('userPool').value,
-                expirationDate: document.getElementById('expirationDate').value
+                expirationDate: document.getElementById('expirationDate').value,
+                isTrial: isTrialMode
             };
+            
+            if (isTrialMode) {
+                data.contactName = document.getElementById('contactName').value;
+                data.email = document.getElementById('email').value;
+                data.phone = document.getElementById('phone').value;
+            }
             
             fetch('/api/admin/licenses', {
                 method: 'POST',
@@ -580,7 +733,17 @@
             .then(function(result) {
                 if (result.key) {
                     document.getElementById('createForm').reset();
-                    document.getElementById('expirationDate').value = defaultDate.toISOString().split('T')[0];
+                    
+                    // Reset toggle and form
+                    isTrialMode = false;
+                    trialToggle.checked = false;
+                    userPoolInput.disabled = false;
+                    expirationInput.disabled = false;
+                    expirationInput.value = defaultDate.toISOString().split('T')[0];
+                    contactRow.style.display = 'none';
+                    emailPhoneRow.style.display = 'none';
+                    updateTrialToggle();
+                    
                     loadLicenses();
                     showToast(T[currentLang].copied.replace('!', '') + ': ' + result.key);
                 }
