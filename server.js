@@ -403,6 +403,59 @@ app.post('/api/play/login', (req, res) => {
     res.json({ success: true, username: user.username });
 });
 
+// ============ TRIAL ROUTES ============
+
+app.get('/trial', (req, res) => {
+    res.sendFile(path.join(__dirname, 'trial.html'));
+});
+
+app.post('/api/trial/register', (req, res) => {
+    const { facilityName, contactName, email, phone } = req.body;
+    
+    if (!facilityName || !contactName || !email) {
+        return res.status(400).json({ error: 'Missing required fields' });
+    }
+    
+    const licenses = readJSON(LICENSES_FILE);
+    
+    // Check if email already used for trial
+    const existingTrial = licenses.find(l => l.email === email && l.isTrial);
+    if (existingTrial) {
+        return res.status(400).json({ error: 'Email already used for a free trial' });
+    }
+    
+    // Generate license key
+    const licenseKey = generateKey('LIC');
+    
+    // Set expiration to 7 days from now
+    const expirationDate = new Date();
+    expirationDate.setDate(expirationDate.getDate() + 7);
+    
+    const newLicense = {
+        key: licenseKey,
+        facilityName: facilityName,
+        contactName: contactName,
+        email: email,
+        phone: phone || '',
+        expirationDate: expirationDate.toISOString().split('T')[0],
+        userPool: 10,
+        createdAt: new Date().toISOString(),
+        active: true,
+        isTrial: true
+    };
+    
+    licenses.push(newLicense);
+    writeJSON(LICENSES_FILE, licenses);
+    
+    res.json({ 
+        success: true, 
+        licenseKey: licenseKey,
+        expirationDate: newLicense.expirationDate
+    });
+});
+
+// ============ START SERVER ============
+
 app.listen(PORT, () => {
     console.log(`GoStar Digital running on port ${PORT}`);
 });
