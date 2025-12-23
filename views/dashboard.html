@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - GoStar Digital</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #0d0d2b 100%);
+            color: #fff;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: #1a1a3a;
+        }
+
+        .logo h1 {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .logo h1 span {
+            color: #ffd700;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-info {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+        }
+
+        .user-info strong {
+            color: #ffd700;
+        }
+
+        .logout-btn {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 77, 77, 0.2);
+            border-color: rgba(255, 77, 77, 0.4);
+        }
+
+        /* Main Content */
+        .main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 32px;
+        }
+
+        .welcome {
+            margin-bottom: 40px;
+        }
+
+        .welcome h2 {
+            font-size: 32px;
+            font-weight: 300;
+            margin-bottom: 8px;
+        }
+
+        .welcome h2 strong {
+            font-weight: 700;
+        }
+
+        .welcome p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 16px;
+        }
+
+        /* Games Grid */
+        .section-title {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 20px;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .game-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 32px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .game-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 215, 0, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .game-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+
+        .game-card h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .game-card p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .game-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: rgba(76, 217, 100, 0.1);
+            border: 1px solid rgba(76, 217, 100, 0.3);
+            border-radius: 20px;
+            color: #4cd964;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .game-status::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: #4cd964;
+            border-radius: 50%;
+        }
+
+        /* Coming Soon Card */
+        .game-card.coming-soon {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .game-card.coming-soon:hover {
+            transform: none;
+            border-color: rgba(255, 255, 255, 0.1);
+            box-shadow: none;
+        }
+
+        .game-card.coming-soon .game-status {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .game-card.coming-soon .game-status::before {
+            background: rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+                </svg>
+            </div>
+            <h1>Go<span>Star</span> Digital</h1>
+        </div>
+        <div class="user-menu">
+            <span class="user-info">Welcome, <strong id="username">User</strong></span>
+            <a href="/logout" class="logout-btn">Sign Out</a>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="welcome">
+            <h2>Welcome to <strong>GoStar Digital</strong></h2>
+            <p>Select a cognitive training game to begin your session</p>
+        </div>
+
+        <p class="section-title">Available Games</p>
+        
+        <div class="games-grid">
+            <a href="/game/sequence-memory" class="game-card">
+                <div class="game-icon">🧠</div>
+                <h3>Sequence Memory</h3>
+                <p>Test and improve your working memory by recalling increasingly complex sequences of tiles.</p>
+                <span class="game-status">Available</span>
+            </a>
+
+            <div class="game-card coming-soon">
+                <div class="game-icon" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">🎯</div>
+                <h3>N-Back Challenge</h3>
+                <p>Enhance your executive function and fluid intelligence with this classic cognitive task.</p>
+                <span class="game-status">Coming Soon</span>
+            </div>
+
+            <div class="game-card coming-soon">
+                <div class="game-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">🔢</div>
+                <h3>Digit Span</h3>
+                <p>Challenge your short-term memory capacity by recalling number sequences.</p>
+                <span class="game-status">Coming Soon</span>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Fetch user info
+        fetch('/api/user')
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('username').textContent = data.username;
+            })
+            .catch(err => console.error('Error fetching user:', err));
+    </script>
+</body>
+</html>
