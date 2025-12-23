@@ -96,7 +96,7 @@
         .btn.secondary { background: rgba(255,255,255,0.1); color: #fff; }
         .btn.copy { background: #4cd964; color: #0a0a1a; }
         
-        /* Mobile table replacement */
+        /* License cards */
         .license-list { display: flex; flex-direction: column; gap: 12px; }
         
         .license-card {
@@ -104,6 +104,10 @@
             border: 1px solid rgba(255,255,255,0.1);
             border-radius: 12px;
             padding: 16px;
+        }
+        .license-card.trial {
+            border-color: rgba(104, 211, 145, 0.3);
+            background: rgba(104, 211, 145, 0.05);
         }
         .license-header {
             display: flex;
@@ -118,9 +122,15 @@
             font-weight: 700;
             color: #fff;
         }
+        .license-badges {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
         .license-status { padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 600; }
         .license-status.active { background: rgba(76,217,100,0.2); color: #4cd964; }
         .license-status.expired { background: rgba(255,68,68,0.2); color: #ff4444; }
+        .license-status.trial-badge { background: rgba(104, 211, 145, 0.2); color: #68d391; }
         
         .license-key-row {
             display: flex;
@@ -173,6 +183,31 @@
             font-weight: 600;
         }
         
+        .license-contact {
+            background: rgba(255,255,255,0.03);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+        .license-contact-title {
+            font-size: 10px;
+            color: rgba(255,255,255,0.5);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        .license-contact-info {
+            font-size: 13px;
+            color: rgba(255,255,255,0.8);
+            line-height: 1.6;
+        }
+        .license-contact-info a {
+            color: #ffd700;
+            text-decoration: none;
+        }
+        .license-contact-info a:hover {
+            text-decoration: underline;
+        }
+        
         .license-actions {
             display: flex;
             gap: 8px;
@@ -223,6 +258,32 @@
         }
         .toast.show { opacity: 1; }
         
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .stat-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #ffd700;
+        }
+        .stat-label {
+            font-size: 11px;
+            color: rgba(255,255,255,0.5);
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+        
         @media (max-width: 480px) {
             .header { padding: 10px 12px; }
             .logo { font-size: 16px; }
@@ -233,6 +294,7 @@
             .license-details { grid-template-columns: 1fr 1fr; gap: 8px; }
             .license-detail span { font-size: 13px; }
             .key { font-size: 12px; padding: 6px 10px; }
+            .stats { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -250,6 +312,21 @@
     
     <main class="main">
         <h2><strong data-en="License" data-es="Gestión de">License</strong> <span data-en="Management" data-es="Licencias">Management</span></h2>
+        
+        <div class="stats" id="stats">
+            <div class="stat-card">
+                <div class="stat-value" id="totalLicenses">0</div>
+                <div class="stat-label" data-en="Total Licenses" data-es="Total Licencias">Total Licenses</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="trialLicenses">0</div>
+                <div class="stat-label" data-en="Trial" data-es="Prueba">Trial</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="activeLicenses">0</div>
+                <div class="stat-label" data-en="Active" data-es="Activas">Active</div>
+            </div>
+        </div>
         
         <div class="card">
             <h3 data-en="Create New License" data-es="Crear Nueva Licencia">Create New License</h3>
@@ -275,7 +352,7 @@
         </div>
         
         <div class="card">
-            <h3 data-en="Active Licenses" data-es="Licencias Activas">Active Licenses</h3>
+            <h3 data-en="All Licenses" data-es="Todas las Licencias">All Licenses</h3>
             <div id="licenseList" class="license-list"></div>
         </div>
     </main>
@@ -315,13 +392,18 @@
                 status: 'Status',
                 active: 'Active',
                 expired: 'Expired',
+                trial: 'Trial',
+                paid: 'Paid',
                 edit: 'Edit',
                 delete: 'Delete',
                 copy: 'Copy',
                 copied: 'Copied!',
                 noLicenses: 'No licenses created yet',
                 confirmDelete: 'Delete this license? All associated codes will also be deleted.',
-                used: 'used'
+                used: 'used',
+                contact: 'Contact',
+                email: 'Email',
+                phone: 'Phone'
             },
             es: {
                 pool: 'Usuarios',
@@ -329,13 +411,18 @@
                 status: 'Estado',
                 active: 'Activa',
                 expired: 'Expirada',
+                trial: 'Prueba',
+                paid: 'Pagada',
                 edit: 'Editar',
                 delete: 'Eliminar',
                 copy: 'Copiar',
                 copied: '¡Copiado!',
                 noLicenses: 'No hay licencias creadas',
                 confirmDelete: '¿Eliminar esta licencia? Todos los códigos asociados también serán eliminados.',
-                used: 'usados'
+                used: 'usados',
+                contact: 'Contacto',
+                email: 'Correo',
+                phone: 'Teléfono'
             }
         };
         
@@ -398,12 +485,23 @@
                 .then(function(licenses) {
                     var container = document.getElementById('licenseList');
                     
+                    // Update stats
+                    var now = new Date();
+                    var totalCount = licenses.length;
+                    var trialCount = licenses.filter(function(l) { return l.isTrial; }).length;
+                    var activeCount = licenses.filter(function(l) { 
+                        return new Date(l.expirationDate) >= now && l.active; 
+                    }).length;
+                    
+                    document.getElementById('totalLicenses').textContent = totalCount;
+                    document.getElementById('trialLicenses').textContent = trialCount;
+                    document.getElementById('activeLicenses').textContent = activeCount;
+                    
                     if (licenses.length === 0) {
                         container.innerHTML = '<p class="empty">' + t.noLicenses + '</p>';
                         return;
                     }
                     
-                    var now = new Date();
                     var html = '';
                     
                     for (var i = 0; i < licenses.length; i++) {
@@ -412,11 +510,17 @@
                         var status = expired ? 'expired' : 'active';
                         var statusText = expired ? t.expired : t.active;
                         var expDate = new Date(lic.expirationDate).toLocaleDateString();
+                        var isTrial = lic.isTrial === true;
                         
-                        html += '<div class="license-card">';
+                        html += '<div class="license-card' + (isTrial ? ' trial' : '') + '">';
                         html += '<div class="license-header">';
                         html += '<div class="license-facility">' + lic.facilityName + '</div>';
+                        html += '<div class="license-badges">';
+                        if (isTrial) {
+                            html += '<span class="license-status trial-badge">' + t.trial + '</span>';
+                        }
                         html += '<span class="license-status ' + status + '">' + statusText + '</span>';
+                        html += '</div>';
                         html += '</div>';
                         
                         html += '<div class="license-key-row">';
@@ -424,13 +528,31 @@
                         html += '<button class="copy-btn" onclick="copyKey(\'' + lic.key + '\', this)">📋 ' + t.copy + '</button>';
                         html += '</div>';
                         
+                        // Contact info for trials
+                        if (isTrial && (lic.contactName || lic.email || lic.phone)) {
+                            html += '<div class="license-contact">';
+                            html += '<div class="license-contact-title">' + t.contact + '</div>';
+                            html += '<div class="license-contact-info">';
+                            if (lic.contactName) {
+                                html += '<div>' + lic.contactName + '</div>';
+                            }
+                            if (lic.email) {
+                                html += '<div>' + t.email + ': <a href="mailto:' + lic.email + '">' + lic.email + '</a></div>';
+                            }
+                            if (lic.phone) {
+                                html += '<div>' + t.phone + ': ' + lic.phone + '</div>';
+                            }
+                            html += '</div>';
+                            html += '</div>';
+                        }
+                        
                         html += '<div class="license-details">';
                         html += '<div class="license-detail"><label>' + t.pool + '</label><span>' + (lic.usedPool || 0) + ' / ' + lic.userPool + ' ' + t.used + '</span></div>';
                         html += '<div class="license-detail"><label>' + t.expires + '</label><span>' + expDate + '</span></div>';
                         html += '</div>';
                         
                         html += '<div class="license-actions">';
-                        html += '<button class="btn small secondary" onclick="editLicense(\'' + lic.key + '\', \'' + lic.facilityName + '\', ' + lic.userPool + ', \'' + lic.expirationDate + '\')">' + t.edit + '</button>';
+                        html += '<button class="btn small secondary" onclick="editLicense(\'' + lic.key + '\', \'' + lic.facilityName.replace(/'/g, "\\'") + '\', ' + lic.userPool + ', \'' + lic.expirationDate + '\')">' + t.edit + '</button>';
                         html += '<button class="btn small danger" onclick="deleteLicense(\'' + lic.key + '\')">' + t.delete + '</button>';
                         html += '</div>';
                         html += '</div>';
