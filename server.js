@@ -1,7 +1,6 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-const { v4: uuidv4 } = require('uuid');
 const bcrypt = require('bcryptjs');
 
 const app = express();
@@ -42,9 +41,9 @@ function writeJSON(file, data) {
 }
 
 function generateKey(prefix, length = 8) {
-    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-    let key = prefix + '-';
-    for (let i = 0; i < length; i++) {
+    var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    var key = prefix + '-';
+    for (var i = 0; i < length; i++) {
         key += chars.charAt(Math.floor(Math.random() * chars.length));
     }
     return key;
@@ -52,13 +51,15 @@ function generateKey(prefix, length = 8) {
 
 // Basic Auth for Admin
 function adminAuth(req, res, next) {
-    const auth = req.headers.authorization;
+    var auth = req.headers.authorization;
     if (!auth || !auth.startsWith('Basic ')) {
         res.setHeader('WWW-Authenticate', 'Basic realm="Admin Dashboard"');
         return res.status(401).send('Admin authentication required');
     }
-    const credentials = Buffer.from(auth.split(' ')[1], 'base64').toString();
-    const [user, pass] = credentials.split(':');
+    var credentials = Buffer.from(auth.split(' ')[1], 'base64').toString();
+    var parts = credentials.split(':');
+    var user = parts[0];
+    var pass = parts.slice(1).join(':');
     if (user === ADMIN_USER && pass === ADMIN_PASS) {
         return next();
     }
@@ -67,52 +68,72 @@ function adminAuth(req, res, next) {
 }
 
 // Health check
-app.get('/health', (req, res) => {
+app.get('/health', function(req, res) {
     res.json({ status: 'healthy' });
 });
 
 // Landing page
-app.get('/', (req, res) => {
+app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // ============ ADMIN ROUTES ============
 
-app.get('/admin', adminAuth, (req, res) => {
+app.get('/admin', adminAuth, function(req, res) {
     res.sendFile(path.join(__dirname, 'admin.html'));
 });
 
 // Get all licenses
-app.get('/api/admin/licenses', adminAuth, (req, res) => {
-    const licenses = readJSON(LICENSES_FILE);
-    const codes = readJSON(CODES_FILE);
+app.get('/api/admin/licenses', adminAuth, function(req, res) {
+    var licenses = readJSON(LICENSES_FILE);
+    var codes = readJSON(CODES_FILE);
     
-    const enriched = licenses.map(lic => {
-        const licCodes = codes.filter(c => c.licenseKey === lic.key);
-        const usedPool = licCodes.reduce((sum, c) => sum + c.userLimit, 0);
-        return { ...lic, usedPool, remainingPool: lic.userPool - usedPool };
+    var enriched = licenses.map(function(lic) {
+        var licCodes = codes.filter(function(c) { return c.licenseKey === lic.key; });
+        var usedPool = licCodes.reduce(function(sum, c) { return sum + c.userLimit; }, 0);
+        var result = {};
+        for (var key in lic) {
+            result[key] = lic[key];
+        }
+        result.usedPool = usedPool;
+        result.remainingPool = lic.userPool - usedPool;
+        return result;
     });
     
     res.json(enriched);
 });
 
 // Create license
-app.post('/api/admin/licenses', adminAuth, (req, res) => {
-    const { facilityName, expirationDate, userPool } = req.body;
+app.post('/api/admin/licenses', adminAuth, function(req, res) {
+    var facilityName = req.body.facilityName;
+    var expirationDate = req.body.expirationDate;
+    var userPool = req.body.userPool;
+    var isTrial = req.body.isTrial;
+    var contactName = req.body.contactName;
+    var email = req.body.email;
+    var phone = req.body.phone;
     
     if (!facilityName || !expirationDate || !userPool) {
         return res.status(400).json({ error: 'Missing required fields' });
     }
     
-    const licenses = readJSON(LICENSES_FILE);
-    const newLicense = {
+    var licenses = readJSON(LICENSES_FILE);
+    var newLicense = {
         key: generateKey('LIC'),
-        facilityName,
-        expirationDate,
+        facilityName: facilityName,
+        expirationDate: expirationDate,
         userPool: parseInt(userPool),
         createdAt: new Date().toISOString(),
         active: true
     };
+    
+    // Add trial-specific fields if it's a trial
+    if (isTrial) {
+        newLicense.isTrial = true;
+        newLicense.contactName = contactName || '';
+        newLicense.email = email || '';
+        newLicense.phone = phone || '';
+    }
     
     licenses.push(newLicense);
     writeJSON(LICENSES_FILE, licenses);
@@ -121,12 +142,21 @@ app.post('/api/admin/licenses', adminAuth, (req, res) => {
 });
 
 // Update license
-app.put('/api/admin/licenses/:key', adminAuth, (req, res) => {
-    const { key } = req.params;
-    const { facilityName, expirationDate, userPool, active } = req.body;
+app.put('/api/admin/licenses/:key', adminAuth, function(req, res) {
+    var key = req.params.key;
+    var facilityName = req.body.facilityName;
+    var expirationDate = req.body.expirationDate;
+    var userPool = req.body.userPool;
+    var active = req.body.active;
     
-    const licenses = readJSON(LICENSES_FILE);
-    const index = licenses.findIndex(l => l.key === key);
+    var licenses = readJSON(LICENSES_FILE);
+    var index = -1;
+    for (var i = 0; i < licenses.length; i++) {
+        if (licenses[i].key === key) {
+            index = i;
+            break;
+        }
+    }
     
     if (index === -1) {
         return res.status(404).json({ error: 'License not found' });
@@ -142,19 +172,19 @@ app.put('/api/admin/licenses/:key', adminAuth, (req, res) => {
 });
 
 // Delete license
-app.delete('/api/admin/licenses/:key', adminAuth, (req, res) => {
-    const { key } = req.params;
-    let licenses = readJSON(LICENSES_FILE);
-    licenses = licenses.filter(l => l.key !== key);
+app.delete('/api/admin/licenses/:key', adminAuth, function(req, res) {
+    var key = req.params.key;
+    var licenses = readJSON(LICENSES_FILE);
+    licenses = licenses.filter(function(l) { return l.key !== key; });
     writeJSON(LICENSES_FILE, licenses);
     
-    let codes = readJSON(CODES_FILE);
-    const codesToDelete = codes.filter(c => c.licenseKey === key).map(c => c.code);
-    codes = codes.filter(c => c.licenseKey !== key);
+    var codes = readJSON(CODES_FILE);
+    var codesToDelete = codes.filter(function(c) { return c.licenseKey === key; }).map(function(c) { return c.code; });
+    codes = codes.filter(function(c) { return c.licenseKey !== key; });
     writeJSON(CODES_FILE, codes);
     
-    let users = readJSON(USERS_FILE);
-    users = users.filter(u => !codesToDelete.includes(u.code));
+    var users = readJSON(USERS_FILE);
+    users = users.filter(function(u) { return codesToDelete.indexOf(u.code) === -1; });
     writeJSON(USERS_FILE, users);
     
     res.json({ success: true });
@@ -162,18 +192,24 @@ app.delete('/api/admin/licenses/:key', adminAuth, (req, res) => {
 
 // ============ FACILITY ROUTES ============
 
-app.get('/facility', (req, res) => {
+app.get('/facility', function(req, res) {
     res.sendFile(path.join(__dirname, 'facility-login.html'));
 });
 
-app.get('/facility/dashboard', (req, res) => {
+app.get('/facility/dashboard', function(req, res) {
     res.sendFile(path.join(__dirname, 'facility.html'));
 });
 
-app.post('/api/facility/login', (req, res) => {
-    const { licenseKey } = req.body;
-    const licenses = readJSON(LICENSES_FILE);
-    const license = licenses.find(l => l.key === licenseKey && l.active);
+app.post('/api/facility/login', function(req, res) {
+    var licenseKey = req.body.licenseKey;
+    var licenses = readJSON(LICENSES_FILE);
+    var license = null;
+    for (var i = 0; i < licenses.length; i++) {
+        if (licenses[i].key === licenseKey && licenses[i].active) {
+            license = licenses[i];
+            break;
+        }
+    }
     
     if (!license) {
         return res.status(401).json({ error: 'Invalid license key' });
@@ -186,10 +222,16 @@ app.post('/api/facility/login', (req, res) => {
     res.json({ success: true, facilityName: license.facilityName });
 });
 
-app.get('/api/facility/:licenseKey', (req, res) => {
-    const { licenseKey } = req.params;
-    const licenses = readJSON(LICENSES_FILE);
-    const license = licenses.find(l => l.key === licenseKey && l.active);
+app.get('/api/facility/:licenseKey', function(req, res) {
+    var licenseKey = req.params.licenseKey;
+    var licenses = readJSON(LICENSES_FILE);
+    var license = null;
+    for (var i = 0; i < licenses.length; i++) {
+        if (licenses[i].key === licenseKey && licenses[i].active) {
+            license = licenses[i];
+            break;
+        }
+    }
     
     if (!license) {
         return res.status(401).json({ error: 'Invalid license key' });
@@ -199,32 +241,46 @@ app.get('/api/facility/:licenseKey', (req, res) => {
         return res.status(401).json({ error: 'License expired' });
     }
     
-    const codes = readJSON(CODES_FILE).filter(c => c.licenseKey === licenseKey);
-    const users = readJSON(USERS_FILE);
+    var allCodes = readJSON(CODES_FILE);
+    var codes = allCodes.filter(function(c) { return c.licenseKey === licenseKey; });
+    var users = readJSON(USERS_FILE);
     
-    const enrichedCodes = codes.map(code => {
-        const usedCount = users.filter(u => u.code === code.code).length;
-        return { ...code, usedCount, remainingUsers: code.userLimit - usedCount };
+    var enrichedCodes = codes.map(function(code) {
+        var usedCount = users.filter(function(u) { return u.code === code.code; }).length;
+        var result = {};
+        for (var key in code) {
+            result[key] = code[key];
+        }
+        result.usedCount = usedCount;
+        result.remainingUsers = code.userLimit - usedCount;
+        return result;
     });
     
-    const usedPool = codes.reduce((sum, c) => sum + c.userLimit, 0);
+    var usedPool = codes.reduce(function(sum, c) { return sum + c.userLimit; }, 0);
     
     res.json({
         facilityName: license.facilityName,
         expirationDate: license.expirationDate,
         userPool: license.userPool,
-        usedPool,
+        usedPool: usedPool,
         remainingPool: license.userPool - usedPool,
         codes: enrichedCodes
     });
 });
 
-app.post('/api/facility/:licenseKey/codes', (req, res) => {
-    const { licenseKey } = req.params;
-    const { userLimit, label } = req.body;
+app.post('/api/facility/:licenseKey/codes', function(req, res) {
+    var licenseKey = req.params.licenseKey;
+    var userLimit = req.body.userLimit;
+    var label = req.body.label;
     
-    const licenses = readJSON(LICENSES_FILE);
-    const license = licenses.find(l => l.key === licenseKey && l.active);
+    var licenses = readJSON(LICENSES_FILE);
+    var license = null;
+    for (var i = 0; i < licenses.length; i++) {
+        if (licenses[i].key === licenseKey && licenses[i].active) {
+            license = licenses[i];
+            break;
+        }
+    }
     
     if (!license) {
         return res.status(401).json({ error: 'Invalid license key' });
@@ -234,18 +290,18 @@ app.post('/api/facility/:licenseKey/codes', (req, res) => {
         return res.status(401).json({ error: 'License expired' });
     }
     
-    const codes = readJSON(CODES_FILE);
-    const usedPool = codes.filter(c => c.licenseKey === licenseKey)
-        .reduce((sum, c) => sum + c.userLimit, 0);
-    const remainingPool = license.userPool - usedPool;
+    var codes = readJSON(CODES_FILE);
+    var licenseCodes = codes.filter(function(c) { return c.licenseKey === licenseKey; });
+    var usedPool = licenseCodes.reduce(function(sum, c) { return sum + c.userLimit; }, 0);
+    var remainingPool = license.userPool - usedPool;
     
     if (parseInt(userLimit) > remainingPool) {
-        return res.status(400).json({ error: `Only ${remainingPool} users remaining in pool` });
+        return res.status(400).json({ error: 'Only ' + remainingPool + ' users remaining in pool' });
     }
     
-    const newCode = {
+    var newCode = {
         code: generateKey('ACC', 6),
-        licenseKey,
+        licenseKey: licenseKey,
         userLimit: parseInt(userLimit),
         label: label || '',
         createdAt: new Date().toISOString(),
@@ -258,21 +314,28 @@ app.post('/api/facility/:licenseKey/codes', (req, res) => {
     res.json(newCode);
 });
 
-app.delete('/api/facility/:licenseKey/codes/:code', (req, res) => {
-    const { licenseKey, code } = req.params;
+app.delete('/api/facility/:licenseKey/codes/:code', function(req, res) {
+    var licenseKey = req.params.licenseKey;
+    var code = req.params.code;
     
-    let codes = readJSON(CODES_FILE);
-    const codeObj = codes.find(c => c.code === code && c.licenseKey === licenseKey);
+    var codes = readJSON(CODES_FILE);
+    var codeObj = null;
+    for (var i = 0; i < codes.length; i++) {
+        if (codes[i].code === code && codes[i].licenseKey === licenseKey) {
+            codeObj = codes[i];
+            break;
+        }
+    }
     
     if (!codeObj) {
         return res.status(404).json({ error: 'Code not found' });
     }
     
-    codes = codes.filter(c => c.code !== code);
+    codes = codes.filter(function(c) { return c.code !== code; });
     writeJSON(CODES_FILE, codes);
     
-    let users = readJSON(USERS_FILE);
-    users = users.filter(u => u.code !== code);
+    var users = readJSON(USERS_FILE);
+    users = users.filter(function(u) { return u.code !== code; });
     writeJSON(USERS_FILE, users);
     
     res.json({ success: true });
@@ -280,26 +343,38 @@ app.delete('/api/facility/:licenseKey/codes/:code', (req, res) => {
 
 // ============ PLAY ROUTES ============
 
-app.get('/play', (req, res) => {
+app.get('/play', function(req, res) {
     res.sendFile(path.join(__dirname, 'play.html'));
 });
 
-app.get('/game', (req, res) => {
+app.get('/game', function(req, res) {
     res.sendFile(path.join(__dirname, 'game.html'));
 });
 
-app.post('/api/play/verify', (req, res) => {
-    const { accessCode } = req.body;
+app.post('/api/play/verify', function(req, res) {
+    var accessCode = req.body.accessCode;
     
-    const codes = readJSON(CODES_FILE);
-    const code = codes.find(c => c.code === accessCode && c.active);
+    var codes = readJSON(CODES_FILE);
+    var code = null;
+    for (var i = 0; i < codes.length; i++) {
+        if (codes[i].code === accessCode && codes[i].active) {
+            code = codes[i];
+            break;
+        }
+    }
     
     if (!code) {
         return res.status(401).json({ error: 'Invalid access code' });
     }
     
-    const licenses = readJSON(LICENSES_FILE);
-    const license = licenses.find(l => l.key === code.licenseKey && l.active);
+    var licenses = readJSON(LICENSES_FILE);
+    var license = null;
+    for (var j = 0; j < licenses.length; j++) {
+        if (licenses[j].key === code.licenseKey && licenses[j].active) {
+            license = licenses[j];
+            break;
+        }
+    }
     
     if (!license) {
         return res.status(401).json({ error: 'License not found' });
@@ -309,10 +384,10 @@ app.post('/api/play/verify', (req, res) => {
         return res.status(401).json({ error: 'Access expired' });
     }
     
-    const users = readJSON(USERS_FILE);
-    const codeUsers = users.filter(u => u.code === accessCode);
-    const usedCount = codeUsers.length;
-    const spotsLeft = code.userLimit - usedCount;
+    var users = readJSON(USERS_FILE);
+    var codeUsers = users.filter(function(u) { return u.code === accessCode; });
+    var usedCount = codeUsers.length;
+    var spotsLeft = code.userLimit - usedCount;
     
     res.json({ 
         success: true, 
@@ -322,40 +397,60 @@ app.post('/api/play/verify', (req, res) => {
     });
 });
 
-app.post('/api/play/register', (req, res) => {
-    const { accessCode, username, password } = req.body;
+app.post('/api/play/register', function(req, res) {
+    var accessCode = req.body.accessCode;
+    var username = req.body.username;
+    var password = req.body.password;
     
     if (!accessCode || !username || !password) {
         return res.status(400).json({ error: 'Missing required fields' });
     }
     
-    const codes = readJSON(CODES_FILE);
-    const code = codes.find(c => c.code === accessCode && c.active);
+    var codes = readJSON(CODES_FILE);
+    var code = null;
+    for (var i = 0; i < codes.length; i++) {
+        if (codes[i].code === accessCode && codes[i].active) {
+            code = codes[i];
+            break;
+        }
+    }
     
     if (!code) {
         return res.status(401).json({ error: 'Invalid access code' });
     }
     
-    const licenses = readJSON(LICENSES_FILE);
-    const license = licenses.find(l => l.key === code.licenseKey && l.active);
+    var licenses = readJSON(LICENSES_FILE);
+    var license = null;
+    for (var j = 0; j < licenses.length; j++) {
+        if (licenses[j].key === code.licenseKey && licenses[j].active) {
+            license = licenses[j];
+            break;
+        }
+    }
     
     if (!license || new Date(license.expirationDate) < new Date()) {
         return res.status(401).json({ error: 'Access expired' });
     }
     
-    const users = readJSON(USERS_FILE);
+    var users = readJSON(USERS_FILE);
     
-    const existingUser = users.find(u => u.code === accessCode && u.username.toLowerCase() === username.toLowerCase());
+    var existingUser = null;
+    for (var k = 0; k < users.length; k++) {
+        if (users[k].code === accessCode && users[k].username.toLowerCase() === username.toLowerCase()) {
+            existingUser = users[k];
+            break;
+        }
+    }
     if (existingUser) {
         return res.status(400).json({ error: 'Username already taken' });
     }
     
-    const usedCount = users.filter(u => u.code === accessCode).length;
+    var usedCount = users.filter(function(u) { return u.code === accessCode; }).length;
     if (usedCount >= code.userLimit) {
         return res.status(400).json({ error: 'User limit reached for this code' });
     }
     
-    const hashedPassword = bcrypt.hashSync(password, 10);
+    var hashedPassword = bcrypt.hashSync(password, 10);
     
     users.push({
         code: accessCode,
@@ -368,29 +463,49 @@ app.post('/api/play/register', (req, res) => {
     res.json({ success: true, username: username });
 });
 
-app.post('/api/play/login', (req, res) => {
-    const { accessCode, username, password } = req.body;
+app.post('/api/play/login', function(req, res) {
+    var accessCode = req.body.accessCode;
+    var username = req.body.username;
+    var password = req.body.password;
     
     if (!accessCode || !username || !password) {
         return res.status(400).json({ error: 'Missing required fields' });
     }
     
-    const codes = readJSON(CODES_FILE);
-    const code = codes.find(c => c.code === accessCode && c.active);
+    var codes = readJSON(CODES_FILE);
+    var code = null;
+    for (var i = 0; i < codes.length; i++) {
+        if (codes[i].code === accessCode && codes[i].active) {
+            code = codes[i];
+            break;
+        }
+    }
     
     if (!code) {
         return res.status(401).json({ error: 'Invalid access code' });
     }
     
-    const licenses = readJSON(LICENSES_FILE);
-    const license = licenses.find(l => l.key === code.licenseKey && l.active);
+    var licenses = readJSON(LICENSES_FILE);
+    var license = null;
+    for (var j = 0; j < licenses.length; j++) {
+        if (licenses[j].key === code.licenseKey && licenses[j].active) {
+            license = licenses[j];
+            break;
+        }
+    }
     
     if (!license || new Date(license.expirationDate) < new Date()) {
         return res.status(401).json({ error: 'Access expired' });
     }
     
-    const users = readJSON(USERS_FILE);
-    const user = users.find(u => u.code === accessCode && u.username.toLowerCase() === username.toLowerCase());
+    var users = readJSON(USERS_FILE);
+    var user = null;
+    for (var k = 0; k < users.length; k++) {
+        if (users[k].code === accessCode && users[k].username.toLowerCase() === username.toLowerCase()) {
+            user = users[k];
+            break;
+        }
+    }
     
     if (!user) {
         return res.status(401).json({ error: 'User not found' });
@@ -405,33 +520,42 @@ app.post('/api/play/login', (req, res) => {
 
 // ============ TRIAL ROUTES ============
 
-app.get('/trial', (req, res) => {
+app.get('/trial', function(req, res) {
     res.sendFile(path.join(__dirname, 'trial.html'));
 });
 
-app.post('/api/trial/register', (req, res) => {
-    const { facilityName, contactName, email, phone } = req.body;
+app.post('/api/trial/register', function(req, res) {
+    var facilityName = req.body.facilityName;
+    var contactName = req.body.contactName;
+    var email = req.body.email;
+    var phone = req.body.phone;
     
     if (!facilityName || !contactName || !email) {
         return res.status(400).json({ error: 'Missing required fields' });
     }
     
-    const licenses = readJSON(LICENSES_FILE);
+    var licenses = readJSON(LICENSES_FILE);
     
     // Check if email already used for trial
-    const existingTrial = licenses.find(l => l.email === email && l.isTrial);
+    var existingTrial = null;
+    for (var i = 0; i < licenses.length; i++) {
+        if (licenses[i].email === email && licenses[i].isTrial) {
+            existingTrial = licenses[i];
+            break;
+        }
+    }
     if (existingTrial) {
         return res.status(400).json({ error: 'Email already used for a free trial' });
     }
     
     // Generate license key
-    const licenseKey = generateKey('LIC');
+    var licenseKey = generateKey('LIC');
     
     // Set expiration to 7 days from now
-    const expirationDate = new Date();
+    var expirationDate = new Date();
     expirationDate.setDate(expirationDate.getDate() + 7);
     
-    const newLicense = {
+    var newLicense = {
         key: licenseKey,
         facilityName: facilityName,
         contactName: contactName,
@@ -456,6 +580,6 @@ app.post('/api/trial/register', (req, res) => {
 
 // ============ START SERVER ============
 
-app.listen(PORT, () => {
-    console.log(`GoStar Digital running on port ${PORT}`);
+app.listen(PORT, function() {
+    console.log('GoStar Digital running on port ' + PORT);
 });
