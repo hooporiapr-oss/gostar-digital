@@ -122,15 +122,6 @@
             background: rgba(255,255,255,0.1);
         }
         .divider span { padding: 0 16px; }
-        .info-box {
-            background: rgba(255,215,0,0.1);
-            border: 1px solid rgba(255,215,0,0.3);
-            color: #ffd700;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 14px;
-        }
     </style>
 </head>
 <body>
@@ -162,10 +153,10 @@
         
         <!-- Step 2: Choose Login or Register -->
         <div class="step" id="step2">
-            <div class="info-box" id="spotsInfo"></div>
-            <button class="btn" id="showLoginBtn" data-en="I have an account - Login" data-es="Tengo cuenta - Iniciar Sesion">I have an account - Login</button>
-            <div class="divider"><span data-en="or" data-es="o">or</span></div>
-            <button class="btn secondary" id="showRegisterBtn" data-en="Create new account" data-es="Crear cuenta nueva">Create new account</button>
+            <p style="margin-bottom: 24px; color: rgba(255,255,255,0.7);" data-en="Welcome! Please login or create an account" data-es="Bienvenido! Inicia sesion o crea una cuenta">Welcome! Please login or create an account</p>
+            <button class="btn" id="showLoginBtn" data-en="Login" data-es="Iniciar Sesion">Login</button>
+            <div class="divider" id="dividerRow"><span data-en="or" data-es="o">or</span></div>
+            <button class="btn secondary" id="showRegisterBtn" data-en="Create Account" data-es="Crear Cuenta">Create Account</button>
             <p class="back"><button onclick="goToStep(1)" data-en="Change access code" data-es="Cambiar codigo">Change access code</button></p>
         </div>
         
@@ -213,10 +204,8 @@
             en: {
                 invalidCode: 'Invalid access code',
                 expired: 'Access expired',
-                spotsLeft: '{n} spots remaining',
-                noSpots: 'No spots remaining - login only',
                 usernameTaken: 'Username already taken',
-                limitReached: 'User limit reached',
+                limitReached: 'User limit reached for this code',
                 passwordMismatch: 'Passwords do not match',
                 userNotFound: 'User not found',
                 invalidPassword: 'Invalid password',
@@ -225,8 +214,6 @@
             es: {
                 invalidCode: 'Codigo de acceso invalido',
                 expired: 'Acceso expirado',
-                spotsLeft: '{n} espacios disponibles',
-                noSpots: 'Sin espacios - solo login',
                 usernameTaken: 'Usuario ya existe',
                 limitReached: 'Limite de usuarios alcanzado',
                 passwordMismatch: 'Las contrasenas no coinciden',
@@ -273,7 +260,9 @@
                 document.getElementById('step1').classList.add('active');
             } else if (step === 2) {
                 document.getElementById('step2').classList.add('active');
+                // Hide register option if no spots left
                 document.getElementById('showRegisterBtn').style.display = hasSpots ? 'block' : 'none';
+                document.getElementById('dividerRow').style.display = hasSpots ? 'flex' : 'none';
             } else if (step === '3login') {
                 document.getElementById('step3login').classList.add('active');
             } else if (step === '3register') {
@@ -301,8 +290,6 @@
             .then(function(result) {
                 if (result.ok) {
                     hasSpots = result.data.hasSpots;
-                    var spotsText = hasSpots ? T[currentLang].spotsLeft.replace('{n}', result.data.spotsLeft) : T[currentLang].noSpots;
-                    document.getElementById('spotsInfo').textContent = spotsText;
                     localStorage.setItem('accessCode', currentCode);
                     localStorage.setItem('facilityName', result.data.facilityName);
                     goToStep(2);
