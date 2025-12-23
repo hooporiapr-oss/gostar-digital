@@ -74,9 +74,19 @@ app.post('/login', async (req, res) => {
         req.session.userId = user.id;
         req.session.username = user.username;
         req.session.role = user.role;
-        res.json({ success: true, redirect: '/dashboard' });
+        
+        // Support both JSON and form submissions
+        if (req.headers['content-type'] && req.headers['content-type'].includes('application/json')) {
+            res.json({ success: true, redirect: '/dashboard' });
+        } else {
+            res.redirect('/dashboard');
+        }
     } else {
-        res.status(401).json({ success: false, message: 'Invalid credentials' });
+        if (req.headers['content-type'] && req.headers['content-type'].includes('application/json')) {
+            res.status(401).json({ success: false, message: 'Invalid credentials' });
+        } else {
+            res.redirect('/login?error=1');
+        }
     }
 });
 
