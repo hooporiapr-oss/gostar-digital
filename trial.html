@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start Free Trial - GoStar Digital</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0a0a1a, #1a1a3a);
+            color: #fff;
+            padding: 20px;
+        }
+        .lang-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        .lang-btn {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            color: rgba(255,255,255,0.6);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .lang-btn.active {
+            background: #ffd700;
+            color: #0a0a1a;
+        }
+        .container {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 480px;
+        }
+        .logo { text-align: center; margin-bottom: 10px; }
+        .logo h1 { font-size: 28px; }
+        .logo h1 span { color: #ffd700; }
+        
+        .trial-badge {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .trial-badge span {
+            display: inline-block;
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            color: #0a0a1a;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+        
+        .form-group { margin-bottom: 20px; }
+        .form-group label { 
+            display: block; 
+            font-size: 12px; 
+            color: rgba(255,255,255,0.6); 
+            margin-bottom: 8px; 
+        }
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="tel"] {
+            width: 100%;
+            padding: 14px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 16px;
+        }
+        .form-group input:focus { outline: none; border-color: #ffd700; }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .acceptance-box {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+        .acceptance-title {
+            font-size: 11px;
+            color: rgba(255,255,255,0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        .checkbox-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .checkbox-item:last-child { margin-bottom: 0; }
+        .checkbox-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+            accent-color: #ffd700;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .checkbox-item label {
+            font-size: 14px;
+            color: rgba(255,255,255,0.8);
+            line-height: 1.5;
+            cursor: pointer;
+        }
+        .checkbox-item a {
+            color: #ffd700;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .checkbox-item a:hover { text-decoration: underline; }
+        
+        .btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            border: none;
+            border-radius: 10px;
+            color: #0a0a1a;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn:hover:not(:disabled) { 
+            opacity: 0.9; 
+            transform: translateY(-2px);
+        }
+        .btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .error {
+            background: rgba(255,68,68,0.1);
+            border: 1px solid rgba(255,68,68,0.3);
+            color: #ff6b6b;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
+        }
+        .error.show { display: block; }
+        
+        .back { text-align: center; margin-top: 20px; }
+        .back a { color: rgba(255,255,255,0.5); font-size: 14px; text-decoration: none; }
+        .back a:hover { color: #fff; }
+        
+        /* Success Screen */
+        .success-screen {
+            display: none;
+            text-align: center;
+        }
+        .success-screen.show { display: block; }
+        .success-icon { font-size: 64px; margin-bottom: 20px; }
+        .success-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+        .success-message {
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        .license-box {
+            background: rgba(255,215,0,0.1);
+            border: 2px solid #ffd700;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .license-label {
+            font-size: 12px;
+            color: rgba(255,255,255,0.5);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        .license-key {
+            font-family: monospace;
+            font-size: 28px;
+            font-weight: 700;
+            color: #ffd700;
+            letter-spacing: 3px;
+        }
+        .license-expiry {
+            font-size: 14px;
+            color: rgba(255,255,255,0.6);
+            margin-top: 15px;
+        }
+        .copy-btn {
+            padding: 12px 24px;
+            background: rgba(76,217,100,0.2);
+            border: 1px solid #4cd964;
+            color: #4cd964;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+        .copy-btn:hover { background: rgba(76,217,100,0.3); }
+        .copy-btn.copied { background: #4cd964; color: #0a0a1a; }
+        
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .btn-secondary:hover { background: rgba(255,255,255,0.2); }
+        
+        @media (max-width: 480px) {
+            .container { padding: 30px 20px; }
+            .form-row { grid-template-columns: 1fr; }
+            .checkbox-item label { font-size: 13px; }
+            .license-key { font-size: 20px; letter-spacing: 2px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="lang-toggle">
+        <button class="lang-btn" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="es">ES</button>
+    </div>
+    
+    <div class="container">
+        <!-- Registration Form -->
+        <div id="formScreen">
+            <div class="logo">
+                <h1>Go<span>Star</span> Digital</h1>
+            </div>
+            
+            <div class="trial-badge">
+                <span data-en="🎉 7-Day Free Trial" data-es="🎉 Prueba Gratis 7 Días">🎉 7-Day Free Trial</span>
+            </div>
+            
+            <div class="error" id="error"></div>
+            
+            <form id="trialForm">
+                <div class="form-group">
+                    <label data-en="FACILITY NAME" data-es="NOMBRE DE INSTALACIÓN">FACILITY NAME</label>
+                    <input type="text" id="facilityName" required placeholder="Sunrise Senior Living">
+                </div>
+                
+                <div class="form-group">
+                    <label data-en="CONTACT NAME" data-es="NOMBRE DE CONTACTO">CONTACT NAME</label>
+                    <input type="text" id="contactName" required placeholder="John Smith">
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label data-en="EMAIL" data-es="CORREO ELECTRÓNICO">EMAIL</label>
+                        <input type="email" id="email" required placeholder="john@facility.com">
+                    </div>
+                    <div class="form-group">
+                        <label data-en="PHONE" data-es="TELÉFONO">PHONE</label>
+                        <input type="tel" id="phone" placeholder="(787) 555-1234">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label data-en="USER POOL (Trial: 10 users)" data-es="USUARIOS (Prueba: 10 usuarios)">USER POOL (Trial: 10 users)</label>
+                    <input type="text" value="10" disabled style="opacity: 0.6;">
+                </div>
+                
+                <div class="acceptance-box">
+                    <div class="acceptance-title" data-en="Required Acceptance" data-es="Aceptación Requerida">Required Acceptance</div>
+                    
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="acceptPrivacy">
+                        <label for="acceptPrivacy">
+                            <span data-en="I have read and accept the" data-es="He leído y acepto la">I have read and accept the</span>
+                            <a href="https://gostardigital.com/privacy.html" target="_blank" data-en="Privacy Policy" data-es="Política de Privacidad">Privacy Policy</a>
+                        </label>
+                    </div>
+                    
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="acceptTerms">
+                        <label for="acceptTerms">
+                            <span data-en="I have read and accept the" data-es="He leído y acepto los">I have read and accept the</span>
+                            <a href="https://gostardigital.com/terms.html" target="_blank" data-en="Terms of Use" data-es="Términos de Uso">Terms of Use</a>
+                        </label>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn" id="submitBtn" disabled data-en="Start Free Trial" data-es="Comenzar Prueba Gratis">Start Free Trial</button>
+            </form>
+            
+            <p class="back"><a href="https://gostardigital.com" data-en="← Back to Home" data-es="← Volver al Inicio">← Back to Home</a></p>
+        </div>
+        
+        <!-- Success Screen -->
+        <div id="successScreen" class="success-screen">
+            <div class="success-icon">🎉</div>
+            <div class="success-title" data-en="Welcome to GoStar!" data-es="¡Bienvenido a GoStar!">Welcome to GoStar!</div>
+            <p class="success-message" data-en="Your 7-day free trial is now active. Save your license key below — you'll need it to access your dashboard." data-es="Tu prueba gratis de 7 días está activa. Guarda tu clave de licencia — la necesitarás para acceder a tu panel.">Your 7-day free trial is now active. Save your license key below — you'll need it to access your dashboard.</p>
+            
+            <div class="license-box">
+                <div class="license-label" data-en="YOUR LICENSE KEY" data-es="TU CLAVE DE LICENCIA">YOUR LICENSE KEY</div>
+                <div class="license-key" id="generatedKey">LIC-XXXXXXXX</div>
+                <div class="license-expiry" id="expiryDate"></div>
+            </div>
+            
+            <button class="copy-btn" id="copyBtn" data-en="📋 Copy License Key" data-es="📋 Copiar Clave">📋 Copy License Key</button>
+            
+            <a href="/facility" class="btn" data-en="Go to Dashboard →" data-es="Ir al Panel →">Go to Dashboard →</a>
+        </div>
+    </div>
+    
+    <script>
+        var currentLang = localStorage.getItem('lang') || 'en';
+        
+        function setLang(lang) {
+            currentLang = lang;
+            localStorage.setItem('lang', lang);
+            var els = document.querySelectorAll('[data-en]');
+            for (var i = 0; i < els.length; i++) {
+                els[i].textContent = els[i].getAttribute('data-' + lang);
+            }
+            var btns = document.querySelectorAll('.lang-btn');
+            for (var j = 0; j < btns.length; j++) {
+                if (btns[j].dataset.lang === lang) {
+                    btns[j].classList.add('active');
+                } else {
+                    btns[j].classList.remove('active');
+                }
+            }
+        }
+        
+        var langBtns = document.querySelectorAll('.lang-btn');
+        for (var k = 0; k < langBtns.length; k++) {
+            langBtns[k].addEventListener('click', function() { 
+                setLang(this.dataset.lang); 
+            });
+        }
+        
+        // Checkbox validation
+        var privacyCheckbox = document.getElementById('acceptPrivacy');
+        var termsCheckbox = document.getElementById('acceptTerms');
+        var submitBtn = document.getElementById('submitBtn');
+        
+        function checkAcceptance() {
+            submitBtn.disabled = !(privacyCheckbox.checked && termsCheckbox.checked);
+        }
+        
+        privacyCheckbox.addEventListener('change', checkAcceptance);
+        termsCheckbox.addEventListener('change', checkAcceptance);
+        
+        // Form submission
+        document.getElementById('trialForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var error = document.getElementById('error');
+            error.classList.remove('show');
+            
+            var data = {
+                facilityName: document.getElementById('facilityName').value,
+                contactName: document.getElementById('contactName').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value
+            };
+            
+            fetch('/api/trial/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(function(res) { return res.json(); })
+            .then(function(result) {
+                if (result.success) {
+                    document.getElementById('generatedKey').textContent = result.licenseKey;
+                    var expDate = new Date(result.expirationDate);
+                    var expText = currentLang === 'es' ? 'Expira: ' : 'Expires: ';
+                    document.getElementById('expiryDate').textContent = expText + expDate.toLocaleDateString();
+                    
+                    document.getElementById('formScreen').style.display = 'none';
+                    document.getElementById('successScreen').classList.add('show');
+                } else {
+                    error.textContent = result.error || 'Registration failed';
+                    error.classList.add('show');
+                }
+            })
+            .catch(function() {
+                error.textContent = currentLang === 'es' ? 'Error de conexión' : 'Connection error';
+                error.classList.add('show');
+            });
+        });
+        
+        // Copy button
+        document.getElementById('copyBtn').addEventListener('click', function() {
+            var key = document.getElementById('generatedKey').textContent;
+            var btn = this;
+            navigator.clipboard.writeText(key).then(function() {
+                btn.textContent = currentLang === 'es' ? '✓ ¡Copiado!' : '✓ Copied!';
+                btn.classList.add('copied');
+                setTimeout(function() {
+                    btn.textContent = currentLang === 'es' ? '📋 Copiar Clave' : '📋 Copy License Key';
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        });
+        
+        setLang(currentLang);
+    </script>
+</body>
+</html>
