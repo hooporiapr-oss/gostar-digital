@@ -62,7 +62,7 @@ app.get('/login', (req, res) => {
     if (req.session && req.session.userId) {
         return res.redirect('/dashboard');
     }
-    res.sendFile(path.join(__dirname, 'views', 'login.html'));
+    res.sendFile(path.join(__dirname, 'login.html'));
 });
 
 app.post('/login', async (req, res) => {
@@ -87,11 +87,11 @@ app.get('/logout', (req, res) => {
 });
 
 app.get('/dashboard', requireAuth, (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'dashboard.html'));
+    res.sendFile(path.join(__dirname, 'dashboard.html'));
 });
 
 app.get('/game/sequence-memory', requireAuth, (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'sequence-memory.html'));
+    res.sendFile(path.join(__dirname, 'sequence-memory.html'));
 });
 
 // API endpoint to get current user
