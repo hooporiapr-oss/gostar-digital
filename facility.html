@@ -3,294 +3,190 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Facility Dashboard - GoStar Digital</title>
+    <title>Facility Login - GoStar Digital</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', sans-serif;
             min-height: 100vh;
-            background: #0a0a1a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0a0a1a, #1a1a3a);
             color: #fff;
         }
-        .header {
-            background: rgba(255,255,255,0.03);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding: 12px 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .header-left { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-        .logo { font-size: 18px; font-weight: 700; }
-        .logo span { color: #ffd700; }
-        .facility-name { color: rgba(255,255,255,0.6); font-size: 14px; }
-        .header-right { display: flex; align-items: center; gap: 12px; }
         .lang-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
             display: flex;
             background: rgba(255,255,255,0.1);
             border-radius: 20px;
             overflow: hidden;
         }
         .lang-btn {
-            padding: 6px 12px;
+            padding: 8px 16px;
             border: none;
             background: transparent;
             color: rgba(255,255,255,0.6);
             cursor: pointer;
-            font-size: 12px;
+            font-size: 14px;
             font-weight: 600;
         }
         .lang-btn.active {
             background: #ffd700;
             color: #0a0a1a;
         }
-        .logout { color: #ffd700; text-decoration: none; font-size: 14px; font-weight: 600; }
-        .main { max-width: 900px; margin: 0 auto; padding: 16px; }
-        
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-        .stat-card {
+        .container {
             background: rgba(255,255,255,0.03);
             border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 12px;
-            padding: 16px 12px;
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 420px;
             text-align: center;
         }
-        .stat-value { font-size: 28px; font-weight: 700; color: #ffd700; }
-        .stat-label { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 4px; }
-        
-        .card {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 16px;
-            padding: 16px;
-            margin-bottom: 20px;
-        }
-        .card h3 { margin-bottom: 16px; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.5); }
-        
-        .form-row { display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap; }
-        .form-group { flex: 1; min-width: 120px; }
-        .form-group.full { min-width: 100%; }
-        .form-group label { display: block; font-size: 11px; color: rgba(255,255,255,0.6); margin-bottom: 6px; }
-        .form-group input {
+        .logo { margin-bottom: 32px; }
+        .logo h1 { font-size: 28px; }
+        .logo h1 span { color: #ffd700; }
+        .logo p { color: rgba(255,255,255,0.5); font-size: 14px; margin-top: 8px; }
+        .form-group { margin-bottom: 20px; text-align: left; }
+        .form-group label { display: block; font-size: 12px; color: rgba(255,255,255,0.6); margin-bottom: 8px; }
+        .form-group input[type="text"] {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             background: rgba(255,255,255,0.05);
             border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 8px;
+            border-radius: 10px;
             color: #fff;
-            font-size: 14px;
+            font-size: 16px;
+            font-family: monospace;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-align: center;
         }
         .form-group input:focus { outline: none; border-color: #ffd700; }
         
+        /* Checkbox styling */
+        .checkbox-group {
+            margin-bottom: 16px;
+            text-align: left;
+        }
+        .checkbox-label {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            color: rgba(255,255,255,0.8);
+            line-height: 1.5;
+        }
+        .checkbox-label input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+            accent-color: #ffd700;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .checkbox-label a {
+            color: #ffd700;
+            text-decoration: none;
+        }
+        .checkbox-label a:hover {
+            text-decoration: underline;
+        }
+        
         .btn {
-            padding: 12px 20px;
+            width: 100%;
+            padding: 14px;
             background: linear-gradient(135deg, #ffd700, #ffaa00);
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             color: #0a0a1a;
+            font-size: 16px;
             font-weight: 700;
             cursor: pointer;
-            font-size: 14px;
-            width: 100%;
-            margin-top: 12px;
+            margin-top: 10px;
+            transition: opacity 0.3s, transform 0.3s;
         }
-        .btn:hover { opacity: 0.9; }
-        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        .btn.small { padding: 8px 12px; font-size: 12px; width: auto; margin-top: 0; }
-        .btn.danger { background: #ff4444; color: #fff; }
-        
-        /* Code cards */
-        .code-list { display: flex; flex-direction: column; gap: 12px; }
-        
-        .code-card {
-            background: rgba(255,255,255,0.02);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 12px;
-            padding: 16px;
+        .btn:hover:not(:disabled) { opacity: 0.9; transform: translateY(-2px); }
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
         }
-        .code-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        .code-label {
-            font-size: 14px;
-            font-weight: 600;
-            color: rgba(255,255,255,0.7);
-        }
-        .code-users {
-            font-size: 13px;
-            color: rgba(255,255,255,0.5);
-        }
-        
-        .code-key-row {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 12px;
-            flex-wrap: wrap;
-        }
-        .code { 
-            font-family: monospace; 
-            background: rgba(255,215,0,0.2); 
-            color: #ffd700; 
-            padding: 10px 14px; 
-            border-radius: 8px; 
-            font-size: 18px; 
-            letter-spacing: 2px;
-            font-weight: 700;
-        }
-        .copy-btn {
-            padding: 10px 14px;
-            background: rgba(76,217,100,0.2);
-            border: 1px solid #4cd964;
-            color: #4cd964;
+        .error {
+            background: rgba(255,68,68,0.1);
+            border: 1px solid rgba(255,68,68,0.3);
+            color: #ff6b6b;
+            padding: 12px;
             border-radius: 8px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            margin-bottom: 20px;
+            display: none;
         }
-        .copy-btn:hover { background: rgba(76,217,100,0.3); }
-        .copy-btn.copied { background: #4cd964; color: #0a0a1a; }
-        
-        .code-actions {
-            display: flex;
-            justify-content: flex-end;
-        }
-        
-        .empty { text-align: center; color: rgba(255,255,255,0.5); padding: 30px 20px; }
-        .error { background: rgba(255,68,68,0.1); border: 1px solid rgba(255,68,68,0.3); color: #ff6b6b; padding: 12px; border-radius: 8px; margin-bottom: 16px; display: none; }
         .error.show { display: block; }
-        
-        /* Toast notification */
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #4cd964;
-            color: #0a0a1a;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-weight: 600;
+        .back { margin-top: 24px; }
+        .back a {
+            color: rgba(255,255,255,0.5);
             font-size: 14px;
-            z-index: 200;
-            opacity: 0;
-            transition: opacity 0.3s;
+            text-decoration: none;
         }
-        .toast.show { opacity: 1; }
+        .back a:hover { color: #fff; }
         
         @media (max-width: 480px) {
-            .header { padding: 10px 12px; }
-            .logo { font-size: 16px; }
-            .main { padding: 12px; }
-            .stats { grid-template-columns: repeat(3, 1fr); gap: 8px; }
-            .stat-card { padding: 12px 8px; }
-            .stat-value { font-size: 22px; }
-            .stat-label { font-size: 10px; }
-            .card { padding: 14px; }
-            .code { font-size: 15px; padding: 8px 10px; letter-spacing: 1px; }
-            .copy-btn { padding: 8px 10px; font-size: 12px; }
+            .container { padding: 30px 20px; margin: 15px; }
+            .checkbox-label { font-size: 13px; }
         }
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="header-left">
-            <div class="logo">Go<span>Star</span> Digital</div>
-            <div class="facility-name" id="facilityName"></div>
-        </div>
-        <div class="header-right">
-            <div class="lang-toggle">
-                <button class="lang-btn" data-lang="en">EN</button>
-                <button class="lang-btn" data-lang="es">ES</button>
-            </div>
-            <a href="/facility" class="logout" onclick="localStorage.removeItem('licenseKey')" data-en="Sign Out" data-es="Salir">Sign Out</a>
-        </div>
-    </header>
+    <div class="lang-toggle">
+        <button class="lang-btn" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="es">ES</button>
+    </div>
     
-    <main class="main">
-        <div class="stats">
-            <div class="stat-card">
-                <div class="stat-value" id="remainingPool">--</div>
-                <div class="stat-label" data-en="Available" data-es="Disponibles">Available</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value" id="usedPool">--</div>
-                <div class="stat-label" data-en="Assigned" data-es="Asignados">Assigned</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value" id="expiration">--</div>
-                <div class="stat-label" data-en="Days Left" data-es="Días">Days Left</div>
-            </div>
+    <div class="container">
+        <div class="logo">
+            <h1>Go<span>Star</span> Digital</h1>
+            <p data-en="Facility Portal" data-es="Portal de Instalación">Facility Portal</p>
         </div>
         
-        <div class="card">
-            <h3 data-en="Generate Access Code" data-es="Generar Código de Acceso">Generate Access Code</h3>
-            <div class="error" id="error"></div>
-            <form id="createForm">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label data-en="Number of Users" data-es="Número de Usuarios">Number of Users</label>
-                        <input type="number" id="userLimit" required min="1" placeholder="5">
-                    </div>
-                    <div class="form-group">
-                        <label data-en="Label (optional)" data-es="Etiqueta (opcional)">Label (optional)</label>
-                        <input type="text" id="label" placeholder="Floor 2">
-                    </div>
-                </div>
-                <button type="submit" class="btn" id="createBtn" data-en="Generate Code" data-es="Generar Código">Generate Code</button>
-            </form>
-        </div>
+        <div class="error" id="error"></div>
         
-        <div class="card">
-            <h3 data-en="Active Access Codes" data-es="Códigos de Acceso Activos">Active Access Codes</h3>
-            <div id="codeList" class="code-list"></div>
-        </div>
-    </main>
-    
-    <div class="toast" id="toast"></div>
+        <form id="loginForm">
+            <div class="form-group">
+                <label data-en="LICENSE KEY" data-es="CLAVE DE LICENCIA">LICENSE KEY</label>
+                <input type="text" id="licenseKey" required placeholder="LIC-XXXXXXXX" maxlength="12">
+            </div>
+            
+            <div class="checkbox-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="acceptPrivacy" required>
+                    <span>
+                        <span data-en="I have read and accept the" data-es="He leído y acepto la">I have read and accept the</span>
+                        <a href="https://gostardigital.com/privacy.html" target="_blank" data-en="Privacy Policy" data-es="Política de Privacidad">Privacy Policy</a>
+                    </span>
+                </label>
+            </div>
+            
+            <div class="checkbox-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="acceptTerms" required>
+                    <span>
+                        <span data-en="I have read and accept the" data-es="He leído y acepto los">I have read and accept the</span>
+                        <a href="https://gostardigital.com/terms.html" target="_blank" data-en="Terms of Use" data-es="Términos de Uso">Terms of Use</a>
+                    </span>
+                </label>
+            </div>
+            
+            <button type="submit" class="btn" id="submitBtn" disabled data-en="Access Dashboard" data-es="Acceder al Panel">Access Dashboard</button>
+        </form>
+        
+        <p class="back"><a href="https://gostardigital.com" data-en="← Back to Home" data-es="← Volver al Inicio">← Back to Home</a></p>
+    </div>
     
     <script>
-        var T = {
-            en: {
-                users: 'users',
-                used: 'used',
-                delete: 'Delete',
-                copy: 'Copy',
-                copied: 'Copied!',
-                noCodes: 'No access codes created yet',
-                confirmDelete: 'Delete this access code? Users with this code will lose access.',
-                noLabel: 'No label'
-            },
-            es: {
-                users: 'usuarios',
-                used: 'usados',
-                delete: 'Eliminar',
-                copy: 'Copiar',
-                copied: '¡Copiado!',
-                noCodes: 'No hay códigos de acceso creados',
-                confirmDelete: '¿Eliminar este código? Los usuarios perderán acceso.',
-                noLabel: 'Sin etiqueta'
-            }
-        };
-        
-        var licenseKey = localStorage.getItem('licenseKey');
-        if (!licenseKey) { window.location.href = '/facility'; }
-        
         var currentLang = localStorage.getItem('lang') || 'en';
         
         function setLang(lang) {
@@ -308,7 +204,6 @@
                     btns[j].classList.remove('active');
                 }
             }
-            loadData();
         }
         
         var langBtns = document.querySelectorAll('.lang-btn');
@@ -316,127 +211,46 @@
             langBtns[k].addEventListener('click', function() { setLang(this.dataset.lang); });
         }
         
-        function showToast(message) {
-            var toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.classList.add('show');
-            setTimeout(function() {
-                toast.classList.remove('show');
-            }, 2000);
+        // Checkbox validation
+        var privacyCheckbox = document.getElementById('acceptPrivacy');
+        var termsCheckbox = document.getElementById('acceptTerms');
+        var submitBtn = document.getElementById('submitBtn');
+        
+        function checkAcceptance() {
+            submitBtn.disabled = !(privacyCheckbox.checked && termsCheckbox.checked);
         }
         
-        function copyCode(code, btn) {
-            navigator.clipboard.writeText(code).then(function() {
-                var t = T[currentLang];
-                btn.innerHTML = '✓ ' + t.copied;
-                btn.classList.add('copied');
-                showToast(t.copied + ' ' + code);
-                setTimeout(function() {
-                    btn.innerHTML = '📋 ' + t.copy;
-                    btn.classList.remove('copied');
-                }, 2000);
-            });
-        }
+        privacyCheckbox.addEventListener('change', checkAcceptance);
+        termsCheckbox.addEventListener('change', checkAcceptance);
         
-        function loadData() {
-            var t = T[currentLang];
-            fetch('/api/facility/' + licenseKey)
-                .then(function(res) {
-                    if (!res.ok) {
-                        localStorage.removeItem('licenseKey');
-                        window.location.href = '/facility';
-                        return;
-                    }
-                    return res.json();
-                })
-                .then(function(data) {
-                    if (!data) return;
-                    
-                    document.getElementById('facilityName').textContent = data.facilityName;
-                    document.getElementById('remainingPool').textContent = data.remainingPool;
-                    document.getElementById('usedPool').textContent = data.usedPool;
-                    
-                    var expDate = new Date(data.expirationDate);
-                    var daysLeft = Math.ceil((expDate - new Date()) / (1000 * 60 * 60 * 24));
-                    document.getElementById('expiration').textContent = daysLeft > 0 ? daysLeft : 0;
-                    
-                    document.getElementById('userLimit').max = data.remainingPool;
-                    document.getElementById('createBtn').disabled = data.remainingPool <= 0;
-                    
-                    var container = document.getElementById('codeList');
-                    
-                    if (data.codes.length === 0) {
-                        container.innerHTML = '<p class="empty">' + t.noCodes + '</p>';
-                        return;
-                    }
-                    
-                    var html = '';
-                    for (var i = 0; i < data.codes.length; i++) {
-                        var code = data.codes[i];
-                        var labelText = code.label || t.noLabel;
-                        
-                        html += '<div class="code-card">';
-                        html += '<div class="code-header">';
-                        html += '<span class="code-label">' + labelText + '</span>';
-                        html += '<span class="code-users">' + code.usedCount + ' / ' + code.userLimit + ' ' + t.users + '</span>';
-                        html += '</div>';
-                        
-                        html += '<div class="code-key-row">';
-                        html += '<span class="code">' + code.code + '</span>';
-                        html += '<button class="copy-btn" onclick="copyCode(\'' + code.code + '\', this)">📋 ' + t.copy + '</button>';
-                        html += '</div>';
-                        
-                        html += '<div class="code-actions">';
-                        html += '<button class="btn small danger" onclick="deleteCode(\'' + code.code + '\')">' + t.delete + '</button>';
-                        html += '</div>';
-                        html += '</div>';
-                    }
-                    
-                    container.innerHTML = html;
-                });
-        }
-        
-        document.getElementById('createForm').addEventListener('submit', function(e) {
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             var error = document.getElementById('error');
             error.classList.remove('show');
             
-            var data = {
-                userLimit: document.getElementById('userLimit').value,
-                label: document.getElementById('label').value
-            };
+            var licenseKey = document.getElementById('licenseKey').value.toUpperCase();
             
-            fetch('/api/facility/' + licenseKey + '/codes', {
+            fetch('/api/facility/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
+                body: JSON.stringify({ licenseKey: licenseKey })
             })
-            .then(function(res) {
-                if (res.ok) {
-                    return res.json();
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+                if (data.success) {
+                    localStorage.setItem('licenseKey', licenseKey);
+                    localStorage.setItem('facilityName', data.facilityName);
+                    window.location.href = '/facility/dashboard';
                 } else {
-                    return res.json().then(function(err) {
-                        throw new Error(err.error);
-                    });
+                    error.textContent = currentLang === 'es' ? 'Clave de licencia inválida' : 'Invalid license key';
+                    error.classList.add('show');
                 }
             })
-            .then(function(result) {
-                document.getElementById('createForm').reset();
-                loadData();
-                showToast(T[currentLang].copied + ' ' + result.code);
-            })
-            .catch(function(err) {
-                error.textContent = err.message || 'Failed to create code';
+            .catch(function() {
+                error.textContent = currentLang === 'es' ? 'Error de conexión' : 'Connection error';
                 error.classList.add('show');
             });
         });
-        
-        function deleteCode(code) {
-            if (!confirm(T[currentLang].confirmDelete)) return;
-            
-            fetch('/api/facility/' + licenseKey + '/codes/' + code, { method: 'DELETE' })
-                .then(function() { loadData(); });
-        }
         
         setLang(currentLang);
     </script>
