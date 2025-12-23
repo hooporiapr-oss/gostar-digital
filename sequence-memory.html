@@ -1769,6 +1769,13 @@ function backToStart() {
     updateStreakDisplay();
 }
 
+function logout() {
+    localStorage.removeItem('accessCode');
+    localStorage.removeItem('username');
+    localStorage.removeItem('facilityName');
+    window.location.href = '/play';
+}
+    
 window.onload = init;
 </script>
 
