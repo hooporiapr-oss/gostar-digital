@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Auth check - uncomment for production
     <script>
     if (!localStorage.getItem('accessCode') || !localStorage.getItem('username')) {
         window.location.href = '/play';
     }
-</script>
+    </script>
+    -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Sequence Memory - GoStar</title>
@@ -35,6 +37,15 @@ html {
     --q2: #E8A848;
     --q3: #ed8936;
     --q4: #fc8181;
+    
+    /* Star colors */
+    --star-red: #e53e3e;
+    --star-blue: #3182ce;
+    --star-green: #38a169;
+    --star-yellow: #d69e2e;
+    
+    /* Gold gradient for branding */
+    --gold-gradient: linear-gradient(135deg, #FFD93D 0%, #FF9F1C 100%);
 }
 
 body {
@@ -350,6 +361,31 @@ body[data-lang="en"] .lang-en { display: inline; }
     animation: countPulse 0.5s ease-out;
 }
 
+.countdown-gostar {
+    font-size: 2.2rem;
+    font-weight: 900;
+    animation: countPulse 0.5s ease-out;
+    white-space: nowrap;
+}
+
+.countdown-lets {
+    background: var(--gold-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.countdown-go {
+    color: var(--text-light);
+}
+
+.countdown-star {
+    background: var(--gold-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
 @keyframes countPulse {
     0% { transform: scale(1.3); opacity: 0.7; }
     100% { transform: scale(1); opacity: 1; }
@@ -454,7 +490,7 @@ body[data-lang="en"] .lang-en { display: inline; }
 }
 
 .message-area {
-    height: 50px;
+    height: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -483,57 +519,107 @@ body[data-lang="en"] .lang-en { display: inline; }
     animation: none;
 }
 
-/* Game Board */
+/* Game Board - Stars */
 .game-board {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-    max-width: 320px;
+    gap: 20px;
+    max-width: 340px;
     margin-bottom: 20px;
 }
 
+/* Star Tile */
 .game-tile {
     width: 140px;
     height: 140px;
-    border-radius: 20px;
     cursor: pointer;
     transition: all 0.15s ease;
-    border: 4px solid transparent;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 3rem;
-    font-weight: 900;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
+    position: relative;
 }
 
-.game-tile.color-red { background: #e53e3e; }
-.game-tile.color-blue { background: #3182ce; }
-.game-tile.color-green { background: #38a169; }
-.game-tile.color-yellow { background: #d69e2e; }
-
-.game-tile.number-tile {
-    background: var(--bg-card);
-    border: 4px solid var(--primary);
-    color: var(--text-light);
+/* Star Shape using SVG */
+.game-tile .star-shape {
+    width: 100%;
+    height: 100%;
+    transition: all 0.15s ease;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
 }
 
+.game-tile.color-red .star-shape { fill: var(--star-red); }
+.game-tile.color-blue .star-shape { fill: var(--star-blue); }
+.game-tile.color-green .star-shape { fill: var(--star-green); }
+.game-tile.color-yellow .star-shape { fill: var(--star-yellow); }
+
+/* Number/Animal tiles - star with content */
+.game-tile.number-tile,
 .game-tile.animal-tile {
-    background: var(--bg-card);
-    border: 4px solid var(--primary);
-    font-size: 3.5rem;
+    position: relative;
 }
 
-.game-tile.lit {
-    transform: scale(1.08);
-    border-color: white;
-    box-shadow: 0 0 40px rgba(255,255,255,0.5);
-    filter: brightness(1.4);
+.game-tile.number-tile .star-shape,
+.game-tile.animal-tile .star-shape {
+    fill: var(--bg-card);
+    stroke: var(--primary);
+    stroke-width: 3;
 }
 
-.game-tile:active {
-    transform: scale(0.95);
+.game-tile .tile-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2.8rem;
+    font-weight: 900;
+    color: var(--text-light);
+    z-index: 2;
+    pointer-events: none;
+}
+
+.game-tile.animal-tile .tile-content {
+    font-size: 3.2rem;
+}
+
+/* Lit state - glowing star */
+.game-tile.lit .star-shape {
+    filter: drop-shadow(0 0 25px currentColor) drop-shadow(0 0 50px currentColor);
+    transform: scale(1.1);
+}
+
+.game-tile.color-red.lit .star-shape {
+    fill: #ff6b6b;
+    filter: drop-shadow(0 0 30px var(--star-red)) drop-shadow(0 0 60px var(--star-red));
+}
+
+.game-tile.color-blue.lit .star-shape {
+    fill: #63b3ed;
+    filter: drop-shadow(0 0 30px var(--star-blue)) drop-shadow(0 0 60px var(--star-blue));
+}
+
+.game-tile.color-green.lit .star-shape {
+    fill: #68d391;
+    filter: drop-shadow(0 0 30px var(--star-green)) drop-shadow(0 0 60px var(--star-green));
+}
+
+.game-tile.color-yellow.lit .star-shape {
+    fill: #f6e05e;
+    filter: drop-shadow(0 0 30px var(--star-yellow)) drop-shadow(0 0 60px var(--star-yellow));
+}
+
+.game-tile.number-tile.lit .star-shape,
+.game-tile.animal-tile.lit .star-shape {
+    fill: rgba(26, 127, 142, 0.3);
+    stroke: var(--text-light);
+    filter: drop-shadow(0 0 20px var(--primary)) drop-shadow(0 0 40px var(--primary));
+    transform: scale(1.1);
+}
+
+.game-tile:active .star-shape {
+    transform: scale(0.92);
 }
 
 .game-tile.disabled {
@@ -734,6 +820,19 @@ body[data-lang="en"] .lang-en { display: inline; }
         height: 120px;
     }
     
+    .game-board {
+        gap: 15px;
+        max-width: 280px;
+    }
+    
+    .game-tile .tile-content {
+        font-size: 2.2rem;
+    }
+    
+    .game-tile.animal-tile .tile-content {
+        font-size: 2.6rem;
+    }
+    
     .quarter-dot {
         width: 50px;
     }
@@ -746,15 +845,14 @@ body[data-lang="en"] .lang-en { display: inline; }
         flex-wrap: wrap;
         justify-content: center;
     }
+    
+    .countdown-gostar {
+        font-size: 1.8rem;
+    }
 }
 </style>
 </head>
 <body data-lang="en">
-
-<a href="index.html" class="home-btn">
-    <span class="lang-en">← Home</span>
-    <span class="lang-es">← Inicio</span>
-</a>
 
 <div class="lang-toggle">
     <button class="lang-btn active" onclick="setLang('en')">EN</button>
@@ -768,7 +866,7 @@ body[data-lang="en"] .lang-en { display: inline; }
         <span class="lang-es">Salir</span>
     </a>
     
-    <div class="logo-icon">🧠</div>
+    <div class="logo-icon">⭐</div>
     <div class="logo-text">Sequence Memory</div>
     <div class="logo-sub">GoStar</div>
     
@@ -813,10 +911,10 @@ body[data-lang="en"] .lang-en { display: inline; }
     
     <div class="mode-grid">
         <button class="mode-btn selected" data-mode="colors" onclick="selectMode('colors')">
-            <span class="icon">🎨</span>
+            <span class="icon">⭐</span>
             <span class="label">
-                <span class="lang-en">Colors</span>
-                <span class="lang-es">Colores</span>
+                <span class="lang-en">Stars</span>
+                <span class="lang-es">Estrellas</span>
             </span>
         </button>
         <button class="mode-btn" data-mode="numbers" onclick="selectMode('numbers')">
@@ -922,7 +1020,7 @@ body[data-lang="en"] .lang-en { display: inline; }
     </div>
     
     <div class="game-board" id="gameBoard">
-        <!-- Tiles inserted by JS -->
+        <!-- Star tiles inserted by JS -->
     </div>
 </div>
 
@@ -1027,6 +1125,9 @@ body[data-lang="en"] .lang-en { display: inline; }
 </div>
 
 <script>
+// Star SVG template
+var starSVG = '<svg class="star-shape" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><polygon points="50,5 61,40 98,40 68,62 79,97 50,75 21,97 32,62 2,40 39,40"/></svg>';
+
 // Language
 var currentLang = localStorage.getItem('gostar-lang') || 'en';
 
@@ -1202,7 +1303,7 @@ function setupBoard() {
     } else if (gameMode === 'animals') {
         values = animals;
     } else if (gameMode === 'speed') {
-        values = colors; // Speed mode uses colors
+        values = colors; // Speed mode uses colors/stars
     }
     
     for (var i = 0; i < 4; i++) {
@@ -1213,12 +1314,13 @@ function setupBoard() {
         
         if (gameMode === 'colors' || gameMode === 'speed') {
             tile.className = 'game-tile color-' + values[i];
+            tile.innerHTML = starSVG;
         } else if (gameMode === 'numbers') {
             tile.className = 'game-tile number-tile';
-            tile.textContent = values[i];
+            tile.innerHTML = starSVG + '<span class="tile-content">' + values[i] + '</span>';
         } else if (gameMode === 'animals') {
             tile.className = 'game-tile animal-tile';
-            tile.textContent = values[i];
+            tile.innerHTML = starSVG + '<span class="tile-content">' + values[i] + '</span>';
         }
         
         board.appendChild(tile);
@@ -1306,11 +1408,8 @@ function playCountdown(callback) {
             count--;
             setTimeout(tick, interval);
         } else {
-            if (currentLang === 'es') {
-                setMessage('<span class="countdown" style="color: var(--success)">¡YA!</span>', '');
-            } else {
-                setMessage('<span class="countdown" style="color: var(--success)">GO!</span>', '');
-            }
+            // Let's GoStar! with styled text
+            setMessage('<span class="countdown-gostar"><span class="countdown-lets">Let\'s</span> <span class="countdown-go">Go</span><span class="countdown-star">Star!</span></span>', '');
             playGoBeep();
             setTimeout(function() {
                 if (currentLang === 'es') {
@@ -1319,7 +1418,7 @@ function playCountdown(callback) {
                     setMessage('Watch carefully!');
                 }
                 setTimeout(callback, 500);
-            }, 400);
+            }, 600);
         }
     }
     
@@ -1442,19 +1541,24 @@ function playGoBeep() {
             ctx.resume();
         }
         
-        var osc = ctx.createOscillator();
-        var gain = ctx.createGain();
+        // Play a triumphant chord for "Let's GoStar!"
+        var freqs = [523.25, 659.25, 783.99]; // C5, E5, G5 - major chord
         
-        osc.type = 'sine';
-        osc.frequency.value = 880; // A5 - higher pitch for GO
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        
-        gain.gain.setValueAtTime(0.4, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
-        
-        osc.start(ctx.currentTime);
-        osc.stop(ctx.currentTime + 0.25);
+        for (var i = 0; i < freqs.length; i++) {
+            var osc = ctx.createOscillator();
+            var gain = ctx.createGain();
+            
+            osc.type = 'sine';
+            osc.frequency.value = freqs[i];
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            
+            gain.gain.setValueAtTime(0.25, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+            
+            osc.start(ctx.currentTime);
+            osc.stop(ctx.currentTime + 0.35);
+        }
     } catch (e) {}
 }
 
