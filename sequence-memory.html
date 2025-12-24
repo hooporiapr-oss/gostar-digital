@@ -386,6 +386,13 @@ body[data-lang="en"] .lang-en { display: inline; }
     background-clip: text;
 }
 
+.countdown-palante {
+    background: var(--gold-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
 @keyframes countPulse {
     0% { transform: scale(1.3); opacity: 0.7; }
     100% { transform: scale(1); opacity: 1; }
@@ -1408,8 +1415,12 @@ function playCountdown(callback) {
             count--;
             setTimeout(tick, interval);
         } else {
-            // Let's GoStar! with styled text
-            setMessage('<span class="countdown-gostar"><span class="countdown-lets">Let\'s</span> <span class="countdown-go">Go</span><span class="countdown-star">Star!</span></span>', '');
+            // Styled countdown finish - different for each language
+            if (currentLang === 'es') {
+                setMessage('<span class="countdown-gostar"><span class="countdown-palante">¡Pa\'lante!</span></span>', '');
+            } else {
+                setMessage('<span class="countdown-gostar"><span class="countdown-lets">Let\'s</span> <span class="countdown-go">Go</span><span class="countdown-star">Star!</span></span>', '');
+            }
             playGoBeep();
             setTimeout(function() {
                 if (currentLang === 'es') {
