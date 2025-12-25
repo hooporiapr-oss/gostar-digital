@@ -249,6 +249,7 @@ body[data-lang="en"] .lang-en { display: inline; }
 .difficulty-btn.gentle .icon { color: var(--q1); }
 .difficulty-btn.standard .icon { color: var(--q2); }
 .difficulty-btn.pro .icon { color: var(--q4); }
+.difficulty-btn.elite .icon { color: #A855F7; }
 
 /* Tempo Selection */
 .tempo-grid {
@@ -847,6 +848,13 @@ body[data-lang="en"] .lang-en { display: inline; }
                 <span class="lang-es">Pro</span>
             </span>
         </button>
+        <button class="difficulty-btn elite" data-difficulty="elite" onclick="selectDifficulty('elite')">
+            <span class="icon">💎</span>
+            <span class="label">
+                <span class="lang-en">Elite</span>
+                <span class="lang-es">Élite</span>
+            </span>
+        </button>
     </div>
     
     <div class="section-title">
@@ -1076,7 +1084,8 @@ var completedStars = [];
 var difficultySettings = {
     gentle: { 1: 4, 2: 4, 3: 5, 4: 5 },
     standard: { 1: 5, 2: 6, 3: 6, 4: 7 },
-    pro: { 1: 6, 2: 7, 3: 8, 4: 9 }
+    pro: { 1: 6, 2: 7, 3: 8, 4: 9 },
+    elite: { 1: 8, 2: 9, 3: 10, 4: 12 }
 };
 
 // Tempo settings
@@ -1250,8 +1259,8 @@ function generateStarPositions(numStars) {
     var board = document.getElementById('trailBoard');
     var boardWidth = board.offsetWidth;
     var boardHeight = board.offsetHeight;
-    var padding = 45;
-    var minDistance = 70;
+    var padding = 40;
+    var minDistance = 60;
     
     starNodes = [];
     
