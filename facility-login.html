@@ -4,253 +4,389 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Facility Login - GoStar Digital</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg-primary: #0D0D0D;
+            --bg-secondary: #1A1A1A;
+            --bg-card: #242424;
+            --text-primary: #FFFFFF;
+            --text-secondary: #B3B3B3;
+            --text-muted: #808080;
+            --accent-gold: #FFD93D;
+            --accent-teal: #00D9A5;
+            --accent-coral: #FF6B6B;
+            --gradient-gold: linear-gradient(135deg, #FFD93D 0%, #FF9F1C 100%);
+            --gradient-teal: linear-gradient(135deg, #00D9A5 0%, #00B386 100%);
+        }
+
+        html, body { height: 100%; }
+
         body {
-            font-family: 'Segoe UI', sans-serif;
-            min-height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            color: var(--text-primary);
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #0a0a1a, #1a1a3a);
-            color: #fff;
+            min-height: 100vh;
             padding: 20px;
         }
+
+        body[data-lang="es"] .lang-en { display: none !important; }
+        body[data-lang="en"] .lang-es { display: none !important; }
+        body[data-lang="es"] .lang-es { display: inline !important; }
+        body[data-lang="en"] .lang-en { display: inline !important; }
+
         .lang-toggle {
             position: fixed;
             top: 20px;
             right: 20px;
             display: flex;
-            background: rgba(255,255,255,0.1);
-            border-radius: 20px;
-            overflow: hidden;
+            gap: 4px;
+            background: var(--bg-card);
+            padding: 4px;
+            border-radius: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+            z-index: 100;
         }
+
         .lang-btn {
             padding: 8px 16px;
             border: none;
             background: transparent;
-            color: rgba(255,255,255,0.6);
-            cursor: pointer;
-            font-size: 14px;
+            color: var(--text-secondary);
+            border-radius: 25px;
+            font-family: 'Inter', sans-serif;
             font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s ease;
         }
+
+        .lang-btn:hover { color: var(--text-primary); }
+
         .lang-btn.active {
-            background: #ffd700;
-            color: #0a0a1a;
+            background: var(--accent-teal);
+            color: var(--bg-primary);
         }
-        .container {
-            background: rgba(255,255,255,0.03);
+
+        .login-card {
+            background: var(--bg-card);
             border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 20px;
-            padding: 40px;
+            border-radius: 24px;
+            padding: 48px 40px;
             width: 100%;
-            max-width: 420px;
-        }
-        .logo { text-align: center; margin-bottom: 32px; }
-        .logo h1 { font-size: 28px; }
-        .logo h1 span { color: #ffd700; }
-        .logo p { color: rgba(255,255,255,0.5); font-size: 14px; margin-top: 8px; }
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; font-size: 12px; color: rgba(255,255,255,0.6); margin-bottom: 8px; }
-        .form-group input {
-            width: 100%;
-            padding: 14px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 10px;
-            color: #fff;
-            font-size: 16px;
-            font-family: monospace;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+            max-width: 440px;
             text-align: center;
         }
-        .form-group input:focus { outline: none; border-color: #ffd700; }
-        
-        /* Acceptance Section */
-        .acceptance-box {
-            background: rgba(255,255,255,0.02);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 24px;
+
+        .login-logo {
+            font-size: 64px;
+            margin-bottom: 16px;
+            filter: drop-shadow(0 0 20px rgba(0, 217, 165, 0.4));
         }
-        .acceptance-title {
+
+        .login-title {
+            font-size: 28px;
+            font-weight: 900;
+            margin-bottom: 8px;
+        }
+
+        .login-title span {
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .login-badge {
+            display: inline-block;
             font-size: 11px;
-            color: rgba(255,255,255,0.4);
+            font-weight: 700;
+            color: var(--bg-primary);
+            background: var(--accent-teal);
+            padding: 4px 12px;
+            border-radius: 20px;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 16px;
-            text-align: center;
+            margin-bottom: 32px;
         }
-        .checkbox-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            margin-bottom: 12px;
-        }
-        .checkbox-item:last-child {
-            margin-bottom: 0;
-        }
-        .checkbox-item input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            margin-top: 2px;
-            accent-color: #ffd700;
-            cursor: pointer;
-            flex-shrink: 0;
-        }
-        .checkbox-item label {
+
+        .login-subtitle {
             font-size: 14px;
-            color: rgba(255,255,255,0.8);
-            line-height: 1.5;
-            cursor: pointer;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            line-height: 1.6;
         }
-        .checkbox-item a {
-            color: #ffd700;
-            text-decoration: none;
-            font-weight: 600;
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
         }
-        .checkbox-item a:hover {
-            text-decoration: underline;
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        
-        .btn {
+
+        .form-input {
             width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #ffd700, #ffaa00);
-            border: none;
-            border-radius: 10px;
-            color: #0a0a1a;
+            padding: 16px 20px;
+            font-size: 16px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            background: var(--bg-primary);
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-teal);
+            box-shadow: 0 0 0 3px rgba(0, 217, 165, 0.2);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-muted);
+            text-transform: none;
+            letter-spacing: 0;
+            font-weight: 400;
+        }
+
+        .form-input.error {
+            border-color: var(--accent-coral);
+            animation: shake 0.4s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 16px 32px;
             font-size: 16px;
             font-weight: 700;
+            font-family: 'Inter', sans-serif;
+            background: var(--gradient-teal);
+            color: var(--bg-primary);
+            border: none;
+            border-radius: 12px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
+            margin-top: 8px;
         }
-        .btn:hover:not(:disabled) { 
-            opacity: 0.9; 
+
+        .login-btn:hover {
             transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 217, 165, 0.3);
         }
-        .btn:disabled {
-            opacity: 0.3;
+
+        .login-btn:disabled {
+            opacity: 0.5;
             cursor: not-allowed;
             transform: none;
         }
-        .error {
-            background: rgba(255,68,68,0.1);
-            border: 1px solid rgba(255,68,68,0.3);
-            color: #ff6b6b;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            text-align: center;
+
+        .login-error {
+            color: var(--accent-coral);
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 16px;
             display: none;
         }
-        .error.show { display: block; }
-        .back { text-align: center; margin-top: 20px; }
-        .back a { color: rgba(255,255,255,0.5); font-size: 14px; text-decoration: none; }
-        .back a:hover { color: #fff; }
-        
+
+        .login-error.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .trial-banner {
+            background: rgba(255, 217, 61, 0.1);
+            border: 1px solid rgba(255, 217, 61, 0.2);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 24px;
+        }
+
+        .trial-banner-text {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .trial-banner-link {
+            color: var(--accent-gold);
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .trial-banner-link:hover { text-decoration: underline; }
+
+        .login-links {
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .login-link {
+            color: var(--accent-gold);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .login-link:hover { color: var(--accent-teal); }
+
+        .home-link {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .home-link:hover { color: var(--accent-gold); }
+
         @media (max-width: 480px) {
-            .container { padding: 30px 20px; }
-            .checkbox-item label { font-size: 13px; }
+            .login-card { padding: 36px 24px; }
+            .login-logo { font-size: 48px; }
+            .login-title { font-size: 24px; }
         }
     </style>
 </head>
-<body>
+<body data-lang="en">
+
     <div class="lang-toggle">
-        <button class="lang-btn" data-lang="en">EN</button>
-        <button class="lang-btn" data-lang="es">ES</button>
+        <button class="lang-btn active" onclick="setLang('en')">EN</button>
+        <button class="lang-btn" onclick="setLang('es')">ES</button>
     </div>
-    
-    <div class="container">
-        <div class="logo">
-            <h1>Go<span>Star</span> Digital</h1>
-            <p data-en="Facility Dashboard" data-es="Panel de Instalación">Facility Dashboard</p>
-        </div>
-        <div class="error" id="error"></div>
+
+    <a href="/" class="home-link">
+        <span>⭐</span>
+        <span>GoStar</span>
+    </a>
+
+    <div class="login-card">
+        <div class="login-logo">🏢</div>
+        <h1 class="login-title">Go<span>Star</span></h1>
+        <span class="login-badge">
+            <span class="lang-en">Facility Portal</span>
+            <span class="lang-es">Portal de Instalación</span>
+        </span>
+        
+        <p class="login-subtitle">
+            <span class="lang-en">Enter your license key to access your facility dashboard.</span>
+            <span class="lang-es">Ingresa tu clave de licencia para acceder al panel de tu instalación.</span>
+        </p>
+        
         <form id="loginForm">
             <div class="form-group">
-                <label data-en="LICENSE KEY" data-es="CLAVE DE LICENCIA">LICENSE KEY</label>
-                <input type="text" id="licenseKey" required placeholder="LIC-XXXXXXXX">
+                <label class="form-label">
+                    <span class="lang-en">License Key</span>
+                    <span class="lang-es">Clave de Licencia</span>
+                </label>
+                <input 
+                    type="text" 
+                    class="form-input" 
+                    id="licenseKey" 
+                    placeholder="LIC-XXXXXXXX"
+                    autocomplete="off"
+                    spellcheck="false"
+                >
             </div>
             
-            <div class="acceptance-box">
-                <div class="acceptance-title" data-en="Required Acceptance" data-es="Aceptación Requerida">Required Acceptance</div>
-                
-                <div class="checkbox-item">
-                    <input type="checkbox" id="acceptPrivacy">
-                    <label for="acceptPrivacy">
-                        <span data-en="I have read and accept the" data-es="He leído y acepto la">I have read and accept the</span>
-                        <a href="https://gostardigital.com/privacy.html" target="_blank" data-en="Privacy Policy" data-es="Política de Privacidad">Privacy Policy</a>
-                    </label>
-                </div>
-                
-                <div class="checkbox-item">
-                    <input type="checkbox" id="acceptTerms">
-                    <label for="acceptTerms">
-                        <span data-en="I have read and accept the" data-es="He leído y acepto los">I have read and accept the</span>
-                        <a href="https://gostardigital.com/terms.html" target="_blank" data-en="Terms of Use" data-es="Términos de Uso">Terms of Use</a>
-                    </label>
-                </div>
-            </div>
-            
-            <button type="submit" class="btn" id="submitBtn" disabled data-en="Access Dashboard" data-es="Acceder al Panel">Access Dashboard</button>
+            <button type="submit" class="login-btn" id="loginBtn">
+                <span class="lang-en">Access Dashboard</span>
+                <span class="lang-es">Acceder al Panel</span>
+            </button>
         </form>
-        <p class="back"><a href="https://gostardigital.com" data-en="← Back to Home" data-es="← Volver al Inicio">← Back to Home</a></p>
+        
+        <p class="login-error" id="loginError">
+            <span class="lang-en">Invalid or expired license key.</span>
+            <span class="lang-es">Clave de licencia inválida o expirada.</span>
+        </p>
+        
+        <div class="trial-banner">
+            <p class="trial-banner-text">
+                <span class="lang-en">Don't have a license key?</span>
+                <span class="lang-es">¿No tienes una clave de licencia?</span>
+            </p>
+            <a href="/trial" class="trial-banner-link">
+                <span class="lang-en">Start Free 7-Day Trial →</span>
+                <span class="lang-es">Comenzar Prueba Gratis de 7 Días →</span>
+            </a>
+        </div>
+        
+        <div class="login-links">
+            <a href="mailto:info@gostar.email" class="login-link">
+                <span class="lang-en">Need help? Contact us</span>
+                <span class="lang-es">¿Necesitas ayuda? Contáctanos</span>
+            </a>
+        </div>
     </div>
-    
+
     <script>
-        var errors = {
-            en: { invalid: 'Invalid license key', expired: 'License expired', connection: 'Connection error' },
-            es: { invalid: 'Clave de licencia inválida', expired: 'Licencia expirada', connection: 'Error de conexión' }
-        };
-        
-        var currentLang = localStorage.getItem('lang') || 'en';
-        
+        var currentLang = localStorage.getItem('gostar-lang') || 'en';
+
         function setLang(lang) {
             currentLang = lang;
-            localStorage.setItem('lang', lang);
-            var els = document.querySelectorAll('[data-en]');
-            for (var i = 0; i < els.length; i++) {
-                els[i].textContent = els[i].getAttribute('data-' + lang);
-            }
-            var btns = document.querySelectorAll('.lang-btn');
-            for (var j = 0; j < btns.length; j++) {
-                if (btns[j].dataset.lang === lang) {
-                    btns[j].classList.add('active');
-                } else {
-                    btns[j].classList.remove('active');
-                }
-            }
-        }
-        
-        var langBtns = document.querySelectorAll('.lang-btn');
-        for (var k = 0; k < langBtns.length; k++) {
-            langBtns[k].addEventListener('click', function() { 
-                setLang(this.dataset.lang); 
+            localStorage.setItem('gostar-lang', lang);
+            document.body.setAttribute('data-lang', lang);
+            document.querySelectorAll('.lang-btn').forEach(function(btn) {
+                btn.classList.toggle('active', btn.textContent === lang.toUpperCase());
             });
         }
-        
-        // Checkbox validation
-        var privacyCheckbox = document.getElementById('acceptPrivacy');
-        var termsCheckbox = document.getElementById('acceptTerms');
-        var submitBtn = document.getElementById('submitBtn');
-        
-        function checkAcceptance() {
-            submitBtn.disabled = !(privacyCheckbox.checked && termsCheckbox.checked);
-        }
-        
-        privacyCheckbox.addEventListener('change', checkAcceptance);
-        termsCheckbox.addEventListener('change', checkAcceptance);
-        
-        // Form submission
+
+        document.body.setAttribute('data-lang', currentLang);
+        document.querySelectorAll('.lang-btn').forEach(function(btn) {
+            btn.classList.toggle('active', btn.textContent === currentLang.toUpperCase());
+        });
+
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            var error = document.getElementById('error');
-            var licenseKey = document.getElementById('licenseKey').value.toUpperCase();
             
-            error.classList.remove('show');
+            var licenseKey = document.getElementById('licenseKey').value.trim().toUpperCase();
+            var loginBtn = document.getElementById('loginBtn');
+            var errorEl = document.getElementById('loginError');
+            var inputEl = document.getElementById('licenseKey');
+            
+            if (!licenseKey) {
+                inputEl.classList.add('error');
+                return;
+            }
+            
+            errorEl.classList.remove('show');
+            inputEl.classList.remove('error');
+            
+            loginBtn.disabled = true;
+            loginBtn.textContent = currentLang === 'es' ? 'Verificando...' : 'Verifying...';
             
             fetch('/api/facility/login', {
                 method: 'POST',
@@ -260,21 +396,31 @@
             .then(function(res) { return res.json(); })
             .then(function(data) {
                 if (data.success) {
-                    localStorage.setItem('licenseKey', licenseKey);
+                    sessionStorage.setItem('gostar-facility-license', licenseKey);
+                    sessionStorage.setItem('gostar-facility-name', data.facilityName);
                     window.location.href = '/facility/dashboard';
                 } else {
-                    var errKey = data.error && data.error.includes('expired') ? 'expired' : 'invalid';
-                    error.textContent = errors[currentLang][errKey];
-                    error.classList.add('show');
+                    throw new Error(data.error || 'Invalid license');
                 }
             })
-            .catch(function() {
-                error.textContent = errors[currentLang].connection;
-                error.classList.add('show');
+            .catch(function(err) {
+                errorEl.classList.add('show');
+                inputEl.classList.add('error');
+                inputEl.value = '';
+                inputEl.focus();
+            })
+            .finally(function() {
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = currentLang === 'es' ? 'Acceder al Panel' : 'Access Dashboard';
             });
         });
-        
-        setLang(currentLang);
+
+        document.getElementById('licenseKey').addEventListener('input', function() {
+            this.value = this.value.toUpperCase();
+            document.getElementById('loginError').classList.remove('show');
+            this.classList.remove('error');
+        });
     </script>
+
 </body>
 </html>
