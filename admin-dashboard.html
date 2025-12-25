@@ -1572,21 +1572,41 @@ tr:hover td {
 
 <script>
 // ============================================
-// ADMIN PIN CONFIGURATION
-// Change this PIN to secure your dashboard
+// ADMIN AUTH - API BASED
 // ============================================
-var ADMIN_PIN = '1234';
-// ============================================
+var API_BASE = window.location.origin; // Uses same domain
 
 // Check login status on page load
 function checkAuth() {
-    var isLoggedIn = sessionStorage.getItem('gostar-admin-auth');
-    if (isLoggedIn === 'true') {
-        document.getElementById('loginScreen').classList.add('hidden');
+    var token = sessionStorage.getItem('gostar-admin-token');
+    if (token) {
+        // Verify token is still valid
+        fetch(API_BASE + '/api/admin/verify-token', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token: token })
+        })
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+            if (data.success) {
+                document.getElementById('loginScreen').classList.add('hidden');
+            } else {
+                sessionStorage.removeItem('gostar-admin-token');
+                showLoginScreen();
+            }
+        })
+        .catch(function() {
+            // If API fails, allow access if token exists (offline mode)
+            document.getElementById('loginScreen').classList.add('hidden');
+        });
     } else {
-        document.getElementById('loginScreen').classList.remove('hidden');
-        document.getElementById('pin1').focus();
+        showLoginScreen();
     }
+}
+
+function showLoginScreen() {
+    document.getElementById('loginScreen').classList.remove('hidden');
+    document.getElementById('pin1').focus();
 }
 
 // PIN Input handling
@@ -1646,23 +1666,48 @@ function verifyPin() {
         return;
     }
     
-    if (enteredPin === ADMIN_PIN) {
-        // Success
-        sessionStorage.setItem('gostar-admin-auth', 'true');
-        document.getElementById('loginScreen').classList.add('hidden');
-    } else {
-        // Error
-        document.getElementById('loginError').classList.add('show');
-        pinInputs.forEach(function(input) {
-            input.classList.add('error');
-            input.value = '';
-        });
-        pinInputs[0].focus();
-    }
+    // Disable button while checking
+    var loginBtn = document.getElementById('loginBtn');
+    loginBtn.disabled = true;
+    loginBtn.innerHTML = '<span class="lang-en">Verifying...</span><span class="lang-es">Verificando...</span>';
+    
+    // Call API to verify PIN
+    fetch(API_BASE + '/api/admin/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pin: enteredPin })
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+        if (data.success) {
+            // Store token and enter dashboard
+            sessionStorage.setItem('gostar-admin-token', data.token);
+            document.getElementById('loginScreen').classList.add('hidden');
+        } else {
+            showPinError();
+        }
+    })
+    .catch(function(err) {
+        console.error('Auth error:', err);
+        showPinError();
+    })
+    .finally(function() {
+        loginBtn.disabled = false;
+        loginBtn.innerHTML = '<span class="lang-en">Enter Dashboard</span><span class="lang-es">Entrar al Panel</span>';
+    });
+}
+
+function showPinError() {
+    document.getElementById('loginError').classList.add('show');
+    pinInputs.forEach(function(input) {
+        input.classList.add('error');
+        input.value = '';
+    });
+    pinInputs[0].focus();
 }
 
 function logout() {
-    sessionStorage.removeItem('gostar-admin-auth');
+    sessionStorage.removeItem('gostar-admin-token');
     document.getElementById('loginScreen').classList.remove('hidden');
     pinInputs.forEach(function(input) {
         input.value = '';
