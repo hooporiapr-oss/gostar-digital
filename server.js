@@ -6,9 +6,12 @@ const bcrypt = require('bcryptjs');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Admin credentials
+// Admin credentials (legacy Basic Auth)
 const ADMIN_USER = process.env.ADMIN_USER || 'admin';
 const ADMIN_PASS = process.env.ADMIN_PASS || 'GoStar2025';
+
+// Admin PIN (new dashboard auth)
+const ADMIN_PIN = process.env.ADMIN_PIN || '1234';
 
 // Middleware
 app.use(express.json());
@@ -49,7 +52,11 @@ function generateKey(prefix, length = 8) {
     return key;
 }
 
-// Basic Auth for Admin
+function generateToken() {
+    return Buffer.from(Date.now() + '-' + Math.random().toString(36).substring(2, 15)).toString('base64');
+}
+
+// Basic Auth for Admin (legacy)
 function adminAuth(req, res, next) {
     var auth = req.headers.authorization;
     if (!auth || !auth.startsWith('Basic ')) {
@@ -67,9 +74,12 @@ function adminAuth(req, res, next) {
     res.status(401).send('Invalid admin credentials');
 }
 
+// Store active admin tokens (in production, use Redis or database)
+var adminTokens = new Set();
+
 // Health check
 app.get('/health', function(req, res) {
-    res.json({ status: 'healthy' });
+    res.json({ status: 'healthy', timestamp: new Date().toISOString() });
 });
 
 // Landing page
@@ -77,8 +87,70 @@ app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+// ============ ADMIN PIN AUTH (NEW DASHBOARD) ============
+
+// Verify admin PIN
+app.post('/api/admin/verify', function(req, res) {
+    var pin = req.body.pin;
+    
+    if (!ADMIN_PIN) {
+        console.error('ADMIN_PIN environment variable not set!');
+        return res.status(500).json({ 
+            success: false, 
+            message: 'Server configuration error' 
+        });
+    }
+    
+    if (pin === ADMIN_PIN) {
+        var token = generateToken();
+        adminTokens.add(token);
+        
+        // Auto-expire token after 24 hours
+        setTimeout(function() {
+            adminTokens.delete(token);
+        }, 24 * 60 * 60 * 1000);
+        
+        res.json({ 
+            success: true, 
+            token: token,
+            message: 'Access granted'
+        });
+    } else {
+        res.status(401).json({ 
+            success: false, 
+            message: 'Invalid PIN' 
+        });
+    }
+});
+
+// Verify admin token
+app.post('/api/admin/verify-token', function(req, res) {
+    var token = req.body.token;
+    
+    if (token && adminTokens.has(token)) {
+        res.json({ success: true });
+    } else {
+        res.status(401).json({ success: false, message: 'Invalid or expired token' });
+    }
+});
+
+// Admin logout (invalidate token)
+app.post('/api/admin/logout', function(req, res) {
+    var token = req.body.token;
+    if (token) {
+        adminTokens.delete(token);
+    }
+    res.json({ success: true });
+});
+
 // ============ ADMIN ROUTES ============
 
+// New admin dashboard
+app.get('/admin-dashboard', function(req, res) {
+    res.sendFile(path.join(__dirname, 'admin-dashboard.html'));
+});
+
+// Legacy admin (Basic Auth)
 app.get('/admin', adminAuth, function(req, res) {
     res.sendFile(path.join(__dirname, 'admin.html'));
 });
@@ -582,4 +654,6 @@ app.post('/api/trial/register', function(req, res) {
 
 app.listen(PORT, function() {
     console.log('GoStar Digital running on port ' + PORT);
+    console.log('Admin Dashboard: /admin-dashboard');
+    console.log('Legacy Admin: /admin');
 });
