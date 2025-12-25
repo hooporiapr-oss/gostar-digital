@@ -10,6 +10,185 @@
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
+/* Login Screen */
+.login-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #0D0D0D 0%, #1A1A1A 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.login-screen.hidden {
+    display: none;
+}
+
+.login-card {
+    background: var(--bg-card);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 24px;
+    padding: 48px 40px;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.login-logo {
+    font-size: 64px;
+    margin-bottom: 16px;
+    filter: drop-shadow(0 0 20px rgba(255, 217, 61, 0.4));
+}
+
+.login-title {
+    font-size: 28px;
+    font-weight: 900;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+}
+
+.login-title span {
+    background: linear-gradient(135deg, #FFD93D 0%, #FF9F1C 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.login-subtitle {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 32px;
+}
+
+.login-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    color: #0D0D0D;
+    background: #FFD93D;
+    padding: 4px 12px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 32px;
+}
+
+.pin-input-group {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.pin-input {
+    width: 56px;
+    height: 64px;
+    font-size: 24px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    text-align: center;
+    background: #1A1A1A;
+    border: 2px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    color: var(--text-primary);
+    transition: all 0.2s ease;
+}
+
+.pin-input:focus {
+    outline: none;
+    border-color: #FFD93D;
+    box-shadow: 0 0 0 3px rgba(255, 217, 61, 0.2);
+}
+
+.pin-input.error {
+    border-color: #FF6B6B;
+    animation: shake 0.4s ease;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    75% { transform: translateX(8px); }
+}
+
+.login-btn {
+    width: 100%;
+    padding: 16px 32px;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #FFD93D 0%, #FF9F1C 100%);
+    color: #0D0D0D;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 217, 61, 0.3);
+}
+
+.login-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.login-error {
+    color: #FF6B6B;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 16px;
+    display: none;
+}
+
+.login-error.show {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.login-hint {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 24px;
+}
+
+/* Logout Button */
+.logout-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 12px;
+    margin-top: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    background: rgba(255, 107, 107, 0.1);
+    border: 1px solid rgba(255, 107, 107, 0.2);
+    border-radius: 10px;
+    color: #FF6B6B;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.logout-btn:hover {
+    background: rgba(255, 107, 107, 0.2);
+    border-color: #FF6B6B;
+}
+
 :root {
     --bg-primary: #0D0D0D;
     --bg-secondary: #1A1A1A;
@@ -795,6 +974,41 @@ tr:hover td {
 </head>
 <body data-lang="en">
 
+<!-- Login Screen -->
+<div class="login-screen" id="loginScreen">
+    <div class="login-card">
+        <div class="login-logo">⭐</div>
+        <h1 class="login-title">Go<span>Star</span></h1>
+        <span class="login-badge">Admin Access</span>
+        <p class="login-subtitle">
+            <span class="lang-en">Enter your admin PIN to continue</span>
+            <span class="lang-es">Ingresa tu PIN de administrador</span>
+        </p>
+        
+        <div class="pin-input-group">
+            <input type="password" class="pin-input" maxlength="1" id="pin1" inputmode="numeric" pattern="[0-9]*">
+            <input type="password" class="pin-input" maxlength="1" id="pin2" inputmode="numeric" pattern="[0-9]*">
+            <input type="password" class="pin-input" maxlength="1" id="pin3" inputmode="numeric" pattern="[0-9]*">
+            <input type="password" class="pin-input" maxlength="1" id="pin4" inputmode="numeric" pattern="[0-9]*">
+        </div>
+        
+        <button class="login-btn" onclick="verifyPin()" id="loginBtn">
+            <span class="lang-en">Enter Dashboard</span>
+            <span class="lang-es">Entrar al Panel</span>
+        </button>
+        
+        <p class="login-error" id="loginError">
+            <span class="lang-en">Incorrect PIN. Please try again.</span>
+            <span class="lang-es">PIN incorrecto. Intenta de nuevo.</span>
+        </p>
+        
+        <p class="login-hint">
+            <span class="lang-en">Contact administrator if you forgot your PIN</span>
+            <span class="lang-es">Contacta al administrador si olvidaste tu PIN</span>
+        </p>
+    </div>
+</div>
+
 <!-- Sidebar -->
 <div class="dashboard">
     <aside class="sidebar">
@@ -864,6 +1078,11 @@ tr:hover td {
                 <button class="lang-btn active" onclick="setLang('en')">EN</button>
                 <button class="lang-btn" onclick="setLang('es')">ES</button>
             </div>
+            <button class="logout-btn" onclick="logout()">
+                <span>🚪</span>
+                <span class="lang-en">Logout</span>
+                <span class="lang-es">Cerrar Sesión</span>
+            </button>
         </div>
     </aside>
     
@@ -1352,6 +1571,108 @@ tr:hover td {
 </div>
 
 <script>
+// ============================================
+// ADMIN PIN CONFIGURATION
+// Change this PIN to secure your dashboard
+// ============================================
+var ADMIN_PIN = '1234';
+// ============================================
+
+// Check login status on page load
+function checkAuth() {
+    var isLoggedIn = sessionStorage.getItem('gostar-admin-auth');
+    if (isLoggedIn === 'true') {
+        document.getElementById('loginScreen').classList.add('hidden');
+    } else {
+        document.getElementById('loginScreen').classList.remove('hidden');
+        document.getElementById('pin1').focus();
+    }
+}
+
+// PIN Input handling
+var pinInputs = document.querySelectorAll('.pin-input');
+pinInputs.forEach(function(input, index) {
+    input.addEventListener('input', function(e) {
+        // Only allow numbers
+        this.value = this.value.replace(/[^0-9]/g, '');
+        
+        // Move to next input
+        if (this.value.length === 1 && index < pinInputs.length - 1) {
+            pinInputs[index + 1].focus();
+        }
+        
+        // Auto-submit when all filled
+        if (index === pinInputs.length - 1 && this.value.length === 1) {
+            verifyPin();
+        }
+        
+        // Clear error state
+        document.getElementById('loginError').classList.remove('show');
+        pinInputs.forEach(function(inp) { inp.classList.remove('error'); });
+    });
+    
+    input.addEventListener('keydown', function(e) {
+        // Handle backspace
+        if (e.key === 'Backspace' && this.value.length === 0 && index > 0) {
+            pinInputs[index - 1].focus();
+        }
+        
+        // Handle Enter
+        if (e.key === 'Enter') {
+            verifyPin();
+        }
+    });
+    
+    // Handle paste
+    input.addEventListener('paste', function(e) {
+        e.preventDefault();
+        var pastedData = e.clipboardData.getData('text').replace(/[^0-9]/g, '');
+        for (var i = 0; i < Math.min(pastedData.length, 4); i++) {
+            pinInputs[i].value = pastedData[i];
+        }
+        if (pastedData.length >= 4) {
+            verifyPin();
+        }
+    });
+});
+
+function verifyPin() {
+    var enteredPin = '';
+    pinInputs.forEach(function(input) {
+        enteredPin += input.value;
+    });
+    
+    if (enteredPin.length < 4) {
+        return;
+    }
+    
+    if (enteredPin === ADMIN_PIN) {
+        // Success
+        sessionStorage.setItem('gostar-admin-auth', 'true');
+        document.getElementById('loginScreen').classList.add('hidden');
+    } else {
+        // Error
+        document.getElementById('loginError').classList.add('show');
+        pinInputs.forEach(function(input) {
+            input.classList.add('error');
+            input.value = '';
+        });
+        pinInputs[0].focus();
+    }
+}
+
+function logout() {
+    sessionStorage.removeItem('gostar-admin-auth');
+    document.getElementById('loginScreen').classList.remove('hidden');
+    pinInputs.forEach(function(input) {
+        input.value = '';
+    });
+    document.getElementById('pin1').focus();
+}
+
+// Initialize auth check
+checkAuth();
+
 // Language
 var currentLang = localStorage.getItem('gostar-lang') || 'en';
 
