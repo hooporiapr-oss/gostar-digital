@@ -4,370 +4,801 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Play - GoStar Digital</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg-primary: #0D0D0D;
+            --bg-secondary: #1A1A1A;
+            --bg-card: #242424;
+            --text-primary: #FFFFFF;
+            --text-secondary: #B3B3B3;
+            --text-muted: #808080;
+            --accent-gold: #FFD93D;
+            --accent-teal: #00D9A5;
+            --accent-coral: #FF6B6B;
+            --accent-green: #22C55E;
+            --gradient-gold: linear-gradient(135deg, #FFD93D 0%, #FF9F1C 100%);
+            --gradient-teal: linear-gradient(135deg, #00D9A5 0%, #00B386 100%);
+        }
+
+        html, body { height: 100%; }
+
         body {
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #0a0a1a, #1a1a3a);
-            color: #fff;
+            padding: 20px;
         }
+
+        body[data-lang="es"] .lang-en { display: none !important; }
+        body[data-lang="en"] .lang-es { display: none !important; }
+        body[data-lang="es"] .lang-es { display: inline !important; }
+        body[data-lang="en"] .lang-en { display: inline !important; }
+
         .lang-toggle {
             position: fixed;
             top: 20px;
             right: 20px;
             display: flex;
-            background: rgba(255,255,255,0.1);
-            border-radius: 20px;
-            overflow: hidden;
+            gap: 4px;
+            background: var(--bg-card);
+            padding: 4px;
+            border-radius: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+            z-index: 100;
         }
+
         .lang-btn {
             padding: 8px 16px;
             border: none;
             background: transparent;
-            color: rgba(255,255,255,0.6);
-            cursor: pointer;
-            font-size: 14px;
+            color: var(--text-secondary);
+            border-radius: 25px;
+            font-family: 'Inter', sans-serif;
             font-weight: 600;
-        }
-        .lang-btn.active {
-            background: #ffd700;
-            color: #0a0a1a;
-        }
-        .container {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 20px;
-            padding: 40px;
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-        }
-        .logo { margin-bottom: 32px; }
-        .logo h1 { font-size: 28px; }
-        .logo h1 span { color: #ffd700; }
-        .logo p { color: rgba(255,255,255,0.5); font-size: 14px; margin-top: 8px; }
-        .step { display: none; }
-        .step.active { display: block; }
-        .form-group { margin-bottom: 20px; text-align: left; }
-        .form-group label { display: block; font-size: 12px; color: rgba(255,255,255,0.6); margin-bottom: 8px; }
-        .form-group input {
-            width: 100%;
-            padding: 14px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 10px;
-            color: #fff;
-            font-size: 16px;
-        }
-        .form-group input.code-input {
-            font-family: monospace;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            text-align: center;
-        }
-        .form-group input:focus { outline: none; border-color: #ffd700; }
-        .btn {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #ffd700, #ffaa00);
-            border: none;
-            border-radius: 10px;
-            color: #0a0a1a;
-            font-size: 16px;
-            font-weight: 700;
+            font-size: 13px;
             cursor: pointer;
-            margin-bottom: 12px;
+            transition: all 0.2s ease;
         }
-        .btn:hover { opacity: 0.9; }
-        .btn.secondary {
-            background: rgba(255,255,255,0.1);
-            color: #fff;
-        }
-        .btn.secondary:hover { background: rgba(255,255,255,0.15); }
-        .error {
-            background: rgba(255,68,68,0.1);
-            border: 1px solid rgba(255,68,68,0.3);
-            color: #ff6b6b;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            display: none;
-        }
-        .error.show { display: block; }
-        .back { margin-top: 20px; }
-        .back a, .back button {
-            color: rgba(255,255,255,0.5);
-            font-size: 14px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            text-decoration: none;
-        }
-        .back button:hover, .back a:hover { color: #fff; }
-        .divider {
+
+        .lang-btn:hover { color: var(--text-primary); }
+        .lang-btn.active { background: var(--accent-gold); color: var(--bg-primary); }
+
+        .home-link {
+            position: fixed;
+            top: 20px;
+            left: 20px;
             display: flex;
             align-items: center;
-            margin: 20px 0;
-            color: rgba(255,255,255,0.3);
-            font-size: 12px;
+            gap: 8px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
         }
-        .divider::before, .divider::after {
-            content: '';
+
+        .home-link:hover { color: var(--accent-gold); }
+
+        .login-container {
+            width: 100%;
+            max-width: 440px;
+        }
+
+        .login-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px;
+            padding: 48px 40px;
+            text-align: center;
+        }
+
+        .login-logo {
+            font-size: 72px;
+            margin-bottom: 16px;
+            filter: drop-shadow(0 0 30px rgba(255, 217, 61, 0.5));
+        }
+
+        .login-title {
+            font-size: 32px;
+            font-weight: 900;
+            margin-bottom: 8px;
+        }
+
+        .login-title span {
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .login-tagline {
+            font-size: 14px;
+            color: var(--accent-teal);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 32px;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            background: var(--bg-primary);
+            border-radius: 12px;
+            padding: 4px;
+            margin-bottom: 24px;
+        }
+
+        .tab {
             flex: 1;
-            height: 1px;
-            background: rgba(255,255,255,0.1);
+            padding: 12px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            font-size: 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
         }
-        .divider span { padding: 0 16px; }
+
+        .tab:hover { color: var(--text-primary); }
+        .tab.active { background: var(--accent-gold); color: var(--bg-primary); }
+
+        /* Steps */
+        .step { display: none; }
+        .step.active { display: block; }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px 20px;
+            font-size: 16px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            background: var(--bg-primary);
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 0 3px rgba(255, 217, 61, 0.2);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .form-input.error {
+            border-color: var(--accent-coral);
+            animation: shake 0.4s ease;
+        }
+
+        .form-input.code-input {
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
+
+        .form-hint {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 8px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px 32px;
+            font-size: 16px;
+            font-weight: 700;
+            font-family: 'Inter', sans-serif;
+            background: var(--gradient-gold);
+            color: var(--bg-primary);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 8px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 217, 61, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent-gold);
+            box-shadow: none;
+        }
+
+        .error-msg {
+            color: var(--accent-coral);
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 16px;
+            display: none;
+        }
+
+        .error-msg.show { display: block; }
+
+        .success-msg {
+            color: var(--accent-green);
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 16px;
+            display: none;
+        }
+
+        .success-msg.show { display: block; }
+
+        /* Facility Badge */
+        .facility-badge {
+            background: rgba(0, 217, 165, 0.1);
+            border: 1px solid rgba(0, 217, 165, 0.3);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .facility-badge-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .facility-badge-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--accent-teal);
+        }
+
+        .spots-info {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 8px;
+        }
+
+        .spots-info.warning { color: var(--accent-gold); }
+        .spots-info.danger { color: var(--accent-coral); }
+
+        /* Back button */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 20px;
+            padding: 0;
+        }
+
+        .back-btn:hover { color: var(--accent-gold); }
+
+        /* Password toggle */
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 18px;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .password-toggle:hover { color: var(--text-primary); }
+
+        @media (max-width: 480px) {
+            .login-card { padding: 36px 24px; }
+            .login-logo { font-size: 56px; }
+            .login-title { font-size: 28px; }
+        }
     </style>
 </head>
-<body>
+<body data-lang="en">
+
     <div class="lang-toggle">
-        <button class="lang-btn" data-lang="en">EN</button>
-        <button class="lang-btn" data-lang="es">ES</button>
+        <button class="lang-btn active" onclick="setLang('en')">EN</button>
+        <button class="lang-btn" onclick="setLang('es')">ES</button>
     </div>
-    
-    <div class="container">
-        <div class="logo">
-            <h1>Go<span>Star</span> Digital</h1>
-            <p data-en="Cognitive Training Platform" data-es="Plataforma de Entrenamiento Cognitivo">Cognitive Training Platform</p>
-        </div>
-        
-        <div class="error" id="error"></div>
-        
-        <!-- Step 1: Enter Access Code -->
-        <div class="step active" id="step1">
-            <p style="margin-bottom: 24px; color: rgba(255,255,255,0.7);" data-en="Enter your access code to continue" data-es="Ingresa tu codigo de acceso para continuar">Enter your access code to continue</p>
-            <form id="codeForm">
-                <div class="form-group">
-                    <label data-en="ACCESS CODE" data-es="CODIGO DE ACCESO">ACCESS CODE</label>
-                    <input type="text" id="accessCode" class="code-input" required placeholder="ACC-XXXXXX" maxlength="12">
+
+    <a href="/" class="home-link">
+        <span>⭐</span>
+        <span>GoStar</span>
+    </a>
+
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-logo">⭐</div>
+            <h1 class="login-title">Go<span>Star</span></h1>
+            <p class="login-tagline">
+                <span class="lang-en">Mental Fitness</span>
+                <span class="lang-es">Fitness Mental</span>
+            </p>
+
+            <!-- Tabs -->
+            <div class="tabs" id="mainTabs">
+                <button class="tab active" onclick="switchTab('login')">
+                    <span class="lang-en">Login</span>
+                    <span class="lang-es">Iniciar Sesión</span>
+                </button>
+                <button class="tab" onclick="switchTab('register')">
+                    <span class="lang-en">Register</span>
+                    <span class="lang-es">Registrarse</span>
+                </button>
+            </div>
+
+            <!-- LOGIN FLOW -->
+            <div id="loginFlow">
+                <!-- Step 1: Access Code -->
+                <div class="step active" id="login-step1">
+                    <div class="form-group">
+                        <label class="form-label">
+                            <span class="lang-en">Access Code</span>
+                            <span class="lang-es">Código de Acceso</span>
+                        </label>
+                        <input type="text" class="form-input code-input" id="loginCode" placeholder="ACC-XXXXXX" autocomplete="off" spellcheck="false">
+                        <p class="form-hint">
+                            <span class="lang-en">Enter the code provided by your facility</span>
+                            <span class="lang-es">Ingresa el código proporcionado por tu instalación</span>
+                        </p>
+                    </div>
+                    <button class="btn" onclick="verifyLoginCode()">
+                        <span class="lang-en">Continue</span>
+                        <span class="lang-es">Continuar</span>
+                    </button>
+                    <p class="error-msg" id="loginCodeError">
+                        <span class="lang-en">Invalid access code</span>
+                        <span class="lang-es">Código de acceso inválido</span>
+                    </p>
                 </div>
-                <button type="submit" class="btn" data-en="Continue" data-es="Continuar">Continue</button>
-            </form>
-            <p class="back"><a href="/" data-en="Back to Home" data-es="Volver al Inicio">Back to Home</a></p>
-        </div>
-        
-        <!-- Step 2: Choose Login or Register -->
-        <div class="step" id="step2">
-            <p style="margin-bottom: 24px; color: rgba(255,255,255,0.7);" data-en="Welcome! Please login or create an account" data-es="Bienvenido! Inicia sesion o crea una cuenta">Welcome! Please login or create an account</p>
-            <button class="btn" id="showLoginBtn" data-en="Login" data-es="Iniciar Sesion">Login</button>
-            <div class="divider" id="dividerRow"><span data-en="or" data-es="o">or</span></div>
-            <button class="btn secondary" id="showRegisterBtn" data-en="Create Account" data-es="Crear Cuenta">Create Account</button>
-            <p class="back"><button onclick="goToStep(1)" data-en="Change access code" data-es="Cambiar codigo">Change access code</button></p>
-        </div>
-        
-        <!-- Step 3a: Login Form -->
-        <div class="step" id="step3login">
-            <p style="margin-bottom: 24px; color: rgba(255,255,255,0.7);" data-en="Login to your account" data-es="Inicia sesion en tu cuenta">Login to your account</p>
-            <form id="loginForm">
-                <div class="form-group">
-                    <label data-en="USERNAME" data-es="USUARIO">USERNAME</label>
-                    <input type="text" id="loginUsername" required>
+
+                <!-- Step 2: Username & Password -->
+                <div class="step" id="login-step2">
+                    <button class="back-btn" onclick="goBackLogin()">
+                        <span>←</span>
+                        <span class="lang-en">Back</span>
+                        <span class="lang-es">Atrás</span>
+                    </button>
+
+                    <div class="facility-badge">
+                        <div class="facility-badge-label">
+                            <span class="lang-en">Facility</span>
+                            <span class="lang-es">Instalación</span>
+                        </div>
+                        <div class="facility-badge-name" id="loginFacilityName">--</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            <span class="lang-en">Username</span>
+                            <span class="lang-es">Nombre de Usuario</span>
+                        </label>
+                        <input type="text" class="form-input" id="loginUsername" placeholder="Enter your username" autocomplete="username">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            <span class="lang-en">Password</span>
+                            <span class="lang-es">Contraseña</span>
+                        </label>
+                        <div class="password-wrapper">
+                            <input type="password" class="form-input" id="loginPassword" placeholder="Enter your password" autocomplete="current-password">
+                            <button type="button" class="password-toggle" onclick="togglePassword('loginPassword', this)">👁️</button>
+                        </div>
+                    </div>
+
+                    <button class="btn" onclick="loginUser()">
+                        <span class="lang-en">Play Now</span>
+                        <span class="lang-es">Jugar Ahora</span>
+                    </button>
+                    <p class="error-msg" id="loginError">
+                        <span class="lang-en">Invalid username or password</span>
+                        <span class="lang-es">Usuario o contraseña inválidos</span>
+                    </p>
                 </div>
-                <div class="form-group">
-                    <label data-en="PASSWORD" data-es="CONTRASENA">PASSWORD</label>
-                    <input type="password" id="loginPassword" required>
+            </div>
+
+            <!-- REGISTER FLOW -->
+            <div id="registerFlow" style="display: none;">
+                <!-- Step 1: Access Code -->
+                <div class="step active" id="register-step1">
+                    <div class="form-group">
+                        <label class="form-label">
+                            <span class="lang-en">Access Code</span>
+                            <span class="lang-es">Código de Acceso</span>
+                        </label>
+                        <input type="text" class="form-input code-input" id="registerCode" placeholder="ACC-XXXXXX" autocomplete="off" spellcheck="false">
+                        <p class="form-hint">
+                            <span class="lang-en">Enter the code provided by your facility</span>
+                            <span class="lang-es">Ingresa el código proporcionado por tu instalación</span>
+                        </p>
+                    </div>
+                    <button class="btn" onclick="verifyRegisterCode()">
+                        <span class="lang-en">Continue</span>
+                        <span class="lang-es">Continuar</span>
+                    </button>
+                    <p class="error-msg" id="registerCodeError">
+                        <span class="lang-en">Invalid access code</span>
+                        <span class="lang-es">Código de acceso inválido</span>
+                    </p>
                 </div>
-                <button type="submit" class="btn" data-en="Login" data-es="Iniciar Sesion">Login</button>
-            </form>
-            <p class="back"><button onclick="goToStep(2)" data-en="Back" data-es="Volver">Back</button></p>
-        </div>
-        
-        <!-- Step 3b: Register Form -->
-        <div class="step" id="step3register">
-            <p style="margin-bottom: 24px; color: rgba(255,255,255,0.7);" data-en="Create your account" data-es="Crea tu cuenta">Create your account</p>
-            <form id="registerForm">
-                <div class="form-group">
-                    <label data-en="USERNAME" data-es="USUARIO">USERNAME</label>
-                    <input type="text" id="regUsername" required minlength="3">
+
+                <!-- Step 2: Create Account -->
+                <div class="step" id="register-step2">
+                    <button class="back-btn" onclick="goBackRegister()">
+                        <span>←</span>
+                        <span class="lang-en">Back</span>
+                        <span class="lang-es">Atrás</span>
+                    </button>
+
+                    <div class="facility-badge">
+                        <div class="facility-badge-label">
+                            <span class="lang-en">Facility</span>
+                            <span class="lang-es">Instalación</span>
+                        </div>
+                        <div class="facility-badge-name" id="registerFacilityName">--</div>
+                        <p class="spots-info" id="spotsInfo">
+                            <span class="lang-en">Spots available</span>
+                            <span class="lang-es">Lugares disponibles</span>
+                        </p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            <span class="lang-en">Choose a Username</span>
+                            <span class="lang-es">Elige un Nombre de Usuario</span>
+                        </label>
+                        <input type="text" class="form-input" id="registerUsername" placeholder="Your display name" autocomplete="username">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            <span class="lang-en">Create Password</span>
+                            <span class="lang-es">Crear Contraseña</span>
+                        </label>
+                        <div class="password-wrapper">
+                            <input type="password" class="form-input" id="registerPassword" placeholder="At least 4 characters" autocomplete="new-password">
+                            <button type="button" class="password-toggle" onclick="togglePassword('registerPassword', this)">👁️</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            <span class="lang-en">Confirm Password</span>
+                            <span class="lang-es">Confirmar Contraseña</span>
+                        </label>
+                        <div class="password-wrapper">
+                            <input type="password" class="form-input" id="registerPasswordConfirm" placeholder="Repeat password" autocomplete="new-password">
+                            <button type="button" class="password-toggle" onclick="togglePassword('registerPasswordConfirm', this)">👁️</button>
+                        </div>
+                    </div>
+
+                    <button class="btn" onclick="registerUser()">
+                        <span class="lang-en">Create Account & Play</span>
+                        <span class="lang-es">Crear Cuenta y Jugar</span>
+                    </button>
+                    <p class="error-msg" id="registerError"></p>
+                    <p class="success-msg" id="registerSuccess">
+                        <span class="lang-en">Account created! Redirecting...</span>
+                        <span class="lang-es">¡Cuenta creada! Redirigiendo...</span>
+                    </p>
                 </div>
-                <div class="form-group">
-                    <label data-en="PASSWORD" data-es="CONTRASENA">PASSWORD</label>
-                    <input type="password" id="regPassword" required minlength="4">
-                </div>
-                <div class="form-group">
-                    <label data-en="CONFIRM PASSWORD" data-es="CONFIRMAR CONTRASENA">CONFIRM PASSWORD</label>
-                    <input type="password" id="regPassword2" required minlength="4">
-                </div>
-                <button type="submit" class="btn" data-en="Create Account" data-es="Crear Cuenta">Create Account</button>
-            </form>
-            <p class="back"><button onclick="goToStep(2)" data-en="Back" data-es="Volver">Back</button></p>
+            </div>
         </div>
     </div>
-    
+
     <script>
-        var T = {
-            en: {
-                invalidCode: 'Invalid access code',
-                expired: 'Access expired',
-                usernameTaken: 'Username already taken',
-                limitReached: 'User limit reached for this code',
-                passwordMismatch: 'Passwords do not match',
-                userNotFound: 'User not found',
-                invalidPassword: 'Invalid password',
-                error: 'An error occurred'
-            },
-            es: {
-                invalidCode: 'Codigo de acceso invalido',
-                expired: 'Acceso expirado',
-                usernameTaken: 'Usuario ya existe',
-                limitReached: 'Limite de usuarios alcanzado',
-                passwordMismatch: 'Las contrasenas no coinciden',
-                userNotFound: 'Usuario no encontrado',
-                invalidPassword: 'Contrasena invalida',
-                error: 'Ocurrio un error'
-            }
-        };
-        
-        var currentLang = localStorage.getItem('lang') || 'en';
-        var currentCode = '';
-        var hasSpots = true;
-        
+        var currentLang = localStorage.getItem('gostar-lang') || 'en';
+        var currentTab = 'login';
+        var verifiedCode = null;
+        var facilityInfo = null;
+
         function setLang(lang) {
             currentLang = lang;
-            localStorage.setItem('lang', lang);
-            var els = document.querySelectorAll('[data-en]');
-            for (var i = 0; i < els.length; i++) {
-                els[i].textContent = els[i].getAttribute('data-' + lang);
-            }
-            var btns = document.querySelectorAll('.lang-btn');
-            for (var j = 0; j < btns.length; j++) {
-                if (btns[j].dataset.lang === lang) {
-                    btns[j].classList.add('active');
-                } else {
-                    btns[j].classList.remove('active');
-                }
-            }
+            localStorage.setItem('gostar-lang', lang);
+            document.body.setAttribute('data-lang', lang);
+            document.querySelectorAll('.lang-btn').forEach(function(btn) {
+                btn.classList.toggle('active', btn.textContent === lang.toUpperCase());
+            });
         }
-        
-        var langBtns = document.querySelectorAll('.lang-btn');
-        for (var k = 0; k < langBtns.length; k++) {
-            langBtns[k].addEventListener('click', function() { setLang(this.dataset.lang); });
-        }
-        
-        function goToStep(step) {
-            var steps = document.querySelectorAll('.step');
-            for (var i = 0; i < steps.length; i++) {
-                steps[i].classList.remove('active');
-            }
-            document.getElementById('error').classList.remove('show');
+
+        document.body.setAttribute('data-lang', currentLang);
+        document.querySelectorAll('.lang-btn').forEach(function(btn) {
+            btn.classList.toggle('active', btn.textContent === currentLang.toUpperCase());
+        });
+
+        function switchTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.tab').forEach(function(t, i) {
+                t.classList.toggle('active', (i === 0 && tab === 'login') || (i === 1 && tab === 'register'));
+            });
+            document.getElementById('loginFlow').style.display = tab === 'login' ? 'block' : 'none';
+            document.getElementById('registerFlow').style.display = tab === 'register' ? 'block' : 'none';
             
-            if (step === 1) {
-                document.getElementById('step1').classList.add('active');
-            } else if (step === 2) {
-                document.getElementById('step2').classList.add('active');
-                // Hide register option if no spots left
-                document.getElementById('showRegisterBtn').style.display = hasSpots ? 'block' : 'none';
-                document.getElementById('dividerRow').style.display = hasSpots ? 'flex' : 'none';
-            } else if (step === '3login') {
-                document.getElementById('step3login').classList.add('active');
-            } else if (step === '3register') {
-                document.getElementById('step3register').classList.add('active');
+            // Reset to step 1
+            document.querySelectorAll('.step').forEach(function(s) { s.classList.remove('active'); });
+            document.getElementById(tab + '-step1').classList.add('active');
+            clearErrors();
+        }
+
+        function clearErrors() {
+            document.querySelectorAll('.error-msg').forEach(function(e) { e.classList.remove('show'); });
+            document.querySelectorAll('.form-input').forEach(function(i) { i.classList.remove('error'); });
+        }
+
+        function togglePassword(inputId, btn) {
+            var input = document.getElementById(inputId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                btn.textContent = '🙈';
+            } else {
+                input.type = 'password';
+                btn.textContent = '👁️';
             }
         }
-        
-        function showError(msg) {
-            var error = document.getElementById('error');
-            error.textContent = msg;
-            error.classList.add('show');
-        }
-        
-        document.getElementById('codeForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            document.getElementById('error').classList.remove('show');
-            currentCode = document.getElementById('accessCode').value.toUpperCase();
-            
+
+        // ========== LOGIN FLOW ==========
+        function verifyLoginCode() {
+            var code = document.getElementById('loginCode').value.trim().toUpperCase();
+            if (!code) {
+                document.getElementById('loginCode').classList.add('error');
+                return;
+            }
+            clearErrors();
+
             fetch('/api/play/verify', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ accessCode: currentCode })
+                body: JSON.stringify({ accessCode: code })
             })
-            .then(function(res) { return res.json().then(function(data) { return { ok: res.ok, data: data }; }); })
-            .then(function(result) {
-                if (result.ok) {
-                    hasSpots = result.data.hasSpots;
-                    localStorage.setItem('accessCode', currentCode);
-                    localStorage.setItem('facilityName', result.data.facilityName);
-                    goToStep(2);
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                if (data.success) {
+                    verifiedCode = code;
+                    facilityInfo = data;
+                    document.getElementById('loginFacilityName').textContent = data.facilityName;
+                    document.getElementById('login-step1').classList.remove('active');
+                    document.getElementById('login-step2').classList.add('active');
                 } else {
-                    var errKey = result.data.error.includes('expired') ? 'expired' : 'invalidCode';
-                    showError(T[currentLang][errKey]);
+                    throw new Error(data.error);
                 }
             })
-            .catch(function() { showError(T[currentLang].error); });
-        });
-        
-        document.getElementById('showLoginBtn').addEventListener('click', function() {
-            goToStep('3login');
-        });
-        
-        document.getElementById('showRegisterBtn').addEventListener('click', function() {
-            goToStep('3register');
-        });
-        
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            document.getElementById('error').classList.remove('show');
-            
-            var username = document.getElementById('loginUsername').value;
+            .catch(function() {
+                document.getElementById('loginCodeError').classList.add('show');
+                document.getElementById('loginCode').classList.add('error');
+            });
+        }
+
+        function goBackLogin() {
+            document.getElementById('login-step2').classList.remove('active');
+            document.getElementById('login-step1').classList.add('active');
+            clearErrors();
+        }
+
+        function loginUser() {
+            var username = document.getElementById('loginUsername').value.trim();
             var password = document.getElementById('loginPassword').value;
-            
+
+            if (!username || !password) {
+                if (!username) document.getElementById('loginUsername').classList.add('error');
+                if (!password) document.getElementById('loginPassword').classList.add('error');
+                return;
+            }
+            clearErrors();
+
             fetch('/api/play/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ accessCode: currentCode, username: username, password: password })
+                body: JSON.stringify({ accessCode: verifiedCode, username: username, password: password })
             })
-            .then(function(res) { return res.json().then(function(data) { return { ok: res.ok, data: data }; }); })
-            .then(function(result) {
-                if (result.ok) {
-                    localStorage.setItem('username', result.data.username);
-                    window.location.href = '/sequence-memory.html';
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                if (data.success) {
+                    sessionStorage.setItem('gostar-user-code', verifiedCode);
+                    sessionStorage.setItem('gostar-user-name', data.username);
+                    sessionStorage.setItem('gostar-facility', facilityInfo.facilityName);
+                    window.location.href = '/game';
                 } else {
-                    var errKey = result.data.error.includes('not found') ? 'userNotFound' : 'invalidPassword';
-                    showError(T[currentLang][errKey]);
+                    throw new Error(data.error);
                 }
             })
-            .catch(function() { showError(T[currentLang].error); });
-        });
-        
-        document.getElementById('registerForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            document.getElementById('error').classList.remove('show');
-            
-            var username = document.getElementById('regUsername').value;
-            var password = document.getElementById('regPassword').value;
-            var password2 = document.getElementById('regPassword2').value;
-            
-            if (password !== password2) {
-                showError(T[currentLang].passwordMismatch);
+            .catch(function() {
+                document.getElementById('loginError').classList.add('show');
+            });
+        }
+
+        // ========== REGISTER FLOW ==========
+        function verifyRegisterCode() {
+            var code = document.getElementById('registerCode').value.trim().toUpperCase();
+            if (!code) {
+                document.getElementById('registerCode').classList.add('error');
                 return;
             }
-            
+            clearErrors();
+
+            fetch('/api/play/verify', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ accessCode: code })
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                if (data.success) {
+                    verifiedCode = code;
+                    facilityInfo = data;
+                    document.getElementById('registerFacilityName').textContent = data.facilityName;
+                    
+                    var spotsEl = document.getElementById('spotsInfo');
+                    if (data.spotsLeft <= 0) {
+                        spotsEl.textContent = currentLang === 'es' ? '❌ Sin lugares disponibles' : '❌ No spots available';
+                        spotsEl.className = 'spots-info danger';
+                    } else if (data.spotsLeft <= 2) {
+                        spotsEl.textContent = (currentLang === 'es' ? '⚠️ Solo ' : '⚠️ Only ') + data.spotsLeft + (currentLang === 'es' ? ' lugares' : ' spots left');
+                        spotsEl.className = 'spots-info warning';
+                    } else {
+                        spotsEl.textContent = '✓ ' + data.spotsLeft + (currentLang === 'es' ? ' lugares disponibles' : ' spots available');
+                        spotsEl.className = 'spots-info';
+                    }
+
+                    document.getElementById('register-step1').classList.remove('active');
+                    document.getElementById('register-step2').classList.add('active');
+                } else {
+                    throw new Error(data.error);
+                }
+            })
+            .catch(function() {
+                document.getElementById('registerCodeError').classList.add('show');
+                document.getElementById('registerCode').classList.add('error');
+            });
+        }
+
+        function goBackRegister() {
+            document.getElementById('register-step2').classList.remove('active');
+            document.getElementById('register-step1').classList.add('active');
+            clearErrors();
+        }
+
+        function registerUser() {
+            var username = document.getElementById('registerUsername').value.trim();
+            var password = document.getElementById('registerPassword').value;
+            var confirm = document.getElementById('registerPasswordConfirm').value;
+            var errorEl = document.getElementById('registerError');
+
+            clearErrors();
+
+            if (!username) {
+                document.getElementById('registerUsername').classList.add('error');
+                errorEl.textContent = currentLang === 'es' ? 'Ingresa un nombre de usuario' : 'Enter a username';
+                errorEl.classList.add('show');
+                return;
+            }
+
+            if (password.length < 4) {
+                document.getElementById('registerPassword').classList.add('error');
+                errorEl.textContent = currentLang === 'es' ? 'La contraseña debe tener al menos 4 caracteres' : 'Password must be at least 4 characters';
+                errorEl.classList.add('show');
+                return;
+            }
+
+            if (password !== confirm) {
+                document.getElementById('registerPasswordConfirm').classList.add('error');
+                errorEl.textContent = currentLang === 'es' ? 'Las contraseñas no coinciden' : 'Passwords do not match';
+                errorEl.classList.add('show');
+                return;
+            }
+
             fetch('/api/play/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ accessCode: currentCode, username: username, password: password })
+                body: JSON.stringify({ accessCode: verifiedCode, username: username, password: password })
             })
-            .then(function(res) { return res.json().then(function(data) { return { ok: res.ok, data: data }; }); })
-            .then(function(result) {
-                if (result.ok) {
-                    localStorage.setItem('username', result.data.username);
-                    window.location.href = '/sequence-memory.html';
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                if (data.success) {
+                    document.getElementById('registerSuccess').classList.add('show');
+                    sessionStorage.setItem('gostar-user-code', verifiedCode);
+                    sessionStorage.setItem('gostar-user-name', data.username);
+                    sessionStorage.setItem('gostar-facility', facilityInfo.facilityName);
+                    setTimeout(function() {
+                        window.location.href = '/game';
+                    }, 1500);
                 } else {
-                    var errKey = 'error';
-                    if (result.data.error.includes('taken')) errKey = 'usernameTaken';
-                    if (result.data.error.includes('limit')) errKey = 'limitReached';
-                    showError(T[currentLang][errKey]);
+                    throw new Error(data.error);
                 }
             })
-            .catch(function() { showError(T[currentLang].error); });
+            .catch(function(err) {
+                errorEl.textContent = err.message || (currentLang === 'es' ? 'Error al registrar' : 'Registration failed');
+                errorEl.classList.add('show');
+            });
+        }
+
+        // Auto-uppercase code inputs
+        document.getElementById('loginCode').addEventListener('input', function() {
+            this.value = this.value.toUpperCase();
+            clearErrors();
         });
-        
-        setLang(currentLang);
+        document.getElementById('registerCode').addEventListener('input', function() {
+            this.value = this.value.toUpperCase();
+            clearErrors();
+        });
+
+        // Enter key handling
+        document.getElementById('loginCode').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') verifyLoginCode();
+        });
+        document.getElementById('loginPassword').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') loginUser();
+        });
+        document.getElementById('registerCode').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') verifyRegisterCode();
+        });
+        document.getElementById('registerPasswordConfirm').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') registerUser();
+        });
     </script>
+
 </body>
 </html>
