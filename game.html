@@ -3,169 +3,843 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Games - GoStar Digital</title>
+    <title>Game Hub - GoStar Digital</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            min-height: 100vh;
-            background: #0a0a1a;
-            color: #fff;
+
+        :root {
+            --bg-primary: #0D0D0D;
+            --bg-secondary: #1A1A1A;
+            --bg-card: #242424;
+            --bg-card-hover: #2D2D2D;
+            --text-primary: #FFFFFF;
+            --text-secondary: #B3B3B3;
+            --text-muted: #808080;
+            --accent-gold: #FFD93D;
+            --accent-teal: #00D9A5;
+            --accent-blue: #4DA8FF;
+            --accent-coral: #FF6B6B;
+            --accent-purple: #A855F7;
+            --accent-green: #22C55E;
+            --gradient-gold: linear-gradient(135deg, #FFD93D 0%, #FF9F1C 100%);
+            --gradient-teal: linear-gradient(135deg, #00D9A5 0%, #00B386 100%);
+            --border-color: rgba(255,255,255,0.08);
         }
+
+        html, body { height: 100%; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body[data-lang="es"] .lang-en { display: none !important; }
+        body[data-lang="en"] .lang-es { display: none !important; }
+        body[data-lang="es"] .lang-es { display: inline !important; }
+        body[data-lang="en"] .lang-en { display: inline !important; }
+
+        /* Header */
         .header {
-            background: rgba(255,255,255,0.03);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding: 16px 32px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
-        .header-left { display: flex; align-items: center; gap: 16px; }
-        .logo { font-size: 20px; font-weight: 700; }
-        .logo span { color: #ffd700; }
-        .facility { color: rgba(255,255,255,0.6); font-size: 14px; }
-        .header-right { display: flex; align-items: center; gap: 16px; }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            font-size: 28px;
+            filter: drop-shadow(0 0 10px rgba(255, 217, 61, 0.5));
+        }
+
+        .logo-text {
+            font-size: 22px;
+            font-weight: 900;
+            color: var(--text-primary);
+        }
+
+        .logo-text span {
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--bg-card);
+            padding: 8px 16px;
+            border-radius: 30px;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            background: var(--gradient-gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--bg-primary);
+        }
+
+        .user-name {
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .user-facility {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
         .lang-toggle {
             display: flex;
-            background: rgba(255,255,255,0.1);
+            gap: 4px;
+            background: var(--bg-card);
+            padding: 4px;
             border-radius: 20px;
-            overflow: hidden;
         }
+
         .lang-btn {
             padding: 6px 12px;
             border: none;
             background: transparent;
-            color: rgba(255,255,255,0.6);
-            cursor: pointer;
+            color: var(--text-secondary);
+            border-radius: 16px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
             font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .lang-btn:hover { color: var(--text-primary); }
+        .lang-btn.active { background: var(--accent-gold); color: var(--bg-primary); }
+
+        .logout-btn {
+            padding: 8px 16px;
+            background: rgba(255, 107, 107, 0.1);
+            border: 1px solid rgba(255, 107, 107, 0.2);
+            border-radius: 20px;
+            color: var(--accent-coral);
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 107, 107, 0.2);
+            border-color: var(--accent-coral);
+        }
+
+        /* Main */
+        .main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        /* Welcome */
+        .welcome {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .welcome-title {
+            font-size: 36px;
+            font-weight: 900;
+            margin-bottom: 8px;
+        }
+
+        .welcome-title span {
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .welcome-subtitle {
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 900;
+            margin-bottom: 4px;
+        }
+
+        .stat-card:nth-child(1) .stat-value { color: var(--accent-gold); }
+        .stat-card:nth-child(2) .stat-value { color: var(--accent-teal); }
+        .stat-card:nth-child(3) .stat-value { color: var(--accent-blue); }
+        .stat-card:nth-child(4) .stat-value { color: var(--accent-purple); }
+
+        .stat-label {
+            font-size: 13px;
+            color: var(--text-secondary);
             font-weight: 600;
         }
-        .lang-btn.active {
-            background: #ffd700;
-            color: #0a0a1a;
+
+        /* Section */
+        .section {
+            margin-bottom: 40px;
         }
-        .logout { color: #ffd700; text-decoration: none; font-size: 14px; }
-        .main { max-width: 800px; margin: 0 auto; padding: 40px 32px; }
-        h2 { font-weight: 400; margin-bottom: 8px; font-size: 28px; }
-        h2 strong { font-weight: 700; }
-        .subtitle { color: rgba(255,255,255,0.5); margin-bottom: 32px; }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-title-icon {
+            font-size: 28px;
+        }
+
+        /* Games Grid */
         .games-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 20px;
         }
+
         .game-card {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 16px;
-            padding: 28px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
             cursor: pointer;
-            transition: all 0.2s;
             text-decoration: none;
-            color: inherit;
             display: block;
         }
+
         .game-card:hover {
-            border-color: rgba(255,215,0,0.3);
-            transform: translateY(-2px);
+            transform: translateY(-4px);
+            border-color: var(--accent-gold);
+            box-shadow: 0 12px 40px rgba(255, 217, 61, 0.15);
         }
-        .game-icon {
-            width: 56px;
-            height: 56px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 14px;
+
+        .game-banner {
+            height: 120px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 28px;
+            font-size: 56px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-card:nth-child(1) .game-banner { background: linear-gradient(135deg, #FFD93D20 0%, #FF9F1C20 100%); }
+        .game-card:nth-child(2) .game-banner { background: linear-gradient(135deg, #00D9A520 0%, #00B38620 100%); }
+        .game-card:nth-child(3) .game-banner { background: linear-gradient(135deg, #4DA8FF20 0%, #0066CC20 100%); }
+        .game-card:nth-child(4) .game-banner { background: linear-gradient(135deg, #A855F720 0%, #7C3AED20 100%); }
+        .game-card:nth-child(5) .game-banner { background: linear-gradient(135deg, #FF6B6B20 0%, #EE5A5A20 100%); }
+
+        .game-content {
+            padding: 20px;
+        }
+
+        .game-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+
+        .game-description {
+            font-size: 13px;
+            color: var(--text-secondary);
             margin-bottom: 16px;
+            line-height: 1.5;
         }
-        .game-card h3 { font-size: 18px; margin-bottom: 8px; }
-        .game-card p { color: rgba(255,255,255,0.5); font-size: 14px; line-height: 1.5; }
-        .coming-soon {
-            opacity: 0.5;
-            cursor: not-allowed;
+
+        .game-stats {
+            display: flex;
+            gap: 16px;
         }
-        .coming-soon:hover {
-            transform: none;
-            border-color: rgba(255,255,255,0.1);
+
+        .game-stat {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: var(--text-muted);
         }
-        .badge {
-            display: inline-block;
-            background: rgba(255,255,255,0.1);
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 12px;
+
+        .game-stat-icon {
+            font-size: 14px;
+        }
+
+        .game-stat-value {
+            font-weight: 700;
+            color: var(--accent-gold);
+        }
+
+        .play-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 14px;
+            background: var(--gradient-gold);
+            border: none;
+            border-radius: 12px;
+            color: var(--bg-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 16px;
+        }
+
+        .play-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 20px rgba(255, 217, 61, 0.4);
+        }
+
+        /* Streak Banner */
+        .streak-banner {
+            background: linear-gradient(135deg, var(--bg-card) 0%, rgba(255, 217, 61, 0.1) 100%);
+            border: 2px solid var(--accent-gold);
+            border-radius: 20px;
+            padding: 24px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 40px;
+        }
+
+        .streak-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .streak-icon {
+            font-size: 48px;
+            filter: drop-shadow(0 0 20px rgba(255, 217, 61, 0.5));
+        }
+
+        .streak-info h3 {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--accent-gold);
+            margin-bottom: 4px;
+        }
+
+        .streak-info p {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .streak-days {
+            display: flex;
+            gap: 8px;
+        }
+
+        .streak-day {
+            width: 40px;
+            height: 40px;
+            background: var(--bg-primary);
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+
+        .streak-day.completed {
+            background: var(--accent-gold);
+            border-color: var(--accent-gold);
+            color: var(--bg-primary);
+        }
+
+        .streak-day.today {
+            border-color: var(--accent-teal);
+            color: var(--accent-teal);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px 24px;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        .footer a {
+            color: var(--accent-gold);
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .streak-banner {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+            
+            .streak-left {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .header {
+                flex-direction: column;
+                gap: 16px;
+                padding: 16px;
+            }
+            
+            .header-right {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            .welcome-title {
+                font-size: 28px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+            
+            .stat-card {
+                padding: 16px;
+            }
+            
+            .stat-value {
+                font-size: 24px;
+            }
+            
+            .games-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
-<body>
+<body data-lang="en">
+
+    <!-- Header -->
     <header class="header">
         <div class="header-left">
-            <div class="logo">Go<span>Star</span> Digital</div>
-            <div class="facility" id="facility"></div>
+            <a href="/" class="logo">
+                <span class="logo-icon">⭐</span>
+                <span class="logo-text">Go<span>Star</span></span>
+            </a>
         </div>
+        
         <div class="header-right">
-            <div class="lang-toggle">
-                <button class="lang-btn" data-lang="en">EN</button>
-                <button class="lang-btn" data-lang="es">ES</button>
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">?</div>
+                <div>
+                    <div class="user-name" id="userName">Player</div>
+                    <div class="user-facility" id="userFacility">Facility</div>
+                </div>
             </div>
-            <a href="/play" class="logout" onclick="localStorage.removeItem('accessCode')" data-en="Exit" data-es="Salir">Exit</a>
+            
+            <div class="lang-toggle">
+                <button class="lang-btn active" onclick="setLang('en')">EN</button>
+                <button class="lang-btn" onclick="setLang('es')">ES</button>
+            </div>
+            
+            <button class="logout-btn" onclick="logout()">
+                <span class="lang-en">Logout</span>
+                <span class="lang-es">Salir</span>
+            </button>
         </div>
     </header>
+
+    <!-- Main -->
     <main class="main">
-        <h2><strong data-en="Cognitive" data-es="Juegos de">Cognitive</strong> <span data-en="Training Games" data-es="Entrenamiento Cognitivo">Training Games</span></h2>
-        <p class="subtitle" data-en="Select a game to begin your training session" data-es="Selecciona un juego para comenzar tu sesion">Select a game to begin your training session</p>
-        <div class="games-grid">
-            <a href="/sequence-memory.html" class="game-card">
-                <div class="game-icon">&#129504;</div>
-                <h3 data-en="Sequence Memory" data-es="Memoria de Secuencia">Sequence Memory</h3>
-                <p data-en="Test your working memory by recalling increasingly complex sequences of tiles." data-es="Pon a prueba tu memoria recordando secuencias cada vez mas complejas.">Test your working memory by recalling increasingly complex sequences of tiles.</p>
-            </a>
-            <div class="game-card coming-soon">
-                <div class="game-icon" style="background: linear-gradient(135deg, #11998e, #38ef7d);">&#127919;</div>
-                <h3 data-en="N-Back Challenge" data-es="Desafio N-Back">N-Back Challenge</h3>
-                <p data-en="Enhance executive function and fluid intelligence with this classic cognitive task." data-es="Mejora la funcion ejecutiva con esta tarea cognitiva clasica.">Enhance executive function and fluid intelligence with this classic cognitive task.</p>
-                <span class="badge" data-en="Coming Soon" data-es="Proximamente">Coming Soon</span>
+        <!-- Welcome -->
+        <div class="welcome">
+            <h1 class="welcome-title">
+                <span class="lang-en">Welcome back, </span>
+                <span class="lang-es">Bienvenido, </span>
+                <span id="welcomeName">Player</span>! 🌟
+            </h1>
+            <p class="welcome-subtitle">
+                <span class="lang-en">Ready to train your brain today?</span>
+                <span class="lang-es">¿Listo para entrenar tu mente hoy?</span>
+            </p>
+        </div>
+
+        <!-- Streak Banner -->
+        <div class="streak-banner">
+            <div class="streak-left">
+                <div class="streak-icon">🔥</div>
+                <div class="streak-info">
+                    <h3>
+                        <span id="streakCount">0</span>
+                        <span class="lang-en"> Day Streak!</span>
+                        <span class="lang-es"> Días Seguidos!</span>
+                    </h3>
+                    <p>
+                        <span class="lang-en">Keep playing daily to build your streak</span>
+                        <span class="lang-es">Juega diariamente para mantener tu racha</span>
+                    </p>
+                </div>
             </div>
-            <div class="game-card coming-soon">
-                <div class="game-icon" style="background: linear-gradient(135deg, #f093fb, #f5576c);">&#128290;</div>
-                <h3 data-en="Digit Span" data-es="Retencion de Digitos">Digit Span</h3>
-                <p data-en="Challenge your short-term memory capacity by recalling number sequences." data-es="Desafia tu memoria a corto plazo recordando secuencias de numeros.">Challenge your short-term memory capacity by recalling number sequences.</p>
-                <span class="badge" data-en="Coming Soon" data-es="Proximamente">Coming Soon</span>
+            <div class="streak-days" id="streakDays">
+                <!-- Days populated by JS -->
             </div>
         </div>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">🎮</div>
+                <div class="stat-value" id="statGamesPlayed">0</div>
+                <div class="stat-label">
+                    <span class="lang-en">Games Played</span>
+                    <span class="lang-es">Juegos Jugados</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">⏱️</div>
+                <div class="stat-value" id="statTotalTime">0m</div>
+                <div class="stat-label">
+                    <span class="lang-en">Training Time</span>
+                    <span class="lang-es">Tiempo de Entrenamiento</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🏆</div>
+                <div class="stat-value" id="statPersonalBests">0</div>
+                <div class="stat-label">
+                    <span class="lang-en">Personal Bests</span>
+                    <span class="lang-es">Récords Personales</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">⭐</div>
+                <div class="stat-value" id="statTotalStars">0</div>
+                <div class="stat-label">
+                    <span class="lang-en">Stars Earned</span>
+                    <span class="lang-es">Estrellas Ganadas</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Games -->
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="section-title-icon">🎯</span>
+                    <span class="lang-en">Training Games</span>
+                    <span class="lang-es">Juegos de Entrenamiento</span>
+                </h2>
+            </div>
+
+            <div class="games-grid">
+                <!-- Sequence Memory -->
+                <a href="/games/sequence-memory.html" class="game-card">
+                    <div class="game-banner">⭐</div>
+                    <div class="game-content">
+                        <h3 class="game-title">Sequence Memory</h3>
+                        <p class="game-description">
+                            <span class="lang-en">Remember and repeat star patterns. Build your visual memory!</span>
+                            <span class="lang-es">Recuerda y repite patrones de estrellas. ¡Mejora tu memoria visual!</span>
+                        </p>
+                        <div class="game-stats">
+                            <div class="game-stat">
+                                <span class="game-stat-icon">🏆</span>
+                                <span class="lang-en">Best:</span>
+                                <span class="lang-es">Récord:</span>
+                                <span class="game-stat-value" id="pb-sequence">--</span>
+                            </div>
+                        </div>
+                        <button class="play-btn">
+                            <span>▶</span>
+                            <span class="lang-en">Play Now</span>
+                            <span class="lang-es">Jugar</span>
+                        </button>
+                    </div>
+                </a>
+
+                <!-- Memory StarTrail -->
+                <a href="/games/memory-startrail.html" class="game-card">
+                    <div class="game-banner">🛤️</div>
+                    <div class="game-content">
+                        <h3 class="game-title">Memory StarTrail</h3>
+                        <p class="game-description">
+                            <span class="lang-en">Connect stars in order. Train your sequential memory!</span>
+                            <span class="lang-es">Conecta estrellas en orden. ¡Entrena tu memoria secuencial!</span>
+                        </p>
+                        <div class="game-stats">
+                            <div class="game-stat">
+                                <span class="game-stat-icon">🏆</span>
+                                <span class="lang-en">Best:</span>
+                                <span class="lang-es">Récord:</span>
+                                <span class="game-stat-value" id="pb-startrail">--</span>
+                            </div>
+                        </div>
+                        <button class="play-btn">
+                            <span>▶</span>
+                            <span class="lang-en">Play Now</span>
+                            <span class="lang-es">Jugar</span>
+                        </button>
+                    </div>
+                </a>
+
+                <!-- KwikStar -->
+                <a href="/games/kwikstar.html" class="game-card">
+                    <div class="game-banner">⚡</div>
+                    <div class="game-content">
+                        <h3 class="game-title">KwikStar</h3>
+                        <p class="game-description">
+                            <span class="lang-en">Tap fast when stars appear. Sharpen your reaction time!</span>
+                            <span class="lang-es">Toca rápido cuando aparezcan estrellas. ¡Mejora tu tiempo de reacción!</span>
+                        </p>
+                        <div class="game-stats">
+                            <div class="game-stat">
+                                <span class="game-stat-icon">🏆</span>
+                                <span class="lang-en">Best:</span>
+                                <span class="lang-es">Récord:</span>
+                                <span class="game-stat-value" id="pb-kwikstar">--</span>
+                            </div>
+                        </div>
+                        <button class="play-btn">
+                            <span>▶</span>
+                            <span class="lang-en">Play Now</span>
+                            <span class="lang-es">Jugar</span>
+                        </button>
+                    </div>
+                </a>
+
+                <!-- Go-No-GoStar -->
+                <a href="/games/go-no-gostar.html" class="game-card">
+                    <div class="game-banner">🛑</div>
+                    <div class="game-content">
+                        <h3 class="game-title">Go-No-GoStar</h3>
+                        <p class="game-description">
+                            <span class="lang-en">Tap gold stars, avoid red ones. Train your impulse control!</span>
+                            <span class="lang-es">Toca estrellas doradas, evita las rojas. ¡Entrena tu control!</span>
+                        </p>
+                        <div class="game-stats">
+                            <div class="game-stat">
+                                <span class="game-stat-icon">🏆</span>
+                                <span class="lang-en">Best:</span>
+                                <span class="lang-es">Récord:</span>
+                                <span class="game-stat-value" id="pb-gonogo">--</span>
+                            </div>
+                        </div>
+                        <button class="play-btn">
+                            <span>▶</span>
+                            <span class="lang-en">Play Now</span>
+                            <span class="lang-es">Jugar</span>
+                        </button>
+                    </div>
+                </a>
+
+                <!-- StarStroop -->
+                <a href="/games/starstroop.html" class="game-card">
+                    <div class="game-banner">🔀</div>
+                    <div class="game-content">
+                        <h3 class="game-title">StarStroop</h3>
+                        <p class="game-description">
+                            <span class="lang-en">Match colors or text. Challenge your cognitive flexibility!</span>
+                            <span class="lang-es">Empareja colores o texto. ¡Desafía tu flexibilidad cognitiva!</span>
+                        </p>
+                        <div class="game-stats">
+                            <div class="game-stat">
+                                <span class="game-stat-icon">🏆</span>
+                                <span class="lang-en">Best:</span>
+                                <span class="lang-es">Récord:</span>
+                                <span class="game-stat-value" id="pb-stroop">--</span>
+                            </div>
+                        </div>
+                        <button class="play-btn">
+                            <span>▶</span>
+                            <span class="lang-en">Play Now</span>
+                            <span class="lang-es">Jugar</span>
+                        </button>
+                    </div>
+                </a>
+            </div>
+        </section>
     </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>
+            <span class="lang-en">GoStar Digital - Mental Fitness. Measurable Results.</span>
+            <span class="lang-es">GoStar Digital - Fitness Mental. Resultados Medibles.</span>
+        </p>
+        <p style="margin-top: 8px;">
+            <a href="/about">
+                <span class="lang-en">About</span>
+                <span class="lang-es">Acerca de</span>
+            </a>
+            &nbsp;•&nbsp;
+            <a href="/privacy">
+                <span class="lang-en">Privacy</span>
+                <span class="lang-es">Privacidad</span>
+            </a>
+            &nbsp;•&nbsp;
+            <a href="/terms">
+                <span class="lang-en">Terms</span>
+                <span class="lang-es">Términos</span>
+            </a>
+        </p>
+    </footer>
+
     <script>
-        var accessCode = localStorage.getItem('accessCode');
-        var facilityName = localStorage.getItem('facilityName');
-        if (!accessCode) { window.location.href = '/play'; }
-        document.getElementById('facility').textContent = facilityName || '';
-        var currentLang = localStorage.getItem('lang') || 'en';
+        var currentLang = localStorage.getItem('gostar-lang') || 'en';
+        var userName = sessionStorage.getItem('gostar-user-name') || 'Player';
+        var userFacility = sessionStorage.getItem('gostar-facility') || 'GoStar';
+
         function setLang(lang) {
             currentLang = lang;
-            localStorage.setItem('lang', lang);
-            var els = document.querySelectorAll('[data-en]');
-            for (var i = 0; i < els.length; i++) {
-                els[i].textContent = els[i].getAttribute('data-' + lang);
-            }
-            var btns = document.querySelectorAll('.lang-btn');
-            for (var j = 0; j < btns.length; j++) {
-                if (btns[j].dataset.lang === lang) {
-                    btns[j].classList.add('active');
-                } else {
-                    btns[j].classList.remove('active');
-                }
-            }
+            localStorage.setItem('gostar-lang', lang);
+            document.body.setAttribute('data-lang', lang);
+            document.querySelectorAll('.lang-btn').forEach(function(btn) {
+                btn.classList.toggle('active', btn.textContent === lang.toUpperCase());
+            });
         }
-        var langBtns = document.querySelectorAll('.lang-btn');
-        for (var k = 0; k < langBtns.length; k++) {
-            langBtns[k].addEventListener('click', function() { setLang(this.dataset.lang); });
+
+        document.body.setAttribute('data-lang', currentLang);
+        document.querySelectorAll('.lang-btn').forEach(function(btn) {
+            btn.classList.toggle('active', btn.textContent === currentLang.toUpperCase());
+        });
+
+        function logout() {
+            sessionStorage.removeItem('gostar-user-code');
+            sessionStorage.removeItem('gostar-user-name');
+            sessionStorage.removeItem('gostar-facility');
+            window.location.href = '/play';
         }
-        setLang(currentLang);
+
+        // Initialize user info
+        document.getElementById('userName').textContent = userName;
+        document.getElementById('userFacility').textContent = userFacility;
+        document.getElementById('userAvatar').textContent = userName.charAt(0).toUpperCase();
+        document.getElementById('welcomeName').textContent = userName;
+
+        // Load stats from localStorage
+        function loadStats() {
+            var stats = JSON.parse(localStorage.getItem('gostar-user-stats') || '{}');
+            document.getElementById('statGamesPlayed').textContent = stats.gamesPlayed || 0;
+            document.getElementById('statTotalTime').textContent = (stats.totalMinutes || 0) + 'm';
+            document.getElementById('statPersonalBests').textContent = stats.personalBests || 0;
+            document.getElementById('statTotalStars').textContent = stats.totalStars || 0;
+            document.getElementById('streakCount').textContent = stats.streak || 0;
+
+            // Load personal bests for each game
+            var pbs = JSON.parse(localStorage.getItem('gostar-personal-bests') || '{}');
+            document.getElementById('pb-sequence').textContent = pbs.sequence || '--';
+            document.getElementById('pb-startrail').textContent = pbs.startrail || '--';
+            document.getElementById('pb-kwikstar').textContent = pbs.kwikstar || '--';
+            document.getElementById('pb-gonogo').textContent = pbs.gonogo || '--';
+            document.getElementById('pb-stroop').textContent = pbs.stroop || '--';
+        }
+
+        // Render streak days
+        function renderStreakDays() {
+            var days = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+            var today = new Date().getDay();
+            var streakData = JSON.parse(localStorage.getItem('gostar-streak-days') || '[]');
+            var html = '';
+
+            for (var i = 0; i < 7; i++) {
+                var dayIndex = (today - 6 + i + 7) % 7;
+                var isCompleted = streakData.includes(i);
+                var isToday = i === 6;
+                var classes = 'streak-day';
+                if (isCompleted) classes += ' completed';
+                if (isToday) classes += ' today';
+                html += '<div class="' + classes + '">' + days[dayIndex] + '</div>';
+            }
+
+            document.getElementById('streakDays').innerHTML = html;
+        }
+
+        loadStats();
+        renderStreakDays();
     </script>
+
 </body>
 </html>
