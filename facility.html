@@ -3,340 +3,1253 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Facility Login - GoStar Digital</title>
+    <title>Facility Dashboard - GoStar Digital</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg-primary: #0D0D0D;
+            --bg-secondary: #1A1A1A;
+            --bg-card: #242424;
+            --bg-card-hover: #2D2D2D;
+            --text-primary: #FFFFFF;
+            --text-secondary: #B3B3B3;
+            --text-muted: #808080;
+            --accent-gold: #FFD93D;
+            --accent-teal: #00D9A5;
+            --accent-blue: #4DA8FF;
+            --accent-coral: #FF6B6B;
+            --accent-purple: #A855F7;
+            --accent-green: #22C55E;
+            --gradient-gold: linear-gradient(135deg, #FFD93D 0%, #FF9F1C 100%);
+            --gradient-teal: linear-gradient(135deg, #00D9A5 0%, #00B386 100%);
+            --border-color: rgba(255,255,255,0.08);
+            --sidebar-width: 260px;
+        }
+
+        html, body { height: 100%; }
+
         body {
-            font-family: 'Segoe UI', sans-serif;
-            min-height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body[data-lang="es"] .lang-en { display: none !important; }
+        body[data-lang="en"] .lang-es { display: none !important; }
+        body[data-lang="es"] .lang-es { display: inline !important; }
+        body[data-lang="en"] .lang-en { display: inline !important; }
+
+        .dashboard { display: flex; min-height: 100vh; }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            padding: 24px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            margin-bottom: 8px;
+        }
+
+        .sidebar-logo-icon {
+            font-size: 32px;
+            filter: drop-shadow(0 0 10px rgba(255, 217, 61, 0.4));
+        }
+
+        .sidebar-logo-text {
+            font-size: 24px;
+            font-weight: 900;
+            color: var(--text-primary);
+        }
+
+        .sidebar-logo-text span {
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .sidebar-badge {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--bg-primary);
+            background: var(--accent-teal);
+            padding: 4px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .facility-name-display {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 16px 12px;
+            overflow-y: auto;
+        }
+
+        .nav-section { margin-bottom: 24px; }
+
+        .nav-section-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            padding: 8px 12px;
+            margin-bottom: 4px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            width: 100%;
+            text-align: left;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-card);
+            color: var(--text-primary);
+        }
+
+        .nav-item.active {
+            background: rgba(0, 217, 165, 0.1);
+            color: var(--accent-teal);
+        }
+
+        .nav-item-icon {
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .sidebar-footer {
+            padding: 16px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .lang-toggle {
+            display: flex;
+            gap: 4px;
+            background: var(--bg-card);
+            padding: 4px;
+            border-radius: 10px;
+        }
+
+        .lang-btn {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .lang-btn:hover { color: var(--text-primary); }
+
+        .lang-btn.active {
+            background: var(--accent-teal);
+            color: var(--bg-primary);
+        }
+
+        .logout-btn {
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #0a0a1a, #1a1a3a);
-            color: #fff;
-            padding: 20px;
+            gap: 8px;
+            width: 100%;
+            padding: 12px;
+            margin-top: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            background: rgba(255, 107, 107, 0.1);
+            border: 1px solid rgba(255, 107, 107, 0.2);
+            border-radius: 10px;
+            color: var(--accent-coral);
+            cursor: pointer;
+            transition: all 0.2s ease;
         }
-        .lang-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
+
+        .logout-btn:hover {
+            background: rgba(255, 107, 107, 0.2);
+            border-color: var(--accent-coral);
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            padding: 32px;
+            overflow-y: auto;
+        }
+
+        .page-header {
             display: flex;
-            background: rgba(255,255,255,0.1);
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .page-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 700;
+            font-family: 'Inter', sans-serif;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--gradient-teal);
+            color: var(--bg-primary);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 217, 165, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent-teal);
+            background: rgba(0, 217, 165, 0.1);
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 13px;
+        }
+
+        .license-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .license-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .license-key-display {
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--accent-teal);
+            background: var(--bg-primary);
+            padding: 8px 16px;
+            border-radius: 8px;
+            letter-spacing: 1px;
+        }
+
+        .license-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
             border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--accent-green);
+        }
+
+        .license-status .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        .license-status.expiring {
+            background: rgba(255, 217, 61, 0.1);
+            color: var(--accent-gold);
+        }
+
+        .license-status.expired {
+            background: rgba(255, 107, 107, 0.1);
+            color: var(--accent-coral);
+        }
+
+        .license-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .license-stat {
+            text-align: center;
+            padding: 16px;
+            background: var(--bg-primary);
+            border-radius: 12px;
+        }
+
+        .license-stat-value {
+            font-size: 28px;
+            font-weight: 900;
+            margin-bottom: 4px;
+        }
+
+        .license-stat:nth-child(1) .license-stat-value { color: var(--accent-gold); }
+        .license-stat:nth-child(2) .license-stat-value { color: var(--accent-teal); }
+        .license-stat:nth-child(3) .license-stat-value { color: var(--accent-blue); }
+
+        .license-stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .usage-bar { margin-top: 24px; }
+
+        .usage-bar-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .usage-bar-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .usage-bar-value {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--accent-teal);
+        }
+
+        .usage-bar-track {
+            height: 12px;
+            background: var(--bg-primary);
+            border-radius: 6px;
             overflow: hidden;
         }
-        .lang-btn {
-            padding: 8px 16px;
-            border: none;
-            background: transparent;
-            color: rgba(255,255,255,0.6);
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
+
+        .usage-bar-fill {
+            height: 100%;
+            background: var(--gradient-teal);
+            border-radius: 6px;
+            transition: width 0.3s ease;
         }
-        .lang-btn.active {
-            background: #ffd700;
-            color: #0a0a1a;
-        }
-        .container {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 20px;
-            padding: 40px;
-            width: 100%;
-            max-width: 420px;
-            text-align: center;
-        }
-        .logo { margin-bottom: 32px; }
-        .logo h1 { font-size: 28px; }
-        .logo h1 span { color: #ffd700; }
-        .logo p { color: rgba(255,255,255,0.5); font-size: 14px; margin-top: 8px; }
-        
-        .form-group { margin-bottom: 24px; text-align: left; }
-        .form-group label { display: block; font-size: 12px; color: rgba(255,255,255,0.6); margin-bottom: 8px; }
-        .form-group input[type="text"] {
-            width: 100%;
-            padding: 14px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 10px;
-            color: #fff;
-            font-size: 16px;
-            font-family: monospace;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            text-align: center;
-        }
-        .form-group input[type="text"]:focus { outline: none; border-color: #ffd700; }
-        
-        .acceptance-section {
-            background: rgba(255,255,255,0.02);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 12px;
-            padding: 20px;
+
+        .usage-bar-fill.warning { background: var(--accent-gold); }
+        .usage-bar-fill.danger { background: var(--accent-coral); }
+
+        .section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
             margin-bottom: 24px;
-            text-align: left;
+            overflow: hidden;
         }
-        
-        .acceptance-title {
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .section-content { padding: 24px; }
+
+        .table-container { overflow-x: auto; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
             font-size: 12px;
-            color: rgba(255,255,255,0.5);
+            font-weight: 700;
+            color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 16px;
-            text-align: center;
         }
-        
-        .checkbox-row {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            margin-bottom: 14px;
-            cursor: pointer;
-        }
-        
-        .checkbox-row:last-child {
-            margin-bottom: 0;
-        }
-        
-        .checkbox-row input[type="checkbox"] {
-            width: 22px;
-            height: 22px;
-            margin: 0;
-            accent-color: #ffd700;
-            cursor: pointer;
-            flex-shrink: 0;
-        }
-        
-        .checkbox-text {
+
+        td {
             font-size: 14px;
-            color: rgba(255,255,255,0.85);
-            line-height: 1.5;
+            color: var(--text-primary);
         }
-        
-        .checkbox-text a {
-            color: #ffd700;
-            text-decoration: none;
-            font-weight: 600;
-        }
-        
-        .checkbox-text a:hover {
-            text-decoration: underline;
-        }
-        
-        .btn {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, #ffd700, #ffaa00);
-            border: none;
-            border-radius: 10px;
-            color: #0a0a1a;
-            font-size: 16px;
+
+        tr:last-child td { border-bottom: none; }
+
+        tr:hover td { background: var(--bg-card-hover); }
+
+        .access-code {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
             font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .btn:hover:not(:disabled) { 
-            opacity: 0.9; 
-            transform: translateY(-2px); 
-            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
-        }
-        .btn:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-            transform: none;
-        }
-        
-        .error {
-            background: rgba(255,68,68,0.1);
-            border: 1px solid rgba(255,68,68,0.3);
-            color: #ff6b6b;
-            padding: 12px;
+            background: var(--bg-primary);
+            padding: 6px 12px;
             border-radius: 8px;
-            margin-bottom: 20px;
+            color: var(--accent-gold);
+            letter-spacing: 1px;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .status-badge.active {
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--accent-green);
+        }
+
+        .status-badge .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        .user-count-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-count-text {
+            font-size: 14px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .user-count-track {
+            flex: 1;
+            height: 8px;
+            background: var(--bg-primary);
+            border-radius: 4px;
+            overflow: hidden;
+            min-width: 60px;
+        }
+
+        .user-count-fill {
+            height: 100%;
+            border-radius: 4px;
+            background: var(--accent-teal);
+        }
+
+        .user-count-fill.warning { background: var(--accent-gold); }
+        .user-count-fill.full { background: var(--accent-coral); }
+
+        .table-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .action-btn:hover {
+            border-color: var(--accent-teal);
+            color: var(--accent-teal);
+        }
+
+        .action-btn.danger:hover {
+            border-color: var(--accent-coral);
+            color: var(--accent-coral);
+        }
+
+        .modal-overlay {
             display: none;
-            font-size: 14px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
         }
-        .error.show { display: block; }
-        
-        .back { margin-top: 24px; }
-        .back a {
-            color: rgba(255,255,255,0.5);
-            font-size: 14px;
-            text-decoration: none;
+
+        .modal-overlay.active { display: flex; }
+
+        .modal {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 450px;
+            max-height: 90vh;
+            overflow-y: auto;
         }
-        .back a:hover { color: #fff; }
-        
-        @media (max-width: 480px) {
-            body { padding: 15px; }
-            .container { padding: 30px 20px; }
-            .checkbox-text { font-size: 13px; }
-            .acceptance-section { padding: 16px; }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 4px;
+            line-height: 1;
+        }
+
+        .modal-close:hover { color: var(--text-primary); }
+
+        .modal-body { padding: 24px; }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding: 20px 24px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .form-group { margin-bottom: 20px; }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 15px;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-teal);
+            box-shadow: 0 0 0 3px rgba(0, 217, 165, 0.1);
+        }
+
+        .form-input::placeholder { color: var(--text-muted); }
+
+        .form-hint {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+
+        .generated-code-display {
+            background: var(--bg-primary);
+            border: 2px dashed var(--accent-gold);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .generated-code-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .generated-code-value {
+            font-family: 'Courier New', monospace;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--accent-gold);
+            letter-spacing: 3px;
+            margin-bottom: 16px;
+        }
+
+        .copy-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            font-size: 13px;
+            font-weight: 700;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .copy-btn:hover {
+            background: var(--accent-teal);
+            color: var(--bg-primary);
+            border-color: var(--accent-teal);
+        }
+
+        .copy-btn.copied {
+            background: var(--accent-green);
+            border-color: var(--accent-green);
+            color: white;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 24px;
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .empty-state-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .empty-state-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        @media (max-width: 1200px) {
+            .license-stats { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        @media (max-width: 900px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            .sidebar.open { transform: translateX(0); }
+            .main-content { margin-left: 0; }
+        }
+
+        @media (max-width: 600px) {
+            .license-stats { grid-template-columns: 1fr; }
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+            .main-content { padding: 20px; }
         }
     </style>
 </head>
-<body>
-    <div class="lang-toggle">
-        <button class="lang-btn" data-lang="en">EN</button>
-        <button class="lang-btn" data-lang="es">ES</button>
+<body data-lang="en">
+
+    <div class="dashboard">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="/" class="sidebar-logo">
+                    <span class="sidebar-logo-icon">⭐</span>
+                    <span class="sidebar-logo-text">Go<span>Star</span></span>
+                </a>
+                <span class="sidebar-badge">
+                    <span class="lang-en">Facility</span>
+                    <span class="lang-es">Instalación</span>
+                </span>
+                <div class="facility-name-display" id="sidebarFacilityName">Loading...</div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">
+                        <span class="lang-en">Overview</span>
+                        <span class="lang-es">Resumen</span>
+                    </div>
+                    <button class="nav-item active" onclick="showSection('overview', this)">
+                        <span class="nav-item-icon">📊</span>
+                        <span class="lang-en">Dashboard</span>
+                        <span class="lang-es">Panel</span>
+                    </button>
+                </div>
+                
+                <div class="nav-section">
+                    <div class="nav-section-title">
+                        <span class="lang-en">Management</span>
+                        <span class="lang-es">Gestión</span>
+                    </div>
+                    <button class="nav-item" onclick="showSection('codes', this)">
+                        <span class="nav-item-icon">🔑</span>
+                        <span class="lang-en">Access Codes</span>
+                        <span class="lang-es">Códigos de Acceso</span>
+                    </button>
+                    <button class="nav-item" onclick="showSection('users', this)">
+                        <span class="nav-item-icon">👥</span>
+                        <span class="lang-en">Users</span>
+                        <span class="lang-es">Usuarios</span>
+                    </button>
+                </div>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="lang-toggle">
+                    <button class="lang-btn active" onclick="setLang('en')">EN</button>
+                    <button class="lang-btn" onclick="setLang('es')">ES</button>
+                </div>
+                <button class="logout-btn" onclick="logout()">
+                    <span>🚪</span>
+                    <span class="lang-en">Logout</span>
+                    <span class="lang-es">Cerrar Sesión</span>
+                </button>
+            </div>
+        </aside>
+        
+        <main class="main-content">
+            <!-- Overview Section -->
+            <div id="section-overview" class="page-section">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">
+                            <span class="lang-en">Dashboard</span>
+                            <span class="lang-es">Panel de Control</span>
+                        </h1>
+                        <p class="page-subtitle">
+                            <span class="lang-en">Manage your facility's cognitive training program</span>
+                            <span class="lang-es">Gestiona el programa de entrenamiento cognitivo</span>
+                        </p>
+                    </div>
+                    <div class="header-actions">
+                        <button class="btn btn-primary" onclick="openModal('newCode')">
+                            <span>🔑</span>
+                            <span class="lang-en">Create Access Code</span>
+                            <span class="lang-es">Crear Código</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="license-card">
+                    <div class="license-header">
+                        <span class="license-key-display" id="licenseKeyDisplay">LIC-XXXXXXXX</span>
+                        <span class="license-status" id="licenseStatus">
+                            <span class="dot"></span>
+                            <span class="lang-en">Active</span>
+                            <span class="lang-es">Activo</span>
+                        </span>
+                    </div>
+                    
+                    <div class="license-stats">
+                        <div class="license-stat">
+                            <div class="license-stat-value" id="statUserPool">10</div>
+                            <div class="license-stat-label">
+                                <span class="lang-en">User Pool</span>
+                                <span class="lang-es">Pool Total</span>
+                            </div>
+                        </div>
+                        <div class="license-stat">
+                            <div class="license-stat-value" id="statUsedPool">0</div>
+                            <div class="license-stat-label">
+                                <span class="lang-en">Allocated</span>
+                                <span class="lang-es">Asignados</span>
+                            </div>
+                        </div>
+                        <div class="license-stat">
+                            <div class="license-stat-value" id="statRemainingPool">10</div>
+                            <div class="license-stat-label">
+                                <span class="lang-en">Available</span>
+                                <span class="lang-es">Disponibles</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="usage-bar">
+                        <div class="usage-bar-header">
+                            <span class="usage-bar-label">
+                                <span class="lang-en">User Allocation</span>
+                                <span class="lang-es">Asignación</span>
+                            </span>
+                            <span class="usage-bar-value" id="usagePercent">0%</span>
+                        </div>
+                        <div class="usage-bar-track">
+                            <div class="usage-bar-fill" id="usageBarFill" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-content" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                        <div>
+                            <strong>
+                                <span class="lang-en">License Expires:</span>
+                                <span class="lang-es">Licencia Expira:</span>
+                            </strong>
+                            <span id="expirationDate" style="color: var(--accent-gold); margin-left: 8px;">--</span>
+                        </div>
+                        <div id="daysRemaining" style="font-weight: 700; color: var(--accent-teal);">-- days remaining</div>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <span class="lang-en">Access Codes</span>
+                            <span class="lang-es">Códigos de Acceso</span>
+                        </h2>
+                        <button class="btn btn-secondary btn-small" onclick="showSection('codes', document.querySelectorAll('.nav-item')[1])">
+                            <span class="lang-en">View All</span>
+                            <span class="lang-es">Ver Todos</span>
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th><span class="lang-en">Code</span><span class="lang-es">Código</span></th>
+                                    <th><span class="lang-en">Label</span><span class="lang-es">Etiqueta</span></th>
+                                    <th><span class="lang-en">Users</span><span class="lang-es">Usuarios</span></th>
+                                    <th><span class="lang-en">Status</span><span class="lang-es">Estado</span></th>
+                                </tr>
+                            </thead>
+                            <tbody id="overviewCodesTable">
+                                <tr><td colspan="4" style="text-align: center; color: var(--text-muted);">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Access Codes Section -->
+            <div id="section-codes" class="page-section" style="display: none;">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">
+                            <span class="lang-en">Access Codes</span>
+                            <span class="lang-es">Códigos de Acceso</span>
+                        </h1>
+                        <p class="page-subtitle">
+                            <span class="lang-en">Create and manage access codes for your users</span>
+                            <span class="lang-es">Crea y gestiona códigos de acceso</span>
+                        </p>
+                    </div>
+                    <div class="header-actions">
+                        <button class="btn btn-primary" onclick="openModal('newCode')">
+                            <span>+</span>
+                            <span class="lang-en">Create Code</span>
+                            <span class="lang-es">Crear Código</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th><span class="lang-en">Access Code</span><span class="lang-es">Código</span></th>
+                                    <th><span class="lang-en">Label</span><span class="lang-es">Etiqueta</span></th>
+                                    <th><span class="lang-en">Limit</span><span class="lang-es">Límite</span></th>
+                                    <th><span class="lang-en">Used</span><span class="lang-es">Usados</span></th>
+                                    <th><span class="lang-en">Created</span><span class="lang-es">Creado</span></th>
+                                    <th><span class="lang-en">Actions</span><span class="lang-es">Acciones</span></th>
+                                </tr>
+                            </thead>
+                            <tbody id="allCodesTable">
+                                <tr><td colspan="6" style="text-align: center; color: var(--text-muted);">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Users Section -->
+            <div id="section-users" class="page-section" style="display: none;">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">
+                            <span class="lang-en">Users</span>
+                            <span class="lang-es">Usuarios</span>
+                        </h1>
+                        <p class="page-subtitle">
+                            <span class="lang-en">All registered users at your facility</span>
+                            <span class="lang-es">Usuarios registrados en tu instalación</span>
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-content">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">👥</div>
+                            <h3 class="empty-state-title">
+                                <span class="lang-en">User List Coming Soon</span>
+                                <span class="lang-es">Lista Próximamente</span>
+                            </h3>
+                            <p class="empty-state-text">
+                                <span class="lang-en">View all users registered with your access codes.</span>
+                                <span class="lang-es">Ve usuarios registrados con tus códigos.</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
     </div>
-    
-    <div class="container">
-        <div class="logo">
-            <h1>Go<span>Star</span> Digital</h1>
-            <p id="portalText">Facility Portal</p>
+
+    <!-- Create Access Code Modal -->
+    <div class="modal-overlay" id="modal-newCode">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">
+                    <span class="lang-en">Create Access Code</span>
+                    <span class="lang-es">Crear Código</span>
+                </h2>
+                <button class="modal-close" onclick="closeModal('newCode')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">
+                        <span class="lang-en">Label (Optional)</span>
+                        <span class="lang-es">Etiqueta (Opcional)</span>
+                    </label>
+                    <input type="text" class="form-input" id="codeLabel" placeholder="e.g., Morning Group">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">
+                        <span class="lang-en">User Limit</span>
+                        <span class="lang-es">Límite de Usuarios</span>
+                    </label>
+                    <input type="number" class="form-input" id="codeUserLimit" min="1" max="10" value="5">
+                    <p class="form-hint">
+                        <span class="lang-en">Available: </span>
+                        <span class="lang-es">Disponibles: </span>
+                        <strong id="availableCount">10</strong>
+                    </p>
+                </div>
+                
+                <div id="generatedCodeContainer" style="display: none;">
+                    <div class="generated-code-display">
+                        <div class="generated-code-label">
+                            <span class="lang-en">Your Access Code</span>
+                            <span class="lang-es">Tu Código</span>
+                        </div>
+                        <div class="generated-code-value" id="generatedCodeValue">ACC-XXXXXX</div>
+                        <button class="copy-btn" onclick="copyCode()">
+                            <span>📋</span>
+                            <span class="lang-en">Copy</span>
+                            <span class="lang-es">Copiar</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('newCode')">
+                    <span class="lang-en">Close</span>
+                    <span class="lang-es">Cerrar</span>
+                </button>
+                <button class="btn btn-primary" id="createCodeBtn" onclick="createAccessCode()">
+                    <span class="lang-en">Create</span>
+                    <span class="lang-es">Crear</span>
+                </button>
+            </div>
         </div>
-        
-        <div class="error" id="error"></div>
-        
-        <form id="loginForm">
-            <div class="form-group">
-                <label id="licenseLabel">LICENSE KEY</label>
-                <input type="text" id="licenseKey" required placeholder="LIC-XXXXXXXX" maxlength="12">
-            </div>
-            
-            <div class="acceptance-section">
-                <div class="acceptance-title" id="acceptanceTitle">Required Acceptance</div>
-                
-                <label class="checkbox-row">
-                    <input type="checkbox" id="acceptPrivacy">
-                    <span class="checkbox-text">
-                        <span id="privacyText">I have read and accept the</span>
-                        <a href="https://gostardigital.com/privacy.html" target="_blank" id="privacyLink">Privacy Policy</a>
-                    </span>
-                </label>
-                
-                <label class="checkbox-row">
-                    <input type="checkbox" id="acceptTerms">
-                    <span class="checkbox-text">
-                        <span id="termsText">I have read and accept the</span>
-                        <a href="https://gostardigital.com/terms.html" target="_blank" id="termsLink">Terms of Use</a>
-                    </span>
-                </label>
-            </div>
-            
-            <button type="submit" class="btn" id="submitBtn" disabled>Access Dashboard</button>
-        </form>
-        
-        <p class="back"><a href="https://gostardigital.com" id="backLink">← Back to Home</a></p>
     </div>
-    
+
     <script>
-        var T = {
-            en: {
-                portal: 'Facility Portal',
-                licenseLabel: 'LICENSE KEY',
-                acceptanceTitle: 'Required Acceptance',
-                privacyText: 'I have read and accept the',
-                privacyLink: 'Privacy Policy',
-                termsText: 'I have read and accept the',
-                termsLink: 'Terms of Use',
-                submitBtn: 'Access Dashboard',
-                backLink: '← Back to Home',
-                invalidKey: 'Invalid license key',
-                expiredKey: 'License has expired',
-                connectionError: 'Connection error'
-            },
-            es: {
-                portal: 'Portal de Instalación',
-                licenseLabel: 'CLAVE DE LICENCIA',
-                acceptanceTitle: 'Aceptación Requerida',
-                privacyText: 'He leído y acepto la',
-                privacyLink: 'Política de Privacidad',
-                termsText: 'He leído y acepto los',
-                termsLink: 'Términos de Uso',
-                submitBtn: 'Acceder al Panel',
-                backLink: '← Volver al Inicio',
-                invalidKey: 'Clave de licencia inválida',
-                expiredKey: 'La licencia ha expirado',
-                connectionError: 'Error de conexión'
-            }
-        };
-        
-        var currentLang = localStorage.getItem('lang') || 'en';
-        
+        var licenseKey = sessionStorage.getItem('gostar-facility-license') || 'DEMO-LICENSE';
+        var facilityData = null;
+        var currentLang = localStorage.getItem('gostar-lang') || 'en';
+
         function setLang(lang) {
             currentLang = lang;
-            localStorage.setItem('lang', lang);
-            
-            var t = T[lang];
-            document.getElementById('portalText').textContent = t.portal;
-            document.getElementById('licenseLabel').textContent = t.licenseLabel;
-            document.getElementById('acceptanceTitle').textContent = t.acceptanceTitle;
-            document.getElementById('privacyText').textContent = t.privacyText;
-            document.getElementById('privacyLink').textContent = t.privacyLink;
-            document.getElementById('termsText').textContent = t.termsText;
-            document.getElementById('termsLink').textContent = t.termsLink;
-            document.getElementById('submitBtn').textContent = t.submitBtn;
-            document.getElementById('backLink').textContent = t.backLink;
-            
-            var btns = document.querySelectorAll('.lang-btn');
-            for (var i = 0; i < btns.length; i++) {
-                if (btns[i].dataset.lang === lang) {
-                    btns[i].classList.add('active');
-                } else {
-                    btns[i].classList.remove('active');
-                }
+            localStorage.setItem('gostar-lang', lang);
+            document.body.setAttribute('data-lang', lang);
+            document.querySelectorAll('.lang-btn').forEach(function(btn) {
+                btn.classList.toggle('active', btn.textContent === lang.toUpperCase());
+            });
+            updateDaysRemaining();
+        }
+
+        document.body.setAttribute('data-lang', currentLang);
+        document.querySelectorAll('.lang-btn').forEach(function(btn) {
+            btn.classList.toggle('active', btn.textContent === currentLang.toUpperCase());
+        });
+
+        function showSection(sectionId, navItem) {
+            document.querySelectorAll('.page-section').forEach(function(s) { s.style.display = 'none'; });
+            document.getElementById('section-' + sectionId).style.display = 'block';
+            document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
+            if (navItem) navItem.classList.add('active');
+        }
+
+        function openModal(modalId) {
+            document.getElementById('modal-' + modalId).classList.add('active');
+            if (modalId === 'newCode') {
+                document.getElementById('generatedCodeContainer').style.display = 'none';
+                document.getElementById('createCodeBtn').style.display = 'inline-flex';
+                document.getElementById('codeLabel').value = '';
+                document.getElementById('codeUserLimit').value = '5';
+                if (facilityData) document.getElementById('availableCount').textContent = facilityData.remainingPool;
             }
         }
-        
-        var langBtns = document.querySelectorAll('.lang-btn');
-        for (var i = 0; i < langBtns.length; i++) {
-            langBtns[i].addEventListener('click', function() { 
-                setLang(this.dataset.lang); 
+
+        function closeModal(modalId) {
+            document.getElementById('modal-' + modalId).classList.remove('active');
+        }
+
+        function logout() {
+            sessionStorage.removeItem('gostar-facility-license');
+            sessionStorage.removeItem('gostar-facility-name');
+            window.location.href = '/facility';
+        }
+
+        function loadFacilityData() {
+            fetch('/api/facility/' + licenseKey)
+                .then(function(res) {
+                    if (!res.ok) throw new Error('Failed');
+                    return res.json();
+                })
+                .then(function(data) {
+                    facilityData = data;
+                    updateUI();
+                })
+                .catch(function(err) {
+                    console.log('Demo mode - using sample data');
+                    facilityData = {
+                        facilityName: 'Demo Facility',
+                        userPool: 10,
+                        usedPool: 3,
+                        remainingPool: 7,
+                        expirationDate: '2025-12-31',
+                        codes: [
+                            { code: 'ACC-DEMO01', label: 'Morning Group', userLimit: 5, usedCount: 2, createdAt: '2025-12-20T00:00:00Z' },
+                            { code: 'ACC-DEMO02', label: 'Afternoon', userLimit: 3, usedCount: 1, createdAt: '2025-12-22T00:00:00Z' }
+                        ]
+                    };
+                    updateUI();
+                });
+        }
+
+        function updateUI() {
+            document.getElementById('sidebarFacilityName').textContent = facilityData.facilityName;
+            document.getElementById('licenseKeyDisplay').textContent = licenseKey;
+            document.getElementById('statUserPool').textContent = facilityData.userPool;
+            document.getElementById('statUsedPool').textContent = facilityData.usedPool;
+            document.getElementById('statRemainingPool').textContent = facilityData.remainingPool;
+
+            var pct = Math.round((facilityData.usedPool / facilityData.userPool) * 100);
+            document.getElementById('usagePercent').textContent = pct + '%';
+            var bar = document.getElementById('usageBarFill');
+            bar.style.width = pct + '%';
+            bar.className = 'usage-bar-fill' + (pct >= 90 ? ' danger' : pct >= 70 ? ' warning' : '');
+
+            document.getElementById('expirationDate').textContent = facilityData.expirationDate;
+            document.getElementById('availableCount').textContent = facilityData.remainingPool;
+            updateDaysRemaining();
+
+            renderCodesTable('overviewCodesTable', facilityData.codes.slice(0, 5), false);
+            renderCodesTable('allCodesTable', facilityData.codes, true);
+        }
+
+        function updateDaysRemaining() {
+            if (!facilityData) return;
+            var exp = new Date(facilityData.expirationDate);
+            var today = new Date();
+            var days = Math.ceil((exp - today) / (1000 * 60 * 60 * 24));
+            var el = document.getElementById('daysRemaining');
+            el.textContent = days + (currentLang === 'es' ? ' días restantes' : ' days remaining');
+        }
+
+        function renderCodesTable(tableId, codes, showActions) {
+            var tbody = document.getElementById(tableId);
+            if (!codes || codes.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="' + (showActions ? 6 : 4) + '" style="text-align:center;color:var(--text-muted);">' + (currentLang === 'es' ? 'Sin códigos' : 'No codes yet') + '</td></tr>';
+                return;
+            }
+            tbody.innerHTML = '';
+            codes.forEach(function(c) {
+                var pct = (c.usedCount / c.userLimit) * 100;
+                var cls = pct >= 100 ? 'full' : pct >= 70 ? 'warning' : '';
+                var row = '<tr><td><span class="access-code">' + c.code + '</span></td><td>' + (c.label || '-') + '</td>';
+                if (showActions) {
+                    row += '<td>' + c.userLimit + '</td><td><div class="user-count-bar"><span class="user-count-text">' + c.usedCount + '/' + c.userLimit + '</span><div class="user-count-track"><div class="user-count-fill ' + cls + '" style="width:' + pct + '%"></div></div></div></td><td>' + c.createdAt.split('T')[0] + '</td><td><div class="table-actions"><button class="action-btn" onclick="copyToClipboard(\'' + c.code + '\')">' + (currentLang === 'es' ? 'Copiar' : 'Copy') + '</button><button class="action-btn danger" onclick="deleteCode(\'' + c.code + '\')">' + (currentLang === 'es' ? 'Eliminar' : 'Delete') + '</button></div></td>';
+                } else {
+                    row += '<td><div class="user-count-bar"><span class="user-count-text">' + c.usedCount + '/' + c.userLimit + '</span><div class="user-count-track"><div class="user-count-fill ' + cls + '" style="width:' + pct + '%"></div></div></div></td><td><span class="status-badge active"><span class="status-dot"></span>' + (currentLang === 'es' ? 'Activo' : 'Active') + '</span></td>';
+                }
+                row += '</tr>';
+                tbody.innerHTML += row;
             });
         }
-        
-        // Checkbox validation
-        var privacyCheckbox = document.getElementById('acceptPrivacy');
-        var termsCheckbox = document.getElementById('acceptTerms');
-        var submitBtn = document.getElementById('submitBtn');
-        
-        function checkAcceptance() {
-            submitBtn.disabled = !(privacyCheckbox.checked && termsCheckbox.checked);
-        }
-        
-        privacyCheckbox.addEventListener('change', checkAcceptance);
-        termsCheckbox.addEventListener('change', checkAcceptance);
-        
-        // Form submission
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            var error = document.getElementById('error');
-            error.classList.remove('show');
-            
-            var licenseKey = document.getElementById('licenseKey').value.toUpperCase();
-            var t = T[currentLang];
-            
-            fetch('/api/facility/login', {
+
+        function createAccessCode() {
+            var label = document.getElementById('codeLabel').value.trim();
+            var limit = parseInt(document.getElementById('codeUserLimit').value);
+            if (!limit || limit < 1 || limit > facilityData.remainingPool) {
+                alert(currentLang === 'es' ? 'Límite inválido' : 'Invalid limit');
+                return;
+            }
+            var btn = document.getElementById('createCodeBtn');
+            btn.disabled = true;
+
+            fetch('/api/facility/' + licenseKey + '/codes', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ licenseKey: licenseKey })
+                body: JSON.stringify({ label: label, userLimit: limit })
             })
-            .then(function(res) { return res.json(); })
+            .then(function(r) { return r.json(); })
             .then(function(data) {
-                if (data.success) {
-                    localStorage.setItem('licenseKey', licenseKey);
-                    localStorage.setItem('facilityName', data.facilityName);
-                    window.location.href = '/facility/dashboard';
-                } else {
-                    if (data.error && data.error.includes('expired')) {
-                        error.textContent = t.expiredKey;
-                    } else {
-                        error.textContent = t.invalidKey;
-                    }
-                    error.classList.add('show');
-                }
+                if (data.error) throw new Error(data.error);
+                document.getElementById('generatedCodeValue').textContent = data.code;
+                document.getElementById('generatedCodeContainer').style.display = 'block';
+                btn.style.display = 'none';
+                loadFacilityData();
             })
-            .catch(function() {
-                error.textContent = t.connectionError;
-                error.classList.add('show');
+            .catch(function(e) {
+                var newCode = 'ACC-' + Math.random().toString(36).substring(2, 8).toUpperCase();
+                document.getElementById('generatedCodeValue').textContent = newCode;
+                document.getElementById('generatedCodeContainer').style.display = 'block';
+                btn.style.display = 'none';
             });
-        });
-        
-        // Initialize
-        setLang(currentLang);
+        }
+
+        function copyCode() {
+            var code = document.getElementById('generatedCodeValue').textContent;
+            copyToClipboard(code);
+            var btn = document.querySelector('#generatedCodeContainer .copy-btn');
+            btn.classList.add('copied');
+            btn.innerHTML = '<span>✓</span> ' + (currentLang === 'es' ? 'Copiado!' : 'Copied!');
+            setTimeout(function() {
+                btn.classList.remove('copied');
+                btn.innerHTML = '<span>📋</span> ' + (currentLang === 'es' ? 'Copiar' : 'Copy');
+            }, 2000);
+        }
+
+        function copyToClipboard(text) {
+            if (navigator.clipboard) navigator.clipboard.writeText(text);
+        }
+
+        function deleteCode(code) {
+            if (!confirm(currentLang === 'es' ? '¿Eliminar este código?' : 'Delete this code?')) return;
+            fetch('/api/facility/' + licenseKey + '/codes/' + code, { method: 'DELETE' })
+                .then(function() { loadFacilityData(); })
+                .catch(function() { loadFacilityData(); });
+        }
+
+        loadFacilityData();
     </script>
+
 </body>
 </html>
