@@ -1,0 +1,1708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard - GoStar Digital</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+    --bg-primary: #0D0D0D;
+    --bg-secondary: #1A1A1A;
+    --bg-card: #242424;
+    --bg-card-hover: #2D2D2D;
+    --text-primary: #FFFFFF;
+    --text-secondary: #B3B3B3;
+    --text-muted: #808080;
+    --accent-gold: #FFD93D;
+    --accent-teal: #00D9A5;
+    --accent-blue: #4DA8FF;
+    --accent-coral: #FF6B6B;
+    --accent-purple: #A855F7;
+    --accent-green: #22C55E;
+    --gradient-gold: linear-gradient(135deg, #FFD93D 0%, #FF9F1C 100%);
+    --gradient-teal: linear-gradient(135deg, #00D9A5 0%, #00B386 100%);
+    --border-color: rgba(255,255,255,0.08);
+    --sidebar-width: 260px;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Language Toggle */
+body[data-lang="es"] .lang-en { display: none !important; }
+body[data-lang="en"] .lang-es { display: none !important; }
+body[data-lang="es"] .lang-es { display: inline !important; }
+body[data-lang="en"] .lang-en { display: inline !important; }
+
+/* Layout */
+.dashboard {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: var(--sidebar-width);
+    background: var(--bg-secondary);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 100;
+}
+
+.sidebar-header {
+    padding: 24px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.sidebar-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    margin-bottom: 8px;
+}
+
+.sidebar-logo-icon {
+    font-size: 32px;
+    filter: drop-shadow(0 0 10px rgba(255, 217, 61, 0.4));
+}
+
+.sidebar-logo-text {
+    font-size: 24px;
+    font-weight: 900;
+    color: var(--text-primary);
+}
+
+.sidebar-logo-text span {
+    background: var(--gradient-gold);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.sidebar-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--bg-primary);
+    background: var(--accent-gold);
+    padding: 4px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.sidebar-nav {
+    flex: 1;
+    padding: 16px 12px;
+    overflow-y: auto;
+}
+
+.nav-section {
+    margin-bottom: 24px;
+}
+
+.nav-section-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding: 8px 12px;
+    margin-bottom: 4px;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    width: 100%;
+    text-align: left;
+}
+
+.nav-item:hover {
+    background: var(--bg-card);
+    color: var(--text-primary);
+}
+
+.nav-item.active {
+    background: rgba(255, 217, 61, 0.1);
+    color: var(--accent-gold);
+}
+
+.nav-item-icon {
+    font-size: 18px;
+    width: 24px;
+    text-align: center;
+}
+
+.nav-item-badge {
+    margin-left: auto;
+    font-size: 12px;
+    font-weight: 700;
+    background: var(--accent-coral);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 10px;
+}
+
+.sidebar-footer {
+    padding: 16px;
+    border-top: 1px solid var(--border-color);
+}
+
+.lang-toggle {
+    display: flex;
+    gap: 4px;
+    background: var(--bg-card);
+    padding: 4px;
+    border-radius: 10px;
+}
+
+.lang-btn {
+    flex: 1;
+    padding: 8px;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.lang-btn:hover {
+    color: var(--text-primary);
+}
+
+.lang-btn.active {
+    background: var(--accent-gold);
+    color: var(--bg-primary);
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    margin-left: var(--sidebar-width);
+    padding: 32px;
+    overflow-y: auto;
+}
+
+/* Header */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.page-title {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+
+.page-subtitle {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+}
+
+.header-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 24px;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-primary {
+    background: var(--gradient-gold);
+    color: var(--bg-primary);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 217, 61, 0.3);
+}
+
+.btn-secondary {
+    background: var(--bg-card);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+    border-color: var(--accent-teal);
+    background: rgba(0, 217, 165, 0.1);
+}
+
+.btn-danger {
+    background: var(--accent-coral);
+    color: white;
+}
+
+.btn-small {
+    padding: 8px 16px;
+    font-size: 13px;
+}
+
+/* Stats Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 32px;
+}
+
+.stat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 24px;
+    transition: all 0.2s ease;
+}
+
+.stat-card:hover {
+    border-color: rgba(255, 217, 61, 0.2);
+}
+
+.stat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+}
+
+.stat-icon {
+    font-size: 24px;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: rgba(255, 217, 61, 0.1);
+}
+
+.stat-card:nth-child(1) .stat-icon { background: rgba(255, 217, 61, 0.1); }
+.stat-card:nth-child(2) .stat-icon { background: rgba(0, 217, 165, 0.1); }
+.stat-card:nth-child(3) .stat-icon { background: rgba(77, 168, 255, 0.1); }
+.stat-card:nth-child(4) .stat-icon { background: rgba(168, 85, 247, 0.1); }
+
+.stat-trend {
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 6px;
+}
+
+.stat-trend.up {
+    background: rgba(34, 197, 94, 0.1);
+    color: var(--accent-green);
+}
+
+.stat-trend.down {
+    background: rgba(255, 107, 107, 0.1);
+    color: var(--accent-coral);
+}
+
+.stat-value {
+    font-size: 36px;
+    font-weight: 900;
+    margin-bottom: 4px;
+    letter-spacing: -1px;
+}
+
+.stat-card:nth-child(1) .stat-value { color: var(--accent-gold); }
+.stat-card:nth-child(2) .stat-value { color: var(--accent-teal); }
+.stat-card:nth-child(3) .stat-value { color: var(--accent-blue); }
+.stat-card:nth-child(4) .stat-value { color: var(--accent-purple); }
+
+.stat-label {
+    font-size: 14px;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+/* Section */
+.section {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    margin-bottom: 24px;
+    overflow: hidden;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.section-title {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.section-content {
+    padding: 24px;
+}
+
+/* Table */
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+th {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+td {
+    font-size: 14px;
+    color: var(--text-primary);
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+tr:hover td {
+    background: var(--bg-card-hover);
+}
+
+.facility-name {
+    font-weight: 700;
+}
+
+.facility-location {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+/* Status Badge */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.status-badge.active {
+    background: rgba(34, 197, 94, 0.1);
+    color: var(--accent-green);
+}
+
+.status-badge.expiring {
+    background: rgba(255, 217, 61, 0.1);
+    color: var(--accent-gold);
+}
+
+.status-badge.expired {
+    background: rgba(255, 107, 107, 0.1);
+    color: var(--accent-coral);
+}
+
+.status-badge.pending {
+    background: rgba(128, 128, 128, 0.1);
+    color: var(--text-muted);
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+/* License Key */
+.license-key {
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    background: var(--bg-primary);
+    padding: 6px 12px;
+    border-radius: 8px;
+    color: var(--accent-teal);
+    letter-spacing: 1px;
+}
+
+/* Progress Bar */
+.progress-bar {
+    height: 8px;
+    background: var(--bg-primary);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 8px;
+}
+
+.progress-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.progress-fill.good {
+    background: var(--accent-green);
+}
+
+.progress-fill.warning {
+    background: var(--accent-gold);
+}
+
+.progress-fill.danger {
+    background: var(--accent-coral);
+}
+
+.user-count {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+/* Modal */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    width: 100%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.modal-title {
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 24px;
+    cursor: pointer;
+    padding: 4px;
+    line-height: 1;
+}
+
+.modal-close:hover {
+    color: var(--text-primary);
+}
+
+.modal-body {
+    padding: 24px;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 20px 24px;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Form */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 14px 16px;
+    font-size: 15px;
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    color: var(--text-primary);
+    transition: all 0.2s ease;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--accent-gold);
+    box-shadow: 0 0 0 3px rgba(255, 217, 61, 0.1);
+}
+
+.form-input::placeholder {
+    color: var(--text-muted);
+}
+
+.form-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23808080' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    padding-right: 48px;
+}
+
+.form-hint {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 6px;
+}
+
+/* Generated Key Display */
+.generated-key-display {
+    background: var(--bg-primary);
+    border: 2px dashed var(--accent-gold);
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.generated-key-label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+}
+
+.generated-key-value {
+    font-family: 'Courier New', monospace;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--accent-gold);
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+}
+
+.copy-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.copy-btn:hover {
+    background: var(--accent-teal);
+    color: var(--bg-primary);
+    border-color: var(--accent-teal);
+}
+
+.copy-btn.copied {
+    background: var(--accent-green);
+    border-color: var(--accent-green);
+    color: white;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 60px 24px;
+}
+
+.empty-state-icon {
+    font-size: 64px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+.empty-state-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+}
+
+.empty-state-text {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+}
+
+/* Action buttons in table */
+.table-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.action-btn {
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+    border-color: var(--accent-teal);
+    color: var(--accent-teal);
+}
+
+.action-btn.danger:hover {
+    border-color: var(--accent-coral);
+    color: var(--accent-coral);
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+    }
+    
+    .sidebar.open {
+        transform: translateX(0);
+    }
+    
+    .main-content {
+        margin-left: 0;
+    }
+    
+    .mobile-menu-btn {
+        display: flex;
+    }
+}
+
+@media (max-width: 600px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+    
+    .main-content {
+        padding: 20px;
+    }
+}
+</style>
+</head>
+<body data-lang="en">
+
+<!-- Sidebar -->
+<div class="dashboard">
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <a href="index.html" class="sidebar-logo">
+                <span class="sidebar-logo-icon">⭐</span>
+                <span class="sidebar-logo-text">Go<span>Star</span></span>
+            </a>
+            <span class="sidebar-badge">Admin</span>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <div class="nav-section">
+                <div class="nav-section-title">
+                    <span class="lang-en">Overview</span>
+                    <span class="lang-es">Resumen</span>
+                </div>
+                <button class="nav-item active" onclick="showSection('overview')">
+                    <span class="nav-item-icon">📊</span>
+                    <span class="lang-en">Dashboard</span>
+                    <span class="lang-es">Panel</span>
+                </button>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-section-title">
+                    <span class="lang-en">Management</span>
+                    <span class="lang-es">Gestión</span>
+                </div>
+                <button class="nav-item" onclick="showSection('facilities')">
+                    <span class="nav-item-icon">🏢</span>
+                    <span class="lang-en">Facilities</span>
+                    <span class="lang-es">Instalaciones</span>
+                </button>
+                <button class="nav-item" onclick="showSection('licenses')">
+                    <span class="nav-item-icon">🔑</span>
+                    <span class="lang-en">Licenses</span>
+                    <span class="lang-es">Licencias</span>
+                </button>
+                <button class="nav-item" onclick="showSection('users')">
+                    <span class="nav-item-icon">👥</span>
+                    <span class="lang-en">All Users</span>
+                    <span class="lang-es">Usuarios</span>
+                </button>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-section-title">
+                    <span class="lang-en">System</span>
+                    <span class="lang-es">Sistema</span>
+                </div>
+                <button class="nav-item" onclick="showSection('activity')">
+                    <span class="nav-item-icon">📋</span>
+                    <span class="lang-en">Activity Log</span>
+                    <span class="lang-es">Actividad</span>
+                </button>
+                <button class="nav-item" onclick="showSection('settings')">
+                    <span class="nav-item-icon">⚙️</span>
+                    <span class="lang-en">Settings</span>
+                    <span class="lang-es">Ajustes</span>
+                </button>
+            </div>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <div class="lang-toggle">
+                <button class="lang-btn active" onclick="setLang('en')">EN</button>
+                <button class="lang-btn" onclick="setLang('es')">ES</button>
+            </div>
+        </div>
+    </aside>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+        
+        <!-- Overview Section -->
+        <div id="section-overview" class="page-section">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">
+                        <span class="lang-en">Dashboard</span>
+                        <span class="lang-es">Panel de Control</span>
+                    </h1>
+                    <p class="page-subtitle">
+                        <span class="lang-en">Platform overview and key metrics</span>
+                        <span class="lang-es">Resumen de la plataforma y métricas clave</span>
+                    </p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-primary" onclick="openModal('newLicense')">
+                        <span>🔑</span>
+                        <span class="lang-en">Generate License</span>
+                        <span class="lang-es">Generar Licencia</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon">🏢</div>
+                        <span class="stat-trend up">+2</span>
+                    </div>
+                    <div class="stat-value" id="stat-facilities">3</div>
+                    <div class="stat-label">
+                        <span class="lang-en">Active Facilities</span>
+                        <span class="lang-es">Instalaciones Activas</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon">👥</div>
+                        <span class="stat-trend up">+12</span>
+                    </div>
+                    <div class="stat-value" id="stat-users">24</div>
+                    <div class="stat-label">
+                        <span class="lang-en">Total Users</span>
+                        <span class="lang-es">Usuarios Totales</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon">🎮</div>
+                        <span class="stat-trend up">+156</span>
+                    </div>
+                    <div class="stat-value" id="stat-sessions">847</div>
+                    <div class="stat-label">
+                        <span class="lang-en">Training Sessions</span>
+                        <span class="lang-es">Sesiones de Entrenamiento</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon">🔑</div>
+                    </div>
+                    <div class="stat-value" id="stat-licenses">5</div>
+                    <div class="stat-label">
+                        <span class="lang-en">Active Licenses</span>
+                        <span class="lang-es">Licencias Activas</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recent Facilities -->
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <span class="lang-en">Recent Facilities</span>
+                        <span class="lang-es">Instalaciones Recientes</span>
+                    </h2>
+                    <button class="btn btn-secondary btn-small" onclick="showSection('facilities')">
+                        <span class="lang-en">View All</span>
+                        <span class="lang-es">Ver Todas</span>
+                    </button>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>
+                                    <span class="lang-en">Facility</span>
+                                    <span class="lang-es">Instalación</span>
+                                </th>
+                                <th>
+                                    <span class="lang-en">License Key</span>
+                                    <span class="lang-es">Clave de Licencia</span>
+                                </th>
+                                <th>
+                                    <span class="lang-en">Users</span>
+                                    <span class="lang-es">Usuarios</span>
+                                </th>
+                                <th>
+                                    <span class="lang-en">Status</span>
+                                    <span class="lang-es">Estado</span>
+                                </th>
+                                <th>
+                                    <span class="lang-en">Expires</span>
+                                    <span class="lang-es">Expira</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="facilities-table-body">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Facilities Section -->
+        <div id="section-facilities" class="page-section" style="display: none;">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">
+                        <span class="lang-en">Facilities</span>
+                        <span class="lang-es">Instalaciones</span>
+                    </h1>
+                    <p class="page-subtitle">
+                        <span class="lang-en">Manage all registered facilities</span>
+                        <span class="lang-es">Gestiona todas las instalaciones registradas</span>
+                    </p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-primary" onclick="openModal('newFacility')">
+                        <span>+</span>
+                        <span class="lang-en">Add Facility</span>
+                        <span class="lang-es">Añadir Instalación</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>
+                                    <span class="lang-en">Facility</span>
+                                    <span class="lang-es">Instalación</span>
+                                </th>
+                                <th>
+                                    <span class="lang-en">License Key</span>
+                                    <span class="lang-es">Clave de Licencia</span>
+                                </th>
+                                <th>
+                                    <span class="lang-en">Users</span>
+                                    <span class="lang-es">Usuarios</span>
+                                </th>
+                                <th>
+                                    <span class="lang-en">Status</span>
+                                    <span class="lang-es">Estado</span>
+                                </th>
+                                <th>
+                                    <span class="lang-en">Days Left</span>
+                                    <span class="lang-es">Días Restantes</span>
+                                </th>
+                                <th>
+                                    <span class="lang-en">Actions</span>
+                                    <span class="lang-es">Acciones</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="all-facilities-table-body">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Licenses Section -->
+        <div id="section-licenses" class="page-section" style="display: none;">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">
+                        <span class="lang-en">Licenses</span>
+                        <span class="lang-es">Licencias</span>
+                    </h1>
+                    <p class="page-subtitle">
+                        <span class="lang-en">Generate and manage license keys</span>
+                        <span class="lang-es">Genera y gestiona claves de licencia</span>
+                    </p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-primary" onclick="openModal('newLicense')">
+                        <span>🔑</span>
+                        <span class="lang-en">Generate License</span>
+                        <span class="lang-es">Generar Licencia</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>
+                                    <span class="lang-en">License Key</span>
+                                    <span class="lang-es">Clave de Licencia</span>
+                                </th>
+                                <th>
+                                    <span class="lang-en">Type</span>
+                                    <span class="lang-es">Tipo</span>
+                                </th>
+                                <th>
+                                    <span class="lang-en">Facility</span>
+                                    <span class="lang-es">Instalación</span>
+                                </th>
+                                <th>
+                                    <span class="lang-en">Created</span>
+                                    <span class="lang-es">Creada</span>
+                                </th>
+                                <th>
+                                    <span class="lang-en">Expires</span>
+                                    <span class="lang-es">Expira</span>
+                                </th>
+                                <th>
+                                    <span class="lang-en">Status</span>
+                                    <span class="lang-es">Estado</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="licenses-table-body">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Users Section -->
+        <div id="section-users" class="page-section" style="display: none;">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">
+                        <span class="lang-en">All Users</span>
+                        <span class="lang-es">Todos los Usuarios</span>
+                    </h1>
+                    <p class="page-subtitle">
+                        <span class="lang-en">Users across all facilities</span>
+                        <span class="lang-es">Usuarios de todas las instalaciones</span>
+                    </p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>
+                                    <span class="lang-en">Name</span>
+                                    <span class="lang-es">Nombre</span>
+                                </th>
+                                <th>
+                                    <span class="lang-en">Facility</span>
+                                    <span class="lang-es">Instalación</span>
+                                </th>
+                                <th>
+                                    <span class="lang-en">Sessions</span>
+                                    <span class="lang-es">Sesiones</span>
+                                </th>
+                                <th>
+                                    <span class="lang-en">Streak</span>
+                                    <span class="lang-es">Racha</span>
+                                </th>
+                                <th>
+                                    <span class="lang-en">Last Active</span>
+                                    <span class="lang-es">Última Actividad</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table-body">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Activity Section -->
+        <div id="section-activity" class="page-section" style="display: none;">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">
+                        <span class="lang-en">Activity Log</span>
+                        <span class="lang-es">Registro de Actividad</span>
+                    </h1>
+                    <p class="page-subtitle">
+                        <span class="lang-en">Recent platform activity</span>
+                        <span class="lang-es">Actividad reciente de la plataforma</span>
+                    </p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-content">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📋</div>
+                        <h3 class="empty-state-title">
+                            <span class="lang-en">Activity Log Coming Soon</span>
+                            <span class="lang-es">Registro de Actividad Próximamente</span>
+                        </h3>
+                        <p class="empty-state-text">
+                            <span class="lang-en">Track all platform events and user activity.</span>
+                            <span class="lang-es">Rastrea todos los eventos de la plataforma y actividad de usuarios.</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Settings Section -->
+        <div id="section-settings" class="page-section" style="display: none;">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">
+                        <span class="lang-en">Settings</span>
+                        <span class="lang-es">Ajustes</span>
+                    </h1>
+                    <p class="page-subtitle">
+                        <span class="lang-en">Platform configuration</span>
+                        <span class="lang-es">Configuración de la plataforma</span>
+                    </p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-content">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">⚙️</div>
+                        <h3 class="empty-state-title">
+                            <span class="lang-en">Settings Coming Soon</span>
+                            <span class="lang-es">Ajustes Próximamente</span>
+                        </h3>
+                        <p class="empty-state-text">
+                            <span class="lang-en">Configure platform-wide settings.</span>
+                            <span class="lang-es">Configura los ajustes de toda la plataforma.</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </main>
+</div>
+
+<!-- New License Modal -->
+<div class="modal-overlay" id="modal-newLicense">
+    <div class="modal">
+        <div class="modal-header">
+            <h2 class="modal-title">
+                <span class="lang-en">Generate License Key</span>
+                <span class="lang-es">Generar Clave de Licencia</span>
+            </h2>
+            <button class="modal-close" onclick="closeModal('newLicense')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label class="form-label">
+                    <span class="lang-en">Facility Name</span>
+                    <span class="lang-es">Nombre de Instalación</span>
+                </label>
+                <input type="text" class="form-input" id="license-facility-name" placeholder="e.g., Sunrise Wellness Center">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">
+                    <span class="lang-en">Location</span>
+                    <span class="lang-es">Ubicación</span>
+                </label>
+                <input type="text" class="form-input" id="license-facility-location" placeholder="e.g., San Juan, PR">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">
+                    <span class="lang-en">License Type</span>
+                    <span class="lang-es">Tipo de Licencia</span>
+                </label>
+                <select class="form-input form-select" id="license-type">
+                    <option value="trial">🆓 Free Trial - 7 Days, 10 Users</option>
+                </select>
+                <p class="form-hint">
+                    <span class="lang-en">More license types coming soon.</span>
+                    <span class="lang-es">Más tipos de licencia próximamente.</span>
+                </p>
+            </div>
+            
+            <div id="generated-key-container" style="display: none;">
+                <div class="generated-key-display">
+                    <div class="generated-key-label">
+                        <span class="lang-en">Your License Key</span>
+                        <span class="lang-es">Tu Clave de Licencia</span>
+                    </div>
+                    <div class="generated-key-value" id="generated-key-value">GOSTAR-XXXX-XXXX</div>
+                    <button class="copy-btn" onclick="copyLicenseKey()">
+                        <span>📋</span>
+                        <span class="lang-en">Copy Key</span>
+                        <span class="lang-es">Copiar Clave</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal('newLicense')">
+                <span class="lang-en">Cancel</span>
+                <span class="lang-es">Cancelar</span>
+            </button>
+            <button class="btn btn-primary" id="generate-key-btn" onclick="generateLicenseKey()">
+                <span class="lang-en">Generate Key</span>
+                <span class="lang-es">Generar Clave</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- New Facility Modal -->
+<div class="modal-overlay" id="modal-newFacility">
+    <div class="modal">
+        <div class="modal-header">
+            <h2 class="modal-title">
+                <span class="lang-en">Add New Facility</span>
+                <span class="lang-es">Añadir Nueva Instalación</span>
+            </h2>
+            <button class="modal-close" onclick="closeModal('newFacility')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label class="form-label">
+                    <span class="lang-en">Facility Name</span>
+                    <span class="lang-es">Nombre de Instalación</span>
+                </label>
+                <input type="text" class="form-input" id="facility-name" placeholder="e.g., Sunrise Wellness Center">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">
+                    <span class="lang-en">Location</span>
+                    <span class="lang-es">Ubicación</span>
+                </label>
+                <input type="text" class="form-input" id="facility-location" placeholder="e.g., San Juan, PR">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">
+                    <span class="lang-en">Contact Email</span>
+                    <span class="lang-es">Email de Contacto</span>
+                </label>
+                <input type="email" class="form-input" id="facility-email" placeholder="admin@facility.com">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">
+                    <span class="lang-en">Assign License Key (Optional)</span>
+                    <span class="lang-es">Asignar Clave de Licencia (Opcional)</span>
+                </label>
+                <input type="text" class="form-input" id="facility-license" placeholder="GOSTAR-XXXX-XXXX">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal('newFacility')">
+                <span class="lang-en">Cancel</span>
+                <span class="lang-es">Cancelar</span>
+            </button>
+            <button class="btn btn-primary" onclick="addFacility()">
+                <span class="lang-en">Add Facility</span>
+                <span class="lang-es">Añadir Instalación</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+// Language
+var currentLang = localStorage.getItem('gostar-lang') || 'en';
+
+function setLang(lang) {
+    currentLang = lang;
+    localStorage.setItem('gostar-lang', lang);
+    document.body.setAttribute('data-lang', lang);
+    var btns = document.querySelectorAll('.lang-btn');
+    btns.forEach(function(btn) {
+        btn.classList.toggle('active', btn.textContent === lang.toUpperCase());
+    });
+}
+
+// Initialize language
+document.body.setAttribute('data-lang', currentLang);
+document.querySelectorAll('.lang-btn').forEach(function(btn) {
+    btn.classList.toggle('active', btn.textContent === currentLang.toUpperCase());
+});
+
+// Sample Data
+var facilities = [
+    {
+        id: 1,
+        name: 'Sunrise Wellness Center',
+        location: 'San Juan, PR',
+        licenseKey: 'GOSTAR-7X9K-M2PL',
+        licenseType: 'trial',
+        users: 8,
+        maxUsers: 10,
+        status: 'active',
+        createdAt: '2025-12-20',
+        expiresAt: '2025-12-27',
+        daysLeft: 2
+    },
+    {
+        id: 2,
+        name: 'Golden Years Community',
+        location: 'Bayamón, PR',
+        licenseKey: 'GOSTAR-4R2T-N8WQ',
+        licenseType: 'trial',
+        users: 10,
+        maxUsers: 10,
+        status: 'active',
+        createdAt: '2025-12-22',
+        expiresAt: '2025-12-29',
+        daysLeft: 4
+    },
+    {
+        id: 3,
+        name: 'Vista del Mar Rehab',
+        location: 'Ponce, PR',
+        licenseKey: 'GOSTAR-6Y3H-P5KJ',
+        licenseType: 'trial',
+        users: 6,
+        maxUsers: 10,
+        status: 'active',
+        createdAt: '2025-12-24',
+        expiresAt: '2025-12-31',
+        daysLeft: 6
+    }
+];
+
+var licenses = [
+    { key: 'GOSTAR-7X9K-M2PL', type: 'trial', facility: 'Sunrise Wellness Center', createdAt: '2025-12-20', expiresAt: '2025-12-27', status: 'active' },
+    { key: 'GOSTAR-4R2T-N8WQ', type: 'trial', facility: 'Golden Years Community', createdAt: '2025-12-22', expiresAt: '2025-12-29', status: 'active' },
+    { key: 'GOSTAR-6Y3H-P5KJ', type: 'trial', facility: 'Vista del Mar Rehab', createdAt: '2025-12-24', expiresAt: '2025-12-31', status: 'active' },
+    { key: 'GOSTAR-2W8E-Q1ZX', type: 'trial', facility: 'Unassigned', createdAt: '2025-12-23', expiresAt: '2025-12-30', status: 'pending' },
+    { key: 'GOSTAR-9M4B-L7CV', type: 'trial', facility: 'Test Facility', createdAt: '2025-12-15', expiresAt: '2025-12-22', status: 'expired' }
+];
+
+var users = [
+    { name: 'María García', facility: 'Sunrise Wellness Center', sessions: 24, streak: 7, lastActive: '2025-12-25' },
+    { name: 'Carlos Rivera', facility: 'Sunrise Wellness Center', sessions: 18, streak: 5, lastActive: '2025-12-25' },
+    { name: 'Ana López', facility: 'Golden Years Community', sessions: 32, streak: 12, lastActive: '2025-12-25' },
+    { name: 'José Martínez', facility: 'Golden Years Community', sessions: 15, streak: 3, lastActive: '2025-12-24' },
+    { name: 'Rosa Hernández', facility: 'Vista del Mar Rehab', sessions: 8, streak: 4, lastActive: '2025-12-25' }
+];
+
+// Navigation
+function showSection(sectionId) {
+    // Hide all sections
+    document.querySelectorAll('.page-section').forEach(function(section) {
+        section.style.display = 'none';
+    });
+    
+    // Show selected section
+    document.getElementById('section-' + sectionId).style.display = 'block';
+    
+    // Update nav
+    document.querySelectorAll('.nav-item').forEach(function(item) {
+        item.classList.remove('active');
+    });
+    event.currentTarget.classList.add('active');
+    
+    // Refresh data for section
+    if (sectionId === 'overview') renderOverviewTable();
+    if (sectionId === 'facilities') renderFacilitiesTable();
+    if (sectionId === 'licenses') renderLicensesTable();
+    if (sectionId === 'users') renderUsersTable();
+}
+
+// Modal
+function openModal(modalId) {
+    document.getElementById('modal-' + modalId).classList.add('active');
+    // Reset form
+    if (modalId === 'newLicense') {
+        document.getElementById('generated-key-container').style.display = 'none';
+        document.getElementById('generate-key-btn').style.display = 'inline-flex';
+        document.getElementById('license-facility-name').value = '';
+        document.getElementById('license-facility-location').value = '';
+    }
+}
+
+function closeModal(modalId) {
+    document.getElementById('modal-' + modalId).classList.remove('active');
+}
+
+// Generate License Key
+function generateLicenseKey() {
+    var facilityName = document.getElementById('license-facility-name').value;
+    var facilityLocation = document.getElementById('license-facility-location').value;
+    
+    if (!facilityName) {
+        alert(currentLang === 'es' ? 'Por favor ingresa el nombre de la instalación' : 'Please enter facility name');
+        return;
+    }
+    
+    // Generate random key
+    var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    var key = 'GOSTAR-';
+    for (var i = 0; i < 4; i++) {
+        key += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    key += '-';
+    for (var i = 0; i < 4; i++) {
+        key += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    
+    // Show generated key
+    document.getElementById('generated-key-value').textContent = key;
+    document.getElementById('generated-key-container').style.display = 'block';
+    document.getElementById('generate-key-btn').style.display = 'none';
+    
+    // Add to licenses array
+    var today = new Date();
+    var expires = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
+    
+    licenses.unshift({
+        key: key,
+        type: 'trial',
+        facility: facilityName,
+        createdAt: today.toISOString().split('T')[0],
+        expiresAt: expires.toISOString().split('T')[0],
+        status: 'active'
+    });
+    
+    // Add facility
+    facilities.unshift({
+        id: facilities.length + 1,
+        name: facilityName,
+        location: facilityLocation || 'N/A',
+        licenseKey: key,
+        licenseType: 'trial',
+        users: 0,
+        maxUsers: 10,
+        status: 'active',
+        createdAt: today.toISOString().split('T')[0],
+        expiresAt: expires.toISOString().split('T')[0],
+        daysLeft: 7
+    });
+    
+    // Update stats
+    updateStats();
+}
+
+function copyLicenseKey() {
+    var key = document.getElementById('generated-key-value').textContent;
+    navigator.clipboard.writeText(key).then(function() {
+        var btn = document.querySelector('.copy-btn');
+        btn.classList.add('copied');
+        btn.innerHTML = '<span>✓</span> ' + (currentLang === 'es' ? 'Copiado!' : 'Copied!');
+        setTimeout(function() {
+            btn.classList.remove('copied');
+            btn.innerHTML = '<span>📋</span> ' + (currentLang === 'es' ? 'Copiar Clave' : 'Copy Key');
+        }, 2000);
+    });
+}
+
+// Add Facility
+function addFacility() {
+    var name = document.getElementById('facility-name').value;
+    var location = document.getElementById('facility-location').value;
+    var email = document.getElementById('facility-email').value;
+    var license = document.getElementById('facility-license').value;
+    
+    if (!name) {
+        alert(currentLang === 'es' ? 'Por favor ingresa el nombre de la instalación' : 'Please enter facility name');
+        return;
+    }
+    
+    facilities.unshift({
+        id: facilities.length + 1,
+        name: name,
+        location: location || 'N/A',
+        licenseKey: license || 'No License',
+        licenseType: license ? 'trial' : 'none',
+        users: 0,
+        maxUsers: license ? 10 : 0,
+        status: license ? 'active' : 'pending',
+        createdAt: new Date().toISOString().split('T')[0],
+        expiresAt: license ? new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] : 'N/A',
+        daysLeft: license ? 7 : 0
+    });
+    
+    closeModal('newFacility');
+    updateStats();
+    renderFacilitiesTable();
+}
+
+// Render Tables
+function renderOverviewTable() {
+    var tbody = document.getElementById('facilities-table-body');
+    tbody.innerHTML = '';
+    
+    facilities.slice(0, 5).forEach(function(f) {
+        var statusClass = f.daysLeft <= 2 ? 'expiring' : 'active';
+        var userPercent = (f.users / f.maxUsers) * 100;
+        var progressClass = userPercent >= 90 ? 'danger' : userPercent >= 70 ? 'warning' : 'good';
+        
+        tbody.innerHTML += `
+            <tr>
+                <td>
+                    <div class="facility-name">${f.name}</div>
+                    <div class="facility-location">${f.location}</div>
+                </td>
+                <td><span class="license-key">${f.licenseKey}</span></td>
+                <td>
+                    <div class="user-count">${f.users} / ${f.maxUsers}</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill ${progressClass}" style="width: ${userPercent}%"></div>
+                    </div>
+                </td>
+                <td>
+                    <span class="status-badge ${statusClass}">
+                        <span class="status-dot"></span>
+                        ${f.daysLeft <= 2 ? (currentLang === 'es' ? 'Por vencer' : 'Expiring') : (currentLang === 'es' ? 'Activo' : 'Active')}
+                    </span>
+                </td>
+                <td>${f.expiresAt}</td>
+            </tr>
+        `;
+    });
+}
+
+function renderFacilitiesTable() {
+    var tbody = document.getElementById('all-facilities-table-body');
+    tbody.innerHTML = '';
+    
+    facilities.forEach(function(f) {
+        var statusClass = f.status === 'expired' ? 'expired' : f.daysLeft <= 2 ? 'expiring' : 'active';
+        var statusText = f.status === 'expired' ? (currentLang === 'es' ? 'Expirado' : 'Expired') :
+                        f.daysLeft <= 2 ? (currentLang === 'es' ? 'Por vencer' : 'Expiring') : 
+                        (currentLang === 'es' ? 'Activo' : 'Active');
+        var userPercent = (f.users / f.maxUsers) * 100;
+        var progressClass = userPercent >= 90 ? 'danger' : userPercent >= 70 ? 'warning' : 'good';
+        
+        tbody.innerHTML += `
+            <tr>
+                <td>
+                    <div class="facility-name">${f.name}</div>
+                    <div class="facility-location">${f.location}</div>
+                </td>
+                <td><span class="license-key">${f.licenseKey}</span></td>
+                <td>
+                    <div class="user-count">${f.users} / ${f.maxUsers}</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill ${progressClass}" style="width: ${userPercent}%"></div>
+                    </div>
+                </td>
+                <td>
+                    <span class="status-badge ${statusClass}">
+                        <span class="status-dot"></span>
+                        ${statusText}
+                    </span>
+                </td>
+                <td>${f.daysLeft} ${currentLang === 'es' ? 'días' : 'days'}</td>
+                <td>
+                    <div class="table-actions">
+                        <button class="action-btn">${currentLang === 'es' ? 'Editar' : 'Edit'}</button>
+                        <button class="action-btn danger">${currentLang === 'es' ? 'Eliminar' : 'Delete'}</button>
+                    </div>
+                </td>
+            </tr>
+        `;
+    });
+}
+
+function renderLicensesTable() {
+    var tbody = document.getElementById('licenses-table-body');
+    tbody.innerHTML = '';
+    
+    licenses.forEach(function(l) {
+        var statusClass = l.status;
+        var statusText = l.status === 'expired' ? (currentLang === 'es' ? 'Expirado' : 'Expired') :
+                        l.status === 'pending' ? (currentLang === 'es' ? 'Pendiente' : 'Pending') :
+                        (currentLang === 'es' ? 'Activo' : 'Active');
+        
+        tbody.innerHTML += `
+            <tr>
+                <td><span class="license-key">${l.key}</span></td>
+                <td>🆓 Free Trial</td>
+                <td>${l.facility}</td>
+                <td>${l.createdAt}</td>
+                <td>${l.expiresAt}</td>
+                <td>
+                    <span class="status-badge ${statusClass}">
+                        <span class="status-dot"></span>
+                        ${statusText}
+                    </span>
+                </td>
+            </tr>
+        `;
+    });
+}
+
+function renderUsersTable() {
+    var tbody = document.getElementById('users-table-body');
+    tbody.innerHTML = '';
+    
+    users.forEach(function(u) {
+        tbody.innerHTML += `
+            <tr>
+                <td><strong>${u.name}</strong></td>
+                <td>${u.facility}</td>
+                <td>${u.sessions}</td>
+                <td>🔥 ${u.streak} ${currentLang === 'es' ? 'días' : 'days'}</td>
+                <td>${u.lastActive}</td>
+            </tr>
+        `;
+    });
+}
+
+function updateStats() {
+    document.getElementById('stat-facilities').textContent = facilities.filter(f => f.status === 'active').length;
+    document.getElementById('stat-users').textContent = facilities.reduce((sum, f) => sum + f.users, 0);
+    document.getElementById('stat-licenses').textContent = licenses.filter(l => l.status === 'active').length;
+}
+
+// Initialize
+renderOverviewTable();
+</script>
+
+</body>
+</html>
