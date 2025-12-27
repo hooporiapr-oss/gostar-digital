@@ -929,6 +929,20 @@ tr:hover td {
     color: var(--accent-coral);
 }
 
+/* Session cells */
+.session-cell {
+    text-align: center;
+    font-weight: 600;
+    color: var(--text-secondary);
+    min-width: 40px;
+}
+
+.session-total {
+    text-align: center;
+    color: var(--accent-gold);
+    min-width: 50px;
+}
+
 /* Responsive */
 @media (max-width: 1200px) {
     .stats-grid {
@@ -1115,9 +1129,8 @@ tr:hover td {
                 <div class="stat-card">
                     <div class="stat-header">
                         <div class="stat-icon">🏢</div>
-                        <span class="stat-trend up">+2</span>
                     </div>
-                    <div class="stat-value" id="stat-facilities">3</div>
+                    <div class="stat-value" id="stat-facilities">0</div>
                     <div class="stat-label">
                         <span class="lang-en">Active Facilities</span>
                         <span class="lang-es">Instalaciones Activas</span>
@@ -1127,9 +1140,8 @@ tr:hover td {
                 <div class="stat-card">
                     <div class="stat-header">
                         <div class="stat-icon">👥</div>
-                        <span class="stat-trend up">+12</span>
                     </div>
-                    <div class="stat-value" id="stat-users">24</div>
+                    <div class="stat-value" id="stat-users">0</div>
                     <div class="stat-label">
                         <span class="lang-en">Total Users</span>
                         <span class="lang-es">Usuarios Totales</span>
@@ -1139,9 +1151,8 @@ tr:hover td {
                 <div class="stat-card">
                     <div class="stat-header">
                         <div class="stat-icon">🎮</div>
-                        <span class="stat-trend up">+156</span>
                     </div>
-                    <div class="stat-value" id="stat-sessions">847</div>
+                    <div class="stat-value" id="stat-sessions">0</div>
                     <div class="stat-label">
                         <span class="lang-en">Training Sessions</span>
                         <span class="lang-es">Sesiones de Entrenamiento</span>
@@ -1152,7 +1163,7 @@ tr:hover td {
                     <div class="stat-header">
                         <div class="stat-icon">🔑</div>
                     </div>
-                    <div class="stat-value" id="stat-licenses">5</div>
+                    <div class="stat-value" id="stat-licenses">0</div>
                     <div class="stat-label">
                         <span class="lang-en">Active Licenses</span>
                         <span class="lang-es">Licencias Activas</span>
@@ -1364,9 +1375,14 @@ tr:hover td {
                                     <span class="lang-en">Facility</span>
                                     <span class="lang-es">Instalación</span>
                                 </th>
+                                <th title="Sequence Memory">⭐</th>
+                                <th title="Memory StarTrail">🛤️</th>
+                                <th title="KwikStar">⚡</th>
+                                <th title="Go-No-GoStar">🛑</th>
+                                <th title="StarStroop">🔀</th>
                                 <th>
-                                    <span class="lang-en">Sessions</span>
-                                    <span class="lang-es">Sesiones</span>
+                                    <span class="lang-en">Total</span>
+                                    <span class="lang-es">Total</span>
                                 </th>
                                 <th>
                                     <span class="lang-en">Streak</span>
@@ -1750,61 +1766,213 @@ document.querySelectorAll('.lang-btn').forEach(function(btn) {
 });
 
 // Sample Data
-var facilities = [
-    {
-        id: 1,
-        name: 'Sunrise Wellness Center',
-        location: 'San Juan, PR',
-        licenseKey: 'GOSTAR-7X9K-M2PL',
-        licenseType: 'trial',
-        users: 2,
-        maxUsers: 10,
-        status: 'active',
-        createdAt: '2025-12-20',
-        expiresAt: '2025-12-27',
-        daysLeft: 2
-    },
-    {
-        id: 2,
-        name: 'Golden Years Community',
-        location: 'Bayamón, PR',
-        licenseKey: 'GOSTAR-4R2T-N8WQ',
-        licenseType: 'trial',
-        users: 2,
-        maxUsers: 10,
-        status: 'active',
-        createdAt: '2025-12-22',
-        expiresAt: '2025-12-29',
-        daysLeft: 4
-    },
-    {
-        id: 3,
-        name: 'Vista del Mar Rehab',
-        location: 'Ponce, PR',
-        licenseKey: 'GOSTAR-6Y3H-P5KJ',
-        licenseType: 'trial',
-        users: 1,
-        maxUsers: 10,
-        status: 'active',
-        createdAt: '2025-12-24',
-        expiresAt: '2025-12-31',
-        daysLeft: 6
+var facilities = [];
+
+var licenses = [];
+
+var users = [];
+
+// Fetch real data from API
+function fetchDashboardData() {
+    var token = sessionStorage.getItem('admin-token');
+    
+    // Fetch facilities
+    fetch('/api/admin/facilities', {
+        headers: { 'Authorization': 'Bearer ' + token }
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.success && data.facilities) {
+            facilities = data.facilities.map(f => ({
+                id: f.id,
+                name: f.name,
+                location: f.location || 'N/A',
+                licenseKey: f.license_key,
+                licenseType: f.license_type || 'trial',
+                users: f.user_count || 0,
+                maxUsers: f.user_limit || 10,
+                status: f.status || 'active',
+                createdAt: f.created_at ? f.created_at.split('T')[0] : 'N/A',
+                expiresAt: f.expires_at || 'N/A',
+                daysLeft: f.days_left || 0
+            }));
+            renderOverviewTable();
+            renderFacilitiesTable();
+            updateStats();
+        }
+    })
+    .catch(err => {
+        console.log('Facility fetch error:', err);
+        loadDemoData();
+    });
+    
+    // Fetch licenses
+    fetch('/api/admin/licenses-list', {
+        headers: { 'Authorization': 'Bearer ' + token }
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.success && data.licenses) {
+            licenses = data.licenses.map(l => ({
+                key: l.license_key,
+                type: l.license_type || 'trial',
+                facility: l.facility_name || 'Unassigned',
+                createdAt: l.created_at ? l.created_at.split('T')[0] : 'N/A',
+                expiresAt: l.expires_at || 'N/A',
+                status: l.status || 'active'
+            }));
+            renderLicensesTable();
+            updateStats();
+        }
+    })
+    .catch(err => {
+        console.log('License fetch error:', err);
+    });
+    
+    // Fetch users
+    fetch('/api/admin/users', {
+        headers: { 'Authorization': 'Bearer ' + token }
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.success && data.users) {
+            users = data.users.map(u => ({
+                id: u.id,
+                name: u.username,
+                facility: u.facility_name || 'Unknown',
+                sessions: {
+                    sequence: u.sessions_sequence || 0,
+                    startrail: u.sessions_startrail || 0,
+                    kwikstar: u.sessions_kwikstar || 0,
+                    gonogo: u.sessions_gonogo || 0,
+                    stroop: u.sessions_stroop || 0
+                },
+                totalSessions: (u.sessions_sequence || 0) + (u.sessions_startrail || 0) + 
+                               (u.sessions_kwikstar || 0) + (u.sessions_gonogo || 0) + (u.sessions_stroop || 0),
+                streak: u.streak || 0,
+                lastActive: u.last_active ? u.last_active.split('T')[0] : 'Never'
+            }));
+            renderUsersTable();
+            updateStats();
+        }
+    })
+    .catch(err => {
+        console.log('User fetch error:', err);
+        loadDemoData();
+    });
+}
+
+// Demo data fallback
+function loadDemoData() {
+    if (facilities.length === 0) {
+        facilities = [
+            {
+                id: 1,
+                name: 'Sunrise Wellness Center',
+                location: 'San Juan, PR',
+                licenseKey: 'GOSTAR-7X9K-M2PL',
+                licenseType: 'trial',
+                users: 2,
+                maxUsers: 10,
+                status: 'active',
+                createdAt: '2025-12-20',
+                expiresAt: '2025-12-27',
+                daysLeft: 2
+            },
+            {
+                id: 2,
+                name: 'Golden Years Community',
+                location: 'Bayamón, PR',
+                licenseKey: 'GOSTAR-4R2T-N8WQ',
+                licenseType: 'trial',
+                users: 2,
+                maxUsers: 10,
+                status: 'active',
+                createdAt: '2025-12-22',
+                expiresAt: '2025-12-29',
+                daysLeft: 4
+            },
+            {
+                id: 3,
+                name: 'Vista del Mar Rehab',
+                location: 'Ponce, PR',
+                licenseKey: 'GOSTAR-6Y3H-P5KJ',
+                licenseType: 'trial',
+                users: 1,
+                maxUsers: 10,
+                status: 'active',
+                createdAt: '2025-12-24',
+                expiresAt: '2025-12-31',
+                daysLeft: 6
+            }
+        ];
     }
-];
-
-var licenses = [
-    { key: 'GOSTAR-7X9K-M2PL', type: 'trial', facility: 'Sunrise Wellness Center', createdAt: '2025-12-20', expiresAt: '2025-12-27', status: 'active' },
-    { key: 'GOSTAR-4R2T-N8WQ', type: 'trial', facility: 'Golden Years Community', createdAt: '2025-12-22', expiresAt: '2025-12-29', status: 'active' },
-    { key: 'GOSTAR-6Y3H-P5KJ', type: 'trial', facility: 'Vista del Mar Rehab', createdAt: '2025-12-24', expiresAt: '2025-12-31', status: 'active' }
-];
-
-var users = [
-    { name: 'María García', facility: 'Sunrise Wellness Center', sessions: 24, streak: 7, lastActive: '2025-12-25' },
-    { name: 'Carlos Rivera', facility: 'Sunrise Wellness Center', sessions: 18, streak: 5, lastActive: '2025-12-25' },
-    { name: 'Ana López', facility: 'Golden Years Community', sessions: 32, streak: 12, lastActive: '2025-12-25' },
-    { name: 'José Martínez', facility: 'Golden Years Community', sessions: 15, streak: 3, lastActive: '2025-12-24' },
-    { name: 'Rosa Hernández', facility: 'Vista del Mar Rehab', sessions: 8, streak: 4, lastActive: '2025-12-25' }
-];
+    
+    if (licenses.length === 0) {
+        licenses = [
+            { key: 'GOSTAR-7X9K-M2PL', type: 'trial', facility: 'Sunrise Wellness Center', createdAt: '2025-12-20', expiresAt: '2025-12-27', status: 'active' },
+            { key: 'GOSTAR-4R2T-N8WQ', type: 'trial', facility: 'Golden Years Community', createdAt: '2025-12-22', expiresAt: '2025-12-29', status: 'active' },
+            { key: 'GOSTAR-6Y3H-P5KJ', type: 'trial', facility: 'Vista del Mar Rehab', createdAt: '2025-12-24', expiresAt: '2025-12-31', status: 'active' }
+        ];
+    }
+    
+    if (users.length === 0) {
+        users = [
+            { 
+                id: 1,
+                name: 'María García', 
+                facility: 'Sunrise Wellness Center', 
+                sessions: { sequence: 8, startrail: 6, kwikstar: 5, gonogo: 3, stroop: 2 },
+                totalSessions: 24,
+                streak: 7, 
+                lastActive: '2025-12-25' 
+            },
+            { 
+                id: 2,
+                name: 'Carlos Rivera', 
+                facility: 'Sunrise Wellness Center', 
+                sessions: { sequence: 5, startrail: 4, kwikstar: 4, gonogo: 3, stroop: 2 },
+                totalSessions: 18,
+                streak: 5, 
+                lastActive: '2025-12-25' 
+            },
+            { 
+                id: 3,
+                name: 'Ana López', 
+                facility: 'Golden Years Community', 
+                sessions: { sequence: 10, startrail: 8, kwikstar: 6, gonogo: 5, stroop: 3 },
+                totalSessions: 32,
+                streak: 12, 
+                lastActive: '2025-12-25' 
+            },
+            { 
+                id: 4,
+                name: 'José Martínez', 
+                facility: 'Golden Years Community', 
+                sessions: { sequence: 4, startrail: 3, kwikstar: 3, gonogo: 3, stroop: 2 },
+                totalSessions: 15,
+                streak: 3, 
+                lastActive: '2025-12-24' 
+            },
+            { 
+                id: 5,
+                name: 'Rosa Hernández', 
+                facility: 'Vista del Mar Rehab', 
+                sessions: { sequence: 2, startrail: 2, kwikstar: 2, gonogo: 1, stroop: 1 },
+                totalSessions: 8,
+                streak: 4, 
+                lastActive: '2025-12-25' 
+            }
+        ];
+    }
+    
+    syncFacilityUserCounts();
+    renderOverviewTable();
+    renderFacilitiesTable();
+    renderLicensesTable();
+    renderUsersTable();
+    updateStats();
+}
 
 // Navigation
 function showSection(sectionId) {
@@ -1855,52 +2023,84 @@ function generateLicenseKey() {
         return;
     }
     
-    // Generate random key
-    var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-    var key = 'GOSTAR-';
-    for (var i = 0; i < 4; i++) {
-        key += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    key += '-';
-    for (var i = 0; i < 4; i++) {
-        key += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    
-    // Show generated key
-    document.getElementById('generated-key-value').textContent = key;
-    document.getElementById('generated-key-container').style.display = 'block';
-    document.getElementById('generate-key-btn').style.display = 'none';
-    
-    // Add to licenses array
+    // Set expiration to 7 days from now
     var today = new Date();
     var expires = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
+    var expirationDate = expires.toISOString().split('T')[0];
     
-    licenses.unshift({
-        key: key,
-        type: 'trial',
-        facility: facilityName,
-        createdAt: today.toISOString().split('T')[0],
-        expiresAt: expires.toISOString().split('T')[0],
-        status: 'active'
+    var token = sessionStorage.getItem('admin-token');
+    
+    // Create license via API
+    fetch('/api/admin/licenses', {
+        method: 'POST',
+        headers: { 
+            'Authorization': 'Basic ' + btoa('admin:GoStar2025'),
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            facilityName: facilityName,
+            expirationDate: expirationDate,
+            userPool: 10,
+            isTrial: true,
+            location: facilityLocation || ''
+        })
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.key) {
+            // Show generated key
+            document.getElementById('generated-key-value').textContent = data.key;
+            document.getElementById('generated-key-container').style.display = 'block';
+            document.getElementById('generate-key-btn').style.display = 'none';
+            
+            // Refresh dashboard data
+            fetchDashboardData();
+        } else {
+            alert(currentLang === 'es' ? '❌ Error al crear licencia' : '❌ Error creating license');
+        }
+    })
+    .catch(err => {
+        console.log('API error, falling back to local:', err);
+        // Fallback to local generation
+        var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+        var key = 'GOSTAR-';
+        for (var i = 0; i < 4; i++) {
+            key += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        key += '-';
+        for (var i = 0; i < 4; i++) {
+            key += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        
+        document.getElementById('generated-key-value').textContent = key;
+        document.getElementById('generated-key-container').style.display = 'block';
+        document.getElementById('generate-key-btn').style.display = 'none';
+        
+        licenses.unshift({
+            key: key,
+            type: 'trial',
+            facility: facilityName,
+            createdAt: today.toISOString().split('T')[0],
+            expiresAt: expirationDate,
+            status: 'active'
+        });
+        
+        facilities.unshift({
+            id: key,
+            name: facilityName,
+            location: facilityLocation || 'N/A',
+            licenseKey: key,
+            licenseType: 'trial',
+            users: 0,
+            maxUsers: 10,
+            status: 'active',
+            createdAt: today.toISOString().split('T')[0],
+            expiresAt: expirationDate,
+            daysLeft: 7
+        });
+        
+        updateStats();
     });
-    
-    // Add facility
-    facilities.unshift({
-        id: facilities.length + 1,
-        name: facilityName,
-        location: facilityLocation || 'N/A',
-        licenseKey: key,
-        licenseType: 'trial',
-        users: 0,
-        maxUsers: 10,
-        status: 'active',
-        createdAt: today.toISOString().split('T')[0],
-        expiresAt: expires.toISOString().split('T')[0],
-        daysLeft: 7
-    });
-    
-    // Update stats
-    updateStats();
 }
 
 function copyLicenseKey() {
@@ -2070,11 +2270,19 @@ function renderUsersTable() {
     tbody.innerHTML = '';
     
     users.forEach(function(u, index) {
+        var sessions = u.sessions || { sequence: 0, startrail: 0, kwikstar: 0, gonogo: 0, stroop: 0 };
+        var total = u.totalSessions || (sessions.sequence + sessions.startrail + sessions.kwikstar + sessions.gonogo + sessions.stroop);
+        
         tbody.innerHTML += `
             <tr>
                 <td><strong>${u.name}</strong></td>
                 <td>${u.facility}</td>
-                <td>${u.sessions}</td>
+                <td class="session-cell">${sessions.sequence}</td>
+                <td class="session-cell">${sessions.startrail}</td>
+                <td class="session-cell">${sessions.kwikstar}</td>
+                <td class="session-cell">${sessions.gonogo}</td>
+                <td class="session-cell">${sessions.stroop}</td>
+                <td class="session-total"><strong>${total}</strong></td>
                 <td>🔥 ${u.streak} ${currentLang === 'es' ? 'días' : 'days'}</td>
                 <td>${u.lastActive}</td>
                 <td>
@@ -2092,6 +2300,16 @@ function updateStats() {
     document.getElementById('stat-facilities').textContent = facilities.filter(f => f.status === 'active').length;
     document.getElementById('stat-users').textContent = users.length;
     document.getElementById('stat-licenses').textContent = licenses.filter(l => l.status === 'active').length;
+    
+    // Calculate total sessions
+    var totalSessions = users.reduce(function(sum, u) {
+        if (u.sessions) {
+            return sum + (u.sessions.sequence || 0) + (u.sessions.startrail || 0) + 
+                   (u.sessions.kwikstar || 0) + (u.sessions.gonogo || 0) + (u.sessions.stroop || 0);
+        }
+        return sum + (u.totalSessions || 0);
+    }, 0);
+    document.getElementById('stat-sessions').textContent = totalSessions;
 }
 
 // Edit Facility
@@ -2100,11 +2318,38 @@ function editFacility(index) {
     var newName = prompt(currentLang === 'es' ? 'Nombre de la instalación:' : 'Facility name:', f.name);
     if (newName !== null && newName.trim() !== '') {
         var newLocation = prompt(currentLang === 'es' ? 'Ubicación:' : 'Location:', f.location);
-        facilities[index].name = newName.trim();
-        facilities[index].location = newLocation ? newLocation.trim() : f.location;
-        renderOverviewTable();
-        renderFacilitiesTable();
-        alert(currentLang === 'es' ? '✅ Instalación actualizada' : '✅ Facility updated');
+        var newExpiry = prompt(currentLang === 'es' ? 'Fecha de expiración (YYYY-MM-DD):' : 'Expiry date (YYYY-MM-DD):', f.expiresAt);
+        
+        var token = sessionStorage.getItem('admin-token');
+        fetch('/api/admin/facilities/' + f.id, {
+            method: 'PUT',
+            headers: { 
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: newName.trim(),
+                location: newLocation ? newLocation.trim() : f.location,
+                expires_at: newExpiry && /^\d{4}-\d{2}-\d{2}$/.test(newExpiry) ? newExpiry : f.expiresAt
+            })
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                alert(currentLang === 'es' ? '✅ Instalación actualizada' : '✅ Facility updated');
+                fetchDashboardData();
+            } else {
+                alert(currentLang === 'es' ? '❌ Error al actualizar' : '❌ Update failed');
+            }
+        })
+        .catch(() => {
+            // Fallback to local update
+            facilities[index].name = newName.trim();
+            facilities[index].location = newLocation ? newLocation.trim() : f.location;
+            renderOverviewTable();
+            renderFacilitiesTable();
+            alert(currentLang === 'es' ? '✅ Instalación actualizada (local)' : '✅ Facility updated (local)');
+        });
     }
 }
 
@@ -2116,21 +2361,34 @@ function deleteFacility(index) {
         : 'Delete "' + f.name + '"? This will delete the license and all associated users.';
     
     if (confirm(confirmMsg)) {
-        // Remove associated license
-        var licenseIndex = licenses.findIndex(l => l.key === f.licenseKey);
-        if (licenseIndex > -1) {
-            licenses.splice(licenseIndex, 1);
-        }
-        // Remove associated users
-        users = users.filter(u => u.facility !== f.name);
-        facilities.splice(index, 1);
-        syncFacilityUserCounts();
-        renderOverviewTable();
-        renderFacilitiesTable();
-        renderLicensesTable();
-        renderUsersTable();
-        updateStats();
-        alert(currentLang === 'es' ? '✅ Instalación eliminada' : '✅ Facility deleted');
+        var token = sessionStorage.getItem('admin-token');
+        fetch('/api/admin/facilities/' + f.id, {
+            method: 'DELETE',
+            headers: { 'Authorization': 'Bearer ' + token }
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                alert(currentLang === 'es' ? '✅ Instalación eliminada' : '✅ Facility deleted');
+                fetchDashboardData();
+            } else {
+                alert(currentLang === 'es' ? '❌ Error al eliminar' : '❌ Delete failed');
+            }
+        })
+        .catch(() => {
+            // Fallback to local delete
+            var licenseIndex = licenses.findIndex(l => l.key === f.licenseKey);
+            if (licenseIndex > -1) licenses.splice(licenseIndex, 1);
+            users = users.filter(u => u.facility !== f.name);
+            facilities.splice(index, 1);
+            syncFacilityUserCounts();
+            renderOverviewTable();
+            renderFacilitiesTable();
+            renderLicensesTable();
+            renderUsersTable();
+            updateStats();
+            alert(currentLang === 'es' ? '✅ Instalación eliminada (local)' : '✅ Facility deleted (local)');
+        });
     }
 }
 
@@ -2140,25 +2398,49 @@ function editLicense(index) {
     var newFacility = prompt(currentLang === 'es' ? 'Nombre de instalación:' : 'Facility name:', l.facility);
     if (newFacility !== null && newFacility.trim() !== '') {
         var newExpiry = prompt(currentLang === 'es' ? 'Fecha de expiración (YYYY-MM-DD):' : 'Expiry date (YYYY-MM-DD):', l.expiresAt);
-        licenses[index].facility = newFacility.trim();
-        if (newExpiry && /^\d{4}-\d{2}-\d{2}$/.test(newExpiry)) {
-            licenses[index].expiresAt = newExpiry;
-        }
-        // Update matching facility
-        var facilityIndex = facilities.findIndex(f => f.licenseKey === l.key);
-        if (facilityIndex > -1) {
-            facilities[facilityIndex].name = newFacility.trim();
-            if (newExpiry && /^\d{4}-\d{2}-\d{2}$/.test(newExpiry)) {
-                facilities[facilityIndex].expiresAt = newExpiry;
-                var today = new Date();
-                var expiry = new Date(newExpiry);
-                facilities[facilityIndex].daysLeft = Math.max(0, Math.ceil((expiry - today) / (1000 * 60 * 60 * 24)));
+        
+        var token = sessionStorage.getItem('admin-token');
+        fetch('/api/admin/facilities/' + l.key, {
+            method: 'PUT',
+            headers: { 
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: newFacility.trim(),
+                expires_at: newExpiry && /^\d{4}-\d{2}-\d{2}$/.test(newExpiry) ? newExpiry : l.expiresAt
+            })
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                alert(currentLang === 'es' ? '✅ Licencia actualizada' : '✅ License updated');
+                fetchDashboardData();
+            } else {
+                alert(currentLang === 'es' ? '❌ Error al actualizar' : '❌ Update failed');
             }
-        }
-        renderOverviewTable();
-        renderFacilitiesTable();
-        renderLicensesTable();
-        alert(currentLang === 'es' ? '✅ Licencia actualizada' : '✅ License updated');
+        })
+        .catch(() => {
+            // Fallback to local update
+            licenses[index].facility = newFacility.trim();
+            if (newExpiry && /^\d{4}-\d{2}-\d{2}$/.test(newExpiry)) {
+                licenses[index].expiresAt = newExpiry;
+            }
+            var facilityIndex = facilities.findIndex(f => f.licenseKey === l.key);
+            if (facilityIndex > -1) {
+                facilities[facilityIndex].name = newFacility.trim();
+                if (newExpiry && /^\d{4}-\d{2}-\d{2}$/.test(newExpiry)) {
+                    facilities[facilityIndex].expiresAt = newExpiry;
+                    var today = new Date();
+                    var expiry = new Date(newExpiry);
+                    facilities[facilityIndex].daysLeft = Math.max(0, Math.ceil((expiry - today) / (1000 * 60 * 60 * 24)));
+                }
+            }
+            renderOverviewTable();
+            renderFacilitiesTable();
+            renderLicensesTable();
+            alert(currentLang === 'es' ? '✅ Licencia actualizada (local)' : '✅ License updated (local)');
+        });
     }
 }
 
@@ -2170,22 +2452,37 @@ function deleteLicense(index) {
         : 'Delete license "' + l.key + '"? This will delete the facility and all associated users.';
     
     if (confirm(confirmMsg)) {
-        // Remove associated facility
-        var facilityIndex = facilities.findIndex(f => f.licenseKey === l.key);
-        if (facilityIndex > -1) {
-            var facilityName = facilities[facilityIndex].name;
-            // Remove associated users
-            users = users.filter(u => u.facility !== facilityName);
-            facilities.splice(facilityIndex, 1);
-        }
-        licenses.splice(index, 1);
-        syncFacilityUserCounts();
-        renderOverviewTable();
-        renderFacilitiesTable();
-        renderLicensesTable();
-        renderUsersTable();
-        updateStats();
-        alert(currentLang === 'es' ? '✅ Licencia eliminada' : '✅ License deleted');
+        var token = sessionStorage.getItem('admin-token');
+        fetch('/api/admin/licenses-list/' + l.key, {
+            method: 'DELETE',
+            headers: { 'Authorization': 'Bearer ' + token }
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                alert(currentLang === 'es' ? '✅ Licencia eliminada' : '✅ License deleted');
+                fetchDashboardData();
+            } else {
+                alert(currentLang === 'es' ? '❌ Error al eliminar' : '❌ Delete failed');
+            }
+        })
+        .catch(() => {
+            // Fallback to local delete
+            var facilityIndex = facilities.findIndex(f => f.licenseKey === l.key);
+            if (facilityIndex > -1) {
+                var facilityName = facilities[facilityIndex].name;
+                users = users.filter(u => u.facility !== facilityName);
+                facilities.splice(facilityIndex, 1);
+            }
+            licenses.splice(index, 1);
+            syncFacilityUserCounts();
+            renderOverviewTable();
+            renderFacilitiesTable();
+            renderLicensesTable();
+            renderUsersTable();
+            updateStats();
+            alert(currentLang === 'es' ? '✅ Licencia eliminada (local)' : '✅ License deleted (local)');
+        });
     }
 }
 
@@ -2194,14 +2491,32 @@ function editUser(index) {
     var u = users[index];
     var newName = prompt(currentLang === 'es' ? 'Nombre del usuario:' : 'User name:', u.name);
     if (newName !== null && newName.trim() !== '') {
-        var newFacility = prompt(currentLang === 'es' ? 'Instalación:' : 'Facility:', u.facility);
-        users[index].name = newName.trim();
-        users[index].facility = newFacility ? newFacility.trim() : u.facility;
-        syncFacilityUserCounts();
-        renderUsersTable();
-        renderOverviewTable();
-        renderFacilitiesTable();
-        alert(currentLang === 'es' ? '✅ Usuario actualizado' : '✅ User updated');
+        var token = sessionStorage.getItem('admin-token');
+        fetch('/api/admin/users/' + u.id, {
+            method: 'PUT',
+            headers: { 
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username: newName.trim()
+            })
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                alert(currentLang === 'es' ? '✅ Usuario actualizado' : '✅ User updated');
+                fetchDashboardData();
+            } else {
+                alert(currentLang === 'es' ? '❌ Error al actualizar' : '❌ Update failed');
+            }
+        })
+        .catch(() => {
+            // Fallback to local update
+            users[index].name = newName.trim();
+            renderUsersTable();
+            alert(currentLang === 'es' ? '✅ Usuario actualizado (local)' : '✅ User updated (local)');
+        });
     }
 }
 
@@ -2213,13 +2528,30 @@ function deleteUser(index) {
         : 'Delete user "' + u.name + '"? This cannot be undone.';
     
     if (confirm(confirmMsg)) {
-        users.splice(index, 1);
-        syncFacilityUserCounts();
-        renderUsersTable();
-        renderOverviewTable();
-        renderFacilitiesTable();
-        updateStats();
-        alert(currentLang === 'es' ? '✅ Usuario eliminado' : '✅ User deleted');
+        var token = sessionStorage.getItem('admin-token');
+        fetch('/api/admin/users/' + u.id, {
+            method: 'DELETE',
+            headers: { 'Authorization': 'Bearer ' + token }
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                alert(currentLang === 'es' ? '✅ Usuario eliminado' : '✅ User deleted');
+                fetchDashboardData();
+            } else {
+                alert(currentLang === 'es' ? '❌ Error al eliminar' : '❌ Delete failed');
+            }
+        })
+        .catch(() => {
+            // Fallback to local delete
+            users.splice(index, 1);
+            syncFacilityUserCounts();
+            renderUsersTable();
+            renderOverviewTable();
+            renderFacilitiesTable();
+            updateStats();
+            alert(currentLang === 'es' ? '✅ Usuario eliminado (local)' : '✅ User deleted (local)');
+        });
     }
 }
 
@@ -2231,9 +2563,12 @@ function syncFacilityUserCounts() {
 }
 
 // Initialize
-syncFacilityUserCounts();
-renderOverviewTable();
-updateStats();
+// Try to fetch real data, fallback to demo
+if (sessionStorage.getItem('admin-token')) {
+    fetchDashboardData();
+} else {
+    loadDemoData();
+}
 </script>
 
 </body>
