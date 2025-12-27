@@ -1864,109 +1864,11 @@ function fetchDashboardData() {
 
 // Demo data fallback
 function loadDemoData() {
-    if (facilities.length === 0) {
-        facilities = [
-            {
-                id: 1,
-                name: 'Sunrise Wellness Center',
-                location: 'San Juan, PR',
-                licenseKey: 'GOSTAR-7X9K-M2PL',
-                licenseType: 'trial',
-                users: 2,
-                maxUsers: 10,
-                status: 'active',
-                createdAt: '2025-12-20',
-                expiresAt: '2025-12-27',
-                daysLeft: 2
-            },
-            {
-                id: 2,
-                name: 'Golden Years Community',
-                location: 'Bayamón, PR',
-                licenseKey: 'GOSTAR-4R2T-N8WQ',
-                licenseType: 'trial',
-                users: 2,
-                maxUsers: 10,
-                status: 'active',
-                createdAt: '2025-12-22',
-                expiresAt: '2025-12-29',
-                daysLeft: 4
-            },
-            {
-                id: 3,
-                name: 'Vista del Mar Rehab',
-                location: 'Ponce, PR',
-                licenseKey: 'GOSTAR-6Y3H-P5KJ',
-                licenseType: 'trial',
-                users: 1,
-                maxUsers: 10,
-                status: 'active',
-                createdAt: '2025-12-24',
-                expiresAt: '2025-12-31',
-                daysLeft: 6
-            }
-        ];
-    }
+    // Fresh start - no demo data, just render empty tables
+    facilities = [];
+    licenses = [];
+    users = [];
     
-    if (licenses.length === 0) {
-        licenses = [
-            { key: 'GOSTAR-7X9K-M2PL', type: 'trial', facility: 'Sunrise Wellness Center', createdAt: '2025-12-20', expiresAt: '2025-12-27', status: 'active' },
-            { key: 'GOSTAR-4R2T-N8WQ', type: 'trial', facility: 'Golden Years Community', createdAt: '2025-12-22', expiresAt: '2025-12-29', status: 'active' },
-            { key: 'GOSTAR-6Y3H-P5KJ', type: 'trial', facility: 'Vista del Mar Rehab', createdAt: '2025-12-24', expiresAt: '2025-12-31', status: 'active' }
-        ];
-    }
-    
-    if (users.length === 0) {
-        users = [
-            { 
-                id: 1,
-                name: 'María García', 
-                facility: 'Sunrise Wellness Center', 
-                sessions: { sequence: 8, startrail: 6, kwikstar: 5, gonogo: 3, stroop: 2 },
-                totalSessions: 24,
-                streak: 7, 
-                lastActive: '2025-12-25' 
-            },
-            { 
-                id: 2,
-                name: 'Carlos Rivera', 
-                facility: 'Sunrise Wellness Center', 
-                sessions: { sequence: 5, startrail: 4, kwikstar: 4, gonogo: 3, stroop: 2 },
-                totalSessions: 18,
-                streak: 5, 
-                lastActive: '2025-12-25' 
-            },
-            { 
-                id: 3,
-                name: 'Ana López', 
-                facility: 'Golden Years Community', 
-                sessions: { sequence: 10, startrail: 8, kwikstar: 6, gonogo: 5, stroop: 3 },
-                totalSessions: 32,
-                streak: 12, 
-                lastActive: '2025-12-25' 
-            },
-            { 
-                id: 4,
-                name: 'José Martínez', 
-                facility: 'Golden Years Community', 
-                sessions: { sequence: 4, startrail: 3, kwikstar: 3, gonogo: 3, stroop: 2 },
-                totalSessions: 15,
-                streak: 3, 
-                lastActive: '2025-12-24' 
-            },
-            { 
-                id: 5,
-                name: 'Rosa Hernández', 
-                facility: 'Vista del Mar Rehab', 
-                sessions: { sequence: 2, startrail: 2, kwikstar: 2, gonogo: 1, stroop: 1 },
-                totalSessions: 8,
-                streak: 4, 
-                lastActive: '2025-12-25' 
-            }
-        ];
-    }
-    
-    syncFacilityUserCounts();
     renderOverviewTable();
     renderFacilitiesTable();
     renderLicensesTable();
@@ -2152,6 +2054,11 @@ function renderOverviewTable() {
     var tbody = document.getElementById('facilities-table-body');
     tbody.innerHTML = '';
     
+    if (facilities.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px; color: var(--text-muted);"><div style="font-size: 2rem; margin-bottom: 10px;">📋</div>' + (currentLang === 'es' ? 'No hay instalaciones aún. Genera una licencia para comenzar.' : 'No facilities yet. Generate a license to get started.') + '</td></tr>';
+        return;
+    }
+    
     facilities.slice(0, 5).forEach(function(f, index) {
         var statusClass = f.daysLeft <= 2 ? 'expiring' : 'active';
         var userPercent = (f.users / f.maxUsers) * 100;
@@ -2191,6 +2098,11 @@ function renderOverviewTable() {
 function renderFacilitiesTable() {
     var tbody = document.getElementById('all-facilities-table-body');
     tbody.innerHTML = '';
+    
+    if (facilities.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px; color: var(--text-muted);"><div style="font-size: 2rem; margin-bottom: 10px;">🏢</div>' + (currentLang === 'es' ? 'No hay instalaciones registradas.' : 'No facilities registered.') + '</td></tr>';
+        return;
+    }
     
     facilities.forEach(function(f, index) {
         var statusClass = f.status === 'expired' ? 'expired' : f.daysLeft <= 2 ? 'expiring' : 'active';
@@ -2235,6 +2147,11 @@ function renderLicensesTable() {
     var tbody = document.getElementById('licenses-table-body');
     tbody.innerHTML = '';
     
+    if (licenses.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px; color: var(--text-muted);"><div style="font-size: 2rem; margin-bottom: 10px;">🔑</div>' + (currentLang === 'es' ? 'No hay licencias generadas. Use el botón "Generar Licencia" arriba.' : 'No licenses generated. Use the "Generate License" button above.') + '</td></tr>';
+        return;
+    }
+    
     licenses.forEach(function(l, index) {
         var statusClass = l.status;
         var statusText = l.status === 'expired' ? (currentLang === 'es' ? 'Expirado' : 'Expired') :
@@ -2268,6 +2185,11 @@ function renderLicensesTable() {
 function renderUsersTable() {
     var tbody = document.getElementById('users-table-body');
     tbody.innerHTML = '';
+    
+    if (users.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="11" style="text-align: center; padding: 40px; color: var(--text-muted);"><div style="font-size: 2rem; margin-bottom: 10px;">👥</div>' + (currentLang === 'es' ? 'No hay usuarios registrados. Los usuarios aparecerán cuando se registren en las instalaciones.' : 'No users registered. Users will appear when they sign up at facilities.') + '</td></tr>';
+        return;
+    }
     
     users.forEach(function(u, index) {
         var sessions = u.sessions || { sequence: 0, startrail: 0, kwikstar: 0, gonogo: 0, stroop: 0 };
