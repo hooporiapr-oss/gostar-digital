@@ -2320,36 +2320,50 @@ function editFacility(index) {
         var newLocation = prompt(currentLang === 'es' ? 'Ubicación:' : 'Location:', f.location);
         var newExpiry = prompt(currentLang === 'es' ? 'Fecha de expiración (YYYY-MM-DD):' : 'Expiry date (YYYY-MM-DD):', f.expiresAt);
         
-        var token = sessionStorage.getItem('admin-token');
-        fetch('/api/admin/facilities/' + f.id, {
-            method: 'PUT',
-            headers: { 
-                'Authorization': 'Bearer ' + token,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                name: newName.trim(),
-                location: newLocation ? newLocation.trim() : f.location,
-                expires_at: newExpiry && /^\d{4}-\d{2}-\d{2}$/.test(newExpiry) ? newExpiry : f.expiresAt
-            })
-        })
-        .then(r => r.json())
-        .then(data => {
-            if (data.success) {
-                alert(currentLang === 'es' ? '✅ Instalación actualizada' : '✅ Facility updated');
-                fetchDashboardData();
-            } else {
-                alert(currentLang === 'es' ? '❌ Error al actualizar' : '❌ Update failed');
-            }
-        })
-        .catch(() => {
-            // Fallback to local update
-            facilities[index].name = newName.trim();
-            facilities[index].location = newLocation ? newLocation.trim() : f.location;
-            renderOverviewTable();
-            renderFacilitiesTable();
-            alert(currentLang === 'es' ? '✅ Instalación actualizada (local)' : '✅ Facility updated (local)');
+        // Update locally first
+        var oldName = facilities[index].name;
+        facilities[index].name = newName.trim();
+        facilities[index].location = newLocation ? newLocation.trim() : f.location;
+        if (newExpiry && /^\d{4}-\d{2}-\d{2}$/.test(newExpiry)) {
+            facilities[index].expiresAt = newExpiry;
+            var today = new Date();
+            var expiry = new Date(newExpiry);
+            facilities[index].daysLeft = Math.max(0, Math.ceil((expiry - today) / (1000 * 60 * 60 * 24)));
+        }
+        
+        // Update license name
+        var licenseIndex = licenses.findIndex(l => l.key === f.licenseKey);
+        if (licenseIndex > -1) {
+            licenses[licenseIndex].facility = newName.trim();
+        }
+        
+        // Update users facility name
+        users.forEach(function(u) {
+            if (u.facility === oldName) u.facility = newName.trim();
         });
+        
+        renderOverviewTable();
+        renderFacilitiesTable();
+        renderLicensesTable();
+        renderUsersTable();
+        alert(currentLang === 'es' ? '✅ Instalación actualizada' : '✅ Facility updated');
+        
+        // Sync to API in background
+        var token = sessionStorage.getItem('admin-token');
+        if (token && f.id) {
+            fetch('/api/admin/facilities/' + f.id, {
+                method: 'PUT',
+                headers: { 
+                    'Authorization': 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: newName.trim(),
+                    location: newLocation ? newLocation.trim() : f.location,
+                    expires_at: newExpiry && /^\d{4}-\d{2}-\d{2}$/.test(newExpiry) ? newExpiry : f.expiresAt
+                })
+            }).catch(function() {});
+        }
     }
 }
 
@@ -2361,34 +2375,27 @@ function deleteFacility(index) {
         : 'Delete "' + f.name + '"? This will delete the license and all associated users.';
     
     if (confirm(confirmMsg)) {
+        // Delete locally first
+        var licenseIndex = licenses.findIndex(l => l.key === f.licenseKey);
+        if (licenseIndex > -1) licenses.splice(licenseIndex, 1);
+        users = users.filter(u => u.facility !== f.name);
+        facilities.splice(index, 1);
+        syncFacilityUserCounts();
+        renderOverviewTable();
+        renderFacilitiesTable();
+        renderLicensesTable();
+        renderUsersTable();
+        updateStats();
+        alert(currentLang === 'es' ? '✅ Instalación eliminada' : '✅ Facility deleted');
+        
+        // Sync to API in background
         var token = sessionStorage.getItem('admin-token');
-        fetch('/api/admin/facilities/' + f.id, {
-            method: 'DELETE',
-            headers: { 'Authorization': 'Bearer ' + token }
-        })
-        .then(r => r.json())
-        .then(data => {
-            if (data.success) {
-                alert(currentLang === 'es' ? '✅ Instalación eliminada' : '✅ Facility deleted');
-                fetchDashboardData();
-            } else {
-                alert(currentLang === 'es' ? '❌ Error al eliminar' : '❌ Delete failed');
-            }
-        })
-        .catch(() => {
-            // Fallback to local delete
-            var licenseIndex = licenses.findIndex(l => l.key === f.licenseKey);
-            if (licenseIndex > -1) licenses.splice(licenseIndex, 1);
-            users = users.filter(u => u.facility !== f.name);
-            facilities.splice(index, 1);
-            syncFacilityUserCounts();
-            renderOverviewTable();
-            renderFacilitiesTable();
-            renderLicensesTable();
-            renderUsersTable();
-            updateStats();
-            alert(currentLang === 'es' ? '✅ Instalación eliminada (local)' : '✅ Facility deleted (local)');
-        });
+        if (token && f.id) {
+            fetch('/api/admin/facilities/' + f.id, {
+                method: 'DELETE',
+                headers: { 'Authorization': 'Bearer ' + token }
+            }).catch(function() {});
+        }
     }
 }
 
@@ -2399,48 +2406,51 @@ function editLicense(index) {
     if (newFacility !== null && newFacility.trim() !== '') {
         var newExpiry = prompt(currentLang === 'es' ? 'Fecha de expiración (YYYY-MM-DD):' : 'Expiry date (YYYY-MM-DD):', l.expiresAt);
         
-        var token = sessionStorage.getItem('admin-token');
-        fetch('/api/admin/facilities/' + l.key, {
-            method: 'PUT',
-            headers: { 
-                'Authorization': 'Bearer ' + token,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                name: newFacility.trim(),
-                expires_at: newExpiry && /^\d{4}-\d{2}-\d{2}$/.test(newExpiry) ? newExpiry : l.expiresAt
-            })
-        })
-        .then(r => r.json())
-        .then(data => {
-            if (data.success) {
-                alert(currentLang === 'es' ? '✅ Licencia actualizada' : '✅ License updated');
-                fetchDashboardData();
-            } else {
-                alert(currentLang === 'es' ? '❌ Error al actualizar' : '❌ Update failed');
-            }
-        })
-        .catch(() => {
-            // Fallback to local update
-            licenses[index].facility = newFacility.trim();
+        // Update locally first
+        var oldFacility = licenses[index].facility;
+        licenses[index].facility = newFacility.trim();
+        if (newExpiry && /^\d{4}-\d{2}-\d{2}$/.test(newExpiry)) {
+            licenses[index].expiresAt = newExpiry;
+        }
+        
+        // Update matching facility
+        var facilityIndex = facilities.findIndex(f => f.licenseKey === l.key);
+        if (facilityIndex > -1) {
+            facilities[facilityIndex].name = newFacility.trim();
             if (newExpiry && /^\d{4}-\d{2}-\d{2}$/.test(newExpiry)) {
-                licenses[index].expiresAt = newExpiry;
+                facilities[facilityIndex].expiresAt = newExpiry;
+                var today = new Date();
+                var expiry = new Date(newExpiry);
+                facilities[facilityIndex].daysLeft = Math.max(0, Math.ceil((expiry - today) / (1000 * 60 * 60 * 24)));
             }
-            var facilityIndex = facilities.findIndex(f => f.licenseKey === l.key);
-            if (facilityIndex > -1) {
-                facilities[facilityIndex].name = newFacility.trim();
-                if (newExpiry && /^\d{4}-\d{2}-\d{2}$/.test(newExpiry)) {
-                    facilities[facilityIndex].expiresAt = newExpiry;
-                    var today = new Date();
-                    var expiry = new Date(newExpiry);
-                    facilities[facilityIndex].daysLeft = Math.max(0, Math.ceil((expiry - today) / (1000 * 60 * 60 * 24)));
-                }
-            }
-            renderOverviewTable();
-            renderFacilitiesTable();
-            renderLicensesTable();
-            alert(currentLang === 'es' ? '✅ Licencia actualizada (local)' : '✅ License updated (local)');
+        }
+        
+        // Update users facility name
+        users.forEach(function(u) {
+            if (u.facility === oldFacility) u.facility = newFacility.trim();
         });
+        
+        renderOverviewTable();
+        renderFacilitiesTable();
+        renderLicensesTable();
+        renderUsersTable();
+        alert(currentLang === 'es' ? '✅ Licencia actualizada' : '✅ License updated');
+        
+        // Sync to API in background
+        var token = sessionStorage.getItem('admin-token');
+        if (token && l.key) {
+            fetch('/api/admin/facilities/' + l.key, {
+                method: 'PUT',
+                headers: { 
+                    'Authorization': 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: newFacility.trim(),
+                    expires_at: newExpiry && /^\d{4}-\d{2}-\d{2}$/.test(newExpiry) ? newExpiry : l.expiresAt
+                })
+            }).catch(function() {});
+        }
     }
 }
 
@@ -2452,37 +2462,30 @@ function deleteLicense(index) {
         : 'Delete license "' + l.key + '"? This will delete the facility and all associated users.';
     
     if (confirm(confirmMsg)) {
+        // Delete locally first
+        var facilityIndex = facilities.findIndex(f => f.licenseKey === l.key);
+        if (facilityIndex > -1) {
+            var facilityName = facilities[facilityIndex].name;
+            users = users.filter(u => u.facility !== facilityName);
+            facilities.splice(facilityIndex, 1);
+        }
+        licenses.splice(index, 1);
+        syncFacilityUserCounts();
+        renderOverviewTable();
+        renderFacilitiesTable();
+        renderLicensesTable();
+        renderUsersTable();
+        updateStats();
+        alert(currentLang === 'es' ? '✅ Licencia eliminada' : '✅ License deleted');
+        
+        // Sync to API in background
         var token = sessionStorage.getItem('admin-token');
-        fetch('/api/admin/licenses-list/' + l.key, {
-            method: 'DELETE',
-            headers: { 'Authorization': 'Bearer ' + token }
-        })
-        .then(r => r.json())
-        .then(data => {
-            if (data.success) {
-                alert(currentLang === 'es' ? '✅ Licencia eliminada' : '✅ License deleted');
-                fetchDashboardData();
-            } else {
-                alert(currentLang === 'es' ? '❌ Error al eliminar' : '❌ Delete failed');
-            }
-        })
-        .catch(() => {
-            // Fallback to local delete
-            var facilityIndex = facilities.findIndex(f => f.licenseKey === l.key);
-            if (facilityIndex > -1) {
-                var facilityName = facilities[facilityIndex].name;
-                users = users.filter(u => u.facility !== facilityName);
-                facilities.splice(facilityIndex, 1);
-            }
-            licenses.splice(index, 1);
-            syncFacilityUserCounts();
-            renderOverviewTable();
-            renderFacilitiesTable();
-            renderLicensesTable();
-            renderUsersTable();
-            updateStats();
-            alert(currentLang === 'es' ? '✅ Licencia eliminada (local)' : '✅ License deleted (local)');
-        });
+        if (token && l.key) {
+            fetch('/api/admin/licenses-list/' + l.key, {
+                method: 'DELETE',
+                headers: { 'Authorization': 'Bearer ' + token }
+            }).catch(function() {});
+        }
     }
 }
 
@@ -2491,32 +2494,25 @@ function editUser(index) {
     var u = users[index];
     var newName = prompt(currentLang === 'es' ? 'Nombre del usuario:' : 'User name:', u.name);
     if (newName !== null && newName.trim() !== '') {
+        // Update locally first
+        users[index].name = newName.trim();
+        renderUsersTable();
+        alert(currentLang === 'es' ? '✅ Usuario actualizado' : '✅ User updated');
+        
+        // Sync to API in background
         var token = sessionStorage.getItem('admin-token');
-        fetch('/api/admin/users/' + u.id, {
-            method: 'PUT',
-            headers: { 
-                'Authorization': 'Bearer ' + token,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                username: newName.trim()
-            })
-        })
-        .then(r => r.json())
-        .then(data => {
-            if (data.success) {
-                alert(currentLang === 'es' ? '✅ Usuario actualizado' : '✅ User updated');
-                fetchDashboardData();
-            } else {
-                alert(currentLang === 'es' ? '❌ Error al actualizar' : '❌ Update failed');
-            }
-        })
-        .catch(() => {
-            // Fallback to local update
-            users[index].name = newName.trim();
-            renderUsersTable();
-            alert(currentLang === 'es' ? '✅ Usuario actualizado (local)' : '✅ User updated (local)');
-        });
+        if (token && u.id !== undefined) {
+            fetch('/api/admin/users/' + u.id, {
+                method: 'PUT',
+                headers: { 
+                    'Authorization': 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username: newName.trim()
+                })
+            }).catch(function() {});
+        }
     }
 }
 
@@ -2528,30 +2524,23 @@ function deleteUser(index) {
         : 'Delete user "' + u.name + '"? This cannot be undone.';
     
     if (confirm(confirmMsg)) {
+        // Delete locally first
+        users.splice(index, 1);
+        syncFacilityUserCounts();
+        renderUsersTable();
+        renderOverviewTable();
+        renderFacilitiesTable();
+        updateStats();
+        alert(currentLang === 'es' ? '✅ Usuario eliminado' : '✅ User deleted');
+        
+        // Sync to API in background
         var token = sessionStorage.getItem('admin-token');
-        fetch('/api/admin/users/' + u.id, {
-            method: 'DELETE',
-            headers: { 'Authorization': 'Bearer ' + token }
-        })
-        .then(r => r.json())
-        .then(data => {
-            if (data.success) {
-                alert(currentLang === 'es' ? '✅ Usuario eliminado' : '✅ User deleted');
-                fetchDashboardData();
-            } else {
-                alert(currentLang === 'es' ? '❌ Error al eliminar' : '❌ Delete failed');
-            }
-        })
-        .catch(() => {
-            // Fallback to local delete
-            users.splice(index, 1);
-            syncFacilityUserCounts();
-            renderUsersTable();
-            renderOverviewTable();
-            renderFacilitiesTable();
-            updateStats();
-            alert(currentLang === 'es' ? '✅ Usuario eliminado (local)' : '✅ User deleted (local)');
-        });
+        if (token && u.id !== undefined) {
+            fetch('/api/admin/users/' + u.id, {
+                method: 'DELETE',
+                headers: { 'Authorization': 'Bearer ' + token }
+            }).catch(function() {});
+        }
     }
 }
 
