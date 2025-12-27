@@ -759,6 +759,106 @@ body[data-lang="en"] .lang-en { display: inline; }
     color: var(--primary-light);
 }
 
+/* Game Hub Button */
+.game-hub-btn {
+    display: inline-block;
+    padding: 14px 40px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    font-family: 'Nunito', sans-serif;
+    background: rgba(255,255,255,0.1);
+    color: var(--text-primary);
+    border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.game-hub-btn:hover {
+    background: rgba(255,255,255,0.15);
+    border-color: var(--secondary);
+    transform: scale(1.03);
+}
+
+/* Quick Play Section */
+.quick-play-section {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.quick-play-label {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 15px;
+}
+
+.quick-play-games {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.quick-game {
+    width: 55px;
+    height: 55px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    background: var(--bg-card);
+    border-radius: 15px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.quick-game:hover {
+    transform: scale(1.15);
+    border-color: var(--secondary);
+    box-shadow: 0 5px 20px rgba(232, 168, 72, 0.3);
+}
+
+/* Motivation Message */
+.motivation-message {
+    margin-top: 25px;
+    padding: 15px 25px;
+    background: linear-gradient(135deg, rgba(0,217,165,0.15) 0%, rgba(0,217,165,0.05) 100%);
+    border-radius: 15px;
+    font-size: 1rem;
+    color: var(--success);
+    font-weight: 600;
+    max-width: 350px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Floating Home Button */
+.floating-home {
+    position: fixed;
+    bottom: 25px;
+    left: 25px;
+    width: 50px;
+    height: 50px;
+    background: var(--bg-card);
+    border: 2px solid rgba(255,255,255,0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    text-decoration: none;
+    z-index: 1000;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.floating-home:hover {
+    transform: scale(1.1);
+    border-color: var(--secondary);
+    box-shadow: 0 6px 25px rgba(232, 168, 72, 0.3);
+}
+
 /* Responsive */
 @media (max-width: 420px) {
     .trail-board {
@@ -1031,15 +1131,30 @@ body[data-lang="en"] .lang-en { display: inline; }
     
     <div class="btn-group">
         <button class="play-again-btn" onclick="playAgain()">
-            <span class="lang-en">Play Again</span>
-            <span class="lang-es">Jugar de Nuevo</span>
+            <span class="lang-en">🔄 Play Again</span>
+            <span class="lang-es">🔄 Jugar de Nuevo</span>
         </button>
         
-        <a href="#" class="home-link" onclick="backToStart(); return false;">
-            <span class="lang-en">← Back to Menu</span>
-            <span class="lang-es">← Volver al Menú</span>
+        <a href="/game" class="game-hub-btn">
+            <span class="lang-en">🎮 Game Hub</span>
+            <span class="lang-es">🎮 Centro de Juegos</span>
         </a>
     </div>
+    
+    <div class="quick-play-section">
+        <div class="quick-play-label">
+            <span class="lang-en">Try Another Game</span>
+            <span class="lang-es">Prueba Otro Juego</span>
+        </div>
+        <div class="quick-play-games">
+            <a href="/sequence-memory.html" class="quick-game" title="Sequence Memory">⭐</a>
+            <a href="/kwikstar.html" class="quick-game" title="KwikStar">⚡</a>
+            <a href="/go-no-gostar.html" class="quick-game" title="Go-No-GoStar">🛑</a>
+            <a href="/starstroop.html" class="quick-game" title="StarStroop">🔀</a>
+        </div>
+    </div>
+    
+    <div class="motivation-message" id="motivationMsg"></div>
 </div>
 
 <script>
@@ -1645,6 +1760,7 @@ function endGame() {
     }
     
     showScreen('finalScreen');
+    showMotivation();
 }
 
 function playAgain() {
@@ -1804,8 +1920,34 @@ function logout() {
     window.location.href = '/play';
 }
 
+// Motivation messages
+function showMotivation() {
+    var messages = currentLang === 'es' ? [
+        '¡Cada día más fuerte! 💪',
+        '¡Tu cerebro te lo agradece! 🧠',
+        '¡Sigue así, campeón! 🏆',
+        '¡La práctica hace al maestro! ⭐',
+        '¡Increíble progreso! 🚀',
+        '¡Eres imparable! 🔥',
+        '¡Mental fitness en acción! 💫'
+    ] : [
+        'Getting stronger every day! 💪',
+        'Your brain thanks you! 🧠',
+        'Keep it up, champion! 🏆',
+        'Practice makes perfect! ⭐',
+        'Amazing progress! 🚀',
+        'You\'re unstoppable! 🔥',
+        'Mental fitness in action! 💫'
+    ];
+    var msg = messages[Math.floor(Math.random() * messages.length)];
+    document.getElementById('motivationMsg').textContent = msg;
+}
+
 window.onload = init;
 </script>
+
+<!-- Floating Home Button -->
+<a href="/game" class="floating-home" title="Game Hub">🏠</a>
 
 </body>
 </html>
