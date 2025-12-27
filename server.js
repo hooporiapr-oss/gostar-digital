@@ -143,6 +143,334 @@ app.post('/api/admin/logout', function(req, res) {
     res.json({ success: true });
 });
 
+// Admin token auth middleware
+function adminTokenAuth(req, res, next) {
+    var authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return res.status(401).json({ success: false, message: 'No token provided' });
+    }
+    var token = authHeader.split(' ')[1];
+    if (adminTokens.has(token)) {
+        return next();
+    }
+    res.status(401).json({ success: false, message: 'Invalid or expired token' });
+}
+
+// ============ ADMIN DASHBOARD API ============
+
+// Get all facilities (from licenses)
+app.get('/api/admin/facilities', adminTokenAuth, function(req, res) {
+    var licenses = readJSON(LICENSES_FILE);
+    var codes = readJSON(CODES_FILE);
+    var users = readJSON(USERS_FILE);
+    
+    var facilities = licenses.map(function(lic) {
+        // Count users for this facility
+        var facilityCodes = codes.filter(function(c) { return c.licenseKey === lic.key; });
+        var facilityCodeIds = facilityCodes.map(function(c) { return c.code; });
+        var facilityUsers = users.filter(function(u) { return facilityCodeIds.indexOf(u.code) !== -1; });
+        
+        // Calculate days left
+        var today = new Date();
+        var expiry = new Date(lic.expirationDate);
+        var daysLeft = Math.ceil((expiry - today) / (1000 * 60 * 60 * 24));
+        
+        return {
+            id: lic.key,
+            name: lic.facilityName,
+            location: lic.location || 'N/A',
+            license_key: lic.key,
+            license_type: lic.isTrial ? 'trial' : 'standard',
+            user_count: facilityUsers.length,
+            user_limit: lic.userPool,
+            status: lic.active ? (daysLeft > 0 ? 'active' : 'expired') : 'inactive',
+            created_at: lic.createdAt,
+            expires_at: lic.expirationDate,
+            days_left: Math.max(0, daysLeft),
+            contact_name: lic.contactName || '',
+            email: lic.email || '',
+            phone: lic.phone || ''
+        };
+    });
+    
+    res.json({ success: true, facilities: facilities });
+});
+
+// Update facility
+app.put('/api/admin/facilities/:id', adminTokenAuth, function(req, res) {
+    var id = req.params.id;
+    var licenses = readJSON(LICENSES_FILE);
+    
+    var index = -1;
+    for (var i = 0; i < licenses.length; i++) {
+        if (licenses[i].key === id) {
+            index = i;
+            break;
+        }
+    }
+    
+    if (index === -1) {
+        return res.status(404).json({ success: false, message: 'Facility not found' });
+    }
+    
+    if (req.body.name) licenses[index].facilityName = req.body.name;
+    if (req.body.location) licenses[index].location = req.body.location;
+    if (req.body.expires_at) licenses[index].expirationDate = req.body.expires_at;
+    if (typeof req.body.active === 'boolean') licenses[index].active = req.body.active;
+    
+    writeJSON(LICENSES_FILE, licenses);
+    res.json({ success: true });
+});
+
+// Delete facility
+app.delete('/api/admin/facilities/:id', adminTokenAuth, function(req, res) {
+    var id = req.params.id;
+    
+    var licenses = readJSON(LICENSES_FILE);
+    licenses = licenses.filter(function(l) { return l.key !== id; });
+    writeJSON(LICENSES_FILE, licenses);
+    
+    var codes = readJSON(CODES_FILE);
+    var codesToDelete = codes.filter(function(c) { return c.licenseKey === id; }).map(function(c) { return c.code; });
+    codes = codes.filter(function(c) { return c.licenseKey !== id; });
+    writeJSON(CODES_FILE, codes);
+    
+    var users = readJSON(USERS_FILE);
+    users = users.filter(function(u) { return codesToDelete.indexOf(u.code) === -1; });
+    writeJSON(USERS_FILE, users);
+    
+    res.json({ success: true });
+});
+
+// Get all licenses
+app.get('/api/admin/licenses-list', adminTokenAuth, function(req, res) {
+    var licenses = readJSON(LICENSES_FILE);
+    
+    var result = licenses.map(function(lic) {
+        var today = new Date();
+        var expiry = new Date(lic.expirationDate);
+        var daysLeft = Math.ceil((expiry - today) / (1000 * 60 * 60 * 24));
+        
+        return {
+            key: lic.key,
+            license_key: lic.key,
+            license_type: lic.isTrial ? 'trial' : 'standard',
+            facility_name: lic.facilityName,
+            created_at: lic.createdAt,
+            expires_at: lic.expirationDate,
+            status: lic.active ? (daysLeft > 0 ? 'active' : 'expired') : 'inactive'
+        };
+    });
+    
+    res.json({ success: true, licenses: result });
+});
+
+// Delete license (same as facility)
+app.delete('/api/admin/licenses-list/:key', adminTokenAuth, function(req, res) {
+    var key = req.params.key;
+    
+    var licenses = readJSON(LICENSES_FILE);
+    licenses = licenses.filter(function(l) { return l.key !== key; });
+    writeJSON(LICENSES_FILE, licenses);
+    
+    var codes = readJSON(CODES_FILE);
+    var codesToDelete = codes.filter(function(c) { return c.licenseKey === key; }).map(function(c) { return c.code; });
+    codes = codes.filter(function(c) { return c.licenseKey !== key; });
+    writeJSON(CODES_FILE, codes);
+    
+    var users = readJSON(USERS_FILE);
+    users = users.filter(function(u) { return codesToDelete.indexOf(u.code) === -1; });
+    writeJSON(USERS_FILE, users);
+    
+    res.json({ success: true });
+});
+
+// Get all users with session data
+app.get('/api/admin/users', adminTokenAuth, function(req, res) {
+    var users = readJSON(USERS_FILE);
+    var codes = readJSON(CODES_FILE);
+    var licenses = readJSON(LICENSES_FILE);
+    
+    var result = users.map(function(u, index) {
+        // Find facility name
+        var facilityName = 'Unknown';
+        var codeObj = codes.find(function(c) { return c.code === u.code; });
+        if (codeObj) {
+            var license = licenses.find(function(l) { return l.key === codeObj.licenseKey; });
+            if (license) {
+                facilityName = license.facilityName;
+            }
+        }
+        
+        return {
+            id: index,
+            username: u.username,
+            facility_name: facilityName,
+            sessions_sequence: u.sessions_sequence || 0,
+            sessions_startrail: u.sessions_startrail || 0,
+            sessions_kwikstar: u.sessions_kwikstar || 0,
+            sessions_gonogo: u.sessions_gonogo || 0,
+            sessions_stroop: u.sessions_stroop || 0,
+            streak: u.streak || 0,
+            last_active: u.lastActive || u.createdAt,
+            created_at: u.createdAt
+        };
+    });
+    
+    res.json({ success: true, users: result });
+});
+
+// Update user
+app.put('/api/admin/users/:id', adminTokenAuth, function(req, res) {
+    var id = parseInt(req.params.id);
+    var users = readJSON(USERS_FILE);
+    
+    if (id < 0 || id >= users.length) {
+        return res.status(404).json({ success: false, message: 'User not found' });
+    }
+    
+    if (req.body.username) users[id].username = req.body.username;
+    if (typeof req.body.streak === 'number') users[id].streak = req.body.streak;
+    
+    writeJSON(USERS_FILE, users);
+    res.json({ success: true });
+});
+
+// Delete user
+app.delete('/api/admin/users/:id', adminTokenAuth, function(req, res) {
+    var id = parseInt(req.params.id);
+    var users = readJSON(USERS_FILE);
+    
+    if (id < 0 || id >= users.length) {
+        return res.status(404).json({ success: false, message: 'User not found' });
+    }
+    
+    users.splice(id, 1);
+    writeJSON(USERS_FILE, users);
+    res.json({ success: true });
+});
+
+// ============ GAME SESSION TRACKING ============
+
+// Record game session
+app.post('/api/game/session', function(req, res) {
+    var accessCode = req.body.accessCode;
+    var username = req.body.username;
+    var game = req.body.game; // sequence, startrail, kwikstar, gonogo, stroop
+    var score = req.body.score;
+    
+    if (!accessCode || !username || !game) {
+        return res.status(400).json({ error: 'Missing required fields' });
+    }
+    
+    var validGames = ['sequence', 'startrail', 'kwikstar', 'gonogo', 'stroop'];
+    if (validGames.indexOf(game) === -1) {
+        return res.status(400).json({ error: 'Invalid game type' });
+    }
+    
+    var users = readJSON(USERS_FILE);
+    var userIndex = -1;
+    for (var i = 0; i < users.length; i++) {
+        if (users[i].code === accessCode && users[i].username.toLowerCase() === username.toLowerCase()) {
+            userIndex = i;
+            break;
+        }
+    }
+    
+    if (userIndex === -1) {
+        return res.status(404).json({ error: 'User not found' });
+    }
+    
+    // Initialize session counts if not exist
+    var sessionKey = 'sessions_' + game;
+    if (!users[userIndex][sessionKey]) {
+        users[userIndex][sessionKey] = 0;
+    }
+    users[userIndex][sessionKey]++;
+    
+    // Update last active
+    users[userIndex].lastActive = new Date().toISOString();
+    
+    // Update streak
+    var today = new Date().toISOString().split('T')[0];
+    var lastStreakDate = users[userIndex].lastStreakDate;
+    
+    if (!lastStreakDate) {
+        users[userIndex].streak = 1;
+        users[userIndex].lastStreakDate = today;
+    } else if (lastStreakDate !== today) {
+        var lastDate = new Date(lastStreakDate);
+        var todayDate = new Date(today);
+        var diffDays = Math.floor((todayDate - lastDate) / (1000 * 60 * 60 * 24));
+        
+        if (diffDays === 1) {
+            users[userIndex].streak = (users[userIndex].streak || 0) + 1;
+        } else if (diffDays > 1) {
+            users[userIndex].streak = 1; // Reset streak
+        }
+        users[userIndex].lastStreakDate = today;
+    }
+    
+    // Store personal best if provided
+    if (score !== undefined) {
+        var bestKey = 'best_' + game;
+        if (!users[userIndex][bestKey] || score > users[userIndex][bestKey]) {
+            users[userIndex][bestKey] = score;
+        }
+    }
+    
+    writeJSON(USERS_FILE, users);
+    
+    res.json({ 
+        success: true, 
+        sessions: users[userIndex][sessionKey],
+        streak: users[userIndex].streak,
+        personalBest: users[userIndex]['best_' + game]
+    });
+});
+
+// Get user stats
+app.get('/api/game/stats/:accessCode/:username', function(req, res) {
+    var accessCode = req.params.accessCode;
+    var username = req.params.username;
+    
+    var users = readJSON(USERS_FILE);
+    var user = null;
+    for (var i = 0; i < users.length; i++) {
+        if (users[i].code === accessCode && users[i].username.toLowerCase() === username.toLowerCase()) {
+            user = users[i];
+            break;
+        }
+    }
+    
+    if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+    }
+    
+    res.json({
+        success: true,
+        stats: {
+            sessions: {
+                sequence: user.sessions_sequence || 0,
+                startrail: user.sessions_startrail || 0,
+                kwikstar: user.sessions_kwikstar || 0,
+                gonogo: user.sessions_gonogo || 0,
+                stroop: user.sessions_stroop || 0
+            },
+            totalSessions: (user.sessions_sequence || 0) + (user.sessions_startrail || 0) +
+                          (user.sessions_kwikstar || 0) + (user.sessions_gonogo || 0) + (user.sessions_stroop || 0),
+            streak: user.streak || 0,
+            personalBests: {
+                sequence: user.best_sequence || 0,
+                startrail: user.best_startrail || 0,
+                kwikstar: user.best_kwikstar || 0,
+                gonogo: user.best_gonogo || 0,
+                stroop: user.best_stroop || 0
+            }
+        }
+    });
+});
+
 // ============ ADMIN ROUTES ============
 
 // New admin dashboard
@@ -184,6 +512,7 @@ app.post('/api/admin/licenses', adminAuth, function(req, res) {
     var contactName = req.body.contactName;
     var email = req.body.email;
     var phone = req.body.phone;
+    var location = req.body.location;
     
     if (!facilityName || !expirationDate || !userPool) {
         return res.status(400).json({ error: 'Missing required fields' });
@@ -198,6 +527,9 @@ app.post('/api/admin/licenses', adminAuth, function(req, res) {
         createdAt: new Date().toISOString(),
         active: true
     };
+    
+    // Add optional fields
+    if (location) newLicense.location = location;
     
     // Add trial-specific fields if it's a trial
     if (isTrial) {
