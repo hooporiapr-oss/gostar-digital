@@ -799,8 +799,53 @@
         document.getElementById('userAvatar').textContent = userName.charAt(0).toUpperCase();
         document.getElementById('welcomeName').textContent = userName;
 
-        // Load stats from localStorage
+        var userCode = sessionStorage.getItem('gostar-user-code') || '';
+
+        // Load stats from API (with localStorage fallback)
         function loadStats() {
+            if (userCode && userName) {
+                fetch('/api/game/stats/' + encodeURIComponent(userCode) + '/' + encodeURIComponent(userName))
+                    .then(function(r) { return r.json(); })
+                    .then(function(data) {
+                        if (data.success && data.stats) {
+                            var s = data.stats;
+                            var totalSessions = s.totalSessions || 0;
+                            
+                            document.getElementById('statGamesPlayed').textContent = totalSessions;
+                            document.getElementById('statTotalTime').textContent = (totalSessions * 3) + 'm'; // ~3 min per game
+                            document.getElementById('statPersonalBests').textContent = Object.values(s.personalBests || {}).filter(function(v) { return v > 0; }).length;
+                            document.getElementById('statTotalStars').textContent = Math.floor(totalSessions * 2.5); // Avg stars
+                            document.getElementById('streakCount').textContent = s.streak || 0;
+                            
+                            // Personal bests per game
+                            var pbs = s.personalBests || {};
+                            document.getElementById('pb-sequence').textContent = pbs.sequence || '--';
+                            document.getElementById('pb-startrail').textContent = pbs.startrail || '--';
+                            document.getElementById('pb-kwikstar').textContent = pbs.kwikstar || '--';
+                            document.getElementById('pb-gonogo').textContent = pbs.gonogo || '--';
+                            document.getElementById('pb-stroop').textContent = pbs.stroop || '--';
+                            
+                            // Store in localStorage for offline access
+                            localStorage.setItem('gostar-user-stats', JSON.stringify({
+                                gamesPlayed: totalSessions,
+                                totalMinutes: totalSessions * 3,
+                                personalBests: Object.values(pbs).filter(function(v) { return v > 0; }).length,
+                                totalStars: Math.floor(totalSessions * 2.5),
+                                streak: s.streak || 0
+                            }));
+                            localStorage.setItem('gostar-personal-bests', JSON.stringify(pbs));
+                        }
+                    })
+                    .catch(function(err) {
+                        console.log('API unavailable, using localStorage:', err);
+                        loadStatsFromLocal();
+                    });
+            } else {
+                loadStatsFromLocal();
+            }
+        }
+        
+        function loadStatsFromLocal() {
             var stats = JSON.parse(localStorage.getItem('gostar-user-stats') || '{}');
             document.getElementById('statGamesPlayed').textContent = stats.gamesPlayed || 0;
             document.getElementById('statTotalTime').textContent = (stats.totalMinutes || 0) + 'm';
@@ -839,6 +884,42 @@
 
         loadStats();
         renderStreakDays();
+        
+        // Global function to record game session (called from game pages)
+        window.recordGameSession = function(game, score) {
+            var accessCode = sessionStorage.getItem('gostar-user-code');
+            var username = sessionStorage.getItem('gostar-user-name');
+            
+            if (!accessCode || !username) {
+                console.log('No user session, skipping API call');
+                return Promise.resolve({ success: false });
+            }
+            
+            return fetch('/api/game/session', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    accessCode: accessCode,
+                    username: username,
+                    game: game,
+                    score: score
+                })
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                if (data.success) {
+                    console.log('Session recorded:', game, 'Sessions:', data.sessions, 'Streak:', data.streak);
+                    // Refresh stats
+                    loadStats();
+                    renderStreakDays();
+                }
+                return data;
+            })
+            .catch(function(err) {
+                console.log('Failed to record session:', err);
+                return { success: false };
+            });
+        };
     </script>
 
 </body>
