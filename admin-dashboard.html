@@ -1196,6 +1196,10 @@ tr:hover td {
                                     <span class="lang-en">Expires</span>
                                     <span class="lang-es">Expira</span>
                                 </th>
+                                <th>
+                                    <span class="lang-en">Actions</span>
+                                    <span class="lang-es">Acciones</span>
+                                </th>
                             </tr>
                         </thead>
                         <tbody id="facilities-table-body">
@@ -1317,6 +1321,10 @@ tr:hover td {
                                 <th>
                                     <span class="lang-en">Status</span>
                                     <span class="lang-es">Estado</span>
+                                </th>
+                                <th>
+                                    <span class="lang-en">Actions</span>
+                                    <span class="lang-es">Acciones</span>
                                 </th>
                             </tr>
                         </thead>
@@ -1942,7 +1950,7 @@ function renderOverviewTable() {
     var tbody = document.getElementById('facilities-table-body');
     tbody.innerHTML = '';
     
-    facilities.slice(0, 5).forEach(function(f) {
+    facilities.slice(0, 5).forEach(function(f, index) {
         var statusClass = f.daysLeft <= 2 ? 'expiring' : 'active';
         var userPercent = (f.users / f.maxUsers) * 100;
         var progressClass = userPercent >= 90 ? 'danger' : userPercent >= 70 ? 'warning' : 'good';
@@ -1967,6 +1975,12 @@ function renderOverviewTable() {
                     </span>
                 </td>
                 <td>${f.expiresAt}</td>
+                <td>
+                    <div class="table-actions">
+                        <button class="action-btn" onclick="editFacility(${index})">${currentLang === 'es' ? 'Editar' : 'Edit'}</button>
+                        <button class="action-btn danger" onclick="deleteFacility(${index})">${currentLang === 'es' ? 'Eliminar' : 'Delete'}</button>
+                    </div>
+                </td>
             </tr>
         `;
     });
@@ -1976,7 +1990,7 @@ function renderFacilitiesTable() {
     var tbody = document.getElementById('all-facilities-table-body');
     tbody.innerHTML = '';
     
-    facilities.forEach(function(f) {
+    facilities.forEach(function(f, index) {
         var statusClass = f.status === 'expired' ? 'expired' : f.daysLeft <= 2 ? 'expiring' : 'active';
         var statusText = f.status === 'expired' ? (currentLang === 'es' ? 'Expirado' : 'Expired') :
                         f.daysLeft <= 2 ? (currentLang === 'es' ? 'Por vencer' : 'Expiring') : 
@@ -2006,8 +2020,8 @@ function renderFacilitiesTable() {
                 <td>${f.daysLeft} ${currentLang === 'es' ? 'días' : 'days'}</td>
                 <td>
                     <div class="table-actions">
-                        <button class="action-btn">${currentLang === 'es' ? 'Editar' : 'Edit'}</button>
-                        <button class="action-btn danger">${currentLang === 'es' ? 'Eliminar' : 'Delete'}</button>
+                        <button class="action-btn" onclick="editFacility(${index})">${currentLang === 'es' ? 'Editar' : 'Edit'}</button>
+                        <button class="action-btn danger" onclick="deleteFacility(${index})">${currentLang === 'es' ? 'Eliminar' : 'Delete'}</button>
                     </div>
                 </td>
             </tr>
@@ -2019,7 +2033,7 @@ function renderLicensesTable() {
     var tbody = document.getElementById('licenses-table-body');
     tbody.innerHTML = '';
     
-    licenses.forEach(function(l) {
+    licenses.forEach(function(l, index) {
         var statusClass = l.status;
         var statusText = l.status === 'expired' ? (currentLang === 'es' ? 'Expirado' : 'Expired') :
                         l.status === 'pending' ? (currentLang === 'es' ? 'Pendiente' : 'Pending') :
@@ -2037,6 +2051,12 @@ function renderLicensesTable() {
                         <span class="status-dot"></span>
                         ${statusText}
                     </span>
+                </td>
+                <td>
+                    <div class="table-actions">
+                        <button class="action-btn" onclick="editLicense(${index})">${currentLang === 'es' ? 'Editar' : 'Edit'}</button>
+                        <button class="action-btn danger" onclick="deleteLicense(${index})">${currentLang === 'es' ? 'Eliminar' : 'Delete'}</button>
+                    </div>
                 </td>
             </tr>
         `;
@@ -2064,6 +2084,92 @@ function updateStats() {
     document.getElementById('stat-facilities').textContent = facilities.filter(f => f.status === 'active').length;
     document.getElementById('stat-users').textContent = facilities.reduce((sum, f) => sum + f.users, 0);
     document.getElementById('stat-licenses').textContent = licenses.filter(l => l.status === 'active').length;
+}
+
+// Edit Facility
+function editFacility(index) {
+    var f = facilities[index];
+    var newName = prompt(currentLang === 'es' ? 'Nombre de la instalación:' : 'Facility name:', f.name);
+    if (newName !== null && newName.trim() !== '') {
+        var newLocation = prompt(currentLang === 'es' ? 'Ubicación:' : 'Location:', f.location);
+        facilities[index].name = newName.trim();
+        facilities[index].location = newLocation ? newLocation.trim() : f.location;
+        renderOverviewTable();
+        renderFacilitiesTable();
+        alert(currentLang === 'es' ? '✅ Instalación actualizada' : '✅ Facility updated');
+    }
+}
+
+// Delete Facility
+function deleteFacility(index) {
+    var f = facilities[index];
+    var confirmMsg = currentLang === 'es' 
+        ? '¿Eliminar "' + f.name + '"? Esta acción no se puede deshacer.'
+        : 'Delete "' + f.name + '"? This cannot be undone.';
+    
+    if (confirm(confirmMsg)) {
+        // Also remove associated license
+        var licenseIndex = licenses.findIndex(l => l.key === f.licenseKey);
+        if (licenseIndex > -1) {
+            licenses.splice(licenseIndex, 1);
+        }
+        facilities.splice(index, 1);
+        renderOverviewTable();
+        renderFacilitiesTable();
+        renderLicensesTable();
+        updateStats();
+        alert(currentLang === 'es' ? '✅ Instalación eliminada' : '✅ Facility deleted');
+    }
+}
+
+// Edit License
+function editLicense(index) {
+    var l = licenses[index];
+    var newFacility = prompt(currentLang === 'es' ? 'Nombre de instalación:' : 'Facility name:', l.facility);
+    if (newFacility !== null && newFacility.trim() !== '') {
+        var newExpiry = prompt(currentLang === 'es' ? 'Fecha de expiración (YYYY-MM-DD):' : 'Expiry date (YYYY-MM-DD):', l.expiresAt);
+        licenses[index].facility = newFacility.trim();
+        if (newExpiry && /^\d{4}-\d{2}-\d{2}$/.test(newExpiry)) {
+            licenses[index].expiresAt = newExpiry;
+        }
+        // Update matching facility
+        var facilityIndex = facilities.findIndex(f => f.licenseKey === l.key);
+        if (facilityIndex > -1) {
+            facilities[facilityIndex].name = newFacility.trim();
+            if (newExpiry && /^\d{4}-\d{2}-\d{2}$/.test(newExpiry)) {
+                facilities[facilityIndex].expiresAt = newExpiry;
+                var today = new Date();
+                var expiry = new Date(newExpiry);
+                facilities[facilityIndex].daysLeft = Math.max(0, Math.ceil((expiry - today) / (1000 * 60 * 60 * 24)));
+            }
+        }
+        renderOverviewTable();
+        renderFacilitiesTable();
+        renderLicensesTable();
+        alert(currentLang === 'es' ? '✅ Licencia actualizada' : '✅ License updated');
+    }
+}
+
+// Delete License
+function deleteLicense(index) {
+    var l = licenses[index];
+    var confirmMsg = currentLang === 'es' 
+        ? '¿Eliminar licencia "' + l.key + '"? Esto también eliminará la instalación asociada.'
+        : 'Delete license "' + l.key + '"? This will also delete the associated facility.';
+    
+    if (confirm(confirmMsg)) {
+        // Also remove associated facility
+        var facilityIndex = facilities.findIndex(f => f.licenseKey === l.key);
+        if (facilityIndex > -1) {
+            facilities.splice(facilityIndex, 1);
+        }
+        licenses.splice(index, 1);
+        renderOverviewTable();
+        renderFacilitiesTable();
+        renderLicensesTable();
+        updateStats();
+        alert(currentLang === 'es' ? '✅ Licencia eliminada' : '✅ License deleted');
+    }
 }
 
 // Initialize
