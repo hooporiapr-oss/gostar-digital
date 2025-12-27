@@ -1376,6 +1376,10 @@ tr:hover td {
                                     <span class="lang-en">Last Active</span>
                                     <span class="lang-es">Última Actividad</span>
                                 </th>
+                                <th>
+                                    <span class="lang-en">Actions</span>
+                                    <span class="lang-es">Acciones</span>
+                                </th>
                             </tr>
                         </thead>
                         <tbody id="users-table-body">
@@ -2067,7 +2071,7 @@ function renderUsersTable() {
     var tbody = document.getElementById('users-table-body');
     tbody.innerHTML = '';
     
-    users.forEach(function(u) {
+    users.forEach(function(u, index) {
         tbody.innerHTML += `
             <tr>
                 <td><strong>${u.name}</strong></td>
@@ -2075,6 +2079,12 @@ function renderUsersTable() {
                 <td>${u.sessions}</td>
                 <td>🔥 ${u.streak} ${currentLang === 'es' ? 'días' : 'days'}</td>
                 <td>${u.lastActive}</td>
+                <td>
+                    <div class="table-actions">
+                        <button class="action-btn" onclick="editUser(${index})">${currentLang === 'es' ? 'Editar' : 'Edit'}</button>
+                        <button class="action-btn danger" onclick="deleteUser(${index})">${currentLang === 'es' ? 'Eliminar' : 'Delete'}</button>
+                    </div>
+                </td>
             </tr>
         `;
     });
@@ -2169,6 +2179,41 @@ function deleteLicense(index) {
         renderLicensesTable();
         updateStats();
         alert(currentLang === 'es' ? '✅ Licencia eliminada' : '✅ License deleted');
+    }
+}
+
+// Edit User
+function editUser(index) {
+    var u = users[index];
+    var newName = prompt(currentLang === 'es' ? 'Nombre del usuario:' : 'User name:', u.name);
+    if (newName !== null && newName.trim() !== '') {
+        var newFacility = prompt(currentLang === 'es' ? 'Instalación:' : 'Facility:', u.facility);
+        users[index].name = newName.trim();
+        users[index].facility = newFacility ? newFacility.trim() : u.facility;
+        renderUsersTable();
+        alert(currentLang === 'es' ? '✅ Usuario actualizado' : '✅ User updated');
+    }
+}
+
+// Delete User
+function deleteUser(index) {
+    var u = users[index];
+    var confirmMsg = currentLang === 'es' 
+        ? '¿Eliminar usuario "' + u.name + '"? Esta acción no se puede deshacer.'
+        : 'Delete user "' + u.name + '"? This cannot be undone.';
+    
+    if (confirm(confirmMsg)) {
+        // Decrease user count in associated facility
+        var facilityIndex = facilities.findIndex(f => f.name === u.facility);
+        if (facilityIndex > -1 && facilities[facilityIndex].users > 0) {
+            facilities[facilityIndex].users--;
+        }
+        users.splice(index, 1);
+        renderUsersTable();
+        renderOverviewTable();
+        renderFacilitiesTable();
+        updateStats();
+        alert(currentLang === 'es' ? '✅ Usuario eliminado' : '✅ User deleted');
     }
 }
 
