@@ -308,11 +308,11 @@
             font-size: 1.4rem;
         }
 
-        /* Master Challenge Card */
+        /* Pattern Challenges Card - Hero */
         .challenge-card {
             display: block;
-            background: linear-gradient(135deg, rgba(255, 217, 61, 0.1) 0%, rgba(255, 159, 28, 0.1) 100%);
-            border: 2px solid rgba(255, 217, 61, 0.3);
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, rgba(0, 217, 165, 0.1) 100%);
+            border: 2px solid rgba(168, 85, 247, 0.4);
             border-radius: 20px;
             padding: 30px;
             text-decoration: none;
@@ -325,8 +325,8 @@
 
         .challenge-card:hover {
             transform: translateY(-4px);
-            border-color: var(--accent-gold);
-            box-shadow: 0 15px 40px rgba(255, 217, 61, 0.2);
+            border-color: var(--accent-purple);
+            box-shadow: 0 15px 40px rgba(168, 85, 247, 0.25);
         }
 
         .challenge-card::before {
@@ -336,7 +336,7 @@
             right: 0;
             width: 200px;
             height: 200px;
-            background: radial-gradient(circle, rgba(255, 217, 61, 0.1) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, transparent 70%);
             pointer-events: none;
         }
 
@@ -349,13 +349,13 @@
 
         .challenge-icon {
             font-size: 4rem;
-            filter: drop-shadow(0 0 20px rgba(255, 217, 61, 0.5));
+            filter: drop-shadow(0 0 20px rgba(168, 85, 247, 0.5));
         }
 
         .challenge-info h2 {
             font-size: 1.8rem;
             font-weight: 900;
-            background: var(--gradient-gold);
+            background: linear-gradient(135deg, #A855F7 0%, #00D9A5 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -372,6 +372,7 @@
             gap: 12px;
             margin-bottom: 20px;
             flex-wrap: wrap;
+            align-items: center;
         }
 
         .challenge-game-icon {
@@ -386,12 +387,20 @@
             border: 1px solid var(--border-color);
         }
 
+        .challenge-game-icon.pattern-arrow {
+            background: transparent;
+            border: none;
+            color: var(--accent-purple);
+            font-size: 1.8rem;
+            width: auto;
+        }
+
         .challenge-btn {
             display: inline-flex;
             align-items: center;
             gap: 10px;
             padding: 14px 32px;
-            background: var(--gradient-gold);
+            background: linear-gradient(135deg, #A855F7 0%, #00D9A5 100%);
             color: var(--bg-primary);
             font-size: 1.1rem;
             font-weight: 800;
@@ -403,47 +412,6 @@
 
         .challenge-btn:hover {
             transform: scale(1.05);
-            box-shadow: 0 8px 25px rgba(255, 217, 61, 0.4);
-        }
-
-        /* Pattern Challenge Card - Purple/Teal Theme */
-        .challenge-card.pattern-challenge {
-            background: linear-gradient(135deg, rgba(168, 85, 247, 0.1) 0%, rgba(0, 217, 165, 0.1) 100%);
-            border-color: rgba(168, 85, 247, 0.3);
-        }
-
-        .challenge-card.pattern-challenge:hover {
-            border-color: var(--accent-purple);
-            box-shadow: 0 15px 40px rgba(168, 85, 247, 0.2);
-        }
-
-        .challenge-card.pattern-challenge::before {
-            background: radial-gradient(circle, rgba(168, 85, 247, 0.1) 0%, transparent 70%);
-        }
-
-        .challenge-card.pattern-challenge .challenge-icon {
-            filter: drop-shadow(0 0 20px rgba(168, 85, 247, 0.5));
-        }
-
-        .challenge-card.pattern-challenge .challenge-info h2 {
-            background: linear-gradient(135deg, #A855F7 0%, #00D9A5 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .challenge-card.pattern-challenge .challenge-game-icon.pattern-arrow {
-            background: transparent;
-            border: none;
-            color: var(--accent-purple);
-            font-size: 1.8rem;
-        }
-
-        .challenge-btn.pattern-btn {
-            background: linear-gradient(135deg, #A855F7 0%, #00D9A5 100%);
-        }
-
-        .challenge-btn.pattern-btn:hover {
             box-shadow: 0 8px 25px rgba(168, 85, 247, 0.4);
         }
 
@@ -718,37 +686,8 @@
             </div>
         </div>
 
-        <!-- Master Challenge -->
-        <a href="master-challenge.html" class="challenge-card">
-            <div class="challenge-header">
-                <div class="challenge-icon">🏆</div>
-                <div class="challenge-info">
-                    <h2>
-                        <span class="lang-en">MASTER CHALLENGE</span>
-                        <span class="lang-es">DESAFÍO MAESTRO</span>
-                    </h2>
-                    <p>
-                        <span class="lang-en">The Ultimate Test - All 5 Games Combined!</span>
-                        <span class="lang-es">¡La Prueba Definitiva - Los 5 Juegos Combinados!</span>
-                    </p>
-                </div>
-            </div>
-            <div class="challenge-games">
-                <div class="challenge-game-icon">⭐</div>
-                <div class="challenge-game-icon">🛤️</div>
-                <div class="challenge-game-icon">⚡</div>
-                <div class="challenge-game-icon">🛑</div>
-                <div class="challenge-game-icon">🔀</div>
-            </div>
-            <button class="challenge-btn">
-                <span>🚀</span>
-                <span class="lang-en">START CHALLENGE</span>
-                <span class="lang-es">INICIAR DESAFÍO</span>
-            </button>
-        </a>
-
-        <!-- Pattern Challenge -->
-        <a href="pattern-challenges.html" class="challenge-card pattern-challenge">
+        <!-- Pattern Challenges - Hero -->
+        <a href="pattern-challenges.html" class="challenge-card">
             <div class="challenge-header">
                 <div class="challenge-icon">🧠</div>
                 <div class="challenge-info">
@@ -757,8 +696,8 @@
                         <span class="lang-es">DESAFÍOS DE PATRONES</span>
                     </h2>
                     <p>
-                        <span class="lang-en">Memory Duo - Pattern Recognition Training!</span>
-                        <span class="lang-es">Dúo de Memoria - ¡Entrenamiento de Reconocimiento!</span>
+                        <span class="lang-en">Rhythm-Based Cognitive Training - Memory Duo!</span>
+                        <span class="lang-es">Entrenamiento Cognitivo Rítmico - ¡Dúo de Memoria!</span>
                     </p>
                 </div>
             </div>
@@ -767,20 +706,20 @@
                 <div class="challenge-game-icon pattern-arrow">→</div>
                 <div class="challenge-game-icon">🛤️</div>
             </div>
-            <button class="challenge-btn pattern-btn">
-                <span>🧩</span>
-                <span class="lang-en">START CHALLENGES</span>
-                <span class="lang-es">INICIAR DESAFÍOS</span>
+            <button class="challenge-btn">
+                <span>🎵</span>
+                <span class="lang-en">START TRAINING</span>
+                <span class="lang-es">INICIAR ENTRENAMIENTO</span>
             </button>
         </a>
 
-        <!-- Training Games -->
+        <!-- Individual Practice -->
         <section class="section">
             <div class="section-header">
                 <h2 class="section-title">
                     <span class="section-title-icon">🎯</span>
-                    <span class="lang-en">Training Games</span>
-                    <span class="lang-es">Juegos de Entrenamiento</span>
+                    <span class="lang-en">Individual Practice</span>
+                    <span class="lang-es">Práctica Individual</span>
                 </h2>
             </div>
 
@@ -825,81 +764,6 @@
                                 <span class="lang-en">Best:</span>
                                 <span class="lang-es">Récord:</span>
                                 <span class="game-stat-value" id="pb-startrail">--</span>
-                            </div>
-                        </div>
-                        <button class="play-btn">
-                            <span>▶</span>
-                            <span class="lang-en">Play Now</span>
-                            <span class="lang-es">Jugar</span>
-                        </button>
-                    </div>
-                </a>
-
-                <!-- KwikStar -->
-                <a href="kwikstar.html" class="game-card">
-                    <div class="game-banner">⚡</div>
-                    <div class="game-content">
-                        <h3 class="game-title">KwikStar</h3>
-                        <p class="game-description">
-                            <span class="lang-en">Tap fast when stars appear. Sharpen your processing speed!</span>
-                            <span class="lang-es">Toca rápido cuando aparezcan estrellas. ¡Mejora tu velocidad de procesamiento!</span>
-                        </p>
-                        <div class="game-stats">
-                            <div class="game-stat">
-                                <span class="game-stat-icon">🏆</span>
-                                <span class="lang-en">Best:</span>
-                                <span class="lang-es">Récord:</span>
-                                <span class="game-stat-value" id="pb-kwikstar">--</span>
-                            </div>
-                        </div>
-                        <button class="play-btn">
-                            <span>▶</span>
-                            <span class="lang-en">Play Now</span>
-                            <span class="lang-es">Jugar</span>
-                        </button>
-                    </div>
-                </a>
-
-                <!-- Go-No-GoStar -->
-                <a href="go-no-gostar.html" class="game-card">
-                    <div class="game-banner">🛑</div>
-                    <div class="game-content">
-                        <h3 class="game-title">Go-No-GoStar</h3>
-                        <p class="game-description">
-                            <span class="lang-en">Tap gold stars, avoid gray ones. Train your inhibition control!</span>
-                            <span class="lang-es">Toca estrellas doradas, evita las grises. ¡Entrena tu control de inhibición!</span>
-                        </p>
-                        <div class="game-stats">
-                            <div class="game-stat">
-                                <span class="game-stat-icon">🏆</span>
-                                <span class="lang-en">Best:</span>
-                                <span class="lang-es">Récord:</span>
-                                <span class="game-stat-value" id="pb-gonogo">--</span>
-                            </div>
-                        </div>
-                        <button class="play-btn">
-                            <span>▶</span>
-                            <span class="lang-en">Play Now</span>
-                            <span class="lang-es">Jugar</span>
-                        </button>
-                    </div>
-                </a>
-
-                <!-- StarStroop -->
-                <a href="starstroop.html" class="game-card">
-                    <div class="game-banner">🔀</div>
-                    <div class="game-content">
-                        <h3 class="game-title">StarStroop</h3>
-                        <p class="game-description">
-                            <span class="lang-en">Match the star's color, ignore the word. Challenge your selective attention!</span>
-                            <span class="lang-es">Empareja el color de la estrella, ignora la palabra. ¡Desafía tu atención selectiva!</span>
-                        </p>
-                        <div class="game-stats">
-                            <div class="game-stat">
-                                <span class="game-stat-icon">🏆</span>
-                                <span class="lang-en">Best:</span>
-                                <span class="lang-es">Récord:</span>
-                                <span class="game-stat-value" id="pb-stroop">--</span>
                             </div>
                         </div>
                         <button class="play-btn">
@@ -997,9 +861,6 @@
                             var pbs = s.personalBests || {};
                             document.getElementById('pb-sequence').textContent = pbs.sequence || '--';
                             document.getElementById('pb-startrail').textContent = pbs.startrail || '--';
-                            document.getElementById('pb-kwikstar').textContent = pbs.kwikstar || '--';
-                            document.getElementById('pb-gonogo').textContent = pbs.gonogo || '--';
-                            document.getElementById('pb-stroop').textContent = pbs.stroop || '--';
                             
                             // Store in localStorage for offline access
                             localStorage.setItem('gostar-user-stats', JSON.stringify({
@@ -1033,9 +894,6 @@
             var pbs = JSON.parse(localStorage.getItem('gostar-personal-bests') || '{}');
             document.getElementById('pb-sequence').textContent = pbs.sequence || '--';
             document.getElementById('pb-startrail').textContent = pbs.startrail || '--';
-            document.getElementById('pb-kwikstar').textContent = pbs.kwikstar || '--';
-            document.getElementById('pb-gonogo').textContent = pbs.gonogo || '--';
-            document.getElementById('pb-stroop').textContent = pbs.stroop || '--';
         }
 
         // Render streak days
