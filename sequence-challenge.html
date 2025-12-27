@@ -1326,43 +1326,74 @@ function startTrailGame() {
     var area = document.getElementById('gameArea');
     area.innerHTML = '<div class="trail-area" id="trailArea"><canvas class="trail-canvas" id="trailCanvas"></canvas></div>';
     
+    // Reset all trail state
+    starNodes = [];
+    trailSequence = [];
+    trailPlayerIndex = 0;
+    completedStars = [];
+    trailShowingSequence = false;
+    
     gameActive = true;
-    trailNewRound();
+    
+    // Small delay to ensure DOM is ready
+    setTimeout(trailNewRound, 100);
 }
 
 function trailNewRound() {
     if (!gameActive) return;
+    
+    // FIRST: Clear completed stars and trail BEFORE anything else
+    completedStars = [];
+    trailPlayerIndex = 0;
+    trailShowingSequence = false;
+    
+    // Clear the canvas immediately
+    var canvas = document.getElementById('trailCanvas');
+    if (canvas) {
+        var ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
     
     setInstruction(currentLang === 'es' ? 'Observa las estrellas...' : 'Watch the stars...');
     
     var config = tierConfig[selectedTier];
     var numStars = config.seqStart + 2 + Math.floor((currentRound - 1) / 2);
     if (numStars > 8) numStars = 8;
+    if (numStars < 4) numStars = 4;
     
     // Generate star positions
     generateStarPositions(numStars);
+    
+    // NOW render (completedStars is already empty)
     renderStars();
     
-    // Generate sequence
+    // Generate sequence - ensure we have valid indices
     trailSequence = [];
     var available = [];
     for (var i = 0; i < numStars; i++) available.push(i);
     
     var seqLen = Math.min(numStars, config.seqStart + Math.floor(currentRound / 2));
+    if (seqLen < 2) seqLen = 2;
+    
     for (var i = 0; i < seqLen; i++) {
+        if (available.length === 0) break;
         var idx = Math.floor(Math.random() * available.length);
         trailSequence.push(available[idx]);
         available.splice(idx, 1);
     }
     
-    trailPlayerIndex = 0;
-    completedStars = [];
+    // Safety check - must have at least 2 items in sequence
+    if (trailSequence.length < 2) {
+        console.error('Invalid sequence generated');
+        trailSequence = [0, 1];
+    }
+    
     trailShowingSequence = true;
     
     // Disable stars during sequence
     disableStars(true);
     
-    setTimeout(showTrailSequence, 500);
+    setTimeout(showTrailSequence, 600);
 }
 
 function generateStarPositions(numStars) {
@@ -1403,12 +1434,13 @@ function generateStarPositions(numStars) {
 
 function renderStars() {
     var area = document.getElementById('trailArea');
+    if (!area) return;
     
     // Remove old stars
     var oldStars = area.querySelectorAll('.star-node');
     oldStars.forEach(function(s) { s.remove(); });
     
-    // Create new stars
+    // Create new stars (fresh - no completed state on new round)
     for (var i = 0; i < starNodes.length; i++) {
         var star = document.createElement('div');
         star.className = 'star-node ' + starColors[starNodes[i].colorIndex];
@@ -1416,10 +1448,6 @@ function renderStars() {
         star.style.left = starNodes[i].x + 'px';
         star.style.top = starNodes[i].y + 'px';
         star.innerHTML = starSVG;
-        
-        if (completedStars.indexOf(i) !== -1) {
-            star.classList.add('completed');
-        }
         
         (function(idx) {
             star.addEventListener('click', function() {
@@ -1430,18 +1458,34 @@ function renderStars() {
         area.appendChild(star);
     }
     
-    drawTrailLines();
+    // Clear trail lines (fresh round = no trail)
+    clearTrailLines();
+}
+
+function clearTrailLines() {
+    var canvas = document.getElementById('trailCanvas');
+    var area = document.getElementById('trailArea');
+    if (!canvas || !area) return;
+    
+    canvas.width = area.offsetWidth;
+    canvas.height = area.offsetHeight;
+    
+    var ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
 function drawTrailLines() {
     var canvas = document.getElementById('trailCanvas');
     var area = document.getElementById('trailArea');
+    if (!canvas || !area) return;
+    
     canvas.width = area.offsetWidth;
     canvas.height = area.offsetHeight;
     
     var ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
+    // Need at least 2 completed stars to draw a line
     if (completedStars.length < 2) return;
     
     ctx.strokeStyle = '#00D9A5';
@@ -1456,6 +1500,8 @@ function drawTrailLines() {
         var starIdx = completedStars[i];
         var node = starNodes[starIdx];
         
+        if (!node) continue;
+        
         if (i === 0) {
             ctx.moveTo(node.x, node.y);
         } else {
@@ -1467,24 +1513,31 @@ function drawTrailLines() {
 }
 
 function showTrailSequence() {
+    if (!gameActive || trailSequence.length === 0) {
+        trailShowingSequence = false;
+        disableStars(false);
+        return;
+    }
+    
     var rhythm = rhythmConfig[selectedRhythm];
     var speed = rhythm.noteLength * tierConfig[selectedTier].speedMod;
-    var pause = rhythm.pauseAfter * tierConfig[selectedTier].speedMod;
     var i = 0;
     
     function showNext() {
+        if (!gameActive) return;
+        
         // Remove previous lit state
-        if (i > 0) {
+        if (i > 0 && i <= trailSequence.length) {
             var prevIdx = trailSequence[i-1];
-            var prevStar = document.querySelector('[data-index="' + prevIdx + '"]');
+            var prevStar = document.querySelector('.star-node[data-index="' + prevIdx + '"]');
             if (prevStar) prevStar.classList.remove('lit');
         }
         
         if (i < trailSequence.length) {
             var starIdx = trailSequence[i];
-            var starEl = document.querySelector('[data-index="' + starIdx + '"]');
+            var starEl = document.querySelector('.star-node[data-index="' + starIdx + '"]');
             
-            if (starEl) {
+            if (starEl && starNodes[starIdx]) {
                 starEl.classList.add('lit');
                 playStarSound(starNodes[starIdx].colorIndex);
             }
@@ -1492,11 +1545,14 @@ function showTrailSequence() {
             i++;
             setTimeout(showNext, speed);
         } else {
+            // Sequence complete - enable player input
             setTimeout(function() {
                 // Remove last lit state
-                var lastIdx = trailSequence[trailSequence.length - 1];
-                var lastStar = document.querySelector('[data-index="' + lastIdx + '"]');
-                if (lastStar) lastStar.classList.remove('lit');
+                if (trailSequence.length > 0) {
+                    var lastIdx = trailSequence[trailSequence.length - 1];
+                    var lastStar = document.querySelector('.star-node[data-index="' + lastIdx + '"]');
+                    if (lastStar) lastStar.classList.remove('lit');
+                }
                 
                 trailShowingSequence = false;
                 setInstruction(currentLang === 'es' ? '¡Tu turno! Conecta las estrellas' : 'Your turn! Connect the stars');
@@ -1510,15 +1566,23 @@ function showTrailSequence() {
 
 function handleStarClick(index) {
     if (trailShowingSequence || !gameActive) return;
+    if (trailSequence.length === 0) return;
     
-    var starEl = document.querySelector('[data-index="' + index + '"]');
+    var starEl = document.querySelector('.star-node[data-index="' + index + '"]');
+    if (!starEl) return;
+    
     var expectedIdx = trailSequence[trailPlayerIndex];
     
     if (index === expectedIdx) {
         // Correct!
         completedStars.push(index);
         starEl.classList.add('completed');
-        playStarSound(starNodes[index].colorIndex);
+        
+        if (starNodes[index]) {
+            playStarSound(starNodes[index].colorIndex);
+        }
+        
+        // Draw trail line to this star
         drawTrailLines();
         
         trailPlayerIndex++;
