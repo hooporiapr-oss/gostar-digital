@@ -406,6 +406,47 @@
             box-shadow: 0 8px 25px rgba(255, 217, 61, 0.4);
         }
 
+        /* Pattern Challenge Card - Purple/Teal Theme */
+        .challenge-card.pattern-challenge {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.1) 0%, rgba(0, 217, 165, 0.1) 100%);
+            border-color: rgba(168, 85, 247, 0.3);
+        }
+
+        .challenge-card.pattern-challenge:hover {
+            border-color: var(--accent-purple);
+            box-shadow: 0 15px 40px rgba(168, 85, 247, 0.2);
+        }
+
+        .challenge-card.pattern-challenge::before {
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.1) 0%, transparent 70%);
+        }
+
+        .challenge-card.pattern-challenge .challenge-icon {
+            filter: drop-shadow(0 0 20px rgba(168, 85, 247, 0.5));
+        }
+
+        .challenge-card.pattern-challenge .challenge-info h2 {
+            background: linear-gradient(135deg, #A855F7 0%, #00D9A5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .challenge-card.pattern-challenge .challenge-game-icon.pattern-arrow {
+            background: transparent;
+            border: none;
+            color: var(--accent-purple);
+            font-size: 1.8rem;
+        }
+
+        .challenge-btn.pattern-btn {
+            background: linear-gradient(135deg, #A855F7 0%, #00D9A5 100%);
+        }
+
+        .challenge-btn.pattern-btn:hover {
+            box-shadow: 0 8px 25px rgba(168, 85, 247, 0.4);
+        }
+
         /* Games Grid */
         .games-grid {
             display: grid;
@@ -703,6 +744,33 @@
                 <span>🚀</span>
                 <span class="lang-en">START CHALLENGE</span>
                 <span class="lang-es">INICIAR DESAFÍO</span>
+            </button>
+        </a>
+
+        <!-- Pattern Challenge -->
+        <a href="pattern-challenges.html" class="challenge-card pattern-challenge">
+            <div class="challenge-header">
+                <div class="challenge-icon">🧠</div>
+                <div class="challenge-info">
+                    <h2>
+                        <span class="lang-en">PATTERN CHALLENGES</span>
+                        <span class="lang-es">DESAFÍOS DE PATRONES</span>
+                    </h2>
+                    <p>
+                        <span class="lang-en">Memory Duo - Pattern Recognition Training!</span>
+                        <span class="lang-es">Dúo de Memoria - ¡Entrenamiento de Reconocimiento!</span>
+                    </p>
+                </div>
+            </div>
+            <div class="challenge-games">
+                <div class="challenge-game-icon">⭐</div>
+                <div class="challenge-game-icon pattern-arrow">→</div>
+                <div class="challenge-game-icon">🛤️</div>
+            </div>
+            <button class="challenge-btn pattern-btn">
+                <span>🧩</span>
+                <span class="lang-en">START CHALLENGES</span>
+                <span class="lang-es">INICIAR DESAFÍOS</span>
             </button>
         </a>
 
