@@ -452,40 +452,67 @@
             position: relative;
         }
         
-        .trail-node {
+        .trail-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .star-node {
             position: absolute;
             width: 50px;
             height: 50px;
-            background: var(--bg-card-light);
-            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
-            font-weight: 800;
             cursor: pointer;
             transition: all 0.2s ease;
-            border: 3px solid transparent;
+            transform: translate(-50%, -50%);
         }
         
-        .trail-node.next {
-            border-color: var(--secondary);
-            animation: pulseNode 1s ease-in-out infinite;
+        .star-node svg {
+            width: 100%;
+            height: 100%;
+            fill: var(--bg-card-light);
+            transition: all 0.2s ease;
         }
         
-        @keyframes pulseNode {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 217, 61, 0.4); }
-            50% { box-shadow: 0 0 0 10px rgba(255, 217, 61, 0); }
+        .star-node.color-0 svg { fill: #FF6B6B; }
+        .star-node.color-1 svg { fill: #4ECDC4; }
+        .star-node.color-2 svg { fill: #00D9A5; }
+        .star-node.color-3 svg { fill: #FFD93D; }
+        .star-node.color-4 svg { fill: #A29BFE; }
+        .star-node.color-5 svg { fill: #FF85A2; }
+        
+        .star-node.lit svg {
+            transform: scale(1.2);
         }
         
-        .trail-node.completed {
-            background: var(--success);
-            border-color: var(--success);
+        .star-node.lit.color-0 svg { filter: drop-shadow(0 0 20px #FF6B6B); }
+        .star-node.lit.color-1 svg { filter: drop-shadow(0 0 20px #4ECDC4); }
+        .star-node.lit.color-2 svg { filter: drop-shadow(0 0 20px #00D9A5); }
+        .star-node.lit.color-3 svg { filter: drop-shadow(0 0 20px #FFD93D); }
+        .star-node.lit.color-4 svg { filter: drop-shadow(0 0 20px #A29BFE); }
+        .star-node.lit.color-5 svg { filter: drop-shadow(0 0 20px #FF85A2); }
+        
+        .star-node.completed svg {
+            fill: var(--success);
+            filter: drop-shadow(0 0 10px var(--success));
         }
         
-        .trail-node.wrong {
-            background: var(--danger);
-            border-color: var(--danger);
+        .star-node.error svg {
+            fill: var(--danger);
+            filter: drop-shadow(0 0 10px var(--danger));
+            animation: shake 0.3s ease;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translate(-50%, -50%) rotate(0deg); }
+            25% { transform: translate(-50%, -50%) rotate(-10deg); }
+            75% { transform: translate(-50%, -50%) rotate(10deg); }
         }
         
         /* Reaction Game */
@@ -1345,47 +1372,112 @@ function seqTileClick(index) {
 }
 
 // =====================================================
-// GAME 2: MEMORY STARTRAIL
+// GAME 2: MEMORY STARTRAIL (Star Sequence with Trail)
 // =====================================================
-var trailNodes = [];
-var trailNextNode = 1;
-var trailTotalNodes = 0;
+var starSVG = '<svg viewBox="0 0 100 100"><polygon points="50,5 61,40 98,40 68,62 79,97 50,75 21,97 32,62 2,40 39,40"/></svg>';
+var starNodes = [];
+var trailSequence = [];
+var trailPlayerIndex = 0;
+var completedStars = [];
+var trailShowingSequence = false;
+var starColors = ['color-0', 'color-1', 'color-2', 'color-3', 'color-4', 'color-5'];
+var starFreqs = [262, 294, 330, 349, 392, 440];
+
+function playStarSound(colorIndex) {
+    try {
+        var ctx = new (window.AudioContext || window.webkitAudioContext)();
+        var osc = ctx.createOscillator();
+        var gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.frequency.value = starFreqs[colorIndex % starFreqs.length];
+        osc.type = 'sine';
+        gain.gain.setValueAtTime(0.3, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.3);
+    } catch(e) {}
+}
 
 function startTrailGame() {
     var area = document.getElementById('gameArea');
-    area.innerHTML = '<div class="trail-area" id="trailArea"></div>';
+    area.innerHTML = '<div class="trail-area" id="trailArea"><canvas class="trail-canvas" id="trailCanvas"></canvas></div>';
+    
+    starNodes = [];
+    trailSequence = [];
+    trailPlayerIndex = 0;
+    completedStars = [];
+    trailShowingSequence = false;
     
     gameActive = true;
-    trailNewRound();
+    setTimeout(trailNewRound, 100);
 }
 
 function trailNewRound() {
     if (!gameActive) return;
     
-    setInstruction(
-        currentLang === 'es' ? 'Conecta los números en orden: 1, 2, 3...' : 'Connect the numbers in order: 1, 2, 3...'
-    );
+    // Clear state FIRST
+    completedStars = [];
+    trailPlayerIndex = 0;
+    trailShowingSequence = false;
     
-    var trailArea = document.getElementById('trailArea');
-    trailArea.innerHTML = '';
-    trailNodes = [];
-    trailNextNode = 1;
+    // Clear canvas
+    var canvas = document.getElementById('trailCanvas');
+    if (canvas) {
+        var ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
     
-    trailTotalNodes = 4 + currentRound;
-    if (trailTotalNodes > 9) trailTotalNodes = 9;
+    setInstruction(currentLang === 'es' ? 'Observa las estrellas...' : 'Watch the stars...');
     
-    var positions = [];
-    for (var i = 0; i < trailTotalNodes; i++) {
+    var numStars = 5 + Math.floor(currentRound / 2);
+    if (numStars > 8) numStars = 8;
+    
+    generateStarPositions(numStars);
+    renderStars();
+    
+    // Generate sequence
+    trailSequence = [];
+    var available = [];
+    for (var i = 0; i < numStars; i++) available.push(i);
+    
+    var seqLen = 3 + Math.floor(currentRound / 2);
+    if (seqLen > numStars) seqLen = numStars;
+    
+    for (var i = 0; i < seqLen; i++) {
+        if (available.length === 0) break;
+        var idx = Math.floor(Math.random() * available.length);
+        trailSequence.push(available[idx]);
+        available.splice(idx, 1);
+    }
+    
+    trailShowingSequence = true;
+    disableStars(true);
+    
+    setTimeout(showTrailSequence, 600);
+}
+
+function generateStarPositions(numStars) {
+    var area = document.getElementById('trailArea');
+    var width = area.offsetWidth || 300;
+    var height = area.offsetHeight || 300;
+    var padding = 40;
+    
+    starNodes = [];
+    
+    for (var i = 0; i < numStars; i++) {
         var attempts = 0;
         var x, y, valid;
+        
         do {
-            x = 15 + Math.random() * 60;
-            y = 15 + Math.random() * 60;
+            x = padding + Math.random() * (width - padding * 2);
+            y = padding + Math.random() * (height - padding * 2);
             valid = true;
-            for (var j = 0; j < positions.length; j++) {
-                var dx = x - positions[j].x;
-                var dy = y - positions[j].y;
-                if (Math.sqrt(dx*dx + dy*dy) < 20) {
+            
+            for (var j = 0; j < starNodes.length; j++) {
+                var dx = x - starNodes[j].x;
+                var dy = y - starNodes[j].y;
+                if (Math.sqrt(dx*dx + dy*dy) < 60) {
                     valid = false;
                     break;
                 }
@@ -1393,48 +1485,168 @@ function trailNewRound() {
             attempts++;
         } while (!valid && attempts < 50);
         
-        positions.push({x: x, y: y});
+        starNodes.push({ x: x, y: y, colorIndex: i % starColors.length });
     }
-    
-    for (var i = 0; i < trailTotalNodes; i++) {
-        var node = document.createElement('div');
-        node.className = 'trail-node';
-        node.dataset.num = i + 1;
-        node.textContent = i + 1;
-        node.style.left = positions[i].x + '%';
-        node.style.top = positions[i].y + '%';
-        node.onclick = function() { trailNodeClick(parseInt(this.dataset.num)); };
-        trailArea.appendChild(node);
-        trailNodes.push(node);
-    }
-    
-    trailNodes[0].classList.add('next');
 }
 
-function trailNodeClick(num) {
-    if (!gameActive) return;
+function renderStars() {
+    var area = document.getElementById('trailArea');
+    if (!area) return;
     
-    var node = trailNodes[num - 1];
+    var oldStars = area.querySelectorAll('.star-node');
+    oldStars.forEach(function(s) { s.remove(); });
     
-    if (num === trailNextNode) {
-        node.classList.remove('next');
-        node.classList.add('completed');
-        trailNextNode++;
+    for (var i = 0; i < starNodes.length; i++) {
+        var star = document.createElement('div');
+        star.className = 'star-node ' + starColors[starNodes[i].colorIndex];
+        star.dataset.index = i;
+        star.style.left = starNodes[i].x + 'px';
+        star.style.top = starNodes[i].y + 'px';
+        star.innerHTML = starSVG;
         
-        if (trailNextNode <= trailTotalNodes) {
-            trailNodes[trailNextNode - 1].classList.add('next');
+        (function(idx) {
+            star.addEventListener('click', function() {
+                handleStarClick(idx);
+            });
+        })(i);
+        
+        area.appendChild(star);
+    }
+    
+    clearTrailCanvas();
+}
+
+function clearTrailCanvas() {
+    var canvas = document.getElementById('trailCanvas');
+    var area = document.getElementById('trailArea');
+    if (!canvas || !area) return;
+    canvas.width = area.offsetWidth;
+    canvas.height = area.offsetHeight;
+    var ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+function drawTrailLines() {
+    var canvas = document.getElementById('trailCanvas');
+    var area = document.getElementById('trailArea');
+    if (!canvas || !area) return;
+    
+    canvas.width = area.offsetWidth;
+    canvas.height = area.offsetHeight;
+    
+    var ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    if (completedStars.length < 2) return;
+    
+    ctx.strokeStyle = '#00D9A5';
+    ctx.lineWidth = 4;
+    ctx.lineCap = 'round';
+    ctx.shadowColor = '#00D9A5';
+    ctx.shadowBlur = 10;
+    
+    ctx.beginPath();
+    
+    for (var i = 0; i < completedStars.length; i++) {
+        var starIdx = completedStars[i];
+        var node = starNodes[starIdx];
+        if (!node) continue;
+        
+        if (i === 0) {
+            ctx.moveTo(node.x, node.y);
+        } else {
+            ctx.lineTo(node.x, node.y);
+        }
+    }
+    
+    ctx.stroke();
+}
+
+function showTrailSequence() {
+    if (!gameActive || trailSequence.length === 0) {
+        trailShowingSequence = false;
+        disableStars(false);
+        return;
+    }
+    
+    var speed = 500 * tierConfig[selectedTier].speedMod;
+    var i = 0;
+    
+    function showNext() {
+        if (!gameActive) return;
+        
+        if (i > 0 && i <= trailSequence.length) {
+            var prevIdx = trailSequence[i-1];
+            var prevStar = document.querySelector('.star-node[data-index="' + prevIdx + '"]');
+            if (prevStar) prevStar.classList.remove('lit');
         }
         
-        if (trailNextNode > trailTotalNodes) {
-            var points = trailTotalNodes * 15;
+        if (i < trailSequence.length) {
+            var starIdx = trailSequence[i];
+            var starEl = document.querySelector('.star-node[data-index="' + starIdx + '"]');
+            
+            if (starEl && starNodes[starIdx]) {
+                starEl.classList.add('lit');
+                playStarSound(starNodes[starIdx].colorIndex);
+            }
+            
+            i++;
+            setTimeout(showNext, speed);
+        } else {
+            setTimeout(function() {
+                if (trailSequence.length > 0) {
+                    var lastIdx = trailSequence[trailSequence.length - 1];
+                    var lastStar = document.querySelector('.star-node[data-index="' + lastIdx + '"]');
+                    if (lastStar) lastStar.classList.remove('lit');
+                }
+                
+                trailShowingSequence = false;
+                setInstruction(currentLang === 'es' ? '¡Tu turno! Conecta las estrellas' : 'Your turn! Connect the stars');
+                disableStars(false);
+            }, speed);
+        }
+    }
+    
+    showNext();
+}
+
+function handleStarClick(index) {
+    if (trailShowingSequence || !gameActive) return;
+    if (trailSequence.length === 0) return;
+    
+    var starEl = document.querySelector('.star-node[data-index="' + index + '"]');
+    if (!starEl) return;
+    
+    var expectedIdx = trailSequence[trailPlayerIndex];
+    
+    if (index === expectedIdx) {
+        completedStars.push(index);
+        starEl.classList.add('completed');
+        if (starNodes[index]) playStarSound(starNodes[index].colorIndex);
+        drawTrailLines();
+        
+        trailPlayerIndex++;
+        
+        if (trailPlayerIndex >= trailSequence.length) {
+            var points = trailSequence.length * 15;
             addScore(points);
-            nextRound();
+            disableStars(true);
+            setTimeout(nextRound, 1000);
         }
     } else {
-        node.classList.add('wrong');
-        setTimeout(function() { node.classList.remove('wrong'); }, 300);
-        addScore(-5);
+        starEl.classList.add('error');
+        setTimeout(function() { starEl.classList.remove('error'); }, 300);
+        var partial = trailPlayerIndex * 5;
+        if (partial > 0) addScore(partial);
+        setTimeout(nextRound, 800);
     }
+}
+
+function disableStars(disabled) {
+    var stars = document.querySelectorAll('.star-node');
+    stars.forEach(function(s) {
+        s.style.pointerEvents = disabled ? 'none' : 'auto';
+    });
 }
 
 // =====================================================
