@@ -407,42 +407,59 @@
             justify-content: center;
         }
         
-        /* Sequence Memory Game */
+        /* Sequence Memory Game - 4 Colored Star Tiles */
         .sequence-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            padding: 20px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            padding: 15px;
             width: 100%;
             height: 100%;
         }
         
         .seq-tile {
-            background: var(--bg-card-light);
-            border-radius: 15px;
+            border-radius: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2rem;
             cursor: pointer;
-            transition: all 0.2s ease;
-            border: 3px solid transparent;
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
         
-        .seq-tile.lit {
-            background: var(--secondary);
-            border-color: var(--secondary-light);
-            box-shadow: 0 0 30px rgba(255, 217, 61, 0.5);
+        .seq-tile svg {
+            width: 60%;
+            height: 60%;
+            transition: transform 0.1s ease;
         }
         
-        .seq-tile.correct {
-            background: var(--success);
-            border-color: var(--success);
-        }
+        .seq-tile.seq-red { background: linear-gradient(135deg, #cc5555 0%, #aa4444 100%); }
+        .seq-tile.seq-red svg { fill: #993333; }
+        .seq-tile.seq-blue { background: linear-gradient(135deg, #3eb8b0 0%, #2da8a0 100%); }
+        .seq-tile.seq-blue svg { fill: #208880; }
+        .seq-tile.seq-green { background: linear-gradient(135deg, #00b890 0%, #009a78 100%); }
+        .seq-tile.seq-green svg { fill: #007a60; }
+        .seq-tile.seq-yellow { background: linear-gradient(135deg, #e0c030 0%, #c8a828 100%); }
+        .seq-tile.seq-yellow svg { fill: #a88820; }
         
-        .seq-tile.wrong {
-            background: var(--danger);
-            border-color: var(--danger);
+        .seq-tile.lit { transform: scale(1.08); z-index: 10; }
+        .seq-tile.seq-red.lit { background: linear-gradient(135deg, #FF6B6B 0%, #ff5252 100%); box-shadow: 0 0 50px rgba(255, 107, 107, 0.9); }
+        .seq-tile.seq-blue.lit { background: linear-gradient(135deg, #4ECDC4 0%, #3fc4bb 100%); box-shadow: 0 0 50px rgba(78, 205, 196, 0.9); }
+        .seq-tile.seq-green.lit { background: linear-gradient(135deg, #00D9A5 0%, #00c896 100%); box-shadow: 0 0 50px rgba(0, 217, 165, 0.9); }
+        .seq-tile.seq-yellow.lit { background: linear-gradient(135deg, #FFD93D 0%, #ffcc00 100%); box-shadow: 0 0 50px rgba(255, 217, 61, 0.9); }
+        .seq-tile.lit svg { fill: #ffffff; transform: scale(1.1); filter: drop-shadow(0 0 10px rgba(255,255,255,0.8)); }
+        
+        .seq-tile.correct { transform: scale(1.05); }
+        .seq-tile.correct svg { fill: #ffffff !important; }
+        
+        .seq-tile.wrong { animation: seqShake 0.4s ease; background: linear-gradient(135deg, #FF6B6B 0%, #ff5252 100%) !important; }
+        .seq-tile.wrong svg { fill: #ffffff !important; }
+        
+        @keyframes seqShake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
         }
         
         /* Trail Game */
@@ -1281,12 +1298,31 @@ function startCurrentGame() {
 }
 
 // =====================================================
-// GAME 1: SEQUENCE MEMORY
+// GAME 1: SEQUENCE MEMORY (4 Colored Star Tiles)
 // =====================================================
+var seqSVG = '<svg viewBox="0 0 100 100"><polygon points="50,5 61,40 98,40 68,62 79,97 50,75 21,97 32,62 2,40 39,40"/></svg>';
 var seqTiles = [];
 var seqSequence = [];
 var seqPlayerIndex = 0;
 var seqShowingSequence = false;
+var seqColors = ['red', 'blue', 'green', 'yellow'];
+var seqNoteFreqs = [261.63, 329.63, 392.00, 523.25];
+
+function seqPlaySound(idx) {
+    try {
+        var ctx = new (window.AudioContext || window.webkitAudioContext)();
+        var osc = ctx.createOscillator();
+        var gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.frequency.value = seqNoteFreqs[idx % 4];
+        osc.type = 'sine';
+        gain.gain.setValueAtTime(0.5, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.25);
+    } catch(e) {}
+}
 
 function startSequenceGame() {
     var area = document.getElementById('gameArea');
@@ -1294,64 +1330,110 @@ function startSequenceGame() {
     
     var grid = document.getElementById('seqGrid');
     seqTiles = [];
+    seqSequence = [];
+    seqPlayerIndex = 0;
+    seqShowingSequence = false;
     
-    for (var i = 0; i < 9; i++) {
+    for (var i = 0; i < 4; i++) {
         var tile = document.createElement('div');
-        tile.className = 'seq-tile';
+        tile.className = 'seq-tile seq-' + seqColors[i];
         tile.dataset.index = i;
-        tile.textContent = '⭐';
-        tile.onclick = function() { seqTileClick(parseInt(this.dataset.index)); };
+        tile.innerHTML = seqSVG;
+        
+        (function(idx) {
+            tile.addEventListener('click', function() { seqTileClick(idx); });
+            tile.addEventListener('touchstart', function(e) { 
+                e.preventDefault(); 
+                seqTileClick(idx); 
+            }, {passive: false});
+        })(i);
+        
         grid.appendChild(tile);
         seqTiles.push(tile);
     }
     
+    // Disable tiles initially
+    seqDisableTiles(true);
     gameActive = true;
-    seqNewRound();
+    
+    setTimeout(seqNewRound, 800);
+}
+
+function seqDisableTiles(disabled) {
+    for (var i = 0; i < seqTiles.length; i++) {
+        seqTiles[i].style.pointerEvents = disabled ? 'none' : 'auto';
+        seqTiles[i].style.opacity = disabled ? '0.7' : '1';
+    }
 }
 
 function seqNewRound() {
     if (!gameActive) return;
     
-    setInstruction(
-        currentLang === 'es' ? 'Observa la secuencia...' : 'Watch the sequence...'
-    );
+    seqPlayerIndex = 0;
+    seqShowingSequence = false;
+    
+    for (var i = 0; i < seqTiles.length; i++) {
+        seqTiles[i].classList.remove('lit', 'correct', 'wrong');
+    }
+    
+    setInstruction(currentLang === 'es' ? 'Observa la secuencia...' : 'Watch the sequence...');
+    seqDisableTiles(true);
     
     var length = 2 + Math.floor(currentRound / 2);
+    if (length > 8) length = 8;
+    
     seqSequence = [];
     for (var i = 0; i < length; i++) {
-        seqSequence.push(Math.floor(Math.random() * 9));
+        seqSequence.push(Math.floor(Math.random() * 4));
     }
+    
+    setTimeout(seqShowSequence, 1000);
+}
+
+function seqShowSequence() {
+    if (!gameActive) return;
     
     seqShowingSequence = true;
-    seqPlayerIndex = 0;
+    var speed = Math.max(300, 500 * tierConfig[selectedTier].speedMod);
+    var pause = Math.max(150, 250 * tierConfig[selectedTier].speedMod);
+    var idx = 0;
     
-    var speed = 600 * tierConfig[selectedTier].speedMod;
-    var i = 0;
-    
-    function showNext() {
-        if (i > 0) seqTiles[seqSequence[i-1]].classList.remove('lit');
-        if (i < seqSequence.length) {
-            seqTiles[seqSequence[i]].classList.add('lit');
-            i++;
-            setTimeout(showNext, speed);
-        } else {
-            setTimeout(function() {
-                seqTiles[seqSequence[seqSequence.length-1]].classList.remove('lit');
-                seqShowingSequence = false;
-                setInstruction(
-                    currentLang === 'es' ? '¡Tu turno! Repite la secuencia' : 'Your turn! Repeat the sequence'
-                );
-            }, speed);
+    function lightTile() {
+        if (!gameActive) return;
+        if (idx >= seqSequence.length) {
+            seqShowingSequence = false;
+            setInstruction(currentLang === 'es' ? '¡Tu turno!' : 'Your turn!');
+            seqDisableTiles(false);
+            return;
         }
+        
+        var tileIdx = seqSequence[idx];
+        var tile = seqTiles[tileIdx];
+        if (!tile) return;
+        
+        tile.classList.add('lit');
+        seqPlaySound(tileIdx);
+        
+        setTimeout(function() {
+            tile.classList.remove('lit');
+            idx++;
+            setTimeout(lightTile, pause);
+        }, speed);
     }
     
-    setTimeout(showNext, 500);
+    lightTile();
 }
 
 function seqTileClick(index) {
     if (seqShowingSequence || !gameActive) return;
+    if (seqSequence.length === 0) return;
     
     var tile = seqTiles[index];
+    if (!tile) return;
+    
+    tile.classList.add('lit');
+    seqPlaySound(index);
+    setTimeout(function() { tile.classList.remove('lit'); }, 150);
     
     if (seqSequence[seqPlayerIndex] === index) {
         tile.classList.add('correct');
@@ -1359,15 +1441,18 @@ function seqTileClick(index) {
         
         seqPlayerIndex++;
         
-        if (seqPlayerIndex === seqSequence.length) {
+        if (seqPlayerIndex >= seqSequence.length) {
+            seqDisableTiles(true);
             var points = seqSequence.length * 10;
             addScore(points);
-            nextRound();
+            setInstruction('+' + points + '!');
+            setTimeout(nextRound, 1200);
         }
     } else {
         tile.classList.add('wrong');
-        setTimeout(function() { tile.classList.remove('wrong'); }, 300);
-        nextRound();
+        seqDisableTiles(true);
+        setTimeout(function() { tile.classList.remove('wrong'); }, 400);
+        setTimeout(nextRound, 1000);
     }
 }
 
