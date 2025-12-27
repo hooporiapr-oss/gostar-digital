@@ -1561,6 +1561,25 @@ function endGame() {
         localStorage.setItem('gostar-gonogostar-best', personalBest);
     }
     
+    // Record session to API
+    var accessCode = sessionStorage.getItem('gostar-user-code');
+    var username = sessionStorage.getItem('gostar-user-name');
+    if (accessCode && username) {
+        fetch('/api/game/session', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                accessCode: accessCode,
+                username: username,
+                game: 'gonogo',
+                score: score
+            })
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) { console.log('Session recorded:', data); })
+        .catch(function(err) { console.log('Session recording failed:', err); });
+    }
+    
     document.getElementById('finalQ1').textContent = quarterScores[0];
     document.getElementById('finalQ2').textContent = quarterScores[1];
     document.getElementById('finalQ3').textContent = quarterScores[2];
