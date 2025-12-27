@@ -1757,7 +1757,7 @@ var facilities = [
         location: 'San Juan, PR',
         licenseKey: 'GOSTAR-7X9K-M2PL',
         licenseType: 'trial',
-        users: 8,
+        users: 2,
         maxUsers: 10,
         status: 'active',
         createdAt: '2025-12-20',
@@ -1770,7 +1770,7 @@ var facilities = [
         location: 'Bayamón, PR',
         licenseKey: 'GOSTAR-4R2T-N8WQ',
         licenseType: 'trial',
-        users: 10,
+        users: 2,
         maxUsers: 10,
         status: 'active',
         createdAt: '2025-12-22',
@@ -1783,7 +1783,7 @@ var facilities = [
         location: 'Ponce, PR',
         licenseKey: 'GOSTAR-6Y3H-P5KJ',
         licenseType: 'trial',
-        users: 6,
+        users: 1,
         maxUsers: 10,
         status: 'active',
         createdAt: '2025-12-24',
@@ -1795,9 +1795,7 @@ var facilities = [
 var licenses = [
     { key: 'GOSTAR-7X9K-M2PL', type: 'trial', facility: 'Sunrise Wellness Center', createdAt: '2025-12-20', expiresAt: '2025-12-27', status: 'active' },
     { key: 'GOSTAR-4R2T-N8WQ', type: 'trial', facility: 'Golden Years Community', createdAt: '2025-12-22', expiresAt: '2025-12-29', status: 'active' },
-    { key: 'GOSTAR-6Y3H-P5KJ', type: 'trial', facility: 'Vista del Mar Rehab', createdAt: '2025-12-24', expiresAt: '2025-12-31', status: 'active' },
-    { key: 'GOSTAR-2W8E-Q1ZX', type: 'trial', facility: 'Unassigned', createdAt: '2025-12-23', expiresAt: '2025-12-30', status: 'pending' },
-    { key: 'GOSTAR-9M4B-L7CV', type: 'trial', facility: 'Test Facility', createdAt: '2025-12-15', expiresAt: '2025-12-22', status: 'expired' }
+    { key: 'GOSTAR-6Y3H-P5KJ', type: 'trial', facility: 'Vista del Mar Rehab', createdAt: '2025-12-24', expiresAt: '2025-12-31', status: 'active' }
 ];
 
 var users = [
@@ -2092,7 +2090,7 @@ function renderUsersTable() {
 
 function updateStats() {
     document.getElementById('stat-facilities').textContent = facilities.filter(f => f.status === 'active').length;
-    document.getElementById('stat-users').textContent = facilities.reduce((sum, f) => sum + f.users, 0);
+    document.getElementById('stat-users').textContent = users.length;
     document.getElementById('stat-licenses').textContent = licenses.filter(l => l.status === 'active').length;
 }
 
@@ -2114,19 +2112,23 @@ function editFacility(index) {
 function deleteFacility(index) {
     var f = facilities[index];
     var confirmMsg = currentLang === 'es' 
-        ? '¿Eliminar "' + f.name + '"? Esta acción no se puede deshacer.'
-        : 'Delete "' + f.name + '"? This cannot be undone.';
+        ? '¿Eliminar "' + f.name + '"? Esto eliminará la licencia y todos los usuarios asociados.'
+        : 'Delete "' + f.name + '"? This will delete the license and all associated users.';
     
     if (confirm(confirmMsg)) {
-        // Also remove associated license
+        // Remove associated license
         var licenseIndex = licenses.findIndex(l => l.key === f.licenseKey);
         if (licenseIndex > -1) {
             licenses.splice(licenseIndex, 1);
         }
+        // Remove associated users
+        users = users.filter(u => u.facility !== f.name);
         facilities.splice(index, 1);
+        syncFacilityUserCounts();
         renderOverviewTable();
         renderFacilitiesTable();
         renderLicensesTable();
+        renderUsersTable();
         updateStats();
         alert(currentLang === 'es' ? '✅ Instalación eliminada' : '✅ Facility deleted');
     }
@@ -2164,19 +2166,24 @@ function editLicense(index) {
 function deleteLicense(index) {
     var l = licenses[index];
     var confirmMsg = currentLang === 'es' 
-        ? '¿Eliminar licencia "' + l.key + '"? Esto también eliminará la instalación asociada.'
-        : 'Delete license "' + l.key + '"? This will also delete the associated facility.';
+        ? '¿Eliminar licencia "' + l.key + '"? Esto eliminará la instalación y todos los usuarios asociados.'
+        : 'Delete license "' + l.key + '"? This will delete the facility and all associated users.';
     
     if (confirm(confirmMsg)) {
-        // Also remove associated facility
+        // Remove associated facility
         var facilityIndex = facilities.findIndex(f => f.licenseKey === l.key);
         if (facilityIndex > -1) {
+            var facilityName = facilities[facilityIndex].name;
+            // Remove associated users
+            users = users.filter(u => u.facility !== facilityName);
             facilities.splice(facilityIndex, 1);
         }
         licenses.splice(index, 1);
+        syncFacilityUserCounts();
         renderOverviewTable();
         renderFacilitiesTable();
         renderLicensesTable();
+        renderUsersTable();
         updateStats();
         alert(currentLang === 'es' ? '✅ Licencia eliminada' : '✅ License deleted');
     }
@@ -2190,7 +2197,10 @@ function editUser(index) {
         var newFacility = prompt(currentLang === 'es' ? 'Instalación:' : 'Facility:', u.facility);
         users[index].name = newName.trim();
         users[index].facility = newFacility ? newFacility.trim() : u.facility;
+        syncFacilityUserCounts();
         renderUsersTable();
+        renderOverviewTable();
+        renderFacilitiesTable();
         alert(currentLang === 'es' ? '✅ Usuario actualizado' : '✅ User updated');
     }
 }
@@ -2203,12 +2213,8 @@ function deleteUser(index) {
         : 'Delete user "' + u.name + '"? This cannot be undone.';
     
     if (confirm(confirmMsg)) {
-        // Decrease user count in associated facility
-        var facilityIndex = facilities.findIndex(f => f.name === u.facility);
-        if (facilityIndex > -1 && facilities[facilityIndex].users > 0) {
-            facilities[facilityIndex].users--;
-        }
         users.splice(index, 1);
+        syncFacilityUserCounts();
         renderUsersTable();
         renderOverviewTable();
         renderFacilitiesTable();
@@ -2217,8 +2223,17 @@ function deleteUser(index) {
     }
 }
 
+// Sync facility user counts with actual users array
+function syncFacilityUserCounts() {
+    facilities.forEach(function(f) {
+        f.users = users.filter(u => u.facility === f.name).length;
+    });
+}
+
 // Initialize
+syncFacilityUserCounts();
 renderOverviewTable();
+updateStats();
 </script>
 
 </body>
