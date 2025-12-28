@@ -743,11 +743,47 @@
 
         function copyCode() {
             var code = document.getElementById('generatedCodeValue').textContent;
-            copyToClipboard(code);
+            var btn = document.querySelector('#generatedCodeContainer .copy-btn');
+            
+            copyToClipboard(code, function(success) {
+                if (success) {
+                    btn.textContent = '✓ Copied!';
+                    btn.style.background = 'var(--accent-green)';
+                    setTimeout(function() {
+                        btn.textContent = 'Copy';
+                        btn.style.background = '';
+                    }, 2000);
+                }
+            });
         }
 
-        function copyToClipboard(text) {
-            if (navigator.clipboard) navigator.clipboard.writeText(text);
+        function copyToClipboard(text, callback) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(function() {
+                    if (callback) callback(true);
+                }).catch(function() {
+                    fallbackCopy(text, callback);
+                });
+            } else {
+                fallbackCopy(text, callback);
+            }
+        }
+
+        function fallbackCopy(text, callback) {
+            var textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-9999px';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                if (callback) callback(true);
+            } catch (err) {
+                if (callback) callback(false);
+            }
+            document.body.removeChild(textArea);
         }
 
         function deleteCode(code) {
