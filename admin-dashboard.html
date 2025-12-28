@@ -1372,6 +1372,10 @@ tr:hover td {
                                     <span class="lang-es">Nombre</span>
                                 </th>
                                 <th>
+                                    <span class="lang-en">PIN</span>
+                                    <span class="lang-es">PIN</span>
+                                </th>
+                                <th>
                                     <span class="lang-en">Facility</span>
                                     <span class="lang-es">Instalación</span>
                                 </th>
@@ -1904,6 +1908,7 @@ function fetchDashboardData() {
                 return {
                     id: u.id,
                     name: u.username,
+                    pin: u.pin || null,
                     facility: u.facility_name || 'Unknown',
                     sessions: {
                         sequence: u.sessions_sequence || 0,
@@ -2270,7 +2275,7 @@ function renderUsersTable() {
     tbody.innerHTML = '';
     
     if (users.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; padding: 40px; color: var(--text-muted);"><div style="font-size: 2rem; margin-bottom: 10px;">👥</div>' + (currentLang === 'es' ? 'No hay usuarios registrados. Los usuarios aparecerán cuando se registren en las instalaciones.' : 'No users registered. Users will appear when they sign up at facilities.') + '</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="10" style="text-align: center; padding: 40px; color: var(--text-muted);"><div style="font-size: 2rem; margin-bottom: 10px;">👥</div>' + (currentLang === 'es' ? 'No hay usuarios registrados. Los usuarios aparecerán cuando se registren en las instalaciones.' : 'No users registered. Users will appear when they sign up at facilities.') + '</td></tr>';
         return;
     }
     
@@ -2278,10 +2283,12 @@ function renderUsersTable() {
         var sessions = u.sessions || { sequence: 0, startrail: 0, duo: 0 };
         var bests = u.bests || { sequence: 0, startrail: 0, duo: 0 };
         var total = u.totalSessions || (sessions.sequence + sessions.startrail + sessions.duo);
+        var userPin = u.pin || '--';
         
         tbody.innerHTML += `
             <tr>
                 <td><strong>${u.name}</strong></td>
+                <td><span class="license-key" style="font-size: 14px;">${userPin}</span></td>
                 <td>${u.facility}</td>
                 <td class="session-cell">
                     <div>${sessions.sequence} <span style="opacity: 0.5; font-size: 11px;">plays</span></div>
