@@ -98,7 +98,7 @@
         }
 
         .login-title span {
-            background: var(--gradient-gold);
+            background: var(--gradient-teal);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -106,68 +106,60 @@
 
         .login-badge {
             display: inline-block;
-            font-size: 11px;
-            font-weight: 700;
+            background: var(--gradient-teal);
             color: var(--bg-primary);
-            background: var(--accent-teal);
-            padding: 4px 12px;
+            padding: 6px 16px;
             border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 32px;
+            margin-bottom: 24px;
+        }
+
+        .facility-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--accent-gold);
+            margin-bottom: 8px;
         }
 
         .login-subtitle {
-            font-size: 14px;
             color: var(--text-secondary);
+            font-size: 15px;
+            line-height: 1.5;
             margin-bottom: 32px;
-            line-height: 1.6;
         }
 
-        .form-group {
-            margin-bottom: 20px;
-            text-align: left;
+        /* PIN Input Styles */
+        .pin-input-group {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 24px;
         }
 
-        .form-label {
-            display: block;
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--text-secondary);
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 16px 20px;
-            font-size: 16px;
-            font-family: 'Inter', sans-serif;
-            font-weight: 600;
-            background: var(--bg-primary);
+        .pin-input {
+            width: 56px;
+            height: 64px;
+            background: var(--bg-secondary);
             border: 2px solid rgba(255,255,255,0.1);
             border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
             color: var(--text-primary);
+            text-align: center;
             transition: all 0.2s ease;
-            text-transform: uppercase;
-            letter-spacing: 2px;
         }
 
-        .form-input:focus {
+        .pin-input:focus {
             outline: none;
             border-color: var(--accent-teal);
             box-shadow: 0 0 0 3px rgba(0, 217, 165, 0.2);
         }
 
-        .form-input::placeholder {
-            color: var(--text-muted);
-            text-transform: none;
-            letter-spacing: 0;
-            font-weight: 400;
-        }
-
-        .form-input.error {
+        .pin-input.error {
             border-color: var(--accent-coral);
             animation: shake 0.4s ease;
         }
@@ -178,86 +170,124 @@
             75% { transform: translateX(8px); }
         }
 
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px;
+            background: var(--bg-secondary);
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-teal);
+            box-shadow: 0 0 0 3px rgba(0, 217, 165, 0.2);
+        }
+
+        .form-input.error {
+            border-color: var(--accent-coral);
+        }
+
         .login-btn {
             width: 100%;
             padding: 16px 32px;
-            font-size: 16px;
-            font-weight: 700;
-            font-family: 'Inter', sans-serif;
             background: var(--gradient-teal);
-            color: var(--bg-primary);
             border: none;
             border-radius: 12px;
+            color: var(--bg-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.2s ease;
-            margin-top: 8px;
+            margin-bottom: 16px;
         }
 
-        .login-btn:hover {
+        .login-btn:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(0, 217, 165, 0.3);
         }
 
         .login-btn:disabled {
-            opacity: 0.5;
+            opacity: 0.6;
             cursor: not-allowed;
-            transform: none;
+        }
+
+        .secondary-btn {
+            width: 100%;
+            padding: 14px 24px;
+            background: transparent;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
+            color: var(--text-secondary);
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 16px;
+        }
+
+        .secondary-btn:hover {
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
         }
 
         .login-error {
             color: var(--accent-coral);
             font-size: 14px;
-            font-weight: 600;
-            margin-top: 16px;
+            font-weight: 500;
+            margin-bottom: 16px;
             display: none;
         }
 
-        .login-error.show {
-            display: block;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .login-error.show { display: block; }
 
         .trial-banner {
-            background: rgba(255, 217, 61, 0.1);
-            border: 1px solid rgba(255, 217, 61, 0.2);
+            background: linear-gradient(135deg, rgba(255, 217, 61, 0.1) 0%, rgba(255, 159, 28, 0.1) 100%);
+            border: 1px solid rgba(255, 217, 61, 0.3);
             border-radius: 12px;
             padding: 16px;
             margin-top: 24px;
         }
 
         .trial-banner-text {
-            font-size: 13px;
             color: var(--text-secondary);
+            font-size: 13px;
             margin-bottom: 8px;
         }
 
         .trial-banner-link {
             color: var(--accent-gold);
-            font-weight: 700;
-            text-decoration: none;
-        }
-
-        .trial-banner-link:hover { text-decoration: underline; }
-
-        .login-links {
-            margin-top: 32px;
-            padding-top: 24px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .login-link {
-            color: var(--accent-gold);
             text-decoration: none;
             font-size: 14px;
-            font-weight: 600;
+            font-weight: 700;
         }
 
-        .login-link:hover { color: var(--accent-teal); }
+        .trial-banner-link:hover { color: var(--accent-teal); }
 
         .home-link {
             position: fixed;
@@ -274,10 +304,15 @@
 
         .home-link:hover { color: var(--accent-gold); }
 
+        .hidden { display: none !important; }
+
+        .screen { display: block; }
+
         @media (max-width: 480px) {
             .login-card { padding: 36px 24px; }
             .login-logo { font-size: 48px; }
             .login-title { font-size: 24px; }
+            .pin-input { width: 48px; height: 56px; font-size: 24px; }
         }
     </style>
 </head>
@@ -293,7 +328,47 @@
         <span>GoStar</span>
     </a>
 
-    <div class="login-card">
+    <!-- SCREEN 1: Quick PIN Login (for returning facilities) -->
+    <div class="login-card screen hidden" id="pinScreen">
+        <div class="login-logo">🏢</div>
+        <h1 class="login-title">Go<span>Star</span></h1>
+        <span class="login-badge">
+            <span class="lang-en">Welcome Back</span>
+            <span class="lang-es">Bienvenido</span>
+        </span>
+        
+        <p class="facility-name" id="facilityNameDisplay"></p>
+        
+        <p class="login-subtitle">
+            <span class="lang-en">Enter your 4-digit PIN to continue</span>
+            <span class="lang-es">Ingresa tu PIN de 4 dígitos para continuar</span>
+        </p>
+        
+        <div class="pin-input-group" id="pinInputGroup">
+            <input type="password" class="pin-input" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+            <input type="password" class="pin-input" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+            <input type="password" class="pin-input" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+            <input type="password" class="pin-input" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+        </div>
+        
+        <button class="login-btn" onclick="verifyPin()" id="pinLoginBtn">
+            <span class="lang-en">Enter Dashboard</span>
+            <span class="lang-es">Entrar al Panel</span>
+        </button>
+        
+        <p class="login-error" id="pinError">
+            <span class="lang-en">Incorrect PIN. Please try again.</span>
+            <span class="lang-es">PIN incorrecto. Intenta de nuevo.</span>
+        </p>
+        
+        <button class="secondary-btn" onclick="showLicenseScreen()">
+            <span class="lang-en">Use Different Facility</span>
+            <span class="lang-es">Usar Otra Instalación</span>
+        </button>
+    </div>
+
+    <!-- SCREEN 2: License Key Entry (first time or switching) -->
+    <div class="login-card screen hidden" id="licenseScreen">
         <div class="login-logo">🏢</div>
         <h1 class="login-title">Go<span>Star</span></h1>
         <span class="login-badge">
@@ -306,7 +381,7 @@
             <span class="lang-es">Ingresa tu clave de licencia para acceder al panel de tu instalación.</span>
         </p>
         
-        <form id="loginForm">
+        <form id="licenseForm">
             <div class="form-group">
                 <label class="form-label">
                     <span class="lang-en">License Key</span>
@@ -322,13 +397,13 @@
                 >
             </div>
             
-            <button type="submit" class="login-btn" id="loginBtn">
-                <span class="lang-en">Access Dashboard</span>
-                <span class="lang-es">Acceder al Panel</span>
+            <button type="submit" class="login-btn" id="licenseBtn">
+                <span class="lang-en">Continue</span>
+                <span class="lang-es">Continuar</span>
             </button>
         </form>
         
-        <p class="login-error" id="loginError">
+        <p class="login-error" id="licenseError">
             <span class="lang-en">Invalid or expired license key.</span>
             <span class="lang-es">Clave de licencia inválida o expirada.</span>
         </p>
@@ -343,18 +418,63 @@
                 <span class="lang-es">Comenzar Prueba Gratis de 7 Días →</span>
             </a>
         </div>
+    </div>
+
+    <!-- SCREEN 3: PIN Setup (after license verification) -->
+    <div class="login-card screen hidden" id="setupScreen">
+        <div class="login-logo">🔐</div>
+        <h1 class="login-title">Go<span>Star</span></h1>
+        <span class="login-badge">
+            <span class="lang-en">Quick Access Setup</span>
+            <span class="lang-es">Configurar Acceso Rápido</span>
+        </span>
         
-        <div class="login-links">
-            <a href="mailto:info@gostar.email" class="login-link">
-                <span class="lang-en">Need help? Contact us</span>
-                <span class="lang-es">¿Necesitas ayuda? Contáctanos</span>
-            </a>
+        <p class="facility-name" id="setupFacilityName"></p>
+        
+        <p class="login-subtitle">
+            <span class="lang-en">Create a 4-digit PIN for quick access. You won't need to enter your license key again on this device.</span>
+            <span class="lang-es">Crea un PIN de 4 dígitos para acceso rápido. No necesitarás ingresar tu clave de licencia nuevamente en este dispositivo.</span>
+        </p>
+        
+        <div class="form-group" style="text-align: center;">
+            <label class="form-label" style="text-align: center;">
+                <span class="lang-en">Create PIN</span>
+                <span class="lang-es">Crear PIN</span>
+            </label>
+            <div class="pin-input-group" id="setupPinInputGroup">
+                <input type="password" class="pin-input" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+                <input type="password" class="pin-input" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+                <input type="password" class="pin-input" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+                <input type="password" class="pin-input" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+            </div>
         </div>
+        
+        <button class="login-btn" onclick="savePin()" id="savePinBtn">
+            <span class="lang-en">Save & Enter Dashboard</span>
+            <span class="lang-es">Guardar y Entrar al Panel</span>
+        </button>
+        
+        <p class="login-error" id="setupError">
+            <span class="lang-en">Please enter a 4-digit PIN.</span>
+            <span class="lang-es">Por favor ingresa un PIN de 4 dígitos.</span>
+        </p>
+        
+        <button class="secondary-btn" onclick="skipPin()">
+            <span class="lang-en">Skip for now</span>
+            <span class="lang-es">Omitir por ahora</span>
+        </button>
     </div>
 
     <script>
-        var currentLang = localStorage.getItem('gostar-lang') || 'en';
+        // ============================================
+        // FACILITY LOGIN WITH PIN-BASED QUICK ACCESS
+        // ============================================
 
+        var currentLang = localStorage.getItem('gostar-lang') || 'en';
+        var pendingLicenseKey = null;
+        var pendingFacilityName = null;
+
+        // Language handling
         function setLang(lang) {
             currentLang = lang;
             localStorage.setItem('gostar-lang', lang);
@@ -369,12 +489,180 @@
             btn.classList.toggle('active', btn.textContent === currentLang.toUpperCase());
         });
 
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
+        // Check if facility is already set up
+        function checkSetup() {
+            var savedFacility = localStorage.getItem('gostar-facility');
+            
+            if (savedFacility) {
+                try {
+                    var facility = JSON.parse(savedFacility);
+                    if (facility.licenseKey && facility.pin) {
+                        // Show PIN screen
+                        document.getElementById('facilityNameDisplay').textContent = facility.name || 'Your Facility';
+                        showScreen('pinScreen');
+                        var firstPin = document.querySelector('#pinInputGroup .pin-input');
+                        if (firstPin) firstPin.focus();
+                        return;
+                    }
+                } catch (e) {
+                    localStorage.removeItem('gostar-facility');
+                }
+            }
+            
+            // No saved facility, show license screen
+            showScreen('licenseScreen');
+            document.getElementById('licenseKey').focus();
+        }
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(function(s) {
+                s.classList.add('hidden');
+            });
+            document.getElementById(screenId).classList.remove('hidden');
+        }
+
+        function showLicenseScreen() {
+            localStorage.removeItem('gostar-facility');
+            showScreen('licenseScreen');
+            document.getElementById('licenseKey').value = '';
+            document.getElementById('licenseError').classList.remove('show');
+            document.getElementById('licenseKey').focus();
+        }
+
+        // Generic PIN input setup function
+        function initPinInputs(containerId, onComplete) {
+            var container = document.getElementById(containerId);
+            var inputs = container.querySelectorAll('.pin-input');
+            
+            inputs.forEach(function(input, index) {
+                input.addEventListener('input', function(e) {
+                    this.value = this.value.replace(/[^0-9]/g, '');
+                    
+                    if (this.value.length === 1 && index < inputs.length - 1) {
+                        inputs[index + 1].focus();
+                    }
+                    
+                    if (index === inputs.length - 1 && this.value.length === 1) {
+                        onComplete();
+                    }
+                    
+                    // Clear error state
+                    inputs.forEach(function(inp) { inp.classList.remove('error'); });
+                    var errorEl = container.closest('.login-card').querySelector('.login-error');
+                    if (errorEl) errorEl.classList.remove('show');
+                });
+                
+                input.addEventListener('keydown', function(e) {
+                    if (e.key === 'Backspace' && this.value.length === 0 && index > 0) {
+                        inputs[index - 1].focus();
+                    }
+                    if (e.key === 'Enter') {
+                        onComplete();
+                    }
+                });
+                
+                input.addEventListener('paste', function(e) {
+                    e.preventDefault();
+                    var pastedData = e.clipboardData.getData('text').replace(/[^0-9]/g, '');
+                    for (var i = 0; i < Math.min(pastedData.length, 4); i++) {
+                        inputs[i].value = pastedData[i];
+                    }
+                    if (pastedData.length >= 4) {
+                        onComplete();
+                    }
+                });
+            });
+        }
+
+        function getPinValue(containerId) {
+            var inputs = document.querySelectorAll('#' + containerId + ' .pin-input');
+            var pin = '';
+            inputs.forEach(function(input) { pin += input.value; });
+            return pin;
+        }
+
+        function clearPinInputs(containerId) {
+            var inputs = document.querySelectorAll('#' + containerId + ' .pin-input');
+            inputs.forEach(function(input) { 
+                input.value = '';
+                input.classList.remove('error');
+            });
+            if (inputs[0]) inputs[0].focus();
+        }
+
+        function showPinError(containerId, errorId) {
+            var inputs = document.querySelectorAll('#' + containerId + ' .pin-input');
+            inputs.forEach(function(input) { input.classList.add('error'); });
+            document.getElementById(errorId).classList.add('show');
+            clearPinInputs(containerId);
+        }
+
+        // Verify PIN
+        function verifyPin() {
+            var enteredPin = getPinValue('pinInputGroup');
+            
+            if (enteredPin.length < 4) return;
+            
+            var savedFacility = localStorage.getItem('gostar-facility');
+            if (!savedFacility) {
+                showLicenseScreen();
+                return;
+            }
+            
+            var facility = JSON.parse(savedFacility);
+            
+            // Verify PIN matches
+            if (enteredPin === facility.pin) {
+                // Verify license is still valid with server
+                var btn = document.getElementById('pinLoginBtn');
+                btn.disabled = true;
+                btn.textContent = currentLang === 'es' ? 'Verificando...' : 'Verifying...';
+                
+                fetch('/api/facility/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ licenseKey: facility.licenseKey })
+                })
+                .then(function(res) { return res.json(); })
+                .then(function(data) {
+                    if (data.success) {
+                        // Update facility name in case it changed
+                        facility.name = data.facilityName;
+                        localStorage.setItem('gostar-facility', JSON.stringify(facility));
+                        
+                        sessionStorage.setItem('gostar-facility-license', facility.licenseKey);
+                        sessionStorage.setItem('gostar-facility-name', data.facilityName);
+                        window.location.href = '/facility/dashboard';
+                    } else {
+                        // License expired or invalid
+                        localStorage.removeItem('gostar-facility');
+                        document.getElementById('licenseError').innerHTML = 
+                            '<span class="lang-en">License has expired. Please enter a new one.</span>' +
+                            '<span class="lang-es">La licencia ha expirado. Por favor ingresa una nueva.</span>';
+                        document.getElementById('licenseError').classList.add('show');
+                        showScreen('licenseScreen');
+                        document.body.setAttribute('data-lang', currentLang);
+                    }
+                })
+                .catch(function(err) {
+                    alert(currentLang === 'es' ? 'Error de conexión. Intenta de nuevo.' : 'Connection error. Please try again.');
+                    btn.disabled = false;
+                    btn.innerHTML = '<span class="lang-en">Enter Dashboard</span><span class="lang-es">Entrar al Panel</span>';
+                    document.body.setAttribute('data-lang', currentLang);
+                });
+            } else {
+                // Wrong PIN
+                showPinError('pinInputGroup', 'pinError');
+            }
+        }
+
+        // License form submission
+        document.getElementById('licenseForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
             var licenseKey = document.getElementById('licenseKey').value.trim().toUpperCase();
-            var loginBtn = document.getElementById('loginBtn');
-            var errorEl = document.getElementById('loginError');
+            var btn = document.getElementById('licenseBtn');
+            var errorEl = document.getElementById('licenseError');
             var inputEl = document.getElementById('licenseKey');
             
             if (!licenseKey) {
@@ -384,9 +672,8 @@
             
             errorEl.classList.remove('show');
             inputEl.classList.remove('error');
-            
-            loginBtn.disabled = true;
-            loginBtn.textContent = currentLang === 'es' ? 'Verificando...' : 'Verifying...';
+            btn.disabled = true;
+            btn.textContent = currentLang === 'es' ? 'Verificando...' : 'Verifying...';
             
             fetch('/api/facility/login', {
                 method: 'POST',
@@ -396,9 +683,14 @@
             .then(function(res) { return res.json(); })
             .then(function(data) {
                 if (data.success) {
-                    sessionStorage.setItem('gostar-facility-license', licenseKey);
-                    sessionStorage.setItem('gostar-facility-name', data.facilityName);
-                    window.location.href = '/facility/dashboard';
+                    // Store pending info and show PIN setup
+                    pendingLicenseKey = licenseKey;
+                    pendingFacilityName = data.facilityName;
+                    
+                    document.getElementById('setupFacilityName').textContent = data.facilityName;
+                    showScreen('setupScreen');
+                    var firstSetupPin = document.querySelector('#setupPinInputGroup .pin-input');
+                    if (firstSetupPin) firstSetupPin.focus();
                 } else {
                     throw new Error(data.error || 'Invalid license');
                 }
@@ -410,16 +702,55 @@
                 inputEl.focus();
             })
             .finally(function() {
-                loginBtn.disabled = false;
-                loginBtn.innerHTML = currentLang === 'es' ? 'Acceder al Panel' : 'Access Dashboard';
+                btn.disabled = false;
+                btn.innerHTML = '<span class="lang-en">Continue</span><span class="lang-es">Continuar</span>';
+                document.body.setAttribute('data-lang', currentLang);
             });
         });
 
+        // Save PIN and enter dashboard
+        function savePin() {
+            var pin = getPinValue('setupPinInputGroup');
+            
+            if (pin.length < 4) {
+                showPinError('setupPinInputGroup', 'setupError');
+                return;
+            }
+            
+            // Save facility with PIN
+            var facility = {
+                licenseKey: pendingLicenseKey,
+                name: pendingFacilityName,
+                pin: pin
+            };
+            
+            localStorage.setItem('gostar-facility', JSON.stringify(facility));
+            sessionStorage.setItem('gostar-facility-license', pendingLicenseKey);
+            sessionStorage.setItem('gostar-facility-name', pendingFacilityName);
+            
+            window.location.href = '/facility/dashboard';
+        }
+
+        // Skip PIN setup
+        function skipPin() {
+            sessionStorage.setItem('gostar-facility-license', pendingLicenseKey);
+            sessionStorage.setItem('gostar-facility-name', pendingFacilityName);
+            window.location.href = '/facility/dashboard';
+        }
+
+        // Input auto-uppercase
         document.getElementById('licenseKey').addEventListener('input', function() {
             this.value = this.value.toUpperCase();
-            document.getElementById('loginError').classList.remove('show');
             this.classList.remove('error');
+            document.getElementById('licenseError').classList.remove('show');
         });
+
+        // Initialize PIN input handlers
+        initPinInputs('pinInputGroup', verifyPin);
+        initPinInputs('setupPinInputGroup', savePin);
+
+        // Initialize
+        checkSetup();
     </script>
 
 </body>
