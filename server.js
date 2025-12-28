@@ -160,40 +160,52 @@ function adminTokenAuth(req, res, next) {
 
 // Get all facilities (from licenses)
 app.get('/api/admin/facilities', adminTokenAuth, function(req, res) {
-    var licenses = readJSON(LICENSES_FILE);
-    var codes = readJSON(CODES_FILE);
-    var users = readJSON(USERS_FILE);
-    
-    var facilities = licenses.map(function(lic) {
-        // Count users for this facility
-        var facilityCodes = codes.filter(function(c) { return c.licenseKey === lic.key; });
-        var facilityCodeIds = facilityCodes.map(function(c) { return c.code; });
-        var facilityUsers = users.filter(function(u) { return facilityCodeIds.indexOf(u.code) !== -1; });
+    try {
+        var licenses = readJSON(LICENSES_FILE);
+        var codes = readJSON(CODES_FILE);
+        var users = readJSON(USERS_FILE);
         
-        // Calculate days left
-        var today = new Date();
-        var expiry = new Date(lic.expirationDate);
-        var daysLeft = Math.ceil((expiry - today) / (1000 * 60 * 60 * 24));
+        var facilities = licenses.map(function(lic) {
+            // Count users for this facility
+            var facilityCodes = codes.filter(function(c) { return c.licenseKey === lic.key; });
+            var facilityCodeIds = facilityCodes.map(function(c) { return c.code; });
+            var facilityUsers = users.filter(function(u) { return facilityCodeIds.indexOf(u.code) !== -1; });
+            
+            // Calculate total sessions for this facility
+            var totalSessions = facilityUsers.reduce(function(sum, u) {
+                return sum + (u.sessions_sequence || 0) + (u.sessions_startrail || 0) +
+                       (u.sessions_kwikstar || 0) + (u.sessions_gonogo || 0) + (u.sessions_stroop || 0);
+            }, 0);
+            
+            // Calculate days left
+            var today = new Date();
+            var expiry = new Date(lic.expirationDate);
+            var daysLeft = Math.ceil((expiry - today) / (1000 * 60 * 60 * 24));
+            
+            return {
+                id: lic.key,
+                name: lic.facilityName,
+                location: lic.location || 'N/A',
+                license_key: lic.key,
+                license_type: lic.isTrial ? 'trial' : 'standard',
+                user_count: facilityUsers.length,
+                user_limit: lic.userPool,
+                total_sessions: totalSessions,
+                status: lic.active ? (daysLeft > 0 ? 'active' : 'expired') : 'inactive',
+                created_at: lic.createdAt,
+                expires_at: lic.expirationDate,
+                days_left: Math.max(0, daysLeft),
+                contact_name: lic.contactName || '',
+                email: lic.email || '',
+                phone: lic.phone || ''
+            };
+        });
         
-        return {
-            id: lic.key,
-            name: lic.facilityName,
-            location: lic.location || 'N/A',
-            license_key: lic.key,
-            license_type: lic.isTrial ? 'trial' : 'standard',
-            user_count: facilityUsers.length,
-            user_limit: lic.userPool,
-            status: lic.active ? (daysLeft > 0 ? 'active' : 'expired') : 'inactive',
-            created_at: lic.createdAt,
-            expires_at: lic.expirationDate,
-            days_left: Math.max(0, daysLeft),
-            contact_name: lic.contactName || '',
-            email: lic.email || '',
-            phone: lic.phone || ''
-        };
-    });
-    
-    res.json({ success: true, facilities: facilities });
+        res.json({ success: true, facilities: facilities });
+    } catch (err) {
+        console.error('Error fetching facilities:', err);
+        res.json({ success: true, facilities: [] });
+    }
 });
 
 // Update facility
@@ -244,28 +256,33 @@ app.delete('/api/admin/facilities/:id', adminTokenAuth, function(req, res) {
 
 // Get all licenses
 app.get('/api/admin/licenses-list', adminTokenAuth, function(req, res) {
-    var licenses = readJSON(LICENSES_FILE);
-    
-    var result = licenses.map(function(lic) {
-        var today = new Date();
-        var expiry = new Date(lic.expirationDate);
-        var daysLeft = Math.ceil((expiry - today) / (1000 * 60 * 60 * 24));
+    try {
+        var licenses = readJSON(LICENSES_FILE);
         
-        return {
-            key: lic.key,
-            license_key: lic.key,
-            license_type: lic.isTrial ? 'trial' : 'standard',
-            facility_name: lic.facilityName,
-            created_at: lic.createdAt,
-            expires_at: lic.expirationDate,
-            status: lic.active ? (daysLeft > 0 ? 'active' : 'expired') : 'inactive'
-        };
-    });
-    
-    res.json({ success: true, licenses: result });
+        var result = licenses.map(function(lic) {
+            var today = new Date();
+            var expiry = new Date(lic.expirationDate);
+            var daysLeft = Math.ceil((expiry - today) / (1000 * 60 * 60 * 24));
+            
+            return {
+                key: lic.key,
+                license_key: lic.key,
+                license_type: lic.isTrial ? 'trial' : 'standard',
+                facility_name: lic.facilityName,
+                created_at: lic.createdAt,
+                expires_at: lic.expirationDate,
+                status: lic.active ? (daysLeft > 0 ? 'active' : 'expired') : 'inactive'
+            };
+        });
+        
+        res.json({ success: true, licenses: result });
+    } catch (err) {
+        console.error('Error fetching licenses:', err);
+        res.json({ success: true, licenses: [] });
+    }
 });
 
-// Delete license (same as facility)
+// Delete license
 app.delete('/api/admin/licenses-list/:key', adminTokenAuth, function(req, res) {
     var key = req.params.key;
     
@@ -287,37 +304,46 @@ app.delete('/api/admin/licenses-list/:key', adminTokenAuth, function(req, res) {
 
 // Get all users with session data
 app.get('/api/admin/users', adminTokenAuth, function(req, res) {
-    var users = readJSON(USERS_FILE);
-    var codes = readJSON(CODES_FILE);
-    var licenses = readJSON(LICENSES_FILE);
-    
-    var result = users.map(function(u, index) {
-        // Find facility name
-        var facilityName = 'Unknown';
-        var codeObj = codes.find(function(c) { return c.code === u.code; });
-        if (codeObj) {
-            var license = licenses.find(function(l) { return l.key === codeObj.licenseKey; });
-            if (license) {
-                facilityName = license.facilityName;
-            }
-        }
+    try {
+        var users = readJSON(USERS_FILE);
+        var codes = readJSON(CODES_FILE);
+        var licenses = readJSON(LICENSES_FILE);
         
-        return {
-            id: index,
-            username: u.username,
-            facility_name: facilityName,
-            sessions_sequence: u.sessions_sequence || 0,
-            sessions_startrail: u.sessions_startrail || 0,
-            sessions_kwikstar: u.sessions_kwikstar || 0,
-            sessions_gonogo: u.sessions_gonogo || 0,
-            sessions_stroop: u.sessions_stroop || 0,
-            streak: u.streak || 0,
-            last_active: u.lastActive || u.createdAt,
-            created_at: u.createdAt
-        };
-    });
-    
-    res.json({ success: true, users: result });
+        var result = users.map(function(u, index) {
+            // Find facility name
+            var facilityName = 'Unknown';
+            for (var i = 0; i < codes.length; i++) {
+                if (codes[i].code === u.code) {
+                    for (var j = 0; j < licenses.length; j++) {
+                        if (licenses[j].key === codes[i].licenseKey) {
+                            facilityName = licenses[j].facilityName;
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+            
+            return {
+                id: index,
+                username: u.username,
+                facility_name: facilityName,
+                sessions_sequence: u.sessions_sequence || 0,
+                sessions_startrail: u.sessions_startrail || 0,
+                sessions_kwikstar: u.sessions_kwikstar || 0,
+                sessions_gonogo: u.sessions_gonogo || 0,
+                sessions_stroop: u.sessions_stroop || 0,
+                streak: u.streak || 0,
+                last_active: u.lastActive || u.createdAt,
+                created_at: u.createdAt
+            };
+        });
+        
+        res.json({ success: true, users: result });
+    } catch (err) {
+        console.error('Error fetching users:', err);
+        res.json({ success: true, users: [] });
+    }
 });
 
 // Update user
@@ -350,127 +376,6 @@ app.delete('/api/admin/users/:id', adminTokenAuth, function(req, res) {
     res.json({ success: true });
 });
 
-// ============ GAME SESSION TRACKING ============
-
-// Record game session
-app.post('/api/game/session', function(req, res) {
-    var accessCode = req.body.accessCode;
-    var username = req.body.username;
-    var game = req.body.game; // sequence, startrail, kwikstar, gonogo, stroop
-    var score = req.body.score;
-    
-    if (!accessCode || !username || !game) {
-        return res.status(400).json({ error: 'Missing required fields' });
-    }
-    
-    var validGames = ['sequence', 'startrail', 'kwikstar', 'gonogo', 'stroop'];
-    if (validGames.indexOf(game) === -1) {
-        return res.status(400).json({ error: 'Invalid game type' });
-    }
-    
-    var users = readJSON(USERS_FILE);
-    var userIndex = -1;
-    for (var i = 0; i < users.length; i++) {
-        if (users[i].code === accessCode && users[i].username.toLowerCase() === username.toLowerCase()) {
-            userIndex = i;
-            break;
-        }
-    }
-    
-    if (userIndex === -1) {
-        return res.status(404).json({ error: 'User not found' });
-    }
-    
-    // Initialize session counts if not exist
-    var sessionKey = 'sessions_' + game;
-    if (!users[userIndex][sessionKey]) {
-        users[userIndex][sessionKey] = 0;
-    }
-    users[userIndex][sessionKey]++;
-    
-    // Update last active
-    users[userIndex].lastActive = new Date().toISOString();
-    
-    // Update streak
-    var today = new Date().toISOString().split('T')[0];
-    var lastStreakDate = users[userIndex].lastStreakDate;
-    
-    if (!lastStreakDate) {
-        users[userIndex].streak = 1;
-        users[userIndex].lastStreakDate = today;
-    } else if (lastStreakDate !== today) {
-        var lastDate = new Date(lastStreakDate);
-        var todayDate = new Date(today);
-        var diffDays = Math.floor((todayDate - lastDate) / (1000 * 60 * 60 * 24));
-        
-        if (diffDays === 1) {
-            users[userIndex].streak = (users[userIndex].streak || 0) + 1;
-        } else if (diffDays > 1) {
-            users[userIndex].streak = 1; // Reset streak
-        }
-        users[userIndex].lastStreakDate = today;
-    }
-    
-    // Store personal best if provided
-    if (score !== undefined) {
-        var bestKey = 'best_' + game;
-        if (!users[userIndex][bestKey] || score > users[userIndex][bestKey]) {
-            users[userIndex][bestKey] = score;
-        }
-    }
-    
-    writeJSON(USERS_FILE, users);
-    
-    res.json({ 
-        success: true, 
-        sessions: users[userIndex][sessionKey],
-        streak: users[userIndex].streak,
-        personalBest: users[userIndex]['best_' + game]
-    });
-});
-
-// Get user stats
-app.get('/api/game/stats/:accessCode/:username', function(req, res) {
-    var accessCode = req.params.accessCode;
-    var username = req.params.username;
-    
-    var users = readJSON(USERS_FILE);
-    var user = null;
-    for (var i = 0; i < users.length; i++) {
-        if (users[i].code === accessCode && users[i].username.toLowerCase() === username.toLowerCase()) {
-            user = users[i];
-            break;
-        }
-    }
-    
-    if (!user) {
-        return res.status(404).json({ error: 'User not found' });
-    }
-    
-    res.json({
-        success: true,
-        stats: {
-            sessions: {
-                sequence: user.sessions_sequence || 0,
-                startrail: user.sessions_startrail || 0,
-                kwikstar: user.sessions_kwikstar || 0,
-                gonogo: user.sessions_gonogo || 0,
-                stroop: user.sessions_stroop || 0
-            },
-            totalSessions: (user.sessions_sequence || 0) + (user.sessions_startrail || 0) +
-                          (user.sessions_kwikstar || 0) + (user.sessions_gonogo || 0) + (user.sessions_stroop || 0),
-            streak: user.streak || 0,
-            personalBests: {
-                sequence: user.best_sequence || 0,
-                startrail: user.best_startrail || 0,
-                kwikstar: user.best_kwikstar || 0,
-                gonogo: user.best_gonogo || 0,
-                stroop: user.best_stroop || 0
-            }
-        }
-    });
-});
-
 // ============ ADMIN ROUTES ============
 
 // New admin dashboard
@@ -483,7 +388,7 @@ app.get('/admin', adminAuth, function(req, res) {
     res.sendFile(path.join(__dirname, 'admin.html'));
 });
 
-// Get all licenses
+// Get all licenses (Basic Auth - for license creation)
 app.get('/api/admin/licenses', adminAuth, function(req, res) {
     var licenses = readJSON(LICENSES_FILE);
     var codes = readJSON(CODES_FILE);
@@ -503,7 +408,7 @@ app.get('/api/admin/licenses', adminAuth, function(req, res) {
     res.json(enriched);
 });
 
-// Create license
+// Create license (Basic Auth)
 app.post('/api/admin/licenses', adminAuth, function(req, res) {
     var facilityName = req.body.facilityName;
     var expirationDate = req.body.expirationDate;
@@ -528,10 +433,8 @@ app.post('/api/admin/licenses', adminAuth, function(req, res) {
         active: true
     };
     
-    // Add optional fields
     if (location) newLicense.location = location;
     
-    // Add trial-specific fields if it's a trial
     if (isTrial) {
         newLicense.isTrial = true;
         newLicense.contactName = contactName || '';
@@ -650,17 +553,44 @@ app.get('/api/facility/:licenseKey', function(req, res) {
     var users = readJSON(USERS_FILE);
     
     var enrichedCodes = codes.map(function(code) {
-        var usedCount = users.filter(function(u) { return u.code === code.code; }).length;
+        var codeUsers = users.filter(function(u) { return u.code === code.code; });
+        var usedCount = codeUsers.length;
+        
+        var totalSessions = codeUsers.reduce(function(sum, u) {
+            return sum + (u.sessions_sequence || 0) + (u.sessions_startrail || 0) +
+                   (u.sessions_kwikstar || 0) + (u.sessions_gonogo || 0) + (u.sessions_stroop || 0);
+        }, 0);
+        
         var result = {};
         for (var key in code) {
             result[key] = code[key];
         }
         result.usedCount = usedCount;
         result.remainingUsers = code.userLimit - usedCount;
+        result.totalSessions = totalSessions;
         return result;
     });
     
     var usedPool = codes.reduce(function(sum, c) { return sum + c.userLimit; }, 0);
+    
+    var facilityCodeIds = codes.map(function(c) { return c.code; });
+    var facilityUsers = users.filter(function(u) { return facilityCodeIds.indexOf(u.code) !== -1; });
+    var enrichedUsers = facilityUsers.map(function(u) {
+        return {
+            username: u.username,
+            code: u.code,
+            sessions_sequence: u.sessions_sequence || 0,
+            sessions_startrail: u.sessions_startrail || 0,
+            sessions_kwikstar: u.sessions_kwikstar || 0,
+            sessions_gonogo: u.sessions_gonogo || 0,
+            sessions_stroop: u.sessions_stroop || 0,
+            totalSessions: (u.sessions_sequence || 0) + (u.sessions_startrail || 0) +
+                          (u.sessions_kwikstar || 0) + (u.sessions_gonogo || 0) + (u.sessions_stroop || 0),
+            streak: u.streak || 0,
+            lastActive: u.lastActive || u.createdAt,
+            createdAt: u.createdAt
+        };
+    });
     
     res.json({
         facilityName: license.facilityName,
@@ -668,7 +598,8 @@ app.get('/api/facility/:licenseKey', function(req, res) {
         userPool: license.userPool,
         usedPool: usedPool,
         remainingPool: license.userPool - usedPool,
-        codes: enrichedCodes
+        codes: enrichedCodes,
+        users: enrichedUsers
     });
 });
 
@@ -860,7 +791,13 @@ app.post('/api/play/register', function(req, res) {
         code: accessCode,
         username: username,
         password: hashedPassword,
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
+        sessions_sequence: 0,
+        sessions_startrail: 0,
+        sessions_kwikstar: 0,
+        sessions_gonogo: 0,
+        sessions_stroop: 0,
+        streak: 0
     });
     writeJSON(USERS_FILE, users);
     
@@ -922,6 +859,121 @@ app.post('/api/play/login', function(req, res) {
     res.json({ success: true, username: user.username });
 });
 
+// ============ GAME SESSION TRACKING ============
+
+app.post('/api/game/session', function(req, res) {
+    var accessCode = req.body.accessCode;
+    var username = req.body.username;
+    var game = req.body.game;
+    var score = req.body.score;
+    
+    if (!accessCode || !username || !game) {
+        return res.status(400).json({ error: 'Missing required fields' });
+    }
+    
+    var validGames = ['sequence', 'startrail', 'kwikstar', 'gonogo', 'stroop'];
+    if (validGames.indexOf(game) === -1) {
+        return res.status(400).json({ error: 'Invalid game type' });
+    }
+    
+    var users = readJSON(USERS_FILE);
+    var userIndex = -1;
+    for (var i = 0; i < users.length; i++) {
+        if (users[i].code === accessCode && users[i].username.toLowerCase() === username.toLowerCase()) {
+            userIndex = i;
+            break;
+        }
+    }
+    
+    if (userIndex === -1) {
+        return res.status(404).json({ error: 'User not found' });
+    }
+    
+    var sessionKey = 'sessions_' + game;
+    if (!users[userIndex][sessionKey]) {
+        users[userIndex][sessionKey] = 0;
+    }
+    users[userIndex][sessionKey]++;
+    
+    users[userIndex].lastActive = new Date().toISOString();
+    
+    var today = new Date().toISOString().split('T')[0];
+    var lastStreakDate = users[userIndex].lastStreakDate;
+    
+    if (!lastStreakDate) {
+        users[userIndex].streak = 1;
+        users[userIndex].lastStreakDate = today;
+    } else if (lastStreakDate !== today) {
+        var lastDate = new Date(lastStreakDate);
+        var todayDate = new Date(today);
+        var diffDays = Math.floor((todayDate - lastDate) / (1000 * 60 * 60 * 24));
+        
+        if (diffDays === 1) {
+            users[userIndex].streak = (users[userIndex].streak || 0) + 1;
+        } else if (diffDays > 1) {
+            users[userIndex].streak = 1;
+        }
+        users[userIndex].lastStreakDate = today;
+    }
+    
+    if (score !== undefined) {
+        var bestKey = 'best_' + game;
+        if (!users[userIndex][bestKey] || score > users[userIndex][bestKey]) {
+            users[userIndex][bestKey] = score;
+        }
+    }
+    
+    writeJSON(USERS_FILE, users);
+    
+    res.json({ 
+        success: true, 
+        sessions: users[userIndex][sessionKey],
+        streak: users[userIndex].streak,
+        personalBest: users[userIndex]['best_' + game]
+    });
+});
+
+app.get('/api/game/stats/:accessCode/:username', function(req, res) {
+    var accessCode = req.params.accessCode;
+    var username = req.params.username;
+    
+    var users = readJSON(USERS_FILE);
+    var user = null;
+    for (var i = 0; i < users.length; i++) {
+        if (users[i].code === accessCode && users[i].username.toLowerCase() === username.toLowerCase()) {
+            user = users[i];
+            break;
+        }
+    }
+    
+    if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+    }
+    
+    res.json({
+        success: true,
+        stats: {
+            sessions: {
+                sequence: user.sessions_sequence || 0,
+                startrail: user.sessions_startrail || 0,
+                kwikstar: user.sessions_kwikstar || 0,
+                gonogo: user.sessions_gonogo || 0,
+                stroop: user.sessions_stroop || 0
+            },
+            totalSessions: (user.sessions_sequence || 0) + (user.sessions_startrail || 0) +
+                          (user.sessions_kwikstar || 0) + (user.sessions_gonogo || 0) + (user.sessions_stroop || 0),
+            streak: user.streak || 0,
+            personalBests: {
+                sequence: user.best_sequence || 0,
+                startrail: user.best_startrail || 0,
+                kwikstar: user.best_kwikstar || 0,
+                gonogo: user.best_gonogo || 0,
+                stroop: user.best_stroop || 0
+            }
+        }
+    });
+});
+
 // ============ TRIAL ROUTES ============
 
 app.get('/trial', function(req, res) {
@@ -940,7 +992,6 @@ app.post('/api/trial/register', function(req, res) {
     
     var licenses = readJSON(LICENSES_FILE);
     
-    // Check if email already used for trial
     var existingTrial = null;
     for (var i = 0; i < licenses.length; i++) {
         if (licenses[i].email === email && licenses[i].isTrial) {
@@ -952,10 +1003,8 @@ app.post('/api/trial/register', function(req, res) {
         return res.status(400).json({ error: 'Email already used for a free trial' });
     }
     
-    // Generate license key
     var licenseKey = generateKey('LIC');
     
-    // Set expiration to 7 days from now
     var expirationDate = new Date();
     expirationDate.setDate(expirationDate.getDate() + 7);
     
