@@ -297,6 +297,47 @@ body[data-lang="en"] .lang-en { display: inline; }
     font-family: 'Nunito', sans-serif;
 }
 
+/* Tone Selection */
+.tone-grid {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 30px;
+}
+
+.tone-btn {
+    padding: 15px 20px;
+    background: var(--bg-card);
+    border: 3px solid transparent;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    min-width: 90px;
+}
+
+.tone-btn:hover {
+    border-color: var(--primary);
+}
+
+.tone-btn.selected {
+    border-color: var(--secondary);
+    background: rgba(232, 168, 72, 0.1);
+}
+
+.tone-btn .icon {
+    font-size: 1.8rem;
+}
+
+.tone-btn .label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-light);
+    font-family: 'Nunito', sans-serif;
+}
+
 /* Countdown */
 .countdown {
     font-size: 4rem;
@@ -876,7 +917,8 @@ body[data-lang="en"] .lang-en { display: inline; }
     }
     
     .difficulty-grid,
-    .tempo-grid {
+    .tempo-grid,
+    .tone-grid {
         flex-wrap: wrap;
         justify-content: center;
     }
@@ -986,6 +1028,26 @@ body[data-lang="en"] .lang-en { display: inline; }
                 <span class="lang-es">Rápido</span>
             </span>
             <span class="bpm">120 BPM</span>
+        </button>
+    </div>
+    
+    <div class="section-title">
+        <span class="lang-en">Tone</span>
+        <span class="lang-es">Tono</span>
+    </div>
+    
+    <div class="tone-grid">
+        <button class="tone-btn selected" data-tone="startone" onclick="selectTone('startone')">
+            <span class="icon">⭐</span>
+            <span class="label">StarTone</span>
+        </button>
+        <button class="tone-btn" data-tone="conga" onclick="selectTone('conga')">
+            <span class="icon">🥁</span>
+            <span class="label">Conga</span>
+        </button>
+        <button class="tone-btn" data-tone="crystal" onclick="selectTone('crystal')">
+            <span class="icon">🔔</span>
+            <span class="label">Crystal</span>
         </button>
     </div>
     
@@ -1177,6 +1239,7 @@ function setLang(lang) {
 // Game State
 var difficulty = 'standard';
 var tempo = 'steady';
+var toneType = localStorage.getItem('gostar-tone') || 'startone';
 var currentQuarter = 1;
 var currentRound = 1;
 var roundsPerQuarter = 3;
@@ -1221,6 +1284,16 @@ function init() {
     setLang(currentLang);
     updateStreakDisplay();
     checkStreak();
+    
+    // Load saved tone preference
+    toneType = localStorage.getItem('gostar-tone') || 'startone';
+    var toneBtns = document.querySelectorAll('.tone-btn');
+    for (var i = 0; i < toneBtns.length; i++) {
+        toneBtns[i].classList.remove('selected');
+        if (toneBtns[i].dataset.tone === toneType) {
+            toneBtns[i].classList.add('selected');
+        }
+    }
 }
 
 function checkStreak() {
@@ -1270,6 +1343,20 @@ function selectTempo(t) {
             btns[i].classList.add('selected');
         }
     }
+}
+
+function selectTone(t) {
+    toneType = t;
+    localStorage.setItem('gostar-tone', t);
+    var btns = document.querySelectorAll('.tone-btn');
+    for (var i = 0; i < btns.length; i++) {
+        btns[i].classList.remove('selected');
+        if (btns[i].dataset.tone === t) {
+            btns[i].classList.add('selected');
+        }
+    }
+    // Play preview sound
+    playSound(0);
 }
 
 function showScreen(screenId) {
@@ -1788,6 +1875,10 @@ function getAudioContext() {
     return audioCtx;
 }
 
+// ============================================
+// TONE GENERATORS - StarTone, Conga, Crystal
+// ============================================
+
 function playSound(colorIndex) {
     var ctx = getAudioContext();
     if (!ctx) return;
@@ -1795,20 +1886,110 @@ function playSound(colorIndex) {
     try {
         if (ctx.state === 'suspended') ctx.resume();
         
-        var osc = ctx.createOscillator();
-        var gain = ctx.createGain();
-        
-        osc.type = 'sine';
-        osc.frequency.value = noteFreqs[colorIndex % noteFreqs.length];
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        
-        gain.gain.setValueAtTime(0.4, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
-        
-        osc.start(ctx.currentTime);
-        osc.stop(ctx.currentTime + 0.2);
+        if (toneType === 'startone') {
+            playStarTone(ctx, colorIndex);
+        } else if (toneType === 'conga') {
+            playCongaTone(ctx, colorIndex);
+        } else if (toneType === 'crystal') {
+            playCrystalTone(ctx, colorIndex);
+        }
     } catch (e) {}
+}
+
+// StarTone - Original sine wave (clean, digital)
+function playStarTone(ctx, colorIndex) {
+    var osc = ctx.createOscillator();
+    var gain = ctx.createGain();
+    
+    osc.type = 'sine';
+    osc.frequency.value = noteFreqs[colorIndex % noteFreqs.length];
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    
+    gain.gain.setValueAtTime(0.4, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+    
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.2);
+}
+
+// Conga - Warm percussion (Puerto Rico connection)
+function playCongaTone(ctx, colorIndex) {
+    var congaFreqs = [120, 150, 180, 220, 260, 300];
+    var freq = congaFreqs[colorIndex % congaFreqs.length];
+    
+    var osc = ctx.createOscillator();
+    var gain = ctx.createGain();
+    var filter = ctx.createBiquadFilter();
+    
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(freq * 1.5, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(freq, ctx.currentTime + 0.05);
+    
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(1500, ctx.currentTime);
+    filter.frequency.exponentialRampToValueAtTime(400, ctx.currentTime + 0.1);
+    filter.Q.value = 2;
+    
+    osc.connect(filter);
+    filter.connect(gain);
+    gain.connect(ctx.destination);
+    
+    gain.gain.setValueAtTime(0.6, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.25);
+    
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.3);
+    
+    // Add a click/slap
+    var click = ctx.createOscillator();
+    var clickGain = ctx.createGain();
+    
+    click.type = 'square';
+    click.frequency.value = freq * 4;
+    click.connect(clickGain);
+    clickGain.connect(ctx.destination);
+    
+    clickGain.gain.setValueAtTime(0.15, ctx.currentTime);
+    clickGain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.02);
+    
+    click.start(ctx.currentTime);
+    click.stop(ctx.currentTime + 0.03);
+}
+
+// Crystal - Gentle chimes (calming for seniors)
+function playCrystalTone(ctx, colorIndex) {
+    var crystalFreqs = [523.25, 659.25, 783.99, 1046.50, 1174.66, 1318.51];
+    var freq = crystalFreqs[colorIndex % crystalFreqs.length];
+    
+    var osc = ctx.createOscillator();
+    var gain = ctx.createGain();
+    
+    osc.type = 'sine';
+    osc.frequency.value = freq;
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    
+    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.8);
+    
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.9);
+    
+    // Harmonic overtone
+    var osc2 = ctx.createOscillator();
+    var gain2 = ctx.createGain();
+    
+    osc2.type = 'sine';
+    osc2.frequency.value = freq * 2.5;
+    osc2.connect(gain2);
+    gain2.connect(ctx.destination);
+    
+    gain2.gain.setValueAtTime(0.1, ctx.currentTime);
+    gain2.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+    
+    osc2.start(ctx.currentTime);
+    osc2.stop(ctx.currentTime + 0.6);
 }
 
 function playCountdownBeep() {
@@ -1818,19 +1999,56 @@ function playCountdownBeep() {
     try {
         if (ctx.state === 'suspended') ctx.resume();
         
-        var osc = ctx.createOscillator();
-        var gain = ctx.createGain();
-        
-        osc.type = 'sine';
-        osc.frequency.value = 440;
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        
-        gain.gain.setValueAtTime(0.3, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
-        
-        osc.start(ctx.currentTime);
-        osc.stop(ctx.currentTime + 0.15);
+        if (toneType === 'conga') {
+            var osc = ctx.createOscillator();
+            var gain = ctx.createGain();
+            var filter = ctx.createBiquadFilter();
+            
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(200, ctx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.05);
+            
+            filter.type = 'lowpass';
+            filter.frequency.value = 800;
+            
+            osc.connect(filter);
+            filter.connect(gain);
+            gain.connect(ctx.destination);
+            
+            gain.gain.setValueAtTime(0.4, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+            
+            osc.start(ctx.currentTime);
+            osc.stop(ctx.currentTime + 0.2);
+        } else if (toneType === 'crystal') {
+            var osc = ctx.createOscillator();
+            var gain = ctx.createGain();
+            
+            osc.type = 'sine';
+            osc.frequency.value = 880;
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            
+            gain.gain.setValueAtTime(0.2, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+            
+            osc.start(ctx.currentTime);
+            osc.stop(ctx.currentTime + 0.35);
+        } else {
+            var osc = ctx.createOscillator();
+            var gain = ctx.createGain();
+            
+            osc.type = 'sine';
+            osc.frequency.value = 440;
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            
+            gain.gain.setValueAtTime(0.3, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+            
+            osc.start(ctx.currentTime);
+            osc.stop(ctx.currentTime + 0.15);
+        }
     } catch (e) {}
 }
 
@@ -1841,22 +2059,65 @@ function playGoBeep() {
     try {
         if (ctx.state === 'suspended') ctx.resume();
         
-        var freqs = [523.25, 659.25, 783.99];
-        
-        for (var i = 0; i < freqs.length; i++) {
-            var osc = ctx.createOscillator();
-            var gain = ctx.createGain();
-            
-            osc.type = 'sine';
-            osc.frequency.value = freqs[i];
-            osc.connect(gain);
-            gain.connect(ctx.destination);
-            
-            gain.gain.setValueAtTime(0.25, ctx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
-            
-            osc.start(ctx.currentTime);
-            osc.stop(ctx.currentTime + 0.35);
+        if (toneType === 'conga') {
+            var freqs = [150, 180, 220];
+            for (var i = 0; i < freqs.length; i++) {
+                (function(idx) {
+                    var osc = ctx.createOscillator();
+                    var gain = ctx.createGain();
+                    var filter = ctx.createBiquadFilter();
+                    
+                    osc.type = 'triangle';
+                    osc.frequency.value = freqs[idx];
+                    filter.type = 'lowpass';
+                    filter.frequency.value = 1200;
+                    
+                    osc.connect(filter);
+                    filter.connect(gain);
+                    gain.connect(ctx.destination);
+                    
+                    var startTime = ctx.currentTime + (idx * 0.08);
+                    gain.gain.setValueAtTime(0.4, startTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, startTime + 0.2);
+                    
+                    osc.start(startTime);
+                    osc.stop(startTime + 0.25);
+                })(i);
+            }
+        } else if (toneType === 'crystal') {
+            var freqs = [523.25, 659.25, 783.99, 1046.50];
+            for (var i = 0; i < freqs.length; i++) {
+                var osc = ctx.createOscillator();
+                var gain = ctx.createGain();
+                
+                osc.type = 'sine';
+                osc.frequency.value = freqs[i];
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                
+                gain.gain.setValueAtTime(0.15, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.6);
+                
+                osc.start(ctx.currentTime);
+                osc.stop(ctx.currentTime + 0.7);
+            }
+        } else {
+            var freqs = [523.25, 659.25, 783.99];
+            for (var i = 0; i < freqs.length; i++) {
+                var osc = ctx.createOscillator();
+                var gain = ctx.createGain();
+                
+                osc.type = 'sine';
+                osc.frequency.value = freqs[i];
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                
+                gain.gain.setValueAtTime(0.25, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+                
+                osc.start(ctx.currentTime);
+                osc.stop(ctx.currentTime + 0.35);
+            }
         }
     } catch (e) {}
 }
@@ -1868,24 +2129,71 @@ function playSuccessSound() {
     try {
         if (ctx.state === 'suspended') ctx.resume();
         
-        var notes = [523.25, 659.25, 783.99, 1046.50];
-        var startTime = ctx.currentTime;
-        
-        for (var i = 0; i < notes.length; i++) {
-            var osc = ctx.createOscillator();
-            var gain = ctx.createGain();
-            
-            osc.type = 'sine';
-            osc.frequency.value = notes[i];
-            osc.connect(gain);
-            gain.connect(ctx.destination);
-            
-            var noteStart = startTime + (i * 0.08);
-            gain.gain.setValueAtTime(0.3, noteStart);
-            gain.gain.exponentialRampToValueAtTime(0.01, noteStart + 0.2);
-            
-            osc.start(noteStart);
-            osc.stop(noteStart + 0.25);
+        if (toneType === 'conga') {
+            var freqs = [150, 180, 220, 260];
+            for (var i = 0; i < freqs.length; i++) {
+                (function(idx) {
+                    var osc = ctx.createOscillator();
+                    var gain = ctx.createGain();
+                    var filter = ctx.createBiquadFilter();
+                    
+                    osc.type = 'triangle';
+                    osc.frequency.value = freqs[idx];
+                    filter.type = 'lowpass';
+                    filter.frequency.value = 1500;
+                    
+                    osc.connect(filter);
+                    filter.connect(gain);
+                    gain.connect(ctx.destination);
+                    
+                    var startTime = ctx.currentTime + (idx * 0.07);
+                    gain.gain.setValueAtTime(0.5, startTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, startTime + 0.15);
+                    
+                    osc.start(startTime);
+                    osc.stop(startTime + 0.2);
+                })(i);
+            }
+        } else if (toneType === 'crystal') {
+            var notes = [523.25, 659.25, 783.99, 1046.50];
+            for (var i = 0; i < notes.length; i++) {
+                (function(idx) {
+                    var osc = ctx.createOscillator();
+                    var gain = ctx.createGain();
+                    
+                    osc.type = 'sine';
+                    osc.frequency.value = notes[idx];
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    
+                    var noteStart = ctx.currentTime + (idx * 0.1);
+                    gain.gain.setValueAtTime(0.25, noteStart);
+                    gain.gain.exponentialRampToValueAtTime(0.01, noteStart + 0.4);
+                    
+                    osc.start(noteStart);
+                    osc.stop(noteStart + 0.5);
+                })(i);
+            }
+        } else {
+            var notes = [523.25, 659.25, 783.99, 1046.50];
+            for (var i = 0; i < notes.length; i++) {
+                (function(idx) {
+                    var osc = ctx.createOscillator();
+                    var gain = ctx.createGain();
+                    
+                    osc.type = 'sine';
+                    osc.frequency.value = notes[idx];
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    
+                    var noteStart = ctx.currentTime + (idx * 0.08);
+                    gain.gain.setValueAtTime(0.3, noteStart);
+                    gain.gain.exponentialRampToValueAtTime(0.01, noteStart + 0.2);
+                    
+                    osc.start(noteStart);
+                    osc.stop(noteStart + 0.25);
+                })(i);
+            }
         }
     } catch (e) {}
 }
