@@ -658,16 +658,16 @@ tr:hover td {
     background: currentColor;
 }
 
-/* License Key */
+/* Facility PIN */
 .license-key {
-    font-family: 'Courier New', monospace;
-    font-size: 13px;
-    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
     background: var(--bg-primary);
-    padding: 6px 12px;
-    border-radius: 8px;
+    padding: 8px 16px;
+    border-radius: 10px;
     color: var(--accent-teal);
-    letter-spacing: 1px;
+    letter-spacing: 4px;
 }
 
 /* Progress Bar */
@@ -1192,8 +1192,8 @@ tr:hover td {
                                     <span class="lang-es">Instalación</span>
                                 </th>
                                 <th>
-                                    <span class="lang-en">License Key</span>
-                                    <span class="lang-es">Clave de Licencia</span>
+                                    <span class="lang-en">Facility PIN</span>
+                                    <span class="lang-es">PIN de Instalación</span>
                                 </th>
                                 <th>
                                     <span class="lang-en">Users</span>
@@ -1253,8 +1253,8 @@ tr:hover td {
                                     <span class="lang-es">Instalación</span>
                                 </th>
                                 <th>
-                                    <span class="lang-en">License Key</span>
-                                    <span class="lang-es">Clave de Licencia</span>
+                                    <span class="lang-en">Facility PIN</span>
+                                    <span class="lang-es">PIN de Instalación</span>
                                 </th>
                                 <th>
                                     <span class="lang-en">Users</span>
@@ -1291,15 +1291,15 @@ tr:hover td {
                         <span class="lang-es">Licencias</span>
                     </h1>
                     <p class="page-subtitle">
-                        <span class="lang-en">Generate and manage license keys</span>
-                        <span class="lang-es">Genera y gestiona claves de licencia</span>
+                        <span class="lang-en">Generate and manage facility PINs</span>
+                        <span class="lang-es">Genera y gestiona PINs de instalaciones</span>
                     </p>
                 </div>
                 <div class="header-actions">
                     <button class="btn btn-primary" onclick="openModal('newLicense')">
                         <span>🔑</span>
-                        <span class="lang-en">Generate License</span>
-                        <span class="lang-es">Generar Licencia</span>
+                        <span class="lang-en">Generate PIN</span>
+                        <span class="lang-es">Generar PIN</span>
                     </button>
                 </div>
             </div>
@@ -1310,8 +1310,8 @@ tr:hover td {
                         <thead>
                             <tr>
                                 <th>
-                                    <span class="lang-en">License Key</span>
-                                    <span class="lang-es">Clave de Licencia</span>
+                                    <span class="lang-en">Facility PIN</span>
+                                    <span class="lang-es">PIN de Instalación</span>
                                 </th>
                                 <th>
                                     <span class="lang-en">Type</span>
@@ -1503,8 +1503,8 @@ tr:hover td {
     <div class="modal">
         <div class="modal-header">
             <h2 class="modal-title">
-                <span class="lang-en">Generate License Key</span>
-                <span class="lang-es">Generar Clave de Licencia</span>
+                <span class="lang-en">Generate Facility</span>
+                <span class="lang-es">Generar Instalación</span>
             </h2>
             <button class="modal-close" onclick="closeModal('newLicense')">&times;</button>
         </div>
@@ -1542,14 +1542,14 @@ tr:hover td {
             <div id="generated-key-container" style="display: none;">
                 <div class="generated-key-display">
                     <div class="generated-key-label">
-                        <span class="lang-en">Your License Key</span>
-                        <span class="lang-es">Tu Clave de Licencia</span>
+                        <span class="lang-en">Your Facility PIN</span>
+                        <span class="lang-es">Tu PIN de Instalación</span>
                     </div>
-                    <div class="generated-key-value" id="generated-key-value">GOSTAR-XXXX-XXXX</div>
+                    <div class="generated-key-value" id="generated-key-value" style="font-size: 48px; letter-spacing: 8px;">0000</div>
                     <button class="copy-btn" onclick="copyLicenseKey()">
                         <span>📋</span>
-                        <span class="lang-en">Copy Key</span>
-                        <span class="lang-es">Copiar Clave</span>
+                        <span class="lang-en">Copy PIN</span>
+                        <span class="lang-es">Copiar PIN</span>
                     </button>
                 </div>
             </div>
@@ -1560,8 +1560,8 @@ tr:hover td {
                 <span class="lang-es">Cancelar</span>
             </button>
             <button class="btn btn-primary" id="generate-key-btn" onclick="generateLicenseKey()">
-                <span class="lang-en">Generate Key</span>
-                <span class="lang-es">Generar Clave</span>
+                <span class="lang-en">Generate PIN</span>
+                <span class="lang-es">Generar PIN</span>
             </button>
         </div>
     </div>
@@ -1604,8 +1604,8 @@ tr:hover td {
             
             <div class="form-group">
                 <label class="form-label">
-                    <span class="lang-en">Assign License Key (Optional)</span>
-                    <span class="lang-es">Asignar Clave de Licencia (Opcional)</span>
+                    <span class="lang-en">Assign Facility PIN (Optional)</span>
+                    <span class="lang-es">Asignar PIN de Instalación (Opcional)</span>
                 </label>
                 <input type="text" class="form-input" id="facility-license" placeholder="GOSTAR-XXXX-XXXX">
             </div>
@@ -1998,7 +1998,7 @@ function closeModal(modalId) {
     document.getElementById('modal-' + modalId).classList.remove('active');
 }
 
-// Generate License Key
+// Generate Facility
 function generateLicenseKey() {
     var facilityName = document.getElementById('license-facility-name').value;
     var facilityLocation = document.getElementById('license-facility-location').value;
