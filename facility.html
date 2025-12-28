@@ -20,9 +20,7 @@
             --text-muted: #808080;
             --accent-gold: #FFD93D;
             --accent-teal: #00D9A5;
-            --accent-blue: #4DA8FF;
             --accent-coral: #FF6B6B;
-            --accent-purple: #A855F7;
             --accent-green: #22C55E;
             --gradient-gold: linear-gradient(135deg, #FFD93D 0%, #FF9F1C 100%);
             --gradient-teal: linear-gradient(135deg, #00D9A5 0%, #00B386 100%);
@@ -37,13 +35,7 @@
             background: var(--bg-primary);
             color: var(--text-primary);
             line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
         }
-
-        body[data-lang="es"] .lang-en { display: none !important; }
-        body[data-lang="en"] .lang-es { display: none !important; }
-        body[data-lang="es"] .lang-es { display: inline !important; }
-        body[data-lang="en"] .lang-en { display: inline !important; }
 
         .dashboard { display: flex; min-height: 100vh; }
 
@@ -51,130 +43,88 @@
             width: var(--sidebar-width);
             background: var(--bg-secondary);
             border-right: 1px solid var(--border-color);
+            padding: 24px 0;
             display: flex;
             flex-direction: column;
             position: fixed;
-            top: 0;
-            left: 0;
             height: 100vh;
-            z-index: 100;
+            overflow-y: auto;
         }
 
         .sidebar-header {
-            padding: 24px;
+            padding: 0 24px 24px;
             border-bottom: 1px solid var(--border-color);
+            margin-bottom: 24px;
         }
 
-        .sidebar-logo {
+        .logo {
             display: flex;
             align-items: center;
             gap: 12px;
             text-decoration: none;
-            margin-bottom: 8px;
+            margin-bottom: 16px;
         }
 
-        .sidebar-logo-icon {
-            font-size: 32px;
-            filter: drop-shadow(0 0 10px rgba(255, 217, 61, 0.4));
-        }
+        .logo-icon { font-size: 32px; }
 
-        .sidebar-logo-text {
+        .logo-text {
             font-size: 24px;
             font-weight: 900;
             color: var(--text-primary);
         }
 
-        .sidebar-logo-text span {
-            background: var(--gradient-gold);
+        .logo-text span {
+            background: var(--gradient-teal);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
-        .sidebar-badge {
+        .facility-badge {
             display: inline-block;
-            font-size: 11px;
-            font-weight: 700;
+            background: var(--gradient-gold);
             color: var(--bg-primary);
-            background: var(--accent-teal);
-            padding: 4px 10px;
+            padding: 4px 12px;
             border-radius: 20px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .facility-name-display {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-secondary);
-            margin-top: 12px;
-            padding-top: 12px;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .sidebar-nav {
-            flex: 1;
-            padding: 16px 12px;
-            overflow-y: auto;
-        }
-
-        .nav-section { margin-bottom: 24px; }
-
-        .nav-section-title {
             font-size: 11px;
             font-weight: 700;
-            color: var(--text-muted);
             text-transform: uppercase;
-            letter-spacing: 1.5px;
-            padding: 8px 12px;
-            margin-bottom: 4px;
+            letter-spacing: 0.5px;
         }
+
+        .nav-menu { padding: 0 12px; flex: 1; }
 
         .nav-item {
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 12px 16px;
+            padding: 14px 16px;
             border-radius: 12px;
             color: var(--text-secondary);
             text-decoration: none;
-            font-weight: 600;
-            font-size: 14px;
-            transition: all 0.2s ease;
+            font-weight: 500;
+            transition: all 0.2s;
             cursor: pointer;
-            border: none;
-            background: transparent;
-            width: 100%;
-            text-align: left;
+            margin-bottom: 4px;
         }
 
-        .nav-item:hover {
-            background: var(--bg-card);
-            color: var(--text-primary);
-        }
-
-        .nav-item.active {
-            background: rgba(0, 217, 165, 0.1);
-            color: var(--accent-teal);
-        }
-
-        .nav-item-icon {
-            font-size: 18px;
-            width: 24px;
-            text-align: center;
-        }
+        .nav-item:hover { background: var(--bg-card); color: var(--text-primary); }
+        .nav-item.active { background: var(--accent-teal); color: var(--bg-primary); }
+        .nav-item .icon { font-size: 20px; width: 24px; text-align: center; }
 
         .sidebar-footer {
-            padding: 16px;
+            padding: 24px;
             border-top: 1px solid var(--border-color);
+            margin-top: auto;
         }
 
         .lang-toggle {
             display: flex;
-            gap: 4px;
+            gap: 8px;
             background: var(--bg-card);
             padding: 4px;
             border-radius: 10px;
+            margin-bottom: 16px;
         }
 
         .lang-btn {
@@ -184,241 +134,93 @@
             background: transparent;
             color: var(--text-secondary);
             border-radius: 8px;
-            font-family: 'Inter', sans-serif;
             font-weight: 600;
-            font-size: 12px;
+            font-size: 13px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.2s;
         }
 
         .lang-btn:hover { color: var(--text-primary); }
-
-        .lang-btn.active {
-            background: var(--accent-teal);
-            color: var(--bg-primary);
-        }
+        .lang-btn.active { background: var(--accent-teal); color: var(--bg-primary); }
 
         .logout-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
             width: 100%;
             padding: 12px;
-            margin-top: 12px;
-            font-size: 14px;
-            font-weight: 600;
-            font-family: 'Inter', sans-serif;
-            background: rgba(255, 107, 107, 0.1);
-            border: 1px solid rgba(255, 107, 107, 0.2);
+            background: transparent;
+            border: 1px solid var(--border-color);
             border-radius: 10px;
-            color: var(--accent-coral);
+            color: var(--text-secondary);
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.2s;
         }
 
-        .logout-btn:hover {
-            background: rgba(255, 107, 107, 0.2);
-            border-color: var(--accent-coral);
-        }
+        .logout-btn:hover { background: var(--accent-coral); color: white; border-color: var(--accent-coral); }
 
         .main-content {
             flex: 1;
             margin-left: var(--sidebar-width);
             padding: 32px;
-            overflow-y: auto;
+            max-width: calc(100% - var(--sidebar-width));
         }
+
+        .page-section { display: none; }
+        .page-section.active { display: block; }
 
         .page-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
             margin-bottom: 32px;
         }
 
         .page-title {
-            font-size: 28px;
+            font-size: 32px;
             font-weight: 800;
-            letter-spacing: -0.5px;
+            margin-bottom: 8px;
         }
 
-        .page-subtitle {
-            font-size: 14px;
-            color: var(--text-secondary);
-            margin-top: 4px;
-        }
+        .page-subtitle { color: var(--text-secondary); font-size: 15px; }
 
         .btn {
             display: inline-flex;
             align-items: center;
-            justify-content: center;
             gap: 8px;
-            padding: 12px 24px;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 600;
             font-size: 14px;
-            font-weight: 700;
-            font-family: 'Inter', sans-serif;
-            border-radius: 12px;
-            text-decoration: none;
-            transition: all 0.2s ease;
             cursor: pointer;
             border: none;
+            transition: all 0.2s;
         }
 
-        .btn-primary {
-            background: var(--gradient-teal);
-            color: var(--bg-primary);
+        .btn-primary { background: var(--gradient-teal); color: var(--bg-primary); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0, 217, 165, 0.3); }
+        .btn-secondary { background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border-color); }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
         }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 217, 165, 0.3);
-        }
-
-        .btn-secondary {
+        .stat-card {
             background: var(--bg-card);
-            color: var(--text-primary);
-            border: 1px solid var(--border-color);
-        }
-
-        .btn-secondary:hover {
-            border-color: var(--accent-teal);
-            background: rgba(0, 217, 165, 0.1);
-        }
-
-        .btn-small {
-            padding: 8px 16px;
-            font-size: 13px;
-        }
-
-        .license-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
             border-radius: 16px;
             padding: 24px;
-            margin-bottom: 24px;
+            border: 1px solid var(--border-color);
         }
 
-        .license-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-
-        .license-key-display {
-            font-family: 'Courier New', monospace;
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--accent-teal);
-            background: var(--bg-primary);
-            padding: 8px 16px;
-            border-radius: 8px;
-            letter-spacing: 1px;
-        }
-
-        .license-status {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 700;
-            background: rgba(34, 197, 94, 0.1);
-            color: var(--accent-green);
-        }
-
-        .license-status .dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: currentColor;
-        }
-
-        .license-status.expiring {
-            background: rgba(255, 217, 61, 0.1);
-            color: var(--accent-gold);
-        }
-
-        .license-status.expired {
-            background: rgba(255, 107, 107, 0.1);
-            color: var(--accent-coral);
-        }
-
-        .license-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-        }
-
-        .license-stat {
-            text-align: center;
-            padding: 16px;
-            background: var(--bg-primary);
-            border-radius: 12px;
-        }
-
-        .license-stat-value {
-            font-size: 28px;
-            font-weight: 900;
-            margin-bottom: 4px;
-        }
-
-        .license-stat:nth-child(1) .license-stat-value { color: var(--accent-gold); }
-        .license-stat:nth-child(2) .license-stat-value { color: var(--accent-teal); }
-        .license-stat:nth-child(3) .license-stat-value { color: var(--accent-blue); }
-
-        .license-stat-label {
-            font-size: 12px;
-            color: var(--text-secondary);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .usage-bar { margin-top: 24px; }
-
-        .usage-bar-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-        }
-
-        .usage-bar-label {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .usage-bar-value {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--accent-teal);
-        }
-
-        .usage-bar-track {
-            height: 12px;
-            background: var(--bg-primary);
-            border-radius: 6px;
-            overflow: hidden;
-        }
-
-        .usage-bar-fill {
-            height: 100%;
-            background: var(--gradient-teal);
-            border-radius: 6px;
-            transition: width 0.3s ease;
-        }
-
-        .usage-bar-fill.warning { background: var(--accent-gold); }
-        .usage-bar-fill.danger { background: var(--accent-coral); }
+        .stat-icon { font-size: 32px; margin-bottom: 12px; }
+        .stat-value { font-size: 36px; font-weight: 800; margin-bottom: 4px; }
+        .stat-label { color: var(--text-secondary); font-size: 14px; }
 
         .section {
             background: var(--bg-card);
-            border: 1px solid var(--border-color);
             border-radius: 16px;
+            border: 1px solid var(--border-color);
             margin-bottom: 24px;
             overflow: hidden;
         }
@@ -431,52 +233,33 @@
             border-bottom: 1px solid var(--border-color);
         }
 
-        .section-title {
-            font-size: 18px;
-            font-weight: 700;
-        }
-
-        .section-content { padding: 24px; }
+        .section-title { font-size: 18px; font-weight: 700; }
 
         .table-container { overflow-x: auto; }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th, td {
-            padding: 16px;
-            text-align: left;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        th {
-            font-size: 12px;
-            font-weight: 700;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        td {
-            font-size: 14px;
-            color: var(--text-primary);
-        }
-
-        tr:last-child td { border-bottom: none; }
-
-        tr:hover td { background: var(--bg-card-hover); }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 16px 20px; text-align: left; }
+        th { background: var(--bg-secondary); color: var(--text-secondary); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        tr { border-bottom: 1px solid var(--border-color); }
+        tr:last-child { border-bottom: none; }
+        tr:hover { background: rgba(255,255,255,0.02); }
 
         .access-code {
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            font-weight: 700;
-            background: var(--bg-primary);
-            padding: 6px 12px;
-            border-radius: 8px;
-            color: var(--accent-gold);
+            font-family: monospace;
+            background: var(--bg-secondary);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
             letter-spacing: 1px;
+        }
+
+        .user-pin {
+            font-family: monospace;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--accent-gold);
         }
 
         .status-badge {
@@ -489,75 +272,29 @@
             font-weight: 700;
         }
 
-        .status-badge.active {
-            background: rgba(34, 197, 94, 0.1);
-            color: var(--accent-green);
-        }
+        .status-badge.active { background: rgba(34, 197, 94, 0.1); color: var(--accent-green); }
 
-        .status-badge .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: currentColor;
-        }
-
-        .user-count-bar {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .user-count-text {
-            font-size: 14px;
-            font-weight: 600;
-            white-space: nowrap;
-        }
-
-        .user-count-track {
-            flex: 1;
-            height: 8px;
-            background: var(--bg-primary);
-            border-radius: 4px;
-            overflow: hidden;
-            min-width: 60px;
-        }
-
-        .user-count-fill {
-            height: 100%;
-            border-radius: 4px;
-            background: var(--accent-teal);
-        }
-
+        .user-count-bar { display: flex; align-items: center; gap: 12px; }
+        .user-count-text { font-weight: 600; min-width: 50px; }
+        .user-count-track { flex: 1; height: 8px; background: var(--bg-secondary); border-radius: 4px; overflow: hidden; max-width: 100px; }
+        .user-count-fill { height: 100%; background: var(--accent-teal); border-radius: 4px; transition: width 0.3s; }
         .user-count-fill.warning { background: var(--accent-gold); }
         .user-count-fill.full { background: var(--accent-coral); }
 
-        .table-actions {
-            display: flex;
-            gap: 8px;
-        }
-
+        .table-actions { display: flex; gap: 8px; }
         .action-btn {
             padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: transparent;
+            color: var(--text-secondary);
             font-size: 12px;
             font-weight: 600;
-            font-family: 'Inter', sans-serif;
-            background: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            color: var(--text-secondary);
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.2s;
         }
-
-        .action-btn:hover {
-            border-color: var(--accent-teal);
-            color: var(--accent-teal);
-        }
-
-        .action-btn.danger:hover {
-            border-color: var(--accent-coral);
-            color: var(--accent-coral);
-        }
+        .action-btn:hover { background: var(--bg-secondary); color: var(--text-primary); }
+        .action-btn.danger:hover { background: var(--accent-coral); color: white; border-color: var(--accent-coral); }
 
         .modal-overlay {
             display: none;
@@ -566,7 +303,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0,0,0,0.8);
             z-index: 1000;
             align-items: center;
             justify-content: center;
@@ -575,13 +312,11 @@
         .modal-overlay.active { display: flex; }
 
         .modal {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
+            background: var(--bg-card);
             border-radius: 20px;
             width: 100%;
-            max-width: 450px;
-            max-height: 90vh;
-            overflow-y: auto;
+            max-width: 480px;
+            border: 1px solid var(--border-color);
         }
 
         .modal-header {
@@ -592,216 +327,82 @@
             border-bottom: 1px solid var(--border-color);
         }
 
-        .modal-title {
-            font-size: 20px;
-            font-weight: 800;
-        }
-
-        .modal-close {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 24px;
-            cursor: pointer;
-            padding: 4px;
-            line-height: 1;
-        }
-
-        .modal-close:hover { color: var(--text-primary); }
-
+        .modal-title { font-size: 20px; font-weight: 700; }
+        .modal-close { background: none; border: none; color: var(--text-muted); font-size: 24px; cursor: pointer; }
         .modal-body { padding: 24px; }
-
-        .modal-footer {
-            display: flex;
-            justify-content: flex-end;
-            gap: 12px;
-            padding: 20px 24px;
-            border-top: 1px solid var(--border-color);
-        }
+        .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border-color); display: flex; gap: 12px; justify-content: flex-end; }
 
         .form-group { margin-bottom: 20px; }
-
-        .form-label {
-            display: block;
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--text-secondary);
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
+        .form-label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; }
         .form-input {
             width: 100%;
-            padding: 14px 16px;
-            font-size: 15px;
-            font-family: 'Inter', sans-serif;
-            background: var(--bg-card);
+            padding: 12px 16px;
+            border-radius: 10px;
             border: 1px solid var(--border-color);
-            border-radius: 12px;
+            background: var(--bg-secondary);
             color: var(--text-primary);
-            transition: all 0.2s ease;
+            font-size: 15px;
         }
-
-        .form-input:focus {
-            outline: none;
-            border-color: var(--accent-teal);
-            box-shadow: 0 0 0 3px rgba(0, 217, 165, 0.1);
-        }
-
-        .form-input::placeholder { color: var(--text-muted); }
-
-        .form-hint {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-top: 6px;
-        }
+        .form-input:focus { outline: none; border-color: var(--accent-teal); }
+        .form-hint { font-size: 13px; color: var(--text-muted); margin-top: 6px; }
 
         .generated-code-display {
-            background: var(--bg-primary);
-            border: 2px dashed var(--accent-gold);
+            background: var(--bg-secondary);
             border-radius: 12px;
             padding: 24px;
             text-align: center;
-            margin: 20px 0;
         }
-
-        .generated-code-label {
-            font-size: 12px;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 12px;
-        }
-
+        .generated-code-label { font-size: 14px; color: var(--text-secondary); margin-bottom: 8px; }
         .generated-code-value {
-            font-family: 'Courier New', monospace;
+            font-family: monospace;
             font-size: 28px;
-            font-weight: 700;
+            font-weight: 800;
             color: var(--accent-gold);
             letter-spacing: 3px;
             margin-bottom: 16px;
         }
-
         .copy-btn {
+            background: var(--gradient-teal);
+            color: var(--bg-primary);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 10px 20px;
-            font-size: 13px;
-            font-weight: 700;
-            font-family: 'Inter', sans-serif;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            color: var(--text-primary);
-            cursor: pointer;
-            transition: all 0.2s ease;
         }
 
-        .copy-btn:hover {
-            background: var(--accent-teal);
-            color: var(--bg-primary);
-            border-color: var(--accent-teal);
-        }
-
-        .copy-btn.copied {
-            background: var(--accent-green);
-            border-color: var(--accent-green);
-            color: white;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 60px 24px;
-        }
-
-        .empty-state-icon {
-            font-size: 64px;
-            margin-bottom: 16px;
-            opacity: 0.5;
-        }
-
-        .empty-state-title {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .empty-state-text {
-            font-size: 14px;
-            color: var(--text-secondary);
-            margin-bottom: 24px;
-        }
-
-        @media (max-width: 1200px) {
-            .license-stats { grid-template-columns: repeat(3, 1fr); }
-        }
-
-        @media (max-width: 900px) {
-            .sidebar {
-                transform: translateX(-100%);
-                transition: transform 0.3s ease;
-            }
-            .sidebar.open { transform: translateX(0); }
-            .main-content { margin-left: 0; }
-        }
-
-        @media (max-width: 600px) {
-            .license-stats { grid-template-columns: 1fr; }
-            .page-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 16px;
-            }
-            .main-content { padding: 20px; }
+        @media (max-width: 768px) {
+            .sidebar { display: none; }
+            .main-content { margin-left: 0; max-width: 100%; padding: 20px; }
         }
     </style>
 </head>
-<body data-lang="en">
-
+<body>
     <div class="dashboard">
         <aside class="sidebar">
             <div class="sidebar-header">
-                <a href="/" class="sidebar-logo">
-                    <span class="sidebar-logo-icon">⭐</span>
-                    <span class="sidebar-logo-text">Go<span>Star</span></span>
+                <a href="/" class="logo">
+                    <span class="logo-icon">⭐</span>
+                    <span class="logo-text">Go<span>Star</span></span>
                 </a>
-                <span class="sidebar-badge">
-                    <span class="lang-en">Facility</span>
-                    <span class="lang-es">Instalación</span>
-                </span>
-                <div class="facility-name-display" id="sidebarFacilityName">Loading...</div>
+                <span class="facility-badge">Facility Portal</span>
             </div>
             
-            <nav class="sidebar-nav">
-                <div class="nav-section">
-                    <div class="nav-section-title">
-                        <span class="lang-en">Overview</span>
-                        <span class="lang-es">Resumen</span>
-                    </div>
-                    <button class="nav-item active" onclick="showSection('overview', this)">
-                        <span class="nav-item-icon">📊</span>
-                        <span class="lang-en">Dashboard</span>
-                        <span class="lang-es">Panel</span>
-                    </button>
+            <nav class="nav-menu">
+                <div class="nav-item active" onclick="showSection('overview', this)">
+                    <span class="icon">📊</span>
+                    <span>Overview</span>
                 </div>
-                
-                <div class="nav-section">
-                    <div class="nav-section-title">
-                        <span class="lang-en">Management</span>
-                        <span class="lang-es">Gestión</span>
-                    </div>
-                    <button class="nav-item" onclick="showSection('codes', this)">
-                        <span class="nav-item-icon">🔑</span>
-                        <span class="lang-en">Access Codes</span>
-                        <span class="lang-es">Códigos de Acceso</span>
-                    </button>
-                    <button class="nav-item" onclick="showSection('users', this)">
-                        <span class="nav-item-icon">👥</span>
-                        <span class="lang-en">Users</span>
-                        <span class="lang-es">Usuarios</span>
-                    </button>
+                <div class="nav-item" onclick="showSection('codes', this)">
+                    <span class="icon">🔑</span>
+                    <span>Access Codes</span>
+                </div>
+                <div class="nav-item" onclick="showSection('users', this)">
+                    <span class="icon">👥</span>
+                    <span>Users</span>
                 </div>
             </nav>
             
@@ -810,146 +411,73 @@
                     <button class="lang-btn active" onclick="setLang('en')">EN</button>
                     <button class="lang-btn" onclick="setLang('es')">ES</button>
                 </div>
-                <button class="logout-btn" onclick="logout()">
-                    <span>🚪</span>
-                    <span class="lang-en">Logout</span>
-                    <span class="lang-es">Cerrar Sesión</span>
-                </button>
+                <button class="logout-btn" onclick="logout()">🚪 Logout</button>
             </div>
         </aside>
-        
+
         <main class="main-content">
-            <!-- Overview Section -->
-            <div id="section-overview" class="page-section">
+            <div id="section-overview" class="page-section active">
                 <div class="page-header">
                     <div>
-                        <h1 class="page-title">
-                            <span class="lang-en">Dashboard</span>
-                            <span class="lang-es">Panel de Control</span>
-                        </h1>
-                        <p class="page-subtitle">
-                            <span class="lang-en">Manage your facility's cognitive training program</span>
-                            <span class="lang-es">Gestiona el programa de entrenamiento cognitivo</span>
-                        </p>
-                    </div>
-                    <div class="header-actions">
-                        <button class="btn btn-primary" onclick="openModal('newCode')">
-                            <span>🔑</span>
-                            <span class="lang-en">Create Access Code</span>
-                            <span class="lang-es">Crear Código</span>
-                        </button>
+                        <h1 class="page-title" id="facilityTitle">Facility Dashboard</h1>
+                        <p class="page-subtitle">Manage your cognitive training program</p>
                     </div>
                 </div>
-                
-                <div class="license-card">
-                    <div class="license-header">
-                        <span class="license-key-display" id="licenseKeyDisplay">LIC-XXXXXXXX</span>
-                        <span class="license-status" id="licenseStatus">
-                            <span class="dot"></span>
-                            <span class="lang-en">Active</span>
-                            <span class="lang-es">Activo</span>
-                        </span>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">👥</div>
+                        <div class="stat-value" id="statUsers">0</div>
+                        <div class="stat-label">Total Users</div>
                     </div>
-                    
-                    <div class="license-stats">
-                        <div class="license-stat">
-                            <div class="license-stat-value" id="statUserPool">10</div>
-                            <div class="license-stat-label">
-                                <span class="lang-en">User Pool</span>
-                                <span class="lang-es">Pool Total</span>
-                            </div>
-                        </div>
-                        <div class="license-stat">
-                            <div class="license-stat-value" id="statUsedPool">0</div>
-                            <div class="license-stat-label">
-                                <span class="lang-en">Allocated</span>
-                                <span class="lang-es">Asignados</span>
-                            </div>
-                        </div>
-                        <div class="license-stat">
-                            <div class="license-stat-value" id="statRemainingPool">10</div>
-                            <div class="license-stat-label">
-                                <span class="lang-en">Available</span>
-                                <span class="lang-es">Disponibles</span>
-                            </div>
-                        </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🎮</div>
+                        <div class="stat-value" id="statSessions">0</div>
+                        <div class="stat-label">Total Sessions</div>
                     </div>
-                    
-                    <div class="usage-bar">
-                        <div class="usage-bar-header">
-                            <span class="usage-bar-label">
-                                <span class="lang-en">User Allocation</span>
-                                <span class="lang-es">Asignación</span>
-                            </span>
-                            <span class="usage-bar-value" id="usagePercent">0%</span>
-                        </div>
-                        <div class="usage-bar-track">
-                            <div class="usage-bar-fill" id="usageBarFill" style="width: 0%"></div>
-                        </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🔑</div>
+                        <div class="stat-value" id="statCodes">0</div>
+                        <div class="stat-label">Access Codes</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📊</div>
+                        <div class="stat-value" id="statPool">0</div>
+                        <div class="stat-label">Pool Remaining</div>
                     </div>
                 </div>
-                
-                <div class="section">
-                    <div class="section-content" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-                        <div>
-                            <strong>
-                                <span class="lang-en">License Expires:</span>
-                                <span class="lang-es">Licencia Expira:</span>
-                            </strong>
-                            <span id="expirationDate" style="color: var(--accent-gold); margin-left: 8px;">--</span>
-                        </div>
-                        <div id="daysRemaining" style="font-weight: 700; color: var(--accent-teal);">-- days remaining</div>
-                    </div>
-                </div>
-                
+
                 <div class="section">
                     <div class="section-header">
-                        <h2 class="section-title">
-                            <span class="lang-en">Access Codes</span>
-                            <span class="lang-es">Códigos de Acceso</span>
-                        </h2>
-                        <button class="btn btn-secondary btn-small" onclick="showSection('codes', document.querySelectorAll('.nav-item')[1])">
-                            <span class="lang-en">View All</span>
-                            <span class="lang-es">Ver Todos</span>
-                        </button>
+                        <h2 class="section-title">Recent Access Codes</h2>
+                        <button class="btn btn-secondary" onclick="showSection('codes', document.querySelectorAll('.nav-item')[1])">View All</button>
                     </div>
                     <div class="table-container">
                         <table>
                             <thead>
                                 <tr>
-                                    <th><span class="lang-en">Code</span><span class="lang-es">Código</span></th>
-                                    <th><span class="lang-en">Label</span><span class="lang-es">Etiqueta</span></th>
-                                    <th><span class="lang-en">Users</span><span class="lang-es">Usuarios</span></th>
-                                    <th><span class="lang-en">Status</span><span class="lang-es">Estado</span></th>
+                                    <th>Code</th>
+                                    <th>Label</th>
+                                    <th>Users</th>
+                                    <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody id="overviewCodesTable">
-                                <tr><td colspan="4" style="text-align: center; color: var(--text-muted);">Loading...</td></tr>
+                                <tr><td colspan="4" style="text-align:center;color:var(--text-muted);">Loading...</td></tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-            
-            <!-- Access Codes Section -->
-            <div id="section-codes" class="page-section" style="display: none;">
+
+            <div id="section-codes" class="page-section">
                 <div class="page-header">
                     <div>
-                        <h1 class="page-title">
-                            <span class="lang-en">Access Codes</span>
-                            <span class="lang-es">Códigos de Acceso</span>
-                        </h1>
-                        <p class="page-subtitle">
-                            <span class="lang-en">Create and manage access codes for your users</span>
-                            <span class="lang-es">Crea y gestiona códigos de acceso</span>
-                        </p>
+                        <h1 class="page-title">Access Codes</h1>
+                        <p class="page-subtitle">Create and manage access codes for your users</p>
                     </div>
-                    <div class="header-actions">
-                        <button class="btn btn-primary" onclick="openModal('newCode')">
-                            <span>+</span>
-                            <span class="lang-en">Create Code</span>
-                            <span class="lang-es">Crear Código</span>
-                        </button>
+                    <div>
+                        <button class="btn btn-primary" onclick="openModal('newCode')">+ Create Code</button>
                     </div>
                 </div>
                 
@@ -958,225 +486,187 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th><span class="lang-en">Access Code</span><span class="lang-es">Código</span></th>
-                                    <th><span class="lang-en">Label</span><span class="lang-es">Etiqueta</span></th>
-                                    <th><span class="lang-en">Limit</span><span class="lang-es">Límite</span></th>
-                                    <th><span class="lang-en">Used</span><span class="lang-es">Usados</span></th>
-                                    <th><span class="lang-en">Created</span><span class="lang-es">Creado</span></th>
-                                    <th><span class="lang-en">Actions</span><span class="lang-es">Acciones</span></th>
+                                    <th>Access Code</th>
+                                    <th>Label</th>
+                                    <th>Limit</th>
+                                    <th>Used</th>
+                                    <th>Created</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody id="allCodesTable">
-                                <tr><td colspan="6" style="text-align: center; color: var(--text-muted);">Loading...</td></tr>
+                                <tr><td colspan="6" style="text-align:center;color:var(--text-muted);">Loading...</td></tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-            
-            <!-- Users Section -->
-            <div id="section-users" class="page-section" style="display: none;">
+
+            <div id="section-users" class="page-section">
                 <div class="page-header">
                     <div>
-                        <h1 class="page-title">
-                            <span class="lang-en">Users</span>
-                            <span class="lang-es">Usuarios</span>
-                        </h1>
-                        <p class="page-subtitle">
-                            <span class="lang-en">All registered users at your facility</span>
-                            <span class="lang-es">Usuarios registrados en tu instalación</span>
-                        </p>
+                        <h1 class="page-title">Users</h1>
+                        <p class="page-subtitle">All registered users and their PINs</p>
                     </div>
                 </div>
                 
                 <div class="section">
-                    <div class="section-content">
-                        <div class="empty-state">
-                            <div class="empty-state-icon">👥</div>
-                            <h3 class="empty-state-title">
-                                <span class="lang-en">User List Coming Soon</span>
-                                <span class="lang-es">Lista Próximamente</span>
-                            </h3>
-                            <p class="empty-state-text">
-                                <span class="lang-en">View all users registered with your access codes.</span>
-                                <span class="lang-es">Ve usuarios registrados con tus códigos.</span>
-                            </p>
-                        </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>PIN</th>
+                                    <th>Access Code</th>
+                                    <th title="Sequence">⭐</th>
+                                    <th title="StarTrail">🛤️</th>
+                                    <th title="Pattern Duo">🎯</th>
+                                    <th>Total</th>
+                                    <th>Streak</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody">
+                                <tr><td colspan="8" style="text-align:center;color:var(--text-muted);">Loading...</td></tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- Create Access Code Modal -->
     <div class="modal-overlay" id="modal-newCode">
         <div class="modal">
             <div class="modal-header">
-                <h2 class="modal-title">
-                    <span class="lang-en">Create Access Code</span>
-                    <span class="lang-es">Crear Código</span>
-                </h2>
-                <button class="modal-close" onclick="closeModal('newCode')">&times;</button>
+                <h2 class="modal-title">Create Access Code</h2>
+                <button class="modal-close" onclick="closeModal('newCode')">x</button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label class="form-label">
-                        <span class="lang-en">Label (Optional)</span>
-                        <span class="lang-es">Etiqueta (Opcional)</span>
-                    </label>
+                    <label class="form-label">Label (Optional)</label>
                     <input type="text" class="form-input" id="codeLabel" placeholder="e.g., Morning Group">
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label">
-                        <span class="lang-en">User Limit</span>
-                        <span class="lang-es">Límite de Usuarios</span>
-                    </label>
-                    <input type="number" class="form-input" id="codeUserLimit" min="1" max="10" value="5">
-                    <p class="form-hint">
-                        <span class="lang-en">Available: </span>
-                        <span class="lang-es">Disponibles: </span>
-                        <strong id="availableCount">10</strong>
-                    </p>
+                    <label class="form-label">User Limit</label>
+                    <input type="number" class="form-input" id="codeUserLimit" min="1" max="50" value="5">
+                    <p class="form-hint">Available: <strong id="availableCount">0</strong></p>
                 </div>
                 
-                <div id="generatedCodeContainer" style="display: none;">
+                <div id="generatedCodeContainer" style="display:none;">
                     <div class="generated-code-display">
-                        <div class="generated-code-label">
-                            <span class="lang-en">Your Access Code</span>
-                            <span class="lang-es">Tu Código</span>
-                        </div>
+                        <div class="generated-code-label">Your Access Code</div>
                         <div class="generated-code-value" id="generatedCodeValue">ACC-XXXXXX</div>
-                        <button class="copy-btn" onclick="copyCode()">
-                            <span>📋</span>
-                            <span class="lang-en">Copy</span>
-                            <span class="lang-es">Copiar</span>
-                        </button>
+                        <button class="copy-btn" onclick="copyCode()">Copy</button>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="closeModal('newCode')">
-                    <span class="lang-en">Close</span>
-                    <span class="lang-es">Cerrar</span>
-                </button>
-                <button class="btn btn-primary" id="createCodeBtn" onclick="createAccessCode()">
-                    <span class="lang-en">Create</span>
-                    <span class="lang-es">Crear</span>
-                </button>
+                <button class="btn btn-secondary" onclick="closeModal('newCode')">Close</button>
+                <button class="btn btn-primary" id="createCodeBtn" onclick="createAccessCode()">Create</button>
             </div>
         </div>
     </div>
 
     <script>
-        var licenseKey = sessionStorage.getItem('gostar-facility-license') || 'DEMO-LICENSE';
+        var licenseKey = sessionStorage.getItem('gostar-facility-license');
+        if (!licenseKey) {
+            // Only redirect on production (Render)
+            if (window.location.hostname.includes('onrender.com')) {
+                window.location.href = '/facility';
+            } else {
+                licenseKey = 'preview-mode';
+            }
+        }
+        
         var facilityData = null;
         var currentLang = localStorage.getItem('gostar-lang') || 'en';
 
         function setLang(lang) {
             currentLang = lang;
             localStorage.setItem('gostar-lang', lang);
-            document.body.setAttribute('data-lang', lang);
             document.querySelectorAll('.lang-btn').forEach(function(btn) {
                 btn.classList.toggle('active', btn.textContent === lang.toUpperCase());
             });
-            updateDaysRemaining();
         }
 
-        document.body.setAttribute('data-lang', currentLang);
-        document.querySelectorAll('.lang-btn').forEach(function(btn) {
-            btn.classList.toggle('active', btn.textContent === currentLang.toUpperCase());
-        });
-
         function showSection(sectionId, navItem) {
-            document.querySelectorAll('.page-section').forEach(function(s) { s.style.display = 'none'; });
-            document.getElementById('section-' + sectionId).style.display = 'block';
-            document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
+            document.querySelectorAll('.page-section').forEach(function(s) {
+                s.classList.remove('active');
+            });
+            document.getElementById('section-' + sectionId).classList.add('active');
+            
+            document.querySelectorAll('.nav-item').forEach(function(n) {
+                n.classList.remove('active');
+            });
             if (navItem) navItem.classList.add('active');
         }
 
-        function openModal(modalId) {
-            document.getElementById('modal-' + modalId).classList.add('active');
-            if (modalId === 'newCode') {
-                document.getElementById('generatedCodeContainer').style.display = 'none';
-                document.getElementById('createCodeBtn').style.display = 'inline-flex';
-                document.getElementById('codeLabel').value = '';
-                document.getElementById('codeUserLimit').value = '5';
-                if (facilityData) document.getElementById('availableCount').textContent = facilityData.remainingPool;
-            }
+        function openModal(id) {
+            document.getElementById('modal-' + id).classList.add('active');
+            document.getElementById('generatedCodeContainer').style.display = 'none';
+            document.getElementById('createCodeBtn').style.display = 'block';
+            document.getElementById('createCodeBtn').disabled = false;
         }
 
-        function closeModal(modalId) {
-            document.getElementById('modal-' + modalId).classList.remove('active');
+        function closeModal(id) {
+            document.getElementById('modal-' + id).classList.remove('active');
         }
 
         function logout() {
             sessionStorage.removeItem('gostar-facility-license');
-            sessionStorage.removeItem('gostar-facility-name');
             window.location.href = '/facility';
         }
 
         function loadFacilityData() {
             fetch('/api/facility/' + licenseKey)
-                .then(function(res) {
-                    if (!res.ok) throw new Error('Failed');
-                    return res.json();
-                })
-                .then(function(data) {
-                    facilityData = data;
-                    updateUI();
-                })
-                .catch(function(err) {
-                    console.log('Demo mode - using sample data');
-                    facilityData = {
-                        facilityName: 'Demo Facility',
-                        userPool: 10,
-                        usedPool: 3,
-                        remainingPool: 7,
-                        expirationDate: '2025-12-31',
-                        codes: [
-                            { code: 'ACC-DEMO01', label: 'Morning Group', userLimit: 5, usedCount: 2, createdAt: '2025-12-20T00:00:00Z' },
-                            { code: 'ACC-DEMO02', label: 'Afternoon', userLimit: 3, usedCount: 1, createdAt: '2025-12-22T00:00:00Z' }
-                        ]
-                    };
-                    updateUI();
-                });
+            .then(function(r) {
+                if (!r.ok) throw new Error('Invalid session');
+                return r.json();
+            })
+            .then(function(data) {
+                facilityData = data;
+                updateUI();
+            })
+            .catch(function(err) {
+                console.error('Error:', err);
+                // Show demo data for preview
+                facilityData = {
+                    facilityName: 'Demo Facility',
+                    users: [],
+                    codes: [],
+                    remainingPool: 50
+                };
+                updateUI();
+            });
         }
 
         function updateUI() {
-            document.getElementById('sidebarFacilityName').textContent = facilityData.facilityName;
-            document.getElementById('licenseKeyDisplay').textContent = licenseKey;
-            document.getElementById('statUserPool').textContent = facilityData.userPool;
-            document.getElementById('statUsedPool').textContent = facilityData.usedPool;
-            document.getElementById('statRemainingPool').textContent = facilityData.remainingPool;
-
-            var pct = Math.round((facilityData.usedPool / facilityData.userPool) * 100);
-            document.getElementById('usagePercent').textContent = pct + '%';
-            var bar = document.getElementById('usageBarFill');
-            bar.style.width = pct + '%';
-            bar.className = 'usage-bar-fill' + (pct >= 90 ? ' danger' : pct >= 70 ? ' warning' : '');
-
-            document.getElementById('expirationDate').textContent = facilityData.expirationDate;
-            document.getElementById('availableCount').textContent = facilityData.remainingPool;
-            updateDaysRemaining();
-
-            renderCodesTable('overviewCodesTable', facilityData.codes.slice(0, 5), false);
-            renderCodesTable('allCodesTable', facilityData.codes, true);
-        }
-
-        function updateDaysRemaining() {
             if (!facilityData) return;
-            var exp = new Date(facilityData.expirationDate);
-            var today = new Date();
-            var days = Math.ceil((exp - today) / (1000 * 60 * 60 * 24));
-            var el = document.getElementById('daysRemaining');
-            el.textContent = days + (currentLang === 'es' ? ' días restantes' : ' days remaining');
+
+            document.getElementById('facilityTitle').textContent = facilityData.facilityName;
+            document.getElementById('statUsers').textContent = facilityData.users ? facilityData.users.length : 0;
+            document.getElementById('statCodes').textContent = facilityData.codes ? facilityData.codes.length : 0;
+            document.getElementById('statPool').textContent = facilityData.remainingPool || 0;
+            document.getElementById('availableCount').textContent = facilityData.remainingPool || 0;
+
+            var totalSessions = 0;
+            if (facilityData.users) {
+                facilityData.users.forEach(function(u) {
+                    totalSessions += (u.sessions_sequence || 0) + (u.sessions_startrail || 0) + (u.sessions_duo || 0);
+                });
+            }
+            document.getElementById('statSessions').textContent = totalSessions;
+
+            renderCodesTable('overviewCodesTable', facilityData.codes ? facilityData.codes.slice(0, 5) : [], false);
+            renderCodesTable('allCodesTable', facilityData.codes || [], true);
+            renderUsersTable();
         }
 
         function renderCodesTable(tableId, codes, showActions) {
             var tbody = document.getElementById(tableId);
             if (!codes || codes.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="' + (showActions ? 6 : 4) + '" style="text-align:center;color:var(--text-muted);">' + (currentLang === 'es' ? 'Sin códigos' : 'No codes yet') + '</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="' + (showActions ? 6 : 4) + '" style="text-align:center;color:var(--text-muted);">No codes yet</td></tr>';
                 return;
             }
             tbody.innerHTML = '';
@@ -1185,10 +675,38 @@
                 var cls = pct >= 100 ? 'full' : pct >= 70 ? 'warning' : '';
                 var row = '<tr><td><span class="access-code">' + c.code + '</span></td><td>' + (c.label || '-') + '</td>';
                 if (showActions) {
-                    row += '<td>' + c.userLimit + '</td><td><div class="user-count-bar"><span class="user-count-text">' + c.usedCount + '/' + c.userLimit + '</span><div class="user-count-track"><div class="user-count-fill ' + cls + '" style="width:' + pct + '%"></div></div></div></td><td>' + c.createdAt.split('T')[0] + '</td><td><div class="table-actions"><button class="action-btn" onclick="copyToClipboard(\'' + c.code + '\')">' + (currentLang === 'es' ? 'Copiar' : 'Copy') + '</button><button class="action-btn danger" onclick="deleteCode(\'' + c.code + '\')">' + (currentLang === 'es' ? 'Eliminar' : 'Delete') + '</button></div></td>';
+                    row += '<td>' + c.userLimit + '</td>';
+                    row += '<td><div class="user-count-bar"><span class="user-count-text">' + c.usedCount + '/' + c.userLimit + '</span><div class="user-count-track"><div class="user-count-fill ' + cls + '" style="width:' + pct + '%"></div></div></div></td>';
+                    row += '<td>' + c.createdAt.split('T')[0] + '</td>';
+                    row += '<td><div class="table-actions"><button class="action-btn" onclick="copyToClipboard(\'' + c.code + '\')">Copy</button><button class="action-btn danger" onclick="deleteCode(\'' + c.code + '\')">Delete</button></div></td>';
                 } else {
-                    row += '<td><div class="user-count-bar"><span class="user-count-text">' + c.usedCount + '/' + c.userLimit + '</span><div class="user-count-track"><div class="user-count-fill ' + cls + '" style="width:' + pct + '%"></div></div></div></td><td><span class="status-badge active"><span class="status-dot"></span>' + (currentLang === 'es' ? 'Activo' : 'Active') + '</span></td>';
+                    row += '<td><div class="user-count-bar"><span class="user-count-text">' + c.usedCount + '/' + c.userLimit + '</span><div class="user-count-track"><div class="user-count-fill ' + cls + '" style="width:' + pct + '%"></div></div></div></td>';
+                    row += '<td><span class="status-badge active">Active</span></td>';
                 }
+                row += '</tr>';
+                tbody.innerHTML += row;
+            });
+        }
+
+        function renderUsersTable() {
+            var tbody = document.getElementById('usersTableBody');
+            if (!facilityData || !facilityData.users || facilityData.users.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--text-muted);padding:40px;">No users yet. Users will appear when they register.</td></tr>';
+                return;
+            }
+            tbody.innerHTML = '';
+            facilityData.users.forEach(function(u) {
+                var total = (u.sessions_sequence || 0) + (u.sessions_startrail || 0) + (u.sessions_duo || 0);
+                var pin = u.pin || '--';
+                var row = '<tr>';
+                row += '<td><strong>' + u.username + '</strong></td>';
+                row += '<td><span class="user-pin">' + pin + '</span></td>';
+                row += '<td><span class="access-code" style="font-size:11px;">' + u.code + '</span></td>';
+                row += '<td>' + (u.sessions_sequence || 0) + '</td>';
+                row += '<td>' + (u.sessions_startrail || 0) + '</td>';
+                row += '<td>' + (u.sessions_duo || 0) + '</td>';
+                row += '<td><strong>' + total + '</strong></td>';
+                row += '<td>' + (u.streak || 0) + '</td>';
                 row += '</tr>';
                 tbody.innerHTML += row;
             });
@@ -1198,7 +716,7 @@
             var label = document.getElementById('codeLabel').value.trim();
             var limit = parseInt(document.getElementById('codeUserLimit').value);
             if (!limit || limit < 1 || limit > facilityData.remainingPool) {
-                alert(currentLang === 'es' ? 'Límite inválido' : 'Invalid limit');
+                alert('Invalid limit');
                 return;
             }
             var btn = document.getElementById('createCodeBtn');
@@ -1218,23 +736,14 @@
                 loadFacilityData();
             })
             .catch(function(e) {
-                var newCode = 'ACC-' + Math.random().toString(36).substring(2, 8).toUpperCase();
-                document.getElementById('generatedCodeValue').textContent = newCode;
-                document.getElementById('generatedCodeContainer').style.display = 'block';
-                btn.style.display = 'none';
+                alert(e.message);
+                btn.disabled = false;
             });
         }
 
         function copyCode() {
             var code = document.getElementById('generatedCodeValue').textContent;
             copyToClipboard(code);
-            var btn = document.querySelector('#generatedCodeContainer .copy-btn');
-            btn.classList.add('copied');
-            btn.innerHTML = '<span>✓</span> ' + (currentLang === 'es' ? 'Copiado!' : 'Copied!');
-            setTimeout(function() {
-                btn.classList.remove('copied');
-                btn.innerHTML = '<span>📋</span> ' + (currentLang === 'es' ? 'Copiar' : 'Copy');
-            }, 2000);
         }
 
         function copyToClipboard(text) {
@@ -1242,7 +751,7 @@
         }
 
         function deleteCode(code) {
-            if (!confirm(currentLang === 'es' ? '¿Eliminar este código?' : 'Delete this code?')) return;
+            if (!confirm('Delete this code?')) return;
             fetch('/api/facility/' + licenseKey + '/codes/' + code, { method: 'DELETE' })
                 .then(function() { loadFacilityData(); })
                 .catch(function() { loadFacilityData(); });
@@ -1250,6 +759,5 @@
 
         loadFacilityData();
     </script>
-
 </body>
 </html>
