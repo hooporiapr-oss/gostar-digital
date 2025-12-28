@@ -1606,7 +1606,7 @@ var API_BASE = window.location.origin; // Uses same domain
 
 // Check login status on page load
 function checkAuth() {
-    var token = sessionStorage.getItem('gostar-admin-token');
+    var token = sessionStorage.getItem('admin-token');
     if (token) {
         // Verify token is still valid
         fetch(API_BASE + '/api/admin/verify-token', {
@@ -1618,14 +1618,17 @@ function checkAuth() {
         .then(function(data) {
             if (data.success) {
                 document.getElementById('loginScreen').classList.add('hidden');
+                // Load dashboard data after successful auth
+                fetchDashboardData();
             } else {
-                sessionStorage.removeItem('gostar-admin-token');
+                sessionStorage.removeItem('admin-token');
                 showLoginScreen();
             }
         })
         .catch(function() {
-            // If API fails, allow access if token exists (offline mode)
-            document.getElementById('loginScreen').classList.add('hidden');
+            // Token invalid or server error - require re-login
+            sessionStorage.removeItem('admin-token');
+            showLoginScreen();
         });
     } else {
         showLoginScreen();
@@ -1709,8 +1712,10 @@ function verifyPin() {
     .then(function(data) {
         if (data.success) {
             // Store token and enter dashboard
-            sessionStorage.setItem('gostar-admin-token', data.token);
+            sessionStorage.setItem('admin-token', data.token);
             document.getElementById('loginScreen').classList.add('hidden');
+            // Load dashboard data after successful login
+            fetchDashboardData();
         } else {
             showPinError();
         }
@@ -1735,8 +1740,24 @@ function showPinError() {
 }
 
 function logout() {
-    sessionStorage.removeItem('gostar-admin-token');
+    var token = sessionStorage.getItem('admin-token');
+    if (token) {
+        // Invalidate token on server
+        fetch(API_BASE + '/api/admin/logout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token: token })
+        }).catch(function() {});
+    }
+    
+    sessionStorage.removeItem('admin-token');
     document.getElementById('loginScreen').classList.remove('hidden');
+    
+    // Clear data arrays
+    facilities = [];
+    licenses = [];
+    users = [];
+    
     pinInputs.forEach(function(input) {
         input.value = '';
     });
@@ -1776,89 +1797,106 @@ var users = [];
 function fetchDashboardData() {
     var token = sessionStorage.getItem('admin-token');
     
+    if (!token) {
+        showLoginScreen();
+        return;
+    }
+    
+    var headers = { 'Authorization': 'Bearer ' + token };
+    
     // Fetch facilities
-    fetch('/api/admin/facilities', {
-        headers: { 'Authorization': 'Bearer ' + token }
+    fetch('/api/admin/facilities', { headers: headers })
+    .then(function(r) {
+        if (r.status === 401) {
+            logout();
+            throw new Error('Unauthorized');
+        }
+        return r.json();
     })
-    .then(r => r.json())
-    .then(data => {
+    .then(function(data) {
         if (data.success && data.facilities) {
-            facilities = data.facilities.map(f => ({
-                id: f.id,
-                name: f.name,
-                location: f.location || 'N/A',
-                licenseKey: f.license_key,
-                licenseType: f.license_type || 'trial',
-                users: f.user_count || 0,
-                maxUsers: f.user_limit || 10,
-                status: f.status || 'active',
-                createdAt: f.created_at ? f.created_at.split('T')[0] : 'N/A',
-                expiresAt: f.expires_at || 'N/A',
-                daysLeft: f.days_left || 0
-            }));
+            facilities = data.facilities.map(function(f) {
+                return {
+                    id: f.id,
+                    name: f.name,
+                    location: f.location || 'N/A',
+                    licenseKey: f.license_key,
+                    licenseType: f.license_type || 'trial',
+                    users: f.user_count || 0,
+                    maxUsers: f.user_limit || 10,
+                    status: f.status || 'active',
+                    createdAt: f.created_at ? f.created_at.split('T')[0] : 'N/A',
+                    expiresAt: f.expires_at || 'N/A',
+                    daysLeft: f.days_left || 0
+                };
+            });
             renderOverviewTable();
             renderFacilitiesTable();
             updateStats();
         }
     })
-    .catch(err => {
+    .catch(function(err) {
         console.log('Facility fetch error:', err);
-        loadDemoData();
     });
     
     // Fetch licenses
-    fetch('/api/admin/licenses-list', {
-        headers: { 'Authorization': 'Bearer ' + token }
+    fetch('/api/admin/licenses-list', { headers: headers })
+    .then(function(r) {
+        if (r.status === 401) throw new Error('Unauthorized');
+        return r.json();
     })
-    .then(r => r.json())
-    .then(data => {
+    .then(function(data) {
         if (data.success && data.licenses) {
-            licenses = data.licenses.map(l => ({
-                key: l.license_key,
-                type: l.license_type || 'trial',
-                facility: l.facility_name || 'Unassigned',
-                createdAt: l.created_at ? l.created_at.split('T')[0] : 'N/A',
-                expiresAt: l.expires_at || 'N/A',
-                status: l.status || 'active'
-            }));
+            licenses = data.licenses.map(function(l) {
+                return {
+                    key: l.license_key,
+                    type: l.license_type || 'trial',
+                    facility: l.facility_name || 'Unassigned',
+                    createdAt: l.created_at ? l.created_at.split('T')[0] : 'N/A',
+                    expiresAt: l.expires_at || 'N/A',
+                    status: l.status || 'active'
+                };
+            });
             renderLicensesTable();
             updateStats();
         }
     })
-    .catch(err => {
+    .catch(function(err) {
         console.log('License fetch error:', err);
     });
     
     // Fetch users
-    fetch('/api/admin/users', {
-        headers: { 'Authorization': 'Bearer ' + token }
+    fetch('/api/admin/users', { headers: headers })
+    .then(function(r) {
+        if (r.status === 401) throw new Error('Unauthorized');
+        return r.json();
     })
-    .then(r => r.json())
-    .then(data => {
+    .then(function(data) {
         if (data.success && data.users) {
-            users = data.users.map(u => ({
-                id: u.id,
-                name: u.username,
-                facility: u.facility_name || 'Unknown',
-                sessions: {
-                    sequence: u.sessions_sequence || 0,
-                    startrail: u.sessions_startrail || 0,
-                    kwikstar: u.sessions_kwikstar || 0,
-                    gonogo: u.sessions_gonogo || 0,
-                    stroop: u.sessions_stroop || 0
-                },
-                totalSessions: (u.sessions_sequence || 0) + (u.sessions_startrail || 0) + 
-                               (u.sessions_kwikstar || 0) + (u.sessions_gonogo || 0) + (u.sessions_stroop || 0),
-                streak: u.streak || 0,
-                lastActive: u.last_active ? u.last_active.split('T')[0] : 'Never'
-            }));
+            users = data.users.map(function(u) {
+                return {
+                    id: u.id,
+                    name: u.username,
+                    facility: u.facility_name || 'Unknown',
+                    sessions: {
+                        sequence: u.sessions_sequence || 0,
+                        startrail: u.sessions_startrail || 0,
+                        kwikstar: u.sessions_kwikstar || 0,
+                        gonogo: u.sessions_gonogo || 0,
+                        stroop: u.sessions_stroop || 0
+                    },
+                    totalSessions: (u.sessions_sequence || 0) + (u.sessions_startrail || 0) + 
+                                   (u.sessions_kwikstar || 0) + (u.sessions_gonogo || 0) + (u.sessions_stroop || 0),
+                    streak: u.streak || 0,
+                    lastActive: u.last_active ? u.last_active.split('T')[0] : 'Never'
+                };
+            });
             renderUsersTable();
             updateStats();
         }
     })
-    .catch(err => {
+    .catch(function(err) {
         console.log('User fetch error:', err);
-        loadDemoData();
     });
 }
 
@@ -2473,13 +2511,8 @@ function syncFacilityUserCounts() {
     });
 }
 
-// Initialize
-// Try to fetch real data, fallback to demo
-if (sessionStorage.getItem('admin-token')) {
-    fetchDashboardData();
-} else {
-    loadDemoData();
-}
+// Initialize - checkAuth handles both authentication and data loading
+// No need for separate initialization since checkAuth() calls fetchDashboardData() on success
 </script>
 
 </body>
