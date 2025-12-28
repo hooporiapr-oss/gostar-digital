@@ -3,11 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GoStar Digital</title>
+    <title>GoStar Digital - Metroritmo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -32,32 +35,165 @@
             cursor: pointer;
             font-size: 14px;
             font-weight: 600;
+            font-family: inherit;
         }
         .lang-btn.active {
             background: #ffd700;
             color: #0a0a1a;
         }
-        .container { text-align: center; padding: 40px; }
-        h1 { font-size: 42px; margin-bottom: 8px; }
+        .container { 
+            text-align: center; 
+            padding: 40px; 
+            max-width: 600px;
+        }
+        
+        /* Logo */
+        .logo {
+            width: 220px;
+            height: auto;
+            margin-bottom: 24px;
+            filter: drop-shadow(0 0 40px rgba(255, 217, 61, 0.3));
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        
+        h1 { 
+            font-size: 48px; 
+            margin-bottom: 8px; 
+            font-weight: 900;
+        }
         h1 span { color: #ffd700; }
-        p { color: rgba(255,255,255,0.6); margin-bottom: 40px; font-size: 18px; }
-        .buttons { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
-        a {
+        
+        .tagline {
+            color: rgba(255,255,255,0.6); 
+            margin-bottom: 12px; 
+            font-size: 18px;
+        }
+        
+        .product-name {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 32px;
+            background: linear-gradient(135deg, #A855F7, #00D9A5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Main Buttons */
+        .buttons { 
+            display: flex; 
+            gap: 16px; 
+            justify-content: center; 
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+        .btn {
             display: inline-block;
             padding: 16px 32px;
             background: linear-gradient(135deg, #ffd700, #ffaa00);
             color: #1a1a3a;
             text-decoration: none;
-            border-radius: 10px;
+            border-radius: 50px;
             font-weight: 700;
             font-size: 16px;
-            transition: opacity 0.2s;
+            transition: all 0.3s ease;
         }
-        a:hover { opacity: 0.9; }
-        a.secondary {
+        .btn:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 217, 61, 0.3);
+        }
+        .btn.secondary {
             background: rgba(255,255,255,0.1);
             color: #fff;
             border: 1px solid rgba(255,255,255,0.2);
+        }
+        .btn.secondary:hover {
+            border-color: #ffd700;
+            color: #ffd700;
+            box-shadow: none;
+        }
+        
+        /* Learn More Link */
+        .learn-more {
+            margin-bottom: 32px;
+        }
+        .learn-more a {
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        .learn-more a:hover {
+            color: #ffd700;
+        }
+        
+        /* Free Trial Banner */
+        .trial-banner {
+            display: inline-block;
+            padding: 16px 28px;
+            background: rgba(0, 217, 165, 0.1);
+            border: 1px solid rgba(0, 217, 165, 0.3);
+            border-radius: 12px;
+        }
+        .trial-banner a {
+            color: #00D9A5;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: color 0.3s ease;
+        }
+        .trial-banner a:hover {
+            color: #33E8BC;
+        }
+        .trial-badge {
+            background: #00D9A5;
+            color: #0a0a1a;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 800;
+        }
+        
+        /* Responsive */
+        @media (max-width: 480px) {
+            .logo { width: 160px; }
+            h1 { font-size: 36px; }
+            .buttons { flex-direction: column; align-items: center; }
+            .btn { width: 100%; max-width: 260px; text-align: center; }
+        }
+        
+        /* Footer */
+        .footer {
+            position: fixed;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: rgba(255,255,255,0.4);
+            font-size: 13px;
+        }
+        .footer a {
+            color: rgba(255,255,255,0.4);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .footer a:hover {
+            color: #ffd700;
+        }
+        .footer span {
+            margin: 0 8px;
+        }
+        .copyright {
+            margin-top: 8px;
+            font-size: 12px;
         }
     </style>
 </head>
@@ -68,13 +204,39 @@
     </div>
     
     <div class="container">
+        <img src="gostar_logo_transparent.png" alt="GoStar Digital" class="logo">
+        
         <h1>Go<span>Star</span> Digital</h1>
-        <p data-en="Cognitive Training Platform" data-es="Plataforma de Entrenamiento Cognitivo">Cognitive Training Platform</p>
+        
+        <p class="tagline" data-en="Rhythm-Based Cognitive Training" data-es="Entrenamiento Cognitivo Basado en Ritmo">Rhythm-Based Cognitive Training</p>
+        
+        <p class="product-name">Metroritmo</p>
+        
         <div class="buttons">
-            <a href="/play" data-en="Play Games" data-es="Jugar">Play Games</a>
-            <a href="/facility" class="secondary" data-en="Facility Login" data-es="Acceso Instalación">Facility Login</a>
+            <a href="/play" class="btn" data-en="▶ Play Now" data-es="▶ Jugar Ahora">▶ Play Now</a>
+            <a href="/facility" class="btn secondary" data-en="Facility Login" data-es="Acceso Instalación">Facility Login</a>
+        </div>
+        
+        <div class="learn-more">
+            <a href="/about" data-en="Learn More →" data-es="Más Información →">Learn More →</a>
+        </div>
+        
+        <div class="trial-banner">
+            <a href="/facility">
+                <span class="trial-badge" data-en="FREE" data-es="GRATIS">FREE</span>
+                <span data-en="7-Day Trial • 10 Users →" data-es="Prueba 7 Días • 10 Usuarios →">7-Day Trial • 10 Users →</span>
+            </a>
         </div>
     </div>
+    
+    <footer class="footer">
+        <a href="/about" data-en="About" data-es="Acerca de">About</a>
+        <span>•</span>
+        <a href="/privacy" data-en="Privacy" data-es="Privacidad">Privacy</a>
+        <span>•</span>
+        <a href="/terms" data-en="Terms" data-es="Términos">Terms</a>
+        <div class="copyright">© 2025 GoStar Digital</div>
+    </footer>
     
     <script>
         function setLang(lang) {
