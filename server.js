@@ -23,12 +23,14 @@ const DATA_DIR = path.join(__dirname, 'data');
 const LICENSES_FILE = path.join(DATA_DIR, 'licenses.json');
 const CODES_FILE = path.join(DATA_DIR, 'codes.json');
 const USERS_FILE = path.join(DATA_DIR, 'users.json');
+const ACTIVITY_FILE = path.join(DATA_DIR, 'activity.json');
 
 // Ensure data directory and files exist
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR);
 if (!fs.existsSync(LICENSES_FILE)) fs.writeFileSync(LICENSES_FILE, '[]');
 if (!fs.existsSync(CODES_FILE)) fs.writeFileSync(CODES_FILE, '[]');
 if (!fs.existsSync(USERS_FILE)) fs.writeFileSync(USERS_FILE, '[]');
+if (!fs.existsSync(ACTIVITY_FILE)) fs.writeFileSync(ACTIVITY_FILE, '[]');
 
 // Helper functions
 function readJSON(file) {
@@ -41,6 +43,23 @@ function readJSON(file) {
 
 function writeJSON(file, data) {
     fs.writeFileSync(file, JSON.stringify(data, null, 2));
+}
+
+// Activity logging
+function logActivity(type, username, facility, details) {
+    var activities = readJSON(ACTIVITY_FILE);
+    activities.unshift({
+        timestamp: new Date().toISOString(),
+        type: type,
+        username: username || null,
+        facility: facility || null,
+        details: details || null
+    });
+    // Keep only last 500 activities
+    if (activities.length > 500) {
+        activities = activities.slice(0, 500);
+    }
+    writeJSON(ACTIVITY_FILE, activities);
 }
 
 function generateKey(prefix, length = 8) {
@@ -173,8 +192,7 @@ app.get('/api/admin/facilities', adminTokenAuth, function(req, res) {
             
             // Calculate total sessions for this facility
             var totalSessions = facilityUsers.reduce(function(sum, u) {
-                return sum + (u.sessions_sequence || 0) + (u.sessions_startrail || 0) +
-                       (u.sessions_kwikstar || 0) + (u.sessions_gonogo || 0) + (u.sessions_stroop || 0);
+                return sum + (u.sessions_sequence || 0) + (u.sessions_startrail || 0) + (u.sessions_duo || 0);
             }, 0);
             
             // Calculate days left
@@ -330,9 +348,10 @@ app.get('/api/admin/users', adminTokenAuth, function(req, res) {
                 facility_name: facilityName,
                 sessions_sequence: u.sessions_sequence || 0,
                 sessions_startrail: u.sessions_startrail || 0,
-                sessions_kwikstar: u.sessions_kwikstar || 0,
-                sessions_gonogo: u.sessions_gonogo || 0,
-                sessions_stroop: u.sessions_stroop || 0,
+                sessions_duo: u.sessions_duo || 0,
+                best_sequence: u.best_sequence || 0,
+                best_startrail: u.best_startrail || 0,
+                best_duo: u.best_duo || 0,
                 streak: u.streak || 0,
                 last_active: u.lastActive || u.createdAt,
                 created_at: u.createdAt
@@ -374,6 +393,17 @@ app.delete('/api/admin/users/:id', adminTokenAuth, function(req, res) {
     users.splice(id, 1);
     writeJSON(USERS_FILE, users);
     res.json({ success: true });
+});
+
+// Get activity log
+app.get('/api/admin/activity', adminTokenAuth, function(req, res) {
+    try {
+        var activities = readJSON(ACTIVITY_FILE);
+        res.json({ success: true, activities: activities });
+    } catch (err) {
+        console.error('Error fetching activities:', err);
+        res.json({ success: true, activities: [] });
+    }
 });
 
 // ============ ADMIN ROUTES ============
@@ -526,6 +556,9 @@ app.post('/api/facility/login', function(req, res) {
         return res.status(401).json({ error: 'License expired' });
     }
     
+    // Log activity
+    logActivity('facility_login', null, license.facilityName, 'Facility dashboard accessed');
+    
     res.json({ success: true, facilityName: license.facilityName });
 });
 
@@ -557,8 +590,7 @@ app.get('/api/facility/:licenseKey', function(req, res) {
         var usedCount = codeUsers.length;
         
         var totalSessions = codeUsers.reduce(function(sum, u) {
-            return sum + (u.sessions_sequence || 0) + (u.sessions_startrail || 0) +
-                   (u.sessions_kwikstar || 0) + (u.sessions_gonogo || 0) + (u.sessions_stroop || 0);
+            return sum + (u.sessions_sequence || 0) + (u.sessions_startrail || 0) + (u.sessions_duo || 0);
         }, 0);
         
         var result = {};
@@ -581,11 +613,11 @@ app.get('/api/facility/:licenseKey', function(req, res) {
             code: u.code,
             sessions_sequence: u.sessions_sequence || 0,
             sessions_startrail: u.sessions_startrail || 0,
-            sessions_kwikstar: u.sessions_kwikstar || 0,
-            sessions_gonogo: u.sessions_gonogo || 0,
-            sessions_stroop: u.sessions_stroop || 0,
-            totalSessions: (u.sessions_sequence || 0) + (u.sessions_startrail || 0) +
-                          (u.sessions_kwikstar || 0) + (u.sessions_gonogo || 0) + (u.sessions_stroop || 0),
+            sessions_duo: u.sessions_duo || 0,
+            best_sequence: u.best_sequence || 0,
+            best_startrail: u.best_startrail || 0,
+            best_duo: u.best_duo || 0,
+            totalSessions: (u.sessions_sequence || 0) + (u.sessions_startrail || 0) + (u.sessions_duo || 0),
             streak: u.streak || 0,
             lastActive: u.lastActive || u.createdAt,
             createdAt: u.createdAt
@@ -794,12 +826,21 @@ app.post('/api/play/register', function(req, res) {
         createdAt: new Date().toISOString(),
         sessions_sequence: 0,
         sessions_startrail: 0,
-        sessions_kwikstar: 0,
-        sessions_gonogo: 0,
-        sessions_stroop: 0,
+        sessions_duo: 0,
         streak: 0
     });
     writeJSON(USERS_FILE, users);
+    
+    // Log activity
+    var licenses = readJSON(LICENSES_FILE);
+    var facilityName = 'Unknown';
+    for (var l = 0; l < licenses.length; l++) {
+        if (licenses[l].key === code.licenseKey) {
+            facilityName = licenses[l].facilityName;
+            break;
+        }
+    }
+    logActivity('user_register', username, facilityName, 'New user registered');
     
     res.json({ success: true, username: username });
 });
@@ -856,6 +897,9 @@ app.post('/api/play/login', function(req, res) {
         return res.status(401).json({ error: 'Invalid password' });
     }
     
+    // Log activity
+    logActivity('user_login', user.username, license.facilityName, 'User logged in');
+    
     res.json({ success: true, username: user.username });
 });
 
@@ -871,7 +915,7 @@ app.post('/api/game/session', function(req, res) {
         return res.status(400).json({ error: 'Missing required fields' });
     }
     
-    var validGames = ['sequence', 'startrail', 'kwikstar', 'gonogo', 'stroop'];
+    var validGames = ['sequence', 'startrail', 'duo'];
     if (validGames.indexOf(game) === -1) {
         return res.status(400).json({ error: 'Invalid game type' });
     }
@@ -925,6 +969,27 @@ app.post('/api/game/session', function(req, res) {
     
     writeJSON(USERS_FILE, users);
     
+    // Log activity - find facility name
+    var codes = readJSON(CODES_FILE);
+    var licenses = readJSON(LICENSES_FILE);
+    var facilityName = 'Unknown';
+    for (var c = 0; c < codes.length; c++) {
+        if (codes[c].code === accessCode) {
+            for (var l = 0; l < licenses.length; l++) {
+                if (licenses[l].key === codes[c].licenseKey) {
+                    facilityName = licenses[l].facilityName;
+                    break;
+                }
+            }
+            break;
+        }
+    }
+    
+    var gameNames = { sequence: 'Sequence Memory', startrail: 'StarTrail', duo: 'Pattern Duo' };
+    var gameName = gameNames[game] || game;
+    var scoreText = score !== undefined ? ' (Score: ' + score + ')' : '';
+    logActivity('game_session', username, facilityName, gameName + scoreText);
+    
     res.json({ 
         success: true, 
         sessions: users[userIndex][sessionKey],
@@ -956,19 +1021,14 @@ app.get('/api/game/stats/:accessCode/:username', function(req, res) {
             sessions: {
                 sequence: user.sessions_sequence || 0,
                 startrail: user.sessions_startrail || 0,
-                kwikstar: user.sessions_kwikstar || 0,
-                gonogo: user.sessions_gonogo || 0,
-                stroop: user.sessions_stroop || 0
+                duo: user.sessions_duo || 0
             },
-            totalSessions: (user.sessions_sequence || 0) + (user.sessions_startrail || 0) +
-                          (user.sessions_kwikstar || 0) + (user.sessions_gonogo || 0) + (user.sessions_stroop || 0),
+            totalSessions: (user.sessions_sequence || 0) + (user.sessions_startrail || 0) + (user.sessions_duo || 0),
             streak: user.streak || 0,
             personalBests: {
                 sequence: user.best_sequence || 0,
                 startrail: user.best_startrail || 0,
-                kwikstar: user.best_kwikstar || 0,
-                gonogo: user.best_gonogo || 0,
-                stroop: user.best_stroop || 0
+                duo: user.best_duo || 0
             }
         }
     });
