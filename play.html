@@ -300,6 +300,31 @@
             letter-spacing: 8px;
         }
 
+        .copy-pin-btn {
+            margin-top: 16px;
+            padding: 10px 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .copy-pin-btn:hover {
+            background: var(--accent-teal);
+            color: var(--bg-primary);
+            border-color: var(--accent-teal);
+        }
+
+        .copy-pin-btn.copied {
+            background: var(--accent-green);
+            color: white;
+            border-color: var(--accent-green);
+        }
+
         .pin-warning {
             background: rgba(255, 217, 61, 0.1);
             border: 1px solid rgba(255, 217, 61, 0.3);
@@ -505,6 +530,10 @@
                 <span class="lang-es">Tu PIN Personal</span>
             </div>
             <div class="pin-display-value" id="generatedPin">0000</div>
+            <button class="copy-pin-btn" onclick="copyGeneratedPin()">
+                <span class="lang-en">📋 Copy PIN</span>
+                <span class="lang-es">📋 Copiar PIN</span>
+            </button>
         </div>
         
         <div class="pin-warning">
@@ -758,6 +787,40 @@
                 btn.innerHTML = '<span class="lang-en">Create My Account</span><span class="lang-es">Crear Mi Cuenta</span>';
                 document.body.setAttribute('data-lang', currentLang);
             });
+        }
+
+        function copyGeneratedPin() {
+            var pin = document.getElementById('generatedPin').textContent;
+            var btn = document.querySelector('.copy-pin-btn');
+            
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(pin).then(function() {
+                    btn.classList.add('copied');
+                    btn.innerHTML = '<span class="lang-en">✓ Copied!</span><span class="lang-es">✓ ¡Copiado!</span>';
+                    document.body.setAttribute('data-lang', currentLang);
+                    setTimeout(function() {
+                        btn.classList.remove('copied');
+                        btn.innerHTML = '<span class="lang-en">📋 Copy PIN</span><span class="lang-es">📋 Copiar PIN</span>';
+                        document.body.setAttribute('data-lang', currentLang);
+                    }, 2000);
+                });
+            } else {
+                // Fallback for older browsers
+                var textArea = document.createElement('textarea');
+                textArea.value = pin;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                btn.classList.add('copied');
+                btn.innerHTML = '<span class="lang-en">✓ Copied!</span><span class="lang-es">✓ ¡Copiado!</span>';
+                document.body.setAttribute('data-lang', currentLang);
+                setTimeout(function() {
+                    btn.classList.remove('copied');
+                    btn.innerHTML = '<span class="lang-en">📋 Copy PIN</span><span class="lang-es">📋 Copiar PIN</span>';
+                    document.body.setAttribute('data-lang', currentLang);
+                }, 2000);
+            }
         }
 
         function startPlaying() {
