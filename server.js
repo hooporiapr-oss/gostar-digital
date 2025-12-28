@@ -87,6 +87,21 @@ function generateLicensePin() {
     return pin;
 }
 
+// Generate unique 4-digit PIN for user login
+function generateUserPin() {
+    var users = readJSON(USERS_FILE);
+    var existingPins = users.map(function(u) { return u.pin; }).filter(function(p) { return p; });
+    
+    var pin;
+    var attempts = 0;
+    do {
+        pin = String(1000 + Math.floor(Math.random() * 9000));
+        attempts++;
+    } while (existingPins.indexOf(pin) !== -1 && attempts < 100);
+    
+    return pin;
+}
+
 function generateToken() {
     return Buffer.from(Date.now() + '-' + Math.random().toString(36).substring(2, 15)).toString('base64');
 }
@@ -361,6 +376,7 @@ app.get('/api/admin/users', adminTokenAuth, function(req, res) {
             return {
                 id: index,
                 username: u.username,
+                pin: u.pin || null,
                 facility_name: facilityName,
                 sessions_sequence: u.sessions_sequence || 0,
                 sessions_startrail: u.sessions_startrail || 0,
@@ -626,6 +642,7 @@ app.get('/api/facility/:licenseKey', function(req, res) {
     var enrichedUsers = facilityUsers.map(function(u) {
         return {
             username: u.username,
+            pin: u.pin || null,
             code: u.code,
             sessions_sequence: u.sessions_sequence || 0,
             sessions_startrail: u.sessions_startrail || 0,
@@ -783,9 +800,8 @@ app.post('/api/play/verify', function(req, res) {
 app.post('/api/play/register', function(req, res) {
     var accessCode = req.body.accessCode;
     var username = req.body.username;
-    var password = req.body.password;
     
-    if (!accessCode || !username || !password) {
+    if (!accessCode || !username) {
         return res.status(400).json({ error: 'Missing required fields' });
     }
     
@@ -817,28 +833,18 @@ app.post('/api/play/register', function(req, res) {
     
     var users = readJSON(USERS_FILE);
     
-    var existingUser = null;
-    for (var k = 0; k < users.length; k++) {
-        if (users[k].code === accessCode && users[k].username.toLowerCase() === username.toLowerCase()) {
-            existingUser = users[k];
-            break;
-        }
-    }
-    if (existingUser) {
-        return res.status(400).json({ error: 'Username already taken' });
-    }
-    
     var usedCount = users.filter(function(u) { return u.code === accessCode; }).length;
     if (usedCount >= code.userLimit) {
         return res.status(400).json({ error: 'User limit reached for this code' });
     }
     
-    var hashedPassword = bcrypt.hashSync(password, 10);
+    // Generate unique PIN for this user
+    var userPin = generateUserPin();
     
     users.push({
         code: accessCode,
-        username: username,
-        password: hashedPassword,
+        username: username.trim(),
+        pin: userPin,
         createdAt: new Date().toISOString(),
         sessions_sequence: 0,
         sessions_startrail: 0,
@@ -848,87 +854,70 @@ app.post('/api/play/register', function(req, res) {
     writeJSON(USERS_FILE, users);
     
     // Log activity
-    var licenses = readJSON(LICENSES_FILE);
-    var facilityName = 'Unknown';
-    for (var l = 0; l < licenses.length; l++) {
-        if (licenses[l].key === code.licenseKey) {
-            facilityName = licenses[l].facilityName;
-            break;
-        }
-    }
-    logActivity('user_register', username, facilityName, 'New user registered');
+    logActivity('user_register', username, license.facilityName, 'New user registered with PIN');
     
-    res.json({ success: true, username: username });
+    res.json({ success: true, username: username.trim(), pin: userPin });
 });
 
+// Login with PIN only
 app.post('/api/play/login', function(req, res) {
-    var accessCode = req.body.accessCode;
-    var username = req.body.username;
-    var password = req.body.password;
+    var pin = req.body.pin;
     
-    if (!accessCode || !username || !password) {
-        return res.status(400).json({ error: 'Missing required fields' });
-    }
-    
-    var codes = readJSON(CODES_FILE);
-    var code = null;
-    for (var i = 0; i < codes.length; i++) {
-        if (codes[i].code === accessCode && codes[i].active) {
-            code = codes[i];
-            break;
-        }
-    }
-    
-    if (!code) {
-        return res.status(401).json({ error: 'Invalid access code' });
-    }
-    
-    var licenses = readJSON(LICENSES_FILE);
-    var license = null;
-    for (var j = 0; j < licenses.length; j++) {
-        if (licenses[j].key === code.licenseKey && licenses[j].active) {
-            license = licenses[j];
-            break;
-        }
-    }
-    
-    if (!license || new Date(license.expirationDate) < new Date()) {
-        return res.status(401).json({ error: 'Access expired' });
+    if (!pin) {
+        return res.status(400).json({ error: 'PIN is required' });
     }
     
     var users = readJSON(USERS_FILE);
     var user = null;
-    for (var k = 0; k < users.length; k++) {
-        if (users[k].code === accessCode && users[k].username.toLowerCase() === username.toLowerCase()) {
-            user = users[k];
+    for (var i = 0; i < users.length; i++) {
+        if (users[i].pin === pin) {
+            user = users[i];
             break;
         }
     }
     
     if (!user) {
-        return res.status(401).json({ error: 'User not found' });
+        return res.status(401).json({ error: 'Invalid PIN' });
     }
     
-    if (!bcrypt.compareSync(password, user.password)) {
-        return res.status(401).json({ error: 'Invalid password' });
+    // Get facility name for logging
+    var codes = readJSON(CODES_FILE);
+    var code = null;
+    for (var j = 0; j < codes.length; j++) {
+        if (codes[j].code === user.code) {
+            code = codes[j];
+            break;
+        }
+    }
+    
+    var facilityName = 'Unknown';
+    if (code) {
+        var licenses = readJSON(LICENSES_FILE);
+        for (var k = 0; k < licenses.length; k++) {
+            if (licenses[k].key === code.licenseKey) {
+                facilityName = licenses[k].facilityName;
+                break;
+            }
+        }
     }
     
     // Log activity
-    logActivity('user_login', user.username, license.facilityName, 'User logged in');
+    logActivity('user_login', user.username, facilityName, 'User logged in with PIN');
     
-    res.json({ success: true, username: user.username });
+    res.json({ success: true, username: user.username, pin: user.pin, accessCode: user.code });
 });
 
 // ============ GAME SESSION TRACKING ============
 
 app.post('/api/game/session', function(req, res) {
+    var pin = req.body.pin;
     var accessCode = req.body.accessCode;
     var username = req.body.username;
     var game = req.body.game;
     var score = req.body.score;
     
-    if (!accessCode || !username || !game) {
-        return res.status(400).json({ error: 'Missing required fields' });
+    if (!game) {
+        return res.status(400).json({ error: 'Missing game type' });
     }
     
     var validGames = ['sequence', 'startrail', 'duo'];
@@ -938,10 +927,21 @@ app.post('/api/game/session', function(req, res) {
     
     var users = readJSON(USERS_FILE);
     var userIndex = -1;
-    for (var i = 0; i < users.length; i++) {
-        if (users[i].code === accessCode && users[i].username.toLowerCase() === username.toLowerCase()) {
-            userIndex = i;
-            break;
+    
+    // Try PIN first, then accessCode+username
+    if (pin) {
+        for (var i = 0; i < users.length; i++) {
+            if (users[i].pin === pin) {
+                userIndex = i;
+                break;
+            }
+        }
+    } else if (accessCode && username) {
+        for (var j = 0; j < users.length; j++) {
+            if (users[j].code === accessCode && users[j].username.toLowerCase() === username.toLowerCase()) {
+                userIndex = j;
+                break;
+            }
         }
     }
     
@@ -949,6 +949,7 @@ app.post('/api/game/session', function(req, res) {
         return res.status(404).json({ error: 'User not found' });
     }
     
+    var user = users[userIndex];
     var sessionKey = 'sessions_' + game;
     if (!users[userIndex][sessionKey]) {
         users[userIndex][sessionKey] = 0;
@@ -990,7 +991,7 @@ app.post('/api/game/session', function(req, res) {
     var licenses = readJSON(LICENSES_FILE);
     var facilityName = 'Unknown';
     for (var c = 0; c < codes.length; c++) {
-        if (codes[c].code === accessCode) {
+        if (codes[c].code === user.code) {
             for (var l = 0; l < licenses.length; l++) {
                 if (licenses[l].key === codes[c].licenseKey) {
                     facilityName = licenses[l].facilityName;
@@ -1004,7 +1005,7 @@ app.post('/api/game/session', function(req, res) {
     var gameNames = { sequence: 'Sequence Memory', startrail: 'StarTrail', duo: 'Pattern Duo' };
     var gameName = gameNames[game] || game;
     var scoreText = score !== undefined ? ' (Score: ' + score + ')' : '';
-    logActivity('game_session', username, facilityName, gameName + scoreText);
+    logActivity('game_session', user.username, facilityName, gameName + scoreText);
     
     res.json({ 
         success: true, 
@@ -1014,6 +1015,44 @@ app.post('/api/game/session', function(req, res) {
     });
 });
 
+// Get stats by PIN
+app.get('/api/game/stats/pin/:pin', function(req, res) {
+    var pin = req.params.pin;
+    
+    var users = readJSON(USERS_FILE);
+    var user = null;
+    for (var i = 0; i < users.length; i++) {
+        if (users[i].pin === pin) {
+            user = users[i];
+            break;
+        }
+    }
+    
+    if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+    }
+    
+    res.json({
+        success: true,
+        username: user.username,
+        stats: {
+            sessions: {
+                sequence: user.sessions_sequence || 0,
+                startrail: user.sessions_startrail || 0,
+                duo: user.sessions_duo || 0
+            },
+            totalSessions: (user.sessions_sequence || 0) + (user.sessions_startrail || 0) + (user.sessions_duo || 0),
+            streak: user.streak || 0,
+            personalBests: {
+                sequence: user.best_sequence || 0,
+                startrail: user.best_startrail || 0,
+                duo: user.best_duo || 0
+            }
+        }
+    });
+});
+
+// Get stats by access code + username (legacy)
 app.get('/api/game/stats/:accessCode/:username', function(req, res) {
     var accessCode = req.params.accessCode;
     var username = req.params.username;
