@@ -20,7 +20,6 @@
             --accent-gold: #FFD93D;
             --accent-teal: #00D9A5;
             --accent-coral: #FF6B6B;
-            --accent-green: #22C55E;
             --gradient-gold: linear-gradient(135deg, #FFD93D 0%, #FF9F1C 100%);
             --gradient-teal: linear-gradient(135deg, #00D9A5 0%, #00B386 100%);
         }
@@ -29,12 +28,12 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg-primary);
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
             color: var(--text-primary);
-            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
+            min-height: 100vh;
             padding: 20px;
         }
 
@@ -70,7 +69,7 @@
         }
 
         .lang-btn:hover { color: var(--text-primary); }
-        .lang-btn.active { background: var(--accent-gold); color: var(--bg-primary); }
+        .lang-btn.active { background: var(--accent-teal); color: var(--bg-primary); }
 
         .home-link {
             position: fixed;
@@ -85,44 +84,38 @@
             font-size: 14px;
         }
 
-        .home-link:hover { color: var(--accent-gold); }
-
-        .login-container { width: 100%; max-width: 440px; }
+        .home-link:hover { color: var(--accent-teal); }
 
         .login-card {
             background: var(--bg-card);
             border: 1px solid rgba(255,255,255,0.1);
             border-radius: 24px;
             padding: 48px 40px;
+            width: 100%;
+            max-width: 420px;
             text-align: center;
         }
 
+        .screen { display: block; }
+        .screen.hidden { display: none; }
+
         .login-logo {
             font-size: 64px;
-            margin-bottom: 12px;
-            filter: drop-shadow(0 0 30px rgba(255, 217, 61, 0.4));
+            margin-bottom: 16px;
+            filter: drop-shadow(0 0 30px rgba(0, 217, 165, 0.4));
         }
 
         .login-title {
             font-size: 32px;
             font-weight: 900;
-            margin-bottom: 4px;
+            margin-bottom: 8px;
         }
 
         .login-title span {
-            background: var(--gradient-gold);
+            background: var(--gradient-teal);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-        }
-
-        .login-tagline {
-            color: var(--text-muted);
-            font-size: 14px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 32px;
         }
 
         .login-badge {
@@ -138,25 +131,45 @@
             margin-bottom: 24px;
         }
 
-        .user-name {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--accent-gold);
-            margin-bottom: 8px;
-        }
-
-        .facility-name {
-            font-size: 14px;
-            color: var(--text-secondary);
-            margin-bottom: 24px;
-        }
-
         .login-subtitle {
             color: var(--text-secondary);
             font-size: 15px;
-            line-height: 1.5;
+            line-height: 1.6;
             margin-bottom: 32px;
         }
+
+        .option-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .option-btn {
+            padding: 20px 24px;
+            border-radius: 16px;
+            border: 2px solid rgba(255,255,255,0.1);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .option-btn:hover {
+            border-color: var(--accent-teal);
+            transform: translateY(-2px);
+        }
+
+        .option-btn .icon { font-size: 28px; }
+        .option-btn .text { flex: 1; }
+        .option-btn .arrow { color: var(--text-muted); font-size: 20px; }
 
         .pin-input-group {
             display: flex;
@@ -166,13 +179,13 @@
         }
 
         .pin-input {
-            width: 56px;
-            height: 64px;
+            width: 60px;
+            height: 72px;
             background: var(--bg-secondary);
             border: 2px solid rgba(255,255,255,0.1);
-            border-radius: 12px;
+            border-radius: 16px;
             font-family: 'Inter', sans-serif;
-            font-size: 28px;
+            font-size: 32px;
             font-weight: 700;
             color: var(--text-primary);
             text-align: center;
@@ -181,8 +194,8 @@
 
         .pin-input:focus {
             outline: none;
-            border-color: var(--accent-gold);
-            box-shadow: 0 0 0 3px rgba(255, 217, 61, 0.2);
+            border-color: var(--accent-teal);
+            box-shadow: 0 0 0 4px rgba(0, 217, 165, 0.2);
         }
 
         .pin-input.error {
@@ -196,78 +209,36 @@
             75% { transform: translateX(8px); }
         }
 
-        .tabs {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 32px;
-            background: var(--bg-secondary);
-            padding: 6px;
-            border-radius: 12px;
-        }
-
-        .tab {
-            flex: 1;
-            padding: 12px 20px;
-            border: none;
-            background: transparent;
-            color: var(--text-secondary);
-            font-family: 'Inter', sans-serif;
-            font-size: 14px;
-            font-weight: 600;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .tab:hover { color: var(--text-primary); }
-        .tab.active { background: var(--accent-gold); color: var(--bg-primary); }
-
-        .form-group { margin-bottom: 20px; text-align: left; }
-
-        .form-label {
-            display: block;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-secondary);
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
         .form-input {
             width: 100%;
-            padding: 14px 16px;
+            padding: 16px;
             background: var(--bg-secondary);
             border: 2px solid rgba(255,255,255,0.1);
             border-radius: 12px;
             font-family: 'Inter', sans-serif;
             font-size: 16px;
+            font-weight: 600;
             color: var(--text-primary);
-            transition: all 0.2s ease;
+            text-align: center;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .form-input.name-input {
+            text-transform: none;
+            letter-spacing: normal;
         }
 
         .form-input:focus {
             outline: none;
-            border-color: var(--accent-gold);
-            box-shadow: 0 0 0 3px rgba(255, 217, 61, 0.2);
+            border-color: var(--accent-teal);
         }
 
-        .form-input.error { border-color: var(--accent-coral); }
-
-        .form-input.code-input {
-            text-align: center;
-            font-size: 20px;
-            font-weight: 700;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-        }
-
-        .form-hint { font-size: 12px; color: var(--text-muted); margin-top: 8px; }
-
-        .btn {
+        .login-btn {
             width: 100%;
             padding: 16px 32px;
-            background: var(--gradient-gold);
+            background: var(--gradient-teal);
             border: none;
             border-radius: 12px;
             color: var(--bg-primary);
@@ -279,103 +250,82 @@
             margin-bottom: 16px;
         }
 
-        .btn:hover:not(:disabled) {
+        .login-btn:hover:not(:disabled) {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(255, 217, 61, 0.3);
+            box-shadow: 0 8px 25px rgba(0, 217, 165, 0.35);
         }
 
-        .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .login-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
-        .btn-secondary {
-            width: 100%;
-            padding: 14px 24px;
-            background: transparent;
-            border: 2px solid rgba(255,255,255,0.2);
-            border-radius: 12px;
-            color: var(--text-secondary);
-            font-family: 'Inter', sans-serif;
+        .login-error {
+            color: var(--accent-coral);
             font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        .login-error.show { display: block; }
+
+        .facility-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--accent-teal);
             margin-bottom: 16px;
         }
 
-        .btn-secondary:hover { border-color: var(--accent-gold); color: var(--accent-gold); }
+        .welcome-name {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--accent-gold);
+            margin-bottom: 8px;
+        }
 
-        .error-msg { color: var(--accent-coral); font-size: 14px; margin-bottom: 16px; display: none; }
-        .error-msg.show { display: block; }
-
-        .success-msg { color: var(--accent-green); font-size: 14px; margin-bottom: 16px; display: none; }
-        .success-msg.show { display: block; }
-
-        .hidden { display: none !important; }
-        .screen { display: block; }
-
-        .step { display: none; }
-        .step.active { display: block; }
-
-        .facility-badge {
-            background: linear-gradient(135deg, rgba(0, 217, 165, 0.1) 0%, rgba(0, 179, 134, 0.1) 100%);
-            border: 1px solid rgba(0, 217, 165, 0.3);
-            border-radius: 12px;
-            padding: 16px;
+        .pin-display {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 24px;
             margin-bottom: 24px;
         }
 
-        .facility-badge-label {
-            font-size: 11px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 4px;
-        }
-
-        .facility-badge-name { font-size: 18px; font-weight: 700; color: var(--accent-teal); }
-
-        .spots-info { font-size: 13px; color: var(--text-secondary); margin-top: 8px; }
-        .spots-info.warning { color: var(--accent-gold); }
-        .spots-info.danger { color: var(--accent-coral); }
-
-        .back-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            font-family: 'Inter', sans-serif;
+        .pin-display-label {
             font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-bottom: 20px;
-            padding: 0;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
         }
 
-        .back-btn:hover { color: var(--accent-gold); }
+        .pin-display-value {
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--accent-gold);
+            letter-spacing: 8px;
+        }
 
-        .password-wrapper { position: relative; }
+        .pin-warning {
+            background: rgba(255, 217, 61, 0.1);
+            border: 1px solid rgba(255, 217, 61, 0.3);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 24px;
+            font-size: 14px;
+            color: var(--accent-gold);
+        }
 
-        .password-toggle {
-            position: absolute;
-            right: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
+        .back-link {
             color: var(--text-muted);
-            font-size: 18px;
+            font-size: 14px;
             cursor: pointer;
-            padding: 4px;
+            margin-top: 16px;
+            display: inline-block;
         }
 
-        .password-toggle:hover { color: var(--text-primary); }
+        .back-link:hover { color: var(--text-primary); }
 
         @media (max-width: 480px) {
             .login-card { padding: 36px 24px; }
             .login-logo { font-size: 56px; }
             .login-title { font-size: 28px; }
-            .pin-input { width: 48px; height: 56px; font-size: 24px; }
+            .pin-input { width: 52px; height: 64px; font-size: 28px; }
+            .pin-display-value { font-size: 36px; letter-spacing: 6px; }
         }
     </style>
 </head>
@@ -391,268 +341,206 @@
         <span>GoStar</span>
     </a>
 
-    <div class="login-container">
-
-        <!-- SCREEN 1: Quick PIN Login -->
-        <div class="login-card screen hidden" id="pinScreen">
-            <div class="login-logo">⭐</div>
-            <h1 class="login-title">Go<span>Star</span></h1>
-            <span class="login-badge">
-                <span class="lang-en">Welcome Back</span>
-                <span class="lang-es">Bienvenido</span>
-            </span>
-            
-            <p class="user-name" id="savedUserName"></p>
-            <p class="facility-name" id="savedFacilityName"></p>
-            
-            <p class="login-subtitle">
-                <span class="lang-en">Enter your PIN to continue</span>
-                <span class="lang-es">Ingresa tu PIN para continuar</span>
-            </p>
-            
-            <div class="pin-input-group" id="quickPinGroup">
-                <input type="password" class="pin-input" maxlength="1" inputmode="numeric" pattern="[0-9]*">
-                <input type="password" class="pin-input" maxlength="1" inputmode="numeric" pattern="[0-9]*">
-                <input type="password" class="pin-input" maxlength="1" inputmode="numeric" pattern="[0-9]*">
-                <input type="password" class="pin-input" maxlength="1" inputmode="numeric" pattern="[0-9]*">
-            </div>
-            
-            <button class="btn" onclick="verifyQuickPin()" id="quickPinBtn">
-                <span class="lang-en">Play Now</span>
-                <span class="lang-es">Jugar Ahora</span>
+    <!-- SCREEN 1: Choose Path -->
+    <div class="login-card screen" id="chooseScreen">
+        <div class="login-logo">🎮</div>
+        <h1 class="login-title">Go<span>Star</span></h1>
+        <span class="login-badge">
+            <span class="lang-en">Brain Training</span>
+            <span class="lang-es">Entrenamiento Mental</span>
+        </span>
+        
+        <div class="option-buttons">
+            <button class="option-btn" onclick="showScreen('pinLoginScreen')">
+                <span class="icon">🔑</span>
+                <span class="text">
+                    <strong>
+                        <span class="lang-en">I have a PIN</span>
+                        <span class="lang-es">Tengo un PIN</span>
+                    </strong>
+                    <br>
+                    <small style="color: var(--text-muted);">
+                        <span class="lang-en">Returning player</span>
+                        <span class="lang-es">Jugador que regresa</span>
+                    </small>
+                </span>
+                <span class="arrow">→</span>
             </button>
             
-            <p class="error-msg" id="quickPinError">
-                <span class="lang-en">Incorrect PIN. Please try again.</span>
-                <span class="lang-es">PIN incorrecto. Intenta de nuevo.</span>
-            </p>
-            
-            <button class="btn-secondary" onclick="showMainLogin()">
-                <span class="lang-en">Use Different Account</span>
-                <span class="lang-es">Usar Otra Cuenta</span>
-            </button>
-        </div>
-
-        <!-- SCREEN 2: Main Login/Register -->
-        <div class="login-card screen hidden" id="mainScreen">
-            <div class="login-logo">⭐</div>
-            <h1 class="login-title">Go<span>Star</span></h1>
-            <p class="login-tagline">
-                <span class="lang-en">Mental Fitness</span>
-                <span class="lang-es">Fitness Mental</span>
-            </p>
-
-            <div class="tabs" id="mainTabs">
-                <button class="tab active" onclick="switchTab('login')">
-                    <span class="lang-en">Login</span>
-                    <span class="lang-es">Iniciar Sesión</span>
-                </button>
-                <button class="tab" onclick="switchTab('register')">
-                    <span class="lang-en">Register</span>
-                    <span class="lang-es">Registrarse</span>
-                </button>
-            </div>
-
-            <!-- LOGIN FLOW -->
-            <div id="loginFlow">
-                <div class="step active" id="login-step1">
-                    <div class="form-group">
-                        <label class="form-label">
-                            <span class="lang-en">Access Code</span>
-                            <span class="lang-es">Código de Acceso</span>
-                        </label>
-                        <input type="text" class="form-input code-input" id="loginCode" placeholder="ACC-XXXXXX" autocomplete="off" spellcheck="false">
-                        <p class="form-hint">
-                            <span class="lang-en">Enter the code provided by your facility</span>
-                            <span class="lang-es">Ingresa el código proporcionado por tu instalación</span>
-                        </p>
-                    </div>
-                    <button class="btn" onclick="verifyLoginCode()">
-                        <span class="lang-en">Continue</span>
-                        <span class="lang-es">Continuar</span>
-                    </button>
-                    <p class="error-msg" id="loginCodeError">
-                        <span class="lang-en">Invalid access code</span>
-                        <span class="lang-es">Código de acceso inválido</span>
-                    </p>
-                </div>
-
-                <div class="step" id="login-step2">
-                    <button class="back-btn" onclick="goBackLogin()">
-                        <span>←</span>
-                        <span class="lang-en">Back</span>
-                        <span class="lang-es">Atrás</span>
-                    </button>
-
-                    <div class="facility-badge">
-                        <div class="facility-badge-label">
-                            <span class="lang-en">Facility</span>
-                            <span class="lang-es">Instalación</span>
-                        </div>
-                        <div class="facility-badge-name" id="loginFacilityName">--</div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">
-                            <span class="lang-en">Username</span>
-                            <span class="lang-es">Nombre de Usuario</span>
-                        </label>
-                        <input type="text" class="form-input" id="loginUsername" autocomplete="username">
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">
-                            <span class="lang-en">Password</span>
-                            <span class="lang-es">Contraseña</span>
-                        </label>
-                        <div class="password-wrapper">
-                            <input type="password" class="form-input" id="loginPassword" autocomplete="current-password">
-                            <button type="button" class="password-toggle" onclick="togglePassword('loginPassword', this)">👁️</button>
-                        </div>
-                    </div>
-
-                    <button class="btn" onclick="loginUser()">
-                        <span class="lang-en">Login</span>
-                        <span class="lang-es">Iniciar Sesión</span>
-                    </button>
-                    <p class="error-msg" id="loginError">
-                        <span class="lang-en">Invalid username or password</span>
-                        <span class="lang-es">Usuario o contraseña inválidos</span>
-                    </p>
-                </div>
-            </div>
-
-            <!-- REGISTER FLOW -->
-            <div id="registerFlow" class="hidden">
-                <div class="step active" id="register-step1">
-                    <div class="form-group">
-                        <label class="form-label">
-                            <span class="lang-en">Access Code</span>
-                            <span class="lang-es">Código de Acceso</span>
-                        </label>
-                        <input type="text" class="form-input code-input" id="registerCode" placeholder="ACC-XXXXXX" autocomplete="off" spellcheck="false">
-                        <p class="form-hint">
-                            <span class="lang-en">Enter the code provided by your facility</span>
-                            <span class="lang-es">Ingresa el código proporcionado por tu instalación</span>
-                        </p>
-                    </div>
-                    <button class="btn" onclick="verifyRegisterCode()">
-                        <span class="lang-en">Continue</span>
-                        <span class="lang-es">Continuar</span>
-                    </button>
-                    <p class="error-msg" id="registerCodeError">
-                        <span class="lang-en">Invalid access code</span>
-                        <span class="lang-es">Código de acceso inválido</span>
-                    </p>
-                </div>
-
-                <div class="step" id="register-step2">
-                    <button class="back-btn" onclick="goBackRegister()">
-                        <span>←</span>
-                        <span class="lang-en">Back</span>
-                        <span class="lang-es">Atrás</span>
-                    </button>
-
-                    <div class="facility-badge">
-                        <div class="facility-badge-label">
-                            <span class="lang-en">Facility</span>
-                            <span class="lang-es">Instalación</span>
-                        </div>
-                        <div class="facility-badge-name" id="registerFacilityName">--</div>
-                        <p class="spots-info" id="spotsInfo"></p>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">
-                            <span class="lang-en">Choose Username</span>
-                            <span class="lang-es">Elige un Nombre de Usuario</span>
-                        </label>
-                        <input type="text" class="form-input" id="registerUsername" autocomplete="username">
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">
-                            <span class="lang-en">Create Password</span>
-                            <span class="lang-es">Crear Contraseña</span>
-                        </label>
-                        <div class="password-wrapper">
-                            <input type="password" class="form-input" id="registerPassword" autocomplete="new-password">
-                            <button type="button" class="password-toggle" onclick="togglePassword('registerPassword', this)">👁️</button>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">
-                            <span class="lang-en">Confirm Password</span>
-                            <span class="lang-es">Confirmar Contraseña</span>
-                        </label>
-                        <div class="password-wrapper">
-                            <input type="password" class="form-input" id="registerPasswordConfirm" autocomplete="new-password">
-                            <button type="button" class="password-toggle" onclick="togglePassword('registerPasswordConfirm', this)">👁️</button>
-                        </div>
-                    </div>
-
-                    <button class="btn" onclick="registerUser()">
-                        <span class="lang-en">Create Account</span>
-                        <span class="lang-es">Crear Cuenta</span>
-                    </button>
-                    <p class="error-msg" id="registerError"></p>
-                </div>
-            </div>
-        </div>
-
-        <!-- SCREEN 3: PIN Setup -->
-        <div class="login-card screen hidden" id="setupScreen">
-            <div class="login-logo">🔐</div>
-            <h1 class="login-title">Go<span>Star</span></h1>
-            <span class="login-badge">
-                <span class="lang-en">Quick Access</span>
-                <span class="lang-es">Acceso Rápido</span>
-            </span>
-            
-            <p class="user-name" id="setupUserName"></p>
-            
-            <p class="login-subtitle">
-                <span class="lang-en">Create a 4-digit PIN for quick login next time. No more typing access codes!</span>
-                <span class="lang-es">Crea un PIN de 4 dígitos para iniciar sesión rápido. ¡Sin escribir códigos!</span>
-            </p>
-            
-            <div class="form-group" style="text-align: center;">
-                <label class="form-label" style="text-align: center;">
-                    <span class="lang-en">Create PIN</span>
-                    <span class="lang-es">Crear PIN</span>
-                </label>
-                <div class="pin-input-group" id="setupPinGroup">
-                    <input type="password" class="pin-input" maxlength="1" inputmode="numeric" pattern="[0-9]*">
-                    <input type="password" class="pin-input" maxlength="1" inputmode="numeric" pattern="[0-9]*">
-                    <input type="password" class="pin-input" maxlength="1" inputmode="numeric" pattern="[0-9]*">
-                    <input type="password" class="pin-input" maxlength="1" inputmode="numeric" pattern="[0-9]*">
-                </div>
-            </div>
-            
-            <button class="btn" onclick="saveUserPin()">
-                <span class="lang-en">Save & Play</span>
-                <span class="lang-es">Guardar y Jugar</span>
-            </button>
-            
-            <p class="error-msg" id="setupPinError">
-                <span class="lang-en">Please enter a 4-digit PIN</span>
-                <span class="lang-es">Por favor ingresa un PIN de 4 dígitos</span>
-            </p>
-            
-            <button class="btn-secondary" onclick="skipUserPin()">
-                <span class="lang-en">Skip for now</span>
-                <span class="lang-es">Omitir por ahora</span>
+            <button class="option-btn" onclick="showScreen('accessCodeScreen')">
+                <span class="icon">✨</span>
+                <span class="text">
+                    <strong>
+                        <span class="lang-en">I'm new</span>
+                        <span class="lang-es">Soy nuevo</span>
+                    </strong>
+                    <br>
+                    <small style="color: var(--text-muted);">
+                        <span class="lang-en">Register with access code</span>
+                        <span class="lang-es">Registrar con código de acceso</span>
+                    </small>
+                </span>
+                <span class="arrow">→</span>
             </button>
         </div>
+    </div>
 
+    <!-- SCREEN 2a: Enter PIN (returning user) -->
+    <div class="login-card screen hidden" id="pinLoginScreen">
+        <div class="login-logo">🔑</div>
+        <h1 class="login-title">Go<span>Star</span></h1>
+        <span class="login-badge">
+            <span class="lang-en">Welcome Back!</span>
+            <span class="lang-es">¡Bienvenido!</span>
+        </span>
+        
+        <p class="login-subtitle">
+            <span class="lang-en">Enter your 4-digit PIN</span>
+            <span class="lang-es">Ingresa tu PIN de 4 dígitos</span>
+        </p>
+        
+        <div class="pin-input-group" id="loginPinGroup">
+            <input type="tel" class="pin-input" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+            <input type="tel" class="pin-input" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+            <input type="tel" class="pin-input" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+            <input type="tel" class="pin-input" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+        </div>
+        
+        <button class="login-btn" onclick="loginWithPin()" id="loginPinBtn">
+            <span class="lang-en">Play Now!</span>
+            <span class="lang-es">¡Jugar Ahora!</span>
+        </button>
+        
+        <p class="login-error" id="pinLoginError">
+            <span class="lang-en">Invalid PIN. Please try again.</span>
+            <span class="lang-es">PIN inválido. Por favor intenta de nuevo.</span>
+        </p>
+        
+        <span class="back-link" onclick="showScreen('chooseScreen')">
+            <span class="lang-en">← Back</span>
+            <span class="lang-es">← Atrás</span>
+        </span>
+    </div>
+
+    <!-- SCREEN 2b: Enter Access Code (new user) -->
+    <div class="login-card screen hidden" id="accessCodeScreen">
+        <div class="login-logo">📋</div>
+        <h1 class="login-title">Go<span>Star</span></h1>
+        <span class="login-badge">
+            <span class="lang-en">New Player</span>
+            <span class="lang-es">Nuevo Jugador</span>
+        </span>
+        
+        <p class="login-subtitle">
+            <span class="lang-en">Enter the access code from your facility</span>
+            <span class="lang-es">Ingresa el código de acceso de tu instalación</span>
+        </p>
+        
+        <input type="text" class="form-input" id="accessCodeInput" placeholder="ACC-XXXXXX" maxlength="10">
+        
+        <button class="login-btn" onclick="verifyAccessCode()" id="verifyCodeBtn">
+            <span class="lang-en">Continue</span>
+            <span class="lang-es">Continuar</span>
+        </button>
+        
+        <p class="login-error" id="accessCodeError">
+            <span class="lang-en">Invalid access code</span>
+            <span class="lang-es">Código de acceso inválido</span>
+        </p>
+        
+        <span class="back-link" onclick="showScreen('chooseScreen')">
+            <span class="lang-en">← Back</span>
+            <span class="lang-es">← Atrás</span>
+        </span>
+    </div>
+
+    <!-- SCREEN 3: Enter Name -->
+    <div class="login-card screen hidden" id="nameScreen">
+        <div class="login-logo">👋</div>
+        <h1 class="login-title">Go<span>Star</span></h1>
+        <span class="login-badge">
+            <span class="lang-en">Almost There!</span>
+            <span class="lang-es">¡Casi Listo!</span>
+        </span>
+        
+        <p class="facility-name" id="facilityName"></p>
+        
+        <p class="login-subtitle">
+            <span class="lang-en">Enter your name to create your account</span>
+            <span class="lang-es">Ingresa tu nombre para crear tu cuenta</span>
+        </p>
+        
+        <input type="text" class="form-input name-input" id="userName" placeholder="Your name / Tu nombre" maxlength="30">
+        
+        <button class="login-btn" onclick="registerUser()" id="registerBtn">
+            <span class="lang-en">Create My Account</span>
+            <span class="lang-es">Crear Mi Cuenta</span>
+        </button>
+        
+        <p class="login-error" id="registerError">
+            <span class="lang-en">Please enter your name</span>
+            <span class="lang-es">Por favor ingresa tu nombre</span>
+        </p>
+        
+        <span class="back-link" onclick="showScreen('accessCodeScreen')">
+            <span class="lang-en">← Back</span>
+            <span class="lang-es">← Atrás</span>
+        </span>
+    </div>
+
+    <!-- SCREEN 4: Show Generated PIN -->
+    <div class="login-card screen hidden" id="pinGeneratedScreen">
+        <div class="login-logo">🎉</div>
+        <h1 class="login-title">Go<span>Star</span></h1>
+        <span class="login-badge">
+            <span class="lang-en">You're All Set!</span>
+            <span class="lang-es">¡Todo Listo!</span>
+        </span>
+        
+        <p class="welcome-name" id="welcomeName"></p>
+        
+        <div class="pin-display">
+            <div class="pin-display-label">
+                <span class="lang-en">Your Personal PIN</span>
+                <span class="lang-es">Tu PIN Personal</span>
+            </div>
+            <div class="pin-display-value" id="generatedPin">0000</div>
+        </div>
+        
+        <div class="pin-warning">
+            <span class="lang-en">⚠️ Remember this PIN! You'll need it to access your training.</span>
+            <span class="lang-es">⚠️ ¡Recuerda este PIN! Lo necesitarás para acceder a tu entrenamiento.</span>
+        </div>
+        
+        <button class="login-btn" onclick="startPlaying()">
+            <span class="lang-en">🎮 Start Playing!</span>
+            <span class="lang-es">🎮 ¡Empezar a Jugar!</span>
+        </button>
+    </div>
+
+    <!-- SCREEN 5: Welcome Back (after PIN login) -->
+    <div class="login-card screen hidden" id="welcomeBackScreen">
+        <div class="login-logo">🌟</div>
+        <h1 class="login-title">Go<span>Star</span></h1>
+        <span class="login-badge">
+            <span class="lang-en">Welcome Back!</span>
+            <span class="lang-es">¡Bienvenido!</span>
+        </span>
+        
+        <p class="welcome-name" id="welcomeBackName"></p>
+        
+        <button class="login-btn" onclick="startPlaying()">
+            <span class="lang-en">🎮 Continue Training</span>
+            <span class="lang-es">🎮 Continuar Entrenamiento</span>
+        </button>
     </div>
 
     <script>
         var currentLang = localStorage.getItem('gostar-lang') || 'en';
-        var verifiedCode = null;
-        var facilityInfo = null;
-        var pendingUser = null;
+        var currentAccessCode = null;
+        var currentFacility = null;
+        var currentUserPin = null;
+        var currentUsername = null;
 
         function setLang(lang) {
             currentLang = lang;
@@ -668,336 +556,221 @@
             btn.classList.toggle('active', btn.textContent === currentLang.toUpperCase());
         });
 
-        function checkSavedUser() {
-            var savedUser = localStorage.getItem('gostar-player');
-            if (savedUser) {
-                try {
-                    var user = JSON.parse(savedUser);
-                    if (user.accessCode && user.username && user.password && user.pin) {
-                        document.getElementById('savedUserName').textContent = user.username;
-                        document.getElementById('savedFacilityName').textContent = user.facilityName || '';
-                        showScreen('pinScreen');
-                        var firstPin = document.querySelector('#quickPinGroup .pin-input');
-                        if (firstPin) firstPin.focus();
-                        return;
-                    }
-                } catch (e) { localStorage.removeItem('gostar-player'); }
-            }
-            showScreen('mainScreen');
-        }
-
         function showScreen(screenId) {
-            document.querySelectorAll('.screen').forEach(function(s) { s.classList.add('hidden'); });
-            document.getElementById(screenId).classList.remove('hidden');
-        }
-
-        function showMainLogin() {
-            localStorage.removeItem('gostar-player');
-            showScreen('mainScreen');
-            clearAllInputs();
-        }
-
-        function clearAllInputs() {
-            document.querySelectorAll('.form-input, .pin-input').forEach(function(inp) {
-                inp.value = '';
-                inp.classList.remove('error');
+            document.querySelectorAll('.screen').forEach(function(s) {
+                s.classList.add('hidden');
             });
-            document.querySelectorAll('.error-msg, .success-msg').forEach(function(el) { el.classList.remove('show'); });
+            document.getElementById(screenId).classList.remove('hidden');
+            
+            if (screenId === 'pinLoginScreen') {
+                initPinInputs('loginPinGroup');
+                document.querySelector('#loginPinGroup .pin-input').focus();
+            } else if (screenId === 'accessCodeScreen') {
+                document.getElementById('accessCodeInput').focus();
+            } else if (screenId === 'nameScreen') {
+                document.getElementById('userName').focus();
+            }
         }
 
-        function initPinInputs(containerId, onComplete) {
-            var container = document.getElementById(containerId);
-            var inputs = container.querySelectorAll('.pin-input');
+        function initPinInputs(groupId) {
+            var inputs = document.querySelectorAll('#' + groupId + ' .pin-input');
+            
             inputs.forEach(function(input, index) {
+                var newInput = input.cloneNode(true);
+                input.parentNode.replaceChild(newInput, input);
+                input = newInput;
+                input.value = '';
+                
                 input.addEventListener('input', function(e) {
                     this.value = this.value.replace(/[^0-9]/g, '');
-                    if (this.value.length === 1 && index < inputs.length - 1) inputs[index + 1].focus();
-                    if (index === inputs.length - 1 && this.value.length === 1) onComplete();
-                    inputs.forEach(function(inp) { inp.classList.remove('error'); });
-                    var errorEl = container.closest('.login-card').querySelector('.error-msg');
-                    if (errorEl) errorEl.classList.remove('show');
+                    if (this.value.length === 1 && index < inputs.length - 1) {
+                        document.querySelectorAll('#' + groupId + ' .pin-input')[index + 1].focus();
+                    }
+                    if (index === inputs.length - 1 && this.value.length === 1) {
+                        if (groupId === 'loginPinGroup') loginWithPin();
+                    }
+                    document.querySelectorAll('#' + groupId + ' .pin-input').forEach(function(inp) { 
+                        inp.classList.remove('error'); 
+                    });
+                    document.getElementById('pinLoginError').classList.remove('show');
                 });
+                
                 input.addEventListener('keydown', function(e) {
-                    if (e.key === 'Backspace' && this.value.length === 0 && index > 0) inputs[index - 1].focus();
-                    if (e.key === 'Enter') onComplete();
+                    var currentInputs = document.querySelectorAll('#' + groupId + ' .pin-input');
+                    if (e.key === 'Backspace' && this.value.length === 0 && index > 0) {
+                        currentInputs[index - 1].focus();
+                    }
+                    if (e.key === 'Enter') {
+                        if (groupId === 'loginPinGroup') loginWithPin();
+                    }
                 });
+                
                 input.addEventListener('paste', function(e) {
                     e.preventDefault();
                     var pastedData = e.clipboardData.getData('text').replace(/[^0-9]/g, '');
-                    for (var i = 0; i < Math.min(pastedData.length, 4); i++) inputs[i].value = pastedData[i];
-                    if (pastedData.length >= 4) onComplete();
+                    var currentInputs = document.querySelectorAll('#' + groupId + ' .pin-input');
+                    for (var i = 0; i < Math.min(pastedData.length, 4); i++) {
+                        currentInputs[i].value = pastedData[i];
+                    }
+                    if (pastedData.length >= 4) {
+                        if (groupId === 'loginPinGroup') loginWithPin();
+                    }
                 });
             });
         }
 
-        function getPinValue(containerId) {
-            var inputs = document.querySelectorAll('#' + containerId + ' .pin-input');
+        function getPinValue(groupId) {
+            var inputs = document.querySelectorAll('#' + groupId + ' .pin-input');
             var pin = '';
             inputs.forEach(function(input) { pin += input.value; });
             return pin;
         }
 
-        function clearPinInputs(containerId) {
-            var inputs = document.querySelectorAll('#' + containerId + ' .pin-input');
-            inputs.forEach(function(input) { input.value = ''; input.classList.remove('error'); });
+        function showPinError(groupId) {
+            var inputs = document.querySelectorAll('#' + groupId + ' .pin-input');
+            inputs.forEach(function(input) { input.classList.add('error'); });
+            document.getElementById('pinLoginError').classList.add('show');
+            inputs.forEach(function(input) { input.value = ''; });
             if (inputs[0]) inputs[0].focus();
         }
 
-        function showPinError(containerId, errorId) {
-            var inputs = document.querySelectorAll('#' + containerId + ' .pin-input');
-            inputs.forEach(function(input) { input.classList.add('error'); });
-            document.getElementById(errorId).classList.add('show');
-            clearPinInputs(containerId);
-        }
-
-        function verifyQuickPin() {
-            var enteredPin = getPinValue('quickPinGroup');
-            if (enteredPin.length < 4) return;
+        function loginWithPin() {
+            var pin = getPinValue('loginPinGroup');
+            if (pin.length < 4) return;
             
-            var savedUser = localStorage.getItem('gostar-player');
-            if (!savedUser) { showMainLogin(); return; }
+            var btn = document.getElementById('loginPinBtn');
+            btn.disabled = true;
+            btn.textContent = currentLang === 'es' ? 'Verificando...' : 'Verifying...';
             
-            var user = JSON.parse(savedUser);
-            if (enteredPin === user.pin) {
-                var btn = document.getElementById('quickPinBtn');
-                btn.disabled = true;
-                btn.textContent = currentLang === 'es' ? 'Verificando...' : 'Verifying...';
-                
-                fetch('/api/play/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ accessCode: user.accessCode, username: user.username, password: user.password })
-                })
-                .then(function(r) { return r.json(); })
-                .then(function(data) {
-                    if (data.success) {
-                        sessionStorage.setItem('gostar-user-code', user.accessCode);
-                        sessionStorage.setItem('gostar-user-name', data.username);
-                        sessionStorage.setItem('gostar-facility', user.facilityName);
-                        window.location.href = '/game';
-                    } else {
-                        localStorage.removeItem('gostar-player');
-                        alert(currentLang === 'es' ? 'Tu cuenta ya no es válida. Por favor inicia sesión de nuevo.' : 'Your account is no longer valid. Please login again.');
-                        showMainLogin();
-                    }
-                })
-                .catch(function(err) {
-                    alert(currentLang === 'es' ? 'Error de conexión.' : 'Connection error.');
-                    btn.disabled = false;
-                    btn.innerHTML = '<span class="lang-en">Play Now</span><span class="lang-es">Jugar Ahora</span>';
-                    document.body.setAttribute('data-lang', currentLang);
-                });
-            } else {
-                showPinError('quickPinGroup', 'quickPinError');
-            }
-        }
-
-        function switchTab(tab) {
-            document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
-            if (tab === 'login') {
-                document.querySelectorAll('.tab')[0].classList.add('active');
-                document.getElementById('loginFlow').classList.remove('hidden');
-                document.getElementById('registerFlow').classList.add('hidden');
-            } else {
-                document.querySelectorAll('.tab')[1].classList.add('active');
-                document.getElementById('loginFlow').classList.add('hidden');
-                document.getElementById('registerFlow').classList.remove('hidden');
-            }
-            clearAllInputs();
-            document.getElementById('login-step1').classList.add('active');
-            document.getElementById('login-step2').classList.remove('active');
-            document.getElementById('register-step1').classList.add('active');
-            document.getElementById('register-step2').classList.remove('active');
-        }
-
-        function clearErrors() {
-            document.querySelectorAll('.error-msg').forEach(function(el) { el.classList.remove('show'); });
-            document.querySelectorAll('.form-input').forEach(function(el) { el.classList.remove('error'); });
-        }
-
-        function togglePassword(inputId, btn) {
-            var input = document.getElementById(inputId);
-            if (input.type === 'password') { input.type = 'text'; btn.textContent = '🙈'; }
-            else { input.type = 'password'; btn.textContent = '👁️'; }
-        }
-
-        function verifyLoginCode() {
-            var code = document.getElementById('loginCode').value.trim().toUpperCase();
-            if (!code) { document.getElementById('loginCode').classList.add('error'); return; }
-            clearErrors();
-            fetch('/api/play/verify', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ accessCode: code })
-            })
-            .then(function(r) { return r.json(); })
-            .then(function(data) {
-                if (data.success) {
-                    verifiedCode = code;
-                    facilityInfo = data;
-                    document.getElementById('loginFacilityName').textContent = data.facilityName;
-                    document.getElementById('login-step1').classList.remove('active');
-                    document.getElementById('login-step2').classList.add('active');
-                    document.getElementById('loginUsername').focus();
-                } else { throw new Error(data.error); }
-            })
-            .catch(function() {
-                document.getElementById('loginCodeError').classList.add('show');
-                document.getElementById('loginCode').classList.add('error');
-            });
-        }
-
-        function goBackLogin() {
-            document.getElementById('login-step2').classList.remove('active');
-            document.getElementById('login-step1').classList.add('active');
-            clearErrors();
-        }
-
-        function loginUser() {
-            var username = document.getElementById('loginUsername').value.trim();
-            var password = document.getElementById('loginPassword').value;
-            if (!username || !password) {
-                if (!username) document.getElementById('loginUsername').classList.add('error');
-                if (!password) document.getElementById('loginPassword').classList.add('error');
-                return;
-            }
-            clearErrors();
             fetch('/api/play/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ accessCode: verifiedCode, username: username, password: password })
+                body: JSON.stringify({ pin: pin })
             })
-            .then(function(r) { return r.json(); })
+            .then(function(res) { return res.json(); })
             .then(function(data) {
                 if (data.success) {
-                    pendingUser = { accessCode: verifiedCode, username: data.username, password: password, facilityName: facilityInfo.facilityName };
-                    document.getElementById('setupUserName').textContent = data.username;
-                    showScreen('setupScreen');
-                    var firstPin = document.querySelector('#setupPinGroup .pin-input');
-                    if (firstPin) firstPin.focus();
-                } else { throw new Error(data.error); }
+                    currentUserPin = pin;
+                    currentUsername = data.username;
+                    currentAccessCode = data.accessCode;
+                    
+                    sessionStorage.setItem('gostar-user-pin', pin);
+                    sessionStorage.setItem('gostar-user-name', data.username);
+                    sessionStorage.setItem('gostar-user-code', data.accessCode);
+                    
+                    document.getElementById('welcomeBackName').textContent = data.username;
+                    showScreen('welcomeBackScreen');
+                } else {
+                    throw new Error(data.error || 'Invalid PIN');
+                }
             })
-            .catch(function() { document.getElementById('loginError').classList.add('show'); });
+            .catch(function(err) {
+                showPinError('loginPinGroup');
+            })
+            .finally(function() {
+                btn.disabled = false;
+                btn.innerHTML = '<span class="lang-en">Play Now!</span><span class="lang-es">¡Jugar Ahora!</span>';
+                document.body.setAttribute('data-lang', currentLang);
+            });
         }
 
-        function verifyRegisterCode() {
-            var code = document.getElementById('registerCode').value.trim().toUpperCase();
-            if (!code) { document.getElementById('registerCode').classList.add('error'); return; }
-            clearErrors();
+        function verifyAccessCode() {
+            var code = document.getElementById('accessCodeInput').value.trim().toUpperCase();
+            if (!code) {
+                document.getElementById('accessCodeError').classList.add('show');
+                return;
+            }
+            
+            var btn = document.getElementById('verifyCodeBtn');
+            btn.disabled = true;
+            btn.textContent = currentLang === 'es' ? 'Verificando...' : 'Verifying...';
+            
             fetch('/api/play/verify', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ accessCode: code })
             })
-            .then(function(r) { return r.json(); })
+            .then(function(res) { return res.json(); })
             .then(function(data) {
                 if (data.success) {
-                    verifiedCode = code;
-                    facilityInfo = data;
-                    document.getElementById('registerFacilityName').textContent = data.facilityName;
-                    var spotsEl = document.getElementById('spotsInfo');
-                    if (data.spotsLeft <= 0) {
-                        spotsEl.textContent = currentLang === 'es' ? '❌ Sin lugares disponibles' : '❌ No spots available';
-                        spotsEl.className = 'spots-info danger';
-                    } else if (data.spotsLeft <= 2) {
-                        spotsEl.textContent = (currentLang === 'es' ? '⚠️ Solo ' : '⚠️ Only ') + data.spotsLeft + (currentLang === 'es' ? ' lugares' : ' spots left');
-                        spotsEl.className = 'spots-info warning';
-                    } else {
-                        spotsEl.textContent = '✓ ' + data.spotsLeft + (currentLang === 'es' ? ' lugares disponibles' : ' spots available');
-                        spotsEl.className = 'spots-info';
+                    if (!data.hasSpots) {
+                        throw new Error(currentLang === 'es' ? 'Código lleno' : 'Code is full');
                     }
-                    document.getElementById('register-step1').classList.remove('active');
-                    document.getElementById('register-step2').classList.add('active');
-                    document.getElementById('registerUsername').focus();
-                } else { throw new Error(data.error); }
+                    currentAccessCode = code;
+                    currentFacility = data.facilityName;
+                    document.getElementById('facilityName').textContent = data.facilityName;
+                    document.getElementById('accessCodeError').classList.remove('show');
+                    showScreen('nameScreen');
+                } else {
+                    throw new Error(data.error || 'Invalid code');
+                }
             })
-            .catch(function() {
-                document.getElementById('registerCodeError').classList.add('show');
-                document.getElementById('registerCode').classList.add('error');
+            .catch(function(err) {
+                document.getElementById('accessCodeError').textContent = err.message;
+                document.getElementById('accessCodeError').classList.add('show');
+            })
+            .finally(function() {
+                btn.disabled = false;
+                btn.innerHTML = '<span class="lang-en">Continue</span><span class="lang-es">Continuar</span>';
+                document.body.setAttribute('data-lang', currentLang);
             });
-        }
-
-        function goBackRegister() {
-            document.getElementById('register-step2').classList.remove('active');
-            document.getElementById('register-step1').classList.add('active');
-            clearErrors();
         }
 
         function registerUser() {
-            var username = document.getElementById('registerUsername').value.trim();
-            var password = document.getElementById('registerPassword').value;
-            var confirm = document.getElementById('registerPasswordConfirm').value;
-            var errorEl = document.getElementById('registerError');
-            clearErrors();
-
-            if (!username) {
-                document.getElementById('registerUsername').classList.add('error');
-                errorEl.textContent = currentLang === 'es' ? 'Ingresa un nombre de usuario' : 'Enter a username';
-                errorEl.classList.add('show');
+            var name = document.getElementById('userName').value.trim();
+            if (!name) {
+                document.getElementById('registerError').classList.add('show');
                 return;
             }
-            if (password.length < 4) {
-                document.getElementById('registerPassword').classList.add('error');
-                errorEl.textContent = currentLang === 'es' ? 'La contraseña debe tener al menos 4 caracteres' : 'Password must be at least 4 characters';
-                errorEl.classList.add('show');
-                return;
-            }
-            if (password !== confirm) {
-                document.getElementById('registerPasswordConfirm').classList.add('error');
-                errorEl.textContent = currentLang === 'es' ? 'Las contraseñas no coinciden' : 'Passwords do not match';
-                errorEl.classList.add('show');
-                return;
-            }
-
+            
+            var btn = document.getElementById('registerBtn');
+            btn.disabled = true;
+            btn.textContent = currentLang === 'es' ? 'Creando...' : 'Creating...';
+            
             fetch('/api/play/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ accessCode: verifiedCode, username: username, password: password })
+                body: JSON.stringify({ accessCode: currentAccessCode, username: name })
             })
-            .then(function(r) { return r.json(); })
+            .then(function(res) { return res.json(); })
             .then(function(data) {
                 if (data.success) {
-                    pendingUser = { accessCode: verifiedCode, username: data.username, password: password, facilityName: facilityInfo.facilityName };
-                    document.getElementById('setupUserName').textContent = data.username;
-                    showScreen('setupScreen');
-                    var firstPin = document.querySelector('#setupPinGroup .pin-input');
-                    if (firstPin) firstPin.focus();
-                } else { throw new Error(data.error); }
+                    currentUserPin = data.pin;
+                    currentUsername = data.username;
+                    
+                    sessionStorage.setItem('gostar-user-pin', data.pin);
+                    sessionStorage.setItem('gostar-user-name', data.username);
+                    sessionStorage.setItem('gostar-user-code', currentAccessCode);
+                    
+                    document.getElementById('welcomeName').textContent = data.username;
+                    document.getElementById('generatedPin').textContent = data.pin;
+                    showScreen('pinGeneratedScreen');
+                } else {
+                    throw new Error(data.error || 'Registration failed');
+                }
             })
             .catch(function(err) {
-                errorEl.textContent = err.message || (currentLang === 'es' ? 'Error al registrar' : 'Registration failed');
-                errorEl.classList.add('show');
+                document.getElementById('registerError').textContent = err.message;
+                document.getElementById('registerError').classList.add('show');
+            })
+            .finally(function() {
+                btn.disabled = false;
+                btn.innerHTML = '<span class="lang-en">Create My Account</span><span class="lang-es">Crear Mi Cuenta</span>';
+                document.body.setAttribute('data-lang', currentLang);
             });
         }
 
-        function saveUserPin() {
-            var pin = getPinValue('setupPinGroup');
-            if (pin.length < 4) { showPinError('setupPinGroup', 'setupPinError'); return; }
-            var user = { accessCode: pendingUser.accessCode, username: pendingUser.username, password: pendingUser.password, facilityName: pendingUser.facilityName, pin: pin };
-            localStorage.setItem('gostar-player', JSON.stringify(user));
-            sessionStorage.setItem('gostar-user-code', pendingUser.accessCode);
-            sessionStorage.setItem('gostar-user-name', pendingUser.username);
-            sessionStorage.setItem('gostar-facility', pendingUser.facilityName);
+        function startPlaying() {
             window.location.href = '/game';
         }
 
-        function skipUserPin() {
-            sessionStorage.setItem('gostar-user-code', pendingUser.accessCode);
-            sessionStorage.setItem('gostar-user-name', pendingUser.username);
-            sessionStorage.setItem('gostar-facility', pendingUser.facilityName);
-            window.location.href = '/game';
-        }
+        document.getElementById('accessCodeInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') verifyAccessCode();
+        });
 
-        document.getElementById('loginCode').addEventListener('input', function() { this.value = this.value.toUpperCase(); clearErrors(); });
-        document.getElementById('registerCode').addEventListener('input', function() { this.value = this.value.toUpperCase(); clearErrors(); });
-        document.getElementById('loginCode').addEventListener('keypress', function(e) { if (e.key === 'Enter') verifyLoginCode(); });
-        document.getElementById('loginPassword').addEventListener('keypress', function(e) { if (e.key === 'Enter') loginUser(); });
-        document.getElementById('registerCode').addEventListener('keypress', function(e) { if (e.key === 'Enter') verifyRegisterCode(); });
-        document.getElementById('registerPasswordConfirm').addEventListener('keypress', function(e) { if (e.key === 'Enter') registerUser(); });
-
-        initPinInputs('quickPinGroup', verifyQuickPin);
-        initPinInputs('setupPinGroup', saveUserPin);
-        checkSavedUser();
+        document.getElementById('userName').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') registerUser();
+        });
     </script>
 
 </body>
