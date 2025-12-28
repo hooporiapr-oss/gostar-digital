@@ -71,6 +71,22 @@ function generateKey(prefix, length = 8) {
     return key;
 }
 
+// Generate unique 4-digit PIN for facility license
+function generateLicensePin() {
+    var licenses = readJSON(LICENSES_FILE);
+    var existingPins = licenses.map(function(l) { return l.key; });
+    
+    var pin;
+    var attempts = 0;
+    do {
+        // Generate 4-digit PIN (1000-9999 to avoid leading zeros)
+        pin = String(1000 + Math.floor(Math.random() * 9000));
+        attempts++;
+    } while (existingPins.indexOf(pin) !== -1 && attempts < 100);
+    
+    return pin;
+}
+
 function generateToken() {
     return Buffer.from(Date.now() + '-' + Math.random().toString(36).substring(2, 15)).toString('base64');
 }
@@ -455,7 +471,7 @@ app.post('/api/admin/licenses', adminAuth, function(req, res) {
     
     var licenses = readJSON(LICENSES_FILE);
     var newLicense = {
-        key: generateKey('LIC'),
+        key: generateLicensePin(),
         facilityName: facilityName,
         expirationDate: expirationDate,
         userPool: parseInt(userPool),
@@ -1063,7 +1079,7 @@ app.post('/api/trial/register', function(req, res) {
         return res.status(400).json({ error: 'Email already used for a free trial' });
     }
     
-    var licenseKey = generateKey('LIC');
+    var licenseKey = generateLicensePin();
     
     var expirationDate = new Date();
     expirationDate.setDate(expirationDate.getDate() + 7);
