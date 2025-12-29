@@ -655,7 +655,11 @@ app.get('/api/facility/:licenseKey', function(req, res) {
             totalSessions: (u.sessions_sequence || 0) + (u.sessions_startrail || 0) + (u.sessions_duo || 0) + (u.sessions_gonogo || 0),
             streak: u.streak || 0,
             lastActive: u.lastActive || u.createdAt,
-            createdAt: u.createdAt
+            createdAt: u.createdAt,
+            // RT data
+            best_rt: u.best_rt || null,
+            latest_rt: u.latest_rt || null,
+            rt_history: u.rt_history || []
         };
     });
     
@@ -989,6 +993,45 @@ app.post('/api/game/session', function(req, res) {
         if (!users[userIndex][bestKey] || score > users[userIndex][bestKey]) {
             users[userIndex][bestKey] = score;
         }
+    }
+    
+    // Store RT data for gonogo game
+    if (game === 'gonogo' && req.body.rt) {
+        var rt = req.body.rt;
+        
+        // Initialize RT history if not exists
+        if (!users[userIndex].rt_history) {
+            users[userIndex].rt_history = [];
+        }
+        
+        // Add this session's RT data
+        users[userIndex].rt_history.push({
+            date: new Date().toISOString(),
+            average: rt.average || 0,
+            fastest: rt.fastest || 0,
+            slowest: rt.slowest || 0,
+            consistency: rt.consistency || 0,
+            totalTaps: rt.totalTaps || 0,
+            accuracy: req.body.accuracy || 0,
+            score: score || 0
+        });
+        
+        // Keep only last 50 sessions
+        if (users[userIndex].rt_history.length > 50) {
+            users[userIndex].rt_history = users[userIndex].rt_history.slice(-50);
+        }
+        
+        // Update best RT (fastest average)
+        if (!users[userIndex].best_rt || (rt.average > 0 && rt.average < users[userIndex].best_rt)) {
+            users[userIndex].best_rt = rt.average;
+        }
+        
+        // Store latest RT stats
+        users[userIndex].latest_rt = {
+            average: rt.average,
+            fastest: rt.fastest,
+            consistency: rt.consistency
+        };
     }
     
     writeJSON(USERS_FILE, users);
