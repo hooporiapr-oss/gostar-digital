@@ -753,8 +753,8 @@ app.get('/game', function(req, res) {
     res.sendFile(path.join(__dirname, 'game.html'));
 });
 
-app.get('/go-no-gostar', function(req, res) {
-    res.sendFile(path.join(__dirname, 'go-no-gostar.html'));
+app.get('/go-nogo-trail', function(req, res) {
+    res.sendFile(path.join(__dirname, 'go-nogo-trail.html'));
 });
 
 app.post('/api/play/verify', function(req, res) {
