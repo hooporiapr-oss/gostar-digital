@@ -521,12 +521,13 @@
                                     <th title="Sequence">⭐</th>
                                     <th title="StarTrail">🛤️</th>
                                     <th title="Pattern Duo">🎯</th>
+                                    <th title="Go/No-Go">🚦</th>
                                     <th>Total</th>
                                     <th>Streak</th>
                                 </tr>
                             </thead>
                             <tbody id="usersTableBody">
-                                <tr><td colspan="8" style="text-align:center;color:var(--text-muted);">Loading...</td></tr>
+                                <tr><td colspan="9" style="text-align:center;color:var(--text-muted);">Loading...</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -653,7 +654,7 @@
             var totalSessions = 0;
             if (facilityData.users) {
                 facilityData.users.forEach(function(u) {
-                    totalSessions += (u.sessions_sequence || 0) + (u.sessions_startrail || 0) + (u.sessions_duo || 0);
+                    totalSessions += (u.sessions_sequence || 0) + (u.sessions_startrail || 0) + (u.sessions_duo || 0) + (u.sessions_gonogo || 0);
                 });
             }
             document.getElementById('statSessions').textContent = totalSessions;
@@ -691,12 +692,12 @@
         function renderUsersTable() {
             var tbody = document.getElementById('usersTableBody');
             if (!facilityData || !facilityData.users || facilityData.users.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--text-muted);padding:40px;">No users yet. Users will appear when they register.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:var(--text-muted);padding:40px;">No users yet. Users will appear when they register.</td></tr>';
                 return;
             }
             tbody.innerHTML = '';
             facilityData.users.forEach(function(u) {
-                var total = (u.sessions_sequence || 0) + (u.sessions_startrail || 0) + (u.sessions_duo || 0);
+                var total = (u.sessions_sequence || 0) + (u.sessions_startrail || 0) + (u.sessions_duo || 0) + (u.sessions_gonogo || 0);
                 var pin = u.pin || '--';
                 var row = '<tr>';
                 row += '<td><strong>' + u.username + '</strong></td>';
@@ -705,6 +706,7 @@
                 row += '<td>' + (u.sessions_sequence || 0) + '</td>';
                 row += '<td>' + (u.sessions_startrail || 0) + '</td>';
                 row += '<td>' + (u.sessions_duo || 0) + '</td>';
+                row += '<td>' + (u.sessions_gonogo || 0) + '</td>';
                 row += '<td><strong>' + total + '</strong></td>';
                 row += '<td>' + (u.streak || 0) + '</td>';
                 row += '</tr>';
