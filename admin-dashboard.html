@@ -1391,6 +1391,10 @@ tr:hover td {
                                     🎯
                                     <div style="font-size: 10px; font-weight: 400; opacity: 0.7;">Duo</div>
                                 </th>
+                                <th title="Go/No-Go Trail">
+                                    🚦
+                                    <div style="font-size: 10px; font-weight: 400; opacity: 0.7;">Go/No-Go</div>
+                                </th>
                                 <th>
                                     <span class="lang-en">Total</span>
                                     <span class="lang-es">Total</span>
@@ -1913,14 +1917,16 @@ function fetchDashboardData() {
                     sessions: {
                         sequence: u.sessions_sequence || 0,
                         startrail: u.sessions_startrail || 0,
-                        duo: u.sessions_duo || 0
+                        duo: u.sessions_duo || 0,
+                        gonogo: u.sessions_gonogo || 0
                     },
                     bests: {
                         sequence: u.best_sequence || 0,
                         startrail: u.best_startrail || 0,
-                        duo: u.best_duo || 0
+                        duo: u.best_duo || 0,
+                        gonogo: u.best_gonogo || 0
                     },
-                    totalSessions: (u.sessions_sequence || 0) + (u.sessions_startrail || 0) + (u.sessions_duo || 0),
+                    totalSessions: (u.sessions_sequence || 0) + (u.sessions_startrail || 0) + (u.sessions_duo || 0) + (u.sessions_gonogo || 0),
                     streak: u.streak || 0,
                     lastActive: u.last_active ? u.last_active.split('T')[0] : 'Never'
                 };
@@ -2275,14 +2281,14 @@ function renderUsersTable() {
     tbody.innerHTML = '';
     
     if (users.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="10" style="text-align: center; padding: 40px; color: var(--text-muted);"><div style="font-size: 2rem; margin-bottom: 10px;">👥</div>' + (currentLang === 'es' ? 'No hay usuarios registrados. Los usuarios aparecerán cuando se registren en las instalaciones.' : 'No users registered. Users will appear when they sign up at facilities.') + '</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="11" style="text-align: center; padding: 40px; color: var(--text-muted);"><div style="font-size: 2rem; margin-bottom: 10px;">👥</div>' + (currentLang === 'es' ? 'No hay usuarios registrados. Los usuarios aparecerán cuando se registren en las instalaciones.' : 'No users registered. Users will appear when they sign up at facilities.') + '</td></tr>';
         return;
     }
     
     users.forEach(function(u, index) {
-        var sessions = u.sessions || { sequence: 0, startrail: 0, duo: 0 };
-        var bests = u.bests || { sequence: 0, startrail: 0, duo: 0 };
-        var total = u.totalSessions || (sessions.sequence + sessions.startrail + sessions.duo);
+        var sessions = u.sessions || { sequence: 0, startrail: 0, duo: 0, gonogo: 0 };
+        var bests = u.bests || { sequence: 0, startrail: 0, duo: 0, gonogo: 0 };
+        var total = u.totalSessions || (sessions.sequence + sessions.startrail + sessions.duo + (sessions.gonogo || 0));
         var userPin = u.pin || '--';
         
         tbody.innerHTML += `
@@ -2301,6 +2307,10 @@ function renderUsersTable() {
                 <td class="session-cell">
                     <div>${sessions.duo} <span style="opacity: 0.5; font-size: 11px;">plays</span></div>
                     ${bests.duo > 0 ? '<div style="color: var(--accent-gold); font-size: 11px;">🏆 ' + bests.duo + '</div>' : ''}
+                </td>
+                <td class="session-cell">
+                    <div>${sessions.gonogo || 0} <span style="opacity: 0.5; font-size: 11px;">plays</span></div>
+                    ${bests.gonogo > 0 ? '<div style="color: var(--accent-gold); font-size: 11px;">🏆 ' + bests.gonogo + '</div>' : ''}
                 </td>
                 <td class="session-total"><strong>${total}</strong></td>
                 <td>🔥 ${u.streak} ${currentLang === 'es' ? 'días' : 'days'}</td>
@@ -2324,7 +2334,7 @@ function updateStats() {
     // Calculate total sessions
     var totalSessions = users.reduce(function(sum, u) {
         if (u.sessions) {
-            return sum + (u.sessions.sequence || 0) + (u.sessions.startrail || 0) + (u.sessions.duo || 0);
+            return sum + (u.sessions.sequence || 0) + (u.sessions.startrail || 0) + (u.sessions.duo || 0) + (u.sessions.gonogo || 0);
         }
         return sum + (u.totalSessions || 0);
     }, 0);
@@ -2388,15 +2398,16 @@ function renderActivityLog() {
 
 function viewUserDetails(index) {
     var u = users[index];
-    var sessions = u.sessions || { sequence: 0, startrail: 0, duo: 0 };
-    var bests = u.bests || { sequence: 0, startrail: 0, duo: 0 };
+    var sessions = u.sessions || { sequence: 0, startrail: 0, duo: 0, gonogo: 0 };
+    var bests = u.bests || { sequence: 0, startrail: 0, duo: 0, gonogo: 0 };
     
     var details = (currentLang === 'es' ? 'Usuario: ' : 'User: ') + u.name + '\\n';
     details += (currentLang === 'es' ? 'Instalación: ' : 'Facility: ') + u.facility + '\\n\\n';
     details += '📊 ' + (currentLang === 'es' ? 'SESIONES' : 'SESSIONS') + ':\\n';
     details += '⭐ Sequence: ' + sessions.sequence + (bests.sequence > 0 ? ' (Best: ' + bests.sequence + ')' : '') + '\\n';
     details += '🛤️ StarTrail: ' + sessions.startrail + (bests.startrail > 0 ? ' (Best: ' + bests.startrail + ')' : '') + '\\n';
-    details += '🎯 Duo: ' + sessions.duo + (bests.duo > 0 ? ' (Best: ' + bests.duo + ')' : '') + '\\n\\n';
+    details += '🎯 Duo: ' + sessions.duo + (bests.duo > 0 ? ' (Best: ' + bests.duo + ')' : '') + '\\n';
+    details += '🚦 Go/No-Go: ' + (sessions.gonogo || 0) + (bests.gonogo > 0 ? ' (Best: ' + bests.gonogo + ')' : '') + '\\n\\n';
     details += '🔥 ' + (currentLang === 'es' ? 'Racha: ' : 'Streak: ') + u.streak + ' ' + (currentLang === 'es' ? 'días' : 'days') + '\\n';
     details += '📅 ' + (currentLang === 'es' ? 'Última actividad: ' : 'Last active: ') + u.lastActive;
     
