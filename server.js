@@ -223,7 +223,7 @@ app.get('/api/admin/facilities', adminTokenAuth, function(req, res) {
             
             // Calculate total sessions for this facility
             var totalSessions = facilityUsers.reduce(function(sum, u) {
-                return sum + (u.sessions_sequence || 0) + (u.sessions_startrail || 0) + (u.sessions_duo || 0);
+                return sum + (u.sessions_sequence || 0) + (u.sessions_startrail || 0) + (u.sessions_duo || 0) + (u.sessions_gonogo || 0);
             }, 0);
             
             // Calculate days left
@@ -622,7 +622,7 @@ app.get('/api/facility/:licenseKey', function(req, res) {
         var usedCount = codeUsers.length;
         
         var totalSessions = codeUsers.reduce(function(sum, u) {
-            return sum + (u.sessions_sequence || 0) + (u.sessions_startrail || 0) + (u.sessions_duo || 0);
+            return sum + (u.sessions_sequence || 0) + (u.sessions_startrail || 0) + (u.sessions_duo || 0) + (u.sessions_gonogo || 0);
         }, 0);
         
         var result = {};
@@ -647,10 +647,12 @@ app.get('/api/facility/:licenseKey', function(req, res) {
             sessions_sequence: u.sessions_sequence || 0,
             sessions_startrail: u.sessions_startrail || 0,
             sessions_duo: u.sessions_duo || 0,
+            sessions_gonogo: u.sessions_gonogo || 0,
             best_sequence: u.best_sequence || 0,
             best_startrail: u.best_startrail || 0,
             best_duo: u.best_duo || 0,
-            totalSessions: (u.sessions_sequence || 0) + (u.sessions_startrail || 0) + (u.sessions_duo || 0),
+            best_gonogo: u.best_gonogo || 0,
+            totalSessions: (u.sessions_sequence || 0) + (u.sessions_startrail || 0) + (u.sessions_duo || 0) + (u.sessions_gonogo || 0),
             streak: u.streak || 0,
             lastActive: u.lastActive || u.createdAt,
             createdAt: u.createdAt
@@ -751,6 +753,10 @@ app.get('/game', function(req, res) {
     res.sendFile(path.join(__dirname, 'game.html'));
 });
 
+app.get('/go-no-gostar', function(req, res) {
+    res.sendFile(path.join(__dirname, 'go-no-gostar.html'));
+});
+
 app.post('/api/play/verify', function(req, res) {
     var accessCode = req.body.accessCode;
     
@@ -849,6 +855,7 @@ app.post('/api/play/register', function(req, res) {
         sessions_sequence: 0,
         sessions_startrail: 0,
         sessions_duo: 0,
+        sessions_gonogo: 0,
         streak: 0
     });
     writeJSON(USERS_FILE, users);
@@ -920,7 +927,7 @@ app.post('/api/game/session', function(req, res) {
         return res.status(400).json({ error: 'Missing game type' });
     }
     
-    var validGames = ['sequence', 'startrail', 'duo'];
+    var validGames = ['sequence', 'startrail', 'duo', 'gonogo'];
     if (validGames.indexOf(game) === -1) {
         return res.status(400).json({ error: 'Invalid game type' });
     }
@@ -1039,14 +1046,16 @@ app.get('/api/game/stats/pin/:pin', function(req, res) {
             sessions: {
                 sequence: user.sessions_sequence || 0,
                 startrail: user.sessions_startrail || 0,
-                duo: user.sessions_duo || 0
+                duo: user.sessions_duo || 0,
+                gonogo: user.sessions_gonogo || 0
             },
-            totalSessions: (user.sessions_sequence || 0) + (user.sessions_startrail || 0) + (user.sessions_duo || 0),
+            totalSessions: (user.sessions_sequence || 0) + (user.sessions_startrail || 0) + (user.sessions_duo || 0) + (user.sessions_gonogo || 0),
             streak: user.streak || 0,
             personalBests: {
                 sequence: user.best_sequence || 0,
                 startrail: user.best_startrail || 0,
-                duo: user.best_duo || 0
+                duo: user.best_duo || 0,
+                gonogo: user.best_gonogo || 0
             }
         }
     });
