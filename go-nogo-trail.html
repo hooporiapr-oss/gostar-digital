@@ -533,6 +533,75 @@ body[data-lang="en"] .lang-es { display: none !important; }
     box-shadow: 0 0 15px var(--nogo-red);
 }
 
+/* RT Feedback */
+.rt-feedback {
+    position: absolute;
+    transform: translate(-50%, -100%);
+    padding: 4px 10px;
+    background: rgba(0, 255, 136, 0.9);
+    color: var(--bg-dark);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    border-radius: 12px;
+    pointer-events: none;
+    animation: rtFloat 0.8s ease-out forwards;
+    z-index: 20;
+}
+
+@keyframes rtFloat {
+    0% { opacity: 1; transform: translate(-50%, -100%); }
+    100% { opacity: 0; transform: translate(-50%, -150%); }
+}
+
+/* RT Stats Section in Results */
+.rt-stats-section {
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.1) 0%, rgba(0, 217, 165, 0.1) 100%);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+.rt-stats-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--go-green);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.rt-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.rt-stat {
+    text-align: center;
+}
+
+.rt-stat-value {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--text-light);
+}
+
+.rt-stat-value.fastest { color: var(--go-green); }
+.rt-stat-value.slowest { color: var(--accent-gold); }
+.rt-stat-value.consistency { color: var(--accent-teal); }
+
+.rt-stat-label {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
 .halftime-container, .results-container {
     text-align: center;
     max-width: 500px;
@@ -949,6 +1018,31 @@ body[data-lang="en"] .lang-es { display: none !important; }
             </div>
         </div>
         
+        <!-- RT Stats Section -->
+        <div class="rt-stats-section">
+            <div class="rt-stats-title">
+                ⚡ <span class="lang-en">Reaction Time Analysis</span><span class="lang-es">Análisis de Tiempo de Reacción</span>
+            </div>
+            <div class="rt-stats-grid">
+                <div class="rt-stat">
+                    <div class="rt-stat-value" id="rtAverage">--</div>
+                    <div class="rt-stat-label"><span class="lang-en">Average</span><span class="lang-es">Promedio</span></div>
+                </div>
+                <div class="rt-stat">
+                    <div class="rt-stat-value fastest" id="rtFastest">--</div>
+                    <div class="rt-stat-label"><span class="lang-en">Fastest</span><span class="lang-es">Más Rápido</span></div>
+                </div>
+                <div class="rt-stat">
+                    <div class="rt-stat-value slowest" id="rtSlowest">--</div>
+                    <div class="rt-stat-label"><span class="lang-en">Slowest</span><span class="lang-es">Más Lento</span></div>
+                </div>
+                <div class="rt-stat">
+                    <div class="rt-stat-value consistency" id="rtConsistency">--</div>
+                    <div class="rt-stat-label"><span class="lang-en">Consistency</span><span class="lang-es">Consistencia</span></div>
+                </div>
+            </div>
+        </div>
+        
         <div class="results-streak" id="resultsStreak">
             <span class="streak-fire">🔥</span>
             <span class="streak-text" id="resultsStreakText"></span>
@@ -1000,6 +1094,19 @@ var fullSequence = [];
 var playerIndex = 0;
 var isShowingSequence = false;
 var completedStars = [];
+
+// Reaction Time Tracking
+var rtStartTime = 0;           // When "Your turn!" appears
+var rtLastTapTime = 0;         // Time of last tap (for inter-tap RT)
+var rtAllTaps = [];            // All RT values this session (ms)
+var rtRoundTaps = [];          // RT values for current round
+var rtSessionStats = {         // Aggregated session stats
+    average: 0,
+    fastest: 0,
+    slowest: 0,
+    consistency: 0,            // 100 - coefficient of variation
+    totalTaps: 0
+};
 
 var difficultySettings = {
     gentle:   { 1: {go: 2, nogo: 1}, 2: {go: 2, nogo: 2}, 3: {go: 3, nogo: 2}, 4: {go: 3, nogo: 3} },
@@ -1192,6 +1299,13 @@ function startGame() {
     totalNoGoStars = 0;
     falseAlarms = 0;
     
+    // Reset RT tracking
+    rtStartTime = 0;
+    rtLastTapTime = 0;
+    rtAllTaps = [];
+    rtRoundTaps = [];
+    rtSessionStats = { average: 0, fastest: 0, slowest: 0, consistency: 0, totalTaps: 0 };
+    
     showScreen('gameScreen');
     updateQuarterDisplay();
     updateScore();
@@ -1378,6 +1492,12 @@ function showSequence() {
         if (i >= fullSequence.length) {
             isShowingSequence = false;
             setMessage(currentLang === 'es' ? '¡Tu turno! Recuerda las <span style="color:#00ff88">VERDES</span>' : 'Your turn! Remember the <span style="color:#00ff88">GREEN</span> ones', '');
+            
+            // Start RT timer
+            rtStartTime = performance.now();
+            rtLastTapTime = rtStartTime;
+            rtRoundTaps = [];
+            
             disableStars(false);
             return;
         }
@@ -1410,6 +1530,7 @@ function handleStarClick(index) {
     
     var starEl = document.querySelector('[data-index="' + index + '"]');
     var node = starNodes[index];
+    var now = performance.now();
     
     // Check if clicking a NO-GO star (FALSE ALARM!)
     if (!node.isGo) {
@@ -1426,10 +1547,19 @@ function handleStarClick(index) {
     var expectedIdx = goSequence[playerIndex];
     
     if (index === expectedIdx) {
-        // Correct GO!
+        // Correct GO! Record RT
+        var rt = now - rtLastTapTime;
+        rtLastTapTime = now;
+        rtRoundTaps.push(rt);
+        rtAllTaps.push(rt);
+        
         correctGoResponses++;
         completedStars.push(index);
         starEl.classList.add('go-star', 'completed');
+        
+        // Show RT feedback on star
+        showRTFeedback(starEl, rt);
+        
         playGoSound();
         drawTrailLines();
         playerIndex++;
@@ -1443,7 +1573,12 @@ function handleStarClick(index) {
             disableStars(true);
             updateScore();
             playSuccessSound();
-            setMessage((currentLang === 'es' ? '¡Perfecto! +' : 'Perfect! +') + points, 'success');
+            
+            // Show round RT summary
+            var roundAvg = calculateAverage(rtRoundTaps);
+            var rtText = ' ⚡' + formatRT(roundAvg);
+            setMessage((currentLang === 'es' ? '¡Perfecto! +' : 'Perfect! +') + points + rtText, 'success');
+            
             setTimeout(function() { nextRound(); }, 1500);
         }
     } else {
@@ -1463,6 +1598,68 @@ function handleStarClick(index) {
             nextRound();
         }, 1000);
     }
+}
+
+// Show RT feedback floating above star
+function showRTFeedback(starEl, rt) {
+    var feedback = document.createElement('div');
+    feedback.className = 'rt-feedback';
+    feedback.textContent = formatRT(rt);
+    feedback.style.left = starEl.style.left;
+    feedback.style.top = starEl.style.top;
+    document.getElementById('trailBoard').appendChild(feedback);
+    
+    setTimeout(function() {
+        feedback.remove();
+    }, 800);
+}
+
+// Format RT in seconds with 2 decimals
+function formatRT(ms) {
+    return (ms / 1000).toFixed(2) + 's';
+}
+
+// Calculate average of array
+function calculateAverage(arr) {
+    if (arr.length === 0) return 0;
+    var sum = 0;
+    for (var i = 0; i < arr.length; i++) sum += arr[i];
+    return sum / arr.length;
+}
+
+// Calculate standard deviation
+function calculateStdDev(arr, avg) {
+    if (arr.length < 2) return 0;
+    var sumSquares = 0;
+    for (var i = 0; i < arr.length; i++) {
+        sumSquares += Math.pow(arr[i] - avg, 2);
+    }
+    return Math.sqrt(sumSquares / arr.length);
+}
+
+// Calculate RT session stats
+function calculateRTStats() {
+    if (rtAllTaps.length === 0) {
+        rtSessionStats = { average: 0, fastest: 0, slowest: 0, consistency: 0, totalTaps: 0 };
+        return;
+    }
+    
+    var avg = calculateAverage(rtAllTaps);
+    var fastest = Math.min.apply(null, rtAllTaps);
+    var slowest = Math.max.apply(null, rtAllTaps);
+    var stdDev = calculateStdDev(rtAllTaps, avg);
+    
+    // Consistency: 100 - coefficient of variation (lower CV = more consistent)
+    var cv = avg > 0 ? (stdDev / avg) * 100 : 0;
+    var consistency = Math.max(0, Math.round(100 - cv));
+    
+    rtSessionStats = {
+        average: Math.round(avg),
+        fastest: Math.round(fastest),
+        slowest: Math.round(slowest),
+        consistency: consistency,
+        totalTaps: rtAllTaps.length
+    };
 }
 
 function disableStars(disabled) {
@@ -1531,6 +1728,13 @@ function endGame() {
     document.getElementById('finalInhibitions').textContent = successfulInhibitions;
     document.getElementById('finalBest').textContent = personalBest;
     
+    // Calculate and display RT stats
+    calculateRTStats();
+    document.getElementById('rtAverage').textContent = rtSessionStats.average > 0 ? formatRT(rtSessionStats.average) : '--';
+    document.getElementById('rtFastest').textContent = rtSessionStats.fastest > 0 ? formatRT(rtSessionStats.fastest) : '--';
+    document.getElementById('rtSlowest').textContent = rtSessionStats.slowest > 0 ? formatRT(rtSessionStats.slowest) : '--';
+    document.getElementById('rtConsistency').textContent = rtSessionStats.totalTaps > 0 ? rtSessionStats.consistency + '%' : '--';
+    
     var streakEl = document.getElementById('resultsStreak');
     var streakText = document.getElementById('resultsStreakText');
     if (streak > 0) {
@@ -1550,7 +1754,25 @@ function saveSession() {
     var username = sessionStorage.getItem('gostar-user-name');
     if (!pin && !accessCode) return;
     
-    var payload = { game: 'gonogo', score: score, quarterScores: quarterScores, difficulty: difficulty, tempo: tempo };
+    var accuracy = totalGoStars > 0 ? Math.round((correctGoResponses / totalGoStars) * 100) : 0;
+    
+    var payload = { 
+        game: 'gonogo', 
+        score: score, 
+        quarterScores: quarterScores, 
+        difficulty: difficulty, 
+        tempo: tempo,
+        accuracy: accuracy,
+        inhibitions: successfulInhibitions,
+        falseAlarms: falseAlarms,
+        rt: {
+            average: rtSessionStats.average,
+            fastest: rtSessionStats.fastest,
+            slowest: rtSessionStats.slowest,
+            consistency: rtSessionStats.consistency,
+            totalTaps: rtSessionStats.totalTaps
+        }
+    };
     if (pin) payload.pin = pin;
     else { payload.accessCode = accessCode; payload.username = username; }
     
