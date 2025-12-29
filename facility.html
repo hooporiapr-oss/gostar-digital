@@ -37,6 +37,11 @@
             line-height: 1.6;
         }
 
+        /* Language toggle - hide inactive language */
+        body[data-lang="en"] .lang-es { display: none !important; }
+        body[data-lang="es"] .lang-en { display: none !important; }
+        body:not([data-lang]) .lang-es { display: none !important; }
+
         .dashboard { display: flex; min-height: 100vh; }
 
         .sidebar {
@@ -394,15 +399,18 @@
             <nav class="nav-menu">
                 <div class="nav-item active" onclick="showSection('overview', this)">
                     <span class="icon">📊</span>
-                    <span>Overview</span>
+                    <span class="lang-en">Overview</span>
+                    <span class="lang-es">Resumen</span>
                 </div>
                 <div class="nav-item" onclick="showSection('codes', this)">
                     <span class="icon">🔑</span>
-                    <span>Access Codes</span>
+                    <span class="lang-en">Access Codes</span>
+                    <span class="lang-es">Códigos</span>
                 </div>
                 <div class="nav-item" onclick="showSection('users', this)">
                     <span class="icon">👥</span>
-                    <span>Users</span>
+                    <span class="lang-en">Users</span>
+                    <span class="lang-es">Usuarios</span>
                 </div>
             </nav>
             
@@ -411,7 +419,9 @@
                     <button class="lang-btn active" onclick="setLang('en')">EN</button>
                     <button class="lang-btn" onclick="setLang('es')">ES</button>
                 </div>
-                <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+                <button class="logout-btn" onclick="logout()">
+                    🚪 <span class="lang-en">Logout</span><span class="lang-es">Salir</span>
+                </button>
             </div>
         </aside>
 
@@ -419,8 +429,14 @@
             <div id="section-overview" class="page-section active">
                 <div class="page-header">
                     <div>
-                        <h1 class="page-title" id="facilityTitle">Facility Dashboard</h1>
-                        <p class="page-subtitle">Manage your cognitive training program</p>
+                        <h1 class="page-title" id="facilityTitle">
+                            <span class="lang-en">Facility Dashboard</span>
+                            <span class="lang-es">Panel de Instalación</span>
+                        </h1>
+                        <p class="page-subtitle">
+                            <span class="lang-en">Manage your cognitive training program</span>
+                            <span class="lang-es">Administra tu programa de entrenamiento cognitivo</span>
+                        </p>
                     </div>
                 </div>
 
@@ -428,42 +444,63 @@
                     <div class="stat-card">
                         <div class="stat-icon">👥</div>
                         <div class="stat-value" id="statUsers">0</div>
-                        <div class="stat-label">Total Users</div>
+                        <div class="stat-label">
+                            <span class="lang-en">Total Users</span>
+                            <span class="lang-es">Usuarios Totales</span>
+                        </div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-icon">🎮</div>
                         <div class="stat-value" id="statSessions">0</div>
-                        <div class="stat-label">Total Sessions</div>
+                        <div class="stat-label">
+                            <span class="lang-en">Total Sessions</span>
+                            <span class="lang-es">Sesiones Totales</span>
+                        </div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-icon">🔑</div>
                         <div class="stat-value" id="statCodes">0</div>
-                        <div class="stat-label">Access Codes</div>
+                        <div class="stat-label">
+                            <span class="lang-en">Access Codes</span>
+                            <span class="lang-es">Códigos de Acceso</span>
+                        </div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-icon">📊</div>
                         <div class="stat-value" id="statPool">0</div>
-                        <div class="stat-label">Pool Remaining</div>
+                        <div class="stat-label">
+                            <span class="lang-en">Pool Remaining</span>
+                            <span class="lang-es">Licencias Disponibles</span>
+                        </div>
                     </div>
                 </div>
 
                 <div class="section">
                     <div class="section-header">
-                        <h2 class="section-title">Recent Access Codes</h2>
-                        <button class="btn btn-secondary" onclick="showSection('codes', document.querySelectorAll('.nav-item')[1])">View All</button>
+                        <h2 class="section-title">
+                            <span class="lang-en">Recent Access Codes</span>
+                            <span class="lang-es">Códigos de Acceso Recientes</span>
+                        </h2>
+                        <button class="btn btn-secondary" onclick="showSection('codes', document.querySelectorAll('.nav-item')[1])">
+                            <span class="lang-en">View All</span>
+                            <span class="lang-es">Ver Todos</span>
+                        </button>
                     </div>
                     <div class="table-container">
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Code</th>
-                                    <th>Label</th>
-                                    <th>Users</th>
-                                    <th>Status</th>
+                                    <th><span class="lang-en">Code</span><span class="lang-es">Código</span></th>
+                                    <th><span class="lang-en">Label</span><span class="lang-es">Etiqueta</span></th>
+                                    <th><span class="lang-en">Users</span><span class="lang-es">Usuarios</span></th>
+                                    <th><span class="lang-en">Status</span><span class="lang-es">Estado</span></th>
                                 </tr>
                             </thead>
                             <tbody id="overviewCodesTable">
-                                <tr><td colspan="4" style="text-align:center;color:var(--text-muted);">Loading...</td></tr>
+                                <tr><td colspan="4" style="text-align:center;color:var(--text-muted);">
+                                    <span class="lang-en">Loading...</span>
+                                    <span class="lang-es">Cargando...</span>
+                                </td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -473,11 +510,19 @@
             <div id="section-codes" class="page-section">
                 <div class="page-header">
                     <div>
-                        <h1 class="page-title">Access Codes</h1>
-                        <p class="page-subtitle">Create and manage access codes for your users</p>
+                        <h1 class="page-title">
+                            <span class="lang-en">Access Codes</span>
+                            <span class="lang-es">Códigos de Acceso</span>
+                        </h1>
+                        <p class="page-subtitle">
+                            <span class="lang-en">Create and manage access codes for your users</span>
+                            <span class="lang-es">Crea y administra códigos de acceso para tus usuarios</span>
+                        </p>
                     </div>
                     <div>
-                        <button class="btn btn-primary" onclick="openModal('newCode')">+ Create Code</button>
+                        <button class="btn btn-primary" onclick="openModal('newCode')">
+                            + <span class="lang-en">Create Code</span><span class="lang-es">Crear Código</span>
+                        </button>
                     </div>
                 </div>
                 
@@ -486,16 +531,19 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Access Code</th>
-                                    <th>Label</th>
-                                    <th>Limit</th>
-                                    <th>Used</th>
-                                    <th>Created</th>
-                                    <th>Actions</th>
+                                    <th><span class="lang-en">Access Code</span><span class="lang-es">Código</span></th>
+                                    <th><span class="lang-en">Label</span><span class="lang-es">Etiqueta</span></th>
+                                    <th><span class="lang-en">Limit</span><span class="lang-es">Límite</span></th>
+                                    <th><span class="lang-en">Used</span><span class="lang-es">Usado</span></th>
+                                    <th><span class="lang-en">Created</span><span class="lang-es">Creado</span></th>
+                                    <th><span class="lang-en">Actions</span><span class="lang-es">Acciones</span></th>
                                 </tr>
                             </thead>
                             <tbody id="allCodesTable">
-                                <tr><td colspan="6" style="text-align:center;color:var(--text-muted);">Loading...</td></tr>
+                                <tr><td colspan="6" style="text-align:center;color:var(--text-muted);">
+                                    <span class="lang-en">Loading...</span>
+                                    <span class="lang-es">Cargando...</span>
+                                </td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -505,8 +553,19 @@
             <div id="section-users" class="page-section">
                 <div class="page-header">
                     <div>
-                        <h1 class="page-title">Users</h1>
-                        <p class="page-subtitle">All registered users and their PINs</p>
+                        <h1 class="page-title">
+                            <span class="lang-en">Users</span>
+                            <span class="lang-es">Usuarios</span>
+                        </h1>
+                        <p class="page-subtitle">
+                            <span class="lang-en">All registered users and their PINs</span>
+                            <span class="lang-es">Todos los usuarios registrados y sus PINs</span>
+                        </p>
+                    </div>
+                    <div>
+                        <button class="action-btn" onclick="downloadCSV()" style="background: var(--accent-teal); color: var(--bg-primary); border-color: var(--accent-teal); padding: 10px 20px;">
+                            📥 <span class="lang-en">Export CSV</span><span class="lang-es">Exportar CSV</span>
+                        </button>
                     </div>
                 </div>
                 
@@ -515,19 +574,23 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Name</th>
+                                    <th><span class="lang-en">Name</span><span class="lang-es">Nombre</span></th>
                                     <th>PIN</th>
-                                    <th>Access Code</th>
+                                    <th><span class="lang-en">Access Code</span><span class="lang-es">Código</span></th>
                                     <th title="Sequence">⭐</th>
                                     <th title="StarTrail">🛤️</th>
                                     <th title="Pattern Duo">🎯</th>
                                     <th title="Go/No-Go">🚦</th>
-                                    <th>Total</th>
-                                    <th>Streak</th>
+                                    <th title="Avg Reaction Time">⚡ RT</th>
+                                    <th><span class="lang-en">Total</span><span class="lang-es">Total</span></th>
+                                    <th><span class="lang-en">Streak</span><span class="lang-es">Racha</span></th>
                                 </tr>
                             </thead>
                             <tbody id="usersTableBody">
-                                <tr><td colspan="9" style="text-align:center;color:var(--text-muted);">Loading...</td></tr>
+                                <tr><td colspan="10" style="text-align:center;color:var(--text-muted);">
+                                    <span class="lang-en">Loading...</span>
+                                    <span class="lang-es">Cargando...</span>
+                                </td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -539,32 +602,57 @@
     <div class="modal-overlay" id="modal-newCode">
         <div class="modal">
             <div class="modal-header">
-                <h2 class="modal-title">Create Access Code</h2>
+                <h2 class="modal-title">
+                    <span class="lang-en">Create Access Code</span>
+                    <span class="lang-es">Crear Código de Acceso</span>
+                </h2>
                 <button class="modal-close" onclick="closeModal('newCode')">x</button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label class="form-label">Label (Optional)</label>
-                    <input type="text" class="form-input" id="codeLabel" placeholder="e.g., Morning Group">
+                    <label class="form-label">
+                        <span class="lang-en">Label (Optional)</span>
+                        <span class="lang-es">Etiqueta (Opcional)</span>
+                    </label>
+                    <input type="text" class="form-input" id="codeLabel" placeholder="">
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label">User Limit</label>
+                    <label class="form-label">
+                        <span class="lang-en">User Limit</span>
+                        <span class="lang-es">Límite de Usuarios</span>
+                    </label>
                     <input type="number" class="form-input" id="codeUserLimit" min="1" max="50" value="5">
-                    <p class="form-hint">Available: <strong id="availableCount">0</strong></p>
+                    <p class="form-hint">
+                        <span class="lang-en">Available:</span>
+                        <span class="lang-es">Disponibles:</span>
+                        <strong id="availableCount">0</strong>
+                    </p>
                 </div>
                 
                 <div id="generatedCodeContainer" style="display:none;">
                     <div class="generated-code-display">
-                        <div class="generated-code-label">Your Access Code</div>
+                        <div class="generated-code-label">
+                            <span class="lang-en">Your Access Code</span>
+                            <span class="lang-es">Tu Código de Acceso</span>
+                        </div>
                         <div class="generated-code-value" id="generatedCodeValue">ACC-XXXXXX</div>
-                        <button class="copy-btn" onclick="copyCode()">Copy</button>
+                        <button class="copy-btn" onclick="copyCode()">
+                            <span class="lang-en">Copy</span>
+                            <span class="lang-es">Copiar</span>
+                        </button>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="closeModal('newCode')">Close</button>
-                <button class="btn btn-primary" id="createCodeBtn" onclick="createAccessCode()">Create</button>
+                <button class="btn btn-secondary" onclick="closeModal('newCode')">
+                    <span class="lang-en">Close</span>
+                    <span class="lang-es">Cerrar</span>
+                </button>
+                <button class="btn btn-primary" id="createCodeBtn" onclick="createAccessCode()">
+                    <span class="lang-en">Create</span>
+                    <span class="lang-es">Crear</span>
+                </button>
             </div>
         </div>
     </div>
@@ -582,13 +670,26 @@
         
         var facilityData = null;
         var currentLang = localStorage.getItem('gostar-lang') || 'en';
+        
+        // Initialize language on page load
+        document.body.setAttribute('data-lang', currentLang);
+        document.querySelectorAll('.lang-btn').forEach(function(btn) {
+            btn.classList.toggle('active', btn.textContent === currentLang.toUpperCase());
+        });
 
         function setLang(lang) {
             currentLang = lang;
             localStorage.setItem('gostar-lang', lang);
+            document.body.setAttribute('data-lang', lang);
             document.querySelectorAll('.lang-btn').forEach(function(btn) {
                 btn.classList.toggle('active', btn.textContent === lang.toUpperCase());
             });
+            // Re-render tables to update dynamic content
+            if (facilityData) {
+                renderCodesTable('overviewCodesTable', facilityData.codes ? facilityData.codes.slice(0, 5) : [], false);
+                renderCodesTable('allCodesTable', facilityData.codes || [], true);
+                renderUsersTable();
+            }
         }
 
         function showSection(sectionId, navItem) {
@@ -666,8 +767,12 @@
 
         function renderCodesTable(tableId, codes, showActions) {
             var tbody = document.getElementById(tableId);
+            var noCodesMsg = currentLang === 'es' ? 'Aún no hay códigos' : 'No codes yet';
+            var copyText = currentLang === 'es' ? 'Copiar' : 'Copy';
+            var deleteText = currentLang === 'es' ? 'Eliminar' : 'Delete';
+            
             if (!codes || codes.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="' + (showActions ? 6 : 4) + '" style="text-align:center;color:var(--text-muted);">No codes yet</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="' + (showActions ? 6 : 4) + '" style="text-align:center;color:var(--text-muted);">' + noCodesMsg + '</td></tr>';
                 return;
             }
             tbody.innerHTML = '';
@@ -679,7 +784,7 @@
                     row += '<td>' + c.userLimit + '</td>';
                     row += '<td><div class="user-count-bar"><span class="user-count-text">' + c.usedCount + '/' + c.userLimit + '</span><div class="user-count-track"><div class="user-count-fill ' + cls + '" style="width:' + pct + '%"></div></div></div></td>';
                     row += '<td>' + c.createdAt.split('T')[0] + '</td>';
-                    row += '<td><div class="table-actions"><button class="action-btn" onclick="copyToClipboard(\'' + c.code + '\')">Copy</button><button class="action-btn danger" onclick="deleteCode(\'' + c.code + '\')">Delete</button></div></td>';
+                    row += '<td><div class="table-actions"><button class="action-btn" onclick="copyToClipboard(\'' + c.code + '\')">' + copyText + '</button><button class="action-btn danger" onclick="deleteCode(\'' + c.code + '\')">' + deleteText + '</button></div></td>';
                 } else {
                     row += '<td><div class="user-count-bar"><span class="user-count-text">' + c.usedCount + '/' + c.userLimit + '</span><div class="user-count-track"><div class="user-count-fill ' + cls + '" style="width:' + pct + '%"></div></div></div></td>';
                     row += '<td><span class="status-badge active">Active</span></td>';
@@ -692,13 +797,23 @@
         function renderUsersTable() {
             var tbody = document.getElementById('usersTableBody');
             if (!facilityData || !facilityData.users || facilityData.users.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:var(--text-muted);padding:40px;">No users yet. Users will appear when they register.</td></tr>';
+                var emptyMsg = currentLang === 'es' 
+                    ? 'Aún no hay usuarios. Los usuarios aparecerán cuando se registren.'
+                    : 'No users yet. Users will appear when they register.';
+                tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;color:var(--text-muted);padding:40px;">' + emptyMsg + '</td></tr>';
                 return;
             }
             tbody.innerHTML = '';
             facilityData.users.forEach(function(u) {
                 var total = (u.sessions_sequence || 0) + (u.sessions_startrail || 0) + (u.sessions_duo || 0) + (u.sessions_gonogo || 0);
                 var pin = u.pin || '--';
+                
+                // Format RT display
+                var rtDisplay = '--';
+                if (u.latest_rt && u.latest_rt.average > 0) {
+                    rtDisplay = (u.latest_rt.average / 1000).toFixed(2) + 's';
+                }
+                
                 var row = '<tr>';
                 row += '<td><strong>' + u.username + '</strong></td>';
                 row += '<td><span class="user-pin">' + pin + '</span></td>';
@@ -707,18 +822,68 @@
                 row += '<td>' + (u.sessions_startrail || 0) + '</td>';
                 row += '<td>' + (u.sessions_duo || 0) + '</td>';
                 row += '<td>' + (u.sessions_gonogo || 0) + '</td>';
+                row += '<td style="color: var(--accent-teal);">' + rtDisplay + '</td>';
                 row += '<td><strong>' + total + '</strong></td>';
                 row += '<td>' + (u.streak || 0) + '</td>';
                 row += '</tr>';
                 tbody.innerHTML += row;
             });
         }
+        
+        function downloadCSV() {
+            if (!facilityData || !facilityData.users || facilityData.users.length === 0) {
+                alert(currentLang === 'es' ? 'No hay datos para exportar' : 'No data to export');
+                return;
+            }
+            
+            // CSV headers
+            var csv = 'Username,PIN,Access Code,Sequence Sessions,StarTrail Sessions,Duo Sessions,Go/No-Go Sessions,Total Sessions,Streak,Best Sequence,Best StarTrail,Best Duo,Best Go/No-Go,Latest RT (ms),Best RT (ms),RT Consistency (%),Last Active,Created\n';
+            
+            // Add rows
+            facilityData.users.forEach(function(u) {
+                var total = (u.sessions_sequence || 0) + (u.sessions_startrail || 0) + (u.sessions_duo || 0) + (u.sessions_gonogo || 0);
+                var latestRT = u.latest_rt && u.latest_rt.average > 0 ? u.latest_rt.average : '';
+                var bestRT = u.best_rt || '';
+                var rtConsistency = u.latest_rt && u.latest_rt.consistency ? u.latest_rt.consistency : '';
+                
+                csv += '"' + u.username + '",';
+                csv += (u.pin || '') + ',';
+                csv += u.code + ',';
+                csv += (u.sessions_sequence || 0) + ',';
+                csv += (u.sessions_startrail || 0) + ',';
+                csv += (u.sessions_duo || 0) + ',';
+                csv += (u.sessions_gonogo || 0) + ',';
+                csv += total + ',';
+                csv += (u.streak || 0) + ',';
+                csv += (u.best_sequence || 0) + ',';
+                csv += (u.best_startrail || 0) + ',';
+                csv += (u.best_duo || 0) + ',';
+                csv += (u.best_gonogo || 0) + ',';
+                csv += latestRT + ',';
+                csv += bestRT + ',';
+                csv += rtConsistency + ',';
+                csv += (u.lastActive || '') + ',';
+                csv += (u.createdAt || '') + '\n';
+            });
+            
+            // Download file
+            var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            var link = document.createElement('a');
+            var url = URL.createObjectURL(blob);
+            var date = new Date().toISOString().split('T')[0];
+            link.setAttribute('href', url);
+            link.setAttribute('download', 'gostar_users_' + date + '.csv');
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
 
         function createAccessCode() {
             var label = document.getElementById('codeLabel').value.trim();
             var limit = parseInt(document.getElementById('codeUserLimit').value);
             if (!limit || limit < 1 || limit > facilityData.remainingPool) {
-                alert('Invalid limit');
+                alert(currentLang === 'es' ? 'Límite inválido' : 'Invalid limit');
                 return;
             }
             var btn = document.getElementById('createCodeBtn');
@@ -749,10 +914,10 @@
             
             copyToClipboard(code, function(success) {
                 if (success) {
-                    btn.textContent = '✓ Copied!';
+                    btn.textContent = currentLang === 'es' ? '✓ ¡Copiado!' : '✓ Copied!';
                     btn.style.background = 'var(--accent-green)';
                     setTimeout(function() {
-                        btn.textContent = 'Copy';
+                        btn.textContent = currentLang === 'es' ? 'Copiar' : 'Copy';
                         btn.style.background = '';
                     }, 2000);
                 }
