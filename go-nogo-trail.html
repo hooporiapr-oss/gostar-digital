@@ -1,0 +1,1561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Go/No-Go Star - GoStar Digital</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@400;500;600;700;800&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+    --bg-dark: #0a0a12;
+    --bg-card: #12121f;
+    --bg-surface: #1a1a2e;
+    --text-light: #ffffff;
+    --text-muted: #8892b0;
+    --go-green: #00ff88;
+    --go-green-glow: rgba(0, 255, 136, 0.6);
+    --nogo-red: #ff3366;
+    --nogo-red-glow: rgba(255, 51, 102, 0.6);
+    --accent-gold: #ffd700;
+    --accent-teal: #00D9A5;
+    --accent-purple: #9945ff;
+    --q1: #00ff88;
+    --q2: #ffd700;
+    --q3: #ff9500;
+    --q4: #ff3366;
+}
+
+html, body { height: 100%; overflow: hidden; }
+
+body {
+    font-family: 'Exo 2', sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-light);
+    min-height: 100vh;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: 
+        radial-gradient(ellipse at 20% 80%, rgba(0, 255, 136, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(255, 51, 102, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 50%, rgba(153, 69, 255, 0.05) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+body[data-lang="es"] .lang-en { display: none !important; }
+body[data-lang="en"] .lang-es { display: none !important; }
+
+.lang-toggle {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    display: flex;
+    gap: 6px;
+    z-index: 100;
+}
+
+.lang-btn {
+    padding: 6px 12px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: var(--text-muted);
+    border-radius: 6px;
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 600;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.lang-btn.active {
+    background: var(--accent-teal);
+    color: var(--bg-dark);
+    border-color: var(--accent-teal);
+}
+
+.back-btn {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    padding: 8px 16px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: var(--text-light);
+    border-radius: 20px;
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-decoration: none;
+    z-index: 100;
+    transition: all 0.3s;
+}
+
+.back-btn:hover {
+    background: rgba(255, 51, 102, 0.2);
+    border-color: var(--nogo-red);
+}
+
+.screen {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 1;
+    transition: opacity 0.4s, transform 0.4s;
+}
+
+.screen.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.95);
+}
+
+.welcome-container {
+    text-align: center;
+    max-width: 500px;
+}
+
+.game-icon {
+    font-size: 80px;
+    margin-bottom: 20px;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.game-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2.8rem;
+    font-weight: 900;
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+}
+
+.game-title .go { color: var(--go-green); }
+.game-title .nogo { color: var(--nogo-red); }
+.game-title .star { color: var(--accent-gold); }
+
+.game-subtitle {
+    color: var(--text-muted);
+    font-size: 1rem;
+    margin-bottom: 30px;
+}
+
+.game-description {
+    background: var(--bg-surface);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 30px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.rule-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.rule-item:last-child { margin-bottom: 0; }
+
+.rule-icon {
+    font-size: 2rem;
+    width: 50px;
+    text-align: center;
+}
+
+.rule-text {
+    flex: 1;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.rule-text strong { color: var(--go-green); }
+.rule-text .nogo-text { color: var(--nogo-red); }
+
+.difficulty-section {
+    margin-bottom: 25px;
+}
+
+.section-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.difficulty-options {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.difficulty-btn {
+    padding: 12px 20px;
+    background: var(--bg-surface);
+    border: 2px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    color: var(--text-light);
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.difficulty-btn:hover {
+    border-color: var(--accent-teal);
+    transform: translateY(-2px);
+}
+
+.difficulty-btn.selected {
+    background: linear-gradient(135deg, var(--go-green) 0%, var(--accent-teal) 100%);
+    color: var(--bg-dark);
+    border-color: transparent;
+}
+
+.difficulty-btn .stars {
+    display: block;
+    font-size: 0.7rem;
+    margin-top: 4px;
+    opacity: 0.7;
+}
+
+.tempo-options {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.tempo-btn {
+    padding: 10px 18px;
+    background: var(--bg-surface);
+    border: 2px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    color: var(--text-light);
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.tempo-btn:hover { border-color: var(--accent-purple); }
+
+.tempo-btn.selected {
+    background: var(--accent-purple);
+    color: white;
+    border-color: transparent;
+}
+
+.start-btn {
+    padding: 18px 60px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--go-green) 0%, var(--accent-teal) 100%);
+    color: var(--bg-dark);
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    box-shadow: 0 10px 40px rgba(0, 255, 136, 0.3);
+    margin-top: 10px;
+}
+
+.start-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 50px rgba(0, 255, 136, 0.4);
+}
+
+.streak-display {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: rgba(255, 215, 0, 0.1);
+    border-radius: 30px;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.streak-display.visible { display: flex; }
+.streak-fire { font-size: 1.5rem; }
+.streak-text { font-weight: 700; color: var(--accent-gold); }
+
+.game-container {
+    width: 100%;
+    max-width: 600px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 60px 15px 20px;
+}
+
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.quarter-display {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.quarter-badge {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 900;
+}
+
+.quarter-badge.q1 { color: var(--q1); }
+.quarter-badge.q2 { color: var(--q2); }
+.quarter-badge.q3 { color: var(--q3); }
+.quarter-badge.q4 { color: var(--q4); }
+
+.quarter-dots {
+    display: flex;
+    gap: 6px;
+}
+
+.quarter-dot {
+    width: 40px;
+    height: 6px;
+    border-radius: 3px;
+    background: rgba(255,255,255,0.15);
+    transition: all 0.3s;
+}
+
+.quarter-dot.q1 { background: var(--q1); }
+.quarter-dot.q2 { background: var(--q2); }
+.quarter-dot.q3 { background: var(--q3); }
+.quarter-dot.q4 { background: var(--q4); }
+.quarter-dot.completed { opacity: 0.4; }
+
+.score-display { text-align: right; }
+
+.score-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.score-value {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--accent-gold);
+}
+
+.round-info {
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+}
+
+.message-area {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.message {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+.message.pulse { animation: pulse 1s ease-in-out infinite; }
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.message.success { color: var(--go-green); }
+.message.error { color: var(--nogo-red); }
+
+.countdown {
+    font-size: 4rem;
+    font-weight: 900;
+    color: var(--accent-gold);
+    text-shadow: 0 0 30px var(--accent-gold);
+}
+
+.legend {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 15px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.legend-star {
+    width: 24px;
+    height: 24px;
+}
+
+.legend-star.go svg { fill: var(--go-green); }
+.legend-star.nogo svg { fill: var(--nogo-red); }
+.legend-text.go { color: var(--go-green); }
+.legend-text.nogo { color: var(--nogo-red); }
+
+.trail-board {
+    position: relative;
+    flex: 1;
+    min-height: 300px;
+    max-height: 450px;
+    background: var(--bg-card);
+    border-radius: 20px;
+    border: 3px solid rgba(255,255,255,0.1);
+    overflow: hidden;
+}
+
+.trail-canvas {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.star-node {
+    position: absolute;
+    width: 55px;
+    height: 55px;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    z-index: 2;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.star-node svg {
+    width: 100%;
+    height: 100%;
+    fill: rgba(255,255,255,0.15);
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+    transition: all 0.2s ease;
+}
+
+.star-node.disabled { pointer-events: none; }
+
+.star-node.go-star svg { fill: var(--go-green); }
+
+.star-node.go-star.lit svg {
+    transform: scale(1.3);
+    filter: drop-shadow(0 0 25px var(--go-green)) drop-shadow(0 0 50px var(--go-green));
+}
+
+.star-node.go-star.completed svg {
+    fill: var(--go-green);
+    opacity: 0.5;
+}
+
+.star-node.nogo-star svg { fill: var(--nogo-red); }
+
+.star-node.nogo-star.lit svg {
+    transform: scale(1.3);
+    filter: drop-shadow(0 0 25px var(--nogo-red)) drop-shadow(0 0 50px var(--nogo-red));
+}
+
+.star-node.nogo-star.completed svg {
+    fill: var(--nogo-red);
+    opacity: 0.3;
+}
+
+.star-node.error { animation: shake 0.3s ease-in-out; }
+
+@keyframes shake {
+    0%, 100% { transform: translate(-50%, -50%) rotate(0); }
+    25% { transform: translate(-50%, -50%) rotate(-10deg); }
+    75% { transform: translate(-50%, -50%) rotate(10deg); }
+}
+
+.beat-indicator {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 20px;
+    z-index: 10;
+}
+
+.beat-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    transition: all 0.1s;
+}
+
+.beat-dot.go-beat {
+    background: var(--go-green);
+    box-shadow: 0 0 15px var(--go-green);
+}
+
+.beat-dot.nogo-beat {
+    background: var(--nogo-red);
+    box-shadow: 0 0 15px var(--nogo-red);
+}
+
+.halftime-container, .results-container {
+    text-align: center;
+    max-width: 500px;
+}
+
+.halftime-title, .results-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 900;
+    margin-bottom: 20px;
+}
+
+.halftime-title { color: var(--accent-gold); }
+
+.halftime-subtitle {
+    color: var(--text-muted);
+    margin-bottom: 30px;
+}
+
+.halftime-stats, .results-stats {
+    display: grid;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.halftime-stats { grid-template-columns: 1fr 1fr; }
+.results-stats { grid-template-columns: 1fr 1fr 1fr; }
+
+.halftime-stat, .results-stat {
+    background: var(--bg-surface);
+    border-radius: 15px;
+    padding: 20px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.halftime-stat-value, .results-stat-value {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--accent-teal);
+}
+
+.halftime-stat-label, .results-stat-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.continue-btn, .play-again-btn {
+    padding: 16px 50px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.continue-btn {
+    background: linear-gradient(135deg, var(--accent-gold) 0%, #ff9500 100%);
+    color: var(--bg-dark);
+}
+
+.continue-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(255, 215, 0, 0.3);
+}
+
+.play-again-btn {
+    background: linear-gradient(135deg, var(--go-green) 0%, var(--accent-teal) 100%);
+    color: var(--bg-dark);
+}
+
+.play-again-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(0, 255, 136, 0.3);
+}
+
+.results-score-box {
+    background: linear-gradient(135deg, var(--bg-surface) 0%, var(--bg-card) 100%);
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 25px;
+    border: 2px solid rgba(255, 215, 0, 0.3);
+}
+
+.results-score-label {
+    font-size: 1rem;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+}
+
+.results-score-value {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 4rem;
+    font-weight: 900;
+    color: var(--accent-gold);
+    text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+}
+
+.results-quarters {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.results-quarter {
+    background: var(--bg-surface);
+    border-radius: 12px;
+    padding: 15px 20px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.results-quarter-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.results-quarter-value {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+
+.results-quarter-value.q1 { color: var(--q1); }
+.results-quarter-value.q2 { color: var(--q2); }
+.results-quarter-value.q3 { color: var(--q3); }
+.results-quarter-value.q4 { color: var(--q4); }
+
+.results-streak {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 25px;
+    padding: 15px 25px;
+    background: rgba(255, 215, 0, 0.1);
+    border-radius: 30px;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.results-streak.visible { display: flex; }
+
+.results-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+}
+
+.menu-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.3s;
+}
+
+.menu-link:hover { color: var(--text-light); }
+
+@media (max-width: 480px) {
+    .game-title { font-size: 2.2rem; }
+    .star-node { width: 45px; height: 45px; }
+    .quarter-badge { font-size: 1.5rem; }
+    .score-value { font-size: 1.5rem; }
+    .results-score-value { font-size: 3rem; }
+    .countdown { font-size: 3rem; }
+}
+</style>
+</head>
+<body data-lang="en">
+
+<div class="lang-toggle">
+    <button class="lang-btn active" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('es')">ES</button>
+</div>
+
+<a href="/game" class="back-btn">
+    <span class="lang-en">← Menu</span>
+    <span class="lang-es">← Menú</span>
+</a>
+
+<!-- WELCOME SCREEN -->
+<div class="screen" id="welcomeScreen">
+    <div class="welcome-container">
+        <div class="game-icon">🚦</div>
+        <h1 class="game-title">
+            <span class="go">GO</span>/<span class="nogo">NO-GO</span> <span class="star">★</span>
+        </h1>
+        <p class="game-subtitle">
+            <span class="lang-en">Inhibitory Control + Working Memory</span>
+            <span class="lang-es">Control Inhibitorio + Memoria de Trabajo</span>
+        </p>
+        
+        <div class="game-description">
+            <div class="rule-item">
+                <div class="rule-icon">🟢</div>
+                <div class="rule-text">
+                    <span class="lang-en"><strong>GREEN stars</strong> = GO! Remember these in order.</span>
+                    <span class="lang-es"><strong>Estrellas VERDES</strong> = ¡IR! Recuerda el orden.</span>
+                </div>
+            </div>
+            <div class="rule-item">
+                <div class="rule-icon">🔴</div>
+                <div class="rule-text">
+                    <span class="lang-en"><span class="nogo-text">RED stars</span> = NO-GO! Ignore these completely.</span>
+                    <span class="lang-es"><span class="nogo-text">Estrellas ROJAS</span> = ¡NO-IR! Ignóralas.</span>
+                </div>
+            </div>
+            <div class="rule-item">
+                <div class="rule-icon">🎵</div>
+                <div class="rule-text">
+                    <span class="lang-en">Listen! GO has a <strong>high tone</strong>, NO-GO has a <span class="nogo-text">low buzz</span>.</span>
+                    <span class="lang-es">¡Escucha! IR tiene <strong>tono alto</strong>, NO-IR tiene <span class="nogo-text">zumbido bajo</span>.</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="difficulty-section">
+            <div class="section-label">
+                <span class="lang-en">Difficulty</span>
+                <span class="lang-es">Dificultad</span>
+            </div>
+            <div class="difficulty-options">
+                <button class="difficulty-btn" data-difficulty="gentle" onclick="selectDifficulty('gentle')">
+                    <span class="lang-en">Gentle</span>
+                    <span class="lang-es">Suave</span>
+                    <span class="stars">2-3 GO</span>
+                </button>
+                <button class="difficulty-btn selected" data-difficulty="standard" onclick="selectDifficulty('standard')">
+                    <span class="lang-en">Standard</span>
+                    <span class="lang-es">Normal</span>
+                    <span class="stars">3-4 GO</span>
+                </button>
+                <button class="difficulty-btn" data-difficulty="pro" onclick="selectDifficulty('pro')">
+                    <span class="lang-en">Pro</span>
+                    <span class="lang-es">Pro</span>
+                    <span class="stars">4-5 GO</span>
+                </button>
+                <button class="difficulty-btn" data-difficulty="elite" onclick="selectDifficulty('elite')">
+                    <span class="lang-en">Elite</span>
+                    <span class="lang-es">Élite</span>
+                    <span class="stars">5-6 GO</span>
+                </button>
+            </div>
+        </div>
+        
+        <div class="difficulty-section">
+            <div class="section-label">
+                <span class="lang-en">Tempo</span>
+                <span class="lang-es">Tempo</span>
+            </div>
+            <div class="tempo-options">
+                <button class="tempo-btn" data-tempo="relaxed" onclick="selectTempo('relaxed')">
+                    <span class="lang-en">Relaxed</span>
+                    <span class="lang-es">Relajado</span>
+                </button>
+                <button class="tempo-btn selected" data-tempo="steady" onclick="selectTempo('steady')">
+                    <span class="lang-en">Steady</span>
+                    <span class="lang-es">Estable</span>
+                </button>
+                <button class="tempo-btn" data-tempo="upbeat" onclick="selectTempo('upbeat')">
+                    <span class="lang-en">Upbeat</span>
+                    <span class="lang-es">Rápido</span>
+                </button>
+            </div>
+        </div>
+        
+        <button class="start-btn" onclick="startGame()">
+            <span class="lang-en">Start</span>
+            <span class="lang-es">Iniciar</span>
+        </button>
+        
+        <div class="streak-display" id="welcomeStreak">
+            <span class="streak-fire">🔥</span>
+            <span class="streak-text" id="welcomeStreakText"></span>
+        </div>
+    </div>
+</div>
+
+<!-- GAME SCREEN -->
+<div class="screen hidden" id="gameScreen">
+    <div class="game-container">
+        <div class="game-header">
+            <div class="quarter-display">
+                <span class="quarter-badge q1" id="quarterBadge">Q1</span>
+                <div class="quarter-dots">
+                    <div class="quarter-dot" id="dot1"></div>
+                    <div class="quarter-dot" id="dot2"></div>
+                    <div class="quarter-dot" id="dot3"></div>
+                    <div class="quarter-dot" id="dot4"></div>
+                </div>
+            </div>
+            <div class="score-display">
+                <div class="score-label">Score</div>
+                <div class="score-value" id="scoreValue">0</div>
+            </div>
+        </div>
+        
+        <div class="round-info" id="roundInfo">Round 1 of 3</div>
+        
+        <div class="message-area">
+            <div class="message pulse" id="gameMessage">Get Ready...</div>
+        </div>
+        
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-star go"><svg viewBox="0 0 100 100"><polygon points="50,5 61,40 98,40 68,62 79,97 50,75 21,97 32,62 2,40 39,40"/></svg></div>
+                <span class="legend-text go">GO</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-star nogo"><svg viewBox="0 0 100 100"><polygon points="50,5 61,40 98,40 68,62 79,97 50,75 21,97 32,62 2,40 39,40"/></svg></div>
+                <span class="legend-text nogo">NO-GO</span>
+            </div>
+        </div>
+        
+        <div class="trail-board" id="trailBoard">
+            <canvas class="trail-canvas" id="trailCanvas"></canvas>
+            <div class="beat-indicator">
+                <div class="beat-dot" id="beatDot1"></div>
+                <div class="beat-dot" id="beatDot2"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- HALFTIME SCREEN -->
+<div class="screen hidden" id="halftimeScreen">
+    <div class="halftime-container">
+        <div class="game-icon">⏱️</div>
+        <h1 class="halftime-title">HALFTIME</h1>
+        <p class="halftime-subtitle">
+            <span class="lang-en">Great work! Here's your first half:</span>
+            <span class="lang-es">¡Buen trabajo! Tu primera mitad:</span>
+        </p>
+        
+        <div class="halftime-stats">
+            <div class="halftime-stat">
+                <div class="halftime-stat-value" id="halfScore">0</div>
+                <div class="halftime-stat-label">Points</div>
+            </div>
+            <div class="halftime-stat">
+                <div class="halftime-stat-value" id="halfAccuracy">0%</div>
+                <div class="halftime-stat-label">Accuracy</div>
+            </div>
+            <div class="halftime-stat">
+                <div class="halftime-stat-value" id="halfInhibitions">0</div>
+                <div class="halftime-stat-label">Inhibitions</div>
+            </div>
+            <div class="halftime-stat">
+                <div class="halftime-stat-value" id="halfFalseAlarms">0</div>
+                <div class="halftime-stat-label">False Alarms</div>
+            </div>
+        </div>
+        
+        <button class="continue-btn" onclick="continueGame()">Continue Q3</button>
+    </div>
+</div>
+
+<!-- RESULTS SCREEN -->
+<div class="screen hidden" id="resultsScreen">
+    <div class="results-container">
+        <h1 class="results-title">🏆 Game Complete!</h1>
+        
+        <div class="results-score-box">
+            <div class="results-score-label">Final Score</div>
+            <div class="results-score-value" id="finalScore">0</div>
+        </div>
+        
+        <div class="results-quarters">
+            <div class="results-quarter">
+                <div class="results-quarter-label">Q1</div>
+                <div class="results-quarter-value q1" id="finalQ1">0</div>
+            </div>
+            <div class="results-quarter">
+                <div class="results-quarter-label">Q2</div>
+                <div class="results-quarter-value q2" id="finalQ2">0</div>
+            </div>
+            <div class="results-quarter">
+                <div class="results-quarter-label">Q3</div>
+                <div class="results-quarter-value q3" id="finalQ3">0</div>
+            </div>
+            <div class="results-quarter">
+                <div class="results-quarter-label">Q4</div>
+                <div class="results-quarter-value q4" id="finalQ4">0</div>
+            </div>
+        </div>
+        
+        <div class="results-stats">
+            <div class="results-stat">
+                <div class="results-stat-value" id="finalAccuracy">0%</div>
+                <div class="results-stat-label">Accuracy</div>
+            </div>
+            <div class="results-stat">
+                <div class="results-stat-value" id="finalInhibitions">0</div>
+                <div class="results-stat-label">Inhibitions</div>
+            </div>
+            <div class="results-stat">
+                <div class="results-stat-value" id="finalBest">0</div>
+                <div class="results-stat-label">Best</div>
+            </div>
+        </div>
+        
+        <div class="results-streak" id="resultsStreak">
+            <span class="streak-fire">🔥</span>
+            <span class="streak-text" id="resultsStreakText"></span>
+        </div>
+        
+        <div class="results-actions">
+            <button class="play-again-btn" onclick="playAgain()">Play Again</button>
+            <a href="/game" class="menu-link">← Back to Menu</a>
+        </div>
+    </div>
+</div>
+
+<script>
+var starSVG = '<svg viewBox="0 0 100 100"><polygon points="50,5 61,40 98,40 68,62 79,97 50,75 21,97 32,62 2,40 39,40"/></svg>';
+
+var currentLang = localStorage.getItem('gostar-lang') || 'en';
+
+function setLang(lang) {
+    currentLang = lang;
+    localStorage.setItem('gostar-lang', lang);
+    document.body.setAttribute('data-lang', lang);
+    document.querySelectorAll('.lang-btn').forEach(function(b) {
+        b.classList.toggle('active', b.textContent === lang.toUpperCase());
+    });
+}
+
+var difficulty = 'standard';
+var tempo = 'steady';
+var currentQuarter = 1;
+var currentRound = 1;
+var roundsPerQuarter = 3;
+var score = 0;
+var quarterScores = [0, 0, 0, 0];
+
+var correctGoResponses = 0;
+var totalGoStars = 0;
+var successfulInhibitions = 0;
+var totalNoGoStars = 0;
+var falseAlarms = 0;
+
+var streak = parseInt(localStorage.getItem('gostar-gonogo-streak')) || 0;
+var lastPlayed = localStorage.getItem('gostar-gonogo-last') || '';
+var personalBest = parseInt(localStorage.getItem('gostar-gonogo-best')) || 0;
+
+var starNodes = [];
+var goSequence = [];
+var nogoSequence = [];
+var fullSequence = [];
+var playerIndex = 0;
+var isShowingSequence = false;
+var completedStars = [];
+
+var difficultySettings = {
+    gentle:   { 1: {go: 2, nogo: 1}, 2: {go: 2, nogo: 2}, 3: {go: 3, nogo: 2}, 4: {go: 3, nogo: 3} },
+    standard: { 1: {go: 3, nogo: 2}, 2: {go: 3, nogo: 3}, 3: {go: 4, nogo: 3}, 4: {go: 4, nogo: 4} },
+    pro:      { 1: {go: 4, nogo: 3}, 2: {go: 4, nogo: 4}, 3: {go: 5, nogo: 4}, 4: {go: 5, nogo: 5} },
+    elite:    { 1: {go: 5, nogo: 4}, 2: {go: 5, nogo: 5}, 3: {go: 6, nogo: 5}, 4: {go: 6, nogo: 6} }
+};
+
+var tempoSettings = {
+    relaxed: { noteLength: 700, pauseAfter: 400 },
+    steady:  { noteLength: 500, pauseAfter: 300 },
+    upbeat:  { noteLength: 350, pauseAfter: 200 }
+};
+
+var audioCtx = null;
+
+function getAudioContext() {
+    if (!audioCtx) {
+        try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { return null; }
+    }
+    return audioCtx;
+}
+
+function playGoSound() {
+    var ctx = getAudioContext();
+    if (!ctx) return;
+    try {
+        if (ctx.state === 'suspended') ctx.resume();
+        var osc = ctx.createOscillator();
+        var gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = 523.25;
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        gain.gain.setValueAtTime(0.4, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.25);
+        
+        var osc2 = ctx.createOscillator();
+        var gain2 = ctx.createGain();
+        osc2.type = 'sine';
+        osc2.frequency.value = 659.25;
+        osc2.connect(gain2);
+        gain2.connect(ctx.destination);
+        gain2.gain.setValueAtTime(0.2, ctx.currentTime);
+        gain2.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+        osc2.start(ctx.currentTime);
+        osc2.stop(ctx.currentTime + 0.2);
+        
+        var dot = document.getElementById('beatDot1');
+        dot.classList.add('go-beat');
+        setTimeout(function() { dot.classList.remove('go-beat'); }, 200);
+    } catch (e) {}
+}
+
+function playNoGoSound() {
+    var ctx = getAudioContext();
+    if (!ctx) return;
+    try {
+        if (ctx.state === 'suspended') ctx.resume();
+        var osc = ctx.createOscillator();
+        var gain = ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.value = 130.81;
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        gain.gain.setValueAtTime(0.25, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.25);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.3);
+        
+        var dot = document.getElementById('beatDot2');
+        dot.classList.add('nogo-beat');
+        setTimeout(function() { dot.classList.remove('nogo-beat'); }, 200);
+    } catch (e) {}
+}
+
+function playCountdownBeep() {
+    var ctx = getAudioContext();
+    if (!ctx) return;
+    try {
+        if (ctx.state === 'suspended') ctx.resume();
+        var osc = ctx.createOscillator();
+        var gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = 440;
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        gain.gain.setValueAtTime(0.3, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.15);
+    } catch (e) {}
+}
+
+function playSuccessSound() {
+    var ctx = getAudioContext();
+    if (!ctx) return;
+    try {
+        if (ctx.state === 'suspended') ctx.resume();
+        var notes = [523.25, 659.25, 783.99, 1046.50];
+        for (var i = 0; i < notes.length; i++) {
+            var osc = ctx.createOscillator();
+            var gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.value = notes[i];
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            var t = ctx.currentTime + (i * 0.08);
+            gain.gain.setValueAtTime(0.3, t);
+            gain.gain.exponentialRampToValueAtTime(0.01, t + 0.2);
+            osc.start(t);
+            osc.stop(t + 0.25);
+        }
+    } catch (e) {}
+}
+
+function playErrorSound() {
+    var ctx = getAudioContext();
+    if (!ctx) return;
+    try {
+        if (ctx.state === 'suspended') ctx.resume();
+        var osc = ctx.createOscillator();
+        var gain = ctx.createGain();
+        osc.type = 'square';
+        osc.frequency.value = 100;
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        gain.gain.setValueAtTime(0.2, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.45);
+    } catch (e) {}
+}
+
+function init() {
+    setLang(currentLang);
+    checkStreak();
+    updateWelcomeStreak();
+}
+
+function checkStreak() {
+    var today = new Date().toDateString();
+    var yesterday = new Date(Date.now() - 86400000).toDateString();
+    if (lastPlayed !== today && lastPlayed !== yesterday && lastPlayed !== '') {
+        streak = 0;
+        localStorage.setItem('gostar-gonogo-streak', streak);
+    }
+}
+
+function updateWelcomeStreak() {
+    var el = document.getElementById('welcomeStreak');
+    var text = document.getElementById('welcomeStreakText');
+    if (streak > 0) {
+        el.classList.add('visible');
+        text.textContent = streak + (currentLang === 'es' ? ' días' : ' day streak');
+    } else {
+        el.classList.remove('visible');
+    }
+}
+
+function selectDifficulty(diff) {
+    difficulty = diff;
+    document.querySelectorAll('.difficulty-btn').forEach(function(b) {
+        b.classList.toggle('selected', b.dataset.difficulty === diff);
+    });
+}
+
+function selectTempo(t) {
+    tempo = t;
+    document.querySelectorAll('.tempo-btn').forEach(function(b) {
+        b.classList.toggle('selected', b.dataset.tempo === t);
+    });
+}
+
+function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(function(s) { s.classList.add('hidden'); });
+    document.getElementById(id).classList.remove('hidden');
+}
+
+function startGame() {
+    currentQuarter = 1;
+    currentRound = 1;
+    score = 0;
+    quarterScores = [0, 0, 0, 0];
+    correctGoResponses = 0;
+    totalGoStars = 0;
+    successfulInhibitions = 0;
+    totalNoGoStars = 0;
+    falseAlarms = 0;
+    
+    showScreen('gameScreen');
+    updateQuarterDisplay();
+    updateScore();
+    startRound();
+}
+
+function updateQuarterDisplay() {
+    var badge = document.getElementById('quarterBadge');
+    badge.textContent = 'Q' + currentQuarter;
+    badge.className = 'quarter-badge q' + currentQuarter;
+    
+    for (var i = 1; i <= 4; i++) {
+        var dot = document.getElementById('dot' + i);
+        dot.className = 'quarter-dot';
+        if (i < currentQuarter) dot.classList.add('q' + i, 'completed');
+        else if (i === currentQuarter) dot.classList.add('q' + i);
+    }
+    updateRoundInfo();
+}
+
+function updateRoundInfo() {
+    document.getElementById('roundInfo').textContent = (currentLang === 'es' ? 'Ronda ' : 'Round ') + currentRound + (currentLang === 'es' ? ' de ' : ' of ') + roundsPerQuarter;
+}
+
+function updateScore() {
+    document.getElementById('scoreValue').textContent = score;
+}
+
+function setMessage(html, className) {
+    var msg = document.getElementById('gameMessage');
+    msg.innerHTML = html;
+    msg.className = 'message' + (className ? ' ' + className : '');
+}
+
+function startRound() {
+    starNodes = [];
+    goSequence = [];
+    nogoSequence = [];
+    fullSequence = [];
+    playerIndex = 0;
+    completedStars = [];
+    isShowingSequence = false;
+    
+    var settings = difficultySettings[difficulty][currentQuarter];
+    totalGoStars += settings.go;
+    totalNoGoStars += settings.nogo;
+    
+    generateStarPositions(settings.go, settings.nogo);
+    generateSequences();
+    renderStars();
+    disableStars(true);
+    
+    playCountdown(function() { showSequence(); });
+}
+
+function generateStarPositions(numGo, numNogo) {
+    var board = document.getElementById('trailBoard');
+    var boardWidth = board.offsetWidth;
+    var boardHeight = board.offsetHeight - 50;
+    var padding = 40;
+    var minDistance = 65;
+    var totalStars = numGo + numNogo;
+    
+    for (var i = 0; i < totalStars; i++) {
+        var x, y, valid, attempts = 0;
+        do {
+            x = padding + Math.random() * (boardWidth - padding * 2);
+            y = padding + Math.random() * (boardHeight - padding * 2);
+            valid = true;
+            for (var j = 0; j < starNodes.length; j++) {
+                var dist = Math.sqrt(Math.pow(x - starNodes[j].x, 2) + Math.pow(y - starNodes[j].y, 2));
+                if (dist < minDistance) { valid = false; break; }
+            }
+            attempts++;
+        } while (!valid && attempts < 100);
+        
+        starNodes.push({ x: x, y: y, isGo: i < numGo, index: i });
+    }
+}
+
+function generateSequences() {
+    var goIndices = [], nogoIndices = [];
+    for (var i = 0; i < starNodes.length; i++) {
+        if (starNodes[i].isGo) goIndices.push(i);
+        else nogoIndices.push(i);
+    }
+    
+    goSequence = shuffleArray(goIndices.slice());
+    nogoSequence = shuffleArray(nogoIndices.slice());
+    
+    fullSequence = [];
+    var gi = 0, ni = 0;
+    while (gi < goSequence.length || ni < nogoSequence.length) {
+        var goCount = Math.min(1 + Math.floor(Math.random() * 2), goSequence.length - gi);
+        for (var g = 0; g < goCount && gi < goSequence.length; g++) {
+            fullSequence.push({ index: goSequence[gi], isGo: true });
+            gi++;
+        }
+        if (ni < nogoSequence.length) {
+            fullSequence.push({ index: nogoSequence[ni], isGo: false });
+            ni++;
+        }
+    }
+}
+
+function shuffleArray(arr) {
+    for (var i = arr.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = arr[i]; arr[i] = arr[j]; arr[j] = temp;
+    }
+    return arr;
+}
+
+function renderStars() {
+    var board = document.getElementById('trailBoard');
+    board.querySelectorAll('.star-node').forEach(function(s) { s.remove(); });
+    
+    for (var i = 0; i < starNodes.length; i++) {
+        var star = document.createElement('div');
+        star.className = 'star-node';
+        star.dataset.index = i;
+        star.style.left = starNodes[i].x + 'px';
+        star.style.top = starNodes[i].y + 'px';
+        star.innerHTML = starSVG;
+        (function(idx) {
+            star.addEventListener('click', function() { handleStarClick(idx); });
+        })(i);
+        board.appendChild(star);
+    }
+    drawTrailLines();
+}
+
+function drawTrailLines() {
+    var canvas = document.getElementById('trailCanvas');
+    var board = document.getElementById('trailBoard');
+    canvas.width = board.offsetWidth;
+    canvas.height = board.offsetHeight;
+    
+    var ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    if (completedStars.length < 2) return;
+    
+    ctx.strokeStyle = '#00ff88';
+    ctx.lineWidth = 4;
+    ctx.lineCap = 'round';
+    ctx.shadowColor = '#00ff88';
+    ctx.shadowBlur = 15;
+    ctx.beginPath();
+    
+    for (var i = 0; i < completedStars.length; i++) {
+        var node = starNodes[completedStars[i]];
+        if (i === 0) ctx.moveTo(node.x, node.y);
+        else ctx.lineTo(node.x, node.y);
+    }
+    ctx.stroke();
+}
+
+function playCountdown(callback) {
+    var count = 3;
+    var t = tempoSettings[tempo];
+    var interval = Math.max(t.noteLength, 500);
+    
+    function tick() {
+        if (count > 0) {
+            setMessage('<span class="countdown">' + count + '</span>', '');
+            playCountdownBeep();
+            count--;
+            setTimeout(tick, interval);
+        } else {
+            setMessage(currentLang === 'es' ? '¡Observa!' : 'Watch!', '');
+            setTimeout(callback, 400);
+        }
+    }
+    tick();
+}
+
+function showSequence() {
+    isShowingSequence = true;
+    var i = 0;
+    var t = tempoSettings[tempo];
+    
+    function showNext() {
+        if (i >= fullSequence.length) {
+            isShowingSequence = false;
+            setMessage(currentLang === 'es' ? '¡Tu turno! Solo <span style="color:#00ff88">VERDES</span>' : 'Your turn! Only <span style="color:#00ff88">GREEN</span>', '');
+            
+            for (var n = 0; n < nogoSequence.length; n++) {
+                var nogoEl = document.querySelector('[data-index="' + nogoSequence[n] + '"]');
+                if (nogoEl) nogoEl.classList.add('nogo-star', 'completed');
+            }
+            for (var g = 0; g < goSequence.length; g++) {
+                var goEl = document.querySelector('[data-index="' + goSequence[g] + '"]');
+                if (goEl) goEl.classList.add('go-star');
+            }
+            disableStars(false);
+            return;
+        }
+        
+        var item = fullSequence[i];
+        var starEl = document.querySelector('[data-index="' + item.index + '"]');
+        if (!starEl) { i++; setTimeout(showNext, 50); return; }
+        
+        if (item.isGo) {
+            starEl.classList.add('go-star', 'lit');
+            playGoSound();
+        } else {
+            starEl.classList.add('nogo-star', 'lit');
+            playNoGoSound();
+        }
+        
+        setTimeout(function() {
+            starEl.classList.remove('lit');
+            i++;
+            setTimeout(showNext, t.pauseAfter);
+        }, t.noteLength);
+    }
+    showNext();
+}
+
+function handleStarClick(index) {
+    if (isShowingSequence) return;
+    
+    var starEl = document.querySelector('[data-index="' + index + '"]');
+    var node = starNodes[index];
+    
+    if (!node.isGo) {
+        falseAlarms++;
+        starEl.classList.add('error');
+        playErrorSound();
+        setMessage(currentLang === 'es' ? '❌ ¡NO-GO!' : '❌ NO-GO!', 'error');
+        setTimeout(function() { starEl.classList.remove('error'); }, 500);
+        return;
+    }
+    
+    var expectedIdx = goSequence[playerIndex];
+    
+    if (index === expectedIdx) {
+        correctGoResponses++;
+        completedStars.push(index);
+        starEl.classList.add('completed');
+        playGoSound();
+        drawTrailLines();
+        playerIndex++;
+        
+        if (playerIndex >= goSequence.length) {
+            successfulInhibitions += nogoSequence.length;
+            var points = goSequence.length * 5 + nogoSequence.length * 3;
+            score += points;
+            quarterScores[currentQuarter - 1] += points;
+            disableStars(true);
+            updateScore();
+            playSuccessSound();
+            setMessage((currentLang === 'es' ? '¡Perfecto! +' : 'Perfect! +') + points, 'success');
+            setTimeout(function() { nextRound(); }, 1500);
+        }
+    } else {
+        starEl.classList.add('error');
+        playErrorSound();
+        setMessage(currentLang === 'es' ? '¡Secuencia incorrecta!' : 'Wrong sequence!', 'error');
+        setTimeout(function() { starEl.classList.remove('error'); }, 300);
+        setTimeout(function() {
+            var partialPoints = Math.max(0, playerIndex * 3);
+            successfulInhibitions += nogoSequence.length - falseAlarms;
+            if (partialPoints > 0) {
+                score += partialPoints;
+                quarterScores[currentQuarter - 1] += partialPoints;
+                updateScore();
+            }
+            nextRound();
+        }, 1000);
+    }
+}
+
+function disableStars(disabled) {
+    document.querySelectorAll('.star-node').forEach(function(s) {
+        s.classList.toggle('disabled', disabled);
+    });
+}
+
+function nextRound() {
+    currentRound++;
+    if (currentRound > roundsPerQuarter) {
+        if (currentQuarter === 2) { showHalftime(); return; }
+        if (currentQuarter === 4) { endGame(); return; }
+        advanceQuarter();
+        return;
+    }
+    updateRoundInfo();
+    setTimeout(startRound, 500);
+}
+
+function advanceQuarter() {
+    currentQuarter++;
+    currentRound = 1;
+    updateQuarterDisplay();
+    setMessage('Q' + currentQuarter + (currentLang === 'es' ? ' - ¡Vamos!' : ' - Let\'s go!'), '');
+    setTimeout(startRound, 1000);
+}
+
+function showHalftime() {
+    var accuracy = totalGoStars > 0 ? Math.round((correctGoResponses / totalGoStars) * 100) : 0;
+    document.getElementById('halfScore').textContent = score;
+    document.getElementById('halfAccuracy').textContent = accuracy + '%';
+    document.getElementById('halfInhibitions').textContent = successfulInhibitions;
+    document.getElementById('halfFalseAlarms').textContent = falseAlarms;
+    showScreen('halftimeScreen');
+}
+
+function continueGame() {
+    currentQuarter = 3;
+    currentRound = 1;
+    showScreen('gameScreen');
+    updateQuarterDisplay();
+    setMessage(currentLang === 'es' ? 'Q3 - ¡Segunda mitad!' : 'Q3 - Second half!', '');
+    setTimeout(startRound, 1000);
+}
+
+function endGame() {
+    var today = new Date().toDateString();
+    if (lastPlayed !== today) {
+        streak++;
+        localStorage.setItem('gostar-gonogo-streak', streak);
+        localStorage.setItem('gostar-gonogo-last', today);
+    }
+    if (score > personalBest) {
+        personalBest = score;
+        localStorage.setItem('gostar-gonogo-best', personalBest);
+    }
+    
+    var accuracy = totalGoStars > 0 ? Math.round((correctGoResponses / totalGoStars) * 100) : 0;
+    document.getElementById('finalScore').textContent = score;
+    document.getElementById('finalQ1').textContent = quarterScores[0];
+    document.getElementById('finalQ2').textContent = quarterScores[1];
+    document.getElementById('finalQ3').textContent = quarterScores[2];
+    document.getElementById('finalQ4').textContent = quarterScores[3];
+    document.getElementById('finalAccuracy').textContent = accuracy + '%';
+    document.getElementById('finalInhibitions').textContent = successfulInhibitions;
+    document.getElementById('finalBest').textContent = personalBest;
+    
+    var streakEl = document.getElementById('resultsStreak');
+    var streakText = document.getElementById('resultsStreakText');
+    if (streak > 0) {
+        streakEl.classList.add('visible');
+        streakText.textContent = streak + (currentLang === 'es' ? ' días' : ' day streak');
+    } else {
+        streakEl.classList.remove('visible');
+    }
+    
+    showScreen('resultsScreen');
+    saveSession();
+}
+
+function saveSession() {
+    var pin = sessionStorage.getItem('gostar-user-pin');
+    var accessCode = sessionStorage.getItem('gostar-user-code');
+    var username = sessionStorage.getItem('gostar-user-name');
+    if (!pin && !accessCode) return;
+    
+    var payload = { game: 'gonogo', score: score, quarterScores: quarterScores, difficulty: difficulty, tempo: tempo };
+    if (pin) payload.pin = pin;
+    else { payload.accessCode = accessCode; payload.username = username; }
+    
+    fetch('/api/game/session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    }).catch(function() {});
+}
+
+function playAgain() {
+    showScreen('welcomeScreen');
+    updateWelcomeStreak();
+}
+
+window.onload = init;
+</script>
+</body>
+</html>
