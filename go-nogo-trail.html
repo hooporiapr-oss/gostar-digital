@@ -428,6 +428,7 @@ body[data-lang="en"] .lang-es { display: none !important; }
     height: 24px;
 }
 
+.legend-star.gold svg { fill: #ffd700; }
 .legend-star.go svg { fill: var(--go-green); }
 .legend-star.nogo svg { fill: var(--nogo-red); }
 .legend-text.go { color: var(--go-green); }
@@ -465,8 +466,8 @@ body[data-lang="en"] .lang-es { display: none !important; }
 .star-node svg {
     width: 100%;
     height: 100%;
-    fill: rgba(255,255,255,0.15);
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+    fill: #ffd700;
+    filter: drop-shadow(0 2px 8px rgba(255, 215, 0, 0.3));
     transition: all 0.2s ease;
 }
 
@@ -481,7 +482,7 @@ body[data-lang="en"] .lang-es { display: none !important; }
 
 .star-node.go-star.completed svg {
     fill: var(--go-green);
-    opacity: 0.5;
+    filter: drop-shadow(0 0 15px var(--go-green));
 }
 
 .star-node.nogo-star svg { fill: var(--nogo-red); }
@@ -730,24 +731,31 @@ body[data-lang="en"] .lang-es { display: none !important; }
         
         <div class="game-description">
             <div class="rule-item">
+                <div class="rule-icon">⭐</div>
+                <div class="rule-text">
+                    <span class="lang-en">All stars start <span style="color:#ffd700;">GOLD</span>. Watch them flash colors!</span>
+                    <span class="lang-es">Todas las estrellas empiezan <span style="color:#ffd700;">DORADAS</span>. ¡Mira los colores!</span>
+                </div>
+            </div>
+            <div class="rule-item">
                 <div class="rule-icon">🟢</div>
                 <div class="rule-text">
-                    <span class="lang-en"><strong>GREEN stars</strong> = GO! Remember these in order.</span>
-                    <span class="lang-es"><strong>Estrellas VERDES</strong> = ¡IR! Recuerda el orden.</span>
+                    <span class="lang-en"><strong>GREEN flash</strong> = GO! Remember these in order.</span>
+                    <span class="lang-es"><strong>Destello VERDE</strong> = ¡IR! Recuerda el orden.</span>
                 </div>
             </div>
             <div class="rule-item">
                 <div class="rule-icon">🔴</div>
                 <div class="rule-text">
-                    <span class="lang-en"><span class="nogo-text">RED stars</span> = NO-GO! Ignore these completely.</span>
-                    <span class="lang-es"><span class="nogo-text">Estrellas ROJAS</span> = ¡NO-IR! Ignóralas.</span>
+                    <span class="lang-en"><span class="nogo-text">RED flash</span> = NO-GO! Don't tap these.</span>
+                    <span class="lang-es"><span class="nogo-text">Destello ROJO</span> = ¡NO-IR! No las toques.</span>
                 </div>
             </div>
             <div class="rule-item">
                 <div class="rule-icon">🎵</div>
                 <div class="rule-text">
-                    <span class="lang-en">Listen! GO has a <strong>high tone</strong>, NO-GO has a <span class="nogo-text">low buzz</span>.</span>
-                    <span class="lang-es">¡Escucha! IR tiene <strong>tono alto</strong>, NO-IR tiene <span class="nogo-text">zumbido bajo</span>.</span>
+                    <span class="lang-en">Listen! <strong>High tone</strong> = GO, <span class="nogo-text">Low buzz</span> = NO-GO.</span>
+                    <span class="lang-es">¡Escucha! <strong>Tono alto</strong> = IR, <span class="nogo-text">Zumbido bajo</span> = NO-IR.</span>
                 </div>
             </div>
         </div>
@@ -841,10 +849,14 @@ body[data-lang="en"] .lang-es { display: none !important; }
         
         <div class="legend">
             <div class="legend-item">
+                <div class="legend-star gold"><svg viewBox="0 0 100 100"><polygon points="50,5 61,40 98,40 68,62 79,97 50,75 21,97 32,62 2,40 39,40"/></svg></div>
+                <span class="legend-text" style="color:#ffd700;">→</span>
                 <div class="legend-star go"><svg viewBox="0 0 100 100"><polygon points="50,5 61,40 98,40 68,62 79,97 50,75 21,97 32,62 2,40 39,40"/></svg></div>
                 <span class="legend-text go">GO</span>
             </div>
             <div class="legend-item">
+                <div class="legend-star gold"><svg viewBox="0 0 100 100"><polygon points="50,5 61,40 98,40 68,62 79,97 50,75 21,97 32,62 2,40 39,40"/></svg></div>
+                <span class="legend-text" style="color:#ffd700;">→</span>
                 <div class="legend-star nogo"><svg viewBox="0 0 100 100"><polygon points="50,5 61,40 98,40 68,62 79,97 50,75 21,97 32,62 2,40 39,40"/></svg></div>
                 <span class="legend-text nogo">NO-GO</span>
             </div>
@@ -1365,16 +1377,7 @@ function showSequence() {
     function showNext() {
         if (i >= fullSequence.length) {
             isShowingSequence = false;
-            setMessage(currentLang === 'es' ? '¡Tu turno! Solo <span style="color:#00ff88">VERDES</span>' : 'Your turn! Only <span style="color:#00ff88">GREEN</span>', '');
-            
-            for (var n = 0; n < nogoSequence.length; n++) {
-                var nogoEl = document.querySelector('[data-index="' + nogoSequence[n] + '"]');
-                if (nogoEl) nogoEl.classList.add('nogo-star', 'completed');
-            }
-            for (var g = 0; g < goSequence.length; g++) {
-                var goEl = document.querySelector('[data-index="' + goSequence[g] + '"]');
-                if (goEl) goEl.classList.add('go-star');
-            }
+            setMessage(currentLang === 'es' ? '¡Tu turno! Recuerda las <span style="color:#00ff88">VERDES</span>' : 'Your turn! Remember the <span style="color:#00ff88">GREEN</span> ones', '');
             disableStars(false);
             return;
         }
@@ -1383,6 +1386,7 @@ function showSequence() {
         var starEl = document.querySelector('[data-index="' + item.index + '"]');
         if (!starEl) { i++; setTimeout(showNext, 50); return; }
         
+        // Light up with color
         if (item.isGo) {
             starEl.classList.add('go-star', 'lit');
             playGoSound();
@@ -1392,7 +1396,8 @@ function showSequence() {
         }
         
         setTimeout(function() {
-            starEl.classList.remove('lit');
+            // Return to gold (remove color classes)
+            starEl.classList.remove('lit', 'go-star', 'nogo-star');
             i++;
             setTimeout(showNext, t.pauseAfter);
         }, t.noteLength);
@@ -1406,26 +1411,31 @@ function handleStarClick(index) {
     var starEl = document.querySelector('[data-index="' + index + '"]');
     var node = starNodes[index];
     
+    // Check if clicking a NO-GO star (FALSE ALARM!)
     if (!node.isGo) {
         falseAlarms++;
-        starEl.classList.add('error');
+        starEl.classList.add('nogo-star', 'error');
         playErrorSound();
-        setMessage(currentLang === 'es' ? '❌ ¡NO-GO!' : '❌ NO-GO!', 'error');
-        setTimeout(function() { starEl.classList.remove('error'); }, 500);
+        setMessage(currentLang === 'es' ? '❌ ¡Era ROJA! NO-GO' : '❌ That was RED! NO-GO', 'error');
+        setTimeout(function() { 
+            starEl.classList.remove('nogo-star', 'error'); 
+        }, 600);
         return;
     }
     
     var expectedIdx = goSequence[playerIndex];
     
     if (index === expectedIdx) {
+        // Correct GO!
         correctGoResponses++;
         completedStars.push(index);
-        starEl.classList.add('completed');
+        starEl.classList.add('go-star', 'completed');
         playGoSound();
         drawTrailLines();
         playerIndex++;
         
         if (playerIndex >= goSequence.length) {
+            // Round complete
             successfulInhibitions += nogoSequence.length;
             var points = goSequence.length * 5 + nogoSequence.length * 3;
             score += points;
@@ -1437,6 +1447,7 @@ function handleStarClick(index) {
             setTimeout(function() { nextRound(); }, 1500);
         }
     } else {
+        // Wrong GO star (out of order) or clicked a star that wasn't GO
         starEl.classList.add('error');
         playErrorSound();
         setMessage(currentLang === 'es' ? '¡Secuencia incorrecta!' : 'Wrong sequence!', 'error');
