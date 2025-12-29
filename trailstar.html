@@ -941,6 +941,19 @@ body[data-lang="en"] .lang-en { display: inline; }
 </style>
 </head>
 <body data-lang="en">
+<script>
+// Auth guard - redirect to play.html if not logged in (only on production)
+(function() {
+    if (window.location.hostname.includes('onrender.com')) {
+        var pin = sessionStorage.getItem('gostar-user-pin');
+        var code = sessionStorage.getItem('gostar-user-code');
+        var name = sessionStorage.getItem('gostar-user-name');
+        if (!pin && !(code && name)) {
+            window.location.href = '/play';
+        }
+    }
+})();
+</script>
 
 <div class="lang-toggle">
     <button class="lang-btn active" onclick="setLang('en')">EN</button>
