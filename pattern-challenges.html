@@ -130,6 +130,11 @@
         .star-node.completed svg { fill: var(--success); filter: drop-shadow(0 0 10px var(--success)); }
         .star-node.error svg { fill: var(--danger); filter: drop-shadow(0 0 10px var(--danger)); animation: shake 0.3s ease; }
         @keyframes shake { 0%, 100% { transform: translate(-50%, -50%) rotate(0deg); } 25% { transform: translate(-50%, -50%) rotate(-10deg); } 75% { transform: translate(-50%, -50%) rotate(10deg); } }
+        /* Go/No-Go specific styles */
+        .star-node.gonogo-gold svg { fill: #ffd700; filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.4)); }
+        .star-node.gonogo-go-lit svg { fill: #00ff88; transform: scale(1.3); filter: drop-shadow(0 0 25px #00ff88) drop-shadow(0 0 50px #00ff88); }
+        .star-node.gonogo-nogo-lit svg { fill: #ff3366; transform: scale(1.3); filter: drop-shadow(0 0 25px #ff3366) drop-shadow(0 0 50px #ff3366); }
+        .star-node.gonogo-go-completed svg { fill: #00ff88; filter: drop-shadow(0 0 15px #00ff88); }
         .transition-icon { font-size: 4rem; margin-bottom: 15px; }
         .transition-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 5px; }
         .transition-score { font-size: 2.5rem; font-weight: 900; color: var(--secondary); margin-bottom: 20px; }
@@ -176,16 +181,19 @@
 <div class="progress-bar" id="progressBar" style="display: none;">
     <div class="progress-dot" data-game="0">⭐</div>
     <div class="progress-dot" data-game="1">🛤️</div>
+    <div class="progress-dot" data-game="2">🚦</div>
 </div>
 
 <div class="screen active" id="welcomeScreen">
     <div class="challenge-icon">🧠</div>
     <div class="challenge-title"><span class="lang-en">PATTERN CHALLENGES</span><span class="lang-es">DESAFÍO DE PATRONES</span></div>
-    <div class="challenge-subtitle"><span class="lang-en">Memory Duo - Pattern Recognition Training</span><span class="lang-es">Dúo de Memoria - Entrenamiento de Patrones</span></div>
+    <div class="challenge-subtitle"><span class="lang-en">Pattern Trio - Complete Cognitive Training</span><span class="lang-es">Trío de Patrones - Entrenamiento Cognitivo Completo</span></div>
     <div class="game-icons-row">
         <div class="game-icon-preview"><div class="game-icon-circle">⭐</div><div class="game-icon-label"><span class="lang-en">Sequence</span><span class="lang-es">Secuencia</span></div></div>
         <div class="game-arrow">→</div>
         <div class="game-icon-preview"><div class="game-icon-circle">🛤️</div><div class="game-icon-label"><span class="lang-en">StarTrail</span><span class="lang-es">Ruta Estelar</span></div></div>
+        <div class="game-arrow">→</div>
+        <div class="game-icon-preview"><div class="game-icon-circle" style="border-color: rgba(0, 255, 136, 0.3);">🚦</div><div class="game-icon-label" style="color: #00ff88;"><span class="lang-en">Go/No-Go</span><span class="lang-es">Go/No-Go</span></div></div>
     </div>
     <div class="section-label"><span class="lang-en">Select Difficulty</span><span class="lang-es">Selecciona Dificultad</span></div>
     <div class="tier-grid">
@@ -243,11 +251,12 @@
 
 <div class="screen" id="finalScreen">
     <div class="final-trophy">🧠</div>
-    <div class="final-title"><span class="lang-en">SEQUENCE MASTERED!</span><span class="lang-es">¡SECUENCIA DOMINADA!</span></div>
-    <div class="final-subtitle"><span class="lang-en">Memory Duo Complete!</span><span class="lang-es">¡Dúo de Memoria Completado!</span></div>
+    <div class="final-title"><span class="lang-en">PATTERN TRIO MASTERED!</span><span class="lang-es">¡TRÍO DE PATRONES DOMINADO!</span></div>
+    <div class="final-subtitle"><span class="lang-en">Pattern Trio Complete!</span><span class="lang-es">¡Trío de Patrones Completado!</span></div>
     <div class="score-breakdown">
         <div class="score-row"><div class="score-row-left"><span class="score-row-icon">⭐</span><span class="score-row-name">Sequence Memory</span></div><span class="score-row-value" id="finalScore1">0</span></div>
         <div class="score-row"><div class="score-row-left"><span class="score-row-icon">🛤️</span><span class="score-row-name">Memory StarTrail</span></div><span class="score-row-value" id="finalScore2">0</span></div>
+        <div class="score-row"><div class="score-row-left"><span class="score-row-icon">🚦</span><span class="score-row-name">Go/No-Go Trail</span></div><span class="score-row-value" id="finalScore3">0</span></div>
         <div class="score-row total-row"><div class="score-row-left"><span class="score-row-icon">🧠</span><span class="score-row-name"><span class="lang-en">TOTAL</span><span class="lang-es">TOTAL</span></span></div><span class="score-row-value" id="finalTotal">0</span></div>
     </div>
     <div class="final-buttons">
@@ -388,12 +397,13 @@ function initToneButtons() { toneType = localStorage.getItem('gostar-tone') || '
 
 var games = [
     { id: 'sequence', icon: '⭐', name: 'Sequence Memory', nameEs: 'Memoria Secuencial', skill: 'Working Memory', skillEs: 'Memoria de Trabajo' },
-    { id: 'trail', icon: '🛤️', name: 'Memory StarTrail', nameEs: 'Ruta Estelar', skill: 'Visual-Spatial', skillEs: 'Visual-Espacial' }
+    { id: 'trail', icon: '🛤️', name: 'Memory StarTrail', nameEs: 'Ruta Estelar', skill: 'Visual-Spatial', skillEs: 'Visual-Espacial' },
+    { id: 'gonogo', icon: '🚦', name: 'Go/No-Go Trail', nameEs: 'Rastro Go/No-Go', skill: 'Inhibitory Control', skillEs: 'Control Inhibitorio' }
 ];
 var tierConfig = { rookie: { quarters: 2, speedMod: 1.3, roundsPerQuarter: 3, seqStart: 2 }, pro: { quarters: 4, speedMod: 1.0, roundsPerQuarter: 4, seqStart: 3 }, elite: { quarters: 4, speedMod: 1.0, roundsPerQuarter: 5, seqStart: 4 }, legend: { quarters: 4, speedMod: 0.7, roundsPerQuarter: 5, seqStart: 4 } };
 var rhythmConfig = { relaxed: { transition: 8, noteLength: 700, pauseAfter: 400 }, standard: { transition: 5, noteLength: 500, pauseAfter: 300 }, intense: { transition: 3, noteLength: 350, pauseAfter: 200 } };
 
-var selectedTier = 'pro', selectedRhythm = 'standard', currentGameIndex = 0, currentQuarter = 1, currentRound = 1, gameScores = [0, 0], currentGameScore = 0, gameActive = false;
+var selectedTier = 'pro', selectedRhythm = 'standard', currentGameIndex = 0, currentQuarter = 1, currentRound = 1, gameScores = [0, 0, 0], currentGameScore = 0, gameActive = false;
 
 function showScreen(screenId) { document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); }); document.getElementById(screenId).classList.add('active'); }
 function selectTier(tier) { selectedTier = tier; document.querySelectorAll('.tier-btn').forEach(function(btn) { btn.classList.toggle('selected', btn.dataset.tier === tier); }); }
@@ -401,9 +411,9 @@ function selectRhythm(rhythm) { selectedRhythm = rhythm; document.querySelectorA
 function updateProgress() { document.querySelectorAll('.progress-dot').forEach(function(dot, i) { dot.classList.remove('active', 'completed'); if (i < currentGameIndex) dot.classList.add('completed'); else if (i === currentGameIndex) dot.classList.add('active'); }); }
 function updateQuarterProgress() { var quarters = tierConfig[selectedTier].quarters; var progressEl = document.getElementById('quarterProgress'); progressEl.innerHTML = ''; for (var i = 1; i <= quarters; i++) { var dot = document.createElement('div'); dot.className = 'quarter-dot q' + i; if (i <= currentQuarter) dot.classList.add('active'); progressEl.appendChild(dot); } }
 
-function startChallenge() { currentGameIndex = 0; currentQuarter = 1; currentRound = 1; gameScores = [0, 0]; currentGameScore = 0; document.getElementById('progressBar').style.display = 'flex'; updateProgress(); showCountdown(); }
+function startChallenge() { currentGameIndex = 0; currentQuarter = 1; currentRound = 1; gameScores = [0, 0, 0]; currentGameScore = 0; document.getElementById('progressBar').style.display = 'flex'; updateProgress(); showCountdown(); }
 function showCountdown() { var game = games[currentGameIndex]; document.getElementById('countdownIcon').textContent = game.icon; document.getElementById('countdownGame').textContent = currentLang === 'es' ? game.nameEs : game.name; showScreen('countdownScreen'); var count = 3; document.getElementById('countdownNum').textContent = count; var interval = setInterval(function() { count--; if (count > 0) { document.getElementById('countdownNum').textContent = count; playCountdownBeep(); } else { clearInterval(interval); playGoBeep(); startCurrentGame(); } }, 1000); }
-function startCurrentGame() { var game = games[currentGameIndex]; currentGameScore = 0; currentQuarter = 1; currentRound = 1; document.getElementById('gameIcon').textContent = game.icon; document.getElementById('gameName').textContent = currentLang === 'es' ? game.nameEs : game.name; document.getElementById('gameSkill').textContent = currentLang === 'es' ? game.skillEs : game.skill; document.getElementById('currentScore').textContent = '0'; document.getElementById('currentRound').textContent = '1'; updateQuarterProgress(); showScreen('gameScreen'); if (game.id === 'sequence') startSequenceGame(); else startTrailGame(); }
+function startCurrentGame() { var game = games[currentGameIndex]; currentGameScore = 0; currentQuarter = 1; currentRound = 1; document.getElementById('gameIcon').textContent = game.icon; document.getElementById('gameName').textContent = currentLang === 'es' ? game.nameEs : game.name; document.getElementById('gameSkill').textContent = currentLang === 'es' ? game.skillEs : game.skill; document.getElementById('currentScore').textContent = '0'; document.getElementById('currentRound').textContent = '1'; updateQuarterProgress(); showScreen('gameScreen'); if (game.id === 'sequence') startSequenceGame(); else if (game.id === 'trail') startTrailGame(); else if (game.id === 'gonogo') startGoNoGoGame(); }
 
 var seqTiles = [], seqSequence = [], seqPlayerIndex = 0, seqShowingSequence = false, seqColors = ['red', 'blue', 'green', 'yellow'];
 function startSequenceGame() { var area = document.getElementById('gameArea'); area.innerHTML = '<div class="sequence-grid" id="seqGrid"></div>'; var grid = document.getElementById('seqGrid'); seqTiles = []; seqSequence = []; seqPlayerIndex = 0; seqShowingSequence = false; for (var i = 0; i < 4; i++) { var tile = document.createElement('div'); tile.className = 'seq-tile seq-' + seqColors[i]; tile.dataset.index = i; tile.innerHTML = starSVG; (function(idx) { tile.addEventListener('click', function() { seqTileClick(idx); }); tile.addEventListener('touchstart', function(e) { e.preventDefault(); seqTileClick(idx); }, {passive: false}); })(i); grid.appendChild(tile); seqTiles.push(tile); } gameActive = true; seqDisableTiles(true); setTimeout(seqNewRound, 800); }
@@ -423,12 +433,231 @@ function showTrailSequence() { if (!gameActive || trailSequence.length === 0) { 
 function handleStarClick(index) { if (trailShowingSequence || !gameActive || trailSequence.length === 0) return; var starEl = document.querySelector('.star-node[data-index="' + index + '"]'); if (!starEl) return; var expectedIdx = trailSequence[trailPlayerIndex]; if (index === expectedIdx) { completedStars.push(index); starEl.classList.add('completed'); if (starNodes[index]) playStarSound(starNodes[index].colorIndex); drawTrailLines(); trailPlayerIndex++; if (trailPlayerIndex >= trailSequence.length) { var points = trailSequence.length * 20; addScore(points); playSuccessSound(); setInstruction('+' + points + '!'); disableStars(true); setTimeout(nextRound, 1000); } } else { starEl.classList.add('error'); playErrorSound(); setTimeout(function() { starEl.classList.remove('error'); }, 300); var partial = trailPlayerIndex * 8; if (partial > 0) addScore(partial); setTimeout(nextRound, 800); } }
 function disableStars(disabled) { var stars = document.querySelectorAll('.star-node'); stars.forEach(function(s) { s.style.pointerEvents = disabled ? 'none' : 'auto'; }); }
 
+// Go/No-Go Trail Game
+var gonogoNodes = [], gonogoGoSequence = [], gonogoNogoSequence = [], gonogoFullSequence = [], gonogoPlayerIndex = 0, gonogoCompletedStars = [], gonogoShowingSequence = false, gonogoFalseAlarms = 0;
+
+function playGoSound() {
+    try { var ctx = getAudioContext(); if (ctx.state === 'suspended') ctx.resume();
+    var osc1 = ctx.createOscillator(), osc2 = ctx.createOscillator(), gain = ctx.createGain();
+    osc1.type = 'sine'; osc1.frequency.value = 523.25;
+    osc2.type = 'sine'; osc2.frequency.value = 659.25;
+    osc1.connect(gain); osc2.connect(gain); gain.connect(ctx.destination);
+    gain.gain.setValueAtTime(0.25, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
+    osc1.start(ctx.currentTime); osc1.stop(ctx.currentTime + 0.25);
+    osc2.start(ctx.currentTime); osc2.stop(ctx.currentTime + 0.25);
+    } catch(e) {}
+}
+
+function playNoGoSound() {
+    try { var ctx = getAudioContext(); if (ctx.state === 'suspended') ctx.resume();
+    var osc = ctx.createOscillator(), gain = ctx.createGain();
+    osc.type = 'sawtooth'; osc.frequency.value = 130.81;
+    osc.connect(gain); gain.connect(ctx.destination);
+    gain.gain.setValueAtTime(0.2, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
+    osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.25);
+    } catch(e) {}
+}
+
+function startGoNoGoGame() {
+    var area = document.getElementById('gameArea');
+    area.innerHTML = '<div class="trail-area" id="gonogoArea"><canvas class="trail-canvas" id="gonogoCanvas"></canvas></div>';
+    gonogoNodes = []; gonogoGoSequence = []; gonogoNogoSequence = []; gonogoFullSequence = [];
+    gonogoPlayerIndex = 0; gonogoCompletedStars = []; gonogoShowingSequence = false; gonogoFalseAlarms = 0;
+    gameActive = true;
+    setTimeout(gonogoNewRound, 100);
+}
+
+function gonogoNewRound() {
+    if (!gameActive) return;
+    gonogoCompletedStars = []; gonogoPlayerIndex = 0; gonogoShowingSequence = false; gonogoFalseAlarms = 0;
+    var canvas = document.getElementById('gonogoCanvas');
+    if (canvas) { var ctx = canvas.getContext('2d'); ctx.clearRect(0, 0, canvas.width, canvas.height); }
+    setInstruction(currentLang === 'es' ? 'Observa: VERDE=ir, ROJO=ignorar' : 'Watch: GREEN=go, RED=ignore');
+    
+    var config = tierConfig[selectedTier];
+    var numGo = Math.min(3 + Math.floor(currentRound / 2), 6);
+    var numNogo = Math.min(2 + Math.floor(currentRound / 3), 4);
+    var totalStars = numGo + numNogo;
+    
+    generateGoNoGoPositions(totalStars);
+    
+    // Assign GO and NO-GO
+    var indices = []; for (var i = 0; i < totalStars; i++) indices.push(i);
+    gonogoGoSequence = []; gonogoNogoSequence = [];
+    
+    // Shuffle indices
+    for (var i = indices.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var temp = indices[i]; indices[i] = indices[j]; indices[j] = temp; }
+    
+    for (var i = 0; i < numGo; i++) { gonogoGoSequence.push(indices[i]); gonogoNodes[indices[i]].isGo = true; }
+    for (var i = numGo; i < totalStars; i++) { gonogoNogoSequence.push(indices[i]); gonogoNodes[indices[i]].isGo = false; }
+    
+    // Shuffle GO sequence for display order
+    for (var i = gonogoGoSequence.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var temp = gonogoGoSequence[i]; gonogoGoSequence[i] = gonogoGoSequence[j]; gonogoGoSequence[j] = temp; }
+    
+    // Create full sequence (interleaved GO and NO-GO)
+    gonogoFullSequence = [];
+    var goIdx = 0, nogoIdx = 0;
+    while (goIdx < gonogoGoSequence.length || nogoIdx < gonogoNogoSequence.length) {
+        if (goIdx < gonogoGoSequence.length && (nogoIdx >= gonogoNogoSequence.length || Math.random() < 0.6)) {
+            gonogoFullSequence.push({ index: gonogoGoSequence[goIdx], isGo: true }); goIdx++;
+        } else if (nogoIdx < gonogoNogoSequence.length) {
+            gonogoFullSequence.push({ index: gonogoNogoSequence[nogoIdx], isGo: false }); nogoIdx++;
+        }
+    }
+    
+    renderGoNoGoStars();
+    gonogoShowingSequence = true;
+    disableGoNoGoStars(true);
+    setTimeout(showGoNoGoSequence, 600);
+}
+
+function generateGoNoGoPositions(numStars) {
+    var area = document.getElementById('gonogoArea');
+    var width = area.offsetWidth || 300; var height = area.offsetHeight || 300;
+    var padding = 40; gonogoNodes = [];
+    for (var i = 0; i < numStars; i++) {
+        var attempts = 0, x, y, valid;
+        do { x = padding + Math.random() * (width - padding * 2); y = padding + Math.random() * (height - padding * 2); valid = true;
+            for (var j = 0; j < gonogoNodes.length; j++) { var dx = x - gonogoNodes[j].x; var dy = y - gonogoNodes[j].y; if (Math.sqrt(dx*dx + dy*dy) < 55) { valid = false; break; } }
+            attempts++;
+        } while (!valid && attempts < 50);
+        gonogoNodes.push({ x: x, y: y, isGo: true });
+    }
+}
+
+function renderGoNoGoStars() {
+    var area = document.getElementById('gonogoArea'); if (!area) return;
+    var oldStars = area.querySelectorAll('.star-node'); oldStars.forEach(function(s) { s.remove(); });
+    for (var i = 0; i < gonogoNodes.length; i++) {
+        var star = document.createElement('div');
+        star.className = 'star-node gonogo-gold';
+        star.dataset.index = i;
+        star.style.left = gonogoNodes[i].x + 'px';
+        star.style.top = gonogoNodes[i].y + 'px';
+        star.innerHTML = starSVG;
+        (function(idx) { star.addEventListener('click', function() { handleGoNoGoClick(idx); }); })(i);
+        area.appendChild(star);
+    }
+    clearGoNoGoLines();
+}
+
+function clearGoNoGoLines() {
+    var canvas = document.getElementById('gonogoCanvas');
+    var area = document.getElementById('gonogoArea');
+    if (!canvas || !area) return;
+    canvas.width = area.offsetWidth; canvas.height = area.offsetHeight;
+    var ctx = canvas.getContext('2d'); ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+function drawGoNoGoLines() {
+    var canvas = document.getElementById('gonogoCanvas');
+    var area = document.getElementById('gonogoArea');
+    if (!canvas || !area) return;
+    canvas.width = area.offsetWidth; canvas.height = area.offsetHeight;
+    var ctx = canvas.getContext('2d'); ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if (gonogoCompletedStars.length < 2) return;
+    ctx.strokeStyle = '#00ff88'; ctx.lineWidth = 4; ctx.lineCap = 'round'; ctx.shadowColor = '#00ff88'; ctx.shadowBlur = 15;
+    ctx.beginPath();
+    for (var i = 0; i < gonogoCompletedStars.length; i++) {
+        var node = gonogoNodes[gonogoCompletedStars[i]]; if (!node) continue;
+        if (i === 0) ctx.moveTo(node.x, node.y); else ctx.lineTo(node.x, node.y);
+    }
+    ctx.stroke();
+}
+
+function showGoNoGoSequence() {
+    if (!gameActive || gonogoFullSequence.length === 0) { gonogoShowingSequence = false; disableGoNoGoStars(false); return; }
+    var rhythm = rhythmConfig[selectedRhythm];
+    var speed = rhythm.noteLength * tierConfig[selectedTier].speedMod;
+    var i = 0;
+    
+    function showNext() {
+        if (!gameActive) return;
+        // Remove previous lit state
+        if (i > 0) {
+            var prevItem = gonogoFullSequence[i-1];
+            var prevStar = document.querySelector('#gonogoArea .star-node[data-index="' + prevItem.index + '"]');
+            if (prevStar) { prevStar.classList.remove('gonogo-go-lit', 'gonogo-nogo-lit'); prevStar.classList.add('gonogo-gold'); }
+        }
+        
+        if (i < gonogoFullSequence.length) {
+            var item = gonogoFullSequence[i];
+            var starEl = document.querySelector('#gonogoArea .star-node[data-index="' + item.index + '"]');
+            if (starEl) {
+                starEl.classList.remove('gonogo-gold');
+                if (item.isGo) { starEl.classList.add('gonogo-go-lit'); playGoSound(); }
+                else { starEl.classList.add('gonogo-nogo-lit'); playNoGoSound(); }
+            }
+            i++;
+            setTimeout(showNext, speed);
+        } else {
+            setTimeout(function() {
+                // Reset all to gold
+                var allStars = document.querySelectorAll('#gonogoArea .star-node');
+                allStars.forEach(function(s) { s.classList.remove('gonogo-go-lit', 'gonogo-nogo-lit'); s.classList.add('gonogo-gold'); });
+                gonogoShowingSequence = false;
+                setInstruction(currentLang === 'es' ? '¡Tu turno! Solo las VERDES' : 'Your turn! GREEN ones only');
+                disableGoNoGoStars(false);
+            }, speed);
+        }
+    }
+    showNext();
+}
+
+function handleGoNoGoClick(index) {
+    if (gonogoShowingSequence || !gameActive) return;
+    var starEl = document.querySelector('#gonogoArea .star-node[data-index="' + index + '"]');
+    if (!starEl) return;
+    var node = gonogoNodes[index];
+    
+    // Check if clicking a NO-GO star (FALSE ALARM!)
+    if (!node.isGo) {
+        gonogoFalseAlarms++;
+        starEl.classList.remove('gonogo-gold');
+        starEl.classList.add('gonogo-nogo-lit', 'error');
+        playErrorSound();
+        setInstruction(currentLang === 'es' ? '❌ ¡Era ROJA!' : '❌ That was RED!');
+        setTimeout(function() { starEl.classList.remove('gonogo-nogo-lit', 'error'); starEl.classList.add('gonogo-gold'); }, 500);
+        return;
+    }
+    
+    var expectedIdx = gonogoGoSequence[gonogoPlayerIndex];
+    if (index === expectedIdx) {
+        gonogoCompletedStars.push(index);
+        starEl.classList.remove('gonogo-gold');
+        starEl.classList.add('gonogo-go-completed');
+        playGoSound();
+        drawGoNoGoLines();
+        gonogoPlayerIndex++;
+        
+        if (gonogoPlayerIndex >= gonogoGoSequence.length) {
+            var points = gonogoGoSequence.length * 15 + (gonogoNogoSequence.length - gonogoFalseAlarms) * 10;
+            addScore(points);
+            playSuccessSound();
+            setInstruction('+' + points + '!');
+            disableGoNoGoStars(true);
+            setTimeout(nextRound, 1000);
+        }
+    } else {
+        starEl.classList.add('error');
+        playErrorSound();
+        setTimeout(function() { starEl.classList.remove('error'); }, 300);
+        var partial = gonogoPlayerIndex * 8;
+        if (partial > 0) addScore(partial);
+        setTimeout(nextRound, 800);
+    }
+}
+
+function disableGoNoGoStars(disabled) { var stars = document.querySelectorAll('#gonogoArea .star-node'); stars.forEach(function(s) { s.style.pointerEvents = disabled ? 'none' : 'auto'; }); }
+
 function setInstruction(text) { document.getElementById('gameInstruction').textContent = text; }
 function addScore(points) { currentGameScore += points; if (currentGameScore < 0) currentGameScore = 0; document.getElementById('currentScore').textContent = currentGameScore; }
-function nextRound() { if (!gameActive) return; var config = tierConfig[selectedTier]; currentRound++; if (currentRound > config.roundsPerQuarter) { currentRound = 1; currentQuarter++; if (currentQuarter > config.quarters) { endCurrentGame(); return; } } document.getElementById('currentRound').textContent = currentRound; updateQuarterProgress(); var game = games[currentGameIndex]; var delay = rhythmConfig[selectedRhythm].pauseAfter + 500; setTimeout(function() { if (game.id === 'sequence') seqNewRound(); else trailNewRound(); }, delay); }
+function nextRound() { if (!gameActive) return; var config = tierConfig[selectedTier]; currentRound++; if (currentRound > config.roundsPerQuarter) { currentRound = 1; currentQuarter++; if (currentQuarter > config.quarters) { endCurrentGame(); return; } } document.getElementById('currentRound').textContent = currentRound; updateQuarterProgress(); var game = games[currentGameIndex]; var delay = rhythmConfig[selectedRhythm].pauseAfter + 500; setTimeout(function() { if (game.id === 'sequence') seqNewRound(); else if (game.id === 'trail') trailNewRound(); else if (game.id === 'gonogo') gonogoNewRound(); }, delay); }
 function endCurrentGame() { gameActive = false; gameScores[currentGameIndex] = currentGameScore; currentGameIndex++; updateProgress(); if (currentGameIndex >= games.length) showFinalScreen(); else showTransition(); }
 function showTransition() { var nextGame = games[currentGameIndex]; document.getElementById('transitionIcon').textContent = '✅'; document.getElementById('transitionScore').textContent = gameScores[currentGameIndex - 1]; document.getElementById('nextGameName').textContent = nextGame.icon + ' ' + (currentLang === 'es' ? nextGame.nameEs : nextGame.name); document.getElementById('nextGamePreview').style.display = 'block'; showScreen('transitionScreen'); var countdown = rhythmConfig[selectedRhythm].transition; document.getElementById('transitionCountdown').textContent = countdown; var interval = setInterval(function() { countdown--; if (countdown > 0) document.getElementById('transitionCountdown').textContent = countdown; else { clearInterval(interval); showCountdown(); } }, 1000); }
-function showFinalScreen() { document.getElementById('progressBar').style.display = 'none'; var total = gameScores[0] + gameScores[1]; document.getElementById('finalScore1').textContent = gameScores[0]; document.getElementById('finalScore2').textContent = gameScores[1]; document.getElementById('finalTotal').textContent = total; showScreen('finalScreen'); recordChallenge(total); }
+function showFinalScreen() { document.getElementById('progressBar').style.display = 'none'; var total = gameScores[0] + gameScores[1] + gameScores[2]; document.getElementById('finalScore1').textContent = gameScores[0]; document.getElementById('finalScore2').textContent = gameScores[1]; document.getElementById('finalScore3').textContent = gameScores[2]; document.getElementById('finalTotal').textContent = total; showScreen('finalScreen'); recordChallenge(total); }
 function recordChallenge(total) { var accessCode = sessionStorage.getItem('gostar-user-code'); var username = sessionStorage.getItem('gostar-user-name'); if (!accessCode || !username) return; fetch('/api/game/session', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ accessCode: accessCode, username: username, game: 'duo', score: total }) }).catch(function() {}); }
 function restartChallenge() { showScreen('welcomeScreen'); document.getElementById('progressBar').style.display = 'none'; }
 
