@@ -761,6 +761,10 @@ app.get('/trailtrotter', function(req, res) {
     res.sendFile(path.join(__dirname, 'trailtrotter.html'));
 });
 
+app.get('/gotrotters', function(req, res) {
+    res.sendFile(path.join(__dirname, 'gotrotters.html'));
+});
+
 app.get('/go-nogo-trail', function(req, res) {
     res.sendFile(path.join(__dirname, 'go-nogo-trail.html'));
 });
@@ -935,7 +939,7 @@ app.post('/api/game/session', function(req, res) {
         return res.status(400).json({ error: 'Missing game type' });
     }
     
-    var validGames = ['sequence', 'startrail', 'duo', 'gonogo', 'startrotters', 'trailtrotter'];
+    var validGames = ['sequence', 'startrail', 'duo', 'gonogo', 'startrotters', 'trailtrotter', 'gotrotters'];
     if (validGames.indexOf(game) === -1) {
         return res.status(400).json({ error: 'Invalid game type' });
     }
