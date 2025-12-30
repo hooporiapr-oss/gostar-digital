@@ -1,0 +1,1468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>StarTrotters - Ball Handling Drill</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;600;700;800;900&display=swap');
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { height: 100%; overflow-y: scroll; }
+:root {
+    /* Basketball Court Colors */
+    --court-wood: #CD853F;
+    --court-wood-dark: #8B4513;
+    --court-lines: #FFFFFF;
+    --ball-orange: #FF6B00;
+    --ball-dark: #CC5500;
+    --ball-lines: #000000;
+    
+    /* Globetrotter Theme */
+    --primary: #1E3A8A;
+    --primary-light: #3B82F6;
+    --secondary: #FF6B00;
+    --secondary-light: #FF8C00;
+    --accent-red: #DC2626;
+    --accent-white: #FFFFFF;
+    
+    /* UI Colors */
+    --bg-dark: #0F172A;
+    --bg-card: #1E293B;
+    --text-light: #FFFFFF;
+    --text-muted: #94A3B8;
+    --success: #22C55E;
+    --danger: #EF4444;
+    
+    /* Quarter Colors - Basketball themed */
+    --q1: #22C55E;
+    --q2: #FF6B00;
+    --q3: #F59E0B;
+    --q4: #EF4444;
+}
+
+body { 
+    font-family: 'Nunito', sans-serif; 
+    background: var(--bg-dark);
+    color: var(--text-light); 
+    min-height: 100%; 
+}
+
+body[data-lang="es"] .lang-en { display: none; }
+body[data-lang="en"] .lang-es { display: none; }
+body[data-lang="es"] .lang-es { display: inline; }
+body[data-lang="en"] .lang-en { display: inline; }
+
+.lang-toggle { position: fixed; top: 15px; right: 15px; display: flex; gap: 6px; z-index: 100; }
+.lang-btn { padding: 6px 12px; border: 2px solid var(--secondary); background: transparent; color: var(--secondary); border-radius: 15px; font-family: 'Nunito', sans-serif; font-weight: 600; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease; }
+.lang-btn.active { background: var(--secondary); color: var(--text-light); }
+
+.logout-btn-fixed { position: fixed; top: 15px; left: 15px; padding: 8px 16px; background: rgba(255,255,255,0.1); border: 2px solid rgba(255,255,255,0.3); color: white; border-radius: 20px; font-family: 'Nunito', sans-serif; font-weight: 600; font-size: 0.8rem; text-decoration: none; z-index: 100; transition: all 0.3s ease; }
+.logout-btn-fixed:hover { background: rgba(239, 68, 68, 0.2); border-color: var(--danger); color: var(--danger); }
+
+.screen { display: none; flex-direction: column; align-items: center; justify-content: flex-start; min-height: 100vh; width: 100%; padding: 60px 20px 40px 20px; text-align: center; }
+.screen.active { display: flex; }
+#gameScreen, #halftimeScreen { justify-content: center; padding-top: 20px; }
+#welcomeScreen { justify-content: flex-start; padding-top: 50px; padding-bottom: 40px; }
+#finalScreen { justify-content: flex-start; padding-top: 60px; padding-bottom: 80px; }
+
+/* StarTrotters Logo */
+.logo-container { margin-bottom: 20px; }
+.logo-icon { font-size: 4rem; margin-bottom: 5px; animation: ballBounce 1s ease-in-out infinite; }
+@keyframes ballBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+.logo-text { 
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3.5rem; 
+    letter-spacing: 4px;
+    background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-light) 50%, var(--accent-white) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
+    filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+}
+.logo-sub { 
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem; 
+    color: var(--primary-light); 
+    letter-spacing: 8px;
+    margin-bottom: 5px;
+}
+.logo-tagline {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    font-style: italic;
+    margin-bottom: 30px;
+}
+
+/* Court Background Pattern */
+.court-bg {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: 
+        repeating-linear-gradient(
+            90deg,
+            transparent,
+            transparent 48px,
+            rgba(139, 69, 19, 0.1) 48px,
+            rgba(139, 69, 19, 0.1) 50px
+        ),
+        linear-gradient(180deg, #1a1a2e 0%, #0f0f1a 100%);
+    z-index: -1;
+}
+
+/* Game Title */
+.game-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    color: var(--secondary);
+    letter-spacing: 3px;
+    margin-bottom: 25px;
+}
+
+.section-title { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 3px; }
+
+/* Difficulty/Tempo Selection */
+.selection-grid { display: flex; gap: 12px; margin-bottom: 25px; flex-wrap: wrap; justify-content: center; }
+.select-btn { 
+    padding: 15px 20px; 
+    background: var(--bg-card); 
+    border: 3px solid transparent; 
+    border-radius: 15px; 
+    cursor: pointer; 
+    transition: all 0.3s ease; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    gap: 5px;
+    min-width: 90px;
+}
+.select-btn:hover { border-color: var(--primary-light); transform: translateY(-2px); }
+.select-btn.selected { border-color: var(--secondary); background: rgba(255, 107, 0, 0.15); }
+.select-btn .icon { font-size: 1.8rem; }
+.select-btn .label { font-size: 0.8rem; font-weight: 700; color: var(--text-light); font-family: 'Nunito', sans-serif; }
+.select-btn .sublabel { font-size: 0.7rem; color: var(--text-muted); }
+
+/* Start Button */
+.start-btn { 
+    padding: 18px 50px; 
+    font-size: 1.3rem; 
+    font-weight: 800; 
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 4px;
+    background: linear-gradient(135deg, var(--secondary) 0%, var(--ball-dark) 100%); 
+    color: var(--text-light); 
+    border: none; 
+    border-radius: 50px; 
+    cursor: pointer; 
+    transition: all 0.3s ease; 
+    text-transform: uppercase;
+    box-shadow: 0 4px 20px rgba(255, 107, 0, 0.4);
+}
+.start-btn:hover { transform: scale(1.05); box-shadow: 0 8px 30px rgba(255, 107, 0, 0.5); }
+
+/* Streak Display */
+.streak-display { 
+    margin-top: 20px; 
+    padding: 10px 20px; 
+    background: rgba(255, 107, 0, 0.15); 
+    border: 2px solid rgba(255, 107, 0, 0.3);
+    border-radius: 30px; 
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+}
+.streak-fire { font-size: 1.2rem; }
+.streak-text { font-size: 0.9rem; font-weight: 700; color: var(--secondary); }
+
+/* Countdown */
+.countdown { font-size: 5rem; font-weight: 900; color: var(--secondary); animation: countPulse 0.5s ease-out; }
+.countdown-text { 
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem; 
+    letter-spacing: 6px;
+    color: var(--text-light);
+    margin-top: 10px;
+}
+@keyframes countPulse { 0% { transform: scale(1.3); opacity: 0.7; } 100% { transform: scale(1); opacity: 1; } }
+
+/* Game Header - Scoreboard Style */
+.game-header { 
+    width: 100%; 
+    max-width: 400px; 
+    margin-bottom: 15px;
+    background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
+    border: 3px solid #333;
+    border-radius: 15px;
+    padding: 15px;
+}
+.scoreboard-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.scoreboard-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+}
+.scoreboard-score {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    color: var(--secondary);
+    text-shadow: 0 0 20px rgba(255, 107, 0, 0.5);
+}
+.quarter-display { display: flex; justify-content: center; gap: 8px; margin-bottom: 10px; }
+.quarter-dot { 
+    width: 50px; 
+    height: 10px; 
+    border-radius: 5px; 
+    background: rgba(255,255,255,0.15); 
+    transition: all 0.3s ease; 
+}
+.quarter-dot.active { transform: scaleY(1.3); box-shadow: 0 0 10px currentColor; }
+.quarter-dot.q1 { background: var(--q1); } 
+.quarter-dot.q2 { background: var(--q2); } 
+.quarter-dot.q3 { background: var(--q3); } 
+.quarter-dot.q4 { background: var(--q4); }
+.quarter-dot.completed { opacity: 0.4; }
+.quarter-label { 
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem; 
+    letter-spacing: 3px;
+    margin-bottom: 5px; 
+}
+.quarter-label.q1 { color: var(--q1); } 
+.quarter-label.q2 { color: var(--q2); } 
+.quarter-label.q3 { color: var(--q3); } 
+.quarter-label.q4 { color: var(--q4); }
+.round-info { font-size: 0.9rem; color: var(--text-muted); }
+
+/* Message Area */
+.message-area { height: 50px; display: flex; align-items: center; justify-content: center; margin: 10px 0; }
+.message { 
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem; 
+    letter-spacing: 2px;
+    color: var(--text-light); 
+    animation: pulse 1s ease-in-out infinite; 
+}
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+.message.success { color: var(--success); animation: none; }
+.message.error { color: var(--danger); animation: none; }
+
+/* Basketball Court Grid */
+.court-container {
+    position: relative;
+    width: min(90vw, 340px);
+    height: min(90vw, 340px);
+    background: linear-gradient(135deg, #CD853F 0%, #A0522D 100%);
+    border-radius: 15px;
+    border: 4px solid #8B4513;
+    overflow: hidden;
+    box-shadow: 
+        inset 0 0 50px rgba(0,0,0,0.3),
+        0 10px 40px rgba(0,0,0,0.5);
+}
+
+/* Court Lines */
+.court-lines {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+}
+.court-lines::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: rgba(255,255,255,0.4);
+    transform: translateY(-50%);
+}
+.court-lines::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    bottom: 0;
+    width: 3px;
+    background: rgba(255,255,255,0.4);
+    transform: translateX(-50%);
+}
+.center-circle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 80px;
+    height: 80px;
+    border: 3px solid rgba(255,255,255,0.4);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Basketball Grid */
+.ball-grid {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 15px;
+    padding: 25px;
+    z-index: 1;
+}
+
+/* Basketball */
+.basketball {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: radial-gradient(ellipse at 30% 30%, #FF8C42 0%, #FF6B00 40%, #CC5500 100%);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 
+        inset -5px -5px 15px rgba(0,0,0,0.3),
+        inset 5px 5px 15px rgba(255,255,255,0.2),
+        0 5px 15px rgba(0,0,0,0.3);
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Basketball Lines */
+.basketball::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 5%;
+    right: 5%;
+    height: 3px;
+    background: rgba(0,0,0,0.4);
+    transform: translateY(-50%);
+    border-radius: 2px;
+}
+.basketball::after {
+    content: '';
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    bottom: 10%;
+    width: 3px;
+    background: rgba(0,0,0,0.4);
+    transform: translateX(-50%);
+    border-radius: 2px;
+}
+
+/* Ball States */
+.basketball.disabled { pointer-events: none; opacity: 0.6; }
+.basketball.lit {
+    transform: scale(1.1);
+    box-shadow: 
+        inset -5px -5px 15px rgba(0,0,0,0.3),
+        inset 5px 5px 15px rgba(255,255,255,0.2),
+        0 0 30px rgba(255, 107, 0, 0.8),
+        0 0 60px rgba(255, 107, 0, 0.5);
+    animation: ballPulse 0.3s ease;
+}
+@keyframes ballPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+    100% { transform: scale(1.1); }
+}
+.basketball.correct {
+    background: radial-gradient(ellipse at 30% 30%, #4ade80 0%, #22c55e 40%, #16a34a 100%);
+    box-shadow: 
+        inset -5px -5px 15px rgba(0,0,0,0.3),
+        inset 5px 5px 15px rgba(255,255,255,0.2),
+        0 0 20px rgba(34, 197, 94, 0.6);
+}
+.basketball.wrong {
+    background: radial-gradient(ellipse at 30% 30%, #f87171 0%, #ef4444 40%, #dc2626 100%);
+    animation: shake 0.4s ease;
+}
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-8px) rotate(-5deg); }
+    75% { transform: translateX(8px) rotate(5deg); }
+}
+
+/* Ball Number */
+.ball-number {
+    position: relative;
+    z-index: 1;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    color: rgba(0,0,0,0.3);
+    pointer-events: none;
+}
+
+/* Halftime Screen */
+.halftime-icon { font-size: 4rem; margin-bottom: 15px; }
+.halftime-title { 
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem; 
+    letter-spacing: 4px;
+    color: var(--secondary); 
+    margin-bottom: 10px; 
+}
+.halftime-score { font-size: 3rem; font-weight: 900; color: var(--text-light); margin-bottom: 20px; }
+.halftime-summary {
+    background: var(--bg-card);
+    border-radius: 15px;
+    padding: 20px 30px;
+    margin-bottom: 25px;
+}
+.summary-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.summary-row:last-child { border-bottom: none; }
+.summary-label { color: var(--text-muted); }
+.summary-value { font-weight: 700; color: var(--secondary); }
+.continue-btn {
+    padding: 16px 40px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 3px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: var(--text-light);
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.continue-btn:hover { transform: scale(1.05); }
+
+/* Final Screen */
+.trophy-icon { font-size: 5rem; margin-bottom: 15px; animation: trophyBounce 1s ease-in-out infinite; }
+@keyframes trophyBounce {
+    0%, 100% { transform: translateY(0) rotate(-5deg); }
+    50% { transform: translateY(-10px) rotate(5deg); }
+}
+.final-title { 
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.2rem;
+    letter-spacing: 4px;
+    background: linear-gradient(135deg, var(--secondary) 0%, #FFD700 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 5px;
+}
+.final-subtitle { color: var(--text-muted); margin-bottom: 25px; font-size: 1rem; }
+.final-score-display {
+    background: linear-gradient(135deg, var(--bg-card) 0%, #0f172a 100%);
+    border: 3px solid var(--secondary);
+    border-radius: 20px;
+    padding: 25px 40px;
+    margin-bottom: 25px;
+}
+.final-score-label { 
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem; 
+    letter-spacing: 3px;
+    color: var(--text-muted); 
+    margin-bottom: 5px; 
+}
+.final-score-value { 
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 4rem; 
+    color: var(--secondary);
+    text-shadow: 0 0 30px rgba(255, 107, 0, 0.5);
+}
+.final-best { color: var(--success); font-size: 1rem; margin-top: 5px; }
+
+/* Quarter Breakdown */
+.quarter-breakdown {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 25px;
+    width: 100%;
+    max-width: 350px;
+}
+.quarter-box {
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: 12px 8px;
+    text-align: center;
+}
+.quarter-box-label { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px; }
+.quarter-box-label.q1 { color: var(--q1); }
+.quarter-box-label.q2 { color: var(--q2); }
+.quarter-box-label.q3 { color: var(--q3); }
+.quarter-box-label.q4 { color: var(--q4); }
+.quarter-box-value { font-size: 1.3rem; font-weight: 900; color: var(--text-light); }
+
+/* Stats Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    width: 100%;
+    max-width: 350px;
+    margin-bottom: 30px;
+}
+.stat-box {
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: 15px;
+    text-align: center;
+}
+.stat-icon { font-size: 1.5rem; margin-bottom: 5px; }
+.stat-value { font-size: 1.4rem; font-weight: 900; color: var(--text-light); }
+.stat-label { font-size: 0.75rem; color: var(--text-muted); }
+
+/* Action Buttons */
+.action-buttons { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 280px; }
+.play-again-btn {
+    padding: 16px 40px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 3px;
+    background: linear-gradient(135deg, var(--secondary) 0%, var(--ball-dark) 100%);
+    color: var(--text-light);
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.play-again-btn:hover { transform: scale(1.05); box-shadow: 0 8px 30px rgba(255, 107, 0, 0.4); }
+.home-btn-final {
+    padding: 14px 40px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    background: transparent;
+    color: var(--text-muted);
+    border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 50px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+.home-btn-final:hover { border-color: var(--primary-light); color: var(--text-light); }
+
+/* Sweet Georgia Brown Badge */
+.rhythm-badge {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.7);
+    border: 2px solid var(--secondary);
+    border-radius: 30px;
+    padding: 8px 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 100;
+}
+.rhythm-badge-icon { font-size: 1.2rem; }
+.rhythm-badge-text { 
+    font-size: 0.75rem; 
+    color: var(--secondary);
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+@media (max-width: 380px) {
+    .logo-text { font-size: 2.8rem; }
+    .court-container { width: min(85vw, 300px); height: min(85vw, 300px); }
+    .ball-grid { padding: 20px; gap: 12px; }
+    .ball-number { font-size: 1.6rem; }
+    .quarter-breakdown { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body data-lang="en">
+<script>
+// Auth guard - redirect to play.html if not logged in (only on production)
+(function() {
+    if (window.location.hostname.includes('onrender.com')) {
+        var pin = sessionStorage.getItem('gostar-user-pin');
+        var code = sessionStorage.getItem('gostar-user-code');
+        var name = sessionStorage.getItem('gostar-user-name');
+        if (!pin && !(code && name)) {
+            window.location.href = '/play';
+        }
+    }
+})();
+</script>
+
+<div class="court-bg"></div>
+
+<div class="lang-toggle">
+    <button class="lang-btn active" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('es')">ES</button>
+</div>
+
+<!-- WELCOME SCREEN -->
+<div class="screen active" id="welcomeScreen">
+    <a href="#" onclick="logout(); return false;" class="logout-btn-fixed">
+        <span class="lang-en">Logout</span>
+        <span class="lang-es">Salir</span>
+    </a>
+    
+    <div class="logo-container">
+        <div class="logo-icon">🏀</div>
+        <div class="logo-text">STARTROTTERS</div>
+        <div class="logo-sub">COGNITIVE COURT</div>
+    </div>
+    
+    <div class="logo-tagline">
+        <span class="lang-en">"Train your mind like a Globetrotter trains their hands"</span>
+        <span class="lang-es">"Entrena tu mente como un Globetrotter entrena sus manos"</span>
+    </div>
+    
+    <div class="game-title">
+        <span class="lang-en">🏀 BALL HANDLING DRILL</span>
+        <span class="lang-es">🏀 EJERCICIO DE DRIBLING</span>
+    </div>
+    
+    <div class="section-title">
+        <span class="lang-en">Select Tempo</span>
+        <span class="lang-es">Selecciona Ritmo</span>
+    </div>
+    <div class="selection-grid">
+        <div class="select-btn" data-tempo="warmup" onclick="selectTempo('warmup')">
+            <span class="icon">🚶</span>
+            <span class="label">Warm-Up</span>
+            <span class="sublabel">90 BPM</span>
+        </div>
+        <div class="select-btn selected" data-tempo="showtime" onclick="selectTempo('showtime')">
+            <span class="icon">⭐</span>
+            <span class="label">Showtime</span>
+            <span class="sublabel">127 BPM</span>
+        </div>
+        <div class="select-btn" data-tempo="allstar" onclick="selectTempo('allstar')">
+            <span class="icon">🔥</span>
+            <span class="label">All-Star</span>
+            <span class="sublabel">150 BPM</span>
+        </div>
+    </div>
+    
+    <div class="section-title">
+        <span class="lang-en">Select Difficulty</span>
+        <span class="lang-es">Selecciona Dificultad</span>
+    </div>
+    <div class="selection-grid">
+        <div class="select-btn" data-diff="rookie" onclick="selectDifficulty('rookie')">
+            <span class="icon">🌟</span>
+            <span class="label"><span class="lang-en">Rookie</span><span class="lang-es">Novato</span></span>
+        </div>
+        <div class="select-btn selected" data-diff="starter" onclick="selectDifficulty('starter')">
+            <span class="icon">🏀</span>
+            <span class="label"><span class="lang-en">Starter</span><span class="lang-es">Titular</span></span>
+        </div>
+        <div class="select-btn" data-diff="mvp" onclick="selectDifficulty('mvp')">
+            <span class="icon">🏆</span>
+            <span class="label">MVP</span>
+        </div>
+    </div>
+    
+    <button class="start-btn" onclick="startGame()">
+        <span class="lang-en">TIP OFF!</span>
+        <span class="lang-es">¡EMPEZAR!</span>
+    </button>
+    
+    <div class="streak-display" id="streakDisplay" style="display: none;">
+        <span class="streak-fire">🔥</span>
+        <span class="streak-text"><span id="streakCount">0</span> <span class="lang-en">day streak!</span><span class="lang-es">días seguidos!</span></span>
+    </div>
+</div>
+
+<!-- COUNTDOWN SCREEN -->
+<div class="screen" id="countdownScreen">
+    <div class="logo-icon" style="animation: none;">🏀</div>
+    <div class="countdown" id="countdownNum">3</div>
+    <div class="countdown-text">
+        <span class="lang-en">GET READY!</span>
+        <span class="lang-es">¡PREPÁRATE!</span>
+    </div>
+</div>
+
+<!-- GAME SCREEN -->
+<div class="screen" id="gameScreen">
+    <div class="game-header">
+        <div class="scoreboard-top">
+            <div>
+                <div class="scoreboard-label">
+                    <span class="lang-en">SCORE</span>
+                    <span class="lang-es">PUNTOS</span>
+                </div>
+            </div>
+            <div class="scoreboard-score" id="scoreDisplay">0</div>
+        </div>
+        <div class="quarter-display" id="quarterDots">
+            <div class="quarter-dot q1"></div>
+            <div class="quarter-dot q2"></div>
+            <div class="quarter-dot q3"></div>
+            <div class="quarter-dot q4"></div>
+        </div>
+        <div class="quarter-label q1" id="quarterLabel">Q1</div>
+        <div class="round-info" id="roundInfo">
+            <span class="lang-en">Round</span>
+            <span class="lang-es">Ronda</span>
+            <span id="roundNum">1</span> / <span id="roundTotal">4</span>
+        </div>
+    </div>
+    
+    <div class="message-area">
+        <div class="message" id="gameMessage">
+            <span class="lang-en">Watch the pattern...</span>
+            <span class="lang-es">Observa el patrón...</span>
+        </div>
+    </div>
+    
+    <div class="court-container">
+        <div class="court-lines">
+            <div class="center-circle"></div>
+        </div>
+        <div class="ball-grid" id="ballGrid">
+            <div class="basketball" data-index="0" onclick="handleBallClick(0)">
+                <span class="ball-number">1</span>
+            </div>
+            <div class="basketball" data-index="1" onclick="handleBallClick(1)">
+                <span class="ball-number">2</span>
+            </div>
+            <div class="basketball" data-index="2" onclick="handleBallClick(2)">
+                <span class="ball-number">3</span>
+            </div>
+            <div class="basketball" data-index="3" onclick="handleBallClick(3)">
+                <span class="ball-number">4</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- HALFTIME SCREEN -->
+<div class="screen" id="halftimeScreen">
+    <div class="halftime-icon">🏀</div>
+    <div class="halftime-title">
+        <span class="lang-en">HALFTIME!</span>
+        <span class="lang-es">¡MEDIO TIEMPO!</span>
+    </div>
+    <div class="halftime-score" id="halftimeScore">0</div>
+    
+    <div class="halftime-summary">
+        <div class="summary-row">
+            <span class="summary-label">Q1</span>
+            <span class="summary-value" id="q1Score">0</span>
+        </div>
+        <div class="summary-row">
+            <span class="summary-label">Q2</span>
+            <span class="summary-value" id="q2Score">0</span>
+        </div>
+        <div class="summary-row">
+            <span class="summary-label"><span class="lang-en">Accuracy</span><span class="lang-es">Precisión</span></span>
+            <span class="summary-value" id="halftimeAccuracy">0%</span>
+        </div>
+    </div>
+    
+    <button class="continue-btn" onclick="continueGame()">
+        <span class="lang-en">2ND HALF →</span>
+        <span class="lang-es">2DA MITAD →</span>
+    </button>
+</div>
+
+<!-- FINAL SCREEN -->
+<div class="screen" id="finalScreen">
+    <div class="trophy-icon">🏆</div>
+    <div class="final-title">
+        <span class="lang-en">GAME COMPLETE!</span>
+        <span class="lang-es">¡JUEGO COMPLETADO!</span>
+    </div>
+    <div class="final-subtitle">
+        <span class="lang-en">StarTrotters - Ball Handling Drill</span>
+        <span class="lang-es">StarTrotters - Ejercicio de Dribling</span>
+    </div>
+    
+    <div class="final-score-display">
+        <div class="final-score-label">
+            <span class="lang-en">FINAL SCORE</span>
+            <span class="lang-es">PUNTUACIÓN FINAL</span>
+        </div>
+        <div class="final-score-value" id="finalScore">0</div>
+        <div class="final-best" id="finalBest" style="display: none;">
+            <span class="lang-en">🎉 NEW PERSONAL BEST!</span>
+            <span class="lang-es">🎉 ¡NUEVO RÉCORD PERSONAL!</span>
+        </div>
+    </div>
+    
+    <div class="quarter-breakdown">
+        <div class="quarter-box">
+            <div class="quarter-box-label q1">Q1</div>
+            <div class="quarter-box-value" id="finalQ1">0</div>
+        </div>
+        <div class="quarter-box">
+            <div class="quarter-box-label q2">Q2</div>
+            <div class="quarter-box-value" id="finalQ2">0</div>
+        </div>
+        <div class="quarter-box">
+            <div class="quarter-box-label q3">Q3</div>
+            <div class="quarter-box-value" id="finalQ3">0</div>
+        </div>
+        <div class="quarter-box">
+            <div class="quarter-box-label q4">Q4</div>
+            <div class="quarter-box-value" id="finalQ4">0</div>
+        </div>
+    </div>
+    
+    <div class="stats-grid">
+        <div class="stat-box">
+            <div class="stat-icon">🎯</div>
+            <div class="stat-value" id="finalAccuracy">0%</div>
+            <div class="stat-label">
+                <span class="lang-en">Accuracy</span>
+                <span class="lang-es">Precisión</span>
+            </div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-icon">📈</div>
+            <div class="stat-value" id="finalLongest">0</div>
+            <div class="stat-label">
+                <span class="lang-en">Longest Sequence</span>
+                <span class="lang-es">Secuencia Más Larga</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="action-buttons">
+        <button class="play-again-btn" onclick="restartGame()">
+            <span class="lang-en">PLAY AGAIN</span>
+            <span class="lang-es">JUGAR DE NUEVO</span>
+        </button>
+        <a href="/game" class="home-btn-final">
+            <span class="lang-en">🏠 Game Hub</span>
+            <span class="lang-es">🏠 Centro de Juegos</span>
+        </a>
+    </div>
+</div>
+
+<!-- Rhythm Badge -->
+<div class="rhythm-badge" id="rhythmBadge" style="display: none;">
+    <span class="rhythm-badge-icon">🎵</span>
+    <span class="rhythm-badge-text">SHOWTIME RHYTHM • 127 BPM</span>
+</div>
+
+<script>
+// Audio Context
+var audioCtx = null;
+function getAudioContext() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    return audioCtx;
+}
+
+// Dribble Sound - Basketball bounce
+function playDribbleSound(index) {
+    try {
+        var ctx = getAudioContext();
+        if (ctx.state === 'suspended') ctx.resume();
+        
+        // Base frequencies for each ball position
+        var freqs = [150, 180, 210, 250];
+        var freq = freqs[index % 4];
+        
+        // Impact sound (thump)
+        var osc = ctx.createOscillator();
+        var gain = ctx.createGain();
+        var filter = ctx.createBiquadFilter();
+        
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq * 2, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(freq, ctx.currentTime + 0.05);
+        
+        filter.type = 'lowpass';
+        filter.frequency.value = 400;
+        filter.Q.value = 1;
+        
+        osc.connect(filter);
+        filter.connect(gain);
+        gain.connect(ctx.destination);
+        
+        gain.gain.setValueAtTime(0.5, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+        
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.2);
+        
+        // Bounce resonance
+        var osc2 = ctx.createOscillator();
+        var gain2 = ctx.createGain();
+        osc2.type = 'triangle';
+        osc2.frequency.value = freq * 0.5;
+        osc2.connect(gain2);
+        gain2.connect(ctx.destination);
+        gain2.gain.setValueAtTime(0.2, ctx.currentTime);
+        gain2.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+        osc2.start(ctx.currentTime);
+        osc2.stop(ctx.currentTime + 0.15);
+    } catch(e) {}
+}
+
+// Whistle Sound
+function playWhistleSound() {
+    try {
+        var ctx = getAudioContext();
+        if (ctx.state === 'suspended') ctx.resume();
+        
+        var osc = ctx.createOscillator();
+        var gain = ctx.createGain();
+        
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(2800, ctx.currentTime);
+        osc.frequency.setValueAtTime(2400, ctx.currentTime + 0.1);
+        osc.frequency.setValueAtTime(2800, ctx.currentTime + 0.2);
+        
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        
+        gain.gain.setValueAtTime(0.2, ctx.currentTime);
+        gain.gain.setValueAtTime(0.2, ctx.currentTime + 0.25);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.35);
+        
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.4);
+    } catch(e) {}
+}
+
+// Swish Sound (success)
+function playSwishSound() {
+    try {
+        var ctx = getAudioContext();
+        if (ctx.state === 'suspended') ctx.resume();
+        
+        // White noise for swish
+        var bufferSize = ctx.sampleRate * 0.3;
+        var buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+        var data = buffer.getChannelData(0);
+        for (var i = 0; i < bufferSize; i++) {
+            data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.1));
+        }
+        
+        var noise = ctx.createBufferSource();
+        noise.buffer = buffer;
+        
+        var filter = ctx.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.frequency.value = 3000;
+        filter.Q.value = 0.5;
+        
+        var gain = ctx.createGain();
+        gain.gain.setValueAtTime(0.3, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.25);
+        
+        noise.connect(filter);
+        filter.connect(gain);
+        gain.connect(ctx.destination);
+        
+        noise.start(ctx.currentTime);
+        
+        // Success chime
+        var notes = [523.25, 659.25, 783.99];
+        notes.forEach(function(freq, i) {
+            var osc = ctx.createOscillator();
+            var g = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.value = freq;
+            osc.connect(g);
+            g.connect(ctx.destination);
+            g.gain.setValueAtTime(0.15, ctx.currentTime + i * 0.08);
+            g.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + i * 0.08 + 0.2);
+            osc.start(ctx.currentTime + i * 0.08);
+            osc.stop(ctx.currentTime + i * 0.08 + 0.25);
+        });
+    } catch(e) {}
+}
+
+// Buzzer Sound (error)
+function playBuzzerSound() {
+    try {
+        var ctx = getAudioContext();
+        if (ctx.state === 'suspended') ctx.resume();
+        
+        var osc = ctx.createOscillator();
+        var gain = ctx.createGain();
+        
+        osc.type = 'sawtooth';
+        osc.frequency.value = 150;
+        
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        
+        gain.gain.setValueAtTime(0.25, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+        
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.35);
+    } catch(e) {}
+}
+
+// Countdown beep
+function playCountdownBeep() {
+    try {
+        var ctx = getAudioContext();
+        if (ctx.state === 'suspended') ctx.resume();
+        var osc = ctx.createOscillator();
+        var gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = 440;
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        gain.gain.setValueAtTime(0.3, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.15);
+    } catch(e) {}
+}
+
+// Language
+var currentLang = localStorage.getItem('gostar-lang') || 'en';
+document.body.setAttribute('data-lang', currentLang);
+
+function setLang(lang) {
+    currentLang = lang;
+    localStorage.setItem('gostar-lang', lang);
+    document.body.setAttribute('data-lang', lang);
+    document.querySelectorAll('.lang-btn').forEach(function(btn) {
+        btn.classList.toggle('active', btn.textContent.trim() === lang.toUpperCase());
+    });
+}
+
+// Tempo Config (BPM-based timing)
+var tempoConfig = {
+    warmup: { bpm: 90, noteLength: 667, pauseAfter: 400, label: 'WARM-UP RHYTHM • 90 BPM' },
+    showtime: { bpm: 127, noteLength: 472, pauseAfter: 280, label: 'SHOWTIME RHYTHM • 127 BPM' },
+    allstar: { bpm: 150, noteLength: 400, pauseAfter: 200, label: 'ALL-STAR RHYTHM • 150 BPM' }
+};
+
+// Difficulty Config
+var difficultyConfig = {
+    rookie: { startLength: 2, roundsPerQuarter: 3 },
+    starter: { startLength: 3, roundsPerQuarter: 4 },
+    mvp: { startLength: 4, roundsPerQuarter: 5 }
+};
+
+// Game State
+var selectedTempo = 'showtime';
+var selectedDifficulty = 'starter';
+var currentQuarter = 1;
+var currentRound = 1;
+var score = 0;
+var quarterScores = [0, 0, 0, 0];
+var sequence = [];
+var playerIndex = 0;
+var isShowingSequence = false;
+var correctTotal = 0;
+var attemptsTotal = 0;
+var longestSequence = 0;
+var balls = [];
+
+function selectTempo(tempo) {
+    selectedTempo = tempo;
+    document.querySelectorAll('[data-tempo]').forEach(function(btn) {
+        btn.classList.toggle('selected', btn.dataset.tempo === tempo);
+    });
+}
+
+function selectDifficulty(diff) {
+    selectedDifficulty = diff;
+    document.querySelectorAll('[data-diff]').forEach(function(btn) {
+        btn.classList.toggle('selected', btn.dataset.diff === diff);
+    });
+}
+
+function showScreen(screenId) {
+    document.querySelectorAll('.screen').forEach(function(s) {
+        s.classList.remove('active');
+    });
+    document.getElementById(screenId).classList.add('active');
+}
+
+function startGame() {
+    currentQuarter = 1;
+    currentRound = 1;
+    score = 0;
+    quarterScores = [0, 0, 0, 0];
+    correctTotal = 0;
+    attemptsTotal = 0;
+    longestSequence = 0;
+    
+    // Show rhythm badge
+    var badge = document.getElementById('rhythmBadge');
+    badge.querySelector('.rhythm-badge-text').textContent = tempoConfig[selectedTempo].label;
+    badge.style.display = 'flex';
+    
+    showScreen('countdownScreen');
+    runCountdown();
+}
+
+function runCountdown() {
+    var count = 3;
+    var countEl = document.getElementById('countdownNum');
+    countEl.textContent = count;
+    
+    var interval = setInterval(function() {
+        count--;
+        if (count > 0) {
+            countEl.textContent = count;
+            countEl.style.animation = 'none';
+            countEl.offsetHeight;
+            countEl.style.animation = 'countPulse 0.5s ease-out';
+            playCountdownBeep();
+        } else {
+            clearInterval(interval);
+            playWhistleSound();
+            showScreen('gameScreen');
+            initGame();
+        }
+    }, 1000);
+}
+
+function initGame() {
+    balls = document.querySelectorAll('.basketball');
+    updateQuarterDisplay();
+    updateScore();
+    startRound();
+}
+
+function updateQuarterDisplay() {
+    var dots = document.querySelectorAll('.quarter-dot');
+    dots.forEach(function(dot, i) {
+        dot.classList.remove('active', 'completed');
+        if (i < currentQuarter - 1) {
+            dot.classList.add('completed');
+        } else if (i === currentQuarter - 1) {
+            dot.classList.add('active');
+        }
+    });
+    
+    var label = document.getElementById('quarterLabel');
+    label.textContent = 'Q' + currentQuarter;
+    label.className = 'quarter-label q' + currentQuarter;
+}
+
+function updateRoundInfo() {
+    document.getElementById('roundNum').textContent = currentRound;
+    document.getElementById('roundTotal').textContent = difficultyConfig[selectedDifficulty].roundsPerQuarter;
+}
+
+function updateScore() {
+    document.getElementById('scoreDisplay').textContent = score;
+}
+
+function setMessage(text, type) {
+    var msg = document.getElementById('gameMessage');
+    msg.textContent = text;
+    msg.className = 'message' + (type ? ' ' + type : '');
+}
+
+function disableBalls(disabled) {
+    balls.forEach(function(ball) {
+        if (disabled) {
+            ball.classList.add('disabled');
+        } else {
+            ball.classList.remove('disabled');
+        }
+    });
+}
+
+function startRound() {
+    updateRoundInfo();
+    playerIndex = 0;
+    
+    // Reset ball states
+    balls.forEach(function(ball) {
+        ball.classList.remove('lit', 'correct', 'wrong');
+    });
+    
+    // Generate sequence
+    var length = difficultyConfig[selectedDifficulty].startLength + Math.floor((currentRound - 1) / 2);
+    sequence = [];
+    for (var i = 0; i < length; i++) {
+        sequence.push(Math.floor(Math.random() * 4));
+    }
+    
+    if (currentLang === 'es') {
+        setMessage('Observa el patrón...');
+    } else {
+        setMessage('Watch the pattern...');
+    }
+    
+    disableBalls(true);
+    
+    setTimeout(function() {
+        showSequence();
+    }, 800);
+}
+
+function showSequence() {
+    isShowingSequence = true;
+    var tempo = tempoConfig[selectedTempo];
+    var i = 0;
+    
+    function showNext() {
+        if (i >= sequence.length) {
+            isShowingSequence = false;
+            if (currentLang === 'es') {
+                setMessage('¡Tu turno! Repite el patrón');
+            } else {
+                setMessage('Your turn! Repeat the pattern');
+            }
+            disableBalls(false);
+            return;
+        }
+        
+        var ballIndex = sequence[i];
+        var ball = balls[ballIndex];
+        
+        ball.classList.add('lit');
+        playDribbleSound(ballIndex);
+        
+        setTimeout(function() {
+            ball.classList.remove('lit');
+            i++;
+            setTimeout(showNext, tempo.pauseAfter);
+        }, tempo.noteLength);
+    }
+    
+    showNext();
+}
+
+function handleBallClick(index) {
+    if (isShowingSequence) return;
+    
+    var ball = balls[index];
+    
+    // Visual feedback
+    ball.classList.add('lit');
+    playDribbleSound(index);
+    
+    setTimeout(function() {
+        ball.classList.remove('lit');
+    }, 150);
+    
+    // Check if correct
+    if (index === sequence[playerIndex]) {
+        ball.classList.add('correct');
+        setTimeout(function() {
+            ball.classList.remove('correct');
+        }, 200);
+        
+        playerIndex++;
+        
+        if (playerIndex >= sequence.length) {
+            // Round complete!
+            correctTotal++;
+            attemptsTotal++;
+            
+            if (sequence.length > longestSequence) {
+                longestSequence = sequence.length;
+            }
+            
+            var points = sequence.length * 15;
+            score += points;
+            quarterScores[currentQuarter - 1] += points;
+            
+            disableBalls(true);
+            updateScore();
+            playSwishSound();
+            
+            if (currentLang === 'es') {
+                setMessage('¡Swish! +' + points, 'success');
+            } else {
+                setMessage('Swish! +' + points, 'success');
+            }
+            
+            setTimeout(function() {
+                nextRound(true);
+            }, 1500);
+        }
+    } else {
+        // Wrong!
+        attemptsTotal++;
+        ball.classList.add('wrong');
+        playBuzzerSound();
+        
+        if (currentLang === 'es') {
+            setMessage('¡Falta!', 'error');
+        } else {
+            setMessage('Turnover!', 'error');
+        }
+        
+        setTimeout(function() {
+            ball.classList.remove('wrong');
+        }, 400);
+        
+        // Partial points
+        var partialPoints = Math.max(0, playerIndex * 8);
+        if (partialPoints > 0) {
+            score += partialPoints;
+            quarterScores[currentQuarter - 1] += partialPoints;
+            updateScore();
+        }
+        
+        setTimeout(function() {
+            nextRound(false);
+        }, 1000);
+    }
+}
+
+function nextRound(wasCorrect) {
+    currentRound++;
+    
+    if (currentRound > difficultyConfig[selectedDifficulty].roundsPerQuarter) {
+        if (currentQuarter === 2) {
+            showHalftime();
+            return;
+        }
+        if (currentQuarter === 4) {
+            endGame();
+            return;
+        }
+        advanceQuarter();
+        return;
+    }
+    
+    setTimeout(function() {
+        startRound();
+    }, 500);
+}
+
+function advanceQuarter() {
+    currentQuarter++;
+    currentRound = 1;
+    updateQuarterDisplay();
+    
+    if (currentLang === 'es') {
+        setMessage('Q' + currentQuarter + ' - ¡Vamos!');
+    } else {
+        setMessage('Q' + currentQuarter + ' - Let\'s go!');
+    }
+    
+    setTimeout(function() {
+        startRound();
+    }, 1500);
+}
+
+function showHalftime() {
+    document.getElementById('halftimeScore').textContent = score;
+    document.getElementById('q1Score').textContent = quarterScores[0];
+    document.getElementById('q2Score').textContent = quarterScores[1];
+    
+    var accuracy = attemptsTotal > 0 ? Math.round((correctTotal / attemptsTotal) * 100) : 0;
+    document.getElementById('halftimeAccuracy').textContent = accuracy + '%';
+    
+    document.getElementById('rhythmBadge').style.display = 'none';
+    showScreen('halftimeScreen');
+}
+
+function continueGame() {
+    currentQuarter = 3;
+    currentRound = 1;
+    
+    document.getElementById('rhythmBadge').style.display = 'flex';
+    showScreen('gameScreen');
+    updateQuarterDisplay();
+    
+    if (currentLang === 'es') {
+        setMessage('Q3 - ¡Segunda mitad!');
+    } else {
+        setMessage('Q3 - Second half!');
+    }
+    
+    setTimeout(function() {
+        startRound();
+    }, 1500);
+}
+
+function endGame() {
+    document.getElementById('rhythmBadge').style.display = 'none';
+    
+    document.getElementById('finalScore').textContent = score;
+    document.getElementById('finalQ1').textContent = quarterScores[0];
+    document.getElementById('finalQ2').textContent = quarterScores[1];
+    document.getElementById('finalQ3').textContent = quarterScores[2];
+    document.getElementById('finalQ4').textContent = quarterScores[3];
+    
+    var accuracy = attemptsTotal > 0 ? Math.round((correctTotal / attemptsTotal) * 100) : 0;
+    document.getElementById('finalAccuracy').textContent = accuracy + '%';
+    document.getElementById('finalLongest').textContent = longestSequence;
+    
+    // Check for personal best
+    var best = parseInt(localStorage.getItem('gostar-best-startrotters') || '0');
+    if (score > best) {
+        localStorage.setItem('gostar-best-startrotters', score);
+        document.getElementById('finalBest').style.display = 'block';
+    } else {
+        document.getElementById('finalBest').style.display = 'none';
+    }
+    
+    showScreen('finalScreen');
+    recordSession();
+}
+
+function recordSession() {
+    var pin = sessionStorage.getItem('gostar-user-pin');
+    var accessCode = sessionStorage.getItem('gostar-user-code');
+    var username = sessionStorage.getItem('gostar-user-name');
+    
+    if (!pin && !(accessCode && username)) return;
+    
+    var payload = {
+        game: 'startrotters',
+        score: score
+    };
+    
+    if (pin) {
+        payload.pin = pin;
+    } else {
+        payload.accessCode = accessCode;
+        payload.username = username;
+    }
+    
+    fetch('/api/game/session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    }).catch(function() {});
+}
+
+function restartGame() {
+    showScreen('welcomeScreen');
+}
+
+function logout() {
+    sessionStorage.removeItem('gostar-user-pin');
+    sessionStorage.removeItem('gostar-user-code');
+    sessionStorage.removeItem('gostar-user-name');
+    window.location.href = '/play';
+}
+
+// Load streak on init
+function loadStreak() {
+    var pin = sessionStorage.getItem('gostar-user-pin');
+    var accessCode = sessionStorage.getItem('gostar-user-code');
+    var username = sessionStorage.getItem('gostar-user-name');
+    
+    if (pin || (accessCode && username)) {
+        // Could fetch streak from server here
+    }
+}
+
+// Initialize
+document.querySelectorAll('.lang-btn').forEach(function(btn) {
+    btn.classList.toggle('active', btn.textContent.trim() === currentLang.toUpperCase());
+});
+loadStreak();
+</script>
+</body>
+</html>
