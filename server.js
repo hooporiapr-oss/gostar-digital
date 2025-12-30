@@ -757,6 +757,10 @@ app.get('/game', function(req, res) {
     res.sendFile(path.join(__dirname, 'game.html'));
 });
 
+app.get('/trailtrotter', function(req, res) {
+    res.sendFile(path.join(__dirname, 'trailtrotter.html'));
+});
+
 app.get('/go-nogo-trail', function(req, res) {
     res.sendFile(path.join(__dirname, 'go-nogo-trail.html'));
 });
