@@ -9,7 +9,6 @@
 *{margin:0;padding:0;box-sizing:border-box}
 html{height:100%;overflow-y:scroll}
 :root{
---court-wood:#CD853F;--court-dark:#8B4513;--court-lines:rgba(255,255,255,0.5);
 --ball-orange:#FF6B00;--ball-dark:#CC5500;
 --primary:#1E3A8A;--primary-light:#3B82F6;
 --secondary:#FF6B00;--secondary-light:#FF8C00;
@@ -21,7 +20,7 @@ html{height:100%;overflow-y:scroll}
 body{font-family:'Nunito',sans-serif;background:var(--bg-dark);color:var(--text-light);min-height:100%}
 body[data-lang="es"] .lang-en{display:none!important}
 body[data-lang="en"] .lang-es{display:none!important}
-.court-bg{position:fixed;top:0;left:0;right:0;bottom:0;background:linear-gradient(90deg,transparent 49%,rgba(139,69,19,0.03) 49%,rgba(139,69,19,0.03) 51%,transparent 51%),linear-gradient(180deg,var(--bg-dark) 0%,#0d0d18 100%);background-size:20px 100%,100% 100%;z-index:-1}
+.court-bg{position:fixed;top:0;left:0;right:0;bottom:0;background:linear-gradient(180deg,var(--bg-dark) 0%,#0d0d18 100%);z-index:-1}
 .top-controls{position:fixed;top:0;left:0;right:0;padding:15px 20px;display:flex;justify-content:space-between;align-items:center;z-index:100;background:linear-gradient(180deg,rgba(10,10,18,0.95) 0%,transparent 100%)}
 .back-link{padding:8px 16px;background:rgba(255,255,255,0.05);border:2px solid rgba(255,255,255,0.1);border-radius:20px;color:var(--text-muted);text-decoration:none;font-weight:600;font-size:0.85rem;transition:all 0.3s ease}
 .back-link:hover{border-color:var(--secondary);color:var(--secondary)}
@@ -30,11 +29,9 @@ body[data-lang="en"] .lang-es{display:none!important}
 .lang-btn.active{background:var(--secondary);color:var(--text-light)}
 .screen{display:none;flex-direction:column;align-items:center;min-height:100vh;width:100%;padding:80px 20px 40px 20px;text-align:center}
 .screen.active{display:flex}
-.pistol-logo{font-family:'Bebas Neue',sans-serif;font-size:3.2rem;letter-spacing:6px;background:linear-gradient(135deg,var(--secondary) 0%,var(--gold) 50%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:5px;animation:shimmer 3s ease-in-out infinite}
-@keyframes shimmer{0%,100%{filter:brightness(1)}50%{filter:brightness(1.2)}}
+.pistol-logo{font-family:'Bebas Neue',sans-serif;font-size:3.2rem;letter-spacing:6px;background:linear-gradient(135deg,var(--secondary) 0%,var(--gold) 50%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:5px}
 .pistol-subtitle{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:8px;color:var(--text-muted)}
-.pistol-icon{font-size:4rem;margin:20px 0;animation:ballBounce 1.5s ease-in-out infinite}
-@keyframes ballBounce{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-15px) rotate(10deg)}}
+.pistol-icon{font-size:4rem;margin:20px 0}
 .pistol-quote{max-width:320px;padding:20px;background:rgba(255,107,0,0.05);border-left:4px solid var(--secondary);border-radius:0 15px 15px 0;margin-bottom:30px}
 .pistol-quote-text{font-style:italic;color:var(--text-light);font-size:1rem;line-height:1.5;margin-bottom:10px}
 .pistol-quote-attr{font-size:0.85rem;color:var(--secondary);font-weight:700}
@@ -63,15 +60,14 @@ body[data-lang="en"] .lang-es{display:none!important}
 .rhythm-label{font-size:0.8rem;font-weight:700;color:var(--text-light)}
 .rhythm-bpm{font-size:0.7rem;color:var(--text-muted)}
 .start-btn{padding:18px 50px;font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:5px;background:linear-gradient(135deg,var(--secondary) 0%,var(--ball-dark) 100%);color:var(--text-light);border:none;border-radius:50px;cursor:pointer;transition:all 0.3s ease;box-shadow:0 5px 25px rgba(255,107,0,0.4)}
-.start-btn:hover{transform:scale(1.05);box-shadow:0 8px 35px rgba(255,107,0,0.5)}
+.start-btn:hover{transform:scale(1.05)}
 .stats-summary{margin-top:25px;padding:15px 25px;background:var(--bg-card);border-radius:15px;display:flex;gap:30px}
 .stat-item{text-align:center}
 .stat-value{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--secondary)}
 .stat-label{font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px}
 #countdownScreen{justify-content:center}
 .countdown-tier{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:4px;color:var(--text-muted);margin-bottom:10px}
-.countdown-number{font-family:'Bebas Neue',sans-serif;font-size:8rem;color:var(--secondary);text-shadow:0 0 50px rgba(255,107,0,0.5);animation:countPulse 0.5s ease-out}
-@keyframes countPulse{0%{transform:scale(1.3);opacity:0.5}100%{transform:scale(1);opacity:1}}
+.countdown-number{font-family:'Bebas Neue',sans-serif;font-size:8rem;color:var(--secondary);text-shadow:0 0 50px rgba(255,107,0,0.5)}
 .countdown-text{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:6px;color:var(--text-muted)}
 #gameScreen{justify-content:flex-start;padding-top:70px}
 .scoreboard{width:100%;max-width:380px;background:linear-gradient(180deg,#0a0a0a 0%,#050505 100%);border:3px solid #222;border-radius:15px;padding:15px 20px;margin-bottom:15px}
@@ -80,33 +76,38 @@ body[data-lang="en"] .lang-es{display:none!important}
 .scoreboard-score{font-family:'Bebas Neue',sans-serif;font-size:2.8rem;color:var(--secondary);text-shadow:0 0 20px rgba(255,107,0,0.4)}
 .quarter-display{display:flex;justify-content:center;gap:8px;margin-bottom:10px}
 .quarter-dot{width:45px;height:8px;border-radius:4px;background:rgba(255,255,255,0.1);transition:all 0.3s ease}
-.quarter-dot.active{transform:scaleY(1.4);box-shadow:0 0 10px currentColor}
-.quarter-dot.completed{opacity:0.4}
+.quarter-dot.active{transform:scaleY(1.4)}
 .quarter-dot.q1{background:var(--q1)}.quarter-dot.q2{background:var(--q2)}.quarter-dot.q3{background:var(--q3)}.quarter-dot.q4{background:var(--q4)}
 .quarter-info{display:flex;justify-content:center;gap:20px;font-size:0.85rem;color:var(--text-muted)}
 .quarter-label{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px}
 .quarter-label.q1{color:var(--q1)}.quarter-label.q2{color:var(--q2)}.quarter-label.q3{color:var(--q3)}.quarter-label.q4{color:var(--q4)}
 .message-area{height:45px;display:flex;align-items:center;justify-content:center;margin-bottom:10px}
 .game-message{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:2px;color:var(--text-light)}
-.game-message.watching{animation:pulse 1.2s ease-in-out infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
 .game-message.success{color:var(--success)}
 .game-message.error{color:var(--danger)}
 .court{position:relative;width:min(92vw,360px);height:min(92vw,360px);background:linear-gradient(145deg,#C4813A 0%,#A66B2A 50%,#8B5A1B 100%);border-radius:15px;border:4px solid #6B4513;overflow:hidden;box-shadow:inset 0 0 60px rgba(0,0,0,0.4),0 15px 50px rgba(0,0,0,0.6)}
 .court-markings{position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none}
-.court-center-line{position:absolute;top:0;left:50%;width:3px;height:100%;background:var(--court-lines);transform:translateX(-50%)}
-.court-center-circle{position:absolute;top:50%;left:50%;width:70px;height:70px;border:3px solid var(--court-lines);border-radius:50%;transform:translate(-50%,-50%)}
+.court-center-line{position:absolute;top:0;left:50%;width:3px;height:100%;background:rgba(255,255,255,0.5);transform:translateX(-50%)}
+.court-center-circle{position:absolute;top:50%;left:50%;width:70px;height:70px;border:3px solid rgba(255,255,255,0.5);border-radius:50%;transform:translate(-50%,-50%)}
 .trail-canvas{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:5}
 .star-container{position:absolute;top:0;left:0;right:0;bottom:0;z-index:10}
 
-/* STARS - NO DEFAULT FILL - COLOR SET VIA JAVASCRIPT */
-.star-node{position:absolute;width:52px;height:52px;transform:translate(-50%,-50%);cursor:pointer;transition:transform 0.15s ease;-webkit-tap-highlight-color:transparent}
-.star-node svg{width:100%;height:100%;filter:drop-shadow(0 3px 6px rgba(0,0,0,0.5))}
-.star-node.disabled{pointer-events:none}
-.star-node.lit{transform:translate(-50%,-50%) scale(1.3)}
-.star-node.lit svg{filter:drop-shadow(0 0 20px rgba(255,255,255,0.8)) drop-shadow(0 0 40px rgba(255,255,255,0.5))}
-@keyframes shake{0%,100%{transform:translate(-50%,-50%) rotate(0deg)}25%{transform:translate(-50%,-50%) rotate(-15deg)}75%{transform:translate(-50%,-50%) rotate(15deg)}}
-.star-node.error{animation:shake 0.3s ease}
+/* STAR USING CSS CLIP-PATH - NO SVG */
+.game-star{
+    position:absolute;
+    width:50px;
+    height:50px;
+    transform:translate(-50%,-50%);
+    cursor:pointer;
+    transition:transform 0.2s ease, filter 0.2s ease;
+    clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
+    filter:drop-shadow(0 3px 5px rgba(0,0,0,0.5));
+}
+.game-star.disabled{pointer-events:none}
+.game-star.lit{transform:translate(-50%,-50%) scale(1.35);filter:drop-shadow(0 0 20px currentColor) drop-shadow(0 0 40px currentColor)}
+.game-star.completed{background:#00D9A5 !important;filter:drop-shadow(0 0 15px #00D9A5)}
+.game-star.error{background:#FF4757 !important;filter:drop-shadow(0 0 15px #FF4757);animation:starShake 0.3s ease}
+@keyframes starShake{0%,100%{transform:translate(-50%,-50%) rotate(0deg)}25%{transform:translate(-50%,-50%) rotate(-15deg)}75%{transform:translate(-50%,-50%) rotate(15deg)}}
 
 #halftimeScreen{justify-content:center}
 .halftime-icon{font-size:4rem;margin-bottom:15px}
@@ -120,8 +121,7 @@ body[data-lang="en"] .lang-es{display:none!important}
 .continue-btn{padding:16px 45px;font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:4px;background:linear-gradient(135deg,var(--primary) 0%,var(--primary-light) 100%);color:var(--text-light);border:none;border-radius:50px;cursor:pointer;transition:all 0.3s ease}
 .continue-btn:hover{transform:scale(1.05)}
 #finalScreen{justify-content:flex-start;padding-top:60px}
-.final-trophy{font-size:4.5rem;margin-bottom:15px;animation:trophyFloat 2s ease-in-out infinite}
-@keyframes trophyFloat{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-10px) rotate(3deg)}}
+.final-trophy{font-size:4.5rem;margin-bottom:15px}
 .final-title{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:4px;background:linear-gradient(135deg,var(--secondary) 0%,var(--gold) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:5px}
 .final-tier-badge{font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:3px;color:var(--text-muted);margin-bottom:20px}
 .final-score-box{background:var(--bg-card);border:3px solid var(--secondary);border-radius:20px;padding:25px 45px;margin-bottom:20px}
@@ -148,49 +148,40 @@ body[data-lang="en"] .lang-es{display:none!important}
 .final-stat-label{font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px}
 .action-buttons{display:flex;flex-direction:column;gap:12px;width:100%;max-width:280px}
 .play-again-btn{padding:16px 40px;font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:3px;background:linear-gradient(135deg,var(--secondary) 0%,var(--ball-dark) 100%);color:var(--text-light);border:none;border-radius:50px;cursor:pointer;transition:all 0.3s ease;box-shadow:0 5px 25px rgba(255,107,0,0.3)}
-.play-again-btn:hover{transform:scale(1.05);box-shadow:0 8px 35px rgba(255,107,0,0.4)}
+.play-again-btn:hover{transform:scale(1.05)}
 .home-link{padding:14px 40px;font-family:'Nunito',sans-serif;font-size:0.95rem;font-weight:700;background:transparent;color:var(--text-muted);border:2px solid rgba(255,255,255,0.15);border-radius:50px;text-decoration:none;transition:all 0.3s ease;display:inline-block}
 .home-link:hover{border-color:var(--primary-light);color:var(--text-light)}
 .rhythm-badge{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.85);border:2px solid var(--secondary);border-radius:25px;padding:8px 18px;display:none;align-items:center;gap:8px;z-index:100}
 .rhythm-badge.visible{display:flex}
-.rhythm-badge-icon{font-size:1rem}
 .rhythm-badge-text{font-size:0.7rem;color:var(--secondary);font-weight:700;letter-spacing:1px}
-.help-btn{position:fixed;bottom:20px;right:20px;width:45px;height:45px;border-radius:50%;background:var(--bg-card);border:2px solid rgba(255,255,255,0.1);color:var(--text-muted);font-size:1.2rem;cursor:pointer;transition:all 0.3s ease;z-index:99;display:flex;align-items:center;justify-content:center}
-.help-btn:hover{border-color:var(--secondary);color:var(--secondary)}
+.help-btn{position:fixed;bottom:20px;right:20px;width:45px;height:45px;border-radius:50%;background:var(--bg-card);border:2px solid rgba(255,255,255,0.1);color:var(--text-muted);font-size:1.2rem;cursor:pointer;z-index:99;display:flex;align-items:center;justify-content:center}
 .tutorial-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.95);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
 .tutorial-overlay.active{display:flex}
-.tutorial-container{width:100%;max-width:360px;background:var(--bg-card);border-radius:25px;padding:30px 25px;text-align:center;border:2px solid rgba(255,107,0,0.3);box-shadow:0 20px 60px rgba(0,0,0,0.5);position:relative}
+.tutorial-container{width:100%;max-width:360px;background:var(--bg-card);border-radius:25px;padding:30px 25px;text-align:center;border:2px solid rgba(255,107,0,0.3);position:relative}
 .tutorial-lang-toggle{position:absolute;top:15px;right:15px;display:flex;gap:5px}
-.tutorial-lang-btn{padding:5px 10px;border:2px solid var(--secondary);background:transparent;color:var(--secondary);border-radius:10px;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.7rem;cursor:pointer;transition:all 0.3s ease}
-.tutorial-lang-btn:hover{background:rgba(255,107,0,0.2)}
+.tutorial-lang-btn{padding:5px 10px;border:2px solid var(--secondary);background:transparent;color:var(--secondary);border-radius:10px;font-weight:700;font-size:0.7rem;cursor:pointer}
 body[data-lang="en"] .tutorial-lang-btn[data-lang="en"]{background:var(--secondary);color:var(--text-light)}
 body[data-lang="es"] .tutorial-lang-btn[data-lang="es"]{background:var(--secondary);color:var(--text-light)}
 .tutorial-progress{display:flex;justify-content:center;gap:8px;margin-bottom:25px}
-.tutorial-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.2);transition:all 0.3s ease}
+.tutorial-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.2)}
 .tutorial-dot.active{background:var(--secondary);transform:scale(1.2)}
 .tutorial-dot.completed{background:var(--success)}
 .tutorial-slide{display:none}
-.tutorial-slide.active{display:block;animation:fadeIn 0.4s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.tutorial-slide.active{display:block}
 .tutorial-icon{font-size:4rem;margin-bottom:20px;display:block}
 .tutorial-title{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:3px;color:var(--secondary);margin-bottom:15px}
 .tutorial-text{font-size:1rem;color:var(--text-light);line-height:1.6;margin-bottom:20px}
 .tutorial-demo{width:200px;height:150px;margin:0 auto 25px auto;background:linear-gradient(145deg,#C4813A 0%,#8B5A1B 100%);border-radius:15px;position:relative;overflow:hidden;border:3px solid #6B4513}
-.demo-star{position:absolute;width:35px;height:35px;transform:translate(-50%,-50%)}
-.demo-star svg{width:100%;height:100%;transition:all 0.3s ease}
-.demo-star.lit svg{filter:drop-shadow(0 0 15px rgba(255,255,255,0.8));transform:scale(1.2)}
+.demo-star{position:absolute;width:35px;height:35px;transform:translate(-50%,-50%);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.demo-star.lit{transform:translate(-50%,-50%) scale(1.2);filter:drop-shadow(0 0 15px white)}
 .tutorial-tip{background:rgba(255,107,0,0.1);border-radius:12px;padding:12px 15px;margin-bottom:20px}
-.tutorial-tip-icon{font-size:1.2rem;margin-right:8px}
 .tutorial-tip-text{font-size:0.85rem;color:var(--secondary)}
 .tutorial-buttons{display:flex;gap:12px;justify-content:center}
-.tutorial-btn{padding:12px 25px;border-radius:25px;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.9rem;cursor:pointer;transition:all 0.3s ease}
+.tutorial-btn{padding:12px 25px;border-radius:25px;font-weight:700;font-size:0.9rem;cursor:pointer}
 .tutorial-btn-skip{background:transparent;border:2px solid rgba(255,255,255,0.2);color:var(--text-muted)}
-.tutorial-btn-skip:hover{border-color:rgba(255,255,255,0.4);color:var(--text-light)}
 .tutorial-btn-next{background:linear-gradient(135deg,var(--secondary) 0%,var(--ball-dark) 100%);border:none;color:var(--text-light)}
-.tutorial-btn-next:hover{transform:scale(1.05)}
 .tutorial-btn-start{background:linear-gradient(135deg,var(--success) 0%,#00B389 100%);border:none;color:var(--bg-dark);padding:14px 35px;font-size:1rem}
-.tutorial-btn-start:hover{transform:scale(1.05)}
-@media(max-width:380px){.pistol-logo{font-size:2.6rem}.court{width:min(88vw,320px);height:min(88vw,320px)}.star-node{width:45px;height:45px}.quarter-breakdown{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:380px){.pistol-logo{font-size:2.6rem}.court{width:min(88vw,320px);height:min(88vw,320px)}.game-star{width:42px;height:42px}}
 </style>
 </head>
 <body data-lang="en">
@@ -208,155 +199,56 @@ body[data-lang="es"] .tutorial-lang-btn[data-lang="es"]{background:var(--seconda
 <div class="tier-section"><div class="section-label"><span class="lang-en">SELECT YOUR LEVEL</span><span class="lang-es">ESCOGE TU NIVEL</span></div><div class="tier-grid" id="tierGrid"></div></div>
 <div class="rhythm-section"><div class="section-label"><span class="lang-en">RHYTHM</span><span class="lang-es">RITMO</span></div><div class="rhythm-grid"><div class="rhythm-btn" data-rhythm="steady" onclick="selectRhythm('steady')"><span class="rhythm-icon">🚶</span><span class="rhythm-label"><span class="lang-en">Steady</span><span class="lang-es">Suave</span></span><span class="rhythm-bpm">90 BPM</span></div><div class="rhythm-btn selected" data-rhythm="showtime" onclick="selectRhythm('showtime')"><span class="rhythm-icon">⭐</span><span class="rhythm-label">Showtime</span><span class="rhythm-bpm">127 BPM</span></div><div class="rhythm-btn" data-rhythm="pistol" onclick="selectRhythm('pistol')"><span class="rhythm-icon">🔥</span><span class="rhythm-label">Pistol</span><span class="rhythm-bpm">150 BPM</span></div></div></div>
 <button class="start-btn" onclick="startGame()"><span class="lang-en">TIP OFF</span><span class="lang-es">¡DALE!</span></button>
-<div class="stats-summary" id="statsSummary"><div class="stat-item"><div class="stat-value" id="totalGames">0</div><div class="stat-label"><span class="lang-en">Games</span><span class="lang-es">Juegos</span></div></div><div class="stat-item"><div class="stat-value" id="bestScore">0</div><div class="stat-label"><span class="lang-en">Best</span><span class="lang-es">Mejor</span></div></div><div class="stat-item"><div class="stat-value" id="currentStreak">0</div><div class="stat-label"><span class="lang-en">Streak</span><span class="lang-es">Racha</span></div></div></div>
+<div class="stats-summary"><div class="stat-item"><div class="stat-value" id="totalGames">0</div><div class="stat-label"><span class="lang-en">Games</span><span class="lang-es">Juegos</span></div></div><div class="stat-item"><div class="stat-value" id="bestScore">0</div><div class="stat-label"><span class="lang-en">Best</span><span class="lang-es">Mejor</span></div></div><div class="stat-item"><div class="stat-value" id="currentStreak">0</div><div class="stat-label"><span class="lang-en">Streak</span><span class="lang-es">Racha</span></div></div></div>
 </div>
 
 <div class="screen" id="countdownScreen"><div class="countdown-tier" id="countdownTier">ROOKIE</div><div class="pistol-icon" style="animation:none;font-size:3rem;">🏀</div><div class="countdown-number" id="countdownNum">3</div><div class="countdown-text"><span class="lang-en">GET READY</span><span class="lang-es">¡PREPÁRATE!</span></div></div>
 
 <div class="screen" id="gameScreen">
-<div class="scoreboard"><div class="scoreboard-main"><div class="scoreboard-tier" id="gameTier">ROOKIE</div><div class="scoreboard-score" id="scoreDisplay">0</div></div><div class="quarter-display" id="quarterDots"><div class="quarter-dot q1"></div><div class="quarter-dot q2"></div><div class="quarter-dot q3"></div><div class="quarter-dot q4"></div></div><div class="quarter-info"><span class="quarter-label q1" id="quarterLabel">Q1</span><span id="roundInfo"><span class="lang-en">Round</span><span class="lang-es">Ronda</span> <span id="roundNum">1</span>/<span id="roundTotal">4</span></span></div></div>
-<div class="message-area"><div class="game-message watching" id="gameMessage"><span class="lang-en">Watch the trail...</span><span class="lang-es">Mira el camino...</span></div></div>
+<div class="scoreboard"><div class="scoreboard-main"><div class="scoreboard-tier" id="gameTier">ROOKIE</div><div class="scoreboard-score" id="scoreDisplay">0</div></div><div class="quarter-display"><div class="quarter-dot q1"></div><div class="quarter-dot q2"></div><div class="quarter-dot q3"></div><div class="quarter-dot q4"></div></div><div class="quarter-info"><span class="quarter-label q1" id="quarterLabel">Q1</span><span><span class="lang-en">Round</span><span class="lang-es">Ronda</span> <span id="roundNum">1</span>/<span id="roundTotal">4</span></span></div></div>
+<div class="message-area"><div class="game-message" id="gameMessage"><span class="lang-en">Watch the trail...</span><span class="lang-es">Mira el camino...</span></div></div>
 <div class="court" id="court"><div class="court-markings"><div class="court-center-line"></div><div class="court-center-circle"></div></div><canvas class="trail-canvas" id="trailCanvas"></canvas><div class="star-container" id="starContainer"></div></div>
 </div>
 
-<div class="screen" id="halftimeScreen"><div class="halftime-icon">🏀</div><div class="halftime-title"><span class="lang-en">HALFTIME</span><span class="lang-es">MEDIO TIEMPO</span></div><div class="halftime-score" id="halftimeScore">0</div><div class="halftime-stats"><div class="halftime-row"><span class="halftime-label">Q1</span><span class="halftime-value" id="htQ1">0</span></div><div class="halftime-row"><span class="halftime-label">Q2</span><span class="halftime-value" id="htQ2">0</span></div><div class="halftime-row"><span class="halftime-label"><span class="lang-en">Accuracy</span><span class="lang-es">Precisión</span></span><span class="halftime-value" id="htAccuracy">0%</span></div></div><button class="continue-btn" onclick="continueToSecondHalf()"><span class="lang-en">2ND HALF →</span><span class="lang-es">¡PA' LA SEGUNDA! →</span></button></div>
+<div class="screen" id="halftimeScreen"><div class="halftime-icon">🏀</div><div class="halftime-title"><span class="lang-en">HALFTIME</span><span class="lang-es">MEDIO TIEMPO</span></div><div class="halftime-score" id="halftimeScore">0</div><div class="halftime-stats"><div class="halftime-row"><span class="halftime-label">Q1</span><span class="halftime-value" id="htQ1">0</span></div><div class="halftime-row"><span class="halftime-label">Q2</span><span class="halftime-value" id="htQ2">0</span></div><div class="halftime-row"><span class="halftime-label"><span class="lang-en">Accuracy</span><span class="lang-es">Precisión</span></span><span class="halftime-value" id="htAccuracy">0%</span></div></div><button class="continue-btn" onclick="continueGame()"><span class="lang-en">2ND HALF →</span><span class="lang-es">¡PA' LA SEGUNDA! →</span></button></div>
 
 <div class="screen" id="finalScreen">
 <div class="final-trophy" id="finalTrophy">🏆</div><div class="final-title"><span class="lang-en">GAME COMPLETE</span><span class="lang-es">¡JUEGO COMPLETO!</span></div><div class="final-tier-badge" id="finalTierBadge">ROOKIE</div>
 <div class="final-score-box"><div class="final-score-label"><span class="lang-en">FINAL SCORE</span><span class="lang-es">PUNTUACIÓN FINAL</span></div><div class="final-score-value" id="finalScore">0</div><div class="final-best-badge" id="finalBestBadge" style="display:none;"><span class="lang-en">🎉 NEW BEST!</span><span class="lang-es">🎉 ¡NUEVO RÉCORD!</span></div></div>
-<div class="tier-progress-box" id="tierProgressBox"><div class="tier-progress-title"><span class="lang-en">Progress to Next Level</span><span class="lang-es">Progreso al Próximo Nivel</span></div><div class="tier-progress-bar-lg"><div class="tier-progress-fill-lg" id="tierProgressFill" style="width:0%;"></div></div><div class="tier-progress-info"><span class="tier-progress-current" id="tierProgressCurrent">0 / 3</span><span class="tier-progress-goal" id="tierProgressGoal">Unlock: JV</span></div><div class="tier-unlock-msg" id="tierUnlockMsg" style="display:none;"><span class="lang-en">🎉 NEW LEVEL UNLOCKED!</span><span class="lang-es">🎉 ¡SUBISTE DE NIVEL!</span></div></div>
+<div class="tier-progress-box" id="tierProgressBox"><div class="tier-progress-title"><span class="lang-en">Progress to Next Level</span><span class="lang-es">Progreso al Próximo Nivel</span></div><div class="tier-progress-bar-lg"><div class="tier-progress-fill-lg" id="tierProgressFill"></div></div><div class="tier-progress-info"><span class="tier-progress-current" id="tierProgressCurrent">0 / 3</span><span class="tier-progress-goal" id="tierProgressGoal">Unlock: JV</span></div><div class="tier-unlock-msg" id="tierUnlockMsg" style="display:none;"><span class="lang-en">🎉 NEW LEVEL UNLOCKED!</span><span class="lang-es">🎉 ¡SUBISTE DE NIVEL!</span></div></div>
 <div class="quarter-breakdown"><div class="quarter-box"><div class="quarter-box-label q1">Q1</div><div class="quarter-box-value" id="finalQ1">0</div></div><div class="quarter-box"><div class="quarter-box-label q2">Q2</div><div class="quarter-box-value" id="finalQ2">0</div></div><div class="quarter-box"><div class="quarter-box-label q3">Q3</div><div class="quarter-box-value" id="finalQ3">0</div></div><div class="quarter-box"><div class="quarter-box-label q4">Q4</div><div class="quarter-box-value" id="finalQ4">0</div></div></div>
 <div class="final-stats-grid"><div class="final-stat-box"><div class="final-stat-icon">🎯</div><div class="final-stat-value" id="finalAccuracy">0%</div><div class="final-stat-label"><span class="lang-en">Accuracy</span><span class="lang-es">Precisión</span></div></div><div class="final-stat-box"><div class="final-stat-icon">⭐</div><div class="final-stat-value" id="finalLongest">0</div><div class="final-stat-label"><span class="lang-en">Longest Trail</span><span class="lang-es">Camino Más Largo</span></div></div></div>
 <div class="action-buttons"><button class="play-again-btn" onclick="playAgain()"><span class="lang-en">PLAY AGAIN</span><span class="lang-es">JUGAR OTRA VEZ</span></button><a href="#" onclick="logout();return false;" class="home-link"><span class="lang-en">🚪 Logout</span><span class="lang-es">🚪 Salir</span></a></div>
 </div>
 
-<div class="rhythm-badge" id="rhythmBadge"><span class="rhythm-badge-icon">🎵</span><span class="rhythm-badge-text" id="rhythmBadgeText">SHOWTIME • 127 BPM</span></div>
-<button class="help-btn" id="helpBtn" onclick="showTutorial()">?</button>
+<div class="rhythm-badge" id="rhythmBadge"><span>🎵</span><span class="rhythm-badge-text" id="rhythmBadgeText">SHOWTIME • 127 BPM</span></div>
+<button class="help-btn" onclick="showTutorial()">?</button>
 
 <div class="tutorial-overlay" id="tutorialOverlay">
 <div class="tutorial-container">
 <div class="tutorial-lang-toggle"><button class="tutorial-lang-btn" onclick="setLang('en')" data-lang="en">EN</button><button class="tutorial-lang-btn" onclick="setLang('es')" data-lang="es">ES</button></div>
-<div class="tutorial-progress"><div class="tutorial-dot active" data-slide="0"></div><div class="tutorial-dot" data-slide="1"></div><div class="tutorial-dot" data-slide="2"></div><div class="tutorial-dot" data-slide="3"></div></div>
-<div class="tutorial-slide active" data-slide="0"><span class="tutorial-icon">🏀</span><h2 class="tutorial-title"><span class="lang-en">WELCOME TO GOTROTTERS</span><span class="lang-es">BIENVENIDO A GOTROTTERS</span></h2><p class="tutorial-text"><span class="lang-en">Train your visual-spatial memory like Pistol Pete trained his legendary handles. Master 8 levels on your path to greatness.</span><span class="lang-es">Entrena tu memoria como Pistol Pete entrenó su dribling legendario. Domina los 8 niveles pa' llegar a la grandeza.</span></p><div class="tutorial-buttons"><button class="tutorial-btn tutorial-btn-skip" onclick="closeTutorial()"><span class="lang-en">Skip</span><span class="lang-es">Saltar</span></button><button class="tutorial-btn tutorial-btn-next" onclick="nextSlide()"><span class="lang-en">Next →</span><span class="lang-es">Siguiente →</span></button></div></div>
-<div class="tutorial-slide" data-slide="1"><h2 class="tutorial-title"><span class="lang-en">STEP 1: WATCH</span><span class="lang-es">PASO 1: MIRA</span></h2><div class="tutorial-demo" id="demoWatch"><div class="demo-star" id="demoStar1" style="left:30%;top:30%;"><svg viewBox="0 0 100 100"><polygon style="fill:#FF6B6B" points="50,5 61,40 98,40 68,62 79,97 50,75 21,97 32,62 2,40 39,40"/></svg></div><div class="demo-star" id="demoStar2" style="left:70%;top:40%;"><svg viewBox="0 0 100 100"><polygon style="fill:#4ECDC4" points="50,5 61,40 98,40 68,62 79,97 50,75 21,97 32,62 2,40 39,40"/></svg></div><div class="demo-star" id="demoStar3" style="left:50%;top:75%;"><svg viewBox="0 0 100 100"><polygon style="fill:#FFEAA7" points="50,5 61,40 98,40 68,62 79,97 50,75 21,97 32,62 2,40 39,40"/></svg></div></div><p class="tutorial-text"><span class="lang-en">Stars will light up one by one. Watch carefully and remember the order!</span><span class="lang-es">Las estrellas se prenden una por una. ¡Fíjate bien y recuerda el orden!</span></p><div class="tutorial-buttons"><button class="tutorial-btn tutorial-btn-skip" onclick="prevSlide()"><span class="lang-en">← Back</span><span class="lang-es">← Atrás</span></button><button class="tutorial-btn tutorial-btn-next" onclick="nextSlide()"><span class="lang-en">Next →</span><span class="lang-es">Siguiente →</span></button></div></div>
-<div class="tutorial-slide" data-slide="2"><h2 class="tutorial-title"><span class="lang-en">STEP 2: TAP</span><span class="lang-es">PASO 2: TOCA</span></h2><div class="tutorial-demo" id="demoTap"><div class="demo-star" style="left:30%;top:30%;"><svg viewBox="0 0 100 100"><polygon style="fill:#00D9A5" points="50,5 61,40 98,40 68,62 79,97 50,75 21,97 32,62 2,40 39,40"/></svg></div><div class="demo-star" style="left:70%;top:40%;"><svg viewBox="0 0 100 100"><polygon style="fill:#00D9A5" points="50,5 61,40 98,40 68,62 79,97 50,75 21,97 32,62 2,40 39,40"/></svg></div><div class="demo-star pulse" id="demoTapStar3" style="left:50%;top:75%;"><svg viewBox="0 0 100 100"><polygon style="fill:#FFEAA7" points="50,5 61,40 98,40 68,62 79,97 50,75 21,97 32,62 2,40 39,40"/></svg></div><div id="demoHand" style="position:absolute;left:50%;top:80%;font-size:1.8rem;opacity:0;transition:opacity 0.3s;">👆</div></div><p class="tutorial-text"><span class="lang-en">Tap the stars in the same order. The trail connects as you go. Complete the path to score!</span><span class="lang-es">Toca las estrellas en el mismo orden. El camino se conecta mientras avanzas. ¡Completa la ruta pa' anotar!</span></p><div class="tutorial-buttons"><button class="tutorial-btn tutorial-btn-skip" onclick="prevSlide()"><span class="lang-en">← Back</span><span class="lang-es">← Atrás</span></button><button class="tutorial-btn tutorial-btn-next" onclick="nextSlide()"><span class="lang-en">Next →</span><span class="lang-es">Siguiente →</span></button></div></div>
-<div class="tutorial-slide" data-slide="3"><span class="tutorial-icon">🏆</span><h2 class="tutorial-title"><span class="lang-en">EARN YOUR WAY UP</span><span class="lang-es">SUBE DE NIVEL</span></h2><p class="tutorial-text"><span class="lang-en">Complete games to unlock higher levels. From Rookie to Pistol — 8 tiers of mastery await. No shortcuts. Just dedication.</span><span class="lang-es">Completa juegos pa' desbloquear niveles más altos. De Novato a Pistol — 8 niveles de maestría te esperan. Sin atajos. Solo dedicación.</span></p><div class="tutorial-tip"><span class="tutorial-tip-icon">💡</span><span class="tutorial-tip-text"><span class="lang-en">Tip: Start with "Showtime" rhythm — it's the sweet spot!</span><span class="lang-es">Tip: Empieza con el ritmo "Showtime" — ¡es el punto perfecto!</span></span></div><div class="tutorial-buttons"><button class="tutorial-btn tutorial-btn-start" onclick="closeTutorial()"><span class="lang-en">LET'S GO! 🏀</span><span class="lang-es">¡PA'LANTE! 🏀</span></button></div></div>
+<div class="tutorial-progress"><div class="tutorial-dot active"></div><div class="tutorial-dot"></div><div class="tutorial-dot"></div><div class="tutorial-dot"></div></div>
+<div class="tutorial-slide active" id="slide0"><span class="tutorial-icon">🏀</span><h2 class="tutorial-title"><span class="lang-en">WELCOME TO GOTROTTERS</span><span class="lang-es">BIENVENIDO A GOTROTTERS</span></h2><p class="tutorial-text"><span class="lang-en">Train your visual-spatial memory like Pistol Pete trained his legendary handles.</span><span class="lang-es">Entrena tu memoria como Pistol Pete entrenó su dribling legendario.</span></p><div class="tutorial-buttons"><button class="tutorial-btn tutorial-btn-skip" onclick="closeTutorial()"><span class="lang-en">Skip</span><span class="lang-es">Saltar</span></button><button class="tutorial-btn tutorial-btn-next" onclick="nextSlide()"><span class="lang-en">Next →</span><span class="lang-es">Siguiente →</span></button></div></div>
+<div class="tutorial-slide" id="slide1"><h2 class="tutorial-title"><span class="lang-en">STEP 1: WATCH</span><span class="lang-es">PASO 1: MIRA</span></h2><div class="tutorial-demo"><div class="demo-star" id="demoStar1" style="left:30%;top:30%;background:#FF6B6B;"></div><div class="demo-star" id="demoStar2" style="left:70%;top:40%;background:#4ECDC4;"></div><div class="demo-star" id="demoStar3" style="left:50%;top:75%;background:#FFEAA7;"></div></div><p class="tutorial-text"><span class="lang-en">Stars light up one by one. Remember the order!</span><span class="lang-es">Las estrellas se prenden una por una. ¡Recuerda el orden!</span></p><div class="tutorial-buttons"><button class="tutorial-btn tutorial-btn-skip" onclick="prevSlide()"><span class="lang-en">← Back</span><span class="lang-es">← Atrás</span></button><button class="tutorial-btn tutorial-btn-next" onclick="nextSlide()"><span class="lang-en">Next →</span><span class="lang-es">Siguiente →</span></button></div></div>
+<div class="tutorial-slide" id="slide2"><h2 class="tutorial-title"><span class="lang-en">STEP 2: TAP</span><span class="lang-es">PASO 2: TOCA</span></h2><div class="tutorial-demo"><div class="demo-star" style="left:30%;top:30%;background:#00D9A5;"></div><div class="demo-star" style="left:70%;top:40%;background:#00D9A5;"></div><div class="demo-star" style="left:50%;top:75%;background:#FFEAA7;"></div></div><p class="tutorial-text"><span class="lang-en">Tap stars in the same order to score!</span><span class="lang-es">¡Toca las estrellas en el mismo orden pa' anotar!</span></p><div class="tutorial-buttons"><button class="tutorial-btn tutorial-btn-skip" onclick="prevSlide()"><span class="lang-en">← Back</span><span class="lang-es">← Atrás</span></button><button class="tutorial-btn tutorial-btn-next" onclick="nextSlide()"><span class="lang-en">Next →</span><span class="lang-es">Siguiente →</span></button></div></div>
+<div class="tutorial-slide" id="slide3"><span class="tutorial-icon">🏆</span><h2 class="tutorial-title"><span class="lang-en">EARN YOUR WAY UP</span><span class="lang-es">SUBE DE NIVEL</span></h2><p class="tutorial-text"><span class="lang-en">Complete games to unlock 8 tiers of mastery. No shortcuts!</span><span class="lang-es">Completa juegos pa' desbloquear 8 niveles. ¡Sin atajos!</span></p><div class="tutorial-tip"><span>💡 </span><span class="tutorial-tip-text"><span class="lang-en">Tip: Start with Showtime rhythm!</span><span class="lang-es">Tip: ¡Empieza con ritmo Showtime!</span></span></div><div class="tutorial-buttons"><button class="tutorial-btn tutorial-btn-start" onclick="closeTutorial()"><span class="lang-en">LET'S GO! 🏀</span><span class="lang-es">¡PA'LANTE! 🏀</span></button></div></div>
 </div>
 </div>
 
 <script>
-// ========================================
-// VIBRANT STAR COLORS - 8 DIFFERENT COLORS
-// ========================================
-var COLORS = [
+// =============================================
+// 8 VIBRANT COLORS FOR STARS
+// =============================================
+var STAR_COLORS = [
     '#FF6B6B', // Coral Red
     '#4ECDC4', // Teal
     '#45B7D1', // Sky Blue
     '#96CEB4', // Sage Green
     '#FFEAA7', // Soft Yellow
-    '#DDA0DD', // Plum Purple
+    '#DDA0DD', // Plum
     '#FF8C42', // Orange
-    '#A8E6CF'  // Mint Green
+    '#A8E6CF'  // Mint
 ];
-
-// Audio
-var audioCtx = null;
-function getAudioContext() {
-    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    return audioCtx;
-}
-var starFreqs = [261.63, 293.66, 329.63, 349.23, 392, 440, 493.88, 523.25];
-
-function playStarSound(i) {
-    try {
-        var ctx = getAudioContext();
-        if (ctx.state === 'suspended') ctx.resume();
-        var f = starFreqs[i % 8];
-        var o = ctx.createOscillator();
-        var g = ctx.createGain();
-        o.type = 'sine';
-        o.frequency.value = f;
-        o.connect(g);
-        g.connect(ctx.destination);
-        g.gain.setValueAtTime(0.35, ctx.currentTime);
-        g.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.25);
-        o.start(ctx.currentTime);
-        o.stop(ctx.currentTime + 0.3);
-    } catch (e) {}
-}
-
-function playSuccessSound() {
-    try {
-        var ctx = getAudioContext();
-        if (ctx.state === 'suspended') ctx.resume();
-        [523.25, 659.25, 783.99, 1046.5].forEach(function(f, i) {
-            var o = ctx.createOscillator();
-            var g = ctx.createGain();
-            o.type = 'sine';
-            o.frequency.value = f;
-            o.connect(g);
-            g.connect(ctx.destination);
-            var t = ctx.currentTime + i * 0.08;
-            g.gain.setValueAtTime(0.25, t);
-            g.gain.exponentialRampToValueAtTime(0.01, t + 0.2);
-            o.start(t);
-            o.stop(t + 0.25);
-        });
-    } catch (e) {}
-}
-
-function playErrorSound() {
-    try {
-        var ctx = getAudioContext();
-        if (ctx.state === 'suspended') ctx.resume();
-        var o = ctx.createOscillator();
-        var g = ctx.createGain();
-        o.type = 'sawtooth';
-        o.frequency.value = 150;
-        o.connect(g);
-        g.connect(ctx.destination);
-        g.gain.setValueAtTime(0.2, ctx.currentTime);
-        g.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.25);
-        o.start(ctx.currentTime);
-        o.stop(ctx.currentTime + 0.3);
-    } catch (e) {}
-}
-
-function playCountdownBeep() {
-    try {
-        var ctx = getAudioContext();
-        if (ctx.state === 'suspended') ctx.resume();
-        var o = ctx.createOscillator();
-        var g = ctx.createGain();
-        o.type = 'sine';
-        o.frequency.value = 440;
-        o.connect(g);
-        g.connect(ctx.destination);
-        g.gain.setValueAtTime(0.25, ctx.currentTime);
-        g.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
-        o.start(ctx.currentTime);
-        o.stop(ctx.currentTime + 0.15);
-    } catch (e) {}
-}
-
-function playWhistle() {
-    try {
-        var ctx = getAudioContext();
-        if (ctx.state === 'suspended') ctx.resume();
-        var o = ctx.createOscillator();
-        var g = ctx.createGain();
-        o.type = 'sine';
-        o.frequency.setValueAtTime(2500, ctx.currentTime);
-        o.frequency.setValueAtTime(2000, ctx.currentTime + 0.1);
-        o.frequency.setValueAtTime(2500, ctx.currentTime + 0.2);
-        o.connect(g);
-        g.connect(ctx.destination);
-        g.gain.setValueAtTime(0.15, ctx.currentTime);
-        g.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.35);
-        o.start(ctx.currentTime);
-        o.stop(ctx.currentTime + 0.4);
-    } catch (e) {}
-}
 
 // Language
 var currentLang = localStorage.getItem('gostar-lang') || 'en';
@@ -371,229 +263,190 @@ function setLang(l) {
     });
 }
 
-// Tier Config
-var tierConfig = {
-    rookie: {name: 'ROOKIE', icon: '🌟', stars: 4, seqMin: 3, seqMax: 4, roundsPerQ: 3, unlockReq: 0, nextTier: 'jv'},
-    jv: {name: 'JV', icon: '🏀', stars: 5, seqMin: 4, seqMax: 5, roundsPerQ: 4, unlockReq: 3, nextTier: 'varsity'},
-    varsity: {name: 'VARSITY', icon: '🎽', stars: 6, seqMin: 5, seqMax: 6, roundsPerQ: 4, unlockReq: 5, nextTier: 'college'},
-    college: {name: 'COLLEGE', icon: '🎓', stars: 7, seqMin: 6, seqMax: 7, roundsPerQ: 5, unlockReq: 7, nextTier: 'pro'},
-    pro: {name: 'PRO', icon: '💰', stars: 8, seqMin: 7, seqMax: 8, roundsPerQ: 5, unlockReq: 10, nextTier: 'allstar'},
-    allstar: {name: 'ALL-STAR', icon: '⭐', stars: 9, seqMin: 8, seqMax: 9, roundsPerQ: 5, unlockReq: 15, nextTier: 'legend'},
-    legend: {name: 'LEGEND', icon: '🏆', stars: 10, seqMin: 9, seqMax: 10, roundsPerQ: 6, unlockReq: 20, nextTier: 'pistol'},
-    pistol: {name: 'PISTOL', icon: '🔥', stars: 12, seqMin: 10, seqMax: 12, roundsPerQ: 6, unlockReq: 25, nextTier: null}
-};
-var tierOrder = ['rookie', 'jv', 'varsity', 'college', 'pro', 'allstar', 'legend', 'pistol'];
+// Audio
+var audioCtx = null;
+function getAudio() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    return audioCtx;
+}
+function playBeep(freq, dur) {
+    try {
+        var ctx = getAudio();
+        if (ctx.state === 'suspended') ctx.resume();
+        var o = ctx.createOscillator(), g = ctx.createGain();
+        o.frequency.value = freq;
+        o.connect(g);
+        g.connect(ctx.destination);
+        g.gain.setValueAtTime(0.3, ctx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + dur);
+        o.start(ctx.currentTime);
+        o.stop(ctx.currentTime + dur);
+    } catch (e) {}
+}
 
-var rhythmConfig = {
-    steady: {bpm: 90, noteLength: 650, pauseAfter: 380, label: 'STEADY • 90 BPM'},
-    showtime: {bpm: 127, noteLength: 470, pauseAfter: 260, label: 'SHOWTIME • 127 BPM'},
-    pistol: {bpm: 150, noteLength: 380, pauseAfter: 180, label: 'PISTOL • 150 BPM'}
+// Config
+var tiers = {
+    rookie: {name: 'ROOKIE', icon: '🌟', stars: 4, seqMin: 3, seqMax: 4, rounds: 3, req: 0, next: 'jv'},
+    jv: {name: 'JV', icon: '🏀', stars: 5, seqMin: 4, seqMax: 5, rounds: 4, req: 3, next: 'varsity'},
+    varsity: {name: 'VARSITY', icon: '🎽', stars: 6, seqMin: 5, seqMax: 6, rounds: 4, req: 5, next: 'college'},
+    college: {name: 'COLLEGE', icon: '🎓', stars: 7, seqMin: 6, seqMax: 7, rounds: 5, req: 7, next: 'pro'},
+    pro: {name: 'PRO', icon: '💰', stars: 8, seqMin: 7, seqMax: 8, rounds: 5, req: 10, next: 'allstar'},
+    allstar: {name: 'ALL-STAR', icon: '⭐', stars: 9, seqMin: 8, seqMax: 9, rounds: 5, req: 15, next: 'legend'},
+    legend: {name: 'LEGEND', icon: '🏆', stars: 10, seqMin: 9, seqMax: 10, rounds: 6, req: 20, next: 'pistol'},
+    pistol: {name: 'PISTOL', icon: '🔥', stars: 12, seqMin: 10, seqMax: 12, rounds: 6, req: 25, next: null}
+};
+var tierList = ['rookie', 'jv', 'varsity', 'college', 'pro', 'allstar', 'legend', 'pistol'];
+var rhythms = {
+    steady: {ms: 650, pause: 380, label: 'STEADY • 90 BPM'},
+    showtime: {ms: 470, pause: 260, label: 'SHOWTIME • 127 BPM'},
+    pistol: {ms: 380, pause: 180, label: 'PISTOL • 150 BPM'}
 };
 
 // Progress
 function getProgress() {
-    var s = localStorage.getItem('gotrotters-progress');
-    if (s) return JSON.parse(s);
-    return {
-        completions: {rookie: 0, jv: 0, varsity: 0, college: 0, pro: 0, allstar: 0, legend: 0, pistol: 0},
-        bestScores: {rookie: 0, jv: 0, varsity: 0, college: 0, pro: 0, allstar: 0, legend: 0, pistol: 0},
-        totalGames: 0,
-        overallBest: 0
-    };
+    try { return JSON.parse(localStorage.getItem('gotrotters-progress')) || {}; } catch (e) { return {}; }
 }
-
 function saveProgress(p) {
     localStorage.setItem('gotrotters-progress', JSON.stringify(p));
 }
 
-function isTierUnlocked(t) {
-    if (t === 'rookie') return true;
-    var i = tierOrder.indexOf(t);
-    if (i <= 0) return true;
-    var prev = tierOrder[i - 1];
-    var p = getProgress();
-    return p.completions[prev] >= tierConfig[t].unlockReq;
+// State
+var selTier = 'rookie', selRhythm = 'showtime';
+var quarter = 1, round = 1, score = 0, qScores = [0,0,0,0];
+var stars = [], seq = [], idx = 0, done = [], showing = false;
+var correct = 0, attempts = 0, longest = 0;
+
+// Screens
+function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
+    document.getElementById(id).classList.add('active');
 }
 
-// Game State
-var selectedTier = 'rookie';
-var selectedRhythm = 'showtime';
-var currentQuarter = 1;
-var currentRound = 1;
-var score = 0;
-var quarterScores = [0, 0, 0, 0];
-var starNodes = [];
-var sequence = [];
-var playerIndex = 0;
-var completedStars = [];
-var isShowingSequence = false;
-var correctTotal = 0;
-var attemptsTotal = 0;
-var longestSequence = 0;
-
-// UI
-function renderTierGrid() {
+// Tier Grid
+function renderTiers() {
     var grid = document.getElementById('tierGrid');
     grid.innerHTML = '';
-    var progress = getProgress();
+    var prog = getProgress();
     
-    tierOrder.forEach(function(id) {
-        var t = tierConfig[id];
-        var unlocked = isTierUnlocked(id);
-        var comp = progress.completions[id] || 0;
+    tierList.forEach(function(id) {
+        var t = tiers[id];
+        var comp = prog[id] || 0;
+        var prevId = tierList[tierList.indexOf(id) - 1];
+        var unlocked = id === 'rookie' || (prog[prevId] || 0) >= t.req;
+        
         var btn = document.createElement('div');
-        btn.className = 'tier-btn' + (id === selectedTier ? ' selected' : '') + (!unlocked ? ' locked' : '');
-        btn.dataset.tier = id;
+        btn.className = 'tier-btn' + (id === selTier ? ' selected' : '') + (!unlocked ? ' locked' : '');
         
         if (unlocked) {
-            btn.onclick = function() { selectTier(id); };
+            btn.onclick = function() {
+                selTier = id;
+                document.querySelectorAll('.tier-btn').forEach(function(b, i) {
+                    b.classList.toggle('selected', tierList[i] === id);
+                });
+            };
         }
         
-        var nextReq = t.nextTier ? tierConfig[t.nextTier].unlockReq : 0;
-        var pct = t.nextTier ? Math.min(100, (comp / nextReq) * 100) : 100;
+        var nextReq = t.next ? tiers[t.next].req : 0;
+        var pct = t.next ? Math.min(100, (comp / nextReq) * 100) : 100;
         
         btn.innerHTML = '<span class="tier-icon">' + t.icon + '</span>' +
             '<div class="tier-info"><div class="tier-name">' + t.name + '</div>' +
-            '<div class="tier-desc">' + t.stars + ' stars • ' + t.seqMin + '-' + t.seqMax + ' seq</div></div>' +
-            (unlocked ? '<div class="tier-progress"><span class="tier-progress-text">' + comp + ' done</span>' +
-            (t.nextTier ? '<div class="tier-progress-bar"><div class="tier-progress-fill" style="width:' + pct + '%"></div></div>' : '<span class="tier-badge">MAX</span>') +
-            '</div>' : '<span class="tier-badge locked-badge">🔒 ' + tierConfig[id].unlockReq + '</span>');
+            '<div class="tier-desc">' + t.stars + ' stars</div></div>' +
+            (unlocked ? '<div class="tier-progress"><span class="tier-progress-text">' + comp + '</span>' +
+            (t.next ? '<div class="tier-progress-bar"><div class="tier-progress-fill" style="width:' + pct + '%"></div></div>' : '') +
+            '</div>' : '<span class="tier-badge locked-badge">🔒 ' + t.req + '</span>');
         
         grid.appendChild(btn);
     });
     
-    document.getElementById('totalGames').textContent = progress.totalGames;
-    document.getElementById('bestScore').textContent = progress.overallBest;
-}
-
-function selectTier(t) {
-    if (!isTierUnlocked(t)) return;
-    selectedTier = t;
-    document.querySelectorAll('.tier-btn').forEach(function(b) {
-        b.classList.toggle('selected', b.dataset.tier === t);
-    });
+    var total = 0;
+    tierList.forEach(function(id) { total += prog[id] || 0; });
+    document.getElementById('totalGames').textContent = total;
+    document.getElementById('bestScore').textContent = prog.best || 0;
 }
 
 function selectRhythm(r) {
-    selectedRhythm = r;
+    selRhythm = r;
     document.querySelectorAll('.rhythm-btn').forEach(function(b) {
         b.classList.toggle('selected', b.dataset.rhythm === r);
     });
 }
 
-function showScreen(id) {
-    document.querySelectorAll('.screen').forEach(function(s) {
-        s.classList.remove('active');
-    });
-    document.getElementById(id).classList.add('active');
-}
-
 // Game
 function startGame() {
-    currentQuarter = 1;
-    currentRound = 1;
-    score = 0;
-    quarterScores = [0, 0, 0, 0];
-    correctTotal = 0;
-    attemptsTotal = 0;
-    longestSequence = 0;
-    
-    document.getElementById('rhythmBadgeText').textContent = rhythmConfig[selectedRhythm].label;
+    quarter = 1; round = 1; score = 0; qScores = [0,0,0,0];
+    correct = 0; attempts = 0; longest = 0;
+    document.getElementById('rhythmBadgeText').textContent = rhythms[selRhythm].label;
     document.getElementById('rhythmBadge').classList.add('visible');
-    document.getElementById('countdownTier').textContent = tierConfig[selectedTier].name;
+    document.getElementById('countdownTier').textContent = tiers[selTier].name;
     showScreen('countdownScreen');
-    runCountdown();
+    countdown(3);
 }
 
-function runCountdown() {
-    var c = 3;
-    var el = document.getElementById('countdownNum');
-    el.textContent = c;
-    
-    var iv = setInterval(function() {
-        c--;
-        if (c > 0) {
-            el.textContent = c;
-            el.style.animation = 'none';
-            el.offsetHeight;
-            el.style.animation = 'countPulse 0.5s ease-out';
-            playCountdownBeep();
-        } else {
-            clearInterval(iv);
-            playWhistle();
-            showScreen('gameScreen');
-            initGame();
-        }
-    }, 1000);
+function countdown(n) {
+    document.getElementById('countdownNum').textContent = n;
+    if (n > 0) {
+        playBeep(440, 0.1);
+        setTimeout(function() { countdown(n - 1); }, 1000);
+    } else {
+        playBeep(880, 0.3);
+        showScreen('gameScreen');
+        initRound();
+    }
 }
 
-function initGame() {
-    document.getElementById('gameTier').textContent = tierConfig[selectedTier].name;
-    updateQuarterDisplay();
-    updateScore();
+function initRound() {
+    document.getElementById('gameTier').textContent = tiers[selTier].name;
+    document.getElementById('roundTotal').textContent = tiers[selTier].rounds;
+    updateQ();
     startRound();
 }
 
-function updateQuarterDisplay() {
-    var dots = document.querySelectorAll('.quarter-dot');
-    dots.forEach(function(d, i) {
-        d.classList.remove('active', 'completed');
-        if (i < currentQuarter - 1) d.classList.add('completed');
-        else if (i === currentQuarter - 1) d.classList.add('active');
+function updateQ() {
+    document.querySelectorAll('.quarter-dot').forEach(function(d, i) {
+        d.classList.toggle('active', i === quarter - 1);
     });
-    
     var lbl = document.getElementById('quarterLabel');
-    lbl.textContent = 'Q' + currentQuarter;
-    lbl.className = 'quarter-label q' + currentQuarter;
-    document.getElementById('roundTotal').textContent = tierConfig[selectedTier].roundsPerQ;
+    lbl.textContent = 'Q' + quarter;
+    lbl.className = 'quarter-label q' + quarter;
 }
 
 function updateScore() {
     document.getElementById('scoreDisplay').textContent = score;
 }
 
-function setMessage(txt, type) {
+function setMsg(txt, type) {
     var el = document.getElementById('gameMessage');
     el.textContent = txt;
     el.className = 'game-message' + (type ? ' ' + type : '');
 }
 
-// ========================================
-// STAR RENDERING - COLORS SET VIA STYLE
-// ========================================
-function generateStarPositions(n) {
+// =============================================
+// STAR CREATION - USING DIV WITH BACKGROUND COLOR
+// =============================================
+function makeStars(n) {
     var court = document.getElementById('court');
-    var w = court.offsetWidth;
-    var h = court.offsetHeight;
-    var pad = 45;
-    
-    starNodes = [];
+    var w = court.offsetWidth, h = court.offsetHeight;
+    stars = [];
     
     for (var i = 0; i < n; i++) {
-        var att = 0;
-        var x, y, valid;
-        
+        var x, y, ok, tries = 0;
         do {
-            x = pad + Math.random() * (w - pad * 2);
-            y = pad + Math.random() * (h - pad * 2);
-            valid = true;
-            
-            for (var j = 0; j < starNodes.length; j++) {
-                var dx = x - starNodes[j].x;
-                var dy = y - starNodes[j].y;
-                if (Math.sqrt(dx * dx + dy * dy) < 55) {
-                    valid = false;
-                    break;
-                }
+            x = 45 + Math.random() * (w - 90);
+            y = 45 + Math.random() * (h - 90);
+            ok = true;
+            for (var j = 0; j < stars.length; j++) {
+                var dx = x - stars[j].x, dy = y - stars[j].y;
+                if (Math.sqrt(dx*dx + dy*dy) < 55) { ok = false; break; }
             }
-            att++;
-        } while (!valid && att < 100);
+            tries++;
+        } while (!ok && tries < 100);
         
-        // EACH STAR GETS A COLOR FROM THE COLORS ARRAY
-        starNodes.push({
+        // EACH STAR GETS ITS OWN COLOR
+        stars.push({
             x: x,
             y: y,
-            color: COLORS[i % COLORS.length]
+            color: STAR_COLORS[i % STAR_COLORS.length]
         });
     }
 }
@@ -602,425 +455,315 @@ function renderStars() {
     var container = document.getElementById('starContainer');
     container.innerHTML = '';
     
-    for (var i = 0; i < starNodes.length; i++) {
-        var node = starNodes[i];
+    for (var i = 0; i < stars.length; i++) {
+        var star = stars[i];
+        
+        // CREATE A DIV WITH BACKGROUND COLOR (NOT SVG)
         var div = document.createElement('div');
-        div.className = 'star-node';
-        div.setAttribute('data-index', i);
-        div.style.left = node.x + 'px';
-        div.style.top = node.y + 'px';
+        div.className = 'game-star';
+        div.setAttribute('data-idx', i);
+        div.style.left = star.x + 'px';
+        div.style.top = star.y + 'px';
+        div.style.backgroundColor = star.color; // SET COLOR DIRECTLY
         
-        // CREATE SVG WITH INLINE STYLE FOR COLOR
-        var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-        svg.setAttribute('viewBox', '0 0 100 100');
-        
-        var polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
-        polygon.setAttribute('points', '50,5 61,40 98,40 68,62 79,97 50,75 21,97 32,62 2,40 39,40');
-        polygon.style.fill = node.color; // SET COLOR VIA STYLE
-        
-        svg.appendChild(polygon);
-        div.appendChild(svg);
-        
-        // Click handler
-        (function(idx) {
-            div.onclick = function() { handleStarClick(idx); };
+        (function(index) {
+            div.onclick = function() { clickStar(index); };
         })(i);
         
         container.appendChild(div);
     }
     
-    clearTrailLines();
+    clearTrail();
 }
 
-function clearTrailLines() {
+function clearTrail() {
     var cv = document.getElementById('trailCanvas');
     var ct = document.getElementById('court');
     cv.width = ct.offsetWidth;
     cv.height = ct.offsetHeight;
-    cv.getContext('2d').clearRect(0, 0, cv.width, cv.height);
 }
 
-function drawTrailLines() {
+function drawTrail() {
     var cv = document.getElementById('trailCanvas');
-    var ct = document.getElementById('court');
-    cv.width = ct.offsetWidth;
-    cv.height = ct.offsetHeight;
     var ctx = cv.getContext('2d');
     ctx.clearRect(0, 0, cv.width, cv.height);
-    
-    if (completedStars.length < 2) return;
-    
+    if (done.length < 2) return;
     ctx.strokeStyle = '#00D9A5';
     ctx.lineWidth = 4;
     ctx.lineCap = 'round';
     ctx.shadowColor = '#00D9A5';
     ctx.shadowBlur = 15;
     ctx.beginPath();
-    
-    for (var i = 0; i < completedStars.length; i++) {
-        var n = starNodes[completedStars[i]];
-        if (i === 0) ctx.moveTo(n.x, n.y);
-        else ctx.lineTo(n.x, n.y);
+    for (var i = 0; i < done.length; i++) {
+        var s = stars[done[i]];
+        if (i === 0) ctx.moveTo(s.x, s.y);
+        else ctx.lineTo(s.x, s.y);
     }
     ctx.stroke();
 }
 
 function disableStars(d) {
-    document.querySelectorAll('.star-node').forEach(function(s) {
-        if (d) s.classList.add('disabled');
-        else s.classList.remove('disabled');
+    document.querySelectorAll('.game-star').forEach(function(s) {
+        s.classList.toggle('disabled', d);
     });
 }
 
 function startRound() {
-    document.getElementById('roundNum').textContent = currentRound;
-    playerIndex = 0;
-    completedStars = [];
+    document.getElementById('roundNum').textContent = round;
+    idx = 0;
+    done = [];
     
-    var t = tierConfig[selectedTier];
-    generateStarPositions(t.stars);
+    var t = tiers[selTier];
+    makeStars(t.stars);
     renderStars();
     
     var len = t.seqMin + Math.floor(Math.random() * (t.seqMax - t.seqMin + 1));
     var avail = [];
-    for (var i = 0; i < starNodes.length; i++) avail.push(i);
+    for (var i = 0; i < stars.length; i++) avail.push(i);
     
-    sequence = [];
+    seq = [];
     for (var i = 0; i < len; i++) {
-        if (avail.length === 0) break;
-        var idx = Math.floor(Math.random() * avail.length);
-        sequence.push(avail[idx]);
-        avail.splice(idx, 1);
+        if (!avail.length) break;
+        var r = Math.floor(Math.random() * avail.length);
+        seq.push(avail[r]);
+        avail.splice(r, 1);
     }
     
-    setMessage(currentLang === 'es' ? 'Mira el camino...' : 'Watch the trail...');
-    document.getElementById('gameMessage').classList.add('watching');
+    setMsg(currentLang === 'es' ? 'Mira el camino...' : 'Watch the trail...');
     disableStars(true);
-    setTimeout(showSequence, 700);
+    setTimeout(showSeq, 700);
 }
 
-function showSequence() {
-    isShowingSequence = true;
-    var rhy = rhythmConfig[selectedRhythm];
+function showSeq() {
+    showing = true;
+    var rhy = rhythms[selRhythm];
     var i = 0;
     
     function next() {
-        // Remove lit from previous
         if (i > 0) {
-            var prev = sequence[i - 1];
-            var ps = document.querySelector('.star-node[data-index="' + prev + '"]');
-            if (ps) ps.classList.remove('lit');
+            var prev = document.querySelector('.game-star[data-idx="' + seq[i-1] + '"]');
+            if (prev) prev.classList.remove('lit');
         }
         
-        if (i >= sequence.length) {
-            isShowingSequence = false;
-            setMessage(currentLang === 'es' ? '¡Te toca! Conecta las estrellas' : 'Your turn! Connect the stars');
-            document.getElementById('gameMessage').classList.remove('watching');
+        if (i >= seq.length) {
+            showing = false;
+            setMsg(currentLang === 'es' ? '¡Te toca!' : 'Your turn!');
             disableStars(false);
             return;
         }
         
-        var idx = sequence[i];
-        var el = document.querySelector('.star-node[data-index="' + idx + '"]');
+        var el = document.querySelector('.game-star[data-idx="' + seq[i] + '"]');
         if (el) {
             el.classList.add('lit');
-            playStarSound(idx);
+            playBeep(261.63 * (1 + seq[i] * 0.1), 0.2);
         }
         
         i++;
-        setTimeout(next, rhy.noteLength + rhy.pauseAfter);
+        setTimeout(next, rhy.ms + rhy.pause);
     }
-    
     next();
 }
 
-function handleStarClick(idx) {
-    if (isShowingSequence) return;
+function clickStar(i) {
+    if (showing) return;
     
-    var el = document.querySelector('.star-node[data-index="' + idx + '"]');
+    var el = document.querySelector('.game-star[data-idx="' + i + '"]');
     if (!el || el.classList.contains('completed')) return;
     
-    var exp = sequence[playerIndex];
-    var polygon = el.querySelector('polygon');
-    var originalColor = starNodes[idx].color;
+    var origColor = stars[i].color;
     
-    if (idx === exp) {
+    if (i === seq[idx]) {
         // CORRECT
-        completedStars.push(idx);
+        done.push(i);
         el.classList.add('completed');
-        polygon.style.fill = '#00D9A5'; // Success green
-        playStarSound(idx);
-        drawTrailLines();
-        playerIndex++;
+        playBeep(523.25, 0.15);
+        drawTrail();
+        idx++;
         
-        if (playerIndex >= sequence.length) {
-            correctTotal++;
-            attemptsTotal++;
-            if (sequence.length > longestSequence) longestSequence = sequence.length;
-            
-            var pts = sequence.length * 20;
+        if (idx >= seq.length) {
+            correct++;
+            attempts++;
+            if (seq.length > longest) longest = seq.length;
+            var pts = seq.length * 20;
             score += pts;
-            quarterScores[currentQuarter - 1] += pts;
+            qScores[quarter - 1] += pts;
             disableStars(true);
             updateScore();
-            playSuccessSound();
-            setMessage((currentLang === 'es' ? '¡Wepa! +' : 'Perfect! +') + pts, 'success');
+            setMsg((currentLang === 'es' ? '¡Wepa! +' : 'Perfect! +') + pts, 'success');
             setTimeout(nextRound, 1200);
         }
     } else {
         // WRONG
-        attemptsTotal++;
+        attempts++;
         el.classList.add('error');
-        polygon.style.fill = '#FF4757'; // Error red
-        playErrorSound();
+        playBeep(150, 0.25);
         
         setTimeout(function() {
             el.classList.remove('error');
-            polygon.style.fill = originalColor; // Restore original color
         }, 300);
         
-        var partial = playerIndex * 10;
+        var partial = idx * 10;
         if (partial > 0) {
             score += partial;
-            quarterScores[currentQuarter - 1] += partial;
+            qScores[quarter - 1] += partial;
             updateScore();
         }
         
-        setMessage(currentLang === 'es' ? '¡Otra vez!' : 'Try again!', 'error');
+        setMsg(currentLang === 'es' ? '¡Otra vez!' : 'Try again!', 'error');
         setTimeout(nextRound, 800);
     }
 }
 
 function nextRound() {
-    currentRound++;
-    if (currentRound > tierConfig[selectedTier].roundsPerQ) {
-        if (currentQuarter === 2) {
-            showHalftime();
-            return;
-        }
-        if (currentQuarter === 4) {
-            endGame();
-            return;
-        }
-        advanceQuarter();
+    round++;
+    if (round > tiers[selTier].rounds) {
+        if (quarter === 2) { showHalftime(); return; }
+        if (quarter === 4) { endGame(); return; }
+        quarter++;
+        round = 1;
+        updateQ();
+        setMsg('Q' + quarter + (currentLang === 'es' ? ' - ¡Dale!' : ' - Let\'s go!'));
+        setTimeout(startRound, 1000);
         return;
     }
     setTimeout(startRound, 400);
 }
 
-function advanceQuarter() {
-    currentQuarter++;
-    currentRound = 1;
-    updateQuarterDisplay();
-    setMessage('Q' + currentQuarter + (currentLang === 'es' ? ' - ¡Dale!' : ' - Let\'s go!'));
-    setTimeout(startRound, 1200);
-}
-
 function showHalftime() {
     document.getElementById('rhythmBadge').classList.remove('visible');
     document.getElementById('halftimeScore').textContent = score;
-    document.getElementById('htQ1').textContent = quarterScores[0];
-    document.getElementById('htQ2').textContent = quarterScores[1];
-    var acc = attemptsTotal > 0 ? Math.round((correctTotal / attemptsTotal) * 100) : 0;
-    document.getElementById('htAccuracy').textContent = acc + '%';
+    document.getElementById('htQ1').textContent = qScores[0];
+    document.getElementById('htQ2').textContent = qScores[1];
+    document.getElementById('htAccuracy').textContent = (attempts ? Math.round(correct/attempts*100) : 0) + '%';
     showScreen('halftimeScreen');
 }
 
-function continueToSecondHalf() {
-    currentQuarter = 3;
-    currentRound = 1;
+function continueGame() {
+    quarter = 3;
+    round = 1;
     document.getElementById('rhythmBadge').classList.add('visible');
     showScreen('gameScreen');
-    updateQuarterDisplay();
-    setMessage('Q3' + (currentLang === 'es' ? ' - ¡Pa\' la segunda!' : ' - Second half!'));
-    setTimeout(startRound, 1200);
+    updateQ();
+    setMsg('Q3' + (currentLang === 'es' ? ' - ¡Pa\' la segunda!' : ' - Second half!'));
+    setTimeout(startRound, 1000);
 }
 
 function endGame() {
     document.getElementById('rhythmBadge').classList.remove('visible');
     
-    var p = getProgress();
-    p.completions[selectedTier] = (p.completions[selectedTier] || 0) + 1;
-    p.totalGames++;
+    var prog = getProgress();
+    prog[selTier] = (prog[selTier] || 0) + 1;
+    var isNew = score > (prog.best || 0);
+    if (isNew) prog.best = score;
+    saveProgress(prog);
     
-    var isNew = false;
-    if (score > (p.bestScores[selectedTier] || 0)) {
-        p.bestScores[selectedTier] = score;
-        isNew = true;
-    }
-    if (score > p.overallBest) p.overallBest = score;
-    saveProgress(p);
-    
-    var t = tierConfig[selectedTier];
-    var justUnlocked = false;
-    if (t.nextTier && p.completions[selectedTier] === tierConfig[t.nextTier].unlockReq) {
-        justUnlocked = true;
-    }
+    var t = tiers[selTier];
+    var unlocked = t.next && prog[selTier] === tiers[t.next].req;
     
     document.getElementById('finalTierBadge').textContent = t.name;
     document.getElementById('finalScore').textContent = score;
     document.getElementById('finalBestBadge').style.display = isNew ? 'inline-block' : 'none';
-    document.getElementById('finalQ1').textContent = quarterScores[0];
-    document.getElementById('finalQ2').textContent = quarterScores[1];
-    document.getElementById('finalQ3').textContent = quarterScores[2];
-    document.getElementById('finalQ4').textContent = quarterScores[3];
+    document.getElementById('finalQ1').textContent = qScores[0];
+    document.getElementById('finalQ2').textContent = qScores[1];
+    document.getElementById('finalQ3').textContent = qScores[2];
+    document.getElementById('finalQ4').textContent = qScores[3];
+    document.getElementById('finalAccuracy').textContent = (attempts ? Math.round(correct/attempts*100) : 0) + '%';
+    document.getElementById('finalLongest').textContent = longest;
     
-    var acc = attemptsTotal > 0 ? Math.round((correctTotal / attemptsTotal) * 100) : 0;
-    document.getElementById('finalAccuracy').textContent = acc + '%';
-    document.getElementById('finalLongest').textContent = longestSequence;
-    
-    if (t.nextTier) {
-        var nReq = tierConfig[t.nextTier].unlockReq;
-        var cur = p.completions[selectedTier];
-        var pct = Math.min(100, (cur / nReq) * 100);
-        document.getElementById('tierProgressFill').style.width = pct + '%';
-        document.getElementById('tierProgressCurrent').textContent = cur + ' / ' + nReq;
-        document.getElementById('tierProgressGoal').textContent = (currentLang === 'es' ? 'Próximo: ' : 'Unlock: ') + tierConfig[t.nextTier].name;
+    if (t.next) {
+        var cur = prog[selTier], req = tiers[t.next].req;
+        document.getElementById('tierProgressFill').style.width = Math.min(100, cur/req*100) + '%';
+        document.getElementById('tierProgressCurrent').textContent = cur + ' / ' + req;
+        document.getElementById('tierProgressGoal').textContent = (currentLang === 'es' ? 'Próximo: ' : 'Unlock: ') + tiers[t.next].name;
         document.getElementById('tierProgressBox').style.display = 'block';
-        document.getElementById('tierUnlockMsg').style.display = justUnlocked ? 'block' : 'none';
+        document.getElementById('tierUnlockMsg').style.display = unlocked ? 'block' : 'none';
     } else {
         document.getElementById('tierProgressBox').style.display = 'none';
     }
     
-    var trophies = {rookie: '⭐', jv: '🏀', varsity: '🎽', college: '🎓', pro: '💰', allstar: '🌟', legend: '🏆', pistol: '🔥'};
-    document.getElementById('finalTrophy').textContent = trophies[selectedTier] || '🏆';
-    
+    document.getElementById('finalTrophy').textContent = t.icon;
     showScreen('finalScreen');
-    recordSession();
-}
-
-function recordSession() {
+    
+    // Record session
     var pin = sessionStorage.getItem('gostar-user-pin');
     var code = sessionStorage.getItem('gostar-user-code');
     var name = sessionStorage.getItem('gostar-user-name');
-    if (!pin && !(code && name)) return;
-    
-    var payload = {game: 'gotrotters', score: score, tier: selectedTier};
-    if (pin) payload.pin = pin;
-    else {
-        payload.accessCode = code;
-        payload.username = name;
+    if (pin || (code && name)) {
+        var data = {game: 'gotrotters', score: score, tier: selTier};
+        if (pin) data.pin = pin; else { data.accessCode = code; data.username = name; }
+        fetch('/api/game/session', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data)}).catch(function(){});
     }
-    
-    fetch('/api/game/session', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(payload)
-    }).catch(function() {});
 }
 
 function playAgain() {
-    renderTierGrid();
+    renderTiers();
     showScreen('welcomeScreen');
 }
 
 function logout() {
-    sessionStorage.removeItem('gostar-user-pin');
-    sessionStorage.removeItem('gostar-user-code');
-    sessionStorage.removeItem('gostar-user-name');
+    sessionStorage.clear();
     window.location.href = '/play';
 }
 
 // Tutorial
-var tutorialSlide = 0;
+var slide = 0;
 var demoTimer = null;
 
 function showTutorial() {
-    tutorialSlide = 0;
-    updateTutorialSlide();
+    slide = 0;
+    updateSlide();
     document.getElementById('tutorialOverlay').classList.add('active');
-    startDemoAnim();
+    startDemo();
 }
 
 function closeTutorial() {
     document.getElementById('tutorialOverlay').classList.remove('active');
-    stopDemoAnim();
+    stopDemo();
     localStorage.setItem('gotrotters-tutorial-seen', 'true');
 }
 
-function nextSlide() {
-    if (tutorialSlide < 3) {
-        tutorialSlide++;
-        updateTutorialSlide();
-    }
-}
+function nextSlide() { if (slide < 3) { slide++; updateSlide(); } }
+function prevSlide() { if (slide > 0) { slide--; updateSlide(); } }
 
-function prevSlide() {
-    if (tutorialSlide > 0) {
-        tutorialSlide--;
-        updateTutorialSlide();
+function updateSlide() {
+    for (var i = 0; i < 4; i++) {
+        document.getElementById('slide' + i).classList.toggle('active', i === slide);
     }
-}
-
-function updateTutorialSlide() {
-    document.querySelectorAll('.tutorial-slide').forEach(function(s, i) {
-        s.classList.toggle('active', i === tutorialSlide);
-    });
-    document.querySelectorAll('.tutorial-dot').forEach(function(d, i) {
+    var dots = document.querySelectorAll('.tutorial-dot');
+    dots.forEach(function(d, i) {
         d.classList.remove('active', 'completed');
-        if (i < tutorialSlide) d.classList.add('completed');
-        else if (i === tutorialSlide) d.classList.add('active');
+        if (i < slide) d.classList.add('completed');
+        else if (i === slide) d.classList.add('active');
     });
-    startDemoAnim();
+    startDemo();
 }
 
-function startDemoAnim() {
-    stopDemoAnim();
-    
-    if (tutorialSlide === 1) {
-        var stars = [
-            document.getElementById('demoStar1'),
-            document.getElementById('demoStar2'),
-            document.getElementById('demoStar3')
-        ];
+function startDemo() {
+    stopDemo();
+    if (slide === 1) {
         var i = 0;
-        
         function anim() {
-            stars.forEach(function(s) { if (s) s.classList.remove('lit'); });
-            if (i < 3) {
-                if (stars[i]) stars[i].classList.add('lit');
-                i++;
-                demoTimer = setTimeout(anim, 700);
-            } else {
-                i = 0;
-                demoTimer = setTimeout(anim, 1000);
-            }
+            document.querySelectorAll('#slide1 .demo-star').forEach(function(s) { s.classList.remove('lit'); });
+            var el = document.getElementById('demoStar' + (i + 1));
+            if (el) el.classList.add('lit');
+            i = (i + 1) % 4;
+            if (i === 0) i = 0;
+            demoTimer = setTimeout(anim, i === 0 ? 1000 : 700);
         }
         anim();
     }
-    
-    if (tutorialSlide === 2) {
-        var hand = document.getElementById('demoHand');
-        var show = false;
-        
-        function anim2() {
-            show = !show;
-            if (hand) hand.style.opacity = show ? '1' : '0';
-            demoTimer = setTimeout(anim2, 1500);
-        }
-        anim2();
-    }
 }
 
-function stopDemoAnim() {
-    if (demoTimer) {
-        clearTimeout(demoTimer);
-        demoTimer = null;
-    }
-}
-
-function checkFirstTime() {
-    if (!localStorage.getItem('gotrotters-tutorial-seen')) {
-        setTimeout(showTutorial, 500);
-    }
+function stopDemo() {
+    if (demoTimer) { clearTimeout(demoTimer); demoTimer = null; }
 }
 
 // Init
 document.querySelectorAll('.lang-btn').forEach(function(b) {
     b.classList.toggle('active', b.textContent.trim() === currentLang.toUpperCase());
 });
-renderTierGrid();
-checkFirstTime();
+renderTiers();
+if (!localStorage.getItem('gotrotters-tutorial-seen')) setTimeout(showTutorial, 500);
 </script>
 </body>
 </html>
