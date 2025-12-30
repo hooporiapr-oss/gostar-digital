@@ -11,7 +11,7 @@ html{height:100%;overflow-y:scroll}
 :root{
 --ball-orange:#FF6B00;--ball-dark:#CC5500;
 --primary:#1E3A8A;--primary-light:#3B82F6;
---secondary:#FF6B00;--secondary-light:#FF8C00;
+--secondary:#FF6B00;
 --bg-dark:#0a0a12;--bg-card:#12121a;
 --text-light:#FFFFFF;--text-muted:#8892a0;
 --success:#00D9A5;--danger:#FF4757;--gold:#FFD700;
@@ -22,10 +22,9 @@ body[data-lang="es"] .lang-en{display:none!important}
 body[data-lang="en"] .lang-es{display:none!important}
 .court-bg{position:fixed;top:0;left:0;right:0;bottom:0;background:linear-gradient(180deg,var(--bg-dark) 0%,#0d0d18 100%);z-index:-1}
 .top-controls{position:fixed;top:0;left:0;right:0;padding:15px 20px;display:flex;justify-content:space-between;align-items:center;z-index:100;background:linear-gradient(180deg,rgba(10,10,18,0.95) 0%,transparent 100%)}
-.back-link{padding:8px 16px;background:rgba(255,255,255,0.05);border:2px solid rgba(255,255,255,0.1);border-radius:20px;color:var(--text-muted);text-decoration:none;font-weight:600;font-size:0.85rem;transition:all 0.3s ease}
-.back-link:hover{border-color:var(--secondary);color:var(--secondary)}
+.back-link{padding:8px 16px;background:rgba(255,255,255,0.05);border:2px solid rgba(255,255,255,0.1);border-radius:20px;color:var(--text-muted);text-decoration:none;font-weight:600;font-size:0.85rem}
 .lang-toggle{display:flex;gap:6px}
-.lang-btn{padding:6px 12px;border:2px solid var(--secondary);background:transparent;color:var(--secondary);border-radius:15px;font-family:'Nunito',sans-serif;font-weight:600;font-size:0.8rem;cursor:pointer;transition:all 0.3s ease}
+.lang-btn{padding:6px 12px;border:2px solid var(--secondary);background:transparent;color:var(--secondary);border-radius:15px;font-family:'Nunito',sans-serif;font-weight:600;font-size:0.8rem;cursor:pointer}
 .lang-btn.active{background:var(--secondary);color:var(--text-light)}
 .screen{display:none;flex-direction:column;align-items:center;min-height:100vh;width:100%;padding:80px 20px 40px 20px;text-align:center}
 .screen.active{display:flex}
@@ -53,14 +52,13 @@ body[data-lang="en"] .lang-es{display:none!important}
 .tier-badge{font-size:0.65rem;padding:3px 8px;background:var(--success);color:var(--bg-dark);border-radius:10px;font-weight:700}
 .tier-badge.locked-badge{background:rgba(255,255,255,0.1);color:var(--text-muted)}
 .rhythm-grid{display:flex;gap:10px;justify-content:center}
-.rhythm-btn{padding:12px 18px;background:var(--bg-card);border:2px solid transparent;border-radius:12px;cursor:pointer;transition:all 0.3s ease;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:90px}
+.rhythm-btn{padding:12px 18px;background:var(--bg-card);border:2px solid transparent;border-radius:12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:90px}
 .rhythm-btn:hover{border-color:var(--primary-light)}
 .rhythm-btn.selected{border-color:var(--secondary);background:rgba(255,107,0,0.1)}
 .rhythm-icon{font-size:1.5rem}
 .rhythm-label{font-size:0.8rem;font-weight:700;color:var(--text-light)}
 .rhythm-bpm{font-size:0.7rem;color:var(--text-muted)}
-.start-btn{padding:18px 50px;font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:5px;background:linear-gradient(135deg,var(--secondary) 0%,var(--ball-dark) 100%);color:var(--text-light);border:none;border-radius:50px;cursor:pointer;transition:all 0.3s ease;box-shadow:0 5px 25px rgba(255,107,0,0.4)}
-.start-btn:hover{transform:scale(1.05)}
+.start-btn{padding:18px 50px;font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:5px;background:linear-gradient(135deg,var(--secondary) 0%,var(--ball-dark) 100%);color:var(--text-light);border:none;border-radius:50px;cursor:pointer;box-shadow:0 5px 25px rgba(255,107,0,0.4)}
 .stats-summary{margin-top:25px;padding:15px 25px;background:var(--bg-card);border-radius:15px;display:flex;gap:30px}
 .stat-item{text-align:center}
 .stat-value{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--secondary)}
@@ -75,7 +73,7 @@ body[data-lang="en"] .lang-es{display:none!important}
 .scoreboard-tier{font-family:'Bebas Neue',sans-serif;font-size:0.85rem;letter-spacing:2px;color:var(--text-muted);padding:4px 10px;background:rgba(255,255,255,0.05);border-radius:8px}
 .scoreboard-score{font-family:'Bebas Neue',sans-serif;font-size:2.8rem;color:var(--secondary);text-shadow:0 0 20px rgba(255,107,0,0.4)}
 .quarter-display{display:flex;justify-content:center;gap:8px;margin-bottom:10px}
-.quarter-dot{width:45px;height:8px;border-radius:4px;background:rgba(255,255,255,0.1);transition:all 0.3s ease}
+.quarter-dot{width:45px;height:8px;border-radius:4px;background:rgba(255,255,255,0.1)}
 .quarter-dot.active{transform:scaleY(1.4)}
 .quarter-dot.q1{background:var(--q1)}.quarter-dot.q2{background:var(--q2)}.quarter-dot.q3{background:var(--q3)}.quarter-dot.q4{background:var(--q4)}
 .quarter-info{display:flex;justify-content:center;gap:20px;font-size:0.85rem;color:var(--text-muted)}
@@ -90,48 +88,51 @@ body[data-lang="en"] .lang-es{display:none!important}
 .court-center-line{position:absolute;top:0;left:50%;width:3px;height:100%;background:rgba(255,255,255,0.5);transform:translateX(-50%)}
 .court-center-circle{position:absolute;top:50%;left:50%;width:70px;height:70px;border:3px solid rgba(255,255,255,0.5);border-radius:50%;transform:translate(-50%,-50%)}
 .trail-canvas{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:5}
-.star-container{position:absolute;top:0;left:0;right:0;bottom:0;z-index:10}
+.ball-container{position:absolute;top:0;left:0;right:0;bottom:0;z-index:10}
 
-/* STAR USING CSS CLIP-PATH - NO SVG */
-.game-star{
+/* BASKETBALL - SIMPLE EMOJI */
+.ball{
     position:absolute;
     width:50px;
     height:50px;
     transform:translate(-50%,-50%);
     cursor:pointer;
+    font-size:42px;
+    line-height:50px;
+    text-align:center;
     transition:transform 0.2s ease, filter 0.2s ease;
-    clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
     filter:drop-shadow(0 3px 5px rgba(0,0,0,0.5));
+    user-select:none;
+    -webkit-user-select:none;
 }
-.game-star.disabled{pointer-events:none}
-.game-star.lit{transform:translate(-50%,-50%) scale(1.35);filter:drop-shadow(0 0 20px currentColor) drop-shadow(0 0 40px currentColor)}
-.game-star.completed{background:#00D9A5 !important;filter:drop-shadow(0 0 15px #00D9A5)}
-.game-star.error{background:#FF4757 !important;filter:drop-shadow(0 0 15px #FF4757);animation:starShake 0.3s ease}
-@keyframes starShake{0%,100%{transform:translate(-50%,-50%) rotate(0deg)}25%{transform:translate(-50%,-50%) rotate(-15deg)}75%{transform:translate(-50%,-50%) rotate(15deg)}}
+.ball.disabled{pointer-events:none}
+.ball.lit{transform:translate(-50%,-50%) scale(1.4);filter:drop-shadow(0 0 20px #FF6B00) drop-shadow(0 0 40px #FF6B00)}
+.ball.completed{filter:drop-shadow(0 0 15px #00D9A5) brightness(1.5) hue-rotate(100deg)}
+.ball.error{animation:ballShake 0.3s ease}
+@keyframes ballShake{0%,100%{transform:translate(-50%,-50%) rotate(0deg)}25%{transform:translate(-50%,-50%) rotate(-15deg)}75%{transform:translate(-50%,-50%) rotate(15deg)}}
 
 #halftimeScreen{justify-content:center}
 .halftime-icon{font-size:4rem;margin-bottom:15px}
 .halftime-title{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;letter-spacing:5px;color:var(--secondary);margin-bottom:10px}
-.halftime-score{font-family:'Bebas Neue',sans-serif;font-size:4rem;color:var(--text-light);text-shadow:0 0 30px rgba(255,107,0,0.3);margin-bottom:25px}
+.halftime-score{font-family:'Bebas Neue',sans-serif;font-size:4rem;color:var(--text-light);margin-bottom:25px}
 .halftime-stats{background:var(--bg-card);border-radius:15px;padding:20px 30px;margin-bottom:25px}
 .halftime-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05)}
 .halftime-row:last-child{border-bottom:none}
 .halftime-label{color:var(--text-muted)}
 .halftime-value{font-weight:700;color:var(--secondary)}
-.continue-btn{padding:16px 45px;font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:4px;background:linear-gradient(135deg,var(--primary) 0%,var(--primary-light) 100%);color:var(--text-light);border:none;border-radius:50px;cursor:pointer;transition:all 0.3s ease}
-.continue-btn:hover{transform:scale(1.05)}
+.continue-btn{padding:16px 45px;font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:4px;background:linear-gradient(135deg,var(--primary) 0%,var(--primary-light) 100%);color:var(--text-light);border:none;border-radius:50px;cursor:pointer}
 #finalScreen{justify-content:flex-start;padding-top:60px}
 .final-trophy{font-size:4.5rem;margin-bottom:15px}
 .final-title{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:4px;background:linear-gradient(135deg,var(--secondary) 0%,var(--gold) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:5px}
 .final-tier-badge{font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:3px;color:var(--text-muted);margin-bottom:20px}
 .final-score-box{background:var(--bg-card);border:3px solid var(--secondary);border-radius:20px;padding:25px 45px;margin-bottom:20px}
 .final-score-label{font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:3px;color:var(--text-muted)}
-.final-score-value{font-family:'Bebas Neue',sans-serif;font-size:4.5rem;color:var(--secondary);text-shadow:0 0 30px rgba(255,107,0,0.4);line-height:1}
+.final-score-value{font-family:'Bebas Neue',sans-serif;font-size:4.5rem;color:var(--secondary);line-height:1}
 .final-best-badge{margin-top:10px;padding:6px 15px;background:var(--success);color:var(--bg-dark);border-radius:20px;font-size:0.8rem;font-weight:700;display:inline-block}
 .tier-progress-box{width:100%;max-width:320px;background:var(--bg-card);border-radius:15px;padding:20px;margin-bottom:20px}
 .tier-progress-title{font-size:0.85rem;color:var(--text-muted);margin-bottom:10px}
 .tier-progress-bar-lg{width:100%;height:12px;background:rgba(255,255,255,0.1);border-radius:6px;overflow:hidden;margin-bottom:8px}
-.tier-progress-fill-lg{height:100%;background:linear-gradient(90deg,var(--secondary) 0%,var(--gold) 100%);border-radius:6px;transition:width 0.5s ease}
+.tier-progress-fill-lg{height:100%;background:linear-gradient(90deg,var(--secondary) 0%,var(--gold) 100%);border-radius:6px}
 .tier-progress-info{display:flex;justify-content:space-between;font-size:0.8rem}
 .tier-progress-current{color:var(--secondary);font-weight:700}
 .tier-progress-goal{color:var(--text-muted)}
@@ -147,10 +148,8 @@ body[data-lang="en"] .lang-es{display:none!important}
 .final-stat-value{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--text-light)}
 .final-stat-label{font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px}
 .action-buttons{display:flex;flex-direction:column;gap:12px;width:100%;max-width:280px}
-.play-again-btn{padding:16px 40px;font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:3px;background:linear-gradient(135deg,var(--secondary) 0%,var(--ball-dark) 100%);color:var(--text-light);border:none;border-radius:50px;cursor:pointer;transition:all 0.3s ease;box-shadow:0 5px 25px rgba(255,107,0,0.3)}
-.play-again-btn:hover{transform:scale(1.05)}
-.home-link{padding:14px 40px;font-family:'Nunito',sans-serif;font-size:0.95rem;font-weight:700;background:transparent;color:var(--text-muted);border:2px solid rgba(255,255,255,0.15);border-radius:50px;text-decoration:none;transition:all 0.3s ease;display:inline-block}
-.home-link:hover{border-color:var(--primary-light);color:var(--text-light)}
+.play-again-btn{padding:16px 40px;font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:3px;background:linear-gradient(135deg,var(--secondary) 0%,var(--ball-dark) 100%);color:var(--text-light);border:none;border-radius:50px;cursor:pointer}
+.home-link{padding:14px 40px;font-family:'Nunito',sans-serif;font-size:0.95rem;font-weight:700;background:transparent;color:var(--text-muted);border:2px solid rgba(255,255,255,0.15);border-radius:50px;text-decoration:none;display:inline-block}
 .rhythm-badge{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.85);border:2px solid var(--secondary);border-radius:25px;padding:8px 18px;display:none;align-items:center;gap:8px;z-index:100}
 .rhythm-badge.visible{display:flex}
 .rhythm-badge-text{font-size:0.7rem;color:var(--secondary);font-weight:700;letter-spacing:1px}
@@ -172,8 +171,9 @@ body[data-lang="es"] .tutorial-lang-btn[data-lang="es"]{background:var(--seconda
 .tutorial-title{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:3px;color:var(--secondary);margin-bottom:15px}
 .tutorial-text{font-size:1rem;color:var(--text-light);line-height:1.6;margin-bottom:20px}
 .tutorial-demo{width:200px;height:150px;margin:0 auto 25px auto;background:linear-gradient(145deg,#C4813A 0%,#8B5A1B 100%);border-radius:15px;position:relative;overflow:hidden;border:3px solid #6B4513}
-.demo-star{position:absolute;width:35px;height:35px;transform:translate(-50%,-50%);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
-.demo-star.lit{transform:translate(-50%,-50%) scale(1.2);filter:drop-shadow(0 0 15px white)}
+.demo-ball{position:absolute;font-size:30px;transform:translate(-50%,-50%)}
+.demo-ball.lit{filter:drop-shadow(0 0 15px #FF6B00);transform:translate(-50%,-50%) scale(1.3)}
+.demo-ball.done{filter:brightness(1.5) hue-rotate(100deg) drop-shadow(0 0 10px #00D9A5)}
 .tutorial-tip{background:rgba(255,107,0,0.1);border-radius:12px;padding:12px 15px;margin-bottom:20px}
 .tutorial-tip-text{font-size:0.85rem;color:var(--secondary)}
 .tutorial-buttons{display:flex;gap:12px;justify-content:center}
@@ -181,7 +181,7 @@ body[data-lang="es"] .tutorial-lang-btn[data-lang="es"]{background:var(--seconda
 .tutorial-btn-skip{background:transparent;border:2px solid rgba(255,255,255,0.2);color:var(--text-muted)}
 .tutorial-btn-next{background:linear-gradient(135deg,var(--secondary) 0%,var(--ball-dark) 100%);border:none;color:var(--text-light)}
 .tutorial-btn-start{background:linear-gradient(135deg,var(--success) 0%,#00B389 100%);border:none;color:var(--bg-dark);padding:14px 35px;font-size:1rem}
-@media(max-width:380px){.pistol-logo{font-size:2.6rem}.court{width:min(88vw,320px);height:min(88vw,320px)}.game-star{width:42px;height:42px}}
+@media(max-width:380px){.pistol-logo{font-size:2.6rem}.court{width:min(88vw,320px);height:min(88vw,320px)}.ball{width:42px;height:42px;font-size:36px}}
 </style>
 </head>
 <body data-lang="en">
@@ -202,12 +202,12 @@ body[data-lang="es"] .tutorial-lang-btn[data-lang="es"]{background:var(--seconda
 <div class="stats-summary"><div class="stat-item"><div class="stat-value" id="totalGames">0</div><div class="stat-label"><span class="lang-en">Games</span><span class="lang-es">Juegos</span></div></div><div class="stat-item"><div class="stat-value" id="bestScore">0</div><div class="stat-label"><span class="lang-en">Best</span><span class="lang-es">Mejor</span></div></div><div class="stat-item"><div class="stat-value" id="currentStreak">0</div><div class="stat-label"><span class="lang-en">Streak</span><span class="lang-es">Racha</span></div></div></div>
 </div>
 
-<div class="screen" id="countdownScreen"><div class="countdown-tier" id="countdownTier">ROOKIE</div><div class="pistol-icon" style="animation:none;font-size:3rem;">🏀</div><div class="countdown-number" id="countdownNum">3</div><div class="countdown-text"><span class="lang-en">GET READY</span><span class="lang-es">¡PREPÁRATE!</span></div></div>
+<div class="screen" id="countdownScreen"><div class="countdown-tier" id="countdownTier">ROOKIE</div><div class="pistol-icon" style="font-size:3rem;">🏀</div><div class="countdown-number" id="countdownNum">3</div><div class="countdown-text"><span class="lang-en">GET READY</span><span class="lang-es">¡PREPÁRATE!</span></div></div>
 
 <div class="screen" id="gameScreen">
 <div class="scoreboard"><div class="scoreboard-main"><div class="scoreboard-tier" id="gameTier">ROOKIE</div><div class="scoreboard-score" id="scoreDisplay">0</div></div><div class="quarter-display"><div class="quarter-dot q1"></div><div class="quarter-dot q2"></div><div class="quarter-dot q3"></div><div class="quarter-dot q4"></div></div><div class="quarter-info"><span class="quarter-label q1" id="quarterLabel">Q1</span><span><span class="lang-en">Round</span><span class="lang-es">Ronda</span> <span id="roundNum">1</span>/<span id="roundTotal">4</span></span></div></div>
 <div class="message-area"><div class="game-message" id="gameMessage"><span class="lang-en">Watch the trail...</span><span class="lang-es">Mira el camino...</span></div></div>
-<div class="court" id="court"><div class="court-markings"><div class="court-center-line"></div><div class="court-center-circle"></div></div><canvas class="trail-canvas" id="trailCanvas"></canvas><div class="star-container" id="starContainer"></div></div>
+<div class="court" id="court"><div class="court-markings"><div class="court-center-line"></div><div class="court-center-circle"></div></div><canvas class="trail-canvas" id="trailCanvas"></canvas><div class="ball-container" id="ballContainer"></div></div>
 </div>
 
 <div class="screen" id="halftimeScreen"><div class="halftime-icon">🏀</div><div class="halftime-title"><span class="lang-en">HALFTIME</span><span class="lang-es">MEDIO TIEMPO</span></div><div class="halftime-score" id="halftimeScore">0</div><div class="halftime-stats"><div class="halftime-row"><span class="halftime-label">Q1</span><span class="halftime-value" id="htQ1">0</span></div><div class="halftime-row"><span class="halftime-label">Q2</span><span class="halftime-value" id="htQ2">0</span></div><div class="halftime-row"><span class="halftime-label"><span class="lang-en">Accuracy</span><span class="lang-es">Precisión</span></span><span class="halftime-value" id="htAccuracy">0%</span></div></div><button class="continue-btn" onclick="continueGame()"><span class="lang-en">2ND HALF →</span><span class="lang-es">¡PA' LA SEGUNDA! →</span></button></div>
@@ -217,7 +217,7 @@ body[data-lang="es"] .tutorial-lang-btn[data-lang="es"]{background:var(--seconda
 <div class="final-score-box"><div class="final-score-label"><span class="lang-en">FINAL SCORE</span><span class="lang-es">PUNTUACIÓN FINAL</span></div><div class="final-score-value" id="finalScore">0</div><div class="final-best-badge" id="finalBestBadge" style="display:none;"><span class="lang-en">🎉 NEW BEST!</span><span class="lang-es">🎉 ¡NUEVO RÉCORD!</span></div></div>
 <div class="tier-progress-box" id="tierProgressBox"><div class="tier-progress-title"><span class="lang-en">Progress to Next Level</span><span class="lang-es">Progreso al Próximo Nivel</span></div><div class="tier-progress-bar-lg"><div class="tier-progress-fill-lg" id="tierProgressFill"></div></div><div class="tier-progress-info"><span class="tier-progress-current" id="tierProgressCurrent">0 / 3</span><span class="tier-progress-goal" id="tierProgressGoal">Unlock: JV</span></div><div class="tier-unlock-msg" id="tierUnlockMsg" style="display:none;"><span class="lang-en">🎉 NEW LEVEL UNLOCKED!</span><span class="lang-es">🎉 ¡SUBISTE DE NIVEL!</span></div></div>
 <div class="quarter-breakdown"><div class="quarter-box"><div class="quarter-box-label q1">Q1</div><div class="quarter-box-value" id="finalQ1">0</div></div><div class="quarter-box"><div class="quarter-box-label q2">Q2</div><div class="quarter-box-value" id="finalQ2">0</div></div><div class="quarter-box"><div class="quarter-box-label q3">Q3</div><div class="quarter-box-value" id="finalQ3">0</div></div><div class="quarter-box"><div class="quarter-box-label q4">Q4</div><div class="quarter-box-value" id="finalQ4">0</div></div></div>
-<div class="final-stats-grid"><div class="final-stat-box"><div class="final-stat-icon">🎯</div><div class="final-stat-value" id="finalAccuracy">0%</div><div class="final-stat-label"><span class="lang-en">Accuracy</span><span class="lang-es">Precisión</span></div></div><div class="final-stat-box"><div class="final-stat-icon">⭐</div><div class="final-stat-value" id="finalLongest">0</div><div class="final-stat-label"><span class="lang-en">Longest Trail</span><span class="lang-es">Camino Más Largo</span></div></div></div>
+<div class="final-stats-grid"><div class="final-stat-box"><div class="final-stat-icon">🎯</div><div class="final-stat-value" id="finalAccuracy">0%</div><div class="final-stat-label"><span class="lang-en">Accuracy</span><span class="lang-es">Precisión</span></div></div><div class="final-stat-box"><div class="final-stat-icon">🏀</div><div class="final-stat-value" id="finalLongest">0</div><div class="final-stat-label"><span class="lang-en">Longest Trail</span><span class="lang-es">Camino Más Largo</span></div></div></div>
 <div class="action-buttons"><button class="play-again-btn" onclick="playAgain()"><span class="lang-en">PLAY AGAIN</span><span class="lang-es">JUGAR OTRA VEZ</span></button><a href="#" onclick="logout();return false;" class="home-link"><span class="lang-en">🚪 Logout</span><span class="lang-es">🚪 Salir</span></a></div>
 </div>
 
@@ -229,28 +229,13 @@ body[data-lang="es"] .tutorial-lang-btn[data-lang="es"]{background:var(--seconda
 <div class="tutorial-lang-toggle"><button class="tutorial-lang-btn" onclick="setLang('en')" data-lang="en">EN</button><button class="tutorial-lang-btn" onclick="setLang('es')" data-lang="es">ES</button></div>
 <div class="tutorial-progress"><div class="tutorial-dot active"></div><div class="tutorial-dot"></div><div class="tutorial-dot"></div><div class="tutorial-dot"></div></div>
 <div class="tutorial-slide active" id="slide0"><span class="tutorial-icon">🏀</span><h2 class="tutorial-title"><span class="lang-en">WELCOME TO GOTROTTERS</span><span class="lang-es">BIENVENIDO A GOTROTTERS</span></h2><p class="tutorial-text"><span class="lang-en">Train your visual-spatial memory like Pistol Pete trained his legendary handles.</span><span class="lang-es">Entrena tu memoria como Pistol Pete entrenó su dribling legendario.</span></p><div class="tutorial-buttons"><button class="tutorial-btn tutorial-btn-skip" onclick="closeTutorial()"><span class="lang-en">Skip</span><span class="lang-es">Saltar</span></button><button class="tutorial-btn tutorial-btn-next" onclick="nextSlide()"><span class="lang-en">Next →</span><span class="lang-es">Siguiente →</span></button></div></div>
-<div class="tutorial-slide" id="slide1"><h2 class="tutorial-title"><span class="lang-en">STEP 1: WATCH</span><span class="lang-es">PASO 1: MIRA</span></h2><div class="tutorial-demo"><div class="demo-star" id="demoStar1" style="left:30%;top:30%;background:#FF6B6B;"></div><div class="demo-star" id="demoStar2" style="left:70%;top:40%;background:#4ECDC4;"></div><div class="demo-star" id="demoStar3" style="left:50%;top:75%;background:#FFEAA7;"></div></div><p class="tutorial-text"><span class="lang-en">Stars light up one by one. Remember the order!</span><span class="lang-es">Las estrellas se prenden una por una. ¡Recuerda el orden!</span></p><div class="tutorial-buttons"><button class="tutorial-btn tutorial-btn-skip" onclick="prevSlide()"><span class="lang-en">← Back</span><span class="lang-es">← Atrás</span></button><button class="tutorial-btn tutorial-btn-next" onclick="nextSlide()"><span class="lang-en">Next →</span><span class="lang-es">Siguiente →</span></button></div></div>
-<div class="tutorial-slide" id="slide2"><h2 class="tutorial-title"><span class="lang-en">STEP 2: TAP</span><span class="lang-es">PASO 2: TOCA</span></h2><div class="tutorial-demo"><div class="demo-star" style="left:30%;top:30%;background:#00D9A5;"></div><div class="demo-star" style="left:70%;top:40%;background:#00D9A5;"></div><div class="demo-star" style="left:50%;top:75%;background:#FFEAA7;"></div></div><p class="tutorial-text"><span class="lang-en">Tap stars in the same order to score!</span><span class="lang-es">¡Toca las estrellas en el mismo orden pa' anotar!</span></p><div class="tutorial-buttons"><button class="tutorial-btn tutorial-btn-skip" onclick="prevSlide()"><span class="lang-en">← Back</span><span class="lang-es">← Atrás</span></button><button class="tutorial-btn tutorial-btn-next" onclick="nextSlide()"><span class="lang-en">Next →</span><span class="lang-es">Siguiente →</span></button></div></div>
+<div class="tutorial-slide" id="slide1"><h2 class="tutorial-title"><span class="lang-en">STEP 1: WATCH</span><span class="lang-es">PASO 1: MIRA</span></h2><div class="tutorial-demo"><div class="demo-ball" id="demoBall1" style="left:30%;top:30%;">🏀</div><div class="demo-ball" id="demoBall2" style="left:70%;top:40%;">🏀</div><div class="demo-ball" id="demoBall3" style="left:50%;top:75%;">🏀</div></div><p class="tutorial-text"><span class="lang-en">Basketballs light up one by one. Remember the order!</span><span class="lang-es">Los balones se prenden uno por uno. ¡Recuerda el orden!</span></p><div class="tutorial-buttons"><button class="tutorial-btn tutorial-btn-skip" onclick="prevSlide()"><span class="lang-en">← Back</span><span class="lang-es">← Atrás</span></button><button class="tutorial-btn tutorial-btn-next" onclick="nextSlide()"><span class="lang-en">Next →</span><span class="lang-es">Siguiente →</span></button></div></div>
+<div class="tutorial-slide" id="slide2"><h2 class="tutorial-title"><span class="lang-en">STEP 2: TAP</span><span class="lang-es">PASO 2: TOCA</span></h2><div class="tutorial-demo"><div class="demo-ball done" style="left:30%;top:30%;">🏀</div><div class="demo-ball done" style="left:70%;top:40%;">🏀</div><div class="demo-ball" style="left:50%;top:75%;">🏀</div></div><p class="tutorial-text"><span class="lang-en">Tap basketballs in the same order. Green trail = success!</span><span class="lang-es">¡Toca los balones en el mismo orden. Línea verde = éxito!</span></p><div class="tutorial-buttons"><button class="tutorial-btn tutorial-btn-skip" onclick="prevSlide()"><span class="lang-en">← Back</span><span class="lang-es">← Atrás</span></button><button class="tutorial-btn tutorial-btn-next" onclick="nextSlide()"><span class="lang-en">Next →</span><span class="lang-es">Siguiente →</span></button></div></div>
 <div class="tutorial-slide" id="slide3"><span class="tutorial-icon">🏆</span><h2 class="tutorial-title"><span class="lang-en">EARN YOUR WAY UP</span><span class="lang-es">SUBE DE NIVEL</span></h2><p class="tutorial-text"><span class="lang-en">Complete games to unlock 8 tiers of mastery. No shortcuts!</span><span class="lang-es">Completa juegos pa' desbloquear 8 niveles. ¡Sin atajos!</span></p><div class="tutorial-tip"><span>💡 </span><span class="tutorial-tip-text"><span class="lang-en">Tip: Start with Showtime rhythm!</span><span class="lang-es">Tip: ¡Empieza con ritmo Showtime!</span></span></div><div class="tutorial-buttons"><button class="tutorial-btn tutorial-btn-start" onclick="closeTutorial()"><span class="lang-en">LET'S GO! 🏀</span><span class="lang-es">¡PA'LANTE! 🏀</span></button></div></div>
 </div>
 </div>
 
 <script>
-// =============================================
-// 8 VIBRANT COLORS FOR STARS
-// =============================================
-var STAR_COLORS = [
-    '#FF6B6B', // Coral Red
-    '#4ECDC4', // Teal
-    '#45B7D1', // Sky Blue
-    '#96CEB4', // Sage Green
-    '#FFEAA7', // Soft Yellow
-    '#DDA0DD', // Plum
-    '#FF8C42', // Orange
-    '#A8E6CF'  // Mint
-];
-
-// Language
 var currentLang = localStorage.getItem('gostar-lang') || 'en';
 document.body.setAttribute('data-lang', currentLang);
 
@@ -263,7 +248,6 @@ function setLang(l) {
     });
 }
 
-// Audio
 var audioCtx = null;
 function getAudio() {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -284,7 +268,6 @@ function playBeep(freq, dur) {
     } catch (e) {}
 }
 
-// Config
 var tiers = {
     rookie: {name: 'ROOKIE', icon: '🌟', stars: 4, seqMin: 3, seqMax: 4, rounds: 3, req: 0, next: 'jv'},
     jv: {name: 'JV', icon: '🏀', stars: 5, seqMin: 4, seqMax: 5, rounds: 4, req: 3, next: 'varsity'},
@@ -302,27 +285,21 @@ var rhythms = {
     pistol: {ms: 380, pause: 180, label: 'PISTOL • 150 BPM'}
 };
 
-// Progress
 function getProgress() {
     try { return JSON.parse(localStorage.getItem('gotrotters-progress')) || {}; } catch (e) { return {}; }
 }
-function saveProgress(p) {
-    localStorage.setItem('gotrotters-progress', JSON.stringify(p));
-}
+function saveProgress(p) { localStorage.setItem('gotrotters-progress', JSON.stringify(p)); }
 
-// State
 var selTier = 'rookie', selRhythm = 'showtime';
 var quarter = 1, round = 1, score = 0, qScores = [0,0,0,0];
-var stars = [], seq = [], idx = 0, done = [], showing = false;
+var balls = [], seq = [], idx = 0, done = [], showing = false;
 var correct = 0, attempts = 0, longest = 0;
 
-// Screens
 function showScreen(id) {
     document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
     document.getElementById(id).classList.add('active');
 }
 
-// Tier Grid
 function renderTiers() {
     var grid = document.getElementById('tierGrid');
     grid.innerHTML = '';
@@ -349,13 +326,7 @@ function renderTiers() {
         var nextReq = t.next ? tiers[t.next].req : 0;
         var pct = t.next ? Math.min(100, (comp / nextReq) * 100) : 100;
         
-        btn.innerHTML = '<span class="tier-icon">' + t.icon + '</span>' +
-            '<div class="tier-info"><div class="tier-name">' + t.name + '</div>' +
-            '<div class="tier-desc">' + t.stars + ' stars</div></div>' +
-            (unlocked ? '<div class="tier-progress"><span class="tier-progress-text">' + comp + '</span>' +
-            (t.next ? '<div class="tier-progress-bar"><div class="tier-progress-fill" style="width:' + pct + '%"></div></div>' : '') +
-            '</div>' : '<span class="tier-badge locked-badge">🔒 ' + t.req + '</span>');
-        
+        btn.innerHTML = '<span class="tier-icon">' + t.icon + '</span><div class="tier-info"><div class="tier-name">' + t.name + '</div><div class="tier-desc">' + t.stars + ' balls</div></div>' + (unlocked ? '<div class="tier-progress"><span class="tier-progress-text">' + comp + '</span>' + (t.next ? '<div class="tier-progress-bar"><div class="tier-progress-fill" style="width:' + pct + '%"></div></div>' : '') + '</div>' : '<span class="tier-badge locked-badge">🔒 ' + t.req + '</span>');
         grid.appendChild(btn);
     });
     
@@ -372,7 +343,6 @@ function selectRhythm(r) {
     });
 }
 
-// Game
 function startGame() {
     quarter = 1; round = 1; score = 0; qScores = [0,0,0,0];
     correct = 0; attempts = 0; longest = 0;
@@ -411,9 +381,7 @@ function updateQ() {
     lbl.className = 'quarter-label q' + quarter;
 }
 
-function updateScore() {
-    document.getElementById('scoreDisplay').textContent = score;
-}
+function updateScore() { document.getElementById('scoreDisplay').textContent = score; }
 
 function setMsg(txt, type) {
     var el = document.getElementById('gameMessage');
@@ -421,13 +389,10 @@ function setMsg(txt, type) {
     el.className = 'game-message' + (type ? ' ' + type : '');
 }
 
-// =============================================
-// STAR CREATION - USING DIV WITH BACKGROUND COLOR
-// =============================================
-function makeStars(n) {
+function makeBalls(n) {
     var court = document.getElementById('court');
     var w = court.offsetWidth, h = court.offsetHeight;
-    stars = [];
+    balls = [];
     
     for (var i = 0; i < n; i++) {
         var x, y, ok, tries = 0;
@@ -435,44 +400,35 @@ function makeStars(n) {
             x = 45 + Math.random() * (w - 90);
             y = 45 + Math.random() * (h - 90);
             ok = true;
-            for (var j = 0; j < stars.length; j++) {
-                var dx = x - stars[j].x, dy = y - stars[j].y;
+            for (var j = 0; j < balls.length; j++) {
+                var dx = x - balls[j].x, dy = y - balls[j].y;
                 if (Math.sqrt(dx*dx + dy*dy) < 55) { ok = false; break; }
             }
             tries++;
         } while (!ok && tries < 100);
-        
-        // EACH STAR GETS ITS OWN COLOR
-        stars.push({
-            x: x,
-            y: y,
-            color: STAR_COLORS[i % STAR_COLORS.length]
-        });
+        balls.push({x: x, y: y});
     }
 }
 
-function renderStars() {
-    var container = document.getElementById('starContainer');
+function renderBalls() {
+    var container = document.getElementById('ballContainer');
     container.innerHTML = '';
     
-    for (var i = 0; i < stars.length; i++) {
-        var star = stars[i];
-        
-        // CREATE A DIV WITH BACKGROUND COLOR (NOT SVG)
+    for (var i = 0; i < balls.length; i++) {
+        var b = balls[i];
         var div = document.createElement('div');
-        div.className = 'game-star';
+        div.className = 'ball';
         div.setAttribute('data-idx', i);
-        div.style.left = star.x + 'px';
-        div.style.top = star.y + 'px';
-        div.style.backgroundColor = star.color; // SET COLOR DIRECTLY
+        div.style.left = b.x + 'px';
+        div.style.top = b.y + 'px';
+        div.textContent = '🏀';
         
         (function(index) {
-            div.onclick = function() { clickStar(index); };
+            div.onclick = function() { clickBall(index); };
         })(i);
         
         container.appendChild(div);
     }
-    
     clearTrail();
 }
 
@@ -488,23 +444,25 @@ function drawTrail() {
     var ctx = cv.getContext('2d');
     ctx.clearRect(0, 0, cv.width, cv.height);
     if (done.length < 2) return;
+    
+    // GREEN TRAIL
     ctx.strokeStyle = '#00D9A5';
-    ctx.lineWidth = 4;
+    ctx.lineWidth = 5;
     ctx.lineCap = 'round';
     ctx.shadowColor = '#00D9A5';
-    ctx.shadowBlur = 15;
+    ctx.shadowBlur = 20;
     ctx.beginPath();
     for (var i = 0; i < done.length; i++) {
-        var s = stars[done[i]];
-        if (i === 0) ctx.moveTo(s.x, s.y);
-        else ctx.lineTo(s.x, s.y);
+        var b = balls[done[i]];
+        if (i === 0) ctx.moveTo(b.x, b.y);
+        else ctx.lineTo(b.x, b.y);
     }
     ctx.stroke();
 }
 
-function disableStars(d) {
-    document.querySelectorAll('.game-star').forEach(function(s) {
-        s.classList.toggle('disabled', d);
+function disableBalls(d) {
+    document.querySelectorAll('.ball').forEach(function(b) {
+        b.classList.toggle('disabled', d);
     });
 }
 
@@ -514,12 +472,12 @@ function startRound() {
     done = [];
     
     var t = tiers[selTier];
-    makeStars(t.stars);
-    renderStars();
+    makeBalls(t.stars);
+    renderBalls();
     
     var len = t.seqMin + Math.floor(Math.random() * (t.seqMax - t.seqMin + 1));
     var avail = [];
-    for (var i = 0; i < stars.length; i++) avail.push(i);
+    for (var i = 0; i < balls.length; i++) avail.push(i);
     
     seq = [];
     for (var i = 0; i < len; i++) {
@@ -530,7 +488,7 @@ function startRound() {
     }
     
     setMsg(currentLang === 'es' ? 'Mira el camino...' : 'Watch the trail...');
-    disableStars(true);
+    disableBalls(true);
     setTimeout(showSeq, 700);
 }
 
@@ -541,18 +499,18 @@ function showSeq() {
     
     function next() {
         if (i > 0) {
-            var prev = document.querySelector('.game-star[data-idx="' + seq[i-1] + '"]');
+            var prev = document.querySelector('.ball[data-idx="' + seq[i-1] + '"]');
             if (prev) prev.classList.remove('lit');
         }
         
         if (i >= seq.length) {
             showing = false;
             setMsg(currentLang === 'es' ? '¡Te toca!' : 'Your turn!');
-            disableStars(false);
+            disableBalls(false);
             return;
         }
         
-        var el = document.querySelector('.game-star[data-idx="' + seq[i] + '"]');
+        var el = document.querySelector('.ball[data-idx="' + seq[i] + '"]');
         if (el) {
             el.classList.add('lit');
             playBeep(261.63 * (1 + seq[i] * 0.1), 0.2);
@@ -564,16 +522,13 @@ function showSeq() {
     next();
 }
 
-function clickStar(i) {
+function clickBall(i) {
     if (showing) return;
     
-    var el = document.querySelector('.game-star[data-idx="' + i + '"]');
+    var el = document.querySelector('.ball[data-idx="' + i + '"]');
     if (!el || el.classList.contains('completed')) return;
     
-    var origColor = stars[i].color;
-    
     if (i === seq[idx]) {
-        // CORRECT
         done.push(i);
         el.classList.add('completed');
         playBeep(523.25, 0.15);
@@ -587,13 +542,12 @@ function clickStar(i) {
             var pts = seq.length * 20;
             score += pts;
             qScores[quarter - 1] += pts;
-            disableStars(true);
+            disableBalls(true);
             updateScore();
             setMsg((currentLang === 'es' ? '¡Wepa! +' : 'Perfect! +') + pts, 'success');
             setTimeout(nextRound, 1200);
         }
     } else {
-        // WRONG
         attempts++;
         el.classList.add('error');
         playBeep(150, 0.25);
@@ -644,7 +598,7 @@ function continueGame() {
     document.getElementById('rhythmBadge').classList.add('visible');
     showScreen('gameScreen');
     updateQ();
-    setMsg('Q3' + (currentLang === 'es' ? ' - ¡Pa\' la segunda!' : ' - Second half!'));
+    setMsg('Q3' + (currentLang === 'es' ? ' - ¡Segunda mitad!' : ' - Second half!'));
     setTimeout(startRound, 1000);
 }
 
@@ -684,7 +638,6 @@ function endGame() {
     document.getElementById('finalTrophy').textContent = t.icon;
     showScreen('finalScreen');
     
-    // Record session
     var pin = sessionStorage.getItem('gostar-user-pin');
     var code = sessionStorage.getItem('gostar-user-code');
     var name = sessionStorage.getItem('gostar-user-name');
@@ -705,7 +658,6 @@ function logout() {
     window.location.href = '/play';
 }
 
-// Tutorial
 var slide = 0;
 var demoTimer = null;
 
@@ -743,8 +695,8 @@ function startDemo() {
     if (slide === 1) {
         var i = 0;
         function anim() {
-            document.querySelectorAll('#slide1 .demo-star').forEach(function(s) { s.classList.remove('lit'); });
-            var el = document.getElementById('demoStar' + (i + 1));
+            document.querySelectorAll('#slide1 .demo-ball').forEach(function(b) { b.classList.remove('lit'); });
+            var el = document.getElementById('demoBall' + (i + 1));
             if (el) el.classList.add('lit');
             i = (i + 1) % 4;
             if (i === 0) i = 0;
@@ -758,7 +710,6 @@ function stopDemo() {
     if (demoTimer) { clearTimeout(demoTimer); demoTimer = null; }
 }
 
-// Init
 document.querySelectorAll('.lang-btn').forEach(function(b) {
     b.classList.toggle('active', b.textContent.trim() === currentLang.toUpperCase());
 });
