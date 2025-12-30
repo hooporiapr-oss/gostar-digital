@@ -931,7 +931,7 @@ app.post('/api/game/session', function(req, res) {
         return res.status(400).json({ error: 'Missing game type' });
     }
     
-    var validGames = ['sequence', 'startrail', 'duo', 'gonogo'];
+    var validGames = ['sequence', 'startrail', 'duo', 'gonogo', 'startrotters'];
     if (validGames.indexOf(game) === -1) {
         return res.status(400).json({ error: 'Invalid game type' });
     }
