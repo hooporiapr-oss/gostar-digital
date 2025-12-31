@@ -39,7 +39,8 @@
 }
 
 .login-logo {
-    font-size: 64px;
+    width: 120px;
+    height: auto;
     margin-bottom: 16px;
     filter: drop-shadow(0 0 20px rgba(255, 217, 61, 0.4));
 }
@@ -261,8 +262,8 @@ body[data-lang="en"] .lang-en { display: inline !important; }
 }
 
 .sidebar-logo-icon {
-    font-size: 32px;
-    filter: drop-shadow(0 0 10px rgba(255, 217, 61, 0.4));
+    width: 40px;
+    height: auto;
 }
 
 .sidebar-logo-text {
@@ -658,6 +659,29 @@ tr:hover td {
     background: currentColor;
 }
 
+/* Ring Badge */
+.ring-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+    background: linear-gradient(135deg, rgba(255, 217, 61, 0.15) 0%, rgba(255, 159, 28, 0.15) 100%);
+    border: 1px solid rgba(255, 217, 61, 0.3);
+    color: var(--accent-gold);
+}
+
+.ring-badge.level-1 { background: rgba(205, 127, 50, 0.15); border-color: rgba(205, 127, 50, 0.3); color: #CD7F32; }
+.ring-badge.level-2 { background: rgba(255, 107, 107, 0.15); border-color: rgba(255, 107, 107, 0.3); color: #FF6B6B; }
+.ring-badge.level-3 { background: rgba(0, 217, 165, 0.15); border-color: rgba(0, 217, 165, 0.3); color: #00D9A5; }
+.ring-badge.level-4 { background: rgba(77, 168, 255, 0.15); border-color: rgba(77, 168, 255, 0.3); color: #4DA8FF; }
+.ring-badge.level-5 { background: rgba(255, 217, 61, 0.15); border-color: rgba(255, 217, 61, 0.3); color: #FFD93D; }
+.ring-badge.level-6 { background: rgba(168, 85, 247, 0.15); border-color: rgba(168, 85, 247, 0.3); color: #A855F7; }
+.ring-badge.level-7 { background: rgba(34, 197, 94, 0.15); border-color: rgba(34, 197, 94, 0.3); color: #22C55E; }
+.ring-badge.level-8 { background: linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%); border-color: gold; color: gold; }
+
 /* Facility PIN */
 .license-key {
     font-family: 'Inter', sans-serif;
@@ -929,20 +953,6 @@ tr:hover td {
     color: var(--accent-coral);
 }
 
-/* Session cells */
-.session-cell {
-    text-align: center;
-    font-weight: 600;
-    color: var(--text-secondary);
-    min-width: 40px;
-}
-
-.session-total {
-    text-align: center;
-    color: var(--accent-gold);
-    min-width: 50px;
-}
-
 /* Responsive */
 @media (max-width: 1200px) {
     .stats-grid {
@@ -991,7 +1001,7 @@ tr:hover td {
 <!-- Login Screen -->
 <div class="login-screen" id="loginScreen">
     <div class="login-card">
-        <div class="login-logo">⭐</div>
+        <img src="gostar_logo_transparent.png" alt="GoStar Digital" class="login-logo">
         <h1 class="login-title">Go<span>Star</span></h1>
         <span class="login-badge">Admin Access</span>
         <p class="login-subtitle">
@@ -1028,7 +1038,7 @@ tr:hover td {
     <aside class="sidebar">
         <div class="sidebar-header">
             <a href="index.html" class="sidebar-logo">
-                <span class="sidebar-logo-icon">⭐</span>
+                <img src="gostar_logo_transparent.png" alt="GoStar" class="sidebar-logo-icon">
                 <span class="sidebar-logo-text">Go<span>Star</span></span>
             </a>
             <span class="sidebar-badge">Admin</span>
@@ -1064,8 +1074,8 @@ tr:hover td {
                 </button>
                 <button class="nav-item" onclick="showSection('users')">
                     <span class="nav-item-icon">👥</span>
-                    <span class="lang-en">All Users</span>
-                    <span class="lang-es">Usuarios</span>
+                    <span class="lang-en">GoTrotters</span>
+                    <span class="lang-es">GoTrotters</span>
                 </button>
             </div>
             
@@ -1112,8 +1122,8 @@ tr:hover td {
                         <span class="lang-es">Panel de Control</span>
                     </h1>
                     <p class="page-subtitle">
-                        <span class="lang-en">Platform overview and key metrics</span>
-                        <span class="lang-es">Resumen de la plataforma y métricas clave</span>
+                        <span class="lang-en">GoTrotters platform overview</span>
+                        <span class="lang-es">Resumen de la plataforma GoTrotters</span>
                     </p>
                 </div>
                 <div class="header-actions">
@@ -1139,23 +1149,23 @@ tr:hover td {
                 
                 <div class="stat-card">
                     <div class="stat-header">
-                        <div class="stat-icon">👥</div>
+                        <div class="stat-icon">🏀</div>
                     </div>
                     <div class="stat-value" id="stat-users">0</div>
                     <div class="stat-label">
-                        <span class="lang-en">Total Users</span>
-                        <span class="lang-es">Usuarios Totales</span>
+                        <span class="lang-en">GoTrotters</span>
+                        <span class="lang-es">GoTrotters</span>
                     </div>
                 </div>
                 
                 <div class="stat-card">
                     <div class="stat-header">
-                        <div class="stat-icon">🎮</div>
+                        <div class="stat-icon">💍</div>
                     </div>
                     <div class="stat-value" id="stat-sessions">0</div>
                     <div class="stat-label">
-                        <span class="lang-en">Training Sessions</span>
-                        <span class="lang-es">Sesiones de Entrenamiento</span>
+                        <span class="lang-en">Rings Earned</span>
+                        <span class="lang-es">Anillos Ganados</span>
                     </div>
                 </div>
                 
@@ -1196,8 +1206,8 @@ tr:hover td {
                                     <span class="lang-es">PIN de Instalación</span>
                                 </th>
                                 <th>
-                                    <span class="lang-en">Users</span>
-                                    <span class="lang-es">Usuarios</span>
+                                    <span class="lang-en">GoTrotters</span>
+                                    <span class="lang-es">GoTrotters</span>
                                 </th>
                                 <th>
                                     <span class="lang-en">Status</span>
@@ -1257,8 +1267,8 @@ tr:hover td {
                                     <span class="lang-es">PIN de Instalación</span>
                                 </th>
                                 <th>
-                                    <span class="lang-en">Users</span>
-                                    <span class="lang-es">Usuarios</span>
+                                    <span class="lang-en">GoTrotters</span>
+                                    <span class="lang-es">GoTrotters</span>
                                 </th>
                                 <th>
                                     <span class="lang-en">Status</span>
@@ -1347,17 +1357,17 @@ tr:hover td {
             </div>
         </div>
         
-        <!-- Users Section -->
+        <!-- Users/GoTrotters Section -->
         <div id="section-users" class="page-section" style="display: none;">
             <div class="page-header">
                 <div>
                     <h1 class="page-title">
-                        <span class="lang-en">All Users</span>
-                        <span class="lang-es">Todos los Usuarios</span>
+                        <span class="lang-en">GoTrotters</span>
+                        <span class="lang-es">GoTrotters</span>
                     </h1>
                     <p class="page-subtitle">
-                        <span class="lang-en">Users across all facilities</span>
-                        <span class="lang-es">Usuarios de todas las instalaciones</span>
+                        <span class="lang-en">All players across facilities</span>
+                        <span class="lang-es">Todos los jugadores de las instalaciones</span>
                     </p>
                 </div>
             </div>
@@ -1379,25 +1389,19 @@ tr:hover td {
                                     <span class="lang-en">Facility</span>
                                     <span class="lang-es">Instalación</span>
                                 </th>
-                                <th title="Sequence Memory">
-                                    ⭐
-                                    <div style="font-size: 10px; font-weight: 400; opacity: 0.7;">Sequence</div>
-                                </th>
-                                <th title="StarTrail">
-                                    🛤️
-                                    <div style="font-size: 10px; font-weight: 400; opacity: 0.7;">StarTrail</div>
-                                </th>
-                                <th title="Pattern Challenges">
-                                    🎯
-                                    <div style="font-size: 10px; font-weight: 400; opacity: 0.7;">Duo</div>
-                                </th>
-                                <th title="Go/No-Go Trail">
-                                    🚦
-                                    <div style="font-size: 10px; font-weight: 400; opacity: 0.7;">Go/No-Go</div>
+                                <th>
+                                    💍
+                                    <div style="font-size: 10px; font-weight: 400; opacity: 0.7;">
+                                        <span class="lang-en">Current Ring</span>
+                                        <span class="lang-es">Anillo Actual</span>
+                                    </div>
                                 </th>
                                 <th>
-                                    <span class="lang-en">Total</span>
-                                    <span class="lang-es">Total</span>
+                                    🏀
+                                    <div style="font-size: 10px; font-weight: 400; opacity: 0.7;">
+                                        <span class="lang-en">Sessions</span>
+                                        <span class="lang-es">Sesiones</span>
+                                    </div>
                                 </th>
                                 <th>
                                     <span class="lang-en">Streak</span>
@@ -1450,8 +1454,8 @@ tr:hover td {
                                     <span class="lang-es">Tipo</span>
                                 </th>
                                 <th>
-                                    <span class="lang-en">User</span>
-                                    <span class="lang-es">Usuario</span>
+                                    <span class="lang-en">GoTrotter</span>
+                                    <span class="lang-es">GoTrotter</span>
                                 </th>
                                 <th>
                                     <span class="lang-en">Facility</span>
@@ -1539,7 +1543,7 @@ tr:hover td {
                     <span class="lang-es">Tipo de Licencia</span>
                 </label>
                 <select class="form-input form-select" id="license-type">
-                    <option value="trial">🆓 Free Trial - 7 Days, 10 Users</option>
+                    <option value="trial">🆓 Free Trial - 7 Days, 10 GoTrotters</option>
                 </select>
                 <p class="form-hint">
                     <span class="lang-en">More license types coming soon.</span>
@@ -1633,15 +1637,33 @@ tr:hover td {
 
 <script>
 // ============================================
+// GOTROTTERS RING LEVELS
+// ============================================
+var RING_LEVELS = [
+    { level: 1, name: 'Rookie', nameEs: 'Novato', icon: '🥉', color: '#CD7F32' },
+    { level: 2, name: 'Hustle', nameEs: 'Esfuerzo', icon: '💪', color: '#FF6B6B' },
+    { level: 3, name: 'Assist', nameEs: 'Asistencia', icon: '🤝', color: '#00D9A5' },
+    { level: 4, name: 'Playmaker', nameEs: 'Creador', icon: '👁️', color: '#4DA8FF' },
+    { level: 5, name: 'All-Star', nameEs: 'All-Star', icon: '⭐', color: '#FFD93D' },
+    { level: 6, name: 'MVP', nameEs: 'MVP', icon: '🏅', color: '#A855F7' },
+    { level: 7, name: 'Champion', nameEs: 'Campeón', icon: '🏆', color: '#22C55E' },
+    { level: 8, name: 'Legend', nameEs: 'Leyenda', icon: '👑', color: 'gold' }
+];
+
+function getRingBadge(level) {
+    var ring = RING_LEVELS[Math.min(level - 1, 7)] || RING_LEVELS[0];
+    var name = currentLang === 'es' ? ring.nameEs : ring.name;
+    return '<span class="ring-badge level-' + ring.level + '">' + ring.icon + ' ' + name + ' Ring</span>';
+}
+
+// ============================================
 // ADMIN AUTH - API BASED
 // ============================================
-var API_BASE = window.location.origin; // Uses same domain
+var API_BASE = window.location.origin;
 
-// Check login status on page load
 function checkAuth() {
     var token = sessionStorage.getItem('admin-token');
     if (token) {
-        // Verify token is still valid
         fetch(API_BASE + '/api/admin/verify-token', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -1651,7 +1673,6 @@ function checkAuth() {
         .then(function(data) {
             if (data.success) {
                 document.getElementById('loginScreen').classList.add('hidden');
-                // Load dashboard data after successful auth
                 fetchDashboardData();
             } else {
                 sessionStorage.removeItem('admin-token');
@@ -1659,7 +1680,6 @@ function checkAuth() {
             }
         })
         .catch(function() {
-            // Token invalid or server error - require re-login
             sessionStorage.removeItem('admin-token');
             showLoginScreen();
         });
@@ -1673,41 +1693,29 @@ function showLoginScreen() {
     document.getElementById('pin1').focus();
 }
 
-// PIN Input handling
 var pinInputs = document.querySelectorAll('.pin-input');
 pinInputs.forEach(function(input, index) {
     input.addEventListener('input', function(e) {
-        // Only allow numbers
         this.value = this.value.replace(/[^0-9]/g, '');
-        
-        // Move to next input
         if (this.value.length === 1 && index < pinInputs.length - 1) {
             pinInputs[index + 1].focus();
         }
-        
-        // Auto-submit when all filled
         if (index === pinInputs.length - 1 && this.value.length === 1) {
             verifyPin();
         }
-        
-        // Clear error state
         document.getElementById('loginError').classList.remove('show');
         pinInputs.forEach(function(inp) { inp.classList.remove('error'); });
     });
     
     input.addEventListener('keydown', function(e) {
-        // Handle backspace
         if (e.key === 'Backspace' && this.value.length === 0 && index > 0) {
             pinInputs[index - 1].focus();
         }
-        
-        // Handle Enter
         if (e.key === 'Enter') {
             verifyPin();
         }
     });
     
-    // Handle paste
     input.addEventListener('paste', function(e) {
         e.preventDefault();
         var pastedData = e.clipboardData.getData('text').replace(/[^0-9]/g, '');
@@ -1726,16 +1734,12 @@ function verifyPin() {
         enteredPin += input.value;
     });
     
-    if (enteredPin.length < 4) {
-        return;
-    }
+    if (enteredPin.length < 4) return;
     
-    // Disable button while checking
     var loginBtn = document.getElementById('loginBtn');
     loginBtn.disabled = true;
     loginBtn.innerHTML = '<span class="lang-en">Verifying...</span><span class="lang-es">Verificando...</span>';
     
-    // Call API to verify PIN
     fetch(API_BASE + '/api/admin/verify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -1744,10 +1748,8 @@ function verifyPin() {
     .then(function(res) { return res.json(); })
     .then(function(data) {
         if (data.success) {
-            // Store token and enter dashboard
             sessionStorage.setItem('admin-token', data.token);
             document.getElementById('loginScreen').classList.add('hidden');
-            // Load dashboard data after successful login
             fetchDashboardData();
         } else {
             showPinError();
@@ -1775,7 +1777,6 @@ function showPinError() {
 function logout() {
     var token = sessionStorage.getItem('admin-token');
     if (token) {
-        // Invalidate token on server
         fetch(API_BASE + '/api/admin/logout', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -1785,19 +1786,13 @@ function logout() {
     
     sessionStorage.removeItem('admin-token');
     document.getElementById('loginScreen').classList.remove('hidden');
-    
-    // Clear data arrays
     facilities = [];
     licenses = [];
     users = [];
-    
-    pinInputs.forEach(function(input) {
-        input.value = '';
-    });
+    pinInputs.forEach(function(input) { input.value = ''; });
     document.getElementById('pin1').focus();
 }
 
-// Initialize auth check
 checkAuth();
 
 // Language
@@ -1811,27 +1806,26 @@ function setLang(lang) {
     btns.forEach(function(btn) {
         btn.classList.toggle('active', btn.textContent === lang.toUpperCase());
     });
+    // Re-render tables for language change
+    renderOverviewTable();
+    renderFacilitiesTable();
+    renderLicensesTable();
+    renderUsersTable();
 }
 
-// Initialize language
 document.body.setAttribute('data-lang', currentLang);
 document.querySelectorAll('.lang-btn').forEach(function(btn) {
     btn.classList.toggle('active', btn.textContent === currentLang.toUpperCase());
 });
 
-// Sample Data
+// Data
 var facilities = [];
-
 var licenses = [];
-
 var users = [];
-
 var activities = [];
 
-// Fetch real data from API
 function fetchDashboardData() {
     var token = sessionStorage.getItem('admin-token');
-    
     if (!token) {
         showLoginScreen();
         return;
@@ -1839,13 +1833,9 @@ function fetchDashboardData() {
     
     var headers = { 'Authorization': 'Bearer ' + token };
     
-    // Fetch facilities
     fetch('/api/admin/facilities', { headers: headers })
     .then(function(r) {
-        if (r.status === 401) {
-            logout();
-            throw new Error('Unauthorized');
-        }
+        if (r.status === 401) { logout(); throw new Error('Unauthorized'); }
         return r.json();
     })
     .then(function(data) {
@@ -1870,11 +1860,8 @@ function fetchDashboardData() {
             updateStats();
         }
     })
-    .catch(function(err) {
-        console.log('Facility fetch error:', err);
-    });
+    .catch(function(err) { console.log('Facility fetch error:', err); });
     
-    // Fetch licenses
     fetch('/api/admin/licenses-list', { headers: headers })
     .then(function(r) {
         if (r.status === 401) throw new Error('Unauthorized');
@@ -1896,11 +1883,8 @@ function fetchDashboardData() {
             updateStats();
         }
     })
-    .catch(function(err) {
-        console.log('License fetch error:', err);
-    });
+    .catch(function(err) { console.log('License fetch error:', err); });
     
-    // Fetch users
     fetch('/api/admin/users', { headers: headers })
     .then(function(r) {
         if (r.status === 401) throw new Error('Unauthorized');
@@ -1914,19 +1898,8 @@ function fetchDashboardData() {
                     name: u.username,
                     pin: u.pin || null,
                     facility: u.facility_name || 'Unknown',
-                    sessions: {
-                        sequence: u.sessions_sequence || 0,
-                        startrail: u.sessions_startrail || 0,
-                        duo: u.sessions_duo || 0,
-                        gonogo: u.sessions_gonogo || 0
-                    },
-                    bests: {
-                        sequence: u.best_sequence || 0,
-                        startrail: u.best_startrail || 0,
-                        duo: u.best_duo || 0,
-                        gonogo: u.best_gonogo || 0
-                    },
-                    totalSessions: (u.sessions_sequence || 0) + (u.sessions_startrail || 0) + (u.sessions_duo || 0) + (u.sessions_gonogo || 0),
+                    ringLevel: u.ring_level || 1,
+                    totalSessions: u.total_sessions || 0,
                     streak: u.streak || 0,
                     lastActive: u.last_active ? u.last_active.split('T')[0] : 'Never'
                 };
@@ -1935,11 +1908,8 @@ function fetchDashboardData() {
             updateStats();
         }
     })
-    .catch(function(err) {
-        console.log('User fetch error:', err);
-    });
+    .catch(function(err) { console.log('User fetch error:', err); });
     
-    // Fetch activity log
     fetch('/api/admin/activity', { headers: headers })
     .then(function(r) {
         if (r.status === 401) throw new Error('Unauthorized');
@@ -1951,52 +1921,24 @@ function fetchDashboardData() {
             renderActivityLog();
         }
     })
-    .catch(function(err) {
-        console.log('Activity fetch error:', err);
-    });
-}
-
-// Demo data fallback
-function loadDemoData() {
-    // Fresh start - no demo data, just render empty tables
-    facilities = [];
-    licenses = [];
-    users = [];
-    
-    renderOverviewTable();
-    renderFacilitiesTable();
-    renderLicensesTable();
-    renderUsersTable();
-    updateStats();
+    .catch(function(err) { console.log('Activity fetch error:', err); });
 }
 
 // Navigation
 function showSection(sectionId) {
-    // Hide all sections
     document.querySelectorAll('.page-section').forEach(function(section) {
         section.style.display = 'none';
     });
-    
-    // Show selected section
     document.getElementById('section-' + sectionId).style.display = 'block';
-    
-    // Update nav
     document.querySelectorAll('.nav-item').forEach(function(item) {
         item.classList.remove('active');
     });
     event.currentTarget.classList.add('active');
-    
-    // Refresh data for section
-    if (sectionId === 'overview') renderOverviewTable();
-    if (sectionId === 'facilities') renderFacilitiesTable();
-    if (sectionId === 'licenses') renderLicensesTable();
-    if (sectionId === 'users') renderUsersTable();
 }
 
 // Modal
 function openModal(modalId) {
     document.getElementById('modal-' + modalId).classList.add('active');
-    // Reset form
     if (modalId === 'newLicense') {
         document.getElementById('generated-key-container').style.display = 'none';
         document.getElementById('generate-key-btn').style.display = 'inline-flex';
@@ -2009,7 +1951,6 @@ function closeModal(modalId) {
     document.getElementById('modal-' + modalId).classList.remove('active');
 }
 
-// Generate Facility
 function generateLicenseKey() {
     var facilityName = document.getElementById('license-facility-name').value;
     var facilityLocation = document.getElementById('license-facility-location').value;
@@ -2019,14 +1960,10 @@ function generateLicenseKey() {
         return;
     }
     
-    // Set expiration to 7 days from now
     var today = new Date();
     var expires = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
     var expirationDate = expires.toISOString().split('T')[0];
     
-    var token = sessionStorage.getItem('admin-token');
-    
-    // Create license via API
     fetch('/api/admin/licenses', {
         method: 'POST',
         headers: { 
@@ -2044,58 +1981,25 @@ function generateLicenseKey() {
     .then(r => r.json())
     .then(data => {
         if (data.key) {
-            // Show generated key
             document.getElementById('generated-key-value').textContent = data.key;
             document.getElementById('generated-key-container').style.display = 'block';
             document.getElementById('generate-key-btn').style.display = 'none';
-            
-            // Refresh dashboard data
             fetchDashboardData();
         } else {
             alert(currentLang === 'es' ? '❌ Error al crear licencia' : '❌ Error creating license');
         }
     })
     .catch(err => {
-        console.log('API error, falling back to local:', err);
-        // Fallback to local generation
+        console.log('API error:', err);
         var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
         var key = 'GOSTAR-';
-        for (var i = 0; i < 4; i++) {
-            key += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
+        for (var i = 0; i < 4; i++) key += chars.charAt(Math.floor(Math.random() * chars.length));
         key += '-';
-        for (var i = 0; i < 4; i++) {
-            key += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
+        for (var i = 0; i < 4; i++) key += chars.charAt(Math.floor(Math.random() * chars.length));
         
         document.getElementById('generated-key-value').textContent = key;
         document.getElementById('generated-key-container').style.display = 'block';
         document.getElementById('generate-key-btn').style.display = 'none';
-        
-        licenses.unshift({
-            key: key,
-            type: 'trial',
-            facility: facilityName,
-            createdAt: today.toISOString().split('T')[0],
-            expiresAt: expirationDate,
-            status: 'active'
-        });
-        
-        facilities.unshift({
-            id: key,
-            name: facilityName,
-            location: facilityLocation || 'N/A',
-            licenseKey: key,
-            licenseType: 'trial',
-            users: 0,
-            maxUsers: 10,
-            status: 'active',
-            createdAt: today.toISOString().split('T')[0],
-            expiresAt: expirationDate,
-            daysLeft: 7
-        });
-        
-        updateStats();
     });
 }
 
@@ -2107,20 +2011,18 @@ function copyLicenseKey() {
         btn.innerHTML = '<span>✓</span> ' + (currentLang === 'es' ? 'Copiado!' : 'Copied!');
         setTimeout(function() {
             btn.classList.remove('copied');
-            btn.innerHTML = '<span>📋</span> ' + (currentLang === 'es' ? 'Copiar Clave' : 'Copy Key');
+            btn.innerHTML = '<span>📋</span> ' + (currentLang === 'es' ? 'Copiar PIN' : 'Copy PIN');
         }, 2000);
     });
 }
 
-// Add Facility
 function addFacility() {
     var name = document.getElementById('facility-name').value;
     var location = document.getElementById('facility-location').value;
-    var email = document.getElementById('facility-email').value;
     var license = document.getElementById('facility-license').value;
     
     if (!name) {
-        alert(currentLang === 'es' ? 'Por favor ingresa el nombre de la instalación' : 'Please enter facility name');
+        alert(currentLang === 'es' ? 'Por favor ingresa el nombre' : 'Please enter facility name');
         return;
     }
     
@@ -2149,7 +2051,7 @@ function renderOverviewTable() {
     tbody.innerHTML = '';
     
     if (facilities.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px; color: var(--text-muted);"><div style="font-size: 2rem; margin-bottom: 10px;">📋</div>' + (currentLang === 'es' ? 'No hay instalaciones aún. Genera una licencia para comenzar.' : 'No facilities yet. Generate a license to get started.') + '</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px; color: var(--text-muted);"><div style="font-size: 2rem; margin-bottom: 10px;">📋</div>' + (currentLang === 'es' ? 'No hay instalaciones aún.' : 'No facilities yet.') + '</td></tr>';
         return;
     }
     
@@ -2158,34 +2060,7 @@ function renderOverviewTable() {
         var userPercent = (f.users / f.maxUsers) * 100;
         var progressClass = userPercent >= 90 ? 'danger' : userPercent >= 70 ? 'warning' : 'good';
         
-        tbody.innerHTML += `
-            <tr>
-                <td>
-                    <div class="facility-name">${f.name}</div>
-                    <div class="facility-location">${f.location}</div>
-                </td>
-                <td><span class="license-key">${f.licenseKey}</span></td>
-                <td>
-                    <div class="user-count">${f.users} / ${f.maxUsers}</div>
-                    <div class="progress-bar">
-                        <div class="progress-fill ${progressClass}" style="width: ${userPercent}%"></div>
-                    </div>
-                </td>
-                <td>
-                    <span class="status-badge ${statusClass}">
-                        <span class="status-dot"></span>
-                        ${f.daysLeft <= 2 ? (currentLang === 'es' ? 'Por vencer' : 'Expiring') : (currentLang === 'es' ? 'Activo' : 'Active')}
-                    </span>
-                </td>
-                <td>${f.expiresAt}</td>
-                <td>
-                    <div class="table-actions">
-                        <button class="action-btn" onclick="editFacility(${index})">${currentLang === 'es' ? 'Editar' : 'Edit'}</button>
-                        <button class="action-btn danger" onclick="deleteFacility(${index})">${currentLang === 'es' ? 'Eliminar' : 'Delete'}</button>
-                    </div>
-                </td>
-            </tr>
-        `;
+        tbody.innerHTML += '<tr><td><div class="facility-name">' + f.name + '</div><div class="facility-location">' + f.location + '</div></td><td><span class="license-key">' + f.licenseKey + '</span></td><td><div class="user-count">' + f.users + ' / ' + f.maxUsers + '</div><div class="progress-bar"><div class="progress-fill ' + progressClass + '" style="width: ' + userPercent + '%"></div></div></td><td><span class="status-badge ' + statusClass + '"><span class="status-dot"></span>' + (f.daysLeft <= 2 ? (currentLang === 'es' ? 'Por vencer' : 'Expiring') : (currentLang === 'es' ? 'Activo' : 'Active')) + '</span></td><td>' + f.expiresAt + '</td><td><div class="table-actions"><button class="action-btn" onclick="editFacility(' + index + ')">' + (currentLang === 'es' ? 'Editar' : 'Edit') + '</button><button class="action-btn danger" onclick="deleteFacility(' + index + ')">' + (currentLang === 'es' ? 'Eliminar' : 'Delete') + '</button></div></td></tr>';
     });
 }
 
@@ -2194,46 +2069,17 @@ function renderFacilitiesTable() {
     tbody.innerHTML = '';
     
     if (facilities.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px; color: var(--text-muted);"><div style="font-size: 2rem; margin-bottom: 10px;">🏢</div>' + (currentLang === 'es' ? 'No hay instalaciones registradas.' : 'No facilities registered.') + '</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px; color: var(--text-muted);"><div style="font-size: 2rem; margin-bottom: 10px;">🏢</div>' + (currentLang === 'es' ? 'No hay instalaciones.' : 'No facilities.') + '</td></tr>';
         return;
     }
     
     facilities.forEach(function(f, index) {
         var statusClass = f.status === 'expired' ? 'expired' : f.daysLeft <= 2 ? 'expiring' : 'active';
-        var statusText = f.status === 'expired' ? (currentLang === 'es' ? 'Expirado' : 'Expired') :
-                        f.daysLeft <= 2 ? (currentLang === 'es' ? 'Por vencer' : 'Expiring') : 
-                        (currentLang === 'es' ? 'Activo' : 'Active');
+        var statusText = f.status === 'expired' ? (currentLang === 'es' ? 'Expirado' : 'Expired') : f.daysLeft <= 2 ? (currentLang === 'es' ? 'Por vencer' : 'Expiring') : (currentLang === 'es' ? 'Activo' : 'Active');
         var userPercent = (f.users / f.maxUsers) * 100;
         var progressClass = userPercent >= 90 ? 'danger' : userPercent >= 70 ? 'warning' : 'good';
         
-        tbody.innerHTML += `
-            <tr>
-                <td>
-                    <div class="facility-name">${f.name}</div>
-                    <div class="facility-location">${f.location}</div>
-                </td>
-                <td><span class="license-key">${f.licenseKey}</span></td>
-                <td>
-                    <div class="user-count">${f.users} / ${f.maxUsers}</div>
-                    <div class="progress-bar">
-                        <div class="progress-fill ${progressClass}" style="width: ${userPercent}%"></div>
-                    </div>
-                </td>
-                <td>
-                    <span class="status-badge ${statusClass}">
-                        <span class="status-dot"></span>
-                        ${statusText}
-                    </span>
-                </td>
-                <td>${f.daysLeft} ${currentLang === 'es' ? 'días' : 'days'}</td>
-                <td>
-                    <div class="table-actions">
-                        <button class="action-btn" onclick="editFacility(${index})">${currentLang === 'es' ? 'Editar' : 'Edit'}</button>
-                        <button class="action-btn danger" onclick="deleteFacility(${index})">${currentLang === 'es' ? 'Eliminar' : 'Delete'}</button>
-                    </div>
-                </td>
-            </tr>
-        `;
+        tbody.innerHTML += '<tr><td><div class="facility-name">' + f.name + '</div><div class="facility-location">' + f.location + '</div></td><td><span class="license-key">' + f.licenseKey + '</span></td><td><div class="user-count">' + f.users + ' / ' + f.maxUsers + '</div><div class="progress-bar"><div class="progress-fill ' + progressClass + '" style="width: ' + userPercent + '%"></div></div></td><td><span class="status-badge ' + statusClass + '"><span class="status-dot"></span>' + statusText + '</span></td><td>' + f.daysLeft + ' ' + (currentLang === 'es' ? 'días' : 'days') + '</td><td><div class="table-actions"><button class="action-btn" onclick="editFacility(' + index + ')">' + (currentLang === 'es' ? 'Editar' : 'Edit') + '</button><button class="action-btn danger" onclick="deleteFacility(' + index + ')">' + (currentLang === 'es' ? 'Eliminar' : 'Delete') + '</button></div></td></tr>';
     });
 }
 
@@ -2242,37 +2088,15 @@ function renderLicensesTable() {
     tbody.innerHTML = '';
     
     if (licenses.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px; color: var(--text-muted);"><div style="font-size: 2rem; margin-bottom: 10px;">🔑</div>' + (currentLang === 'es' ? 'No hay licencias generadas. Use el botón "Generar Licencia" arriba.' : 'No licenses generated. Use the "Generate License" button above.') + '</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px; color: var(--text-muted);"><div style="font-size: 2rem; margin-bottom: 10px;">🔑</div>' + (currentLang === 'es' ? 'No hay licencias.' : 'No licenses.') + '</td></tr>';
         return;
     }
     
     licenses.forEach(function(l, index) {
         var statusClass = l.status;
-        var statusText = l.status === 'expired' ? (currentLang === 'es' ? 'Expirado' : 'Expired') :
-                        l.status === 'pending' ? (currentLang === 'es' ? 'Pendiente' : 'Pending') :
-                        (currentLang === 'es' ? 'Activo' : 'Active');
+        var statusText = l.status === 'expired' ? (currentLang === 'es' ? 'Expirado' : 'Expired') : l.status === 'pending' ? (currentLang === 'es' ? 'Pendiente' : 'Pending') : (currentLang === 'es' ? 'Activo' : 'Active');
         
-        tbody.innerHTML += `
-            <tr>
-                <td><span class="license-key">${l.key}</span></td>
-                <td>🆓 Free Trial</td>
-                <td>${l.facility}</td>
-                <td>${l.createdAt}</td>
-                <td>${l.expiresAt}</td>
-                <td>
-                    <span class="status-badge ${statusClass}">
-                        <span class="status-dot"></span>
-                        ${statusText}
-                    </span>
-                </td>
-                <td>
-                    <div class="table-actions">
-                        <button class="action-btn" onclick="editLicense(${index})">${currentLang === 'es' ? 'Editar' : 'Edit'}</button>
-                        <button class="action-btn danger" onclick="deleteLicense(${index})">${currentLang === 'es' ? 'Eliminar' : 'Delete'}</button>
-                    </div>
-                </td>
-            </tr>
-        `;
+        tbody.innerHTML += '<tr><td><span class="license-key">' + l.key + '</span></td><td>🆓 Free Trial</td><td>' + l.facility + '</td><td>' + l.createdAt + '</td><td>' + l.expiresAt + '</td><td><span class="status-badge ' + statusClass + '"><span class="status-dot"></span>' + statusText + '</span></td><td><div class="table-actions"><button class="action-btn" onclick="editLicense(' + index + ')">' + (currentLang === 'es' ? 'Editar' : 'Edit') + '</button><button class="action-btn danger" onclick="deleteLicense(' + index + ')">' + (currentLang === 'es' ? 'Eliminar' : 'Delete') + '</button></div></td></tr>';
     });
 }
 
@@ -2281,48 +2105,15 @@ function renderUsersTable() {
     tbody.innerHTML = '';
     
     if (users.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="11" style="text-align: center; padding: 40px; color: var(--text-muted);"><div style="font-size: 2rem; margin-bottom: 10px;">👥</div>' + (currentLang === 'es' ? 'No hay usuarios registrados. Los usuarios aparecerán cuando se registren en las instalaciones.' : 'No users registered. Users will appear when they sign up at facilities.') + '</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 40px; color: var(--text-muted);"><div style="font-size: 2rem; margin-bottom: 10px;">🏀</div>' + (currentLang === 'es' ? 'No hay GoTrotters registrados.' : 'No GoTrotters registered.') + '</td></tr>';
         return;
     }
     
     users.forEach(function(u, index) {
-        var sessions = u.sessions || { sequence: 0, startrail: 0, duo: 0, gonogo: 0 };
-        var bests = u.bests || { sequence: 0, startrail: 0, duo: 0, gonogo: 0 };
-        var total = u.totalSessions || (sessions.sequence + sessions.startrail + sessions.duo + (sessions.gonogo || 0));
         var userPin = u.pin || '--';
+        var ringBadge = getRingBadge(u.ringLevel || 1);
         
-        tbody.innerHTML += `
-            <tr>
-                <td><strong>${u.name}</strong></td>
-                <td><span class="license-key" style="font-size: 14px;">${userPin}</span></td>
-                <td>${u.facility}</td>
-                <td class="session-cell">
-                    <div>${sessions.sequence} <span style="opacity: 0.5; font-size: 11px;">plays</span></div>
-                    ${bests.sequence > 0 ? '<div style="color: var(--accent-gold); font-size: 11px;">🏆 ' + bests.sequence + '</div>' : ''}
-                </td>
-                <td class="session-cell">
-                    <div>${sessions.startrail} <span style="opacity: 0.5; font-size: 11px;">plays</span></div>
-                    ${bests.startrail > 0 ? '<div style="color: var(--accent-gold); font-size: 11px;">🏆 ' + bests.startrail + '</div>' : ''}
-                </td>
-                <td class="session-cell">
-                    <div>${sessions.duo} <span style="opacity: 0.5; font-size: 11px;">plays</span></div>
-                    ${bests.duo > 0 ? '<div style="color: var(--accent-gold); font-size: 11px;">🏆 ' + bests.duo + '</div>' : ''}
-                </td>
-                <td class="session-cell">
-                    <div>${sessions.gonogo || 0} <span style="opacity: 0.5; font-size: 11px;">plays</span></div>
-                    ${bests.gonogo > 0 ? '<div style="color: var(--accent-gold); font-size: 11px;">🏆 ' + bests.gonogo + '</div>' : ''}
-                </td>
-                <td class="session-total"><strong>${total}</strong></td>
-                <td>🔥 ${u.streak} ${currentLang === 'es' ? 'días' : 'days'}</td>
-                <td>${u.lastActive}</td>
-                <td>
-                    <div class="table-actions">
-                        <button class="action-btn" onclick="viewUserDetails(${index})">${currentLang === 'es' ? 'Ver' : 'View'}</button>
-                        <button class="action-btn danger" onclick="deleteUser(${index})">${currentLang === 'es' ? 'Eliminar' : 'Delete'}</button>
-                    </div>
-                </td>
-            </tr>
-        `;
+        tbody.innerHTML += '<tr><td><strong>' + u.name + '</strong></td><td><span class="license-key" style="font-size: 14px;">' + userPin + '</span></td><td>' + u.facility + '</td><td>' + ringBadge + '</td><td style="text-align: center; font-weight: 700; color: var(--accent-gold);">' + (u.totalSessions || 0) + '</td><td>🔥 ' + (u.streak || 0) + ' ' + (currentLang === 'es' ? 'días' : 'days') + '</td><td>' + u.lastActive + '</td><td><div class="table-actions"><button class="action-btn" onclick="viewUserDetails(' + index + ')">' + (currentLang === 'es' ? 'Ver' : 'View') + '</button><button class="action-btn danger" onclick="deleteUser(' + index + ')">' + (currentLang === 'es' ? 'Eliminar' : 'Delete') + '</button></div></td></tr>';
     });
 }
 
@@ -2331,14 +2122,11 @@ function updateStats() {
     document.getElementById('stat-users').textContent = users.length;
     document.getElementById('stat-licenses').textContent = licenses.filter(l => l.status === 'active').length;
     
-    // Calculate total sessions
-    var totalSessions = users.reduce(function(sum, u) {
-        if (u.sessions) {
-            return sum + (u.sessions.sequence || 0) + (u.sessions.startrail || 0) + (u.sessions.duo || 0) + (u.sessions.gonogo || 0);
-        }
-        return sum + (u.totalSessions || 0);
+    // Count total rings earned (sum of all user ring levels)
+    var totalRings = users.reduce(function(sum, u) {
+        return sum + (u.ringLevel || 1);
     }, 0);
-    document.getElementById('stat-sessions').textContent = totalSessions;
+    document.getElementById('stat-sessions').textContent = totalRings;
 }
 
 function renderActivityLog() {
@@ -2346,315 +2134,89 @@ function renderActivityLog() {
     tbody.innerHTML = '';
     
     if (activities.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 40px; color: var(--text-muted);"><div style="font-size: 2rem; margin-bottom: 10px;">📋</div>' + (currentLang === 'es' ? 'No hay actividad registrada aún.' : 'No activity recorded yet.') + '</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 40px; color: var(--text-muted);"><div style="font-size: 2rem; margin-bottom: 10px;">📋</div>' + (currentLang === 'es' ? 'No hay actividad.' : 'No activity.') + '</td></tr>';
         return;
     }
     
     activities.forEach(function(a) {
         var typeIcon = '📋';
         var typeLabel = a.type;
-        var typeBadgeClass = '';
         
         switch(a.type) {
-            case 'game_session':
-                typeIcon = '🎮';
-                typeLabel = currentLang === 'es' ? 'Juego' : 'Game';
-                typeBadgeClass = 'license-trial';
-                break;
-            case 'user_register':
-                typeIcon = '👤';
-                typeLabel = currentLang === 'es' ? 'Registro' : 'Register';
-                typeBadgeClass = 'license-basic';
-                break;
-            case 'user_login':
-                typeIcon = '🔑';
-                typeLabel = currentLang === 'es' ? 'Login' : 'Login';
-                typeBadgeClass = '';
-                break;
-            case 'facility_login':
-                typeIcon = '🏢';
-                typeLabel = currentLang === 'es' ? 'Acceso' : 'Access';
-                typeBadgeClass = 'license-premium';
-                break;
+            case 'game_session': typeIcon = '🏀'; typeLabel = currentLang === 'es' ? 'Sesión' : 'Session'; break;
+            case 'ring_earned': typeIcon = '💍'; typeLabel = currentLang === 'es' ? 'Anillo' : 'Ring'; break;
+            case 'user_register': typeIcon = '👤'; typeLabel = currentLang === 'es' ? 'Registro' : 'Register'; break;
+            case 'user_login': typeIcon = '🔑'; typeLabel = 'Login'; break;
+            case 'facility_login': typeIcon = '🏢'; typeLabel = currentLang === 'es' ? 'Acceso' : 'Access'; break;
         }
         
         var timeStr = a.timestamp ? new Date(a.timestamp).toLocaleString() : '--';
         
-        tbody.innerHTML += `
-            <tr>
-                <td style="white-space: nowrap;">${timeStr}</td>
-                <td>
-                    <span class="license-badge ${typeBadgeClass}">
-                        ${typeIcon} ${typeLabel}
-                    </span>
-                </td>
-                <td>${a.username || '--'}</td>
-                <td>${a.facility || '--'}</td>
-                <td>${a.details || '--'}</td>
-            </tr>
-        `;
+        tbody.innerHTML += '<tr><td style="white-space: nowrap;">' + timeStr + '</td><td>' + typeIcon + ' ' + typeLabel + '</td><td>' + (a.username || '--') + '</td><td>' + (a.facility || '--') + '</td><td>' + (a.details || '--') + '</td></tr>';
     });
 }
 
 function viewUserDetails(index) {
     var u = users[index];
-    var sessions = u.sessions || { sequence: 0, startrail: 0, duo: 0, gonogo: 0 };
-    var bests = u.bests || { sequence: 0, startrail: 0, duo: 0, gonogo: 0 };
+    var ring = RING_LEVELS[Math.min((u.ringLevel || 1) - 1, 7)];
+    var ringName = currentLang === 'es' ? ring.nameEs : ring.name;
     
-    var details = (currentLang === 'es' ? 'Usuario: ' : 'User: ') + u.name + '\\n';
-    details += (currentLang === 'es' ? 'Instalación: ' : 'Facility: ') + u.facility + '\\n\\n';
-    details += '📊 ' + (currentLang === 'es' ? 'SESIONES' : 'SESSIONS') + ':\\n';
-    details += '⭐ Sequence: ' + sessions.sequence + (bests.sequence > 0 ? ' (Best: ' + bests.sequence + ')' : '') + '\\n';
-    details += '🛤️ StarTrail: ' + sessions.startrail + (bests.startrail > 0 ? ' (Best: ' + bests.startrail + ')' : '') + '\\n';
-    details += '🎯 Duo: ' + sessions.duo + (bests.duo > 0 ? ' (Best: ' + bests.duo + ')' : '') + '\\n';
-    details += '🚦 Go/No-Go: ' + (sessions.gonogo || 0) + (bests.gonogo > 0 ? ' (Best: ' + bests.gonogo + ')' : '') + '\\n\\n';
-    details += '🔥 ' + (currentLang === 'es' ? 'Racha: ' : 'Streak: ') + u.streak + ' ' + (currentLang === 'es' ? 'días' : 'days') + '\\n';
+    var details = (currentLang === 'es' ? 'GoTrotter: ' : 'GoTrotter: ') + u.name + '\n';
+    details += (currentLang === 'es' ? 'Instalación: ' : 'Facility: ') + u.facility + '\n\n';
+    details += '💍 ' + (currentLang === 'es' ? 'ANILLO ACTUAL' : 'CURRENT RING') + ':\n';
+    details += ring.icon + ' ' + ringName + ' Ring (Level ' + (u.ringLevel || 1) + ')\n\n';
+    details += '🏀 ' + (currentLang === 'es' ? 'Sesiones Totales: ' : 'Total Sessions: ') + (u.totalSessions || 0) + '\n';
+    details += '🔥 ' + (currentLang === 'es' ? 'Racha: ' : 'Streak: ') + (u.streak || 0) + ' ' + (currentLang === 'es' ? 'días' : 'days') + '\n';
     details += '📅 ' + (currentLang === 'es' ? 'Última actividad: ' : 'Last active: ') + u.lastActive;
     
     alert(details);
 }
 
-// Edit Facility
 function editFacility(index) {
     var f = facilities[index];
-    var newName = prompt(currentLang === 'es' ? 'Nombre de la instalación:' : 'Facility name:', f.name);
+    var newName = prompt(currentLang === 'es' ? 'Nombre:' : 'Name:', f.name);
     if (newName !== null && newName.trim() !== '') {
-        var newLocation = prompt(currentLang === 'es' ? 'Ubicación:' : 'Location:', f.location);
-        var newExpiry = prompt(currentLang === 'es' ? 'Fecha de expiración (YYYY-MM-DD):' : 'Expiry date (YYYY-MM-DD):', f.expiresAt);
-        
-        // Update locally first
-        var oldName = facilities[index].name;
         facilities[index].name = newName.trim();
-        facilities[index].location = newLocation ? newLocation.trim() : f.location;
-        if (newExpiry && /^\d{4}-\d{2}-\d{2}$/.test(newExpiry)) {
-            facilities[index].expiresAt = newExpiry;
-            var today = new Date();
-            var expiry = new Date(newExpiry);
-            facilities[index].daysLeft = Math.max(0, Math.ceil((expiry - today) / (1000 * 60 * 60 * 24)));
-        }
-        
-        // Update license name
-        var licenseIndex = licenses.findIndex(l => l.key === f.licenseKey);
-        if (licenseIndex > -1) {
-            licenses[licenseIndex].facility = newName.trim();
-        }
-        
-        // Update users facility name
-        users.forEach(function(u) {
-            if (u.facility === oldName) u.facility = newName.trim();
-        });
-        
         renderOverviewTable();
         renderFacilitiesTable();
-        renderLicensesTable();
-        renderUsersTable();
-        alert(currentLang === 'es' ? '✅ Instalación actualizada' : '✅ Facility updated');
-        
-        // Sync to API in background
-        var token = sessionStorage.getItem('admin-token');
-        if (token && f.id) {
-            fetch('/api/admin/facilities/' + f.id, {
-                method: 'PUT',
-                headers: { 
-                    'Authorization': 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    name: newName.trim(),
-                    location: newLocation ? newLocation.trim() : f.location,
-                    expires_at: newExpiry && /^\d{4}-\d{2}-\d{2}$/.test(newExpiry) ? newExpiry : f.expiresAt
-                })
-            }).catch(function() {});
-        }
+        alert(currentLang === 'es' ? '✅ Actualizado' : '✅ Updated');
     }
 }
 
-// Delete Facility
 function deleteFacility(index) {
-    var f = facilities[index];
-    var confirmMsg = currentLang === 'es' 
-        ? '¿Eliminar "' + f.name + '"? Esto eliminará la licencia y todos los usuarios asociados.'
-        : 'Delete "' + f.name + '"? This will delete the license and all associated users.';
-    
-    if (confirm(confirmMsg)) {
-        // Delete locally first
-        var licenseIndex = licenses.findIndex(l => l.key === f.licenseKey);
-        if (licenseIndex > -1) licenses.splice(licenseIndex, 1);
-        users = users.filter(u => u.facility !== f.name);
+    if (confirm(currentLang === 'es' ? '¿Eliminar?' : 'Delete?')) {
         facilities.splice(index, 1);
-        syncFacilityUserCounts();
         renderOverviewTable();
         renderFacilitiesTable();
-        renderLicensesTable();
-        renderUsersTable();
         updateStats();
-        alert(currentLang === 'es' ? '✅ Instalación eliminada' : '✅ Facility deleted');
-        
-        // Sync to API in background
-        var token = sessionStorage.getItem('admin-token');
-        if (token && f.id) {
-            fetch('/api/admin/facilities/' + f.id, {
-                method: 'DELETE',
-                headers: { 'Authorization': 'Bearer ' + token }
-            }).catch(function() {});
-        }
     }
 }
 
-// Edit License
 function editLicense(index) {
     var l = licenses[index];
-    var newFacility = prompt(currentLang === 'es' ? 'Nombre de instalación:' : 'Facility name:', l.facility);
+    var newFacility = prompt(currentLang === 'es' ? 'Instalación:' : 'Facility:', l.facility);
     if (newFacility !== null && newFacility.trim() !== '') {
-        var newExpiry = prompt(currentLang === 'es' ? 'Fecha de expiración (YYYY-MM-DD):' : 'Expiry date (YYYY-MM-DD):', l.expiresAt);
-        
-        // Update locally first
-        var oldFacility = licenses[index].facility;
         licenses[index].facility = newFacility.trim();
-        if (newExpiry && /^\d{4}-\d{2}-\d{2}$/.test(newExpiry)) {
-            licenses[index].expiresAt = newExpiry;
-        }
-        
-        // Update matching facility
-        var facilityIndex = facilities.findIndex(f => f.licenseKey === l.key);
-        if (facilityIndex > -1) {
-            facilities[facilityIndex].name = newFacility.trim();
-            if (newExpiry && /^\d{4}-\d{2}-\d{2}$/.test(newExpiry)) {
-                facilities[facilityIndex].expiresAt = newExpiry;
-                var today = new Date();
-                var expiry = new Date(newExpiry);
-                facilities[facilityIndex].daysLeft = Math.max(0, Math.ceil((expiry - today) / (1000 * 60 * 60 * 24)));
-            }
-        }
-        
-        // Update users facility name
-        users.forEach(function(u) {
-            if (u.facility === oldFacility) u.facility = newFacility.trim();
-        });
-        
-        renderOverviewTable();
-        renderFacilitiesTable();
         renderLicensesTable();
-        renderUsersTable();
-        alert(currentLang === 'es' ? '✅ Licencia actualizada' : '✅ License updated');
-        
-        // Sync to API in background
-        var token = sessionStorage.getItem('admin-token');
-        if (token && l.key) {
-            fetch('/api/admin/facilities/' + l.key, {
-                method: 'PUT',
-                headers: { 
-                    'Authorization': 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    name: newFacility.trim(),
-                    expires_at: newExpiry && /^\d{4}-\d{2}-\d{2}$/.test(newExpiry) ? newExpiry : l.expiresAt
-                })
-            }).catch(function() {});
-        }
+        alert(currentLang === 'es' ? '✅ Actualizado' : '✅ Updated');
     }
 }
 
-// Delete License
 function deleteLicense(index) {
-    var l = licenses[index];
-    var confirmMsg = currentLang === 'es' 
-        ? '¿Eliminar licencia "' + l.key + '"? Esto eliminará la instalación y todos los usuarios asociados.'
-        : 'Delete license "' + l.key + '"? This will delete the facility and all associated users.';
-    
-    if (confirm(confirmMsg)) {
-        // Delete locally first
-        var facilityIndex = facilities.findIndex(f => f.licenseKey === l.key);
-        if (facilityIndex > -1) {
-            var facilityName = facilities[facilityIndex].name;
-            users = users.filter(u => u.facility !== facilityName);
-            facilities.splice(facilityIndex, 1);
-        }
+    if (confirm(currentLang === 'es' ? '¿Eliminar?' : 'Delete?')) {
         licenses.splice(index, 1);
-        syncFacilityUserCounts();
-        renderOverviewTable();
-        renderFacilitiesTable();
         renderLicensesTable();
-        renderUsersTable();
         updateStats();
-        alert(currentLang === 'es' ? '✅ Licencia eliminada' : '✅ License deleted');
-        
-        // Sync to API in background
-        var token = sessionStorage.getItem('admin-token');
-        if (token && l.key) {
-            fetch('/api/admin/licenses-list/' + l.key, {
-                method: 'DELETE',
-                headers: { 'Authorization': 'Bearer ' + token }
-            }).catch(function() {});
-        }
     }
 }
 
-// Edit User
-function editUser(index) {
-    var u = users[index];
-    var newName = prompt(currentLang === 'es' ? 'Nombre del usuario:' : 'User name:', u.name);
-    if (newName !== null && newName.trim() !== '') {
-        // Update locally first
-        users[index].name = newName.trim();
-        renderUsersTable();
-        alert(currentLang === 'es' ? '✅ Usuario actualizado' : '✅ User updated');
-        
-        // Sync to API in background
-        var token = sessionStorage.getItem('admin-token');
-        if (token && u.id !== undefined) {
-            fetch('/api/admin/users/' + u.id, {
-                method: 'PUT',
-                headers: { 
-                    'Authorization': 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    username: newName.trim()
-                })
-            }).catch(function() {});
-        }
-    }
-}
-
-// Delete User
 function deleteUser(index) {
-    var u = users[index];
-    var confirmMsg = currentLang === 'es' 
-        ? '¿Eliminar usuario "' + u.name + '"? Esta acción no se puede deshacer.'
-        : 'Delete user "' + u.name + '"? This cannot be undone.';
-    
-    if (confirm(confirmMsg)) {
-        // Delete locally first
+    if (confirm(currentLang === 'es' ? '¿Eliminar GoTrotter?' : 'Delete GoTrotter?')) {
         users.splice(index, 1);
-        syncFacilityUserCounts();
         renderUsersTable();
-        renderOverviewTable();
-        renderFacilitiesTable();
         updateStats();
-        alert(currentLang === 'es' ? '✅ Usuario eliminado' : '✅ User deleted');
-        
-        // Sync to API in background
-        var token = sessionStorage.getItem('admin-token');
-        if (token && u.id !== undefined) {
-            fetch('/api/admin/users/' + u.id, {
-                method: 'DELETE',
-                headers: { 'Authorization': 'Bearer ' + token }
-            }).catch(function() {});
-        }
     }
 }
-
-// Sync facility user counts with actual users array
-function syncFacilityUserCounts() {
-    facilities.forEach(function(f) {
-        f.users = users.filter(u => u.facility === f.name).length;
-    });
-}
-
-// Initialize - checkAuth handles both authentication and data loading
-// No need for separate initialization since checkAuth() calls fetchDashboardData() on success
 </script>
 
 </body>
