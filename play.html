@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Play - GoStar Digital</title>
+    <title>Play - GoTrotters</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -20,6 +20,7 @@
             --accent-gold: #FFD93D;
             --accent-teal: #00D9A5;
             --accent-coral: #FF6B6B;
+            --accent-green: #22C55E;
             --gradient-gold: linear-gradient(135deg, #FFD93D 0%, #FF9F1C 100%);
             --gradient-teal: linear-gradient(135deg, #00D9A5 0%, #00B386 100%);
         }
@@ -69,7 +70,7 @@
         }
 
         .lang-btn:hover { color: var(--text-primary); }
-        .lang-btn.active { background: var(--accent-teal); color: var(--bg-primary); }
+        .lang-btn.active { background: var(--accent-gold); color: var(--bg-primary); }
 
         .home-link {
             position: fixed;
@@ -80,11 +81,12 @@
             gap: 8px;
             color: var(--text-secondary);
             text-decoration: none;
-            font-weight: 600;
+            font-weight: 700;
             font-size: 14px;
         }
 
-        .home-link:hover { color: var(--accent-teal); }
+        .home-link:hover { color: var(--accent-gold); }
+        .home-link img { width: 28px; height: auto; }
 
         .login-card {
             background: var(--bg-card);
@@ -102,7 +104,14 @@
         .login-logo {
             font-size: 64px;
             margin-bottom: 16px;
-            filter: drop-shadow(0 0 30px rgba(0, 217, 165, 0.4));
+            filter: drop-shadow(0 0 30px rgba(255, 217, 61, 0.4));
+        }
+
+        .login-logo-img {
+            width: 80px;
+            height: auto;
+            margin-bottom: 16px;
+            filter: drop-shadow(0 0 30px rgba(255, 217, 61, 0.4));
         }
 
         .login-title {
@@ -112,7 +121,7 @@
         }
 
         .login-title span {
-            background: var(--gradient-teal);
+            background: var(--gradient-gold);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -163,7 +172,7 @@
         }
 
         .option-btn:hover {
-            border-color: var(--accent-teal);
+            border-color: var(--accent-gold);
             transform: translateY(-2px);
         }
 
@@ -194,8 +203,8 @@
 
         .pin-input:focus {
             outline: none;
-            border-color: var(--accent-teal);
-            box-shadow: 0 0 0 4px rgba(0, 217, 165, 0.2);
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 0 4px rgba(255, 217, 61, 0.2);
         }
 
         .pin-input.error {
@@ -232,13 +241,13 @@
 
         .form-input:focus {
             outline: none;
-            border-color: var(--accent-teal);
+            border-color: var(--accent-gold);
         }
 
         .login-btn {
             width: 100%;
             padding: 16px 32px;
-            background: var(--gradient-teal);
+            background: var(--gradient-gold);
             border: none;
             border-radius: 12px;
             color: var(--bg-primary);
@@ -252,7 +261,7 @@
 
         .login-btn:hover:not(:disabled) {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 217, 165, 0.35);
+            box-shadow: 0 8px 25px rgba(255, 217, 61, 0.35);
         }
 
         .login-btn:disabled { opacity: 0.6; cursor: not-allowed; }
@@ -304,7 +313,7 @@
             margin-top: 16px;
             padding: 10px 20px;
             background: var(--bg-card);
-            border: 1px solid var(--border-color);
+            border: 1px solid rgba(255,255,255,0.1);
             border-radius: 8px;
             color: var(--text-secondary);
             font-size: 14px;
@@ -314,9 +323,9 @@
         }
 
         .copy-pin-btn:hover {
-            background: var(--accent-teal);
+            background: var(--accent-gold);
             color: var(--bg-primary);
-            border-color: var(--accent-teal);
+            border-color: var(--accent-gold);
         }
 
         .copy-pin-btn.copied {
@@ -345,9 +354,34 @@
 
         .back-link:hover { color: var(--text-primary); }
 
+        /* Ring Badge for Welcome Screen */
+        .ring-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 700;
+            background: rgba(205, 127, 50, 0.15);
+            border: 2px solid rgba(205, 127, 50, 0.3);
+            color: #CD7F32;
+            margin-bottom: 20px;
+        }
+
+        .ring-badge.level-1 { background: rgba(205, 127, 50, 0.15); border-color: rgba(205, 127, 50, 0.3); color: #CD7F32; }
+        .ring-badge.level-2 { background: rgba(255, 107, 107, 0.15); border-color: rgba(255, 107, 107, 0.3); color: #FF6B6B; }
+        .ring-badge.level-3 { background: rgba(0, 217, 165, 0.15); border-color: rgba(0, 217, 165, 0.3); color: #00D9A5; }
+        .ring-badge.level-4 { background: rgba(77, 168, 255, 0.15); border-color: rgba(77, 168, 255, 0.3); color: #4DA8FF; }
+        .ring-badge.level-5 { background: rgba(255, 217, 61, 0.15); border-color: rgba(255, 217, 61, 0.3); color: #FFD93D; }
+        .ring-badge.level-6 { background: rgba(168, 85, 247, 0.15); border-color: rgba(168, 85, 247, 0.3); color: #A855F7; }
+        .ring-badge.level-7 { background: rgba(34, 197, 94, 0.15); border-color: rgba(34, 197, 94, 0.3); color: #22C55E; }
+        .ring-badge.level-8 { background: linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%); border-color: gold; color: gold; }
+
         @media (max-width: 480px) {
             .login-card { padding: 36px 24px; }
             .login-logo { font-size: 56px; }
+            .login-logo-img { width: 64px; }
             .login-title { font-size: 28px; }
             .pin-input { width: 52px; height: 64px; font-size: 28px; }
             .pin-display-value { font-size: 36px; letter-spacing: 6px; }
@@ -362,17 +396,17 @@
     </div>
 
     <a href="/" class="home-link">
-        <span>⭐</span>
+        <img src="gostar_logo_transparent.png" alt="GoStar">
         <span>GoStar</span>
     </a>
 
     <!-- SCREEN 1: Choose Path -->
     <div class="login-card screen" id="chooseScreen">
-        <div class="login-logo">🎮</div>
-        <h1 class="login-title">Go<span>Star</span></h1>
+        <div class="login-logo">🏀</div>
+        <h1 class="login-title">Go<span>Trotters</span></h1>
         <span class="login-badge">
-            <span class="lang-en">Brain Training</span>
-            <span class="lang-es">Entrenamiento Mental</span>
+            <span class="lang-en">Cognitive eBasketball</span>
+            <span class="lang-es">eBaloncesto Cognitivo</span>
         </span>
         
         <div class="option-buttons">
@@ -385,8 +419,8 @@
                     </strong>
                     <br>
                     <small style="color: var(--text-muted);">
-                        <span class="lang-en">Returning player</span>
-                        <span class="lang-es">Jugador que regresa</span>
+                        <span class="lang-en">Returning GoTrotter</span>
+                        <span class="lang-es">GoTrotter que regresa</span>
                     </small>
                 </span>
                 <span class="arrow">→</span>
@@ -413,7 +447,7 @@
     <!-- SCREEN 2a: Enter PIN (returning user) -->
     <div class="login-card screen hidden" id="pinLoginScreen">
         <div class="login-logo">🔑</div>
-        <h1 class="login-title">Go<span>Star</span></h1>
+        <h1 class="login-title">Go<span>Trotters</span></h1>
         <span class="login-badge">
             <span class="lang-en">Welcome Back!</span>
             <span class="lang-es">¡Bienvenido!</span>
@@ -432,8 +466,8 @@
         </div>
         
         <button class="login-btn" onclick="loginWithPin()" id="loginPinBtn">
-            <span class="lang-en">Play Now!</span>
-            <span class="lang-es">¡Jugar Ahora!</span>
+            <span class="lang-en">🏀 Let's Play!</span>
+            <span class="lang-es">🏀 ¡A Jugar!</span>
         </button>
         
         <p class="login-error" id="pinLoginError">
@@ -450,10 +484,10 @@
     <!-- SCREEN 2b: Enter Access Code (new user) -->
     <div class="login-card screen hidden" id="accessCodeScreen">
         <div class="login-logo">📋</div>
-        <h1 class="login-title">Go<span>Star</span></h1>
+        <h1 class="login-title">Go<span>Trotters</span></h1>
         <span class="login-badge">
-            <span class="lang-en">New Player</span>
-            <span class="lang-es">Nuevo Jugador</span>
+            <span class="lang-en">New GoTrotter</span>
+            <span class="lang-es">Nuevo GoTrotter</span>
         </span>
         
         <p class="login-subtitle">
@@ -482,7 +516,7 @@
     <!-- SCREEN 3: Enter Name -->
     <div class="login-card screen hidden" id="nameScreen">
         <div class="login-logo">👋</div>
-        <h1 class="login-title">Go<span>Star</span></h1>
+        <h1 class="login-title">Go<span>Trotters</span></h1>
         <span class="login-badge">
             <span class="lang-en">Almost There!</span>
             <span class="lang-es">¡Casi Listo!</span>
@@ -491,15 +525,15 @@
         <p class="facility-name" id="facilityName"></p>
         
         <p class="login-subtitle">
-            <span class="lang-en">Enter your name to create your account</span>
-            <span class="lang-es">Ingresa tu nombre para crear tu cuenta</span>
+            <span class="lang-en">Enter your name to become a GoTrotter</span>
+            <span class="lang-es">Ingresa tu nombre para ser un GoTrotter</span>
         </p>
         
         <input type="text" class="form-input name-input" id="userName" placeholder="Your name / Tu nombre" maxlength="30">
         
         <button class="login-btn" onclick="registerUser()" id="registerBtn">
-            <span class="lang-en">Create My Account</span>
-            <span class="lang-es">Crear Mi Cuenta</span>
+            <span class="lang-en">🏀 Join the Team!</span>
+            <span class="lang-es">🏀 ¡Únete al Equipo!</span>
         </button>
         
         <p class="login-error" id="registerError">
@@ -516,13 +550,17 @@
     <!-- SCREEN 4: Show Generated PIN -->
     <div class="login-card screen hidden" id="pinGeneratedScreen">
         <div class="login-logo">🎉</div>
-        <h1 class="login-title">Go<span>Star</span></h1>
+        <h1 class="login-title">Go<span>Trotters</span></h1>
         <span class="login-badge">
-            <span class="lang-en">You're All Set!</span>
-            <span class="lang-es">¡Todo Listo!</span>
+            <span class="lang-en">You're a GoTrotter!</span>
+            <span class="lang-es">¡Eres un GoTrotter!</span>
         </span>
         
         <p class="welcome-name" id="welcomeName"></p>
+        
+        <div class="ring-badge level-1" id="newRingBadge">
+            🥉 <span class="lang-en">Rookie Ring</span><span class="lang-es">Anillo Novato</span>
+        </div>
         
         <div class="pin-display">
             <div class="pin-display-label">
@@ -542,15 +580,15 @@
         </div>
         
         <button class="login-btn" onclick="startPlaying()">
-            <span class="lang-en">🎮 Start Playing!</span>
-            <span class="lang-es">🎮 ¡Empezar a Jugar!</span>
+            <span class="lang-en">🏀 Start Training!</span>
+            <span class="lang-es">🏀 ¡Empezar Entrenamiento!</span>
         </button>
     </div>
 
     <!-- SCREEN 5: Welcome Back (after PIN login) -->
     <div class="login-card screen hidden" id="welcomeBackScreen">
         <div class="login-logo">🌟</div>
-        <h1 class="login-title">Go<span>Star</span></h1>
+        <h1 class="login-title">Go<span>Trotters</span></h1>
         <span class="login-badge">
             <span class="lang-en">Welcome Back!</span>
             <span class="lang-es">¡Bienvenido!</span>
@@ -558,13 +596,43 @@
         
         <p class="welcome-name" id="welcomeBackName"></p>
         
+        <div class="ring-badge level-1" id="currentRingBadge">
+            🥉 <span class="lang-en">Rookie Ring</span><span class="lang-es">Anillo Novato</span>
+        </div>
+        
         <button class="login-btn" onclick="startPlaying()">
-            <span class="lang-en">🎮 Continue Training</span>
-            <span class="lang-es">🎮 Continuar Entrenamiento</span>
+            <span class="lang-en">🏀 Continue Training</span>
+            <span class="lang-es">🏀 Continuar Entrenamiento</span>
         </button>
     </div>
 
     <script>
+        // ============================================
+        // GOTROTTERS RING LEVELS
+        // ============================================
+        var RING_LEVELS = [
+            { level: 1, name: 'Rookie', nameEs: 'Novato', icon: '🥉', color: '#CD7F32' },
+            { level: 2, name: 'Hustle', nameEs: 'Esfuerzo', icon: '💪', color: '#FF6B6B' },
+            { level: 3, name: 'Assist', nameEs: 'Asistencia', icon: '🤝', color: '#00D9A5' },
+            { level: 4, name: 'Playmaker', nameEs: 'Creador', icon: '👁️', color: '#4DA8FF' },
+            { level: 5, name: 'All-Star', nameEs: 'All-Star', icon: '⭐', color: '#FFD93D' },
+            { level: 6, name: 'MVP', nameEs: 'MVP', icon: '🏅', color: '#A855F7' },
+            { level: 7, name: 'Champion', nameEs: 'Campeón', icon: '🏆', color: '#22C55E' },
+            { level: 8, name: 'Legend', nameEs: 'Leyenda', icon: '👑', color: 'gold' }
+        ];
+
+        function updateRingBadge(elementId, level) {
+            var ring = RING_LEVELS[Math.min(level - 1, 7)] || RING_LEVELS[0];
+            var badge = document.getElementById(elementId);
+            if (badge) {
+                badge.className = 'ring-badge level-' + ring.level;
+                var ringName = currentLang === 'es' ? ring.nameEs : ring.name;
+                var ringLabel = currentLang === 'es' ? 'Anillo ' + ring.nameEs : ring.name + ' Ring';
+                badge.innerHTML = ring.icon + ' <span class="lang-en">' + ring.name + ' Ring</span><span class="lang-es">Anillo ' + ring.nameEs + '</span>';
+                document.body.setAttribute('data-lang', currentLang);
+            }
+        }
+
         var currentLang = localStorage.getItem('gostar-lang') || 'en';
         var currentAccessCode = null;
         var currentFacility = null;
@@ -688,6 +756,11 @@
                     sessionStorage.setItem('gostar-user-code', data.accessCode);
                     
                     document.getElementById('welcomeBackName').textContent = data.username;
+                    
+                    // Update ring badge with user's current level
+                    var ringLevel = data.ringLevel || data.ring_level || 1;
+                    updateRingBadge('currentRingBadge', ringLevel);
+                    
                     showScreen('welcomeBackScreen');
                 } else {
                     throw new Error(data.error || 'Invalid PIN');
@@ -698,7 +771,7 @@
             })
             .finally(function() {
                 btn.disabled = false;
-                btn.innerHTML = '<span class="lang-en">Play Now!</span><span class="lang-es">¡Jugar Ahora!</span>';
+                btn.innerHTML = '<span class="lang-en">🏀 Let\'s Play!</span><span class="lang-es">🏀 ¡A Jugar!</span>';
                 document.body.setAttribute('data-lang', currentLang);
             });
         }
@@ -773,6 +846,10 @@
                     
                     document.getElementById('welcomeName').textContent = data.username;
                     document.getElementById('generatedPin').textContent = data.pin;
+                    
+                    // New users start at Rookie Ring (level 1)
+                    updateRingBadge('newRingBadge', 1);
+                    
                     showScreen('pinGeneratedScreen');
                 } else {
                     throw new Error(data.error || 'Registration failed');
@@ -784,7 +861,7 @@
             })
             .finally(function() {
                 btn.disabled = false;
-                btn.innerHTML = '<span class="lang-en">Create My Account</span><span class="lang-es">Crear Mi Cuenta</span>';
+                btn.innerHTML = '<span class="lang-en">🏀 Join the Team!</span><span class="lang-es">🏀 ¡Únete al Equipo!</span>';
                 document.body.setAttribute('data-lang', currentLang);
             });
         }
@@ -805,7 +882,6 @@
                     }, 2000);
                 });
             } else {
-                // Fallback for older browsers
                 var textArea = document.createElement('textarea');
                 textArea.value = pin;
                 document.body.appendChild(textArea);
