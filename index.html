@@ -1,285 +1,2223 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - GoStar Digital</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard - GoStar Digital</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #0d0d2b 100%);
-            color: #fff;
-        }
+/* Login Screen */
+.login-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #0D0D0D 0%, #1A1A1A 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
 
-        /* Header */
-        .header {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 16px 32px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+.login-screen.hidden {
+    display: none;
+}
 
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+.login-card {
+    background: var(--bg-card);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 24px;
+    padding: 48px 40px;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
 
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+.login-logo {
+    width: 120px;
+    height: auto;
+    margin-bottom: 16px;
+    filter: drop-shadow(0 0 20px rgba(255, 217, 61, 0.4));
+}
 
-        .logo-icon svg {
-            width: 24px;
-            height: 24px;
-            fill: #1a1a3a;
-        }
+.login-title {
+    font-size: 28px;
+    font-weight: 900;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+}
 
-        .logo h1 {
-            font-size: 20px;
-            font-weight: 700;
-        }
+.login-title span {
+    background: linear-gradient(135deg, #FFD93D 0%, #FF9F1C 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
 
-        .logo h1 span {
-            color: #ffd700;
-        }
+.login-subtitle {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 32px;
+}
 
-        .user-menu {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
+.login-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    color: #0D0D0D;
+    background: #FFD93D;
+    padding: 4px 12px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 32px;
+}
 
-        .user-info {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 14px;
-        }
+.pin-input-group {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 24px;
+}
 
-        .user-info strong {
-            color: #ffd700;
-        }
+.pin-input {
+    width: 56px;
+    height: 64px;
+    font-size: 24px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    text-align: center;
+    background: #1A1A1A;
+    border: 2px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    color: var(--text-primary);
+    transition: all 0.2s ease;
+}
 
-        .logout-btn {
-            padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            color: #fff;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-        }
+.pin-input:focus {
+    outline: none;
+    border-color: #FFD93D;
+    box-shadow: 0 0 0 3px rgba(255, 217, 61, 0.2);
+}
 
-        .logout-btn:hover {
-            background: rgba(255, 77, 77, 0.2);
-            border-color: rgba(255, 77, 77, 0.4);
-        }
+.pin-input.error {
+    border-color: #FF6B6B;
+    animation: shake 0.4s ease;
+}
 
-        /* Main Content */
-        .main {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 32px;
-        }
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    75% { transform: translateX(8px); }
+}
 
-        .welcome {
-            margin-bottom: 40px;
-        }
+.login-btn {
+    width: 100%;
+    padding: 16px 32px;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #FFD93D 0%, #FF9F1C 100%);
+    color: #0D0D0D;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
 
-        .welcome h2 {
-            font-size: 32px;
-            font-weight: 300;
-            margin-bottom: 8px;
-        }
+.login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 217, 61, 0.3);
+}
 
-        .welcome h2 strong {
-            font-weight: 700;
-        }
+.login-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
 
-        .welcome p {
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 16px;
-        }
+.login-error {
+    color: #FF6B6B;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 16px;
+    display: none;
+}
 
-        /* Games Grid */
-        .section-title {
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: rgba(255, 255, 255, 0.5);
-            margin-bottom: 20px;
-        }
+.login-error.show {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
 
-        .games-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 24px;
-        }
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 
-        .game-card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 32px;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            text-decoration: none;
-            color: inherit;
-            display: block;
-        }
+.login-hint {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 24px;
+}
 
-        .game-card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(255, 215, 0, 0.3);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-        }
+/* Logout Button */
+.logout-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 12px;
+    margin-top: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    background: rgba(255, 107, 107, 0.1);
+    border: 1px solid rgba(255, 107, 107, 0.2);
+    border-radius: 10px;
+    color: #FF6B6B;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
 
-        .game-icon {
-            width: 64px;
-            height: 64px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-            font-size: 28px;
-        }
+.logout-btn:hover {
+    background: rgba(255, 107, 107, 0.2);
+    border-color: #FF6B6B;
+}
 
-        .game-card h3 {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
+:root {
+    --bg-primary: #0D0D0D;
+    --bg-secondary: #1A1A1A;
+    --bg-card: #242424;
+    --bg-card-hover: #2D2D2D;
+    --text-primary: #FFFFFF;
+    --text-secondary: #B3B3B3;
+    --text-muted: #808080;
+    --accent-gold: #FFD93D;
+    --accent-teal: #00D9A5;
+    --accent-blue: #4DA8FF;
+    --accent-coral: #FF6B6B;
+    --accent-purple: #A855F7;
+    --accent-green: #22C55E;
+    --gradient-gold: linear-gradient(135deg, #FFD93D 0%, #FF9F1C 100%);
+    --gradient-teal: linear-gradient(135deg, #00D9A5 0%, #00B386 100%);
+    --border-color: rgba(255,255,255,0.08);
+    --sidebar-width: 260px;
+}
 
-        .game-card p {
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 14px;
-            line-height: 1.6;
-            margin-bottom: 16px;
-        }
+html, body {
+    height: 100%;
+}
 
-        .game-status {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
-            background: rgba(76, 217, 100, 0.1);
-            border: 1px solid rgba(76, 217, 100, 0.3);
-            border-radius: 20px;
-            color: #4cd964;
-            font-size: 12px;
-            font-weight: 500;
-        }
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
 
-        .game-status::before {
-            content: '';
-            width: 6px;
-            height: 6px;
-            background: #4cd964;
-            border-radius: 50%;
-        }
+/* Language Toggle */
+body[data-lang="es"] .lang-en { display: none !important; }
+body[data-lang="en"] .lang-es { display: none !important; }
+body[data-lang="es"] .lang-es { display: inline !important; }
+body[data-lang="en"] .lang-en { display: inline !important; }
 
-        /* Coming Soon Card */
-        .game-card.coming-soon {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
+/* Layout */
+.dashboard {
+    display: flex;
+    min-height: 100vh;
+}
 
-        .game-card.coming-soon:hover {
-            transform: none;
-            border-color: rgba(255, 255, 255, 0.1);
-            box-shadow: none;
-        }
+/* Sidebar */
+.sidebar {
+    width: var(--sidebar-width);
+    background: var(--bg-secondary);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 100;
+}
 
-        .game-card.coming-soon .game-status {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(255, 255, 255, 0.2);
-            color: rgba(255, 255, 255, 0.5);
-        }
+.sidebar-header {
+    padding: 24px;
+    border-bottom: 1px solid var(--border-color);
+}
 
-        .game-card.coming-soon .game-status::before {
-            background: rgba(255, 255, 255, 0.5);
-        }
-    </style>
+.sidebar-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    margin-bottom: 8px;
+}
+
+.sidebar-logo-icon {
+    width: 40px;
+    height: auto;
+}
+
+.sidebar-logo-text {
+    font-size: 24px;
+    font-weight: 900;
+    color: var(--text-primary);
+}
+
+.sidebar-logo-text span {
+    background: var(--gradient-gold);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.sidebar-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--bg-primary);
+    background: var(--accent-gold);
+    padding: 4px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.sidebar-nav {
+    flex: 1;
+    padding: 16px 12px;
+    overflow-y: auto;
+}
+
+.nav-section {
+    margin-bottom: 24px;
+}
+
+.nav-section-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding: 8px 12px;
+    margin-bottom: 4px;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    width: 100%;
+    text-align: left;
+}
+
+.nav-item:hover {
+    background: var(--bg-card);
+    color: var(--text-primary);
+}
+
+.nav-item.active {
+    background: rgba(255, 217, 61, 0.1);
+    color: var(--accent-gold);
+}
+
+.nav-item-icon {
+    font-size: 18px;
+    width: 24px;
+    text-align: center;
+}
+
+.nav-item-badge {
+    margin-left: auto;
+    font-size: 12px;
+    font-weight: 700;
+    background: var(--accent-coral);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 10px;
+}
+
+.sidebar-footer {
+    padding: 16px;
+    border-top: 1px solid var(--border-color);
+}
+
+.lang-toggle {
+    display: flex;
+    gap: 4px;
+    background: var(--bg-card);
+    padding: 4px;
+    border-radius: 10px;
+}
+
+.lang-btn {
+    flex: 1;
+    padding: 8px;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.lang-btn:hover {
+    color: var(--text-primary);
+}
+
+.lang-btn.active {
+    background: var(--accent-gold);
+    color: var(--bg-primary);
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    margin-left: var(--sidebar-width);
+    padding: 32px;
+    overflow-y: auto;
+}
+
+/* Header */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.page-title {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+
+.page-subtitle {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+}
+
+.header-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 24px;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-primary {
+    background: var(--gradient-gold);
+    color: var(--bg-primary);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 217, 61, 0.3);
+}
+
+.btn-secondary {
+    background: var(--bg-card);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+    border-color: var(--accent-teal);
+    background: rgba(0, 217, 165, 0.1);
+}
+
+.btn-danger {
+    background: var(--accent-coral);
+    color: white;
+}
+
+.btn-small {
+    padding: 8px 16px;
+    font-size: 13px;
+}
+
+/* Stats Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 32px;
+}
+
+.stat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 24px;
+    transition: all 0.2s ease;
+}
+
+.stat-card:hover {
+    border-color: rgba(255, 217, 61, 0.2);
+}
+
+.stat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+}
+
+.stat-icon {
+    font-size: 24px;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: rgba(255, 217, 61, 0.1);
+}
+
+.stat-card:nth-child(1) .stat-icon { background: rgba(255, 217, 61, 0.1); }
+.stat-card:nth-child(2) .stat-icon { background: rgba(0, 217, 165, 0.1); }
+.stat-card:nth-child(3) .stat-icon { background: rgba(77, 168, 255, 0.1); }
+.stat-card:nth-child(4) .stat-icon { background: rgba(168, 85, 247, 0.1); }
+
+.stat-trend {
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 6px;
+}
+
+.stat-trend.up {
+    background: rgba(34, 197, 94, 0.1);
+    color: var(--accent-green);
+}
+
+.stat-trend.down {
+    background: rgba(255, 107, 107, 0.1);
+    color: var(--accent-coral);
+}
+
+.stat-value {
+    font-size: 36px;
+    font-weight: 900;
+    margin-bottom: 4px;
+    letter-spacing: -1px;
+}
+
+.stat-card:nth-child(1) .stat-value { color: var(--accent-gold); }
+.stat-card:nth-child(2) .stat-value { color: var(--accent-teal); }
+.stat-card:nth-child(3) .stat-value { color: var(--accent-blue); }
+.stat-card:nth-child(4) .stat-value { color: var(--accent-purple); }
+
+.stat-label {
+    font-size: 14px;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+/* Section */
+.section {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    margin-bottom: 24px;
+    overflow: hidden;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.section-title {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.section-content {
+    padding: 24px;
+}
+
+/* Table */
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+th {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+td {
+    font-size: 14px;
+    color: var(--text-primary);
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+tr:hover td {
+    background: var(--bg-card-hover);
+}
+
+.facility-name {
+    font-weight: 700;
+}
+
+.facility-location {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+/* Status Badge */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.status-badge.active {
+    background: rgba(34, 197, 94, 0.1);
+    color: var(--accent-green);
+}
+
+.status-badge.expiring {
+    background: rgba(255, 217, 61, 0.1);
+    color: var(--accent-gold);
+}
+
+.status-badge.expired {
+    background: rgba(255, 107, 107, 0.1);
+    color: var(--accent-coral);
+}
+
+.status-badge.pending {
+    background: rgba(128, 128, 128, 0.1);
+    color: var(--text-muted);
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+/* Ring Badge */
+.ring-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+    background: linear-gradient(135deg, rgba(255, 217, 61, 0.15) 0%, rgba(255, 159, 28, 0.15) 100%);
+    border: 1px solid rgba(255, 217, 61, 0.3);
+    color: var(--accent-gold);
+}
+
+.ring-badge.level-1 { background: rgba(205, 127, 50, 0.15); border-color: rgba(205, 127, 50, 0.3); color: #CD7F32; }
+.ring-badge.level-2 { background: rgba(255, 107, 107, 0.15); border-color: rgba(255, 107, 107, 0.3); color: #FF6B6B; }
+.ring-badge.level-3 { background: rgba(0, 217, 165, 0.15); border-color: rgba(0, 217, 165, 0.3); color: #00D9A5; }
+.ring-badge.level-4 { background: rgba(77, 168, 255, 0.15); border-color: rgba(77, 168, 255, 0.3); color: #4DA8FF; }
+.ring-badge.level-5 { background: rgba(255, 217, 61, 0.15); border-color: rgba(255, 217, 61, 0.3); color: #FFD93D; }
+.ring-badge.level-6 { background: rgba(168, 85, 247, 0.15); border-color: rgba(168, 85, 247, 0.3); color: #A855F7; }
+.ring-badge.level-7 { background: rgba(34, 197, 94, 0.15); border-color: rgba(34, 197, 94, 0.3); color: #22C55E; }
+.ring-badge.level-8 { background: linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%); border-color: gold; color: gold; }
+
+/* Facility PIN */
+.license-key {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    background: var(--bg-primary);
+    padding: 8px 16px;
+    border-radius: 10px;
+    color: var(--accent-teal);
+    letter-spacing: 4px;
+}
+
+/* Progress Bar */
+.progress-bar {
+    height: 8px;
+    background: var(--bg-primary);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 8px;
+}
+
+.progress-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.progress-fill.good {
+    background: var(--accent-green);
+}
+
+.progress-fill.warning {
+    background: var(--accent-gold);
+}
+
+.progress-fill.danger {
+    background: var(--accent-coral);
+}
+
+.user-count {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+/* Modal */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    width: 100%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.modal-title {
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 24px;
+    cursor: pointer;
+    padding: 4px;
+    line-height: 1;
+}
+
+.modal-close:hover {
+    color: var(--text-primary);
+}
+
+.modal-body {
+    padding: 24px;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 20px 24px;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Form */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 14px 16px;
+    font-size: 15px;
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    color: var(--text-primary);
+    transition: all 0.2s ease;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--accent-gold);
+    box-shadow: 0 0 0 3px rgba(255, 217, 61, 0.1);
+}
+
+.form-input::placeholder {
+    color: var(--text-muted);
+}
+
+.form-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23808080' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    padding-right: 48px;
+}
+
+.form-hint {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 6px;
+}
+
+/* Generated Key Display */
+.generated-key-display {
+    background: var(--bg-primary);
+    border: 2px dashed var(--accent-gold);
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.generated-key-label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+}
+
+.generated-key-value {
+    font-family: 'Courier New', monospace;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--accent-gold);
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+}
+
+.copy-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.copy-btn:hover {
+    background: var(--accent-teal);
+    color: var(--bg-primary);
+    border-color: var(--accent-teal);
+}
+
+.copy-btn.copied {
+    background: var(--accent-green);
+    border-color: var(--accent-green);
+    color: white;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 60px 24px;
+}
+
+.empty-state-icon {
+    font-size: 64px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+.empty-state-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+}
+
+.empty-state-text {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+}
+
+/* Action buttons in table */
+.table-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.action-btn {
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+    border-color: var(--accent-teal);
+    color: var(--accent-teal);
+}
+
+.action-btn.danger:hover {
+    border-color: var(--accent-coral);
+    color: var(--accent-coral);
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+    }
+    
+    .sidebar.open {
+        transform: translateX(0);
+    }
+    
+    .main-content {
+        margin-left: 0;
+    }
+    
+    .mobile-menu-btn {
+        display: flex;
+    }
+}
+
+@media (max-width: 600px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+    
+    .main-content {
+        padding: 20px;
+    }
+}
+</style>
 </head>
-<body>
-    <header class="header">
-        <div class="logo">
-            <div class="logo-icon">
-                <svg viewBox="0 0 24 24">
-                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
-                </svg>
-            </div>
-            <h1>Go<span>Star</span> Digital</h1>
-        </div>
-        <div class="user-menu">
-            <span class="user-info">Welcome, <strong id="username">User</strong></span>
-            <a href="/logout" class="logout-btn">Sign Out</a>
-        </div>
-    </header>
+<body data-lang="en">
 
-    <main class="main">
-        <div class="welcome">
-            <h2>Welcome to <strong>GoStar Digital</strong></h2>
-            <p>Select a cognitive training game to begin your session</p>
-        </div>
-
-        <p class="section-title">Available Games</p>
+<!-- Login Screen -->
+<div class="login-screen" id="loginScreen">
+    <div class="login-card">
+        <img src="gostar_logo_transparent.png" alt="GoStar Digital" class="login-logo">
+        <h1 class="login-title">Go<span>Star</span></h1>
+        <span class="login-badge">Admin Access</span>
+        <p class="login-subtitle">
+            <span class="lang-en">Enter your admin PIN to continue</span>
+            <span class="lang-es">Ingresa tu PIN de administrador</span>
+        </p>
         
-        <div class="games-grid">
-            <a href="/game/sequence-memory" class="game-card">
-                <div class="game-icon">🧠</div>
-                <h3>Sequence Memory</h3>
-                <p>Test and improve your working memory by recalling increasingly complex sequences of tiles.</p>
-                <span class="game-status">Available</span>
+        <div class="pin-input-group">
+            <input type="password" class="pin-input" maxlength="1" id="pin1" inputmode="numeric" pattern="[0-9]*">
+            <input type="password" class="pin-input" maxlength="1" id="pin2" inputmode="numeric" pattern="[0-9]*">
+            <input type="password" class="pin-input" maxlength="1" id="pin3" inputmode="numeric" pattern="[0-9]*">
+            <input type="password" class="pin-input" maxlength="1" id="pin4" inputmode="numeric" pattern="[0-9]*">
+        </div>
+        
+        <button class="login-btn" onclick="verifyPin()" id="loginBtn">
+            <span class="lang-en">Enter Dashboard</span>
+            <span class="lang-es">Entrar al Panel</span>
+        </button>
+        
+        <p class="login-error" id="loginError">
+            <span class="lang-en">Incorrect PIN. Please try again.</span>
+            <span class="lang-es">PIN incorrecto. Intenta de nuevo.</span>
+        </p>
+        
+        <p class="login-hint">
+            <span class="lang-en">Contact administrator if you forgot your PIN</span>
+            <span class="lang-es">Contacta al administrador si olvidaste tu PIN</span>
+        </p>
+    </div>
+</div>
+
+<!-- Sidebar -->
+<div class="dashboard">
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <a href="index.html" class="sidebar-logo">
+                <img src="gostar_logo_transparent.png" alt="GoStar" class="sidebar-logo-icon">
+                <span class="sidebar-logo-text">Go<span>Star</span></span>
             </a>
-
-            <div class="game-card coming-soon">
-                <div class="game-icon" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">🎯</div>
-                <h3>N-Back Challenge</h3>
-                <p>Enhance your executive function and fluid intelligence with this classic cognitive task.</p>
-                <span class="game-status">Coming Soon</span>
+            <span class="sidebar-badge">Admin</span>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <div class="nav-section">
+                <div class="nav-section-title">
+                    <span class="lang-en">Overview</span>
+                    <span class="lang-es">Resumen</span>
+                </div>
+                <button class="nav-item active" onclick="showSection('overview')">
+                    <span class="nav-item-icon">📊</span>
+                    <span class="lang-en">Dashboard</span>
+                    <span class="lang-es">Panel</span>
+                </button>
             </div>
-
-            <div class="game-card coming-soon">
-                <div class="game-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">🔢</div>
-                <h3>Digit Span</h3>
-                <p>Challenge your short-term memory capacity by recalling number sequences.</p>
-                <span class="game-status">Coming Soon</span>
+            
+            <div class="nav-section">
+                <div class="nav-section-title">
+                    <span class="lang-en">Management</span>
+                    <span class="lang-es">Gestión</span>
+                </div>
+                <button class="nav-item" onclick="showSection('facilities')">
+                    <span class="nav-item-icon">🏢</span>
+                    <span class="lang-en">Facilities</span>
+                    <span class="lang-es">Instalaciones</span>
+                </button>
+                <button class="nav-item" onclick="showSection('licenses')">
+                    <span class="nav-item-icon">🔑</span>
+                    <span class="lang-en">Licenses</span>
+                    <span class="lang-es">Licencias</span>
+                </button>
+                <button class="nav-item" onclick="showSection('users')">
+                    <span class="nav-item-icon">👥</span>
+                    <span class="lang-en">GoTrotters</span>
+                    <span class="lang-es">GoTrotters</span>
+                </button>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-section-title">
+                    <span class="lang-en">System</span>
+                    <span class="lang-es">Sistema</span>
+                </div>
+                <button class="nav-item" onclick="showSection('activity')">
+                    <span class="nav-item-icon">📋</span>
+                    <span class="lang-en">Activity Log</span>
+                    <span class="lang-es">Actividad</span>
+                </button>
+                <button class="nav-item" onclick="showSection('settings')">
+                    <span class="nav-item-icon">⚙️</span>
+                    <span class="lang-en">Settings</span>
+                    <span class="lang-es">Ajustes</span>
+                </button>
+            </div>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <div class="lang-toggle">
+                <button class="lang-btn active" onclick="setLang('en')">EN</button>
+                <button class="lang-btn" onclick="setLang('es')">ES</button>
+            </div>
+            <button class="logout-btn" onclick="logout()">
+                <span>🚪</span>
+                <span class="lang-en">Logout</span>
+                <span class="lang-es">Cerrar Sesión</span>
+            </button>
+        </div>
+    </aside>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+        
+        <!-- Overview Section -->
+        <div id="section-overview" class="page-section">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">
+                        <span class="lang-en">Dashboard</span>
+                        <span class="lang-es">Panel de Control</span>
+                    </h1>
+                    <p class="page-subtitle">
+                        <span class="lang-en">GoTrotters platform overview</span>
+                        <span class="lang-es">Resumen de la plataforma GoTrotters</span>
+                    </p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-primary" onclick="openModal('newLicense')">
+                        <span>🔑</span>
+                        <span class="lang-en">Generate License</span>
+                        <span class="lang-es">Generar Licencia</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon">🏢</div>
+                    </div>
+                    <div class="stat-value" id="stat-facilities">0</div>
+                    <div class="stat-label">
+                        <span class="lang-en">Active Facilities</span>
+                        <span class="lang-es">Instalaciones Activas</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon">🏀</div>
+                    </div>
+                    <div class="stat-value" id="stat-users">0</div>
+                    <div class="stat-label">
+                        <span class="lang-en">GoTrotters</span>
+                        <span class="lang-es">GoTrotters</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon">💍</div>
+                    </div>
+                    <div class="stat-value" id="stat-sessions">0</div>
+                    <div class="stat-label">
+                        <span class="lang-en">Rings Earned</span>
+                        <span class="lang-es">Anillos Ganados</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon">🔑</div>
+                    </div>
+                    <div class="stat-value" id="stat-licenses">0</div>
+                    <div class="stat-label">
+                        <span class="lang-en">Active Licenses</span>
+                        <span class="lang-es">Licencias Activas</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recent Facilities -->
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <span class="lang-en">Recent Facilities</span>
+                        <span class="lang-es">Instalaciones Recientes</span>
+                    </h2>
+                    <button class="btn btn-secondary btn-small" onclick="showSection('facilities')">
+                        <span class="lang-en">View All</span>
+                        <span class="lang-es">Ver Todas</span>
+                    </button>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>
+                                    <span class="lang-en">Facility</span>
+                                    <span class="lang-es">Instalación</span>
+                                </th>
+                                <th>
+                                    <span class="lang-en">Facility PIN</span>
+                                    <span class="lang-es">PIN de Instalación</span>
+                                </th>
+                                <th>
+                                    <span class="lang-en">GoTrotters</span>
+                                    <span class="lang-es">GoTrotters</span>
+                                </th>
+                                <th>
+                                    <span class="lang-en">Status</span>
+                                    <span class="lang-es">Estado</span>
+                                </th>
+                                <th>
+                                    <span class="lang-en">Expires</span>
+                                    <span class="lang-es">Expira</span>
+                                </th>
+                                <th>
+                                    <span class="lang-en">Actions</span>
+                                    <span class="lang-es">Acciones</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="facilities-table-body">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
+        
+        <!-- Facilities Section -->
+        <div id="section-facilities" class="page-section" style="display: none;">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">
+                        <span class="lang-en">Facilities</span>
+                        <span class="lang-es">Instalaciones</span>
+                    </h1>
+                    <p class="page-subtitle">
+                        <span class="lang-en">Manage all registered facilities</span>
+                        <span class="lang-es">Gestiona todas las instalaciones registradas</span>
+                    </p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-primary" onclick="openModal('newFacility')">
+                        <span>+</span>
+                        <span class="lang-en">Add Facility</span>
+                        <span class="lang-es">Añadir Instalación</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>
+                                    <span class="lang-en">Facility</span>
+                                    <span class="lang-es">Instalación</span>
+                                </th>
+                                <th>
+                                    <span class="lang-en">Facility PIN</span>
+                                    <span class="lang-es">PIN de Instalación</span>
+                                </th>
+                                <th>
+                                    <span class="lang-en">GoTrotters</span>
+                                    <span class="lang-es">GoTrotters</span>
+                                </th>
+                                <th>
+                                    <span class="lang-en">Status</span>
+                                    <span class="lang-es">Estado</span>
+                                </th>
+                                <th>
+                                    <span class="lang-en">Days Left</span>
+                                    <span class="lang-es">Días Restantes</span>
+                                </th>
+                                <th>
+                                    <span class="lang-en">Actions</span>
+                                    <span class="lang-es">Acciones</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="all-facilities-table-body">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Licenses Section -->
+        <div id="section-licenses" class="page-section" style="display: none;">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">
+                        <span class="lang-en">Licenses</span>
+                        <span class="lang-es">Licencias</span>
+                    </h1>
+                    <p class="page-subtitle">
+                        <span class="lang-en">Generate and manage facility PINs</span>
+                        <span class="lang-es">Genera y gestiona PINs de instalaciones</span>
+                    </p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-primary" onclick="openModal('newLicense')">
+                        <span>🔑</span>
+                        <span class="lang-en">Generate PIN</span>
+                        <span class="lang-es">Generar PIN</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>
+                                    <span class="lang-en">Facility PIN</span>
+                                    <span class="lang-es">PIN de Instalación</span>
+                                </th>
+                                <th>
+                                    <span class="lang-en">Type</span>
+                                    <span class="lang-es">Tipo</span>
+                                </th>
+                                <th>
+                                    <span class="lang-en">Facility</span>
+                                    <span class="lang-es">Instalación</span>
+                                </th>
+                                <th>
+                                    <span class="lang-en">Created</span>
+                                    <span class="lang-es">Creada</span>
+                                </th>
+                                <th>
+                                    <span class="lang-en">Expires</span>
+                                    <span class="lang-es">Expira</span>
+                                </th>
+                                <th>
+                                    <span class="lang-en">Status</span>
+                                    <span class="lang-es">Estado</span>
+                                </th>
+                                <th>
+                                    <span class="lang-en">Actions</span>
+                                    <span class="lang-es">Acciones</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="licenses-table-body">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Users/GoTrotters Section -->
+        <div id="section-users" class="page-section" style="display: none;">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">
+                        <span class="lang-en">GoTrotters</span>
+                        <span class="lang-es">GoTrotters</span>
+                    </h1>
+                    <p class="page-subtitle">
+                        <span class="lang-en">All players across facilities</span>
+                        <span class="lang-es">Todos los jugadores de las instalaciones</span>
+                    </p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>
+                                    <span class="lang-en">Name</span>
+                                    <span class="lang-es">Nombre</span>
+                                </th>
+                                <th>
+                                    <span class="lang-en">PIN</span>
+                                    <span class="lang-es">PIN</span>
+                                </th>
+                                <th>
+                                    <span class="lang-en">Facility</span>
+                                    <span class="lang-es">Instalación</span>
+                                </th>
+                                <th>
+                                    💍
+                                    <div style="font-size: 10px; font-weight: 400; opacity: 0.7;">
+                                        <span class="lang-en">Current Ring</span>
+                                        <span class="lang-es">Anillo Actual</span>
+                                    </div>
+                                </th>
+                                <th>
+                                    🏀
+                                    <div style="font-size: 10px; font-weight: 400; opacity: 0.7;">
+                                        <span class="lang-en">Sessions</span>
+                                        <span class="lang-es">Sesiones</span>
+                                    </div>
+                                </th>
+                                <th>
+                                    <span class="lang-en">Streak</span>
+                                    <span class="lang-es">Racha</span>
+                                </th>
+                                <th>
+                                    <span class="lang-en">Last Active</span>
+                                    <span class="lang-es">Última Actividad</span>
+                                </th>
+                                <th>
+                                    <span class="lang-en">Actions</span>
+                                    <span class="lang-es">Acciones</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table-body">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Activity Section -->
+        <div id="section-activity" class="page-section" style="display: none;">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">
+                        <span class="lang-en">Activity Log</span>
+                        <span class="lang-es">Registro de Actividad</span>
+                    </h1>
+                    <p class="page-subtitle">
+                        <span class="lang-en">Recent platform activity</span>
+                        <span class="lang-es">Actividad reciente de la plataforma</span>
+                    </p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>
+                                    <span class="lang-en">Time</span>
+                                    <span class="lang-es">Hora</span>
+                                </th>
+                                <th>
+                                    <span class="lang-en">Type</span>
+                                    <span class="lang-es">Tipo</span>
+                                </th>
+                                <th>
+                                    <span class="lang-en">GoTrotter</span>
+                                    <span class="lang-es">GoTrotter</span>
+                                </th>
+                                <th>
+                                    <span class="lang-en">Facility</span>
+                                    <span class="lang-es">Instalación</span>
+                                </th>
+                                <th>
+                                    <span class="lang-en">Details</span>
+                                    <span class="lang-es">Detalles</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="activity-table-body">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Settings Section -->
+        <div id="section-settings" class="page-section" style="display: none;">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">
+                        <span class="lang-en">Settings</span>
+                        <span class="lang-es">Ajustes</span>
+                    </h1>
+                    <p class="page-subtitle">
+                        <span class="lang-en">Platform configuration</span>
+                        <span class="lang-es">Configuración de la plataforma</span>
+                    </p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-content">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">⚙️</div>
+                        <h3 class="empty-state-title">
+                            <span class="lang-en">Settings Coming Soon</span>
+                            <span class="lang-es">Ajustes Próximamente</span>
+                        </h3>
+                        <p class="empty-state-text">
+                            <span class="lang-en">Configure platform-wide settings.</span>
+                            <span class="lang-es">Configura los ajustes de toda la plataforma.</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
     </main>
+</div>
 
-    <script>
-        // Fetch user info
-        fetch('/api/user')
-            .then(res => res.json())
-            .then(data => {
-                document.getElementById('username').textContent = data.username;
-            })
-            .catch(err => console.error('Error fetching user:', err));
-    </script>
+<!-- New License Modal -->
+<div class="modal-overlay" id="modal-newLicense">
+    <div class="modal">
+        <div class="modal-header">
+            <h2 class="modal-title">
+                <span class="lang-en">Generate Facility</span>
+                <span class="lang-es">Generar Instalación</span>
+            </h2>
+            <button class="modal-close" onclick="closeModal('newLicense')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label class="form-label">
+                    <span class="lang-en">Facility Name</span>
+                    <span class="lang-es">Nombre de Instalación</span>
+                </label>
+                <input type="text" class="form-input" id="license-facility-name" placeholder="e.g., Sunrise Wellness Center">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">
+                    <span class="lang-en">Location</span>
+                    <span class="lang-es">Ubicación</span>
+                </label>
+                <input type="text" class="form-input" id="license-facility-location" placeholder="e.g., San Juan, PR">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">
+                    <span class="lang-en">License Type</span>
+                    <span class="lang-es">Tipo de Licencia</span>
+                </label>
+                <select class="form-input form-select" id="license-type">
+                    <option value="trial">🆓 Free Trial - 7 Days, 10 GoTrotters</option>
+                </select>
+                <p class="form-hint">
+                    <span class="lang-en">More license types coming soon.</span>
+                    <span class="lang-es">Más tipos de licencia próximamente.</span>
+                </p>
+            </div>
+            
+            <div id="generated-key-container" style="display: none;">
+                <div class="generated-key-display">
+                    <div class="generated-key-label">
+                        <span class="lang-en">Your Facility PIN</span>
+                        <span class="lang-es">Tu PIN de Instalación</span>
+                    </div>
+                    <div class="generated-key-value" id="generated-key-value" style="font-size: 48px; letter-spacing: 8px;">0000</div>
+                    <button class="copy-btn" onclick="copyLicenseKey()">
+                        <span>📋</span>
+                        <span class="lang-en">Copy PIN</span>
+                        <span class="lang-es">Copiar PIN</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal('newLicense')">
+                <span class="lang-en">Cancel</span>
+                <span class="lang-es">Cancelar</span>
+            </button>
+            <button class="btn btn-primary" id="generate-key-btn" onclick="generateLicenseKey()">
+                <span class="lang-en">Generate PIN</span>
+                <span class="lang-es">Generar PIN</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- New Facility Modal -->
+<div class="modal-overlay" id="modal-newFacility">
+    <div class="modal">
+        <div class="modal-header">
+            <h2 class="modal-title">
+                <span class="lang-en">Add New Facility</span>
+                <span class="lang-es">Añadir Nueva Instalación</span>
+            </h2>
+            <button class="modal-close" onclick="closeModal('newFacility')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label class="form-label">
+                    <span class="lang-en">Facility Name</span>
+                    <span class="lang-es">Nombre de Instalación</span>
+                </label>
+                <input type="text" class="form-input" id="facility-name" placeholder="e.g., Sunrise Wellness Center">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">
+                    <span class="lang-en">Location</span>
+                    <span class="lang-es">Ubicación</span>
+                </label>
+                <input type="text" class="form-input" id="facility-location" placeholder="e.g., San Juan, PR">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">
+                    <span class="lang-en">Contact Email</span>
+                    <span class="lang-es">Email de Contacto</span>
+                </label>
+                <input type="email" class="form-input" id="facility-email" placeholder="admin@facility.com">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">
+                    <span class="lang-en">Assign Facility PIN (Optional)</span>
+                    <span class="lang-es">Asignar PIN de Instalación (Opcional)</span>
+                </label>
+                <input type="text" class="form-input" id="facility-license" placeholder="GOSTAR-XXXX-XXXX">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal('newFacility')">
+                <span class="lang-en">Cancel</span>
+                <span class="lang-es">Cancelar</span>
+            </button>
+            <button class="btn btn-primary" onclick="addFacility()">
+                <span class="lang-en">Add Facility</span>
+                <span class="lang-es">Añadir Instalación</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+// ============================================
+// GOTROTTERS RING LEVELS
+// ============================================
+var RING_LEVELS = [
+    { level: 1, name: 'Rookie', nameEs: 'Novato', icon: '🥉', color: '#CD7F32' },
+    { level: 2, name: 'Hustle', nameEs: 'Esfuerzo', icon: '💪', color: '#FF6B6B' },
+    { level: 3, name: 'Assist', nameEs: 'Asistencia', icon: '🤝', color: '#00D9A5' },
+    { level: 4, name: 'Playmaker', nameEs: 'Creador', icon: '👁️', color: '#4DA8FF' },
+    { level: 5, name: 'All-Star', nameEs: 'All-Star', icon: '⭐', color: '#FFD93D' },
+    { level: 6, name: 'MVP', nameEs: 'MVP', icon: '🏅', color: '#A855F7' },
+    { level: 7, name: 'Champion', nameEs: 'Campeón', icon: '🏆', color: '#22C55E' },
+    { level: 8, name: 'Legend', nameEs: 'Leyenda', icon: '👑', color: 'gold' }
+];
+
+function getRingBadge(level) {
+    var ring = RING_LEVELS[Math.min(level - 1, 7)] || RING_LEVELS[0];
+    var name = currentLang === 'es' ? ring.nameEs : ring.name;
+    return '<span class="ring-badge level-' + ring.level + '">' + ring.icon + ' ' + name + ' Ring</span>';
+}
+
+// ============================================
+// ADMIN AUTH - API BASED
+// ============================================
+var API_BASE = window.location.origin;
+
+function checkAuth() {
+    var token = sessionStorage.getItem('admin-token');
+    if (token) {
+        fetch(API_BASE + '/api/admin/verify-token', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token: token })
+        })
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+            if (data.success) {
+                document.getElementById('loginScreen').classList.add('hidden');
+                fetchDashboardData();
+            } else {
+                sessionStorage.removeItem('admin-token');
+                showLoginScreen();
+            }
+        })
+        .catch(function() {
+            sessionStorage.removeItem('admin-token');
+            showLoginScreen();
+        });
+    } else {
+        showLoginScreen();
+    }
+}
+
+function showLoginScreen() {
+    document.getElementById('loginScreen').classList.remove('hidden');
+    document.getElementById('pin1').focus();
+}
+
+var pinInputs = document.querySelectorAll('.pin-input');
+pinInputs.forEach(function(input, index) {
+    input.addEventListener('input', function(e) {
+        this.value = this.value.replace(/[^0-9]/g, '');
+        if (this.value.length === 1 && index < pinInputs.length - 1) {
+            pinInputs[index + 1].focus();
+        }
+        if (index === pinInputs.length - 1 && this.value.length === 1) {
+            verifyPin();
+        }
+        document.getElementById('loginError').classList.remove('show');
+        pinInputs.forEach(function(inp) { inp.classList.remove('error'); });
+    });
+    
+    input.addEventListener('keydown', function(e) {
+        if (e.key === 'Backspace' && this.value.length === 0 && index > 0) {
+            pinInputs[index - 1].focus();
+        }
+        if (e.key === 'Enter') {
+            verifyPin();
+        }
+    });
+    
+    input.addEventListener('paste', function(e) {
+        e.preventDefault();
+        var pastedData = e.clipboardData.getData('text').replace(/[^0-9]/g, '');
+        for (var i = 0; i < Math.min(pastedData.length, 4); i++) {
+            pinInputs[i].value = pastedData[i];
+        }
+        if (pastedData.length >= 4) {
+            verifyPin();
+        }
+    });
+});
+
+function verifyPin() {
+    var enteredPin = '';
+    pinInputs.forEach(function(input) {
+        enteredPin += input.value;
+    });
+    
+    if (enteredPin.length < 4) return;
+    
+    var loginBtn = document.getElementById('loginBtn');
+    loginBtn.disabled = true;
+    loginBtn.innerHTML = '<span class="lang-en">Verifying...</span><span class="lang-es">Verificando...</span>';
+    
+    fetch(API_BASE + '/api/admin/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pin: enteredPin })
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+        if (data.success) {
+            sessionStorage.setItem('admin-token', data.token);
+            document.getElementById('loginScreen').classList.add('hidden');
+            fetchDashboardData();
+        } else {
+            showPinError();
+        }
+    })
+    .catch(function(err) {
+        console.error('Auth error:', err);
+        showPinError();
+    })
+    .finally(function() {
+        loginBtn.disabled = false;
+        loginBtn.innerHTML = '<span class="lang-en">Enter Dashboard</span><span class="lang-es">Entrar al Panel</span>';
+    });
+}
+
+function showPinError() {
+    document.getElementById('loginError').classList.add('show');
+    pinInputs.forEach(function(input) {
+        input.classList.add('error');
+        input.value = '';
+    });
+    pinInputs[0].focus();
+}
+
+function logout() {
+    var token = sessionStorage.getItem('admin-token');
+    if (token) {
+        fetch(API_BASE + '/api/admin/logout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token: token })
+        }).catch(function() {});
+    }
+    
+    sessionStorage.removeItem('admin-token');
+    document.getElementById('loginScreen').classList.remove('hidden');
+    facilities = [];
+    licenses = [];
+    users = [];
+    pinInputs.forEach(function(input) { input.value = ''; });
+    document.getElementById('pin1').focus();
+}
+
+checkAuth();
+
+// Language
+var currentLang = localStorage.getItem('gostar-lang') || 'en';
+
+function setLang(lang) {
+    currentLang = lang;
+    localStorage.setItem('gostar-lang', lang);
+    document.body.setAttribute('data-lang', lang);
+    var btns = document.querySelectorAll('.lang-btn');
+    btns.forEach(function(btn) {
+        btn.classList.toggle('active', btn.textContent === lang.toUpperCase());
+    });
+    // Re-render tables for language change
+    renderOverviewTable();
+    renderFacilitiesTable();
+    renderLicensesTable();
+    renderUsersTable();
+}
+
+document.body.setAttribute('data-lang', currentLang);
+document.querySelectorAll('.lang-btn').forEach(function(btn) {
+    btn.classList.toggle('active', btn.textContent === currentLang.toUpperCase());
+});
+
+// Data
+var facilities = [];
+var licenses = [];
+var users = [];
+var activities = [];
+
+function fetchDashboardData() {
+    var token = sessionStorage.getItem('admin-token');
+    if (!token) {
+        showLoginScreen();
+        return;
+    }
+    
+    var headers = { 'Authorization': 'Bearer ' + token };
+    
+    fetch('/api/admin/facilities', { headers: headers })
+    .then(function(r) {
+        if (r.status === 401) { logout(); throw new Error('Unauthorized'); }
+        return r.json();
+    })
+    .then(function(data) {
+        if (data.success && data.facilities) {
+            facilities = data.facilities.map(function(f) {
+                return {
+                    id: f.id,
+                    name: f.name,
+                    location: f.location || 'N/A',
+                    licenseKey: f.license_key,
+                    licenseType: f.license_type || 'trial',
+                    users: f.user_count || 0,
+                    maxUsers: f.user_limit || 10,
+                    status: f.status || 'active',
+                    createdAt: f.created_at ? f.created_at.split('T')[0] : 'N/A',
+                    expiresAt: f.expires_at || 'N/A',
+                    daysLeft: f.days_left || 0
+                };
+            });
+            renderOverviewTable();
+            renderFacilitiesTable();
+            updateStats();
+        }
+    })
+    .catch(function(err) { console.log('Facility fetch error:', err); });
+    
+    fetch('/api/admin/licenses-list', { headers: headers })
+    .then(function(r) {
+        if (r.status === 401) throw new Error('Unauthorized');
+        return r.json();
+    })
+    .then(function(data) {
+        if (data.success && data.licenses) {
+            licenses = data.licenses.map(function(l) {
+                return {
+                    key: l.license_key,
+                    type: l.license_type || 'trial',
+                    facility: l.facility_name || 'Unassigned',
+                    createdAt: l.created_at ? l.created_at.split('T')[0] : 'N/A',
+                    expiresAt: l.expires_at || 'N/A',
+                    status: l.status || 'active'
+                };
+            });
+            renderLicensesTable();
+            updateStats();
+        }
+    })
+    .catch(function(err) { console.log('License fetch error:', err); });
+    
+    fetch('/api/admin/users', { headers: headers })
+    .then(function(r) {
+        if (r.status === 401) throw new Error('Unauthorized');
+        return r.json();
+    })
+    .then(function(data) {
+        if (data.success && data.users) {
+            users = data.users.map(function(u) {
+                return {
+                    id: u.id,
+                    name: u.username,
+                    pin: u.pin || null,
+                    facility: u.facility_name || 'Unknown',
+                    ringLevel: u.ring_level || 1,
+                    totalSessions: u.total_sessions || 0,
+                    streak: u.streak || 0,
+                    lastActive: u.last_active ? u.last_active.split('T')[0] : 'Never'
+                };
+            });
+            renderUsersTable();
+            updateStats();
+        }
+    })
+    .catch(function(err) { console.log('User fetch error:', err); });
+    
+    fetch('/api/admin/activity', { headers: headers })
+    .then(function(r) {
+        if (r.status === 401) throw new Error('Unauthorized');
+        return r.json();
+    })
+    .then(function(data) {
+        if (data.success && data.activities) {
+            activities = data.activities;
+            renderActivityLog();
+        }
+    })
+    .catch(function(err) { console.log('Activity fetch error:', err); });
+}
+
+// Navigation
+function showSection(sectionId) {
+    document.querySelectorAll('.page-section').forEach(function(section) {
+        section.style.display = 'none';
+    });
+    document.getElementById('section-' + sectionId).style.display = 'block';
+    document.querySelectorAll('.nav-item').forEach(function(item) {
+        item.classList.remove('active');
+    });
+    event.currentTarget.classList.add('active');
+}
+
+// Modal
+function openModal(modalId) {
+    document.getElementById('modal-' + modalId).classList.add('active');
+    if (modalId === 'newLicense') {
+        document.getElementById('generated-key-container').style.display = 'none';
+        document.getElementById('generate-key-btn').style.display = 'inline-flex';
+        document.getElementById('license-facility-name').value = '';
+        document.getElementById('license-facility-location').value = '';
+    }
+}
+
+function closeModal(modalId) {
+    document.getElementById('modal-' + modalId).classList.remove('active');
+}
+
+function generateLicenseKey() {
+    var facilityName = document.getElementById('license-facility-name').value;
+    var facilityLocation = document.getElementById('license-facility-location').value;
+    
+    if (!facilityName) {
+        alert(currentLang === 'es' ? 'Por favor ingresa el nombre de la instalación' : 'Please enter facility name');
+        return;
+    }
+    
+    var today = new Date();
+    var expires = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
+    var expirationDate = expires.toISOString().split('T')[0];
+    
+    fetch('/api/admin/licenses', {
+        method: 'POST',
+        headers: { 
+            'Authorization': 'Basic ' + btoa('admin:GoStar2025'),
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            facilityName: facilityName,
+            expirationDate: expirationDate,
+            userPool: 10,
+            isTrial: true,
+            location: facilityLocation || ''
+        })
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.key) {
+            document.getElementById('generated-key-value').textContent = data.key;
+            document.getElementById('generated-key-container').style.display = 'block';
+            document.getElementById('generate-key-btn').style.display = 'none';
+            fetchDashboardData();
+        } else {
+            alert(currentLang === 'es' ? '❌ Error al crear licencia' : '❌ Error creating license');
+        }
+    })
+    .catch(err => {
+        console.log('API error:', err);
+        var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+        var key = 'GOSTAR-';
+        for (var i = 0; i < 4; i++) key += chars.charAt(Math.floor(Math.random() * chars.length));
+        key += '-';
+        for (var i = 0; i < 4; i++) key += chars.charAt(Math.floor(Math.random() * chars.length));
+        
+        document.getElementById('generated-key-value').textContent = key;
+        document.getElementById('generated-key-container').style.display = 'block';
+        document.getElementById('generate-key-btn').style.display = 'none';
+    });
+}
+
+function copyLicenseKey() {
+    var key = document.getElementById('generated-key-value').textContent;
+    navigator.clipboard.writeText(key).then(function() {
+        var btn = document.querySelector('.copy-btn');
+        btn.classList.add('copied');
+        btn.innerHTML = '<span>✓</span> ' + (currentLang === 'es' ? 'Copiado!' : 'Copied!');
+        setTimeout(function() {
+            btn.classList.remove('copied');
+            btn.innerHTML = '<span>📋</span> ' + (currentLang === 'es' ? 'Copiar PIN' : 'Copy PIN');
+        }, 2000);
+    });
+}
+
+function addFacility() {
+    var name = document.getElementById('facility-name').value;
+    var location = document.getElementById('facility-location').value;
+    var license = document.getElementById('facility-license').value;
+    
+    if (!name) {
+        alert(currentLang === 'es' ? 'Por favor ingresa el nombre' : 'Please enter facility name');
+        return;
+    }
+    
+    facilities.unshift({
+        id: facilities.length + 1,
+        name: name,
+        location: location || 'N/A',
+        licenseKey: license || 'No License',
+        licenseType: license ? 'trial' : 'none',
+        users: 0,
+        maxUsers: license ? 10 : 0,
+        status: license ? 'active' : 'pending',
+        createdAt: new Date().toISOString().split('T')[0],
+        expiresAt: license ? new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] : 'N/A',
+        daysLeft: license ? 7 : 0
+    });
+    
+    closeModal('newFacility');
+    updateStats();
+    renderFacilitiesTable();
+}
+
+// Render Tables
+function renderOverviewTable() {
+    var tbody = document.getElementById('facilities-table-body');
+    tbody.innerHTML = '';
+    
+    if (facilities.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px; color: var(--text-muted);"><div style="font-size: 2rem; margin-bottom: 10px;">📋</div>' + (currentLang === 'es' ? 'No hay instalaciones aún.' : 'No facilities yet.') + '</td></tr>';
+        return;
+    }
+    
+    facilities.slice(0, 5).forEach(function(f, index) {
+        var statusClass = f.daysLeft <= 2 ? 'expiring' : 'active';
+        var userPercent = (f.users / f.maxUsers) * 100;
+        var progressClass = userPercent >= 90 ? 'danger' : userPercent >= 70 ? 'warning' : 'good';
+        
+        tbody.innerHTML += '<tr><td><div class="facility-name">' + f.name + '</div><div class="facility-location">' + f.location + '</div></td><td><span class="license-key">' + f.licenseKey + '</span></td><td><div class="user-count">' + f.users + ' / ' + f.maxUsers + '</div><div class="progress-bar"><div class="progress-fill ' + progressClass + '" style="width: ' + userPercent + '%"></div></div></td><td><span class="status-badge ' + statusClass + '"><span class="status-dot"></span>' + (f.daysLeft <= 2 ? (currentLang === 'es' ? 'Por vencer' : 'Expiring') : (currentLang === 'es' ? 'Activo' : 'Active')) + '</span></td><td>' + f.expiresAt + '</td><td><div class="table-actions"><button class="action-btn" onclick="editFacility(' + index + ')">' + (currentLang === 'es' ? 'Editar' : 'Edit') + '</button><button class="action-btn danger" onclick="deleteFacility(' + index + ')">' + (currentLang === 'es' ? 'Eliminar' : 'Delete') + '</button></div></td></tr>';
+    });
+}
+
+function renderFacilitiesTable() {
+    var tbody = document.getElementById('all-facilities-table-body');
+    tbody.innerHTML = '';
+    
+    if (facilities.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px; color: var(--text-muted);"><div style="font-size: 2rem; margin-bottom: 10px;">🏢</div>' + (currentLang === 'es' ? 'No hay instalaciones.' : 'No facilities.') + '</td></tr>';
+        return;
+    }
+    
+    facilities.forEach(function(f, index) {
+        var statusClass = f.status === 'expired' ? 'expired' : f.daysLeft <= 2 ? 'expiring' : 'active';
+        var statusText = f.status === 'expired' ? (currentLang === 'es' ? 'Expirado' : 'Expired') : f.daysLeft <= 2 ? (currentLang === 'es' ? 'Por vencer' : 'Expiring') : (currentLang === 'es' ? 'Activo' : 'Active');
+        var userPercent = (f.users / f.maxUsers) * 100;
+        var progressClass = userPercent >= 90 ? 'danger' : userPercent >= 70 ? 'warning' : 'good';
+        
+        tbody.innerHTML += '<tr><td><div class="facility-name">' + f.name + '</div><div class="facility-location">' + f.location + '</div></td><td><span class="license-key">' + f.licenseKey + '</span></td><td><div class="user-count">' + f.users + ' / ' + f.maxUsers + '</div><div class="progress-bar"><div class="progress-fill ' + progressClass + '" style="width: ' + userPercent + '%"></div></div></td><td><span class="status-badge ' + statusClass + '"><span class="status-dot"></span>' + statusText + '</span></td><td>' + f.daysLeft + ' ' + (currentLang === 'es' ? 'días' : 'days') + '</td><td><div class="table-actions"><button class="action-btn" onclick="editFacility(' + index + ')">' + (currentLang === 'es' ? 'Editar' : 'Edit') + '</button><button class="action-btn danger" onclick="deleteFacility(' + index + ')">' + (currentLang === 'es' ? 'Eliminar' : 'Delete') + '</button></div></td></tr>';
+    });
+}
+
+function renderLicensesTable() {
+    var tbody = document.getElementById('licenses-table-body');
+    tbody.innerHTML = '';
+    
+    if (licenses.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px; color: var(--text-muted);"><div style="font-size: 2rem; margin-bottom: 10px;">🔑</div>' + (currentLang === 'es' ? 'No hay licencias.' : 'No licenses.') + '</td></tr>';
+        return;
+    }
+    
+    licenses.forEach(function(l, index) {
+        var statusClass = l.status;
+        var statusText = l.status === 'expired' ? (currentLang === 'es' ? 'Expirado' : 'Expired') : l.status === 'pending' ? (currentLang === 'es' ? 'Pendiente' : 'Pending') : (currentLang === 'es' ? 'Activo' : 'Active');
+        
+        tbody.innerHTML += '<tr><td><span class="license-key">' + l.key + '</span></td><td>🆓 Free Trial</td><td>' + l.facility + '</td><td>' + l.createdAt + '</td><td>' + l.expiresAt + '</td><td><span class="status-badge ' + statusClass + '"><span class="status-dot"></span>' + statusText + '</span></td><td><div class="table-actions"><button class="action-btn" onclick="editLicense(' + index + ')">' + (currentLang === 'es' ? 'Editar' : 'Edit') + '</button><button class="action-btn danger" onclick="deleteLicense(' + index + ')">' + (currentLang === 'es' ? 'Eliminar' : 'Delete') + '</button></div></td></tr>';
+    });
+}
+
+function renderUsersTable() {
+    var tbody = document.getElementById('users-table-body');
+    tbody.innerHTML = '';
+    
+    if (users.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 40px; color: var(--text-muted);"><div style="font-size: 2rem; margin-bottom: 10px;">🏀</div>' + (currentLang === 'es' ? 'No hay GoTrotters registrados.' : 'No GoTrotters registered.') + '</td></tr>';
+        return;
+    }
+    
+    users.forEach(function(u, index) {
+        var userPin = u.pin || '--';
+        var ringBadge = getRingBadge(u.ringLevel || 1);
+        
+        tbody.innerHTML += '<tr><td><strong>' + u.name + '</strong></td><td><span class="license-key" style="font-size: 14px;">' + userPin + '</span></td><td>' + u.facility + '</td><td>' + ringBadge + '</td><td style="text-align: center; font-weight: 700; color: var(--accent-gold);">' + (u.totalSessions || 0) + '</td><td>🔥 ' + (u.streak || 0) + ' ' + (currentLang === 'es' ? 'días' : 'days') + '</td><td>' + u.lastActive + '</td><td><div class="table-actions"><button class="action-btn" onclick="viewUserDetails(' + index + ')">' + (currentLang === 'es' ? 'Ver' : 'View') + '</button><button class="action-btn danger" onclick="deleteUser(' + index + ')">' + (currentLang === 'es' ? 'Eliminar' : 'Delete') + '</button></div></td></tr>';
+    });
+}
+
+function updateStats() {
+    document.getElementById('stat-facilities').textContent = facilities.filter(f => f.status === 'active').length;
+    document.getElementById('stat-users').textContent = users.length;
+    document.getElementById('stat-licenses').textContent = licenses.filter(l => l.status === 'active').length;
+    
+    // Count total rings earned (sum of all user ring levels)
+    var totalRings = users.reduce(function(sum, u) {
+        return sum + (u.ringLevel || 1);
+    }, 0);
+    document.getElementById('stat-sessions').textContent = totalRings;
+}
+
+function renderActivityLog() {
+    var tbody = document.getElementById('activity-table-body');
+    tbody.innerHTML = '';
+    
+    if (activities.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 40px; color: var(--text-muted);"><div style="font-size: 2rem; margin-bottom: 10px;">📋</div>' + (currentLang === 'es' ? 'No hay actividad.' : 'No activity.') + '</td></tr>';
+        return;
+    }
+    
+    activities.forEach(function(a) {
+        var typeIcon = '📋';
+        var typeLabel = a.type;
+        
+        switch(a.type) {
+            case 'game_session': typeIcon = '🏀'; typeLabel = currentLang === 'es' ? 'Sesión' : 'Session'; break;
+            case 'ring_earned': typeIcon = '💍'; typeLabel = currentLang === 'es' ? 'Anillo' : 'Ring'; break;
+            case 'user_register': typeIcon = '👤'; typeLabel = currentLang === 'es' ? 'Registro' : 'Register'; break;
+            case 'user_login': typeIcon = '🔑'; typeLabel = 'Login'; break;
+            case 'facility_login': typeIcon = '🏢'; typeLabel = currentLang === 'es' ? 'Acceso' : 'Access'; break;
+        }
+        
+        var timeStr = a.timestamp ? new Date(a.timestamp).toLocaleString() : '--';
+        
+        tbody.innerHTML += '<tr><td style="white-space: nowrap;">' + timeStr + '</td><td>' + typeIcon + ' ' + typeLabel + '</td><td>' + (a.username || '--') + '</td><td>' + (a.facility || '--') + '</td><td>' + (a.details || '--') + '</td></tr>';
+    });
+}
+
+function viewUserDetails(index) {
+    var u = users[index];
+    var ring = RING_LEVELS[Math.min((u.ringLevel || 1) - 1, 7)];
+    var ringName = currentLang === 'es' ? ring.nameEs : ring.name;
+    
+    var details = (currentLang === 'es' ? 'GoTrotter: ' : 'GoTrotter: ') + u.name + '\n';
+    details += (currentLang === 'es' ? 'Instalación: ' : 'Facility: ') + u.facility + '\n\n';
+    details += '💍 ' + (currentLang === 'es' ? 'ANILLO ACTUAL' : 'CURRENT RING') + ':\n';
+    details += ring.icon + ' ' + ringName + ' Ring (Level ' + (u.ringLevel || 1) + ')\n\n';
+    details += '🏀 ' + (currentLang === 'es' ? 'Sesiones Totales: ' : 'Total Sessions: ') + (u.totalSessions || 0) + '\n';
+    details += '🔥 ' + (currentLang === 'es' ? 'Racha: ' : 'Streak: ') + (u.streak || 0) + ' ' + (currentLang === 'es' ? 'días' : 'days') + '\n';
+    details += '📅 ' + (currentLang === 'es' ? 'Última actividad: ' : 'Last active: ') + u.lastActive;
+    
+    alert(details);
+}
+
+function editFacility(index) {
+    var f = facilities[index];
+    var newName = prompt(currentLang === 'es' ? 'Nombre:' : 'Name:', f.name);
+    if (newName !== null && newName.trim() !== '') {
+        facilities[index].name = newName.trim();
+        renderOverviewTable();
+        renderFacilitiesTable();
+        alert(currentLang === 'es' ? '✅ Actualizado' : '✅ Updated');
+    }
+}
+
+function deleteFacility(index) {
+    if (confirm(currentLang === 'es' ? '¿Eliminar?' : 'Delete?')) {
+        facilities.splice(index, 1);
+        renderOverviewTable();
+        renderFacilitiesTable();
+        updateStats();
+    }
+}
+
+function editLicense(index) {
+    var l = licenses[index];
+    var newFacility = prompt(currentLang === 'es' ? 'Instalación:' : 'Facility:', l.facility);
+    if (newFacility !== null && newFacility.trim() !== '') {
+        licenses[index].facility = newFacility.trim();
+        renderLicensesTable();
+        alert(currentLang === 'es' ? '✅ Actualizado' : '✅ Updated');
+    }
+}
+
+function deleteLicense(index) {
+    if (confirm(currentLang === 'es' ? '¿Eliminar?' : 'Delete?')) {
+        licenses.splice(index, 1);
+        renderLicensesTable();
+        updateStats();
+    }
+}
+
+function deleteUser(index) {
+    if (confirm(currentLang === 'es' ? '¿Eliminar GoTrotter?' : 'Delete GoTrotter?')) {
+        users.splice(index, 1);
+        renderUsersTable();
+        updateStats();
+    }
+}
+</script>
+
 </body>
 </html>
