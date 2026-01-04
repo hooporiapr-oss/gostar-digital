@@ -715,6 +715,11 @@ document.querySelectorAll('.lang-btn').forEach(function(b) {
 });
 renderTiers();
 if (!localStorage.getItem('gotrotters-tutorial-seen')) setTimeout(showTutorial, 500);
+
+// Auth check - redirect to login if not authenticated
+if (window.location.hostname === 'gostar.digital' && !sessionStorage.getItem('gostar-user-pin')) {
+    window.location.replace('https://gostar.digital/play.html');
+}
 </script>
 </body>
 </html>
