@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Facility Login - GoStar Digital</title>
+    <title>Facility Login - GoTrotters</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -19,9 +19,11 @@
             --text-muted: #808080;
             --accent-gold: #FFD93D;
             --accent-teal: #00D9A5;
+            --accent-orange: #FF6B00;
             --accent-coral: #FF6B6B;
             --gradient-gold: linear-gradient(135deg, #FFD93D 0%, #FF9F1C 100%);
             --gradient-teal: linear-gradient(135deg, #00D9A5 0%, #00B386 100%);
+            --gradient-orange: linear-gradient(135deg, #FF6B00 0%, #CC5500 100%);
         }
 
         html, body { height: 100%; }
@@ -43,16 +45,12 @@
         body[data-lang="en"] .lang-en { display: inline !important; }
 
         .lang-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
             display: flex;
             gap: 4px;
             background: var(--bg-card);
             padding: 4px;
             border-radius: 30px;
             border: 1px solid rgba(255,255,255,0.1);
-            z-index: 100;
         }
 
         .lang-btn {
@@ -71,20 +69,54 @@
         .lang-btn:hover { color: var(--text-primary); }
         .lang-btn.active { background: var(--accent-teal); color: var(--bg-primary); }
 
-        .home-link {
+        .header-nav {
             position: fixed;
-            top: 20px;
-            left: 20px;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: rgba(13,13,13,0.9);
+            backdrop-filter: blur(10px);
+        }
+
+        .header-logo {
             display: flex;
             align-items: center;
-            gap: 8px;
+            text-decoration: none;
+        }
+
+        .header-logo img {
+            height: 40px;
+            width: auto;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-btn {
+            padding: 10px 20px;
+            background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 25px;
             color: var(--text-secondary);
             text-decoration: none;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 13px;
+            transition: all 0.2s ease;
         }
 
-        .home-link:hover { color: var(--accent-teal); }
+        .header-btn:hover {
+            background: var(--accent-gold);
+            color: var(--bg-primary);
+            border-color: var(--accent-gold);
+        }
 
         .login-card {
             background: var(--bg-card);
@@ -110,6 +142,13 @@
 
         .login-title span {
             background: var(--gradient-teal);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .login-title .go {
+            background: var(--gradient-orange);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -239,19 +278,25 @@
 </head>
 <body data-lang="en">
 
-    <div class="lang-toggle">
-        <button class="lang-btn active" onclick="setLang('en')">EN</button>
-        <button class="lang-btn" onclick="setLang('es')">ES</button>
-    </div>
-
-    <a href="/" class="home-link">
-        <span>⭐</span>
-        <span>GoStar</span>
-    </a>
+    <header class="header-nav">
+        <a href="index.html" class="header-logo">
+            <img src="TheGoTrotters.png" alt="GoTrotters">
+        </a>
+        <div class="header-right">
+            <a href="play.html" class="header-btn">
+                <span class="lang-en">🏀 GoTrotters</span>
+                <span class="lang-es">🏀 GoTrotters</span>
+            </a>
+            <div class="lang-toggle">
+                <button class="lang-btn active" onclick="setLang('en')">EN</button>
+                <button class="lang-btn" onclick="setLang('es')">ES</button>
+            </div>
+        </div>
+    </header>
 
     <div class="login-card">
         <div class="login-logo">🏢</div>
-        <h1 class="login-title">Go<span>Star</span></h1>
+        <h1 class="login-title"><span class="go">Go</span><span>Trotters</span></h1>
         <span class="login-badge">
             <span class="lang-en">Facility Portal</span>
             <span class="lang-es">Portal de Instalación</span>
