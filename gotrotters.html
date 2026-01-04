@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>GoTrotters - The Pistol's Way</title>
+<title>GoTrotters - Mastery Mode</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;600;700;800;900&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
@@ -31,9 +31,9 @@ body[data-lang="en"] .lang-es{display:none!important}
 .pistol-logo{font-family:'Bebas Neue',sans-serif;font-size:3.2rem;letter-spacing:6px;background:linear-gradient(135deg,var(--secondary) 0%,var(--gold) 50%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:5px}
 .pistol-subtitle{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:8px;color:var(--text-muted)}
 .pistol-icon{font-size:4rem;margin:20px 0}
-.pistol-quote{max-width:320px;padding:20px;background:rgba(255,107,0,0.05);border-left:4px solid var(--secondary);border-radius:0 15px 15px 0;margin-bottom:30px}
-.pistol-quote-text{font-style:italic;color:var(--text-light);font-size:1rem;line-height:1.5;margin-bottom:10px}
-.pistol-quote-attr{font-size:0.85rem;color:var(--secondary);font-weight:700}
+.mastery-badge{background:linear-gradient(135deg,var(--success) 0%,#00B389 100%);color:var(--bg-dark);padding:12px 24px;border-radius:30px;font-weight:800;font-size:0.9rem;margin-bottom:25px;display:inline-block}
+.mastery-info{max-width:340px;padding:20px;background:rgba(255,107,0,0.05);border-left:4px solid var(--secondary);border-radius:0 15px 15px 0;margin-bottom:30px}
+.mastery-info-text{color:var(--text-light);font-size:0.95rem;line-height:1.6}
 .tier-section,.rhythm-section{width:100%;max-width:380px;margin-bottom:25px}
 .section-label{font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:4px;color:var(--text-muted);margin-bottom:15px}
 .tier-grid{display:flex;flex-direction:column;gap:8px}
@@ -41,16 +41,15 @@ body[data-lang="en"] .lang-es{display:none!important}
 .tier-btn:hover:not(.locked){border-color:var(--secondary);transform:translateX(5px)}
 .tier-btn.selected{border-color:var(--secondary);background:rgba(255,107,0,0.1)}
 .tier-btn.locked{opacity:0.4;cursor:not-allowed}
+.tier-btn.mastered{border-color:var(--success);background:rgba(0,217,165,0.1)}
 .tier-icon{font-size:1.8rem;min-width:45px;text-align:center}
 .tier-info{flex:1}
 .tier-name{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;color:var(--text-light)}
 .tier-desc{font-size:0.75rem;color:var(--text-muted)}
-.tier-progress{display:flex;flex-direction:column;align-items:flex-end;gap:3px}
-.tier-progress-text{font-size:0.7rem;color:var(--text-muted)}
-.tier-progress-bar{width:60px;height:6px;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden}
-.tier-progress-fill{height:100%;background:var(--secondary);border-radius:3px}
-.tier-badge{font-size:0.65rem;padding:3px 8px;background:var(--success);color:var(--bg-dark);border-radius:10px;font-weight:700}
-.tier-badge.locked-badge{background:rgba(255,255,255,0.1);color:var(--text-muted)}
+.tier-status{font-size:0.7rem;padding:4px 10px;border-radius:10px;font-weight:700}
+.tier-status.mastered{background:var(--success);color:var(--bg-dark)}
+.tier-status.locked{background:rgba(255,255,255,0.1);color:var(--text-muted)}
+.tier-status.current{background:var(--secondary);color:var(--text-light)}
 .rhythm-grid{display:flex;gap:10px;justify-content:center}
 .rhythm-btn{padding:12px 18px;background:var(--bg-card);border:2px solid transparent;border-radius:12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:90px}
 .rhythm-btn:hover{border-color:var(--primary-light)}
@@ -72,13 +71,17 @@ body[data-lang="en"] .lang-es{display:none!important}
 .scoreboard-main{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
 .scoreboard-tier{font-family:'Bebas Neue',sans-serif;font-size:0.85rem;letter-spacing:2px;color:var(--text-muted);padding:4px 10px;background:rgba(255,255,255,0.05);border-radius:8px}
 .scoreboard-score{font-family:'Bebas Neue',sans-serif;font-size:2.8rem;color:var(--secondary);text-shadow:0 0 20px rgba(255,107,0,0.4)}
-.quarter-display{display:flex;justify-content:center;gap:8px;margin-bottom:10px}
-.quarter-dot{width:45px;height:8px;border-radius:4px;background:rgba(255,255,255,0.1)}
-.quarter-dot.active{transform:scaleY(1.4)}
-.quarter-dot.q1{background:var(--q1)}.quarter-dot.q2{background:var(--q2)}.quarter-dot.q3{background:var(--q3)}.quarter-dot.q4{background:var(--q4)}
-.quarter-info{display:flex;justify-content:center;gap:20px;font-size:0.85rem;color:var(--text-muted)}
-.quarter-label{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px}
-.quarter-label.q1{color:var(--q1)}.quarter-label.q2{color:var(--q2)}.quarter-label.q3{color:var(--q3)}.quarter-label.q4{color:var(--q4)}
+.half-display{display:flex;justify-content:center;gap:12px;margin-bottom:10px}
+.half-indicator{padding:8px 20px;border-radius:20px;font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:2px}
+.half-indicator.active{background:var(--secondary);color:var(--text-light)}
+.half-indicator.inactive{background:rgba(255,255,255,0.05);color:var(--text-muted)}
+.half-indicator.completed{background:var(--success);color:var(--bg-dark)}
+.accuracy-display{text-align:center;margin-bottom:10px}
+.accuracy-label{font-size:0.75rem;color:var(--text-muted);margin-bottom:4px}
+.accuracy-value{font-family:'Bebas Neue',sans-serif;font-size:1.8rem}
+.accuracy-value.perfect{color:var(--success)}
+.accuracy-value.good{color:var(--gold)}
+.accuracy-value.miss{color:var(--danger)}
 .message-area{height:45px;display:flex;align-items:center;justify-content:center;margin-bottom:10px}
 .game-message{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:2px;color:var(--text-light)}
 .game-message.success{color:var(--success)}
@@ -89,211 +92,276 @@ body[data-lang="en"] .lang-es{display:none!important}
 .court-center-circle{position:absolute;top:50%;left:50%;width:70px;height:70px;border:3px solid rgba(255,255,255,0.5);border-radius:50%;transform:translate(-50%,-50%)}
 .trail-canvas{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:5}
 .ball-container{position:absolute;top:0;left:0;right:0;bottom:0;z-index:10}
+.ball{position:absolute;width:50px;height:50px;transform:translate(-50%,-50%);cursor:pointer;font-size:42px;display:flex;align-items:center;justify-content:center;transition:transform 0.15s ease,filter 0.15s ease;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
+.ball:active{transform:translate(-50%,-50%) scale(0.9)}
+.ball.lit{filter:drop-shadow(0 0 25px #FF6B00) brightness(1.3);transform:translate(-50%,-50%) scale(1.25);z-index:20}
+.ball.completed{filter:brightness(1.5) hue-rotate(100deg) drop-shadow(0 0 15px #00D9A5);pointer-events:none}
+.ball.error{filter:brightness(1.2) hue-rotate(-30deg) drop-shadow(0 0 15px #FF4757);animation:shake 0.3s ease}
+.ball.disabled{pointer-events:none;opacity:0.6}
+@keyframes shake{0%,100%{transform:translate(-50%,-50%)}25%{transform:translate(calc(-50% - 5px),-50%)}75%{transform:translate(calc(-50% + 5px),-50%)}}
 
-/* BASKETBALL - SIMPLE EMOJI */
-.ball{
-    position:absolute;
-    width:50px;
-    height:50px;
-    transform:translate(-50%,-50%);
-    cursor:pointer;
-    font-size:42px;
-    line-height:50px;
-    text-align:center;
-    transition:transform 0.2s ease, filter 0.2s ease;
-    filter:drop-shadow(0 3px 5px rgba(0,0,0,0.5));
-    user-select:none;
-    -webkit-user-select:none;
-}
-.ball.disabled{pointer-events:none}
-.ball.lit{transform:translate(-50%,-50%) scale(1.4);filter:drop-shadow(0 0 20px #FF6B00) drop-shadow(0 0 40px #FF6B00)}
-.ball.completed{filter:drop-shadow(0 0 15px #00D9A5) brightness(1.5) hue-rotate(100deg)}
-.ball.error{animation:ballShake 0.3s ease}
-@keyframes ballShake{0%,100%{transform:translate(-50%,-50%) rotate(0deg)}25%{transform:translate(-50%,-50%) rotate(-15deg)}75%{transform:translate(-50%,-50%) rotate(15deg)}}
-
-#halftimeScreen{justify-content:center}
-.halftime-icon{font-size:4rem;margin-bottom:15px}
-.halftime-title{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;letter-spacing:5px;color:var(--secondary);margin-bottom:10px}
-.halftime-score{font-family:'Bebas Neue',sans-serif;font-size:4rem;color:var(--text-light);margin-bottom:25px}
-.halftime-stats{background:var(--bg-card);border-radius:15px;padding:20px 30px;margin-bottom:25px}
-.halftime-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05)}
-.halftime-row:last-child{border-bottom:none}
-.halftime-label{color:var(--text-muted)}
-.halftime-value{font-weight:700;color:var(--secondary)}
-.continue-btn{padding:16px 45px;font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:4px;background:linear-gradient(135deg,var(--primary) 0%,var(--primary-light) 100%);color:var(--text-light);border:none;border-radius:50px;cursor:pointer}
-#finalScreen{justify-content:flex-start;padding-top:60px}
-.final-trophy{font-size:4.5rem;margin-bottom:15px}
-.final-title{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:4px;background:linear-gradient(135deg,var(--secondary) 0%,var(--gold) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:5px}
-.final-tier-badge{font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:3px;color:var(--text-muted);margin-bottom:20px}
-.final-score-box{background:var(--bg-card);border:3px solid var(--secondary);border-radius:20px;padding:25px 45px;margin-bottom:20px}
-.final-score-label{font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:3px;color:var(--text-muted)}
-.final-score-value{font-family:'Bebas Neue',sans-serif;font-size:4.5rem;color:var(--secondary);line-height:1}
-.final-best-badge{margin-top:10px;padding:6px 15px;background:var(--success);color:var(--bg-dark);border-radius:20px;font-size:0.8rem;font-weight:700;display:inline-block}
-.tier-progress-box{width:100%;max-width:320px;background:var(--bg-card);border-radius:15px;padding:20px;margin-bottom:20px}
-.tier-progress-title{font-size:0.85rem;color:var(--text-muted);margin-bottom:10px}
-.tier-progress-bar-lg{width:100%;height:12px;background:rgba(255,255,255,0.1);border-radius:6px;overflow:hidden;margin-bottom:8px}
-.tier-progress-fill-lg{height:100%;background:linear-gradient(90deg,var(--secondary) 0%,var(--gold) 100%);border-radius:6px}
-.tier-progress-info{display:flex;justify-content:space-between;font-size:0.8rem}
-.tier-progress-current{color:var(--secondary);font-weight:700}
-.tier-progress-goal{color:var(--text-muted)}
-.tier-unlock-msg{margin-top:15px;padding:12px 20px;background:rgba(0,217,165,0.1);border:2px solid var(--success);border-radius:12px;color:var(--success);font-weight:700;font-size:0.9rem}
-.quarter-breakdown{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;width:100%;max-width:320px;margin-bottom:20px}
-.quarter-box{background:var(--bg-card);border-radius:10px;padding:12px 8px;text-align:center}
-.quarter-box-label{font-size:0.75rem;margin-bottom:4px}
-.quarter-box-label.q1{color:var(--q1)}.quarter-box-label.q2{color:var(--q2)}.quarter-box-label.q3{color:var(--q3)}.quarter-box-label.q4{color:var(--q4)}
-.quarter-box-value{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--text-light)}
-.final-stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;width:100%;max-width:320px;margin-bottom:25px}
-.final-stat-box{background:var(--bg-card);border-radius:12px;padding:15px;text-align:center}
-.final-stat-icon{font-size:1.4rem;margin-bottom:5px}
-.final-stat-value{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--text-light)}
-.final-stat-label{font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px}
+/* Result Screen */
+#resultScreen{justify-content:center}
+.result-icon{font-size:5rem;margin-bottom:15px}
+.result-title{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;letter-spacing:4px;margin-bottom:10px}
+.result-title.success{color:var(--success)}
+.result-title.retry{color:var(--secondary)}
+.result-message{font-size:1.1rem;color:var(--text-muted);margin-bottom:25px;max-width:320px;line-height:1.5}
+.result-stats{display:flex;gap:25px;margin-bottom:25px}
+.result-stat{text-align:center}
+.result-stat-value{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--text-light)}
+.result-stat-label{font-size:0.75rem;color:var(--text-muted)}
+.result-accuracy{font-family:'Bebas Neue',sans-serif;font-size:4rem;margin-bottom:10px}
+.result-accuracy.perfect{color:var(--success)}
+.result-accuracy.miss{color:var(--danger)}
+.next-level-preview{background:var(--bg-card);border:2px solid var(--success);border-radius:15px;padding:20px;margin-bottom:25px;max-width:320px}
+.next-level-label{font-size:0.8rem;color:var(--success);margin-bottom:8px}
+.next-level-name{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--text-light)}
+.continue-timer{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--text-muted);margin-bottom:20px}
+.continue-timer span{color:var(--secondary);font-size:1.5rem}
 .action-buttons{display:flex;flex-direction:column;gap:12px;width:100%;max-width:280px}
-.play-again-btn{padding:16px 40px;font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:3px;background:linear-gradient(135deg,var(--secondary) 0%,var(--ball-dark) 100%);color:var(--text-light);border:none;border-radius:50px;cursor:pointer}
-.home-link{padding:14px 40px;font-family:'Nunito',sans-serif;font-size:0.95rem;font-weight:700;background:transparent;color:var(--text-muted);border:2px solid rgba(255,255,255,0.15);border-radius:50px;text-decoration:none;display:inline-block}
+.continue-btn{padding:16px 40px;font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:3px;background:linear-gradient(135deg,var(--success) 0%,#00B389 100%);color:var(--bg-dark);border:none;border-radius:50px;cursor:pointer}
+.retry-btn{padding:16px 40px;font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:3px;background:linear-gradient(135deg,var(--secondary) 0%,var(--ball-dark) 100%);color:var(--text-light);border:none;border-radius:50px;cursor:pointer}
+.home-btn{padding:14px 40px;font-family:'Nunito',sans-serif;font-size:0.95rem;font-weight:700;background:transparent;color:var(--text-muted);border:2px solid rgba(255,255,255,0.15);border-radius:50px;cursor:pointer}
 .rhythm-badge{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.85);border:2px solid var(--secondary);border-radius:25px;padding:8px 18px;display:none;align-items:center;gap:8px;z-index:100}
 .rhythm-badge.visible{display:flex}
 .rhythm-badge-text{font-size:0.7rem;color:var(--secondary);font-weight:700;letter-spacing:1px}
-.help-btn{position:fixed;bottom:20px;right:20px;width:45px;height:45px;border-radius:50%;background:var(--bg-card);border:2px solid rgba(255,255,255,0.1);color:var(--text-muted);font-size:1.2rem;cursor:pointer;z-index:99;display:flex;align-items:center;justify-content:center}
-.tutorial-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.95);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
-.tutorial-overlay.active{display:flex}
-.tutorial-container{width:100%;max-width:360px;background:var(--bg-card);border-radius:25px;padding:30px 25px;text-align:center;border:2px solid rgba(255,107,0,0.3);position:relative}
-.tutorial-lang-toggle{position:absolute;top:15px;right:15px;display:flex;gap:5px}
-.tutorial-lang-btn{padding:5px 10px;border:2px solid var(--secondary);background:transparent;color:var(--secondary);border-radius:10px;font-weight:700;font-size:0.7rem;cursor:pointer}
-body[data-lang="en"] .tutorial-lang-btn[data-lang="en"]{background:var(--secondary);color:var(--text-light)}
-body[data-lang="es"] .tutorial-lang-btn[data-lang="es"]{background:var(--secondary);color:var(--text-light)}
-.tutorial-progress{display:flex;justify-content:center;gap:8px;margin-bottom:25px}
-.tutorial-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.2)}
-.tutorial-dot.active{background:var(--secondary);transform:scale(1.2)}
-.tutorial-dot.completed{background:var(--success)}
-.tutorial-slide{display:none}
-.tutorial-slide.active{display:block}
-.tutorial-icon{font-size:4rem;margin-bottom:20px;display:block}
-.tutorial-title{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:3px;color:var(--secondary);margin-bottom:15px}
-.tutorial-text{font-size:1rem;color:var(--text-light);line-height:1.6;margin-bottom:20px}
-.tutorial-demo{width:200px;height:150px;margin:0 auto 25px auto;background:linear-gradient(145deg,#C4813A 0%,#8B5A1B 100%);border-radius:15px;position:relative;overflow:hidden;border:3px solid #6B4513}
-.demo-ball{position:absolute;font-size:30px;transform:translate(-50%,-50%)}
-.demo-ball.lit{filter:drop-shadow(0 0 15px #FF6B00);transform:translate(-50%,-50%) scale(1.3)}
-.demo-ball.done{filter:brightness(1.5) hue-rotate(100deg) drop-shadow(0 0 10px #00D9A5)}
-.tutorial-tip{background:rgba(255,107,0,0.1);border-radius:12px;padding:12px 15px;margin-bottom:20px}
-.tutorial-tip-text{font-size:0.85rem;color:var(--secondary)}
-.tutorial-buttons{display:flex;gap:12px;justify-content:center}
-.tutorial-btn{padding:12px 25px;border-radius:25px;font-weight:700;font-size:0.9rem;cursor:pointer}
-.tutorial-btn-skip{background:transparent;border:2px solid rgba(255,255,255,0.2);color:var(--text-muted)}
-.tutorial-btn-next{background:linear-gradient(135deg,var(--secondary) 0%,var(--ball-dark) 100%);border:none;color:var(--text-light)}
-.tutorial-btn-start{background:linear-gradient(135deg,var(--success) 0%,#00B389 100%);border:none;color:var(--bg-dark);padding:14px 35px;font-size:1rem}
 @media(max-width:380px){.pistol-logo{font-size:2.6rem}.court{width:min(88vw,320px);height:min(88vw,320px)}.ball{width:42px;height:42px;font-size:36px}}
 </style>
 </head>
 <body data-lang="en">
-<script>
-(function(){if(window.location.hostname.includes('onrender.com')){var p=sessionStorage.getItem('gostar-user-pin'),c=sessionStorage.getItem('gostar-user-code'),n=sessionStorage.getItem('gostar-user-name');if(!p&&!(c&&n))window.location.href='/play';}})();
-</script>
 <div class="court-bg"></div>
-<div class="top-controls"><a href="#" onclick="logout();return false;" class="back-link"><span class="lang-en">← Logout</span><span class="lang-es">← Salir</span></a><div class="lang-toggle"><button class="lang-btn active" onclick="setLang('en')">EN</button><button class="lang-btn" onclick="setLang('es')">ES</button></div></div>
+<div class="top-controls">
+<a href="#" onclick="goHome();return false;" class="back-link"><span class="lang-en">← Menu</span><span class="lang-es">← Menú</span></a>
+<div class="lang-toggle">
+<button class="lang-btn active" onclick="setLang('en')">EN</button>
+<button class="lang-btn" onclick="setLang('es')">ES</button>
+</div>
+</div>
 
+<!-- WELCOME SCREEN -->
 <div class="screen active" id="welcomeScreen">
 <div class="pistol-logo">GOTROTTERS</div>
-<div class="pistol-subtitle"><span class="lang-en">THE PISTOL'S WAY</span><span class="lang-es">EL CAMINO DEL PISTOL</span></div>
+<div class="pistol-subtitle"><span class="lang-en">MASTERY MODE</span><span class="lang-es">MODO MAESTRÍA</span></div>
 <div class="pistol-icon">🏀</div>
-<div class="pistol-quote"><div class="pistol-quote-text"><span class="lang-en">"I don't want to play 10 years and then be forgotten. I want to be remembered."</span><span class="lang-es">"No quiero jugar 10 años y que me olviden. Quiero que me recuerden."</span></div><div class="pistol-quote-attr">— Pistol Pete Maravich</div></div>
-<div class="tier-section"><div class="section-label"><span class="lang-en">SELECT YOUR LEVEL</span><span class="lang-es">ESCOGE TU NIVEL</span></div><div class="tier-grid" id="tierGrid"></div></div>
-<div class="rhythm-section"><div class="section-label"><span class="lang-en">RHYTHM</span><span class="lang-es">RITMO</span></div><div class="rhythm-grid"><div class="rhythm-btn" data-rhythm="steady" onclick="selectRhythm('steady')"><span class="rhythm-icon">🚶</span><span class="rhythm-label"><span class="lang-en">Steady</span><span class="lang-es">Suave</span></span><span class="rhythm-bpm">90 BPM</span></div><div class="rhythm-btn selected" data-rhythm="showtime" onclick="selectRhythm('showtime')"><span class="rhythm-icon">⭐</span><span class="rhythm-label">Showtime</span><span class="rhythm-bpm">127 BPM</span></div><div class="rhythm-btn" data-rhythm="pistol" onclick="selectRhythm('pistol')"><span class="rhythm-icon">🔥</span><span class="rhythm-label">Pistol</span><span class="rhythm-bpm">150 BPM</span></div></div></div>
-<button class="start-btn" onclick="startGame()"><span class="lang-en">TIP OFF</span><span class="lang-es">¡DALE!</span></button>
-<div class="stats-summary"><div class="stat-item"><div class="stat-value" id="totalGames">0</div><div class="stat-label"><span class="lang-en">Games</span><span class="lang-es">Juegos</span></div></div><div class="stat-item"><div class="stat-value" id="bestScore">0</div><div class="stat-label"><span class="lang-en">Best</span><span class="lang-es">Mejor</span></div></div><div class="stat-item"><div class="stat-value" id="currentStreak">0</div><div class="stat-label"><span class="lang-en">Streak</span><span class="lang-es">Racha</span></div></div></div>
+
+<div class="mastery-badge">
+<span class="lang-en">🎯 100% ACCURACY TO ADVANCE</span>
+<span class="lang-es">🎯 100% PRECISIÓN PARA AVANZAR</span>
 </div>
 
-<div class="screen" id="countdownScreen"><div class="countdown-tier" id="countdownTier">ROOKIE</div><div class="pistol-icon" style="font-size:3rem;">🏀</div><div class="countdown-number" id="countdownNum">3</div><div class="countdown-text"><span class="lang-en">GET READY</span><span class="lang-es">¡PREPÁRATE!</span></div></div>
+<div class="mastery-info">
+<div class="mastery-info-text">
+<span class="lang-en">Play both halves perfectly to unlock the next level. Keep training until you achieve 100% accuracy!</span>
+<span class="lang-es">Juega ambas mitades perfectamente para desbloquear el siguiente nivel. ¡Sigue entrenando hasta lograr 100% de precisión!</span>
+</div>
+</div>
 
+<div class="tier-section">
+<div class="section-label"><span class="lang-en">SELECT YOUR LEVEL</span><span class="lang-es">ESCOGE TU NIVEL</span></div>
+<div class="tier-grid" id="tierGrid"></div>
+</div>
+
+<div class="rhythm-section">
+<div class="section-label"><span class="lang-en">RHYTHM</span><span class="lang-es">RITMO</span></div>
+<div class="rhythm-grid">
+<div class="rhythm-btn" data-rhythm="steady" onclick="selectRhythm('steady')">
+<span class="rhythm-icon">🚶</span>
+<span class="rhythm-label"><span class="lang-en">Steady</span><span class="lang-es">Suave</span></span>
+<span class="rhythm-bpm">90 BPM</span>
+</div>
+<div class="rhythm-btn selected" data-rhythm="showtime" onclick="selectRhythm('showtime')">
+<span class="rhythm-icon">⭐</span>
+<span class="rhythm-label">Showtime</span>
+<span class="rhythm-bpm">127 BPM</span>
+</div>
+<div class="rhythm-btn" data-rhythm="pistol" onclick="selectRhythm('pistol')">
+<span class="rhythm-icon">🔥</span>
+<span class="rhythm-label">Pistol</span>
+<span class="rhythm-bpm">150 BPM</span>
+</div>
+</div>
+</div>
+
+<button class="start-btn" onclick="startGame()">
+<span class="lang-en">START TRAINING</span>
+<span class="lang-es">COMENZAR</span>
+</button>
+
+<div class="stats-summary">
+<div class="stat-item">
+<div class="stat-value" id="currentLevel">1</div>
+<div class="stat-label"><span class="lang-en">Level</span><span class="lang-es">Nivel</span></div>
+</div>
+<div class="stat-item">
+<div class="stat-value" id="perfectGames">0</div>
+<div class="stat-label"><span class="lang-en">Perfect</span><span class="lang-es">Perfectos</span></div>
+</div>
+<div class="stat-item">
+<div class="stat-value" id="bestScore">0</div>
+<div class="stat-label"><span class="lang-en">Best</span><span class="lang-es">Mejor</span></div>
+</div>
+</div>
+</div>
+
+<!-- COUNTDOWN SCREEN -->
+<div class="screen" id="countdownScreen">
+<div class="countdown-tier" id="countdownTier">ROOKIE</div>
+<div class="countdown-number" id="countdownNum">3</div>
+<div class="countdown-text"><span class="lang-en">GET READY</span><span class="lang-es">PREPÁRATE</span></div>
+</div>
+
+<!-- GAME SCREEN -->
 <div class="screen" id="gameScreen">
-<div class="scoreboard"><div class="scoreboard-main"><div class="scoreboard-tier" id="gameTier">ROOKIE</div><div class="scoreboard-score" id="scoreDisplay">0</div></div><div class="quarter-display"><div class="quarter-dot q1"></div><div class="quarter-dot q2"></div><div class="quarter-dot q3"></div><div class="quarter-dot q4"></div></div><div class="quarter-info"><span class="quarter-label q1" id="quarterLabel">Q1</span><span><span class="lang-en">Round</span><span class="lang-es">Ronda</span> <span id="roundNum">1</span>/<span id="roundTotal">4</span></span></div></div>
-<div class="message-area"><div class="game-message" id="gameMessage"><span class="lang-en">Watch the trail...</span><span class="lang-es">Mira el camino...</span></div></div>
-<div class="court" id="court"><div class="court-markings"><div class="court-center-line"></div><div class="court-center-circle"></div></div><canvas class="trail-canvas" id="trailCanvas"></canvas><div class="ball-container" id="ballContainer"></div></div>
+<div class="scoreboard">
+<div class="scoreboard-main">
+<div class="scoreboard-tier" id="gameTier">ROOKIE</div>
+<div class="scoreboard-score" id="scoreDisplay">0</div>
 </div>
-
-<div class="screen" id="halftimeScreen"><div class="halftime-icon">🏀</div><div class="halftime-title"><span class="lang-en">HALFTIME</span><span class="lang-es">MEDIO TIEMPO</span></div><div class="halftime-score" id="halftimeScore">0</div><div class="halftime-stats"><div class="halftime-row"><span class="halftime-label">Q1</span><span class="halftime-value" id="htQ1">0</span></div><div class="halftime-row"><span class="halftime-label">Q2</span><span class="halftime-value" id="htQ2">0</span></div><div class="halftime-row"><span class="halftime-label"><span class="lang-en">Accuracy</span><span class="lang-es">Precisión</span></span><span class="halftime-value" id="htAccuracy">0%</span></div></div><button class="continue-btn" onclick="continueGame()"><span class="lang-en">2ND HALF →</span><span class="lang-es">¡PA' LA SEGUNDA! →</span></button></div>
-
-<div class="screen" id="finalScreen">
-<div class="final-trophy" id="finalTrophy">🏆</div><div class="final-title"><span class="lang-en">GAME COMPLETE</span><span class="lang-es">¡JUEGO COMPLETO!</span></div><div class="final-tier-badge" id="finalTierBadge">ROOKIE</div>
-<div class="final-score-box"><div class="final-score-label"><span class="lang-en">FINAL SCORE</span><span class="lang-es">PUNTUACIÓN FINAL</span></div><div class="final-score-value" id="finalScore">0</div><div class="final-best-badge" id="finalBestBadge" style="display:none;"><span class="lang-en">🎉 NEW BEST!</span><span class="lang-es">🎉 ¡NUEVO RÉCORD!</span></div></div>
-<div class="tier-progress-box" id="tierProgressBox"><div class="tier-progress-title"><span class="lang-en">Progress to Next Level</span><span class="lang-es">Progreso al Próximo Nivel</span></div><div class="tier-progress-bar-lg"><div class="tier-progress-fill-lg" id="tierProgressFill"></div></div><div class="tier-progress-info"><span class="tier-progress-current" id="tierProgressCurrent">0 / 3</span><span class="tier-progress-goal" id="tierProgressGoal">Unlock: JV</span></div><div class="tier-unlock-msg" id="tierUnlockMsg" style="display:none;"><span class="lang-en">🎉 NEW LEVEL UNLOCKED!</span><span class="lang-es">🎉 ¡SUBISTE DE NIVEL!</span></div></div>
-<div class="quarter-breakdown"><div class="quarter-box"><div class="quarter-box-label q1">Q1</div><div class="quarter-box-value" id="finalQ1">0</div></div><div class="quarter-box"><div class="quarter-box-label q2">Q2</div><div class="quarter-box-value" id="finalQ2">0</div></div><div class="quarter-box"><div class="quarter-box-label q3">Q3</div><div class="quarter-box-value" id="finalQ3">0</div></div><div class="quarter-box"><div class="quarter-box-label q4">Q4</div><div class="quarter-box-value" id="finalQ4">0</div></div></div>
-<div class="final-stats-grid"><div class="final-stat-box"><div class="final-stat-icon">🎯</div><div class="final-stat-value" id="finalAccuracy">0%</div><div class="final-stat-label"><span class="lang-en">Accuracy</span><span class="lang-es">Precisión</span></div></div><div class="final-stat-box"><div class="final-stat-icon">🏀</div><div class="final-stat-value" id="finalLongest">0</div><div class="final-stat-label"><span class="lang-en">Longest Trail</span><span class="lang-es">Camino Más Largo</span></div></div></div>
-<div class="action-buttons"><button class="play-again-btn" onclick="playAgain()"><span class="lang-en">PLAY AGAIN</span><span class="lang-es">JUGAR OTRA VEZ</span></button><a href="#" onclick="logout();return false;" class="home-link"><span class="lang-en">🚪 Logout</span><span class="lang-es">🚪 Salir</span></a></div>
+<div class="half-display">
+<div class="half-indicator active" id="half1"><span class="lang-en">1ST HALF</span><span class="lang-es">1RA MITAD</span></div>
+<div class="half-indicator inactive" id="half2"><span class="lang-en">2ND HALF</span><span class="lang-es">2DA MITAD</span></div>
 </div>
-
-<div class="rhythm-badge" id="rhythmBadge"><span>🎵</span><span class="rhythm-badge-text" id="rhythmBadgeText">SHOWTIME • 127 BPM</span></div>
-<button class="help-btn" onclick="showTutorial()">?</button>
-
-<div class="tutorial-overlay" id="tutorialOverlay">
-<div class="tutorial-container">
-<div class="tutorial-lang-toggle"><button class="tutorial-lang-btn" onclick="setLang('en')" data-lang="en">EN</button><button class="tutorial-lang-btn" onclick="setLang('es')" data-lang="es">ES</button></div>
-<div class="tutorial-progress"><div class="tutorial-dot active"></div><div class="tutorial-dot"></div><div class="tutorial-dot"></div><div class="tutorial-dot"></div></div>
-<div class="tutorial-slide active" id="slide0"><span class="tutorial-icon">🏀</span><h2 class="tutorial-title"><span class="lang-en">WELCOME TO GOTROTTERS</span><span class="lang-es">BIENVENIDO A GOTROTTERS</span></h2><p class="tutorial-text"><span class="lang-en">Train your visual-spatial memory like Pistol Pete trained his legendary handles.</span><span class="lang-es">Entrena tu memoria como Pistol Pete entrenó su dribling legendario.</span></p><div class="tutorial-buttons"><button class="tutorial-btn tutorial-btn-skip" onclick="closeTutorial()"><span class="lang-en">Skip</span><span class="lang-es">Saltar</span></button><button class="tutorial-btn tutorial-btn-next" onclick="nextSlide()"><span class="lang-en">Next →</span><span class="lang-es">Siguiente →</span></button></div></div>
-<div class="tutorial-slide" id="slide1"><h2 class="tutorial-title"><span class="lang-en">STEP 1: WATCH</span><span class="lang-es">PASO 1: MIRA</span></h2><div class="tutorial-demo"><div class="demo-ball" id="demoBall1" style="left:30%;top:30%;">🏀</div><div class="demo-ball" id="demoBall2" style="left:70%;top:40%;">🏀</div><div class="demo-ball" id="demoBall3" style="left:50%;top:75%;">🏀</div></div><p class="tutorial-text"><span class="lang-en">Basketballs light up one by one. Remember the order!</span><span class="lang-es">Los balones se prenden uno por uno. ¡Recuerda el orden!</span></p><div class="tutorial-buttons"><button class="tutorial-btn tutorial-btn-skip" onclick="prevSlide()"><span class="lang-en">← Back</span><span class="lang-es">← Atrás</span></button><button class="tutorial-btn tutorial-btn-next" onclick="nextSlide()"><span class="lang-en">Next →</span><span class="lang-es">Siguiente →</span></button></div></div>
-<div class="tutorial-slide" id="slide2"><h2 class="tutorial-title"><span class="lang-en">STEP 2: TAP</span><span class="lang-es">PASO 2: TOCA</span></h2><div class="tutorial-demo"><div class="demo-ball done" style="left:30%;top:30%;">🏀</div><div class="demo-ball done" style="left:70%;top:40%;">🏀</div><div class="demo-ball" style="left:50%;top:75%;">🏀</div></div><p class="tutorial-text"><span class="lang-en">Tap basketballs in the same order. Green trail = success!</span><span class="lang-es">¡Toca los balones en el mismo orden. Línea verde = éxito!</span></p><div class="tutorial-buttons"><button class="tutorial-btn tutorial-btn-skip" onclick="prevSlide()"><span class="lang-en">← Back</span><span class="lang-es">← Atrás</span></button><button class="tutorial-btn tutorial-btn-next" onclick="nextSlide()"><span class="lang-en">Next →</span><span class="lang-es">Siguiente →</span></button></div></div>
-<div class="tutorial-slide" id="slide3"><span class="tutorial-icon">🏆</span><h2 class="tutorial-title"><span class="lang-en">EARN YOUR WAY UP</span><span class="lang-es">SUBE DE NIVEL</span></h2><p class="tutorial-text"><span class="lang-en">Complete games to unlock 8 tiers of mastery. No shortcuts!</span><span class="lang-es">Completa juegos pa' desbloquear 8 niveles. ¡Sin atajos!</span></p><div class="tutorial-tip"><span>💡 </span><span class="tutorial-tip-text"><span class="lang-en">Tip: Start with Showtime rhythm!</span><span class="lang-es">Tip: ¡Empieza con ritmo Showtime!</span></span></div><div class="tutorial-buttons"><button class="tutorial-btn tutorial-btn-start" onclick="closeTutorial()"><span class="lang-en">LET'S GO! 🏀</span><span class="lang-es">¡PA'LANTE! 🏀</span></button></div></div>
+<div class="accuracy-display">
+<div class="accuracy-label"><span class="lang-en">ACCURACY</span><span class="lang-es">PRECISIÓN</span></div>
+<div class="accuracy-value perfect" id="accuracyDisplay">100%</div>
 </div>
 </div>
+<div class="message-area"><div class="game-message" id="gameMessage"></div></div>
+<div class="court" id="court">
+<div class="court-markings"><div class="court-center-line"></div><div class="court-center-circle"></div></div>
+<canvas class="trail-canvas" id="trailCanvas"></canvas>
+<div class="ball-container" id="ballContainer"></div>
+</div>
+</div>
+
+<!-- HALFTIME SCREEN -->
+<div class="screen" id="halftimeScreen">
+<div class="pistol-icon">⏸️</div>
+<div class="pistol-logo"><span class="lang-en">HALFTIME</span><span class="lang-es">MEDIO TIEMPO</span></div>
+<div class="result-stats">
+<div class="result-stat">
+<div class="result-stat-value" id="htScore">0</div>
+<div class="result-stat-label"><span class="lang-en">Score</span><span class="lang-es">Puntos</span></div>
+</div>
+<div class="result-stat">
+<div class="result-stat-value" id="htAccuracy">100%</div>
+<div class="result-stat-label"><span class="lang-en">Accuracy</span><span class="lang-es">Precisión</span></div>
+</div>
+</div>
+<p style="color:var(--text-muted);margin-bottom:25px;max-width:300px">
+<span class="lang-en">Keep your accuracy at 100% in the 2nd half to advance!</span>
+<span class="lang-es">¡Mantén tu precisión al 100% en la 2da mitad para avanzar!</span>
+</p>
+<button class="retry-btn" onclick="continueToSecondHalf()">
+<span class="lang-en">2ND HALF →</span>
+<span class="lang-es">2DA MITAD →</span>
+</button>
+</div>
+
+<!-- RESULT SCREEN -->
+<div class="screen" id="resultScreen">
+<div class="result-icon" id="resultIcon">🏆</div>
+<div class="result-title" id="resultTitle">PERFECT!</div>
+<div class="result-accuracy" id="resultAccuracy">100%</div>
+<div class="result-message" id="resultMessage">You've mastered this level!</div>
+
+<div class="result-stats">
+<div class="result-stat">
+<div class="result-stat-value" id="finalScore">0</div>
+<div class="result-stat-label"><span class="lang-en">Score</span><span class="lang-es">Puntos</span></div>
+</div>
+<div class="result-stat">
+<div class="result-stat-value" id="finalCorrect">0/0</div>
+<div class="result-stat-label"><span class="lang-en">Correct</span><span class="lang-es">Correctos</span></div>
+</div>
+</div>
+
+<div class="next-level-preview" id="nextLevelBox" style="display:none">
+<div class="next-level-label"><span class="lang-en">NEXT LEVEL</span><span class="lang-es">SIGUIENTE NIVEL</span></div>
+<div class="next-level-name" id="nextLevelName">JV</div>
+</div>
+
+<div class="continue-timer" id="continueTimer">
+<span class="lang-en">Continuing in <span id="timerCount">3</span>...</span>
+<span class="lang-es">Continuando en <span id="timerCountEs">3</span>...</span>
+</div>
+
+<div class="action-buttons">
+<button class="continue-btn" id="advanceBtn" onclick="advanceNow()" style="display:none">
+<span class="lang-en">ADVANCE NOW</span>
+<span class="lang-es">AVANZAR AHORA</span>
+</button>
+<button class="retry-btn" id="retryBtn" onclick="retryNow()" style="display:none">
+<span class="lang-en">RETRY NOW</span>
+<span class="lang-es">REINTENTAR</span>
+</button>
+<button class="home-btn" onclick="goHome()">
+<span class="lang-en">← Back to Menu</span>
+<span class="lang-es">← Volver al Menú</span>
+</button>
+</div>
+</div>
+
+<div class="rhythm-badge" id="rhythmBadge"><span class="rhythm-badge-text" id="rhythmBadgeText">SHOWTIME • 127 BPM</span></div>
 
 <script>
-var currentLang = localStorage.getItem('gostar-lang') || 'en';
-document.body.setAttribute('data-lang', currentLang);
-
+var currentLang = localStorage.getItem('gt-lang') || 'en';
 function setLang(l) {
     currentLang = l;
-    localStorage.setItem('gostar-lang', l);
+    localStorage.setItem('gt-lang', l);
     document.body.setAttribute('data-lang', l);
     document.querySelectorAll('.lang-btn').forEach(function(b) {
         b.classList.toggle('active', b.textContent.trim() === l.toUpperCase());
     });
 }
+document.body.setAttribute('data-lang', currentLang);
 
 var audioCtx = null;
-function getAudio() {
-    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    return audioCtx;
-}
 function playBeep(freq, dur) {
-    try {
-        var ctx = getAudio();
-        if (ctx.state === 'suspended') ctx.resume();
-        var o = ctx.createOscillator(), g = ctx.createGain();
-        o.frequency.value = freq;
-        o.connect(g);
-        g.connect(ctx.destination);
-        g.gain.setValueAtTime(0.3, ctx.currentTime);
-        g.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + dur);
-        o.start(ctx.currentTime);
-        o.stop(ctx.currentTime + dur);
-    } catch (e) {}
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    var osc = audioCtx.createOscillator();
+    var gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + dur);
+    osc.start();
+    osc.stop(audioCtx.currentTime + dur);
 }
 
+// TIER DEFINITIONS
 var tiers = {
-    rookie: {name: 'ROOKIE', icon: '🌟', stars: 4, seqMin: 3, seqMax: 4, rounds: 3, req: 0, next: 'jv'},
-    jv: {name: 'JV', icon: '🏀', stars: 5, seqMin: 4, seqMax: 5, rounds: 4, req: 3, next: 'varsity'},
-    varsity: {name: 'VARSITY', icon: '🎽', stars: 6, seqMin: 5, seqMax: 6, rounds: 4, req: 5, next: 'college'},
-    college: {name: 'COLLEGE', icon: '🎓', stars: 7, seqMin: 6, seqMax: 7, rounds: 5, req: 7, next: 'pro'},
-    pro: {name: 'PRO', icon: '💰', stars: 8, seqMin: 7, seqMax: 8, rounds: 5, req: 10, next: 'allstar'},
-    allstar: {name: 'ALL-STAR', icon: '⭐', stars: 9, seqMin: 8, seqMax: 9, rounds: 5, req: 15, next: 'legend'},
-    legend: {name: 'LEGEND', icon: '🏆', stars: 10, seqMin: 9, seqMax: 10, rounds: 6, req: 20, next: 'pistol'},
-    pistol: {name: 'PISTOL', icon: '🔥', stars: 12, seqMin: 10, seqMax: 12, rounds: 6, req: 25, next: null}
+    rookie: {name: 'ROOKIE', icon: '🌟', stars: 4, seqMin: 3, seqMax: 4, rounds: 3},
+    jv: {name: 'JV', icon: '🏀', stars: 5, seqMin: 4, seqMax: 5, rounds: 4},
+    varsity: {name: 'VARSITY', icon: '🎽', stars: 6, seqMin: 5, seqMax: 6, rounds: 4},
+    college: {name: 'COLLEGE', icon: '🎓', stars: 7, seqMin: 6, seqMax: 7, rounds: 5},
+    pro: {name: 'PRO', icon: '💰', stars: 8, seqMin: 7, seqMax: 8, rounds: 5},
+    allstar: {name: 'ALL-STAR', icon: '⭐', stars: 9, seqMin: 8, seqMax: 9, rounds: 5},
+    legend: {name: 'LEGEND', icon: '🏆', stars: 10, seqMin: 9, seqMax: 10, rounds: 6},
+    pistol: {name: 'PISTOL', icon: '🔥', stars: 12, seqMin: 10, seqMax: 12, rounds: 6}
 };
 var tierList = ['rookie', 'jv', 'varsity', 'college', 'pro', 'allstar', 'legend', 'pistol'];
+
 var rhythms = {
     steady: {ms: 650, pause: 380, label: 'STEADY • 90 BPM'},
     showtime: {ms: 470, pause: 260, label: 'SHOWTIME • 127 BPM'},
     pistol: {ms: 380, pause: 180, label: 'PISTOL • 150 BPM'}
 };
 
+// PROGRESS - stores highest unlocked level and perfect game counts
 function getProgress() {
-    try { return JSON.parse(localStorage.getItem('gotrotters-progress')) || {}; } catch (e) { return {}; }
+    try { return JSON.parse(localStorage.getItem('gotrotters-mastery')) || {unlockedLevel: 0, perfect: {}, best: 0}; } 
+    catch (e) { return {unlockedLevel: 0, perfect: {}, best: 0}; }
 }
-function saveProgress(p) { localStorage.setItem('gotrotters-progress', JSON.stringify(p)); }
+function saveProgress(p) { localStorage.setItem('gotrotters-mastery', JSON.stringify(p)); }
 
 var selTier = 'rookie', selRhythm = 'showtime';
-var quarter = 1, round = 1, score = 0, qScores = [0,0,0,0];
+var currentHalf = 1, round = 1, score = 0;
 var balls = [], seq = [], idx = 0, done = [], showing = false;
-var correct = 0, attempts = 0, longest = 0;
+var correct = 0, attempts = 0;
+var autoTimer = null;
 
 function showScreen(id) {
     document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
@@ -304,15 +372,16 @@ function renderTiers() {
     var grid = document.getElementById('tierGrid');
     grid.innerHTML = '';
     var prog = getProgress();
+    var unlockedIdx = prog.unlockedLevel || 0;
     
-    tierList.forEach(function(id) {
+    tierList.forEach(function(id, idx) {
         var t = tiers[id];
-        var comp = prog[id] || 0;
-        var prevId = tierList[tierList.indexOf(id) - 1];
-        var unlocked = id === 'rookie' || (prog[prevId] || 0) >= t.req;
+        var unlocked = idx <= unlockedIdx;
+        var mastered = idx < unlockedIdx;
+        var perfectCount = prog.perfect[id] || 0;
         
         var btn = document.createElement('div');
-        btn.className = 'tier-btn' + (id === selTier ? ' selected' : '') + (!unlocked ? ' locked' : '');
+        btn.className = 'tier-btn' + (id === selTier ? ' selected' : '') + (!unlocked ? ' locked' : '') + (mastered ? ' mastered' : '');
         
         if (unlocked) {
             btn.onclick = function() {
@@ -323,16 +392,27 @@ function renderTiers() {
             };
         }
         
-        var nextReq = t.next ? tiers[t.next].req : 0;
-        var pct = t.next ? Math.min(100, (comp / nextReq) * 100) : 100;
+        var statusHtml = '';
+        if (mastered) {
+            statusHtml = '<span class="tier-status mastered">✓ ' + (currentLang === 'es' ? 'MAESTRO' : 'MASTERED') + '</span>';
+        } else if (!unlocked) {
+            statusHtml = '<span class="tier-status locked">🔒</span>';
+        } else if (id === tierList[unlockedIdx]) {
+            statusHtml = '<span class="tier-status current">' + (currentLang === 'es' ? 'ACTUAL' : 'CURRENT') + '</span>';
+        }
         
-        btn.innerHTML = '<span class="tier-icon">' + t.icon + '</span><div class="tier-info"><div class="tier-name">' + t.name + '</div><div class="tier-desc">' + t.stars + ' balls</div></div>' + (unlocked ? '<div class="tier-progress"><span class="tier-progress-text">' + comp + '</span>' + (t.next ? '<div class="tier-progress-bar"><div class="tier-progress-fill" style="width:' + pct + '%"></div></div>' : '') + '</div>' : '<span class="tier-badge locked-badge">🔒 ' + t.req + '</span>');
+        btn.innerHTML = '<span class="tier-icon">' + t.icon + '</span>' +
+            '<div class="tier-info"><div class="tier-name">' + t.name + '</div>' +
+            '<div class="tier-desc">' + t.stars + ' balls • ' + t.rounds + ' rounds</div></div>' + statusHtml;
+        
         grid.appendChild(btn);
     });
     
-    var total = 0;
-    tierList.forEach(function(id) { total += prog[id] || 0; });
-    document.getElementById('totalGames').textContent = total;
+    // Update stats
+    var totalPerfect = 0;
+    for (var k in prog.perfect) totalPerfect += prog.perfect[k];
+    document.getElementById('currentLevel').textContent = unlockedIdx + 1;
+    document.getElementById('perfectGames').textContent = totalPerfect;
     document.getElementById('bestScore').textContent = prog.best || 0;
 }
 
@@ -344,11 +424,17 @@ function selectRhythm(r) {
 }
 
 function startGame() {
-    quarter = 1; round = 1; score = 0; qScores = [0,0,0,0];
-    correct = 0; attempts = 0; longest = 0;
+    currentHalf = 1;
+    round = 1;
+    score = 0;
+    correct = 0;
+    attempts = 0;
+    
     document.getElementById('rhythmBadgeText').textContent = rhythms[selRhythm].label;
     document.getElementById('rhythmBadge').classList.add('visible');
     document.getElementById('countdownTier').textContent = tiers[selTier].name;
+    
+    updateHalfDisplay();
     showScreen('countdownScreen');
     countdown(3);
 }
@@ -367,18 +453,29 @@ function countdown(n) {
 
 function initRound() {
     document.getElementById('gameTier').textContent = tiers[selTier].name;
-    document.getElementById('roundTotal').textContent = tiers[selTier].rounds;
-    updateQ();
+    updateHalfDisplay();
+    updateAccuracy();
     startRound();
 }
 
-function updateQ() {
-    document.querySelectorAll('.quarter-dot').forEach(function(d, i) {
-        d.classList.toggle('active', i === quarter - 1);
-    });
-    var lbl = document.getElementById('quarterLabel');
-    lbl.textContent = 'Q' + quarter;
-    lbl.className = 'quarter-label q' + quarter;
+function updateHalfDisplay() {
+    var h1 = document.getElementById('half1');
+    var h2 = document.getElementById('half2');
+    
+    if (currentHalf === 1) {
+        h1.className = 'half-indicator active';
+        h2.className = 'half-indicator inactive';
+    } else {
+        h1.className = 'half-indicator completed';
+        h2.className = 'half-indicator active';
+    }
+}
+
+function updateAccuracy() {
+    var pct = attempts === 0 ? 100 : Math.round((correct / attempts) * 100);
+    var el = document.getElementById('accuracyDisplay');
+    el.textContent = pct + '%';
+    el.className = 'accuracy-value ' + (pct === 100 ? 'perfect' : (pct >= 80 ? 'good' : 'miss'));
 }
 
 function updateScore() { document.getElementById('scoreDisplay').textContent = score; }
@@ -445,7 +542,6 @@ function drawTrail() {
     ctx.clearRect(0, 0, cv.width, cv.height);
     if (done.length < 2) return;
     
-    // GREEN TRAIL
     ctx.strokeStyle = '#00D9A5';
     ctx.lineWidth = 5;
     ctx.lineCap = 'round';
@@ -467,7 +563,6 @@ function disableBalls(d) {
 }
 
 function startRound() {
-    document.getElementById('roundNum').textContent = round;
     idx = 0;
     done = [];
     
@@ -529,6 +624,7 @@ function clickBall(i) {
     if (!el || el.classList.contains('completed')) return;
     
     if (i === seq[idx]) {
+        // CORRECT
         done.push(i);
         el.classList.add('completed');
         playBeep(523.25, 0.15);
@@ -536,18 +632,19 @@ function clickBall(i) {
         idx++;
         
         if (idx >= seq.length) {
+            // Completed sequence
             correct++;
             attempts++;
-            if (seq.length > longest) longest = seq.length;
             var pts = seq.length * 20;
             score += pts;
-            qScores[quarter - 1] += pts;
             disableBalls(true);
             updateScore();
+            updateAccuracy();
             setMsg((currentLang === 'es' ? '¡Wepa! +' : 'Perfect! +') + pts, 'success');
-            setTimeout(nextRound, 1200);
+            setTimeout(nextRound, 1000);
         }
     } else {
+        // WRONG
         attempts++;
         el.classList.add('error');
         playBeep(150, 0.25);
@@ -556,13 +653,14 @@ function clickBall(i) {
             el.classList.remove('error');
         }, 300);
         
+        // Partial points
         var partial = idx * 10;
         if (partial > 0) {
             score += partial;
-            qScores[quarter - 1] += partial;
             updateScore();
         }
         
+        updateAccuracy();
         setMsg(currentLang === 'es' ? '¡Otra vez!' : 'Try again!', 'error');
         setTimeout(nextRound, 800);
     }
@@ -570,153 +668,155 @@ function clickBall(i) {
 
 function nextRound() {
     round++;
-    if (round > tiers[selTier].rounds) {
-        if (quarter === 2) { showHalftime(); return; }
-        if (quarter === 4) { endGame(); return; }
-        quarter++;
-        round = 1;
-        updateQ();
-        setMsg('Q' + quarter + (currentLang === 'es' ? ' - ¡Dale!' : ' - Let\'s go!'));
-        setTimeout(startRound, 1000);
+    var t = tiers[selTier];
+    
+    if (round > t.rounds) {
+        // End of rounds for this half
+        if (currentHalf === 1) {
+            showHalftime();
+        } else {
+            endGame();
+        }
         return;
     }
+    
     setTimeout(startRound, 400);
 }
 
 function showHalftime() {
     document.getElementById('rhythmBadge').classList.remove('visible');
-    document.getElementById('halftimeScore').textContent = score;
-    document.getElementById('htQ1').textContent = qScores[0];
-    document.getElementById('htQ2').textContent = qScores[1];
-    document.getElementById('htAccuracy').textContent = (attempts ? Math.round(correct/attempts*100) : 0) + '%';
+    document.getElementById('htScore').textContent = score;
+    var pct = attempts === 0 ? 100 : Math.round((correct / attempts) * 100);
+    document.getElementById('htAccuracy').textContent = pct + '%';
     showScreen('halftimeScreen');
 }
 
-function continueGame() {
-    quarter = 3;
+function continueToSecondHalf() {
+    currentHalf = 2;
     round = 1;
     document.getElementById('rhythmBadge').classList.add('visible');
+    updateHalfDisplay();
     showScreen('gameScreen');
-    updateQ();
-    setMsg('Q3' + (currentLang === 'es' ? ' - ¡Segunda mitad!' : ' - Second half!'));
-    setTimeout(startRound, 1000);
+    setMsg(currentLang === 'es' ? '¡Segunda mitad!' : '2nd Half!');
+    setTimeout(startRound, 800);
 }
 
 function endGame() {
     document.getElementById('rhythmBadge').classList.remove('visible');
     
+    var pct = attempts === 0 ? 100 : Math.round((correct / attempts) * 100);
+    var isPerfect = pct === 100;
+    
     var prog = getProgress();
-    prog[selTier] = (prog[selTier] || 0) + 1;
-    var isNew = score > (prog.best || 0);
-    if (isNew) prog.best = score;
+    if (score > prog.best) prog.best = score;
+    
+    var currentIdx = tierList.indexOf(selTier);
+    var canAdvance = isPerfect && currentIdx < tierList.length - 1;
+    
+    if (isPerfect) {
+        prog.perfect[selTier] = (prog.perfect[selTier] || 0) + 1;
+        if (currentIdx >= prog.unlockedLevel && currentIdx < tierList.length - 1) {
+            prog.unlockedLevel = currentIdx + 1;
+        }
+    }
     saveProgress(prog);
     
-    var t = tiers[selTier];
-    var unlocked = t.next && prog[selTier] === tiers[t.next].req;
+    // Show result
+    document.getElementById('resultIcon').textContent = isPerfect ? '🏆' : '🏀';
+    document.getElementById('resultTitle').textContent = isPerfect ? 
+        (currentLang === 'es' ? '¡PERFECTO!' : 'PERFECT!') : 
+        (currentLang === 'es' ? 'SIGUE PRACTICANDO' : 'KEEP PRACTICING');
+    document.getElementById('resultTitle').className = 'result-title ' + (isPerfect ? 'success' : 'retry');
     
-    document.getElementById('finalTierBadge').textContent = t.name;
+    document.getElementById('resultAccuracy').textContent = pct + '%';
+    document.getElementById('resultAccuracy').className = 'result-accuracy ' + (isPerfect ? 'perfect' : 'miss');
+    
+    document.getElementById('resultMessage').innerHTML = isPerfect ?
+        (currentLang === 'es' ? '¡Has dominado este nivel!' : 'You\'ve mastered this level!') :
+        (currentLang === 'es' ? 'Necesitas 100% para avanzar. ¡Tú puedes!' : 'You need 100% to advance. You got this!');
+    
     document.getElementById('finalScore').textContent = score;
-    document.getElementById('finalBestBadge').style.display = isNew ? 'inline-block' : 'none';
-    document.getElementById('finalQ1').textContent = qScores[0];
-    document.getElementById('finalQ2').textContent = qScores[1];
-    document.getElementById('finalQ3').textContent = qScores[2];
-    document.getElementById('finalQ4').textContent = qScores[3];
-    document.getElementById('finalAccuracy').textContent = (attempts ? Math.round(correct/attempts*100) : 0) + '%';
-    document.getElementById('finalLongest').textContent = longest;
+    document.getElementById('finalCorrect').textContent = correct + '/' + attempts;
     
-    if (t.next) {
-        var cur = prog[selTier], req = tiers[t.next].req;
-        document.getElementById('tierProgressFill').style.width = Math.min(100, cur/req*100) + '%';
-        document.getElementById('tierProgressCurrent').textContent = cur + ' / ' + req;
-        document.getElementById('tierProgressGoal').textContent = (currentLang === 'es' ? 'Próximo: ' : 'Unlock: ') + tiers[t.next].name;
-        document.getElementById('tierProgressBox').style.display = 'block';
-        document.getElementById('tierUnlockMsg').style.display = unlocked ? 'block' : 'none';
+    // Next level preview
+    if (canAdvance) {
+        var nextTier = tierList[currentIdx + 1];
+        document.getElementById('nextLevelName').textContent = tiers[nextTier].icon + ' ' + tiers[nextTier].name;
+        document.getElementById('nextLevelBox').style.display = 'block';
+        document.getElementById('advanceBtn').style.display = 'block';
+        document.getElementById('retryBtn').style.display = 'none';
     } else {
-        document.getElementById('tierProgressBox').style.display = 'none';
+        document.getElementById('nextLevelBox').style.display = 'none';
+        document.getElementById('advanceBtn').style.display = 'none';
+        document.getElementById('retryBtn').style.display = 'block';
     }
     
-    document.getElementById('finalTrophy').textContent = t.icon;
-    showScreen('finalScreen');
+    showScreen('resultScreen');
     
+    // Auto-continue timer
+    startAutoTimer(isPerfect, canAdvance);
+    
+    // Save to server
     var pin = sessionStorage.getItem('gostar-user-pin');
     var code = sessionStorage.getItem('gostar-user-code');
     var name = sessionStorage.getItem('gostar-user-name');
     if (pin || (code && name)) {
-        var data = {game: 'gotrotters', score: score, tier: selTier};
+        var data = {game: 'gotrotters', score: score, tier: selTier, accuracy: pct, perfect: isPerfect};
         if (pin) data.pin = pin; else { data.accessCode = code; data.username = name; }
         fetch('/api/game/session', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data)}).catch(function(){});
     }
 }
 
-function playAgain() {
+function startAutoTimer(isPerfect, canAdvance) {
+    var count = 5;
+    document.getElementById('timerCount').textContent = count;
+    document.getElementById('timerCountEs').textContent = count;
+    document.getElementById('continueTimer').style.display = 'block';
+    
+    autoTimer = setInterval(function() {
+        count--;
+        document.getElementById('timerCount').textContent = count;
+        document.getElementById('timerCountEs').textContent = count;
+        
+        if (count <= 0) {
+            clearInterval(autoTimer);
+            if (isPerfect && canAdvance) {
+                advanceNow();
+            } else {
+                retryNow();
+            }
+        }
+    }, 1000);
+}
+
+function advanceNow() {
+    if (autoTimer) clearInterval(autoTimer);
+    var currentIdx = tierList.indexOf(selTier);
+    if (currentIdx < tierList.length - 1) {
+        selTier = tierList[currentIdx + 1];
+    }
+    startGame();
+}
+
+function retryNow() {
+    if (autoTimer) clearInterval(autoTimer);
+    startGame();
+}
+
+function goHome() {
+    if (autoTimer) clearInterval(autoTimer);
+    document.getElementById('rhythmBadge').classList.remove('visible');
     renderTiers();
     showScreen('welcomeScreen');
 }
 
-function logout() {
-    sessionStorage.clear();
-    window.location.href = '/play';
-}
-
-var slide = 0;
-var demoTimer = null;
-
-function showTutorial() {
-    slide = 0;
-    updateSlide();
-    document.getElementById('tutorialOverlay').classList.add('active');
-    startDemo();
-}
-
-function closeTutorial() {
-    document.getElementById('tutorialOverlay').classList.remove('active');
-    stopDemo();
-    localStorage.setItem('gotrotters-tutorial-seen', 'true');
-}
-
-function nextSlide() { if (slide < 3) { slide++; updateSlide(); } }
-function prevSlide() { if (slide > 0) { slide--; updateSlide(); } }
-
-function updateSlide() {
-    for (var i = 0; i < 4; i++) {
-        document.getElementById('slide' + i).classList.toggle('active', i === slide);
-    }
-    var dots = document.querySelectorAll('.tutorial-dot');
-    dots.forEach(function(d, i) {
-        d.classList.remove('active', 'completed');
-        if (i < slide) d.classList.add('completed');
-        else if (i === slide) d.classList.add('active');
-    });
-    startDemo();
-}
-
-function startDemo() {
-    stopDemo();
-    if (slide === 1) {
-        var i = 0;
-        function anim() {
-            document.querySelectorAll('#slide1 .demo-ball').forEach(function(b) { b.classList.remove('lit'); });
-            var el = document.getElementById('demoBall' + (i + 1));
-            if (el) el.classList.add('lit');
-            i = (i + 1) % 4;
-            if (i === 0) i = 0;
-            demoTimer = setTimeout(anim, i === 0 ? 1000 : 700);
-        }
-        anim();
-    }
-}
-
-function stopDemo() {
-    if (demoTimer) { clearTimeout(demoTimer); demoTimer = null; }
-}
-
+// Init
 document.querySelectorAll('.lang-btn').forEach(function(b) {
     b.classList.toggle('active', b.textContent.trim() === currentLang.toUpperCase());
 });
 renderTiers();
-if (!localStorage.getItem('gotrotters-tutorial-seen')) setTimeout(showTutorial, 500);
 
-// Auth check - redirect to login if not authenticated
+// Auth check for production
 if (window.location.hostname === 'gostar.digital' && !sessionStorage.getItem('gostar-user-pin')) {
     window.location.replace('https://gostar.digital/play.html');
 }
