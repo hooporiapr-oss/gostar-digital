@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>The 3 Point Play - GoTrotters</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--orange:#FF6B00;--orange-dark:#CC5500;--teal:#00D9A5;--gold:#FFD700;--purple:#9B59B6;--blue:#3498db;--dark:#0a0a0f;--darker:#050508;--card:#111118;--text:#FFFFFF;--muted:#8892a0;--success:#00D9A5}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Outfit',sans-serif;background:var(--dark);color:var(--text);min-height:100vh;overflow-x:hidden}
+body.es .lang-en{display:none !important}
+body.en .lang-es{display:none !important}
+
+.header{position:fixed;top:0;left:0;right:0;z-index:100;padding:15px 20px;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(180deg,rgba(10,10,15,0.98) 0%,rgba(10,10,15,0.8) 100%);backdrop-filter:blur(20px)}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:3px;text-decoration:none}
+.logo .go{color:var(--orange)}
+.logo .trotters{color:var(--teal)}
+.header-right{display:flex;align-items:center;gap:12px}
+.lang-toggle{display:flex;gap:4px}
+.lang-btn{padding:6px 12px;border:2px solid var(--orange);background:transparent;color:var(--orange);border-radius:15px;font-family:'Outfit',sans-serif;font-weight:600;font-size:0.75rem;cursor:pointer;transition:all 0.3s}
+.lang-btn.active{background:var(--orange);color:var(--text)}
+.user-badge{display:flex;align-items:center;gap:8px;padding:8px 14px;background:var(--card);border:1px solid rgba(255,255,255,0.1);border-radius:20px}
+.user-icon{width:28px;height:28px;background:linear-gradient(135deg,var(--orange),var(--gold));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.8rem}
+.user-name{font-size:0.85rem;font-weight:600;max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.logout-btn{padding:8px 14px;background:transparent;border:1px solid rgba(255,255,255,0.2);color:var(--muted);border-radius:15px;font-size:0.75rem;cursor:pointer;transition:all 0.3s}
+.logout-btn:hover{border-color:var(--orange);color:var(--orange)}
+
+.main{padding:100px 20px 40px;max-width:1000px;margin:0 auto}
+
+.welcome-section{text-align:center;margin-bottom:50px}
+.welcome-badge{display:inline-block;padding:8px 20px;background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.3);border-radius:50px;font-size:0.8rem;color:var(--gold);letter-spacing:2px;margin-bottom:15px}
+.welcome-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,6vw,3.5rem);letter-spacing:4px;margin-bottom:10px}
+.welcome-subtitle{font-size:1rem;color:var(--muted);max-width:500px;margin:0 auto}
+
+.games-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:25px;margin-bottom:50px}
+
+.game-card{background:var(--card);border:2px solid rgba(255,255,255,0.08);border-radius:20px;padding:30px;text-align:center;cursor:pointer;transition:all 0.4s ease;position:relative;overflow:hidden}
+.game-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--orange),var(--gold));transform:scaleX(0);transition:transform 0.4s}
+.game-card:hover{transform:translateY(-8px);border-color:rgba(255,107,0,0.4)}
+.game-card:hover::before{transform:scaleX(1)}
+.game-card:active{transform:translateY(-4px)}
+
+.game-number{position:absolute;top:15px;right:20px;font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:rgba(255,107,0,0.12)}
+.game-icon{font-size:4rem;margin-bottom:15px;filter:drop-shadow(0 5px 15px rgba(255,107,0,0.3))}
+.game-title{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:3px;margin-bottom:5px}
+.game-subtitle{font-size:0.75rem;color:var(--gold);letter-spacing:2px;margin-bottom:15px;text-transform:uppercase}
+.game-desc{font-size:0.9rem;color:var(--muted);line-height:1.5;margin-bottom:20px;min-height:60px}
+
+.game-progress{background:rgba(255,255,255,0.03);border-radius:12px;padding:15px}
+.progress-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.progress-label{font-size:0.75rem;color:var(--muted)}
+.progress-value{font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--orange)}
+.progress-bar{height:6px;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--orange),var(--gold));border-radius:3px;transition:width 0.5s ease}
+
+.play-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 25px;background:linear-gradient(135deg,var(--orange) 0%,var(--orange-dark) 100%);color:var(--text);border:none;border-radius:30px;font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;cursor:pointer;margin-top:15px;transition:all 0.3s}
+.play-btn:hover{transform:scale(1.05);box-shadow:0 5px 25px rgba(255,107,0,0.4)}
+
+.stats-section{background:var(--card);border-radius:20px;padding:30px;margin-bottom:40px}
+.stats-title{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:3px;color:var(--gold);margin-bottom:20px;text-align:center}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:20px}
+.stat-item{text-align:center}
+.stat-value{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--text)}
+.stat-label{font-size:0.75rem;color:var(--muted);margin-top:5px}
+
+.quote-section{text-align:center;padding:30px;background:linear-gradient(135deg,rgba(255,107,0,0.05) 0%,rgba(0,217,165,0.05) 100%);border-radius:20px}
+.quote-text{font-family:'Bebas Neue',sans-serif;font-size:clamp(1rem,3vw,1.5rem);letter-spacing:2px;color:var(--gold);margin-bottom:10px}
+.quote-author{font-size:0.85rem;color:var(--muted)}
+
+@media(max-width:600px){
+.user-name{display:none}
+.games-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body class="en">
+
+<header class="header">
+<a href="index.html" class="logo"><span class="go">Go</span><span class="trotters">Trotters</span></a>
+<div class="header-right">
+<div class="lang-toggle">
+<button class="lang-btn active" id="btn-en">EN</button>
+<button class="lang-btn" id="btn-es">ES</button>
+</div>
+<div class="user-badge">
+<div class="user-icon">🏀</div>
+<span class="user-name" id="userName">GoTrotter</span>
+</div>
+<button class="logout-btn" onclick="logout()"><span class="lang-en">Logout</span><span class="lang-es">Salir</span></button>
+</div>
+</header>
+
+<main class="main">
+<section class="welcome-section">
+<div class="welcome-badge"><span class="lang-en">THE 3 POINT PLAY</span><span class="lang-es">EL TIRO DE 3 PUNTOS</span></div>
+<h1 class="welcome-title"><span class="lang-en">CHOOSE YOUR GAME</span><span class="lang-es">ELIGE TU JUEGO</span></h1>
+<p class="welcome-subtitle"><span class="lang-en">Three games. Complete memory training. Master them all.</span><span class="lang-es">Tres juegos. Entrenamiento de memoria completo. Domínalos todos.</span></p>
+</section>
+
+<div class="games-grid">
+<!-- Game 1: Masters of the Game -->
+<div class="game-card" onclick="playGame('gotrotters.html')">
+<div class="game-number">1</div>
+<div class="game-icon">🏀</div>
+<h2 class="game-title"><span class="lang-en">MASTERS OF THE GAME</span><span class="lang-es">MAESTROS DEL JUEGO</span></h2>
+<div class="game-subtitle"><span class="lang-en">SPATIAL MEMORY</span><span class="lang-es">MEMORIA ESPACIAL</span></div>
+<p class="game-desc"><span class="lang-en">Watch the balls light up. Remember their positions. Tap them in order.</span><span class="lang-es">Mira las bolas iluminarse. Recuerda sus posiciones. Tócalas en orden.</span></p>
+<div class="game-progress">
+<div class="progress-row">
+<span class="progress-label"><span class="lang-en">Level</span><span class="lang-es">Nivel</span></span>
+<span class="progress-value" id="game1Level">TRYOUT 1</span>
+</div>
+<div class="progress-bar"><div class="progress-fill" id="game1Progress" style="width:10%"></div></div>
+</div>
+<button class="play-btn"><span class="lang-en">PLAY →</span><span class="lang-es">JUGAR →</span></button>
+</div>
+
+<!-- Game 2: The Playbook -->
+<div class="game-card" onclick="playGame('playbook.html')">
+<div class="game-number">2</div>
+<div class="game-icon">📋</div>
+<h2 class="game-title">THE PLAYBOOK</h2>
+<div class="game-subtitle"><span class="lang-en">DIGIT SPAN</span><span class="lang-es">SECUENCIA DE DÍGITOS</span></div>
+<p class="game-desc"><span class="lang-en">Watch the number sequence. Call it back. Forward, backward, or alternating.</span><span class="lang-es">Mira la secuencia de números. Repítela. Adelante, reversa, o alternando.</span></p>
+<div class="game-progress">
+<div class="progress-row">
+<span class="progress-label"><span class="lang-en">Level</span><span class="lang-es">Nivel</span></span>
+<span class="progress-value" id="game2Level">TRYOUT 1</span>
+</div>
+<div class="progress-bar"><div class="progress-fill" id="game2Progress" style="width:10%"></div></div>
+</div>
+<button class="play-btn"><span class="lang-en">PLAY →</span><span class="lang-es">JUGAR →</span></button>
+</div>
+
+<!-- Game 3: The Fast Break -->
+<div class="game-card" onclick="playGame('fastbreak.html')">
+<div class="game-number">3</div>
+<div class="game-icon">⚡</div>
+<h2 class="game-title">THE FAST BREAK</h2>
+<div class="game-subtitle"><span class="lang-en">SEQUENCE MEMORY</span><span class="lang-es">MEMORIA DE SECUENCIA</span></div>
+<p class="game-desc"><span class="lang-en">Watch the tiles light up. Repeat the sequence. It grows longer each time!</span><span class="lang-es">Mira las fichas iluminarse. Repite la secuencia. ¡Crece cada vez!</span></p>
+<div class="game-progress">
+<div class="progress-row">
+<span class="progress-label"><span class="lang-en">Level</span><span class="lang-es">Nivel</span></span>
+<span class="progress-value" id="game3Level">TRYOUT 1</span>
+</div>
+<div class="progress-bar"><div class="progress-fill" id="game3Progress" style="width:10%"></div></div>
+</div>
+<button class="play-btn"><span class="lang-en">PLAY →</span><span class="lang-es">JUGAR →</span></button>
+</div>
+</div>
+
+<section class="stats-section">
+<h3 class="stats-title"><span class="lang-en">YOUR STATS</span><span class="lang-es">TUS ESTADÍSTICAS</span></h3>
+<div class="stats-grid">
+<div class="stat-item">
+<div class="stat-value" id="totalPerfect">0</div>
+<div class="stat-label"><span class="lang-en">Perfect Games</span><span class="lang-es">Juegos Perfectos</span></div>
+</div>
+<div class="stat-item">
+<div class="stat-value" id="highestLevel">1</div>
+<div class="stat-label"><span class="lang-en">Highest Level</span><span class="lang-es">Nivel Más Alto</span></div>
+</div>
+<div class="stat-item">
+<div class="stat-value" id="gamesMastered">0/30</div>
+<div class="stat-label"><span class="lang-en">Levels Mastered</span><span class="lang-es">Niveles Dominados</span></div>
+</div>
+<div class="stat-item">
+<div class="stat-value" id="totalTrainingSessions">0</div>
+<div class="stat-label"><span class="lang-en">Training Sessions</span><span class="lang-es">Sesiones</span></div>
+</div>
+</div>
+</section>
+
+<section class="quote-section">
+<p class="quote-text"><span class="lang-en">"TRAIN YOUR MEMORY UNTIL YOU CAN'T GET IT WRONG. THAT'S MASTERY."</span><span class="lang-es">"ENTRENA TU MEMORIA HASTA QUE NO PUEDAS FALLAR. ESO ES MAESTRÍA."</span></p>
+<p class="quote-author">— The GoTrotters Way</p>
+</section>
+</main>
+
+<script>
+// Tier list for display
+var tierList = ['TRYOUT 1', 'TRYOUT 2', 'ROOKIE', 'JV', 'VARSITY', 'COLLEGE', 'PRO', 'ALL-STAR', 'LEGEND', 'MASTER'];
+
+// Language
+var lang = localStorage.getItem('gt-lang') || 'en';
+document.body.className = lang;
+
+function setLang(l) {
+    lang = l;
+    localStorage.setItem('gt-lang', l);
+    document.body.className = l;
+    document.getElementById('btn-en').className = l === 'en' ? 'lang-btn active' : 'lang-btn';
+    document.getElementById('btn-es').className = l === 'es' ? 'lang-btn active' : 'lang-btn';
+}
+
+document.getElementById('btn-en').addEventListener('click', function() { setLang('en'); });
+document.getElementById('btn-es').addEventListener('click', function() { setLang('es'); });
+document.getElementById('btn-en').className = lang === 'en' ? 'lang-btn active' : 'lang-btn';
+document.getElementById('btn-es').className = lang === 'es' ? 'lang-btn active' : 'lang-btn';
+
+// Auth check
+var userPin = sessionStorage.getItem('gostar-user-pin');
+var userName = sessionStorage.getItem('gostar-user-name') || 'GoTrotter';
+
+if (!userPin && window.location.hostname === 'gostar.digital') {
+    window.location.replace('play.html');
+} else {
+    document.getElementById('userName').textContent = userName;
+}
+
+// Load progress for each game
+function loadProgress() {
+    // Game 1: Masters of the Game (gotrotters)
+    try {
+        var g1 = JSON.parse(localStorage.getItem('gotrotters-mastery')) || {};
+        var g1Level = g1.unlockedLevel || 0;
+        document.getElementById('game1Level').textContent = tierList[g1Level] || 'TRYOUT 1';
+        document.getElementById('game1Progress').style.width = ((g1Level + 1) / 10 * 100) + '%';
+    } catch(e) {}
+
+    // Game 2: The Playbook
+    try {
+        var g2 = JSON.parse(localStorage.getItem('playbook-mastery')) || {};
+        var g2Forward = g2.forward ? (g2.forward.unlockedLevel || 0) : 0;
+        document.getElementById('game2Level').textContent = tierList[g2Forward] || 'TRYOUT 1';
+        document.getElementById('game2Progress').style.width = ((g2Forward + 1) / 10 * 100) + '%';
+    } catch(e) {}
+
+    // Game 3: The Fast Break
+    try {
+        var g3 = JSON.parse(localStorage.getItem('fastbreak-mastery')) || {};
+        var g3Level = g3.unlockedLevel || 0;
+        document.getElementById('game3Level').textContent = tierList[g3Level] || 'TRYOUT 1';
+        document.getElementById('game3Progress').style.width = ((g3Level + 1) / 10 * 100) + '%';
+    } catch(e) {}
+
+    // Calculate overall stats
+    calculateStats();
+}
+
+function calculateStats() {
+    var totalPerfect = 0;
+    var highestLevel = 0;
+    var levelsMastered = 0;
+
+    // Game 1
+    try {
+        var g1 = JSON.parse(localStorage.getItem('gotrotters-mastery')) || {};
+        if (g1.unlockedLevel) {
+            levelsMastered += g1.unlockedLevel;
+            if (g1.unlockedLevel > highestLevel) highestLevel = g1.unlockedLevel;
+        }
+        if (g1.perfect) {
+            for (var k in g1.perfect) totalPerfect += g1.perfect[k];
+        }
+    } catch(e) {}
+
+    // Game 2 (3 modes)
+    try {
+        var g2 = JSON.parse(localStorage.getItem('playbook-mastery')) || {};
+        ['forward', 'backward', 'alternating'].forEach(function(mode) {
+            if (g2[mode]) {
+                if (g2[mode].unlockedLevel) {
+                    levelsMastered += g2[mode].unlockedLevel;
+                    if (g2[mode].unlockedLevel > highestLevel) highestLevel = g2[mode].unlockedLevel;
+                }
+                if (g2[mode].perfect) {
+                    for (var k in g2[mode].perfect) totalPerfect += g2[mode].perfect[k];
+                }
+            }
+        });
+    } catch(e) {}
+
+    // Game 3
+    try {
+        var g3 = JSON.parse(localStorage.getItem('fastbreak-mastery')) || {};
+        if (g3.unlockedLevel) {
+            levelsMastered += g3.unlockedLevel;
+            if (g3.unlockedLevel > highestLevel) highestLevel = g3.unlockedLevel;
+        }
+        if (g3.perfect) {
+            for (var k in g3.perfect) totalPerfect += g3.perfect[k];
+        }
+    } catch(e) {}
+
+    document.getElementById('totalPerfect').textContent = totalPerfect;
+    document.getElementById('highestLevel').textContent = highestLevel + 1;
+    document.getElementById('gamesMastered').textContent = levelsMastered + '/30';
+    document.getElementById('totalTrainingSessions').textContent = totalPerfect;
+}
+
+function playGame(url) {
+    window.location.href = url;
+}
+
+function logout() {
+    sessionStorage.removeItem('gostar-user-pin');
+    sessionStorage.removeItem('gostar-user-name');
+    sessionStorage.removeItem('gostar-facility-pin');
+    window.location.href = 'play.html';
+}
+
+// Load on start
+loadProgress();
+</script>
+</body>
+</html>
