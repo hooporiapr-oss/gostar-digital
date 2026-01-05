@@ -271,17 +271,18 @@ function playBeep(freq, dur) {
 }
 
 // 10 TIER SYSTEM - 2 TRYOUTS + 8 SQUAD LEVELS
+// plays = number of sequences per half (internal only, not shown to user)
 var tiers = {
-    tryout1: {name: 'TRYOUT 1', icon: '📋', stars: 2, seqMin: 2, seqMax: 2, rounds: 2, isTryout: true},
-    tryout2: {name: 'TRYOUT 2', icon: '📝', stars: 3, seqMin: 2, seqMax: 3, rounds: 2, isTryout: true},
-    rookie: {name: 'ROOKIE', icon: '🌟', stars: 4, seqMin: 3, seqMax: 4, rounds: 3, isTryout: false},
-    jv: {name: 'JV', icon: '🏀', stars: 5, seqMin: 4, seqMax: 5, rounds: 4, isTryout: false},
-    varsity: {name: 'VARSITY', icon: '🎽', stars: 6, seqMin: 5, seqMax: 6, rounds: 4, isTryout: false},
-    college: {name: 'COLLEGE', icon: '🎓', stars: 7, seqMin: 6, seqMax: 7, rounds: 5, isTryout: false},
-    pro: {name: 'PRO', icon: '💰', stars: 8, seqMin: 7, seqMax: 8, rounds: 5, isTryout: false},
-    allstar: {name: 'ALL-STAR', icon: '⭐', stars: 9, seqMin: 8, seqMax: 9, rounds: 5, isTryout: false},
-    legend: {name: 'LEGEND', icon: '🏆', stars: 10, seqMin: 9, seqMax: 10, rounds: 6, isTryout: false},
-    master: {name: 'MASTER', icon: '🔥', stars: 12, seqMin: 10, seqMax: 12, rounds: 6, isTryout: false}
+    tryout1: {name: 'TRYOUT 1', icon: '📋', stars: 2, seqMin: 2, seqMax: 2, plays: 2, isTryout: true},
+    tryout2: {name: 'TRYOUT 2', icon: '📝', stars: 3, seqMin: 2, seqMax: 3, plays: 2, isTryout: true},
+    rookie: {name: 'ROOKIE', icon: '🌟', stars: 4, seqMin: 3, seqMax: 4, plays: 3, isTryout: false},
+    jv: {name: 'JV', icon: '🏀', stars: 5, seqMin: 4, seqMax: 5, plays: 3, isTryout: false},
+    varsity: {name: 'VARSITY', icon: '🎽', stars: 6, seqMin: 5, seqMax: 6, plays: 3, isTryout: false},
+    college: {name: 'COLLEGE', icon: '🎓', stars: 7, seqMin: 6, seqMax: 7, plays: 4, isTryout: false},
+    pro: {name: 'PRO', icon: '💰', stars: 8, seqMin: 7, seqMax: 8, plays: 4, isTryout: false},
+    allstar: {name: 'ALL-STAR', icon: '⭐', stars: 9, seqMin: 8, seqMax: 9, plays: 4, isTryout: false},
+    legend: {name: 'LEGEND', icon: '🏆', stars: 10, seqMin: 9, seqMax: 10, plays: 5, isTryout: false},
+    master: {name: 'MASTER', icon: '🔥', stars: 12, seqMin: 10, seqMax: 12, plays: 5, isTryout: false}
 };
 var tierList = ['tryout1', 'tryout2', 'rookie', 'jv', 'varsity', 'college', 'pro', 'allstar', 'legend', 'master'];
 
@@ -298,7 +299,7 @@ function getProgress() {
 function saveProgress(p) { localStorage.setItem('gotrotters-mastery', JSON.stringify(p)); }
 
 var selTier = 'tryout1', selRhythm = 'showtime';
-var currentHalf = 1, round = 1, score = 0;
+var currentHalf = 1, play = 1, score = 0;
 var balls = [], seq = [], idx = 0, done = [], showing = false;
 var correct = 0, attempts = 0;
 var autoTimer = null;
@@ -347,7 +348,7 @@ function renderTiers() {
         
         btn.innerHTML = '<span class="tier-icon">' + t.icon + '</span>' +
             '<div class="tier-info"><div class="tier-name">' + t.name + '</div>' +
-            '<div class="tier-desc">' + t.stars + ' balls • ' + t.rounds + ' rounds</div></div>' + statusHtml;
+            '<div class="tier-desc">' + t.stars + ' balls</div></div>' + statusHtml;
         
         grid.appendChild(btn);
     });
@@ -370,7 +371,7 @@ function selectRhythm(r) {
 }
 
 function startGame() {
-    currentHalf = 1; round = 1; score = 0; correct = 0; attempts = 0;
+    currentHalf = 1; play = 1; score = 0; correct = 0; attempts = 0;
     document.getElementById('rhythmBadgeText').textContent = rhythms[selRhythm].label;
     document.getElementById('rhythmBadge').classList.add('visible');
     document.getElementById('countdownTier').textContent = tiers[selTier].name;
@@ -395,7 +396,7 @@ function initRound() {
     document.getElementById('gameTier').textContent = tiers[selTier].name;
     updateHalfDisplay();
     updateAccuracy();
-    startRound();
+    startPlay();
 }
 
 function updateHalfDisplay() {
@@ -492,7 +493,7 @@ function disableBalls(d) {
     document.querySelectorAll('.ball').forEach(function(b) { b.classList.toggle('disabled', d); });
 }
 
-function startRound() {
+function startPlay() {
     idx = 0; done = [];
     var t = tiers[selTier];
     makeBalls(t.stars);
@@ -558,7 +559,7 @@ function clickBall(i) {
             updateScore();
             updateAccuracy();
             setMsg((currentLang === 'es' ? '¡Wepa! +' : 'Perfect! +') + pts, 'success');
-            setTimeout(nextRound, 1000);
+            setTimeout(nextPlay, 1000);
         }
     } else {
         attempts++;
@@ -569,19 +570,19 @@ function clickBall(i) {
         if (partial > 0) { score += partial; updateScore(); }
         updateAccuracy();
         setMsg(currentLang === 'es' ? '¡Otra vez!' : 'Try again!', 'error');
-        setTimeout(nextRound, 800);
+        setTimeout(nextPlay, 800);
     }
 }
 
-function nextRound() {
-    round++;
+function nextPlay() {
+    play++;
     var t = tiers[selTier];
-    if (round > t.rounds) {
+    if (play > t.plays) {
         if (currentHalf === 1) { showHalftime(); }
         else { endGame(); }
         return;
     }
-    setTimeout(startRound, 400);
+    setTimeout(startPlay, 400);
 }
 
 function showHalftime() {
@@ -594,12 +595,12 @@ function showHalftime() {
 
 function continueToSecondHalf() {
     currentHalf = 2;
-    round = 1;
+    play = 1;
     document.getElementById('rhythmBadge').classList.add('visible');
     updateHalfDisplay();
     showScreen('gameScreen');
     setMsg(currentLang === 'es' ? '¡Segunda mitad!' : '2nd Half!');
-    setTimeout(startRound, 800);
+    setTimeout(startPlay, 800);
 }
 
 function endGame() {
