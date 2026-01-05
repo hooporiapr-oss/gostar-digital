@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>The Playbook - GoTrotters Memory Training</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;600;700;800;900&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+html{height:100%;overflow-y:scroll}
+:root{--ball-orange:#FF6B00;--ball-dark:#CC5500;--secondary:#FF6B00;--bg-dark:#0a0a12;--bg-card:#12121a;--text-light:#FFFFFF;--text-muted:#8892a0;--success:#00D9A5;--danger:#FF4757;--gold:#FFD700;--tryout:#9B59B6;--blue:#3498db}
+body{font-family:'Nunito',sans-serif;background:var(--bg-dark);color:var(--text-light);min-height:100%}
+body[data-lang="es"] .lang-en{display:none!important}
+body[data-lang="en"] .lang-es{display:none!important}
+.court-bg{position:fixed;top:0;left:0;right:0;bottom:0;background:linear-gradient(180deg,var(--bg-dark) 0%,#0d0d18 100%);z-index:-1}
+.top-controls{position:fixed;top:0;left:0;right:0;padding:15px 20px;display:flex;justify-content:space-between;align-items:center;z-index:100;background:linear-gradient(180deg,rgba(10,10,18,0.95) 0%,transparent 100%)}
+.back-link{padding:8px 16px;background:rgba(255,255,255,0.05);border:2px solid rgba(255,255,255,0.1);border-radius:20px;color:var(--text-muted);text-decoration:none;font-weight:600;font-size:0.85rem;cursor:pointer}
+.lang-toggle{display:flex;gap:6px}
+.lang-btn{padding:6px 12px;border:2px solid var(--secondary);background:transparent;color:var(--secondary);border-radius:15px;font-family:'Nunito',sans-serif;font-weight:600;font-size:0.8rem;cursor:pointer}
+.lang-btn.active{background:var(--secondary);color:var(--text-light)}
+.screen{display:none;flex-direction:column;align-items:center;min-height:100vh;width:100%;padding:80px 20px 40px 20px;text-align:center}
+.screen.active{display:flex}
+.main-logo{font-family:'Bebas Neue',sans-serif;font-size:2.8rem;letter-spacing:5px;background:linear-gradient(135deg,var(--secondary) 0%,var(--gold) 50%,var(--secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:5px}
+.main-subtitle{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:4px;color:var(--gold);margin-bottom:5px}
+.main-icon{font-size:3rem;margin:12px 0}
+.mastery-badge{background:linear-gradient(135deg,var(--success) 0%,#00B389 100%);color:var(--bg-dark);padding:10px 20px;border-radius:25px;font-weight:800;font-size:0.85rem;margin-bottom:15px;display:inline-block}
+.game-description{max-width:340px;padding:15px;background:rgba(255,107,0,0.05);border-left:4px solid var(--secondary);border-radius:0 15px 15px 0;margin-bottom:20px;text-align:left}
+.game-description p{font-size:0.9rem;color:var(--text-muted);line-height:1.5;margin-bottom:8px}
+.game-description strong{color:var(--text-light)}
+
+/* Mode Selection */
+.mode-section{width:100%;max-width:380px;margin-bottom:15px}
+.section-label{font-family:'Bebas Neue',sans-serif;font-size:0.85rem;letter-spacing:4px;color:var(--text-muted);margin-bottom:10px}
+.mode-grid{display:flex;flex-direction:column;gap:8px}
+.mode-btn{display:flex;align-items:center;gap:12px;padding:12px 15px;background:var(--bg-card);border:2px solid transparent;border-radius:10px;cursor:pointer;transition:all 0.3s ease;text-align:left}
+.mode-btn:hover{border-color:var(--secondary);transform:translateX(5px)}
+.mode-btn.selected{border-color:var(--secondary);background:rgba(255,107,0,0.1)}
+.mode-btn.locked{opacity:0.4;cursor:not-allowed}
+.mode-icon{font-size:1.5rem;min-width:40px;text-align:center}
+.mode-info{flex:1}
+.mode-name{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;color:var(--text-light)}
+.mode-desc{font-size:0.7rem;color:var(--text-muted)}
+.mode-status{font-size:0.65rem;padding:3px 8px;border-radius:8px;font-weight:700}
+.mode-status.unlocked{background:var(--success);color:var(--bg-dark)}
+.mode-status.locked{background:rgba(255,255,255,0.1);color:var(--text-muted)}
+
+/* Tier Selection */
+.tier-section{width:100%;max-width:380px;margin-bottom:15px}
+.tier-grid{display:flex;flex-direction:column;gap:6px;max-height:200px;overflow-y:auto;padding-right:5px}
+.tier-grid::-webkit-scrollbar{width:4px}
+.tier-grid::-webkit-scrollbar-track{background:rgba(255,255,255,0.05);border-radius:2px}
+.tier-grid::-webkit-scrollbar-thumb{background:var(--secondary);border-radius:2px}
+.tier-btn{display:flex;align-items:center;gap:12px;padding:10px 12px;background:var(--bg-card);border:2px solid transparent;border-radius:10px;cursor:pointer;transition:all 0.3s ease;text-align:left}
+.tier-btn:hover:not(.locked){border-color:var(--secondary);transform:translateX(5px)}
+.tier-btn.selected{border-color:var(--secondary);background:rgba(255,107,0,0.1)}
+.tier-btn.locked{opacity:0.4;cursor:not-allowed}
+.tier-btn.mastered{border-color:var(--success);background:rgba(0,217,165,0.08)}
+.tier-btn.tryout{border-color:var(--tryout);background:rgba(155,89,182,0.1)}
+.tier-icon{font-size:1.3rem;min-width:35px;text-align:center}
+.tier-info{flex:1}
+.tier-name{font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:2px;color:var(--text-light)}
+.tier-desc{font-size:0.65rem;color:var(--text-muted)}
+.tier-status{font-size:0.6rem;padding:2px 6px;border-radius:6px;font-weight:700}
+.tier-status.mastered{background:var(--success);color:var(--bg-dark)}
+.tier-status.locked{background:rgba(255,255,255,0.1);color:var(--text-muted)}
+.tier-status.current{background:var(--secondary);color:var(--text-light)}
+.tier-status.tryout{background:var(--tryout);color:var(--text-light)}
+
+.start-btn{padding:16px 45px;font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:4px;background:linear-gradient(135deg,var(--secondary) 0%,var(--ball-dark) 100%);color:var(--text-light);border:none;border-radius:50px;cursor:pointer;box-shadow:0 5px 25px rgba(255,107,0,0.4);margin-top:10px}
+.stats-summary{margin-top:15px;padding:12px 20px;background:var(--bg-card);border-radius:12px;display:flex;gap:25px}
+.stat-item{text-align:center}
+.stat-value{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--secondary)}
+.stat-label{font-size:0.65rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px}
+
+/* Countdown */
+#countdownScreen{justify-content:center}
+.countdown-mode{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:3px;color:var(--gold);margin-bottom:5px}
+.countdown-tier{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:4px;color:var(--text-muted);margin-bottom:10px}
+.countdown-number{font-family:'Bebas Neue',sans-serif;font-size:7rem;color:var(--secondary);text-shadow:0 0 50px rgba(255,107,0,0.5)}
+.countdown-text{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:5px;color:var(--text-muted)}
+
+/* Game Screen */
+#gameScreen{justify-content:flex-start;padding-top:70px}
+.scoreboard{width:100%;max-width:380px;background:linear-gradient(180deg,#0a0a0a 0%,#050505 100%);border:3px solid #222;border-radius:12px;padding:12px 18px;margin-bottom:12px}
+.scoreboard-main{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.scoreboard-mode{font-family:'Bebas Neue',sans-serif;font-size:0.7rem;letter-spacing:2px;color:var(--gold);padding:3px 8px;background:rgba(255,215,0,0.1);border-radius:6px}
+.scoreboard-tier{font-family:'Bebas Neue',sans-serif;font-size:0.8rem;letter-spacing:2px;color:var(--text-muted);padding:4px 10px;background:rgba(255,255,255,0.05);border-radius:8px}
+.scoreboard-score{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--secondary);text-shadow:0 0 20px rgba(255,107,0,0.4)}
+.half-display{display:flex;justify-content:center;gap:10px;margin-bottom:8px}
+.half-indicator{padding:6px 16px;border-radius:15px;font-family:'Bebas Neue',sans-serif;font-size:0.8rem;letter-spacing:2px}
+.half-indicator.active{background:var(--secondary);color:var(--text-light)}
+.half-indicator.inactive{background:rgba(255,255,255,0.05);color:var(--text-muted)}
+.half-indicator.completed{background:var(--success);color:var(--bg-dark)}
+.accuracy-display{text-align:center}
+.accuracy-label{font-size:0.7rem;color:var(--text-muted);margin-bottom:3px}
+.accuracy-value{font-family:'Bebas Neue',sans-serif;font-size:1.6rem}
+.accuracy-value.perfect{color:var(--success)}
+.accuracy-value.good{color:var(--gold)}
+.accuracy-value.miss{color:var(--danger)}
+
+.message-area{height:50px;display:flex;align-items:center;justify-content:center;margin-bottom:10px}
+.game-message{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:2px;color:var(--text-light)}
+.game-message.success{color:var(--success)}
+.game-message.error{color:var(--danger)}
+.game-message.watch{color:var(--gold)}
+
+/* Sequence Display */
+.sequence-display{width:100%;max-width:380px;min-height:80px;background:var(--bg-card);border:3px solid #222;border-radius:12px;padding:15px;margin-bottom:15px;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:10px}
+.seq-item{width:50px;height:60px;background:linear-gradient(145deg,#1a1a2e 0%,#0f0f1a 100%);border:3px solid #333;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--text-muted);transition:all 0.3s ease}
+.seq-item.lit{background:linear-gradient(145deg,var(--secondary) 0%,var(--ball-dark) 100%);border-color:var(--gold);color:var(--text-light);transform:scale(1.1);box-shadow:0 0 20px rgba(255,107,0,0.5)}
+.seq-item.letter{color:var(--blue)}
+.seq-item.letter.lit{background:linear-gradient(145deg,var(--blue) 0%,#2980b9 100%);border-color:#5dade2}
+
+/* Input Pad */
+.input-pad{width:100%;max-width:320px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:15px}
+.input-btn{height:60px;background:var(--bg-card);border:2px solid #333;border-radius:12px;font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--text-light);cursor:pointer;transition:all 0.15s ease}
+.input-btn:hover{border-color:var(--secondary);background:rgba(255,107,0,0.1)}
+.input-btn:active{transform:scale(0.95);background:var(--secondary)}
+.input-btn.letter{color:var(--blue)}
+.input-btn.correct{background:var(--success);border-color:var(--success);color:var(--bg-dark)}
+.input-btn.wrong{background:var(--danger);border-color:var(--danger);color:var(--text-light);animation:shake 0.3s ease}
+.input-btn.clear{font-size:1.2rem;color:var(--text-muted)}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+/* User Input Display */
+.user-input-display{width:100%;max-width:380px;min-height:50px;background:rgba(255,255,255,0.03);border:2px dashed #333;border-radius:10px;padding:10px;margin-bottom:10px;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px}
+.user-input-item{width:40px;height:48px;background:var(--bg-card);border:2px solid var(--secondary);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--secondary)}
+.user-input-item.letter{border-color:var(--blue);color:var(--blue)}
+
+/* Halftime */
+#halftimeScreen{justify-content:center}
+
+/* Results */
+#resultScreen{justify-content:center}
+.result-icon{font-size:4.5rem;margin-bottom:12px}
+.result-title{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;letter-spacing:4px;margin-bottom:8px}
+.result-title.success{color:var(--success)}
+.result-title.retry{color:var(--secondary)}
+.result-message{font-size:1rem;color:var(--text-muted);margin-bottom:20px;max-width:300px;line-height:1.5}
+.result-stats{display:flex;gap:20px;margin-bottom:20px}
+.result-stat{text-align:center}
+.result-stat-value{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--text-light)}
+.result-stat-label{font-size:0.7rem;color:var(--text-muted)}
+.result-accuracy{font-family:'Bebas Neue',sans-serif;font-size:3.5rem;margin-bottom:8px}
+.result-accuracy.perfect{color:var(--success)}
+.result-accuracy.miss{color:var(--danger)}
+.next-level-preview{background:var(--bg-card);border:2px solid var(--success);border-radius:12px;padding:16px;margin-bottom:20px;max-width:300px}
+.next-level-label{font-size:0.75rem;color:var(--success);margin-bottom:6px}
+.next-level-name{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--text-light)}
+.squad-welcome{background:linear-gradient(135deg,var(--secondary) 0%,var(--gold) 100%);border-radius:12px;padding:16px;margin-bottom:20px;max-width:300px}
+.squad-welcome-title{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--bg-dark);margin-bottom:5px}
+.squad-welcome-text{font-size:0.85rem;color:var(--bg-dark)}
+.continue-timer{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:var(--text-muted);margin-bottom:18px}
+.continue-timer span{color:var(--secondary);font-size:1.4rem}
+.action-buttons{display:flex;flex-direction:column;gap:10px;width:100%;max-width:260px}
+.continue-btn{padding:14px 35px;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:3px;background:linear-gradient(135deg,var(--success) 0%,#00B389 100%);color:var(--bg-dark);border:none;border-radius:50px;cursor:pointer}
+.retry-btn{padding:14px 35px;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:3px;background:linear-gradient(135deg,var(--secondary) 0%,var(--ball-dark) 100%);color:var(--text-light);border:none;border-radius:50px;cursor:pointer}
+.home-btn{padding:12px 35px;font-family:'Nunito',sans-serif;font-size:0.9rem;font-weight:700;background:transparent;color:var(--text-muted);border:2px solid rgba(255,255,255,0.15);border-radius:50px;cursor:pointer}
+
+@media(max-width:380px){.main-logo{font-size:2.2rem}.seq-item{width:42px;height:52px;font-size:1.6rem}.input-btn{height:55px;font-size:1.5rem}}
+</style>
+</head>
+<body data-lang="en">
+<div class="court-bg"></div>
+<div class="top-controls">
+<a class="back-link" onclick="goHome();return false;"><span class="lang-en">← Menu</span><span class="lang-es">← Menú</span></a>
+<div class="lang-toggle">
+<button class="lang-btn active" onclick="setLang('en')">EN</button>
+<button class="lang-btn" onclick="setLang('es')">ES</button>
+</div>
+</div>
+
+<!-- WELCOME SCREEN -->
+<div class="screen active" id="welcomeScreen">
+<div class="main-logo">THE PLAYBOOK</div>
+<div class="main-subtitle"><span class="lang-en">CALL THE PLAY</span><span class="lang-es">LLAMA LA JUGADA</span></div>
+<div class="main-icon">📋</div>
+<div class="mastery-badge"><span class="lang-en">🎯 100% ACCURACY TO ADVANCE</span><span class="lang-es">🎯 100% PARA AVANZAR</span></div>
+
+<div class="game-description">
+<p><span class="lang-en"><strong>Watch the sequence.</strong> Remember it. <strong>Call it back.</strong></span><span class="lang-es"><strong>Mira la secuencia.</strong> Recuérdala. <strong>Repítela.</strong></span></p>
+<p><span class="lang-en">Forward. Backward. Alternating. Master them all.</span><span class="lang-es">Adelante. Reversa. Alternando. Domínalos todos.</span></p>
+</div>
+
+<div class="mode-section">
+<div class="section-label"><span class="lang-en">SELECT MODE</span><span class="lang-es">SELECCIONA MODO</span></div>
+<div class="mode-grid" id="modeGrid"></div>
+</div>
+
+<div class="tier-section">
+<div class="section-label"><span class="lang-en">SELECT LEVEL</span><span class="lang-es">SELECCIONA NIVEL</span></div>
+<div class="tier-grid" id="tierGrid"></div>
+</div>
+
+<button class="start-btn" onclick="startGame()"><span class="lang-en">START TRAINING</span><span class="lang-es">COMENZAR</span></button>
+
+<div class="stats-summary">
+<div class="stat-item"><div class="stat-value" id="currentLevel">1</div><div class="stat-label"><span class="lang-en">Level</span><span class="lang-es">Nivel</span></div></div>
+<div class="stat-item"><div class="stat-value" id="perfectGames">0</div><div class="stat-label"><span class="lang-en">Perfect</span><span class="lang-es">Perfectos</span></div></div>
+<div class="stat-item"><div class="stat-value" id="bestStreak">0</div><div class="stat-label"><span class="lang-en">Best</span><span class="lang-es">Mejor</span></div></div>
+</div>
+</div>
+
+<!-- COUNTDOWN SCREEN -->
+<div class="screen" id="countdownScreen">
+<div class="countdown-mode" id="countdownMode">FORWARD</div>
+<div class="countdown-tier" id="countdownTier">TRYOUT 1</div>
+<div class="main-icon">📋</div>
+<div class="countdown-number" id="countdownNum">3</div>
+<div class="countdown-text"><span class="lang-en">GET READY</span><span class="lang-es">¡PREPÁRATE!</span></div>
+</div>
+
+<!-- GAME SCREEN -->
+<div class="screen" id="gameScreen">
+<div class="scoreboard">
+<div class="scoreboard-main">
+<div class="scoreboard-mode" id="gameMode">FORWARD</div>
+<div class="scoreboard-tier" id="gameTier">TRYOUT 1</div>
+<div class="scoreboard-score" id="scoreDisplay">0</div>
+</div>
+<div class="half-display">
+<div class="half-indicator active" id="half1"><span class="lang-en">1ST HALF</span><span class="lang-es">1RA MITAD</span></div>
+<div class="half-indicator inactive" id="half2"><span class="lang-en">2ND HALF</span><span class="lang-es">2DA MITAD</span></div>
+</div>
+<div class="accuracy-display">
+<div class="accuracy-label"><span class="lang-en">ACCURACY</span><span class="lang-es">PRECISIÓN</span></div>
+<div class="accuracy-value perfect" id="accuracyDisplay">100%</div>
+</div>
+</div>
+
+<div class="message-area"><div class="game-message" id="gameMessage"></div></div>
+
+<div class="sequence-display" id="sequenceDisplay"></div>
+
+<div class="user-input-display" id="userInputDisplay"></div>
+
+<div class="input-pad" id="inputPad"></div>
+</div>
+
+<!-- HALFTIME SCREEN -->
+<div class="screen" id="halftimeScreen">
+<div class="main-icon">⏸️</div>
+<div class="main-logo"><span class="lang-en">HALFTIME</span><span class="lang-es">MEDIO TIEMPO</span></div>
+<div class="result-stats">
+<div class="result-stat"><div class="result-stat-value" id="htScore">0</div><div class="result-stat-label"><span class="lang-en">Score</span><span class="lang-es">Puntos</span></div></div>
+<div class="result-stat"><div class="result-stat-value" id="htAccuracy">100%</div><div class="result-stat-label"><span class="lang-en">Accuracy</span><span class="lang-es">Precisión</span></div></div>
+</div>
+<p style="color:var(--text-muted);margin-bottom:20px;max-width:280px;font-size:0.95rem">
+<span class="lang-en">Keep 100% in 2nd half to advance!</span>
+<span class="lang-es">¡Mantén 100% en la 2da mitad!</span>
+</p>
+<button class="retry-btn" onclick="continueToSecondHalf()"><span class="lang-en">2ND HALF →</span><span class="lang-es">2DA MITAD →</span></button>
+</div>
+
+<!-- RESULT SCREEN -->
+<div class="screen" id="resultScreen">
+<div class="result-icon" id="resultIcon">🏆</div>
+<div class="result-title" id="resultTitle">PERFECT!</div>
+<div class="result-accuracy" id="resultAccuracy">100%</div>
+<div class="result-message" id="resultMessage"></div>
+<div class="result-stats">
+<div class="result-stat"><div class="result-stat-value" id="finalScore">0</div><div class="result-stat-label"><span class="lang-en">Score</span><span class="lang-es">Puntos</span></div></div>
+<div class="result-stat"><div class="result-stat-value" id="finalCorrect">0/0</div><div class="result-stat-label"><span class="lang-en">Correct</span><span class="lang-es">Correctos</span></div></div>
+</div>
+<div class="squad-welcome" id="squadWelcome" style="display:none">
+<div class="squad-welcome-title">🏀 <span class="lang-en">WELCOME TO THE SQUAD!</span><span class="lang-es">¡BIENVENIDO AL EQUIPO!</span></div>
+<div class="squad-welcome-text"><span class="lang-en">You passed tryouts! You're now a GoTrotter!</span><span class="lang-es">¡Pasaste las pruebas! ¡Eres un GoTrotter!</span></div>
+</div>
+<div class="next-level-preview" id="nextLevelBox" style="display:none">
+<div class="next-level-label"><span class="lang-en">NEXT LEVEL</span><span class="lang-es">SIGUIENTE NIVEL</span></div>
+<div class="next-level-name" id="nextLevelName">TRYOUT 2</div>
+</div>
+<div class="continue-timer" id="continueTimer"><span class="lang-en">Continuing in <span id="timerCount">5</span>...</span><span class="lang-es">Continuando en <span id="timerCountEs">5</span>...</span></div>
+<div class="action-buttons">
+<button class="continue-btn" id="advanceBtn" onclick="advanceNow()" style="display:none"><span class="lang-en">ADVANCE NOW</span><span class="lang-es">AVANZAR</span></button>
+<button class="retry-btn" id="retryBtn" onclick="retryNow()" style="display:none"><span class="lang-en">RETRY NOW</span><span class="lang-es">REINTENTAR</span></button>
+<button class="home-btn" onclick="goHome()"><span class="lang-en">← Menu</span><span class="lang-es">← Menú</span></button>
+</div>
+</div>
+
+<script>
+// Language
+var currentLang = localStorage.getItem('gt-lang') || 'en';
+function setLang(l) {
+    currentLang = l;
+    localStorage.setItem('gt-lang', l);
+    document.body.setAttribute('data-lang', l);
+    document.querySelectorAll('.lang-btn').forEach(function(b) {
+        b.classList.toggle('active', b.textContent.trim() === l.toUpperCase());
+    });
+}
+document.body.setAttribute('data-lang', currentLang);
+
+// Audio
+var audioCtx = null;
+function playBeep(freq, dur) {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    var osc = audioCtx.createOscillator();
+    var gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + dur);
+    osc.start();
+    osc.stop(audioCtx.currentTime + dur);
+}
+
+// GAME MODES
+var modes = {
+    forward: {name: 'FORWARD', nameEs: 'ADELANTE', icon: '➡️', desc: 'Repeat sequence as shown', descEs: 'Repite la secuencia'},
+    backward: {name: 'BACKWARD', nameEs: 'REVERSA', icon: '⬅️', desc: 'Repeat sequence in reverse', descEs: 'Repite en reversa'},
+    alternating: {name: 'ALTERNATING', nameEs: 'ALTERNANDO', icon: '🔀', desc: 'Numbers and letters: 1-A-2-B', descEs: 'Números y letras: 1-A-2-B'}
+};
+var modeList = ['forward', 'backward', 'alternating'];
+
+// 10 TIER SYSTEM
+var tiers = {
+    tryout1: {name: 'TRYOUT 1', icon: '📋', seqLen: 2, plays: 2, isTryout: true},
+    tryout2: {name: 'TRYOUT 2', icon: '📝', seqLen: 3, plays: 2, isTryout: true},
+    rookie: {name: 'ROOKIE', icon: '🌟', seqLen: 4, plays: 3, isTryout: false},
+    jv: {name: 'JV', icon: '🏀', seqLen: 5, plays: 3, isTryout: false},
+    varsity: {name: 'VARSITY', icon: '🎽', seqLen: 6, plays: 3, isTryout: false},
+    college: {name: 'COLLEGE', icon: '🎓', seqLen: 7, plays: 4, isTryout: false},
+    pro: {name: 'PRO', icon: '💰', seqLen: 8, plays: 4, isTryout: false},
+    allstar: {name: 'ALL-STAR', icon: '⭐', seqLen: 9, plays: 4, isTryout: false},
+    legend: {name: 'LEGEND', icon: '🏆', seqLen: 10, plays: 5, isTryout: false},
+    master: {name: 'MASTER', icon: '🔥', seqLen: 12, plays: 5, isTryout: false}
+};
+var tierList = ['tryout1', 'tryout2', 'rookie', 'jv', 'varsity', 'college', 'pro', 'allstar', 'legend', 'master'];
+
+// Progress storage per mode
+function getProgress(mode) {
+    try { 
+        var all = JSON.parse(localStorage.getItem('playbook-mastery')) || {};
+        return all[mode] || {unlockedLevel: 0, perfect: {}, best: 0};
+    } catch (e) { return {unlockedLevel: 0, perfect: {}, best: 0}; }
+}
+function saveProgress(mode, p) {
+    var all = JSON.parse(localStorage.getItem('playbook-mastery')) || {};
+    all[mode] = p;
+    localStorage.setItem('playbook-mastery', JSON.stringify(all));
+}
+function getModeUnlocked() {
+    try {
+        return JSON.parse(localStorage.getItem('playbook-modes')) || {forward: true, backward: false, alternating: false};
+    } catch (e) { return {forward: true, backward: false, alternating: false}; }
+}
+function saveModeUnlocked(m) {
+    localStorage.setItem('playbook-modes', JSON.stringify(m));
+}
+
+// State
+var selMode = 'forward', selTier = 'tryout1';
+var currentHalf = 1, play = 1, score = 0;
+var sequence = [], userInput = [], expectedAnswer = [];
+var correct = 0, attempts = 0;
+var autoTimer = null, showing = false;
+
+function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
+    document.getElementById(id).classList.add('active');
+}
+
+// Render modes
+function renderModes() {
+    var grid = document.getElementById('modeGrid');
+    grid.innerHTML = '';
+    var unlocked = getModeUnlocked();
+    
+    modeList.forEach(function(id) {
+        var m = modes[id];
+        var isUnlocked = unlocked[id];
+        
+        var btn = document.createElement('div');
+        var classes = 'mode-btn';
+        if (id === selMode) classes += ' selected';
+        if (!isUnlocked) classes += ' locked';
+        btn.className = classes;
+        
+        if (isUnlocked) {
+            btn.onclick = function() {
+                selMode = id;
+                renderModes();
+                renderTiers();
+            };
+        }
+        
+        var statusHtml = isUnlocked ? 
+            '<span class="mode-status unlocked">✓</span>' : 
+            '<span class="mode-status locked">🔒</span>';
+        
+        var name = currentLang === 'es' ? m.nameEs : m.name;
+        var desc = currentLang === 'es' ? m.descEs : m.desc;
+        
+        btn.innerHTML = '<span class="mode-icon">' + m.icon + '</span>' +
+            '<div class="mode-info"><div class="mode-name">' + name + '</div>' +
+            '<div class="mode-desc">' + desc + '</div></div>' + statusHtml;
+        
+        grid.appendChild(btn);
+    });
+}
+
+// Render tiers
+function renderTiers() {
+    var grid = document.getElementById('tierGrid');
+    grid.innerHTML = '';
+    var prog = getProgress(selMode);
+    var unlockedIdx = prog.unlockedLevel || 0;
+    
+    tierList.forEach(function(id, idx) {
+        var t = tiers[id];
+        var unlocked = idx <= unlockedIdx;
+        var mastered = idx < unlockedIdx;
+        
+        var btn = document.createElement('div');
+        var classes = 'tier-btn';
+        if (id === selTier) classes += ' selected';
+        if (!unlocked) classes += ' locked';
+        if (mastered) classes += ' mastered';
+        if (t.isTryout && unlocked && !mastered) classes += ' tryout';
+        btn.className = classes;
+        
+        if (unlocked) {
+            btn.onclick = function() {
+                selTier = id;
+                renderTiers();
+            };
+        }
+        
+        var statusHtml = '';
+        if (mastered) {
+            statusHtml = '<span class="tier-status mastered">✓</span>';
+        } else if (!unlocked) {
+            statusHtml = '<span class="tier-status locked">🔒</span>';
+        } else if (t.isTryout) {
+            statusHtml = '<span class="tier-status tryout">' + (currentLang === 'es' ? 'PRUEBA' : 'TRYOUT') + '</span>';
+        } else if (idx === unlockedIdx) {
+            statusHtml = '<span class="tier-status current">' + (currentLang === 'es' ? 'ACTUAL' : 'CURRENT') + '</span>';
+        }
+        
+        btn.innerHTML = '<span class="tier-icon">' + t.icon + '</span>' +
+            '<div class="tier-info"><div class="tier-name">' + t.name + '</div>' +
+            '<div class="tier-desc">' + t.seqLen + ' ' + (currentLang === 'es' ? 'dígitos' : 'digits') + '</div></div>' + statusHtml;
+        
+        grid.appendChild(btn);
+    });
+    
+    // Update stats
+    var totalPerfect = 0;
+    for (var k in prog.perfect) totalPerfect += prog.perfect[k];
+    document.getElementById('currentLevel').textContent = unlockedIdx + 1;
+    document.getElementById('perfectGames').textContent = totalPerfect;
+    document.getElementById('bestStreak').textContent = prog.best || 0;
+    
+    // Auto-select current level
+    selTier = tierList[Math.min(unlockedIdx, tierList.length - 1)];
+}
+
+function startGame() {
+    currentHalf = 1; play = 1; score = 0; correct = 0; attempts = 0;
+    
+    var modeName = currentLang === 'es' ? modes[selMode].nameEs : modes[selMode].name;
+    document.getElementById('countdownMode').textContent = modeName;
+    document.getElementById('countdownTier').textContent = tiers[selTier].name;
+    document.getElementById('gameMode').textContent = modeName;
+    document.getElementById('gameTier').textContent = tiers[selTier].name;
+    
+    updateHalfDisplay();
+    buildInputPad();
+    showScreen('countdownScreen');
+    countdown(3);
+}
+
+function countdown(n) {
+    document.getElementById('countdownNum').textContent = n;
+    if (n > 0) {
+        playBeep(440, 0.1);
+        setTimeout(function() { countdown(n - 1); }, 1000);
+    } else {
+        playBeep(880, 0.3);
+        showScreen('gameScreen');
+        startPlay();
+    }
+}
+
+function updateHalfDisplay() {
+    var h1 = document.getElementById('half1');
+    var h2 = document.getElementById('half2');
+    if (currentHalf === 1) {
+        h1.className = 'half-indicator active';
+        h2.className = 'half-indicator inactive';
+    } else {
+        h1.className = 'half-indicator completed';
+        h2.className = 'half-indicator active';
+    }
+}
+
+function updateAccuracy() {
+    var pct = attempts === 0 ? 100 : Math.round((correct / attempts) * 100);
+    var el = document.getElementById('accuracyDisplay');
+    el.textContent = pct + '%';
+    el.className = 'accuracy-value ' + (pct === 100 ? 'perfect' : (pct >= 80 ? 'good' : 'miss'));
+}
+
+function updateScore() { document.getElementById('scoreDisplay').textContent = score; }
+
+function setMsg(txt, type) {
+    var el = document.getElementById('gameMessage');
+    el.textContent = txt;
+    el.className = 'game-message' + (type ? ' ' + type : '');
+}
+
+// Build input pad based on mode
+function buildInputPad() {
+    var pad = document.getElementById('inputPad');
+    pad.innerHTML = '';
+    
+    if (selMode === 'alternating') {
+        // 1-5 on top, A-E below, then 6-9,0 and clear
+        var items = ['1','2','3','4','5','A','B','C','D','E','6','7','8','9','0','⌫'];
+        pad.style.gridTemplateColumns = 'repeat(5, 1fr)';
+        items.forEach(function(v) {
+            var btn = document.createElement('button');
+            btn.className = 'input-btn' + (v.match(/[A-E]/) ? ' letter' : '') + (v === '⌫' ? ' clear' : '');
+            btn.textContent = v;
+            btn.onclick = function() { handleInput(v); };
+            pad.appendChild(btn);
+        });
+    } else {
+        // Standard 1-9, clear, 0, submit
+        pad.style.gridTemplateColumns = 'repeat(3, 1fr)';
+        var items = ['1','2','3','4','5','6','7','8','9','⌫','0','✓'];
+        items.forEach(function(v) {
+            var btn = document.createElement('button');
+            btn.className = 'input-btn' + (v === '⌫' || v === '✓' ? ' clear' : '');
+            btn.textContent = v;
+            btn.onclick = function() { handleInput(v); };
+            pad.appendChild(btn);
+        });
+    }
+}
+
+// Generate sequence
+function generateSequence() {
+    var t = tiers[selTier];
+    var len = t.seqLen;
+    sequence = [];
+    
+    if (selMode === 'alternating') {
+        // Generate pairs: 1-A-2-B-3-C etc
+        var nums = [];
+        var letters = ['A','B','C','D','E'];
+        for (var i = 1; i <= 5; i++) nums.push(String(i));
+        
+        var pairCount = Math.ceil(len / 2);
+        for (var i = 0; i < pairCount && sequence.length < len; i++) {
+            sequence.push(nums[i % nums.length]);
+            if (sequence.length < len) {
+                sequence.push(letters[i % letters.length]);
+            }
+        }
+    } else {
+        // Random digits 0-9
+        var used = [];
+        while (sequence.length < len) {
+            var d = String(Math.floor(Math.random() * 10));
+            if (used.indexOf(d) === -1 || sequence.length > 7) {
+                sequence.push(d);
+                used.push(d);
+            }
+        }
+    }
+    
+    // Determine expected answer
+    if (selMode === 'backward') {
+        expectedAnswer = sequence.slice().reverse();
+    } else {
+        expectedAnswer = sequence.slice();
+    }
+}
+
+// Display sequence
+function renderSequenceDisplay(showAll) {
+    var disp = document.getElementById('sequenceDisplay');
+    disp.innerHTML = '';
+    
+    sequence.forEach(function(v) {
+        var item = document.createElement('div');
+        item.className = 'seq-item' + (v.match(/[A-E]/) ? ' letter' : '');
+        item.textContent = showAll ? v : '?';
+        item.setAttribute('data-val', v);
+        disp.appendChild(item);
+    });
+}
+
+// Show sequence animation
+function showSequence() {
+    showing = true;
+    renderSequenceDisplay(false);
+    setMsg(currentLang === 'es' ? '¡Mira la secuencia!' : 'Watch the sequence!', 'watch');
+    
+    var items = document.querySelectorAll('#sequenceDisplay .seq-item');
+    var i = 0;
+    var interval = 800;
+    
+    function showNext() {
+        if (i > 0) {
+            items[i-1].classList.remove('lit');
+            items[i-1].textContent = '?';
+        }
+        if (i >= sequence.length) {
+            showing = false;
+            // Show instruction based on mode
+            if (selMode === 'backward') {
+                setMsg(currentLang === 'es' ? '¡REVERSA!' : 'REVERSE!');
+            } else if (selMode === 'alternating') {
+                setMsg(currentLang === 'es' ? '¡ALTERNA!' : 'ALTERNATE!');
+            } else {
+                setMsg(currentLang === 'es' ? '¡Te toca!' : 'Your turn!');
+            }
+            return;
+        }
+        
+        items[i].classList.add('lit');
+        items[i].textContent = sequence[i];
+        playBeep(300 + (i * 50), 0.15);
+        i++;
+        setTimeout(showNext, interval);
+    }
+    
+    setTimeout(showNext, 500);
+}
+
+// Render user input
+function renderUserInput() {
+    var disp = document.getElementById('userInputDisplay');
+    disp.innerHTML = '';
+    
+    userInput.forEach(function(v) {
+        var item = document.createElement('div');
+        item.className = 'user-input-item' + (v.match(/[A-E]/) ? ' letter' : '');
+        item.textContent = v;
+        disp.appendChild(item);
+    });
+}
+
+// Handle input
+function handleInput(v) {
+    if (showing) return;
+    
+    if (v === '⌫') {
+        userInput.pop();
+        renderUserInput();
+        playBeep(200, 0.1);
+        return;
+    }
+    
+    if (v === '✓') {
+        submitAnswer();
+        return;
+    }
+    
+    if (userInput.length < expectedAnswer.length) {
+        userInput.push(v);
+        renderUserInput();
+        playBeep(400, 0.1);
+        
+        // Auto-submit when length matches
+        if (userInput.length === expectedAnswer.length) {
+            setTimeout(submitAnswer, 300);
+        }
+    }
+}
+
+// Submit answer
+function submitAnswer() {
+    if (userInput.length !== expectedAnswer.length) return;
+    
+    attempts++;
+    var isCorrect = userInput.join('') === expectedAnswer.join('');
+    
+    if (isCorrect) {
+        correct++;
+        var pts = expectedAnswer.length * 25;
+        score += pts;
+        updateScore();
+        updateAccuracy();
+        setMsg((currentLang === 'es' ? '¡Perfecto! +' : 'Perfect! +') + pts, 'success');
+        playBeep(523.25, 0.2);
+        
+        // Flash correct
+        document.querySelectorAll('#inputPad .input-btn').forEach(function(b) {
+            if (userInput.indexOf(b.textContent) !== -1) b.classList.add('correct');
+        });
+    } else {
+        updateAccuracy();
+        setMsg(currentLang === 'es' ? '¡Otra vez!' : 'Try again!', 'error');
+        playBeep(150, 0.25);
+        
+        // Show correct answer briefly
+        renderSequenceDisplay(true);
+    }
+    
+    setTimeout(function() {
+        document.querySelectorAll('#inputPad .input-btn').forEach(function(b) {
+            b.classList.remove('correct', 'wrong');
+        });
+        nextPlay();
+    }, 1200);
+}
+
+function startPlay() {
+    userInput = [];
+    renderUserInput();
+    generateSequence();
+    showSequence();
+}
+
+function nextPlay() {
+    play++;
+    var t = tiers[selTier];
+    if (play > t.plays) {
+        if (currentHalf === 1) { showHalftime(); }
+        else { endGame(); }
+        return;
+    }
+    setTimeout(startPlay, 600);
+}
+
+function showHalftime() {
+    document.getElementById('htScore').textContent = score;
+    var pct = attempts === 0 ? 100 : Math.round((correct / attempts) * 100);
+    document.getElementById('htAccuracy').textContent = pct + '%';
+    showScreen('halftimeScreen');
+}
+
+function continueToSecondHalf() {
+    currentHalf = 2;
+    play = 1;
+    updateHalfDisplay();
+    showScreen('gameScreen');
+    setMsg(currentLang === 'es' ? '¡Segunda mitad!' : '2nd Half!');
+    setTimeout(startPlay, 800);
+}
+
+function endGame() {
+    var pct = attempts === 0 ? 100 : Math.round((correct / attempts) * 100);
+    var isPerfect = pct === 100;
+    
+    var prog = getProgress(selMode);
+    if (score > prog.best) prog.best = score;
+    
+    var currentIdx = tierList.indexOf(selTier);
+    var canAdvance = isPerfect && currentIdx < tierList.length - 1;
+    var joiningSquad = isPerfect && selTier === 'tryout2';
+    
+    if (isPerfect) {
+        prog.perfect[selTier] = (prog.perfect[selTier] || 0) + 1;
+        if (currentIdx >= prog.unlockedLevel && currentIdx < tierList.length - 1) {
+            prog.unlockedLevel = currentIdx + 1;
+        }
+        
+        // Check if completed all tiers in this mode - unlock next mode
+        if (currentIdx === tierList.length - 1) {
+            var modeIdx = modeList.indexOf(selMode);
+            if (modeIdx < modeList.length - 1) {
+                var modesUnlocked = getModeUnlocked();
+                modesUnlocked[modeList[modeIdx + 1]] = true;
+                saveModeUnlocked(modesUnlocked);
+            }
+        }
+    }
+    saveProgress(selMode, prog);
+    
+    // Update result screen
+    document.getElementById('resultIcon').textContent = isPerfect ? '🏆' : '📋';
+    document.getElementById('resultTitle').textContent = isPerfect ? 
+        (currentLang === 'es' ? '¡PERFECTO!' : 'PERFECT!') : 
+        (currentLang === 'es' ? 'SIGUE ENTRENANDO' : 'KEEP TRAINING');
+    document.getElementById('resultTitle').className = 'result-title ' + (isPerfect ? 'success' : 'retry');
+    
+    document.getElementById('resultAccuracy').textContent = pct + '%';
+    document.getElementById('resultAccuracy').className = 'result-accuracy ' + (isPerfect ? 'perfect' : 'miss');
+    
+    var msgEN = isPerfect ? 'Playbook mastered at this level!' : 'You need 100% to advance. You got this!';
+    var msgES = isPerfect ? '¡Dominaste este nivel!' : 'Necesitas 100% para avanzar. ¡Tú puedes!';
+    document.getElementById('resultMessage').innerHTML = '<span class="lang-en">' + msgEN + '</span><span class="lang-es">' + msgES + '</span>';
+    
+    document.getElementById('finalScore').textContent = score;
+    document.getElementById('finalCorrect').textContent = correct + '/' + attempts;
+    
+    document.getElementById('squadWelcome').style.display = joiningSquad ? 'block' : 'none';
+    
+    if (canAdvance) {
+        var nextTier = tierList[currentIdx + 1];
+        document.getElementById('nextLevelName').textContent = tiers[nextTier].icon + ' ' + tiers[nextTier].name;
+        document.getElementById('nextLevelBox').style.display = 'block';
+        document.getElementById('advanceBtn').style.display = 'block';
+        document.getElementById('retryBtn').style.display = 'none';
+    } else {
+        document.getElementById('nextLevelBox').style.display = 'none';
+        document.getElementById('advanceBtn').style.display = 'none';
+        document.getElementById('retryBtn').style.display = 'block';
+    }
+    
+    showScreen('resultScreen');
+    startAutoTimer(isPerfect, canAdvance);
+}
+
+function startAutoTimer(isPerfect, canAdvance) {
+    var count = 5;
+    document.getElementById('timerCount').textContent = count;
+    document.getElementById('timerCountEs').textContent = count;
+    document.getElementById('continueTimer').style.display = 'block';
+    
+    autoTimer = setInterval(function() {
+        count--;
+        document.getElementById('timerCount').textContent = count;
+        document.getElementById('timerCountEs').textContent = count;
+        if (count <= 0) {
+            clearInterval(autoTimer);
+            if (isPerfect && canAdvance) advanceNow();
+            else retryNow();
+        }
+    }, 1000);
+}
+
+function advanceNow() {
+    if (autoTimer) clearInterval(autoTimer);
+    var currentIdx = tierList.indexOf(selTier);
+    if (currentIdx < tierList.length - 1) selTier = tierList[currentIdx + 1];
+    startGame();
+}
+
+function retryNow() {
+    if (autoTimer) clearInterval(autoTimer);
+    startGame();
+}
+
+function goHome() {
+    if (autoTimer) clearInterval(autoTimer);
+    renderModes();
+    renderTiers();
+    showScreen('welcomeScreen');
+}
+
+// Init
+document.querySelectorAll('.lang-btn').forEach(function(b) {
+    b.classList.toggle('active', b.textContent.trim() === currentLang.toUpperCase());
+});
+renderModes();
+renderTiers();
+
+// Auth check
+if (window.location.hostname === 'gostar.digital' && !sessionStorage.getItem('gostar-user-pin')) {
+    window.location.replace('https://gostar.digital/play.html');
+}
+</script>
+</body>
+</html>
