@@ -1,951 +1,632 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Play - GoTrotters</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>GoTrotters - Let's Go!</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--orange:#FF6B00;--orange-dark:#CC5500;--teal:#00D9A5;--gold:#FFD700;--blue:#3B82F6;--dark:#0a0a0f;--darker:#050508;--card:#111118;--text:#FFFFFF;--muted:#8892a0;--success:#00D9A5;--danger:#FF4757}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Outfit',sans-serif;background:var(--dark);color:var(--text)}
+body.es .lang-en{display:none !important}
+body.en .lang-es{display:none !important}
 
-        :root {
-            --bg-primary: #0D0D0D;
-            --bg-secondary: #1A1A1A;
-            --bg-card: #242424;
-            --text-primary: #FFFFFF;
-            --text-secondary: #B3B3B3;
-            --text-muted: #808080;
-            --accent-gold: #FFD93D;
-            --accent-teal: #00D9A5;
-            --accent-coral: #FF6B6B;
-            --accent-green: #22C55E;
-            --gradient-gold: linear-gradient(135deg, #FFD93D 0%, #FF9F1C 100%);
-            --gradient-teal: linear-gradient(135deg, #00D9A5 0%, #00B386 100%);
-        }
+/* LANDING SCREEN */
+.landing{position:fixed;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;background:radial-gradient(ellipse at center top,rgba(255,107,0,0.15) 0%,transparent 50%),radial-gradient(ellipse at 80% 80%,rgba(0,217,165,0.1) 0%,transparent 40%),var(--dark);z-index:1;transition:opacity 0.4s,transform 0.4s}
+.landing.hidden{opacity:0;transform:scale(0.95);pointer-events:none}
 
-        html, body { height: 100%; }
+.lang-toggle{position:absolute;top:20px;right:20px;display:flex;gap:5px}
+.lang-btn{padding:8px 14px;border:2px solid var(--orange);background:transparent;color:var(--orange);border-radius:20px;font-family:'Outfit',sans-serif;font-weight:700;font-size:0.8rem;cursor:pointer;transition:all 0.3s}
+.lang-btn.active{background:var(--orange);color:var(--dark)}
 
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
+.logo-section{margin-bottom:30px}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:clamp(3.5rem,12vw,5rem);letter-spacing:4px;line-height:1}
+.logo .go{color:var(--orange)}
+.logo .trotters{color:var(--teal)}
+.tagline{font-family:'Bebas Neue',sans-serif;font-size:clamp(1rem,3vw,1.3rem);letter-spacing:3px;color:var(--gold);margin-top:5px}
 
-        body[data-lang="es"] .lang-en { display: none !important; }
-        body[data-lang="en"] .lang-es { display: none !important; }
-        body[data-lang="es"] .lang-es { display: inline !important; }
-        body[data-lang="en"] .lang-en { display: inline !important; }
+.hero-icon{font-size:4rem;margin-bottom:20px;animation:bounce 2s infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
 
-        .lang-toggle {
-            display: flex;
-            gap: 4px;
-            background: var(--bg-card);
-            padding: 4px;
-            border-radius: 30px;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
+.hero-text{max-width:320px;margin-bottom:40px}
+.hero-text p{font-size:1.1rem;color:var(--muted);line-height:1.6}
+.hero-text strong{color:var(--text)}
 
-        .lang-btn {
-            padding: 8px 16px;
-            border: none;
-            background: transparent;
-            color: var(--text-secondary);
-            border-radius: 25px;
-            font-family: 'Inter', sans-serif;
-            font-weight: 600;
-            font-size: 13px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
+.go-btn{padding:22px 60px;font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:5px;background:linear-gradient(135deg,var(--orange) 0%,var(--orange-dark) 100%);color:var(--text);border:none;border-radius:60px;cursor:pointer;box-shadow:0 10px 40px rgba(255,107,0,0.5);transition:all 0.3s;display:flex;align-items:center;gap:12px}
+.go-btn:hover{transform:translateY(-4px) scale(1.02);box-shadow:0 15px 50px rgba(255,107,0,0.6)}
+.go-btn:active{transform:translateY(0) scale(0.98)}
+.go-btn-icon{font-size:1.5rem}
 
-        .lang-btn:hover { color: var(--text-primary); }
-        .lang-btn.active { background: var(--accent-gold); color: var(--bg-primary); }
+.footer-text{position:absolute;bottom:25px;font-size:0.75rem;color:var(--muted)}
+.footer-text a{color:var(--teal);text-decoration:none}
 
-        .header-nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 100;
-            background: rgba(13,13,13,0.9);
-            backdrop-filter: blur(10px);
-        }
+/* CHAT SCREEN */
+.chat-screen{position:fixed;top:0;left:0;right:0;bottom:0;background:var(--dark);display:flex;flex-direction:column;z-index:10;opacity:0;transform:translateY(100%);transition:opacity 0.4s,transform 0.4s;pointer-events:none}
+.chat-screen.active{opacity:1;transform:translateY(0);pointer-events:auto}
 
-        .header-logo {
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-        }
+.chat-header{padding:15px 20px;background:linear-gradient(135deg,rgba(255,107,0,0.1),rgba(0,217,165,0.05));border-bottom:2px solid rgba(255,107,0,0.3);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.chat-header-left{display:flex;align-items:center;gap:12px}
+.chat-avatar{width:45px;height:45px;background:linear-gradient(135deg,var(--orange),var(--teal));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px}
+.chat-title{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:2px}
+.chat-title .go{color:var(--orange)}
+.chat-title .tr{color:var(--teal)}
+.chat-status{display:flex;align-items:center;gap:6px;font-size:0.7rem;color:var(--teal)}
+.chat-dot{width:8px;height:8px;background:var(--teal);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+.chat-header-right{display:flex;align-items:center;gap:10px}
+.chat-lang-btn{padding:6px 12px;border:2px solid var(--orange);background:transparent;color:var(--orange);border-radius:15px;font-weight:700;font-size:0.7rem;cursor:pointer}
+.chat-lang-btn.active{background:var(--orange);color:var(--dark)}
+.chat-close{width:36px;height:36px;background:rgba(255,255,255,0.1);border:none;border-radius:50%;color:var(--muted);font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
 
-        .header-logo img {
-            height: 40px;
-            width: auto;
-        }
+.chat-body{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:15px}
 
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+.chat-msg{display:flex;gap:10px;max-width:90%;animation:msgIn 0.3s ease}
+@keyframes msgIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.chat-msg.bot{align-self:flex-start}
+.chat-msg.user{align-self:flex-end;flex-direction:row-reverse}
+.chat-msg-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.chat-msg.bot .chat-msg-avatar{background:linear-gradient(135deg,var(--orange),var(--teal))}
+.chat-msg.user .chat-msg-avatar{background:var(--blue)}
+.chat-msg-bubble{background:var(--card);border:1px solid rgba(255,255,255,0.1);border-radius:18px;padding:14px 18px;font-size:0.95rem;line-height:1.6}
+.chat-msg.user .chat-msg-bubble{background:linear-gradient(135deg,var(--blue),#2563EB);border:none}
+.chat-msg-bubble strong{color:var(--orange)}
+.chat-msg-bubble .highlight{color:var(--teal)}
 
-        .header-btn {
-            padding: 10px 20px;
-            background: var(--bg-card);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 25px;
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 13px;
-            transition: all 0.2s ease;
-        }
+.chat-options{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+.chat-option{padding:12px 20px;background:rgba(0,217,165,0.1);border:2px solid rgba(0,217,165,0.4);color:var(--teal);border-radius:25px;font-weight:700;font-size:0.85rem;cursor:pointer;transition:all 0.2s}
+.chat-option:hover{background:rgba(0,217,165,0.2);transform:scale(1.02)}
+.chat-option:active{transform:scale(0.98)}
+.chat-option.primary{background:linear-gradient(135deg,var(--orange),var(--orange-dark));border:none;color:var(--text)}
 
-        .header-btn:hover {
-            background: var(--accent-teal);
-            color: var(--bg-primary);
-            border-color: var(--accent-teal);
-        }
+.chat-typing{display:flex;gap:5px;padding:10px 0}
+.chat-typing span{width:10px;height:10px;background:var(--muted);border-radius:50%;animation:typing 1.4s infinite}
+.chat-typing span:nth-child(2){animation-delay:0.2s}
+.chat-typing span:nth-child(3){animation-delay:0.4s}
+@keyframes typing{0%,100%{transform:translateY(0);opacity:0.5}50%{transform:translateY(-8px);opacity:1}}
 
-        .login-card {
-            background: var(--bg-card);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 24px;
-            padding: 48px 40px;
-            width: 100%;
-            max-width: 420px;
-            text-align: center;
-        }
+.chat-input-area{padding:15px 20px;border-top:1px solid rgba(255,255,255,0.1);background:var(--darker);flex-shrink:0;display:none}
+.chat-input-area.visible{display:block}
+.chat-input-row{display:flex;gap:10px;align-items:center;background:var(--card);border:2px solid rgba(255,255,255,0.1);border-radius:50px;padding:6px 6px 6px 20px}
+.chat-input-row:focus-within{border-color:var(--orange)}
+.chat-input{flex:1;background:none;border:none;color:var(--text);font-size:1rem;outline:none;font-family:'Outfit',sans-serif}
+.chat-input::placeholder{color:var(--muted)}
+.chat-send{width:44px;height:44px;background:linear-gradient(135deg,var(--orange),var(--teal));border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.chat-send svg{width:20px;height:20px;fill:var(--text)}
 
-        .screen { display: block; }
-        .screen.hidden { display: none; }
+/* PIN Input Special */
+.pin-input-container{display:flex;gap:12px;justify-content:center;margin-top:15px}
+.pin-digit{width:50px;height:60px;background:var(--card);border:3px solid rgba(255,255,255,0.2);border-radius:12px;font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--text);text-align:center;outline:none;transition:all 0.2s}
+.pin-digit:focus{border-color:var(--orange);box-shadow:0 0 20px rgba(255,107,0,0.3)}
+.pin-digit.filled{border-color:var(--teal);background:rgba(0,217,165,0.1)}
 
-        .login-logo {
-            font-size: 64px;
-            margin-bottom: 16px;
-            filter: drop-shadow(0 0 30px rgba(255, 217, 61, 0.4));
-        }
+.pin-submit{margin-top:20px;padding:14px 40px;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;background:linear-gradient(135deg,var(--orange),var(--orange-dark));color:var(--text);border:none;border-radius:30px;cursor:pointer;opacity:0.5;pointer-events:none;transition:all 0.3s}
+.pin-submit.ready{opacity:1;pointer-events:auto}
+.pin-submit.ready:hover{transform:scale(1.05)}
 
-        .login-logo-img {
-            width: 80px;
-            height: auto;
-            margin-bottom: 16px;
-            filter: drop-shadow(0 0 30px rgba(255, 217, 61, 0.4));
-        }
+/* Trial Badge */
+.trial-badge{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.3);border-radius:20px;font-size:0.8rem;color:var(--gold);margin-top:10px}
 
-        .login-title {
-            font-size: 32px;
-            font-weight: 900;
-            margin-bottom: 8px;
-        }
+/* Success Animation */
+.success-burst{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);font-size:6rem;z-index:100;animation:burst 0.8s ease-out forwards;pointer-events:none}
+@keyframes burst{0%{opacity:1;transform:translate(-50%,-50%) scale(0.5)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.2)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.5)}}
 
-        .login-title span {
-            background: var(--gradient-gold);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .login-badge {
-            display: inline-block;
-            background: var(--gradient-gold);
-            color: var(--bg-primary);
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 24px;
-        }
-
-        .login-subtitle {
-            color: var(--text-secondary);
-            font-size: 15px;
-            line-height: 1.6;
-            margin-bottom: 32px;
-        }
-
-        .option-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-
-        .option-btn {
-            padding: 20px 24px;
-            border-radius: 16px;
-            border: 2px solid rgba(255,255,255,0.1);
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            font-family: 'Inter', sans-serif;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-align: left;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .option-btn:hover {
-            border-color: var(--accent-gold);
-            transform: translateY(-2px);
-        }
-
-        .option-btn .icon { font-size: 28px; }
-        .option-btn .text { flex: 1; }
-        .option-btn .arrow { color: var(--text-muted); font-size: 20px; }
-
-        .pin-input-group {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: 24px;
-        }
-
-        .pin-input {
-            width: 60px;
-            height: 72px;
-            background: var(--bg-secondary);
-            border: 2px solid rgba(255,255,255,0.1);
-            border-radius: 16px;
-            font-family: 'Inter', sans-serif;
-            font-size: 32px;
-            font-weight: 700;
-            color: var(--text-primary);
-            text-align: center;
-            transition: all 0.2s ease;
-        }
-
-        .pin-input:focus {
-            outline: none;
-            border-color: var(--accent-gold);
-            box-shadow: 0 0 0 4px rgba(255, 217, 61, 0.2);
-        }
-
-        .pin-input.error {
-            border-color: var(--accent-coral);
-            animation: shake 0.4s ease;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-8px); }
-            75% { transform: translateX(8px); }
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 16px;
-            background: var(--bg-secondary);
-            border: 2px solid rgba(255,255,255,0.1);
-            border-radius: 12px;
-            font-family: 'Inter', sans-serif;
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--text-primary);
-            text-align: center;
-            margin-bottom: 16px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .form-input.name-input {
-            text-transform: none;
-            letter-spacing: normal;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: var(--accent-gold);
-        }
-
-        .login-btn {
-            width: 100%;
-            padding: 16px 32px;
-            background: var(--gradient-gold);
-            border: none;
-            border-radius: 12px;
-            color: var(--bg-primary);
-            font-family: 'Inter', sans-serif;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            margin-bottom: 16px;
-        }
-
-        .login-btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(255, 217, 61, 0.35);
-        }
-
-        .login-btn:disabled { opacity: 0.6; cursor: not-allowed; }
-
-        .login-error {
-            color: var(--accent-coral);
-            font-size: 14px;
-            margin-bottom: 16px;
-            display: none;
-        }
-
-        .login-error.show { display: block; }
-
-        .facility-name {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--accent-teal);
-            margin-bottom: 16px;
-        }
-
-        .welcome-name {
-            font-size: 24px;
-            font-weight: 800;
-            color: var(--accent-gold);
-            margin-bottom: 8px;
-        }
-
-        .pin-display {
-            background: var(--bg-secondary);
-            border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 24px;
-        }
-
-        .pin-display-label {
-            font-size: 14px;
-            color: var(--text-secondary);
-            margin-bottom: 8px;
-        }
-
-        .pin-display-value {
-            font-size: 48px;
-            font-weight: 800;
-            color: var(--accent-gold);
-            letter-spacing: 8px;
-        }
-
-        .copy-pin-btn {
-            margin-top: 16px;
-            padding: 10px 20px;
-            background: var(--bg-card);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 8px;
-            color: var(--text-secondary);
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .copy-pin-btn:hover {
-            background: var(--accent-gold);
-            color: var(--bg-primary);
-            border-color: var(--accent-gold);
-        }
-
-        .copy-pin-btn.copied {
-            background: var(--accent-green);
-            color: white;
-            border-color: var(--accent-green);
-        }
-
-        .pin-warning {
-            background: rgba(255, 217, 61, 0.1);
-            border: 1px solid rgba(255, 217, 61, 0.3);
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 24px;
-            font-size: 14px;
-            color: var(--accent-gold);
-        }
-
-        .back-link {
-            color: var(--text-muted);
-            font-size: 14px;
-            cursor: pointer;
-            margin-top: 16px;
-            display: inline-block;
-        }
-
-        .back-link:hover { color: var(--text-primary); }
-
-        /* Ring Badge for Welcome Screen */
-        .ring-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 20px;
-            border-radius: 30px;
-            font-size: 16px;
-            font-weight: 700;
-            background: rgba(205, 127, 50, 0.15);
-            border: 2px solid rgba(205, 127, 50, 0.3);
-            color: #CD7F32;
-            margin-bottom: 20px;
-        }
-
-        .ring-badge.level-1 { background: rgba(205, 127, 50, 0.15); border-color: rgba(205, 127, 50, 0.3); color: #CD7F32; }
-        .ring-badge.level-2 { background: rgba(255, 107, 107, 0.15); border-color: rgba(255, 107, 107, 0.3); color: #FF6B6B; }
-        .ring-badge.level-3 { background: rgba(0, 217, 165, 0.15); border-color: rgba(0, 217, 165, 0.3); color: #00D9A5; }
-        .ring-badge.level-4 { background: rgba(77, 168, 255, 0.15); border-color: rgba(77, 168, 255, 0.3); color: #4DA8FF; }
-        .ring-badge.level-5 { background: rgba(255, 217, 61, 0.15); border-color: rgba(255, 217, 61, 0.3); color: #FFD93D; }
-        .ring-badge.level-6 { background: rgba(168, 85, 247, 0.15); border-color: rgba(168, 85, 247, 0.3); color: #A855F7; }
-        .ring-badge.level-7 { background: rgba(34, 197, 94, 0.15); border-color: rgba(34, 197, 94, 0.3); color: #22C55E; }
-        .ring-badge.level-8 { background: linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%); border-color: gold; color: gold; }
-
-        @media (max-width: 480px) {
-            .login-card { padding: 36px 24px; }
-            .login-logo { font-size: 56px; }
-            .login-logo-img { width: 64px; }
-            .login-title { font-size: 28px; }
-            .pin-input { width: 52px; height: 64px; font-size: 28px; }
-            .pin-display-value { font-size: 36px; letter-spacing: 6px; }
-        }
-    </style>
+@media(max-width:400px){
+.go-btn{padding:18px 45px;font-size:1.5rem}
+.pin-digit{width:45px;height:55px;font-size:1.8rem}
+}
+</style>
 </head>
-<body data-lang="en">
+<body class="en">
 
-    <header class="header-nav">
-        <a href="https://gotrotters.com" class="header-logo">
-            <img src="TheGoTrotters.png" alt="GoTrotters">
-        </a>
-        <div class="header-right">
-            <a href="facility-login.html" class="header-btn">
-                <span class="lang-en">🏢 Facility</span>
-                <span class="lang-es">🏢 Instalación</span>
-            </a>
-            <div class="lang-toggle">
-                <button class="lang-btn active" onclick="setLang('en')">EN</button>
-                <button class="lang-btn" onclick="setLang('es')">ES</button>
-            </div>
-        </div>
-    </header>
+<!-- LANDING SCREEN -->
+<div class="landing" id="landing">
+<div class="lang-toggle">
+<button class="lang-btn active" data-lang="en">EN</button>
+<button class="lang-btn" data-lang="es">ES</button>
+</div>
 
-    <!-- SCREEN 1: Choose Path -->
-    <div class="login-card screen" id="chooseScreen">
-        <div class="login-logo">🏀</div>
-        <h1 class="login-title">Go<span>Trotters</span></h1>
-        <span class="login-badge">
-            <span class="lang-en">Cognitive eBasketball</span>
-            <span class="lang-es">eBaloncesto Cognitivo</span>
-        </span>
-        
-        <div class="option-buttons">
-            <button class="option-btn" onclick="showScreen('pinLoginScreen')">
-                <span class="icon">🔑</span>
-                <span class="text">
-                    <strong>
-                        <span class="lang-en">I have a PIN</span>
-                        <span class="lang-es">Tengo un PIN</span>
-                    </strong>
-                    <br>
-                    <small style="color: var(--text-muted);">
-                        <span class="lang-en">Returning GoTrotter</span>
-                        <span class="lang-es">GoTrotter que regresa</span>
-                    </small>
-                </span>
-                <span class="arrow">→</span>
-            </button>
-            
-            <button class="option-btn" onclick="showScreen('accessCodeScreen')">
-                <span class="icon">✨</span>
-                <span class="text">
-                    <strong>
-                        <span class="lang-en">I'm new</span>
-                        <span class="lang-es">Soy nuevo</span>
-                    </strong>
-                    <br>
-                    <small style="color: var(--text-muted);">
-                        <span class="lang-en">Register with access code</span>
-                        <span class="lang-es">Registrar con código de acceso</span>
-                    </small>
-                </span>
-                <span class="arrow">→</span>
-            </button>
-        </div>
-    </div>
+<div class="logo-section">
+<div class="logo"><span class="go">GO</span><span class="trotters">TROTTERS</span></div>
+<div class="tagline"><span class="lang-en">MOBILE MEMORY TRAINING</span><span class="lang-es">ENTRENAMIENTO DE MEMORIA MÓVIL</span></div>
+</div>
 
-    <!-- SCREEN 2a: Enter PIN (returning user) -->
-    <div class="login-card screen hidden" id="pinLoginScreen">
-        <div class="login-logo">🔑</div>
-        <h1 class="login-title">Go<span>Trotters</span></h1>
-        <span class="login-badge">
-            <span class="lang-en">Welcome Back!</span>
-            <span class="lang-es">¡Bienvenido!</span>
-        </span>
-        
-        <p class="login-subtitle">
-            <span class="lang-en">Enter your 4-digit PIN</span>
-            <span class="lang-es">Ingresa tu PIN de 4 dígitos</span>
-        </p>
-        
-        <div class="pin-input-group" id="loginPinGroup">
-            <input type="tel" class="pin-input" maxlength="1" inputmode="numeric" pattern="[0-9]*">
-            <input type="tel" class="pin-input" maxlength="1" inputmode="numeric" pattern="[0-9]*">
-            <input type="tel" class="pin-input" maxlength="1" inputmode="numeric" pattern="[0-9]*">
-            <input type="tel" class="pin-input" maxlength="1" inputmode="numeric" pattern="[0-9]*">
-        </div>
-        
-        <button class="login-btn" onclick="loginWithPin()" id="loginPinBtn">
-            <span class="lang-en">🏀 Let's Play!</span>
-            <span class="lang-es">🏀 ¡A Jugar!</span>
-        </button>
-        
-        <p class="login-error" id="pinLoginError">
-            <span class="lang-en">Invalid PIN. Please try again.</span>
-            <span class="lang-es">PIN inválido. Por favor intenta de nuevo.</span>
-        </p>
-        
-        <span class="back-link" onclick="showScreen('chooseScreen')">
-            <span class="lang-en">← Back</span>
-            <span class="lang-es">← Atrás</span>
-        </span>
-    </div>
+<div class="hero-icon">🏀</div>
 
-    <!-- SCREEN 2b: Enter Access Code (new user) -->
-    <div class="login-card screen hidden" id="accessCodeScreen">
-        <div class="login-logo">📋</div>
-        <h1 class="login-title">Go<span>Trotters</span></h1>
-        <span class="login-badge">
-            <span class="lang-en">New GoTrotter</span>
-            <span class="lang-es">Nuevo GoTrotter</span>
-        </span>
-        
-        <p class="login-subtitle">
-            <span class="lang-en">Enter the access code from your facility</span>
-            <span class="lang-es">Ingresa el código de acceso de tu instalación</span>
-        </p>
-        
-        <input type="text" class="form-input" id="accessCodeInput" placeholder="ACC-XXXXXX" maxlength="10">
-        
-        <button class="login-btn" onclick="verifyAccessCode()" id="verifyCodeBtn">
-            <span class="lang-en">Continue</span>
-            <span class="lang-es">Continuar</span>
-        </button>
-        
-        <p class="login-error" id="accessCodeError">
-            <span class="lang-en">Invalid access code</span>
-            <span class="lang-es">Código de acceso inválido</span>
-        </p>
-        
-        <span class="back-link" onclick="showScreen('chooseScreen')">
-            <span class="lang-en">← Back</span>
-            <span class="lang-es">← Atrás</span>
-        </span>
-    </div>
+<div class="hero-text">
+<p><span class="lang-en"><strong>Train your brain anywhere.</strong> Your phone. Your coach. $5/month.</span><span class="lang-es"><strong>Entrena tu cerebro donde sea.</strong> Tu teléfono. Tu entrenador. $5/mes.</span></p>
+</div>
 
-    <!-- SCREEN 3: Enter Name -->
-    <div class="login-card screen hidden" id="nameScreen">
-        <div class="login-logo">👋</div>
-        <h1 class="login-title">Go<span>Trotters</span></h1>
-        <span class="login-badge">
-            <span class="lang-en">Almost There!</span>
-            <span class="lang-es">¡Casi Listo!</span>
-        </span>
-        
-        <p class="facility-name" id="facilityName"></p>
-        
-        <p class="login-subtitle">
-            <span class="lang-en">Enter your name to become a GoTrotter</span>
-            <span class="lang-es">Ingresa tu nombre para ser un GoTrotter</span>
-        </p>
-        
-        <input type="text" class="form-input name-input" id="userName" placeholder="Your name / Tu nombre" maxlength="30">
-        
-        <button class="login-btn" onclick="registerUser()" id="registerBtn">
-            <span class="lang-en">🏀 Join the Team!</span>
-            <span class="lang-es">🏀 ¡Únete al Equipo!</span>
-        </button>
-        
-        <p class="login-error" id="registerError">
-            <span class="lang-en">Please enter your name</span>
-            <span class="lang-es">Por favor ingresa tu nombre</span>
-        </p>
-        
-        <span class="back-link" onclick="showScreen('accessCodeScreen')">
-            <span class="lang-en">← Back</span>
-            <span class="lang-es">← Atrás</span>
-        </span>
-    </div>
+<button class="go-btn" id="goBtn">
+<span class="go-btn-icon">🏀</span>
+<span class="lang-en">LET'S GO</span><span class="lang-es">VAMOS</span>
+</button>
 
-    <!-- SCREEN 4: Show Generated PIN -->
-    <div class="login-card screen hidden" id="pinGeneratedScreen">
-        <div class="login-logo">🎉</div>
-        <h1 class="login-title">Go<span>Trotters</span></h1>
-        <span class="login-badge">
-            <span class="lang-en">You're a GoTrotter!</span>
-            <span class="lang-es">¡Eres un GoTrotter!</span>
-        </span>
-        
-        <p class="welcome-name" id="welcomeName"></p>
-        
-        <div class="ring-badge level-1" id="newRingBadge">
-            🥉 <span class="lang-en">Rookie Ring</span><span class="lang-es">Anillo Novato</span>
-        </div>
-        
-        <div class="pin-display">
-            <div class="pin-display-label">
-                <span class="lang-en">Your Personal PIN</span>
-                <span class="lang-es">Tu PIN Personal</span>
-            </div>
-            <div class="pin-display-value" id="generatedPin">0000</div>
-            <button class="copy-pin-btn" onclick="copyGeneratedPin()">
-                <span class="lang-en">📋 Copy PIN</span>
-                <span class="lang-es">📋 Copiar PIN</span>
-            </button>
-        </div>
-        
-        <div class="pin-warning">
-            <span class="lang-en">⚠️ Remember this PIN! You'll need it to access your training.</span>
-            <span class="lang-es">⚠️ ¡Recuerda este PIN! Lo necesitarás para acceder a tu entrenamiento.</span>
-        </div>
-        
-        <button class="login-btn" onclick="startPlaying()">
-            <span class="lang-en">🏀 Start Training!</span>
-            <span class="lang-es">🏀 ¡Empezar Entrenamiento!</span>
-        </button>
-    </div>
+<div class="footer-text">
+<span class="lang-en">Powered by</span><span class="lang-es">Impulsado por</span> <a href="https://gostar.digital">GoStar Digital</a> 🌴
+</div>
+</div>
 
-    <!-- SCREEN 5: Welcome Back (after PIN login) -->
-    <div class="login-card screen hidden" id="welcomeBackScreen">
-        <div class="login-logo">🌟</div>
-        <h1 class="login-title">Go<span>Trotters</span></h1>
-        <span class="login-badge">
-            <span class="lang-en">Welcome Back!</span>
-            <span class="lang-es">¡Bienvenido!</span>
-        </span>
-        
-        <p class="welcome-name" id="welcomeBackName"></p>
-        
-        <div class="ring-badge level-1" id="currentRingBadge">
-            🥉 <span class="lang-en">Rookie Ring</span><span class="lang-es">Anillo Novato</span>
-        </div>
-        
-        <button class="login-btn" onclick="startPlaying()">
-            <span class="lang-en">🏀 Continue Training</span>
-            <span class="lang-es">🏀 Continuar Entrenamiento</span>
-        </button>
-    </div>
+<!-- CHAT SCREEN -->
+<div class="chat-screen" id="chatScreen">
+<div class="chat-header">
+<div class="chat-header-left">
+<div class="chat-avatar">🏀</div>
+<div>
+<div class="chat-title"><span class="go">GO</span><span class="tr">TROTTER</span> AI</div>
+<div class="chat-status"><span class="chat-dot"></span><span class="lang-en">Your Coach</span><span class="lang-es">Tu Entrenador</span></div>
+</div>
+</div>
+<div class="chat-header-right">
+<button class="chat-lang-btn active" data-lang="en">EN</button>
+<button class="chat-lang-btn" data-lang="es">ES</button>
+<button class="chat-close" id="chatClose">×</button>
+</div>
+</div>
 
-    <script>
-        // ============================================
-        // GOTROTTERS RING LEVELS
-        // ============================================
-        var RING_LEVELS = [
-            { level: 1, name: 'Rookie', nameEs: 'Novato', icon: '🥉', color: '#CD7F32' },
-            { level: 2, name: 'Hustle', nameEs: 'Esfuerzo', icon: '💪', color: '#FF6B6B' },
-            { level: 3, name: 'Assist', nameEs: 'Asistencia', icon: '🤝', color: '#00D9A5' },
-            { level: 4, name: 'Playmaker', nameEs: 'Creador', icon: '👁️', color: '#4DA8FF' },
-            { level: 5, name: 'All-Star', nameEs: 'All-Star', icon: '⭐', color: '#FFD93D' },
-            { level: 6, name: 'MVP', nameEs: 'MVP', icon: '🏅', color: '#A855F7' },
-            { level: 7, name: 'Champion', nameEs: 'Campeón', icon: '🏆', color: '#22C55E' },
-            { level: 8, name: 'Legend', nameEs: 'Leyenda', icon: '👑', color: 'gold' }
-        ];
+<div class="chat-body" id="chatBody"></div>
 
-        function updateRingBadge(elementId, level) {
-            var ring = RING_LEVELS[Math.min(level - 1, 7)] || RING_LEVELS[0];
-            var badge = document.getElementById(elementId);
-            if (badge) {
-                badge.className = 'ring-badge level-' + ring.level;
-                var ringName = currentLang === 'es' ? ring.nameEs : ring.name;
-                var ringLabel = currentLang === 'es' ? 'Anillo ' + ring.nameEs : ring.name + ' Ring';
-                badge.innerHTML = ring.icon + ' <span class="lang-en">' + ring.name + ' Ring</span><span class="lang-es">Anillo ' + ring.nameEs + '</span>';
-                document.body.setAttribute('data-lang', currentLang);
-            }
-        }
+<div class="chat-input-area" id="chatInputArea">
+<div class="chat-input-row">
+<input type="text" class="chat-input" id="chatInput" placeholder="Type here..." maxlength="100">
+<button class="chat-send" id="chatSend">
+<svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+</button>
+</div>
+</div>
+</div>
 
-        var currentLang = localStorage.getItem('gostar-lang') || 'en';
-        var currentAccessCode = null;
-        var currentFacility = null;
-        var currentUserPin = null;
-        var currentUsername = null;
-
-        function setLang(lang) {
-            currentLang = lang;
-            localStorage.setItem('gostar-lang', lang);
-            document.body.setAttribute('data-lang', lang);
-            document.querySelectorAll('.lang-btn').forEach(function(btn) {
-                btn.classList.toggle('active', btn.textContent === lang.toUpperCase());
-            });
-        }
-
-        document.body.setAttribute('data-lang', currentLang);
-        document.querySelectorAll('.lang-btn').forEach(function(btn) {
-            btn.classList.toggle('active', btn.textContent === currentLang.toUpperCase());
+<script>
+(function() {
+    // ========== LANGUAGE ==========
+    var lang = localStorage.getItem('gt-lang') || 'en';
+    
+    function setLang(l) {
+        lang = l;
+        localStorage.setItem('gt-lang', l);
+        document.body.className = l;
+        document.querySelectorAll('.lang-btn, .chat-lang-btn').forEach(function(b) {
+            b.classList.toggle('active', b.dataset.lang === l);
         });
-
-        function showScreen(screenId) {
-            document.querySelectorAll('.screen').forEach(function(s) {
-                s.classList.add('hidden');
+        document.getElementById('chatInput').placeholder = l === 'es' ? 'Escribe aquí...' : 'Type here...';
+    }
+    
+    setLang(lang);
+    
+    document.querySelectorAll('.lang-btn, .chat-lang-btn').forEach(function(b) {
+        b.addEventListener('click', function() { setLang(this.dataset.lang); });
+    });
+    
+    // ========== ELEMENTS ==========
+    var landing = document.getElementById('landing');
+    var chatScreen = document.getElementById('chatScreen');
+    var chatBody = document.getElementById('chatBody');
+    var chatInputArea = document.getElementById('chatInputArea');
+    var chatInput = document.getElementById('chatInput');
+    var chatSend = document.getElementById('chatSend');
+    var goBtn = document.getElementById('goBtn');
+    var chatClose = document.getElementById('chatClose');
+    
+    // ========== STATE ==========
+    var currentFlow = null; // 'new', 'returning', 'facility'
+    var currentStep = null;
+    var tempData = {};
+    
+    // ========== STORAGE ==========
+    function getUser() {
+        try { return JSON.parse(localStorage.getItem('gotrotter-user')) || null; }
+        catch(e) { return null; }
+    }
+    
+    function saveUser(data) {
+        localStorage.setItem('gotrotter-user', JSON.stringify(data));
+    }
+    
+    function setSession(name, pin) {
+        sessionStorage.setItem('gostar-user-pin', pin);
+        sessionStorage.setItem('gostar-user-name', name);
+    }
+    
+    // ========== TRIAL CHECK ==========
+    function getTrialDaysLeft(startDate) {
+        if (!startDate) return 0;
+        var start = new Date(startDate);
+        var now = new Date();
+        var diff = Math.ceil((now - start) / (1000 * 60 * 60 * 24));
+        return Math.max(0, 7 - diff);
+    }
+    
+    // ========== CHAT HELPERS ==========
+    function addMsg(content, isUser, options) {
+        var msg = document.createElement('div');
+        msg.className = 'chat-msg ' + (isUser ? 'user' : 'bot');
+        
+        var html = '<div class="chat-msg-avatar">' + (isUser ? '👤' : '🏀') + '</div>';
+        html += '<div class="chat-msg-bubble">' + content;
+        
+        if (options && options.length) {
+            html += '<div class="chat-options">';
+            options.forEach(function(opt) {
+                var cls = opt.primary ? 'chat-option primary' : 'chat-option';
+                html += '<button class="' + cls + '" data-action="' + opt.action + '">' + opt.label + '</button>';
             });
-            document.getElementById(screenId).classList.remove('hidden');
-            
-            if (screenId === 'pinLoginScreen') {
-                initPinInputs('loginPinGroup');
-                document.querySelector('#loginPinGroup .pin-input').focus();
-            } else if (screenId === 'accessCodeScreen') {
-                document.getElementById('accessCodeInput').focus();
-            } else if (screenId === 'nameScreen') {
-                document.getElementById('userName').focus();
-            }
+            html += '</div>';
         }
-
-        function initPinInputs(groupId) {
-            var inputs = document.querySelectorAll('#' + groupId + ' .pin-input');
-            
-            inputs.forEach(function(input, index) {
-                var newInput = input.cloneNode(true);
-                input.parentNode.replaceChild(newInput, input);
-                input = newInput;
-                input.value = '';
-                
-                input.addEventListener('input', function(e) {
-                    this.value = this.value.replace(/[^0-9]/g, '');
-                    if (this.value.length === 1 && index < inputs.length - 1) {
-                        document.querySelectorAll('#' + groupId + ' .pin-input')[index + 1].focus();
-                    }
-                    if (index === inputs.length - 1 && this.value.length === 1) {
-                        if (groupId === 'loginPinGroup') loginWithPin();
-                    }
-                    document.querySelectorAll('#' + groupId + ' .pin-input').forEach(function(inp) { 
-                        inp.classList.remove('error'); 
-                    });
-                    document.getElementById('pinLoginError').classList.remove('show');
-                });
-                
-                input.addEventListener('keydown', function(e) {
-                    var currentInputs = document.querySelectorAll('#' + groupId + ' .pin-input');
-                    if (e.key === 'Backspace' && this.value.length === 0 && index > 0) {
-                        currentInputs[index - 1].focus();
-                    }
-                    if (e.key === 'Enter') {
-                        if (groupId === 'loginPinGroup') loginWithPin();
-                    }
-                });
-                
-                input.addEventListener('paste', function(e) {
-                    e.preventDefault();
-                    var pastedData = e.clipboardData.getData('text').replace(/[^0-9]/g, '');
-                    var currentInputs = document.querySelectorAll('#' + groupId + ' .pin-input');
-                    for (var i = 0; i < Math.min(pastedData.length, 4); i++) {
-                        currentInputs[i].value = pastedData[i];
-                    }
-                    if (pastedData.length >= 4) {
-                        if (groupId === 'loginPinGroup') loginWithPin();
-                    }
-                });
+        
+        html += '</div>';
+        msg.innerHTML = html;
+        chatBody.appendChild(msg);
+        chatBody.scrollTop = chatBody.scrollHeight;
+        
+        // Bind option clicks
+        msg.querySelectorAll('.chat-option').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                handleOption(this.dataset.action);
             });
-        }
-
-        function getPinValue(groupId) {
-            var inputs = document.querySelectorAll('#' + groupId + ' .pin-input');
+        });
+    }
+    
+    function addTyping() {
+        var msg = document.createElement('div');
+        msg.className = 'chat-msg bot';
+        msg.id = 'typingMsg';
+        msg.innerHTML = '<div class="chat-msg-avatar">🏀</div><div class="chat-msg-bubble"><div class="chat-typing"><span></span><span></span><span></span></div></div>';
+        chatBody.appendChild(msg);
+        chatBody.scrollTop = chatBody.scrollHeight;
+    }
+    
+    function removeTyping() {
+        var t = document.getElementById('typingMsg');
+        if (t) t.remove();
+    }
+    
+    function botSay(content, options, delay) {
+        delay = delay || 800;
+        addTyping();
+        setTimeout(function() {
+            removeTyping();
+            addMsg(content, false, options);
+        }, delay);
+    }
+    
+    function showInput(placeholder) {
+        chatInputArea.classList.add('visible');
+        chatInput.placeholder = placeholder || (lang === 'es' ? 'Escribe aquí...' : 'Type here...');
+        chatInput.value = '';
+        setTimeout(function() { chatInput.focus(); }, 100);
+    }
+    
+    function hideInput() {
+        chatInputArea.classList.remove('visible');
+    }
+    
+    function addPinInput(isCreate) {
+        var msg = document.createElement('div');
+        msg.className = 'chat-msg bot';
+        msg.innerHTML = '<div class="chat-msg-avatar">🏀</div><div class="chat-msg-bubble">' +
+            '<div class="pin-input-container">' +
+            '<input type="tel" class="pin-digit" maxlength="1" data-idx="0">' +
+            '<input type="tel" class="pin-digit" maxlength="1" data-idx="1">' +
+            '<input type="tel" class="pin-digit" maxlength="1" data-idx="2">' +
+            '<input type="tel" class="pin-digit" maxlength="1" data-idx="3">' +
+            '</div>' +
+            '<button class="pin-submit" id="pinSubmit">' + (lang === 'es' ? 'CONFIRMAR' : 'CONFIRM') + '</button>' +
+            '</div>';
+        chatBody.appendChild(msg);
+        chatBody.scrollTop = chatBody.scrollHeight;
+        
+        var digits = msg.querySelectorAll('.pin-digit');
+        var submitBtn = msg.querySelector('#pinSubmit');
+        
+        function checkComplete() {
             var pin = '';
-            inputs.forEach(function(input) { pin += input.value; });
-            return pin;
-        }
-
-        function showPinError(groupId) {
-            var inputs = document.querySelectorAll('#' + groupId + ' .pin-input');
-            inputs.forEach(function(input) { input.classList.add('error'); });
-            document.getElementById('pinLoginError').classList.add('show');
-            inputs.forEach(function(input) { input.value = ''; });
-            if (inputs[0]) inputs[0].focus();
-        }
-
-        function loginWithPin() {
-            var pin = getPinValue('loginPinGroup');
-            if (pin.length < 4) return;
-            
-            var btn = document.getElementById('loginPinBtn');
-            btn.disabled = true;
-            btn.textContent = currentLang === 'es' ? 'Verificando...' : 'Verifying...';
-            
-            fetch('/api/play/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ pin: pin })
-            })
-            .then(function(res) { return res.json(); })
-            .then(function(data) {
-                if (data.success) {
-                    currentUserPin = pin;
-                    currentUsername = data.username;
-                    currentAccessCode = data.accessCode;
-                    
-                    sessionStorage.setItem('gostar-user-pin', pin);
-                    sessionStorage.setItem('gostar-user-name', data.username);
-                    sessionStorage.setItem('gostar-user-code', data.accessCode);
-                    
-                    document.getElementById('welcomeBackName').textContent = data.username;
-                    
-                    // Update ring badge with user's current level
-                    var ringLevel = data.ringLevel || data.ring_level || 1;
-                    updateRingBadge('currentRingBadge', ringLevel);
-                    
-                    showScreen('welcomeBackScreen');
-                } else {
-                    throw new Error(data.error || 'Invalid PIN');
-                }
-            })
-            .catch(function(err) {
-                showPinError('loginPinGroup');
-            })
-            .finally(function() {
-                btn.disabled = false;
-                btn.innerHTML = '<span class="lang-en">🏀 Let\'s Play!</span><span class="lang-es">🏀 ¡A Jugar!</span>';
-                document.body.setAttribute('data-lang', currentLang);
-            });
-        }
-
-        function verifyAccessCode() {
-            var code = document.getElementById('accessCodeInput').value.trim().toUpperCase();
-            if (!code) {
-                document.getElementById('accessCodeError').classList.add('show');
-                return;
-            }
-            
-            var btn = document.getElementById('verifyCodeBtn');
-            btn.disabled = true;
-            btn.textContent = currentLang === 'es' ? 'Verificando...' : 'Verifying...';
-            
-            fetch('/api/play/verify', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ accessCode: code })
-            })
-            .then(function(res) { return res.json(); })
-            .then(function(data) {
-                if (data.success) {
-                    if (!data.hasSpots) {
-                        throw new Error(currentLang === 'es' ? 'Código lleno' : 'Code is full');
-                    }
-                    currentAccessCode = code;
-                    currentFacility = data.facilityName;
-                    document.getElementById('facilityName').textContent = data.facilityName;
-                    document.getElementById('accessCodeError').classList.remove('show');
-                    showScreen('nameScreen');
-                } else {
-                    throw new Error(data.error || 'Invalid code');
-                }
-            })
-            .catch(function(err) {
-                document.getElementById('accessCodeError').textContent = err.message;
-                document.getElementById('accessCodeError').classList.add('show');
-            })
-            .finally(function() {
-                btn.disabled = false;
-                btn.innerHTML = '<span class="lang-en">Continue</span><span class="lang-es">Continuar</span>';
-                document.body.setAttribute('data-lang', currentLang);
-            });
-        }
-
-        function registerUser() {
-            var name = document.getElementById('userName').value.trim();
-            if (!name) {
-                document.getElementById('registerError').classList.add('show');
-                return;
-            }
-            
-            var btn = document.getElementById('registerBtn');
-            btn.disabled = true;
-            btn.textContent = currentLang === 'es' ? 'Creando...' : 'Creating...';
-            
-            fetch('/api/play/register', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ accessCode: currentAccessCode, username: name })
-            })
-            .then(function(res) { return res.json(); })
-            .then(function(data) {
-                if (data.success) {
-                    currentUserPin = data.pin;
-                    currentUsername = data.username;
-                    
-                    sessionStorage.setItem('gostar-user-pin', data.pin);
-                    sessionStorage.setItem('gostar-user-name', data.username);
-                    sessionStorage.setItem('gostar-user-code', currentAccessCode);
-                    
-                    document.getElementById('welcomeName').textContent = data.username;
-                    document.getElementById('generatedPin').textContent = data.pin;
-                    
-                    // New users start at Rookie Ring (level 1)
-                    updateRingBadge('newRingBadge', 1);
-                    
-                    showScreen('pinGeneratedScreen');
-                } else {
-                    throw new Error(data.error || 'Registration failed');
-                }
-            })
-            .catch(function(err) {
-                document.getElementById('registerError').textContent = err.message;
-                document.getElementById('registerError').classList.add('show');
-            })
-            .finally(function() {
-                btn.disabled = false;
-                btn.innerHTML = '<span class="lang-en">🏀 Join the Team!</span><span class="lang-es">🏀 ¡Únete al Equipo!</span>';
-                document.body.setAttribute('data-lang', currentLang);
-            });
-        }
-
-        function copyGeneratedPin() {
-            var pin = document.getElementById('generatedPin').textContent;
-            var btn = document.querySelector('.copy-pin-btn');
-            
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(pin).then(function() {
-                    btn.classList.add('copied');
-                    btn.innerHTML = '<span class="lang-en">✓ Copied!</span><span class="lang-es">✓ ¡Copiado!</span>';
-                    document.body.setAttribute('data-lang', currentLang);
-                    setTimeout(function() {
-                        btn.classList.remove('copied');
-                        btn.innerHTML = '<span class="lang-en">📋 Copy PIN</span><span class="lang-es">📋 Copiar PIN</span>';
-                        document.body.setAttribute('data-lang', currentLang);
-                    }, 2000);
-                });
+            digits.forEach(function(d) { pin += d.value; });
+            if (pin.length === 4) {
+                submitBtn.classList.add('ready');
             } else {
-                var textArea = document.createElement('textarea');
-                textArea.value = pin;
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
-                btn.classList.add('copied');
-                btn.innerHTML = '<span class="lang-en">✓ Copied!</span><span class="lang-es">✓ ¡Copiado!</span>';
-                document.body.setAttribute('data-lang', currentLang);
-                setTimeout(function() {
-                    btn.classList.remove('copied');
-                    btn.innerHTML = '<span class="lang-en">📋 Copy PIN</span><span class="lang-es">📋 Copiar PIN</span>';
-                    document.body.setAttribute('data-lang', currentLang);
-                }, 2000);
+                submitBtn.classList.remove('ready');
             }
         }
-
-        function startPlaying() {
+        
+        digits.forEach(function(d, i) {
+            d.addEventListener('input', function() {
+                this.value = this.value.replace(/[^0-9]/g, '');
+                if (this.value && i < 3) {
+                    digits[i + 1].focus();
+                }
+                this.classList.toggle('filled', this.value !== '');
+                checkComplete();
+            });
+            d.addEventListener('keydown', function(e) {
+                if (e.key === 'Backspace' && !this.value && i > 0) {
+                    digits[i - 1].focus();
+                }
+            });
+        });
+        
+        submitBtn.addEventListener('click', function() {
+            if (!this.classList.contains('ready')) return;
+            var pin = '';
+            digits.forEach(function(d) { pin += d.value; });
+            handlePinSubmit(pin);
+        });
+        
+        setTimeout(function() { digits[0].focus(); }, 100);
+    }
+    
+    function showSuccess(emoji) {
+        var burst = document.createElement('div');
+        burst.className = 'success-burst';
+        burst.textContent = emoji || '🏀';
+        document.body.appendChild(burst);
+        setTimeout(function() { burst.remove(); }, 800);
+    }
+    
+    function goToGameHub() {
+        showSuccess('🏆');
+        setTimeout(function() {
             window.location.href = 'game-hub.html';
+        }, 1000);
+    }
+    
+    // ========== OPEN CHAT ==========
+    function openChat() {
+        landing.classList.add('hidden');
+        chatScreen.classList.add('active');
+        chatBody.innerHTML = '';
+        hideInput();
+        
+        // Check if returning user
+        var user = getUser();
+        
+        if (user && user.pin) {
+            // Has account - show quick options
+            var daysLeft = getTrialDaysLeft(user.trialStart);
+            var greeting = lang === 'es' 
+                ? '¡Hola! 🏀 Bienvenido de vuelta a <strong>GoTrotters</strong>!'
+                : 'Hey! 🏀 Welcome back to <strong>GoTrotters</strong>!';
+            
+            setTimeout(function() {
+                addMsg(greeting, false);
+                
+                var subtext = lang === 'es'
+                    ? '¿Eres <strong>' + user.name + '</strong>?'
+                    : 'Are you <strong>' + user.name + '</strong>?';
+                
+                botSay(subtext, [
+                    {label: lang === 'es' ? '✅ Sí, soy yo' : '✅ Yes, that\'s me', action: 'confirm_user'},
+                    {label: lang === 'es' ? '👤 No, soy nuevo' : '👤 No, I\'m new', action: 'new'}
+                ], 600);
+            }, 400);
+        } else {
+            // New visitor
+            var greeting = lang === 'es' 
+                ? '¡Qué pasa! 🏀 Soy <strong>GoTrotter</strong> — tu entrenador de memoria 24/7!'
+                : 'Yo! 🏀 I\'m <strong>GoTrotter</strong> — your 24/7 memory coach!';
+            
+            setTimeout(function() {
+                addMsg(greeting, false);
+                
+                var question = lang === 'es'
+                    ? '¿Cómo te ayudo hoy?'
+                    : 'How can I help you today?';
+                
+                botSay(question, [
+                    {label: lang === 'es' ? '🆕 Soy Nuevo' : '🆕 I\'m New', action: 'new'},
+                    {label: lang === 'es' ? '🔑 Ya Tengo Cuenta' : '🔑 I Have Account', action: 'returning'},
+                    {label: lang === 'es' ? '🏢 Instalación' : '🏢 Facility', action: 'facility'}
+                ], 600);
+            }, 400);
         }
-
-        document.getElementById('accessCodeInput').addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') verifyAccessCode();
+    }
+    
+    // ========== HANDLE OPTIONS ==========
+    function handleOption(action) {
+        // Disable all options after click
+        document.querySelectorAll('.chat-option').forEach(function(b) {
+            b.style.pointerEvents = 'none';
+            b.style.opacity = '0.5';
         });
-
-        document.getElementById('userName').addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') registerUser();
-        });
-    </script>
-
+        
+        switch(action) {
+            case 'new':
+                currentFlow = 'new';
+                currentStep = 'ask_name';
+                var msg = lang === 'es'
+                    ? '¡Genial! 🎉 Vamos a comenzar tu <strong>prueba gratis de 7 días</strong>.\n\n¿Cómo te llamas?'
+                    : 'Awesome! 🎉 Let\'s get you started with a <strong>FREE 7-day trial</strong>.\n\nWhat\'s your name?';
+                botSay(msg, null, 600);
+                setTimeout(function() { showInput(lang === 'es' ? 'Tu nombre...' : 'Your name...'); }, 1500);
+                break;
+                
+            case 'returning':
+                currentFlow = 'returning';
+                currentStep = 'ask_pin';
+                var msg = lang === 'es'
+                    ? '¡Bienvenido de vuelta! 🏀\n\nIngresa tu PIN de 4 dígitos:'
+                    : 'Welcome back! 🏀\n\nEnter your 4-digit PIN:';
+                botSay(msg, null, 600);
+                setTimeout(addPinInput, 1500);
+                break;
+                
+            case 'facility':
+                currentFlow = 'facility';
+                currentStep = 'ask_facility_code';
+                var msg = lang === 'es'
+                    ? '¡Perfecto! 🏢\n\n¿Cuál es el código de tu instalación?'
+                    : 'Perfect! 🏢\n\nWhat\'s your facility code?';
+                botSay(msg, null, 600);
+                setTimeout(function() { showInput(lang === 'es' ? 'Código de instalación...' : 'Facility code...'); }, 1500);
+                break;
+                
+            case 'confirm_user':
+                currentFlow = 'returning';
+                currentStep = 'ask_pin';
+                var msg = lang === 'es'
+                    ? '¡Excelente! Ingresa tu PIN:'
+                    : 'Great! Enter your PIN:';
+                botSay(msg, null, 400);
+                setTimeout(addPinInput, 1200);
+                break;
+                
+            case 'start_training':
+                goToGameHub();
+                break;
+        }
+    }
+    
+    // ========== HANDLE TEXT INPUT ==========
+    function handleTextInput(text) {
+        text = text.trim();
+        if (!text) return;
+        
+        addMsg(text, true);
+        hideInput();
+        
+        if (currentFlow === 'new' && currentStep === 'ask_name') {
+            tempData.name = text;
+            currentStep = 'ask_pin_create';
+            var msg = lang === 'es'
+                ? '¡Mucho gusto, <strong>' + text + '</strong>! 🏀\n\nAhora crea un PIN de 4 dígitos que puedas recordar:'
+                : 'Nice to meet you, <strong>' + text + '</strong>! 🏀\n\nNow create a 4-digit PIN you\'ll remember:';
+            botSay(msg, null, 600);
+            setTimeout(addPinInput, 1500);
+        }
+        else if (currentFlow === 'facility' && currentStep === 'ask_facility_code') {
+            tempData.facilityCode = text.toUpperCase();
+            currentStep = 'ask_facility_name';
+            var msg = lang === 'es'
+                ? '¡Código recibido! 🏢\n\n¿Cuál es tu nombre?'
+                : 'Got it! 🏢\n\nWhat\'s your name?';
+            botSay(msg, null, 600);
+            setTimeout(function() { showInput(lang === 'es' ? 'Tu nombre...' : 'Your name...'); }, 1500);
+        }
+        else if (currentFlow === 'facility' && currentStep === 'ask_facility_name') {
+            tempData.name = text;
+            currentStep = 'ask_facility_pin';
+            var msg = lang === 'es'
+                ? '¡Hola <strong>' + text + '</strong>! 🏀\n\nCrea tu PIN de 4 dígitos:'
+                : 'Hey <strong>' + text + '</strong>! 🏀\n\nCreate your 4-digit PIN:';
+            botSay(msg, null, 600);
+            setTimeout(addPinInput, 1500);
+        }
+    }
+    
+    // ========== HANDLE PIN SUBMIT ==========
+    function handlePinSubmit(pin) {
+        // Disable PIN inputs
+        document.querySelectorAll('.pin-digit').forEach(function(d) { d.disabled = true; });
+        document.getElementById('pinSubmit').style.opacity = '0.5';
+        
+        addMsg('••••', true);
+        
+        if (currentFlow === 'new' && currentStep === 'ask_pin_create') {
+            // Create new user
+            var userData = {
+                name: tempData.name,
+                pin: pin,
+                trialStart: new Date().toISOString(),
+                type: 'trial'
+            };
+            saveUser(userData);
+            setSession(userData.name, userData.pin);
+            
+            var msg = lang === 'es'
+                ? '🎉 <strong>¡LISTO!</strong>\n\n¡Bienvenido al equipo, <strong>' + tempData.name + '</strong>!\n\nTu prueba gratis de <strong>7 días</strong> comienza ahora. Entrena tu memoria y conviértete en un <span class="highlight">MASTER</span>.'
+                : '🎉 <strong>YOU\'RE IN!</strong>\n\nWelcome to the squad, <strong>' + tempData.name + '</strong>!\n\nYour <strong>7-day free trial</strong> starts now. Train your memory and become a <span class="highlight">MASTER</span>.';
+            
+            botSay(msg, null, 800);
+            
+            setTimeout(function() {
+                var trialMsg = '<div class="trial-badge">🆓 ' + (lang === 'es' ? '7 DÍAS GRATIS' : '7-DAY FREE TRIAL') + '</div>';
+                botSay(trialMsg + (lang === 'es' ? '\n\n¿Listo para entrenar?' : '\n\nReady to train?'), [
+                    {label: lang === 'es' ? '🏀 VAMOS!' : '🏀 LET\'S GO!', action: 'start_training', primary: true}
+                ], 800);
+            }, 2000);
+        }
+        else if (currentFlow === 'returning' && currentStep === 'ask_pin') {
+            // Verify existing user
+            var user = getUser();
+            if (user && user.pin === pin) {
+                setSession(user.name, user.pin);
+                
+                var daysLeft = getTrialDaysLeft(user.trialStart);
+                var trialInfo = '';
+                if (user.type === 'trial' && daysLeft > 0) {
+                    trialInfo = '<div class="trial-badge">🆓 ' + daysLeft + (lang === 'es' ? ' DÍAS RESTANTES' : ' DAYS LEFT') + '</div>';
+                } else if (user.type === 'trial' && daysLeft <= 0) {
+                    trialInfo = '<div class="trial-badge" style="border-color:var(--danger);color:var(--danger);">⚠️ ' + (lang === 'es' ? 'PRUEBA EXPIRADA' : 'TRIAL EXPIRED') + '</div>';
+                }
+                
+                var msg = lang === 'es'
+                    ? '🏀 <strong>¡Bienvenido de vuelta, ' + user.name + '!</strong>\n\n' + trialInfo + '\n\n¿Listo para entrenar?'
+                    : '🏀 <strong>Welcome back, ' + user.name + '!</strong>\n\n' + trialInfo + '\n\nReady to train?';
+                
+                botSay(msg, [
+                    {label: lang === 'es' ? '🏀 VAMOS!' : '🏀 LET\'S GO!', action: 'start_training', primary: true}
+                ], 800);
+            } else {
+                var msg = lang === 'es'
+                    ? '❌ PIN incorrecto. Intenta de nuevo:'
+                    : '❌ Wrong PIN. Try again:';
+                botSay(msg, null, 600);
+                setTimeout(addPinInput, 1400);
+            }
+        }
+        else if (currentFlow === 'facility' && currentStep === 'ask_facility_pin') {
+            // Create facility user
+            var userData = {
+                name: tempData.name,
+                pin: pin,
+                facilityCode: tempData.facilityCode,
+                type: 'facility',
+                created: new Date().toISOString()
+            };
+            saveUser(userData);
+            setSession(userData.name, userData.pin);
+            sessionStorage.setItem('gostar-facility-code', tempData.facilityCode);
+            
+            var msg = lang === 'es'
+                ? '🏢 <strong>¡CONECTADO!</strong>\n\n¡Bienvenido, <strong>' + tempData.name + '</strong>!\n\nEstás conectado a la instalación <strong>' + tempData.facilityCode + '</strong>.'
+                : '🏢 <strong>CONNECTED!</strong>\n\nWelcome, <strong>' + tempData.name + '</strong>!\n\nYou\'re connected to facility <strong>' + tempData.facilityCode + '</strong>.';
+            
+            botSay(msg, [
+                {label: lang === 'es' ? '🏀 VAMOS!' : '🏀 LET\'S GO!', action: 'start_training', primary: true}
+            ], 800);
+        }
+    }
+    
+    // ========== EVENT LISTENERS ==========
+    goBtn.addEventListener('click', openChat);
+    
+    chatClose.addEventListener('click', function() {
+        chatScreen.classList.remove('active');
+        landing.classList.remove('hidden');
+    });
+    
+    chatSend.addEventListener('click', function() {
+        handleTextInput(chatInput.value);
+        chatInput.value = '';
+    });
+    
+    chatInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            handleTextInput(chatInput.value);
+            chatInput.value = '';
+        }
+    });
+    
+    // ========== AUTO-LOGIN CHECK ==========
+    // If already has session, go straight to game-hub
+    if (sessionStorage.getItem('gostar-user-pin')) {
+        // Already logged in this session
+        // Optional: uncomment to auto-redirect
+        // window.location.href = 'game-hub.html';
+    }
+    
+})();
+</script>
 </body>
 </html>
