@@ -7,321 +7,1292 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--orange:#FF6B00;--orange-dark:#CC5500;--teal:#00D9A5;--gold:#FFD700;--purple:#9B59B6;--blue:#3B82F6;--dark:#0a0a0f;--darker:#050508;--card:#111118;--card-hover:#1a1a24;--text:#FFFFFF;--muted:#8892a0;--border:rgba(255,255,255,0.08);--success:#00D9A5;--danger:#FF4757;--sidebar:260px}
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Outfit',sans-serif;background:var(--dark);color:var(--text);min-height:100vh}
-body.es .lang-en{display:none !important}
-body.en .lang-es{display:none !important}
-.login-screen{position:fixed;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,var(--dark) 0%,var(--darker) 100%);display:flex;align-items:center;justify-content:center;z-index:9999}
-.login-screen.hidden{display:none}
-.login-card{background:var(--card);border:1px solid var(--border);border-radius:24px;padding:48px 40px;width:100%;max-width:380px;text-align:center}
-.login-logo{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;letter-spacing:4px;margin-bottom:10px}
-.login-logo .go{color:var(--orange)}
-.login-logo .trotters{color:var(--teal)}
-.login-badge{display:inline-block;font-size:0.7rem;font-weight:700;color:var(--dark);background:var(--gold);padding:5px 15px;border-radius:20px;text-transform:uppercase;letter-spacing:1px;margin-bottom:30px}
-.login-subtitle{font-size:0.9rem;color:var(--muted);margin-bottom:30px}
-.pin-input-group{display:flex;justify-content:center;gap:12px;margin-bottom:24px}
-.pin-input{width:60px;height:72px;font-size:1.8rem;font-weight:700;font-family:'Bebas Neue',sans-serif;text-align:center;background:var(--darker);border:2px solid var(--border);border-radius:12px;color:var(--text);transition:all 0.2s}
-.pin-input:focus{outline:none;border-color:var(--orange);box-shadow:0 0 20px rgba(255,107,0,0.2)}
-.login-btn{width:100%;padding:16px;background:linear-gradient(135deg,var(--orange),var(--orange-dark));color:var(--text);border:none;border-radius:12px;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;cursor:pointer;transition:all 0.3s}
-.login-btn:hover{transform:translateY(-2px);box-shadow:0 5px 25px rgba(255,107,0,0.4)}
-.login-error{color:var(--danger);font-size:0.85rem;margin-top:15px;display:none}
-.login-error.show{display:block}
-.dashboard{display:none;min-height:100vh}
-.dashboard.visible{display:flex}
-.sidebar{width:var(--sidebar);background:var(--darker);border-right:1px solid var(--border);padding:24px 0;display:flex;flex-direction:column;position:fixed;height:100vh;overflow-y:auto}
-.sidebar-header{padding:0 24px 24px;border-bottom:1px solid var(--border);margin-bottom:20px}
-.sidebar-logo{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:3px;margin-bottom:10px}
-.sidebar-logo .go{color:var(--orange)}
-.sidebar-logo .trotters{color:var(--teal)}
-.admin-badge{display:inline-block;background:linear-gradient(135deg,var(--danger),#cc3344);color:var(--text);padding:4px 12px;border-radius:20px;font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:1px}
-.nav-section{padding:0 12px;margin-bottom:20px}
-.nav-section-title{font-size:0.65rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;padding:0 16px;margin-bottom:10px}
-.nav-item{display:flex;align-items:center;gap:12px;width:100%;padding:12px 16px;border:none;background:transparent;border-radius:10px;color:var(--muted);font-family:'Outfit',sans-serif;font-size:0.9rem;font-weight:500;cursor:pointer;transition:all 0.2s;text-align:left;margin-bottom:4px}
-.nav-item:hover{background:var(--card);color:var(--text)}
-.nav-item.active{background:var(--orange);color:var(--text)}
-.nav-item-icon{font-size:1.1rem;width:24px;text-align:center}
-.sidebar-footer{padding:20px 24px;border-top:1px solid var(--border);margin-top:auto}
-.lang-toggle{display:flex;gap:8px;background:var(--card);padding:4px;border-radius:10px;margin-bottom:15px}
-.lang-btn{flex:1;padding:8px;border:none;background:transparent;color:var(--muted);border-radius:8px;font-weight:600;font-size:0.8rem;cursor:pointer;font-family:'Outfit',sans-serif}
-.lang-btn.active{background:var(--orange);color:var(--text)}
-.logout-btn{width:100%;padding:12px;border:1px solid var(--border);background:transparent;color:var(--muted);border-radius:10px;font-weight:600;font-size:0.85rem;cursor:pointer;transition:all 0.2s;font-family:'Outfit',sans-serif}
-.logout-btn:hover{border-color:var(--danger);color:var(--danger)}
-.main-content{flex:1;margin-left:var(--sidebar);padding:30px;max-width:1400px}
-.page-header{margin-bottom:30px}
-.page-title{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:3px;margin-bottom:5px}
-.page-subtitle{font-size:0.9rem;color:var(--muted)}
-.page-section{display:none}
-.page-section.active{display:block}
-.pricing-banner{background:linear-gradient(135deg,rgba(255,107,0,0.15),rgba(0,217,165,0.15));border:1px solid var(--orange);border-radius:16px;padding:20px 24px;margin-bottom:30px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px}
-.pricing-banner-text{font-size:1rem}
-.pricing-banner-text strong{color:var(--orange);font-size:1.2rem}
-.pricing-banner-badge{background:var(--teal);color:var(--dark);padding:8px 16px;border-radius:20px;font-weight:700;font-size:0.85rem}
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;margin-bottom:30px}
-.stat-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;transition:all 0.3s}
-.stat-card:hover{transform:translateY(-3px);border-color:var(--orange)}
-.stat-card-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin-bottom:15px}
-.stat-card-icon.orange{background:rgba(255,107,0,0.15);color:var(--orange)}
-.stat-card-icon.teal{background:rgba(0,217,165,0.15);color:var(--teal)}
-.stat-card-icon.gold{background:rgba(255,215,0,0.15);color:var(--gold)}
-.stat-card-icon.purple{background:rgba(155,89,182,0.15);color:var(--purple)}
-.stat-card-value{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;letter-spacing:2px;margin-bottom:5px}
-.stat-card-label{font-size:0.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
-.game-cards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-bottom:30px}
-.game-card{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:all 0.3s}
-.game-card:hover{transform:translateY(-3px)}
-.game-card-header{padding:16px 20px;display:flex;align-items:center;gap:12px}
-.game-card-header.g1{background:linear-gradient(135deg,rgba(255,107,0,0.2),transparent);border-bottom:2px solid var(--orange)}
-.game-card-header.g2{background:linear-gradient(135deg,rgba(0,217,165,0.2),transparent);border-bottom:2px solid var(--teal)}
-.game-card-header.g3{background:linear-gradient(135deg,rgba(255,215,0,0.2),transparent);border-bottom:2px solid var(--gold)}
-.game-card-icon{font-size:1.5rem}
-.game-card-title{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px}
-.game-card-body{padding:20px}
-.game-card-stats{display:flex;gap:20px}
-.game-stat{text-align:center;flex:1}
-.game-stat-value{font-family:'Bebas Neue',sans-serif;font-size:1.5rem}
-.game-stat-label{font-size:0.7rem;color:var(--muted);text-transform:uppercase}
-.table-card{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:30px}
-.table-header{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px}
-.table-title{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:2px}
-.table-actions{display:flex;gap:10px}
-.btn{padding:10px 20px;border:none;border-radius:10px;font-weight:600;font-size:0.85rem;cursor:pointer;transition:all 0.2s;font-family:'Outfit',sans-serif}
-.btn-primary{background:var(--orange);color:var(--text)}
-.btn-primary:hover{background:var(--orange-dark)}
-.btn-secondary{background:var(--card);border:1px solid var(--border);color:var(--text)}
-.btn-secondary:hover{border-color:var(--orange)}
-.table-container{overflow-x:auto}
-table{width:100%;border-collapse:collapse}
-th,td{padding:14px 20px;text-align:left;border-bottom:1px solid var(--border)}
-th{font-size:0.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;background:var(--darker)}
-td{font-size:0.9rem}
-tr:hover{background:var(--card-hover)}
-.badge{display:inline-block;padding:4px 10px;border-radius:20px;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px}
-.badge-active{background:rgba(0,217,165,0.15);color:var(--teal)}
-.badge-trial{background:rgba(155,89,182,0.15);color:var(--purple)}
-.badge-paid{background:rgba(0,217,165,0.15);color:var(--teal)}
-.tier-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:6px;font-size:0.65rem;font-weight:700}
-.tier-badge.tryout{background:rgba(155,89,182,0.2);color:#b57edc}
-.tier-badge.rookie{background:rgba(255,215,0,0.2);color:var(--gold)}
-.tier-badge.sophomore{background:rgba(255,107,0,0.2);color:var(--orange)}
-.tier-badge.veteran{background:rgba(0,217,165,0.2);color:var(--teal)}
-.tier-badge.allstar{background:rgba(52,152,219,0.2);color:var(--blue)}
-.tier-badge.elite{background:rgba(155,89,182,0.2);color:var(--purple)}
-.tier-badge.champion{background:rgba(255,215,0,0.2);color:var(--gold)}
-.tier-badge.master{background:linear-gradient(135deg,rgba(255,215,0,0.3),rgba(255,107,0,0.3));color:var(--gold)}
-.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);display:none;align-items:center;justify-content:center;z-index:1000;padding:20px}
-.modal-overlay.show{display:flex}
-.modal{background:var(--card);border:1px solid var(--border);border-radius:20px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto}
-.modal-header{padding:24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
-.modal-title{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:2px}
-.modal-close{width:36px;height:36px;border:none;background:var(--darker);border-radius:10px;color:var(--muted);font-size:1.2rem;cursor:pointer}
-.modal-close:hover{color:var(--danger)}
-.modal-body{padding:24px}
-.form-group{margin-bottom:20px}
-.form-label{display:block;font-size:0.8rem;font-weight:600;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px}
-.form-input,.form-select{width:100%;padding:14px 16px;background:var(--darker);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:0.95rem;font-family:'Outfit',sans-serif}
-.form-input:focus,.form-select:focus{outline:none;border-color:var(--orange)}
-.modal-footer{padding:20px 24px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:12px}
-.tier-dist-table{width:100%;border-collapse:collapse;margin-top:15px}
-.tier-dist-table th,.tier-dist-table td{padding:10px 12px;text-align:center;border:1px solid var(--border);font-size:0.8rem}
-.tier-dist-table th{background:var(--darker);font-weight:600;color:var(--muted)}
-.tier-dist-table td{background:var(--card)}
-.activity-list{padding:0}
-.activity-item{display:flex;align-items:flex-start;gap:15px;padding:16px 20px;border-bottom:1px solid var(--border)}
-.activity-item:last-child{border-bottom:none}
-.activity-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
-.activity-icon.user{background:rgba(0,217,165,0.15);color:var(--teal)}
-.activity-icon.game{background:rgba(155,89,182,0.15);color:var(--purple)}
-.activity-content{flex:1}
-.activity-text{font-size:0.9rem;margin-bottom:3px}
-.activity-time{font-size:0.75rem;color:var(--muted)}
-@media(max-width:1024px){.sidebar{width:80px;padding:15px 0}.sidebar-header{padding:0 10px 15px}.sidebar-logo span,.nav-item span:not(.nav-item-icon),.nav-section-title,.sidebar-footer .lang-toggle,.logout-btn span{display:none}.nav-item{justify-content:center;padding:12px}.nav-item-icon{margin:0}.main-content{margin-left:80px}}
-@media(max-width:768px){.sidebar{display:none}.main-content{margin-left:0}.stats-grid{grid-template-columns:1fr 1fr}.pricing-banner{flex-direction:column;text-align:center}}
+:root {
+    --orange: #FF6B00;
+    --orange-dark: #CC5500;
+    --teal: #00D9A5;
+    --gold: #FFD700;
+    --purple: #9B59B6;
+    --blue: #3B82F6;
+    --dark: #0a0a0f;
+    --darker: #050508;
+    --card: #111118;
+    --card-hover: #1a1a24;
+    --text: #FFFFFF;
+    --muted: #8892a0;
+    --border: rgba(255,255,255,0.08);
+    --success: #00D9A5;
+    --danger: #FF4757;
+    --sidebar: 260px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--dark);
+    color: var(--text);
+    min-height: 100vh;
+}
+
+body.es .lang-en { display: none !important; }
+body.en .lang-es { display: none !important; }
+
+.login-screen {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(135deg, var(--dark) 0%, var(--darker) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.login-screen.hidden { display: none; }
+
+.login-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 48px 40px;
+    width: 100%;
+    max-width: 380px;
+    text-align: center;
+}
+
+.login-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    letter-spacing: 4px;
+    margin-bottom: 10px;
+}
+
+.login-logo .go { color: var(--orange); }
+.login-logo .trotters { color: var(--teal); }
+
+.login-badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--dark);
+    background: var(--gold);
+    padding: 5px 15px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 30px;
+}
+
+.login-subtitle {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-bottom: 30px;
+}
+
+.pin-input-group {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.pin-input {
+    width: 60px;
+    height: 72px;
+    font-size: 1.8rem;
+    font-weight: 700;
+    font-family: 'Bebas Neue', sans-serif;
+    text-align: center;
+    background: var(--darker);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    color: var(--text);
+    transition: all 0.2s;
+}
+
+.pin-input:focus {
+    outline: none;
+    border-color: var(--orange);
+    box-shadow: 0 0 20px rgba(255,107,0,0.2);
+}
+
+.login-btn {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--orange), var(--orange-dark));
+    color: var(--text);
+    border: none;
+    border-radius: 12px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 25px rgba(255,107,0,0.4);
+}
+
+.login-error {
+    color: var(--danger);
+    font-size: 0.85rem;
+    margin-top: 15px;
+    display: none;
+}
+
+.login-error.show { display: block; }
+
+.dashboard { display: none; min-height: 100vh; }
+.dashboard.visible { display: flex; }
+
+.sidebar {
+    width: var(--sidebar);
+    background: var(--darker);
+    border-right: 1px solid var(--border);
+    padding: 24px 0;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.sidebar-header {
+    padding: 0 24px 24px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 20px;
+}
+
+.sidebar-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 3px;
+    margin-bottom: 10px;
+}
+
+.sidebar-logo .go { color: var(--orange); }
+.sidebar-logo .trotters { color: var(--teal); }
+
+.admin-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--danger), #cc3344);
+    color: var(--text);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.nav-section { padding: 0 12px; margin-bottom: 20px; }
+
+.nav-section-title {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 0 16px;
+    margin-bottom: 10px;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 12px 16px;
+    border: none;
+    background: transparent;
+    border-radius: 10px;
+    color: var(--muted);
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+    margin-bottom: 4px;
+}
+
+.nav-item:hover { background: var(--card); color: var(--text); }
+.nav-item.active { background: var(--orange); color: var(--text); }
+.nav-item-icon { font-size: 1.1rem; width: 24px; text-align: center; }
+
+.sidebar-footer {
+    padding: 20px 24px;
+    border-top: 1px solid var(--border);
+    margin-top: auto;
+}
+
+.lang-toggle {
+    display: flex;
+    gap: 8px;
+    background: var(--card);
+    padding: 4px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.lang-btn {
+    flex: 1;
+    padding: 8px;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.8rem;
+    cursor: pointer;
+    font-family: 'Outfit', sans-serif;
+}
+
+.lang-btn.active { background: var(--orange); color: var(--text); }
+
+.logout-btn {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Outfit', sans-serif;
+}
+
+.logout-btn:hover { border-color: var(--danger); color: var(--danger); }
+
+.main-content { flex: 1; margin-left: var(--sidebar); padding: 30px; max-width: 1400px; }
+.page-header { margin-bottom: 30px; }
+.page-title { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 3px; margin-bottom: 5px; }
+.page-subtitle { font-size: 0.9rem; color: var(--muted); }
+.page-section { display: none; }
+.page-section.active { display: block; }
+
+.pricing-banner {
+    background: linear-gradient(135deg, rgba(255,107,0,0.15), rgba(0,217,165,0.15));
+    border: 1px solid var(--orange);
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.pricing-banner-text { font-size: 1rem; }
+.pricing-banner-text strong { color: var(--orange); font-size: 1.2rem; }
+.pricing-banner-badge { background: var(--teal); color: var(--dark); padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 0.85rem; }
+
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+
+.stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    transition: all 0.3s;
+}
+
+.stat-card:hover { transform: translateY(-3px); border-color: var(--orange); }
+
+.stat-card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+}
+
+.stat-card-icon.orange { background: rgba(255,107,0,0.15); }
+.stat-card-icon.teal { background: rgba(0,217,165,0.15); }
+.stat-card-icon.gold { background: rgba(255,215,0,0.15); }
+.stat-card-icon.purple { background: rgba(155,89,182,0.15); }
+.stat-card-value { font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; letter-spacing: 2px; margin-bottom: 5px; }
+.stat-card-label { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+
+.game-cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 30px; }
+
+.game-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.3s;
+}
+
+.game-card:hover { transform: translateY(-3px); }
+
+.game-card-header { padding: 16px 20px; display: flex; align-items: center; gap: 12px; }
+.game-card-header.g1 { background: linear-gradient(135deg, rgba(255,107,0,0.2), transparent); border-bottom: 2px solid var(--orange); }
+.game-card-header.g2 { background: linear-gradient(135deg, rgba(0,217,165,0.2), transparent); border-bottom: 2px solid var(--teal); }
+.game-card-header.g3 { background: linear-gradient(135deg, rgba(255,215,0,0.2), transparent); border-bottom: 2px solid var(--gold); }
+.game-card-icon { font-size: 1.5rem; }
+.game-card-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 2px; flex: 1; }
+
+.game-card-edit {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.game-card-edit:hover { border-color: var(--orange); color: var(--orange); }
+.game-card-body { padding: 20px; }
+.game-card-stats { display: flex; gap: 20px; }
+.game-stat { text-align: center; flex: 1; }
+.game-stat-value { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; }
+.game-stat-label { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; }
+
+.table-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; margin-bottom: 30px; }
+.table-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+.table-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 2px; }
+.table-actions { display: flex; gap: 10px; }
+.btn { padding: 10px 20px; border: none; border-radius: 10px; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; font-family: 'Outfit', sans-serif; }
+.btn-primary { background: var(--orange); color: var(--text); }
+.btn-primary:hover { background: var(--orange-dark); }
+.btn-secondary { background: var(--card); border: 1px solid var(--border); color: var(--text); }
+.btn-secondary:hover { border-color: var(--orange); }
+.btn-danger { background: transparent; border: 1px solid var(--danger); color: var(--danger); }
+.btn-danger:hover { background: var(--danger); color: var(--text); }
+
+.table-container { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 14px 20px; text-align: left; border-bottom: 1px solid var(--border); }
+th { font-size: 0.75rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; background: var(--darker); }
+td { font-size: 0.9rem; }
+tr:hover { background: var(--card-hover); }
+
+.badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+.badge-trial { background: rgba(155,89,182,0.15); color: var(--purple); }
+.badge-paid { background: rgba(0,217,165,0.15); color: var(--teal); }
+
+.tier-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 6px; font-size: 0.65rem; font-weight: 700; }
+.tier-badge.tryout { background: rgba(155,89,182,0.2); color: #b57edc; }
+.tier-badge.rookie { background: rgba(255,215,0,0.2); color: var(--gold); }
+.tier-badge.sophomore { background: rgba(255,107,0,0.2); color: var(--orange); }
+.tier-badge.veteran { background: rgba(0,217,165,0.2); color: var(--teal); }
+.tier-badge.allstar { background: rgba(52,152,219,0.2); color: var(--blue); }
+.tier-badge.elite { background: rgba(155,89,182,0.2); color: var(--purple); }
+.tier-badge.champion { background: rgba(255,215,0,0.2); color: var(--gold); }
+.tier-badge.master { background: linear-gradient(135deg, rgba(255,215,0,0.3), rgba(255,107,0,0.3)); color: var(--gold); }
+
+.action-btns { display: flex; gap: 6px; }
+
+.action-btn {
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--border);
+    background: transparent;
+    border-radius: 8px;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+}
+
+.action-btn:hover { border-color: var(--orange); color: var(--orange); }
+.action-btn.delete:hover { border-color: var(--danger); color: var(--danger); }
+
+.activity-list { padding: 0; }
+
+.activity-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.2s;
+}
+
+.activity-item:last-child { border-bottom: none; }
+.activity-item:hover { background: var(--card-hover); }
+
+.activity-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.activity-icon.user { background: rgba(0,217,165,0.15); color: var(--teal); }
+.activity-icon.game { background: rgba(155,89,182,0.15); color: var(--purple); }
+.activity-content { flex: 1; }
+.activity-text { font-size: 0.9rem; margin-bottom: 3px; }
+.activity-time { font-size: 0.75rem; color: var(--muted); }
+.activity-actions { display: flex; gap: 6px; opacity: 0; transition: opacity 0.2s; }
+.activity-item:hover .activity-actions { opacity: 1; }
+
+.tier-dist-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+.tier-dist-table th, .tier-dist-table td { padding: 10px 12px; text-align: center; border: 1px solid var(--border); font-size: 0.8rem; }
+.tier-dist-table th { background: var(--darker); font-weight: 600; color: var(--muted); }
+.tier-dist-table td { background: var(--card); }
+
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.8);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.modal-overlay.show { display: flex; }
+
+.modal {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    width: 100%;
+    max-width: 480px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-header { padding: 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+.modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 2px; }
+
+.modal-close {
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: var(--darker);
+    border-radius: 10px;
+    color: var(--muted);
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.modal-close:hover { color: var(--danger); }
+.modal-body { padding: 24px; }
+.form-group { margin-bottom: 20px; }
+.form-label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+
+.form-input, .form-select {
+    width: 100%;
+    padding: 14px 16px;
+    background: var(--darker);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-size: 0.95rem;
+    font-family: 'Outfit', sans-serif;
+}
+
+.form-input:focus, .form-select:focus { outline: none; border-color: var(--orange); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+.modal-footer { padding: 20px 24px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 12px; }
+.confirm-dialog { text-align: center; padding: 20px 0; }
+.confirm-dialog-icon { font-size: 3rem; margin-bottom: 15px; }
+.confirm-dialog-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 2px; margin-bottom: 10px; }
+.confirm-dialog-text { color: var(--muted); font-size: 0.9rem; margin-bottom: 5px; }
+
+.toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--card);
+    border: 1px solid var(--teal);
+    border-radius: 12px;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.3s;
+    z-index: 2000;
+}
+
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast.error { border-color: var(--danger); }
+.toast-icon { font-size: 1.2rem; }
+.toast-text { font-size: 0.9rem; }
+
+@media (max-width: 1024px) {
+    .sidebar { width: 80px; padding: 15px 0; }
+    .sidebar-header { padding: 0 10px 15px; }
+    .sidebar-logo span, .nav-item span:not(.nav-item-icon), .nav-section-title, .sidebar-footer .lang-toggle, .logout-btn span { display: none; }
+    .nav-item { justify-content: center; padding: 12px; }
+    .nav-item-icon { margin: 0; }
+    .main-content { margin-left: 80px; }
+}
+
+@media (max-width: 768px) {
+    .sidebar { display: none; }
+    .main-content { margin-left: 0; }
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+    .pricing-banner { flex-direction: column; text-align: center; }
+    .form-row { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body class="en">
+
 <div class="login-screen" id="loginScreen">
-<div class="login-card">
-<div class="login-logo"><span class="go">Go</span><span class="trotters">Trotters</span></div>
-<div class="login-badge">Admin Portal</div>
-<p class="login-subtitle"><span class="lang-en">Enter your 4-digit admin PIN</span><span class="lang-es">Ingresa tu PIN de 4 dígitos</span></p>
-<div class="pin-input-group">
-<input type="password" class="pin-input" maxlength="1" id="pin1" inputmode="numeric">
-<input type="password" class="pin-input" maxlength="1" id="pin2" inputmode="numeric">
-<input type="password" class="pin-input" maxlength="1" id="pin3" inputmode="numeric">
-<input type="password" class="pin-input" maxlength="1" id="pin4" inputmode="numeric">
+    <div class="login-card">
+        <div class="login-logo"><span class="go">Go</span><span class="trotters">Trotters</span></div>
+        <div class="login-badge">Admin Portal</div>
+        <p class="login-subtitle">
+            <span class="lang-en">Enter your 4-digit admin PIN</span>
+            <span class="lang-es">Ingresa tu PIN de 4 dígitos</span>
+        </p>
+        <div class="pin-input-group">
+            <input type="password" class="pin-input" maxlength="1" id="pin1" inputmode="numeric">
+            <input type="password" class="pin-input" maxlength="1" id="pin2" inputmode="numeric">
+            <input type="password" class="pin-input" maxlength="1" id="pin3" inputmode="numeric">
+            <input type="password" class="pin-input" maxlength="1" id="pin4" inputmode="numeric">
+        </div>
+        <button class="login-btn" id="loginBtn">
+            <span class="lang-en">ACCESS DASHBOARD</span>
+            <span class="lang-es">ACCEDER</span>
+        </button>
+        <p class="login-error" id="loginError">
+            <span class="lang-en">Invalid PIN</span>
+            <span class="lang-es">PIN inválido</span>
+        </p>
+    </div>
 </div>
-<button class="login-btn" onclick="attemptLogin()"><span class="lang-en">ACCESS DASHBOARD</span><span class="lang-es">ACCEDER</span></button>
-<p class="login-error" id="loginError"><span class="lang-en">Invalid PIN</span><span class="lang-es">PIN inválido</span></p>
-</div>
-</div>
+
 <div class="dashboard" id="dashboard">
-<aside class="sidebar">
-<div class="sidebar-header">
-<div class="sidebar-logo"><span class="go">Go</span><span class="trotters">Trotters</span></div>
-<span class="admin-badge">Master Admin</span>
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo"><span class="go">Go</span><span class="trotters">Trotters</span></div>
+            <span class="admin-badge">Master Admin</span>
+        </div>
+        <nav class="nav-section">
+            <div class="nav-section-title">
+                <span class="lang-en">Dashboard</span>
+                <span class="lang-es">Panel</span>
+            </div>
+            <button class="nav-item active" data-page="overview">
+                <span class="nav-item-icon">📊</span>
+                <span class="lang-en">Overview</span>
+                <span class="lang-es">Resumen</span>
+            </button>
+            <button class="nav-item" data-page="gotrotters">
+                <span class="nav-item-icon">🏀</span>
+                <span>GoTrotters</span>
+            </button>
+            <button class="nav-item" data-page="analytics">
+                <span class="nav-item-icon">📈</span>
+                <span class="lang-en">Analytics</span>
+                <span class="lang-es">Análisis</span>
+            </button>
+            <button class="nav-item" data-page="activity">
+                <span class="nav-item-icon">📋</span>
+                <span class="lang-en">Activity</span>
+                <span class="lang-es">Actividad</span>
+            </button>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="lang-toggle">
+                <button class="lang-btn active" id="btnEn">EN</button>
+                <button class="lang-btn" id="btnEs">ES</button>
+            </div>
+            <button class="logout-btn" id="logoutBtn">🚪 
+                <span class="lang-en">Logout</span>
+                <span class="lang-es">Salir</span>
+            </button>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <section class="page-section active" id="page-overview">
+            <header class="page-header">
+                <h1 class="page-title">
+                    <span class="lang-en">PLATFORM OVERVIEW</span>
+                    <span class="lang-es">RESUMEN DE PLATAFORMA</span>
+                </h1>
+                <p class="page-subtitle">
+                    <span class="lang-en">GoTrotters Memory Training - Admin Dashboard</span>
+                    <span class="lang-es">Entrenamiento de Memoria GoTrotters - Panel Admin</span>
+                </p>
+            </header>
+            <div class="pricing-banner">
+                <div class="pricing-banner-text">
+                    <span class="lang-en">Current Pricing:</span>
+                    <span class="lang-es">Precio Actual:</span> 
+                    <strong>$5<span class="lang-en">/month per user</span><span class="lang-es">/mes por usuario</span></strong>
+                </div>
+                <div class="pricing-banner-badge">
+                    <span class="lang-en">Simple & Accessible</span>
+                    <span class="lang-es">Simple y Accesible</span>
+                </div>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-card-icon teal">🏀</div>
+                    <div class="stat-card-value" id="totalUsers">8</div>
+                    <div class="stat-card-label">GoTrotters</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-icon orange">💰</div>
+                    <div class="stat-card-value">$<span id="monthlyRevenue">30</span></div>
+                    <div class="stat-card-label">
+                        <span class="lang-en">Monthly Revenue</span>
+                        <span class="lang-es">Ingreso Mensual</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-icon gold">🆓</div>
+                    <div class="stat-card-value" id="trialUsers">2</div>
+                    <div class="stat-card-label">
+                        <span class="lang-en">On Trial</span>
+                        <span class="lang-es">En Prueba</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-icon purple">⭐</div>
+                    <div class="stat-card-value" id="totalMasters">1</div>
+                    <div class="stat-card-label">Masters</div>
+                </div>
+            </div>
+            <div class="game-cards-grid" id="overviewGames"></div>
+        </section>
+
+        <section class="page-section" id="page-gotrotters">
+            <header class="page-header">
+                <h1 class="page-title">GOTROTTERS</h1>
+                <p class="page-subtitle">
+                    <span class="lang-en">All users • $5/month per user</span>
+                    <span class="lang-es">Todos los usuarios • $5/mes por usuario</span>
+                </p>
+            </header>
+            <div class="table-card">
+                <div class="table-header">
+                    <h3 class="table-title">
+                        <span class="lang-en">ALL GOTROTTERS</span>
+                        <span class="lang-es">TODOS LOS GOTROTTERS</span>
+                    </h3>
+                    <div class="table-actions">
+                        <button class="btn btn-primary" id="addUserBtn">+ 
+                            <span class="lang-en">Add User</span>
+                            <span class="lang-es">Agregar</span>
+                        </button>
+                        <button class="btn btn-secondary" id="exportBtn">📥 Export</button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th><span class="lang-en">Name</span><span class="lang-es">Nombre</span></th>
+                                <th>Email</th>
+                                <th><span class="lang-en">Status</span><span class="lang-es">Estado</span></th>
+                                <th>🏀</th>
+                                <th>📋</th>
+                                <th>⚡</th>
+                                <th><span class="lang-en">Last Active</span><span class="lang-es">Última Vez</span></th>
+                                <th><span class="lang-en">Actions</span><span class="lang-es">Acciones</span></th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTable"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section class="page-section" id="page-analytics">
+            <header class="page-header">
+                <h1 class="page-title">3 POINT PLAY ANALYTICS</h1>
+                <p class="page-subtitle">
+                    <span class="lang-en">Performance across all three games</span>
+                    <span class="lang-es">Rendimiento en los tres juegos</span>
+                </p>
+            </header>
+            <div class="game-cards-grid" id="analyticsGames"></div>
+            <div class="table-card">
+                <div class="table-header">
+                    <h3 class="table-title">
+                        <span class="lang-en">10-TIER DISTRIBUTION</span>
+                        <span class="lang-es">DISTRIBUCIÓN 10 NIVELES</span>
+                    </h3>
+                </div>
+                <div class="table-container" style="padding:20px">
+                    <table class="tier-dist-table">
+                        <thead><tr><th>Tier</th><th>🏀</th><th>📋</th><th>⚡</th></tr></thead>
+                        <tbody id="tierDistTable"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section class="page-section" id="page-activity">
+            <header class="page-header">
+                <h1 class="page-title">
+                    <span class="lang-en">ACTIVITY LOG</span>
+                    <span class="lang-es">REGISTRO DE ACTIVIDAD</span>
+                </h1>
+                <p class="page-subtitle">
+                    <span class="lang-en">Recent platform activity</span>
+                    <span class="lang-es">Actividad reciente</span>
+                </p>
+            </header>
+            <div class="table-card">
+                <div class="table-header">
+                    <h3 class="table-title">
+                        <span class="lang-en">RECENT ACTIVITY</span>
+                        <span class="lang-es">ACTIVIDAD RECIENTE</span>
+                    </h3>
+                    <div class="table-actions">
+                        <button class="btn btn-primary" id="addActivityBtn">+ 
+                            <span class="lang-en">Add Entry</span>
+                            <span class="lang-es">Agregar</span>
+                        </button>
+                        <button class="btn btn-danger" id="clearActivityBtn">
+                            <span class="lang-en">Clear All</span>
+                            <span class="lang-es">Limpiar Todo</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="activity-list" id="activityList"></div>
+            </div>
+        </section>
+    </main>
 </div>
-<nav class="nav-section">
-<div class="nav-section-title"><span class="lang-en">Dashboard</span><span class="lang-es">Panel</span></div>
-<button class="nav-item active" onclick="showPage('overview',this)"><span class="nav-item-icon">📊</span><span class="lang-en">Overview</span><span class="lang-es">Resumen</span></button>
-<button class="nav-item" onclick="showPage('gotrotters',this)"><span class="nav-item-icon">🏀</span><span class="lang-en">GoTrotters</span><span class="lang-es">GoTrotters</span></button>
-<button class="nav-item" onclick="showPage('analytics',this)"><span class="nav-item-icon">📈</span><span class="lang-en">Analytics</span><span class="lang-es">Análisis</span></button>
-<button class="nav-item" onclick="showPage('activity',this)"><span class="nav-item-icon">📋</span><span class="lang-en">Activity</span><span class="lang-es">Actividad</span></button>
-</nav>
-<div class="sidebar-footer">
-<div class="lang-toggle">
-<button class="lang-btn active" onclick="setLang('en')">EN</button>
-<button class="lang-btn" onclick="setLang('es')">ES</button>
+
+<div class="modal-overlay" id="userModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 class="modal-title" id="userModalTitle">ADD GOTROTTER</h3>
+            <button class="modal-close" data-close="userModal">×</button>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="userId">
+            <div class="form-group">
+                <label class="form-label"><span class="lang-en">Name</span><span class="lang-es">Nombre</span></label>
+                <input type="text" class="form-input" id="userName" placeholder="John Smith">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-input" id="userEmail" placeholder="john@email.com">
+            </div>
+            <div class="form-group">
+                <label class="form-label"><span class="lang-en">Status</span><span class="lang-es">Estado</span></label>
+                <select class="form-select" id="userStatus">
+                    <option value="trial">Trial (7 days free)</option>
+                    <option value="paid">Paid ($5/month)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label"><span class="lang-en">Tier Levels</span><span class="lang-es">Niveles</span></label>
+                <div class="form-row">
+                    <div>
+                        <label class="form-label" style="font-size:0.7rem">🏀 Masters</label>
+                        <select class="form-select" id="userG1"></select>
+                    </div>
+                    <div>
+                        <label class="form-label" style="font-size:0.7rem">📋 Playbook</label>
+                        <select class="form-select" id="userG2"></select>
+                    </div>
+                    <div>
+                        <label class="form-label" style="font-size:0.7rem">⚡ Fast Break</label>
+                        <select class="form-select" id="userG3"></select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" data-close="userModal"><span class="lang-en">Cancel</span><span class="lang-es">Cancelar</span></button>
+            <button class="btn btn-primary" id="saveUserBtn"><span class="lang-en">Save</span><span class="lang-es">Guardar</span></button>
+        </div>
+    </div>
 </div>
-<button class="logout-btn" onclick="logout()">🚪 <span class="lang-en">Logout</span><span class="lang-es">Salir</span></button>
+
+<div class="modal-overlay" id="deleteModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 class="modal-title"><span class="lang-en">CONFIRM</span><span class="lang-es">CONFIRMAR</span></h3>
+            <button class="modal-close" data-close="deleteModal">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="confirm-dialog">
+                <div class="confirm-dialog-icon">⚠️</div>
+                <div class="confirm-dialog-title"><span class="lang-en">ARE YOU SURE?</span><span class="lang-es">¿ESTÁS SEGURO?</span></div>
+                <div class="confirm-dialog-text" id="deleteText"></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" data-close="deleteModal"><span class="lang-en">Cancel</span><span class="lang-es">Cancelar</span></button>
+            <button class="btn btn-danger" id="confirmDeleteBtn"><span class="lang-en">Delete</span><span class="lang-es">Eliminar</span></button>
+        </div>
+    </div>
 </div>
-</aside>
-<main class="main-content">
-<section class="page-section active" id="page-overview">
-<header class="page-header">
-<h1 class="page-title"><span class="lang-en">PLATFORM OVERVIEW</span><span class="lang-es">RESUMEN DE PLATAFORMA</span></h1>
-<p class="page-subtitle"><span class="lang-en">GoTrotters Memory Training - Admin Dashboard</span><span class="lang-es">Entrenamiento de Memoria GoTrotters - Panel Admin</span></p>
-</header>
-<div class="pricing-banner">
-<div class="pricing-banner-text"><span class="lang-en">Current Pricing:</span><span class="lang-es">Precio Actual:</span> <strong>$5<span class="lang-en">/month per user</span><span class="lang-es">/mes por usuario</span></strong></div>
-<div class="pricing-banner-badge"><span class="lang-en">Simple & Accessible</span><span class="lang-es">Simple y Accesible</span></div>
+
+<div class="modal-overlay" id="gameModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 class="modal-title" id="gameModalTitle">EDIT GAME STATS</h3>
+            <button class="modal-close" data-close="gameModal">×</button>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="gameId">
+            <div class="form-group">
+                <label class="form-label"><span class="lang-en">Total Plays</span><span class="lang-es">Jugadas Totales</span></label>
+                <input type="number" class="form-input" id="gamePlays" min="0">
+            </div>
+            <div class="form-group">
+                <label class="form-label"><span class="lang-en">Average Tier</span><span class="lang-es">Nivel Promedio</span></label>
+                <input type="number" class="form-input" id="gameAvg" min="1" max="10" step="0.1">
+            </div>
+            <div class="form-group">
+                <label class="form-label"><span class="lang-en">Masters Count</span><span class="lang-es">Cantidad de Masters</span></label>
+                <input type="number" class="form-input" id="gameMasters" min="0">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" data-close="gameModal"><span class="lang-en">Cancel</span><span class="lang-es">Cancelar</span></button>
+            <button class="btn btn-primary" id="saveGameBtn"><span class="lang-en">Save</span><span class="lang-es">Guardar</span></button>
+        </div>
+    </div>
 </div>
-<div class="stats-grid">
-<div class="stat-card"><div class="stat-card-icon teal">🏀</div><div class="stat-card-value" id="totalUsers">8</div><div class="stat-card-label"><span class="lang-en">GoTrotters</span><span class="lang-es">GoTrotters</span></div></div>
-<div class="stat-card"><div class="stat-card-icon orange">💰</div><div class="stat-card-value">$<span id="monthlyRevenue">40</span></div><div class="stat-card-label"><span class="lang-en">Monthly Revenue</span><span class="lang-es">Ingreso Mensual</span></div></div>
-<div class="stat-card"><div class="stat-card-icon gold">🆓</div><div class="stat-card-value" id="trialUsers">2</div><div class="stat-card-label"><span class="lang-en">On Trial</span><span class="lang-es">En Prueba</span></div></div>
-<div class="stat-card"><div class="stat-card-icon purple">⭐</div><div class="stat-card-value" id="totalMastered">6</div><div class="stat-card-label"><span class="lang-en">Tiers Mastered</span><span class="lang-es">Niveles Dominados</span></div></div>
+
+<div class="modal-overlay" id="activityModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 class="modal-title" id="activityModalTitle">ADD ACTIVITY</h3>
+            <button class="modal-close" data-close="activityModal">×</button>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="activityId">
+            <div class="form-group">
+                <label class="form-label"><span class="lang-en">Type</span><span class="lang-es">Tipo</span></label>
+                <select class="form-select" id="activityType">
+                    <option value="user">🏀 User Activity</option>
+                    <option value="game">🎮 Game Achievement</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label"><span class="lang-en">Description</span><span class="lang-es">Descripción</span></label>
+                <input type="text" class="form-input" id="activityText" placeholder="Carmen Rivera reached MASTER tier">
+            </div>
+            <div class="form-group">
+                <label class="form-label"><span class="lang-en">Time</span><span class="lang-es">Tiempo</span></label>
+                <input type="text" class="form-input" id="activityTime" placeholder="5 minutes ago">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" data-close="activityModal"><span class="lang-en">Cancel</span><span class="lang-es">Cancelar</span></button>
+            <button class="btn btn-primary" id="saveActivityBtn"><span class="lang-en">Save</span><span class="lang-es">Guardar</span></button>
+        </div>
+    </div>
 </div>
-<div class="game-cards-grid">
-<div class="game-card"><div class="game-card-header g1"><span class="game-card-icon">🏀</span><span class="game-card-title">MASTERS OF THE GAME</span></div><div class="game-card-body"><div class="game-card-stats"><div class="game-stat"><div class="game-stat-value">8</div><div class="game-stat-label">Players</div></div><div class="game-stat"><div class="game-stat-value">4.2</div><div class="game-stat-label">Avg Tier</div></div><div class="game-stat"><div class="game-stat-value">1</div><div class="game-stat-label">Masters</div></div></div></div></div>
-<div class="game-card"><div class="game-card-header g2"><span class="game-card-icon">📋</span><span class="game-card-title">THE PLAYBOOK</span></div><div class="game-card-body"><div class="game-card-stats"><div class="game-stat"><div class="game-stat-value">7</div><div class="game-stat-label">Players</div></div><div class="game-stat"><div class="game-stat-value">3.8</div><div class="game-stat-label">Avg Tier</div></div><div class="game-stat"><div class="game-stat-value">0</div><div class="game-stat-label">Masters</div></div></div></div></div>
-<div class="game-card"><div class="game-card-header g3"><span class="game-card-icon">⚡</span><span class="game-card-title">THE FAST BREAK</span></div><div class="game-card-body"><div class="game-card-stats"><div class="game-stat"><div class="game-stat-value">6</div><div class="game-stat-label">Players</div></div><div class="game-stat"><div class="game-stat-value">3.5</div><div class="game-stat-label">Avg Tier</div></div><div class="game-stat"><div class="game-stat-value">0</div><div class="game-stat-label">Masters</div></div></div></div></div>
+
+<div class="toast" id="toast">
+    <span class="toast-icon" id="toastIcon">✓</span>
+    <span class="toast-text" id="toastText">Saved</span>
 </div>
-</section>
-<section class="page-section" id="page-gotrotters">
-<header class="page-header">
-<h1 class="page-title">GOTROTTERS</h1>
-<p class="page-subtitle"><span class="lang-en">All users • $5/month per user</span><span class="lang-es">Todos los usuarios • $5/mes por usuario</span></p>
-</header>
-<div class="table-card">
-<div class="table-header"><h3 class="table-title"><span class="lang-en">ALL GOTROTTERS</span><span class="lang-es">TODOS LOS GOTROTTERS</span></h3><div class="table-actions"><button class="btn btn-primary" onclick="openModal('addUserModal')">+ <span class="lang-en">Add User</span><span class="lang-es">Agregar</span></button><button class="btn btn-secondary" onclick="exportUsers()">📥 Export</button></div></div>
-<div class="table-container"><table><thead><tr><th><span class="lang-en">Name</span><span class="lang-es">Nombre</span></th><th>Email</th><th><span class="lang-en">Status</span><span class="lang-es">Estado</span></th><th>🏀</th><th>📋</th><th>⚡</th><th><span class="lang-en">Last Active</span><span class="lang-es">Última Vez</span></th></tr></thead><tbody id="usersTable"></tbody></table></div>
-</div>
-</section>
-<section class="page-section" id="page-analytics">
-<header class="page-header">
-<h1 class="page-title">3 POINT PLAY ANALYTICS</h1>
-<p class="page-subtitle"><span class="lang-en">Performance across all three games</span><span class="lang-es">Rendimiento en los tres juegos</span></p>
-</header>
-<div class="game-cards-grid">
-<div class="game-card"><div class="game-card-header g1"><span class="game-card-icon">🏀</span><span class="game-card-title">MASTERS OF THE GAME</span></div><div class="game-card-body"><div class="game-card-stats"><div class="game-stat"><div class="game-stat-value">245</div><div class="game-stat-label">Plays</div></div><div class="game-stat"><div class="game-stat-value">4.2</div><div class="game-stat-label">Avg</div></div><div class="game-stat"><div class="game-stat-value">1</div><div class="game-stat-label">Masters</div></div></div></div></div>
-<div class="game-card"><div class="game-card-header g2"><span class="game-card-icon">📋</span><span class="game-card-title">THE PLAYBOOK</span></div><div class="game-card-body"><div class="game-card-stats"><div class="game-stat"><div class="game-stat-value">187</div><div class="game-stat-label">Plays</div></div><div class="game-stat"><div class="game-stat-value">3.8</div><div class="game-stat-label">Avg</div></div><div class="game-stat"><div class="game-stat-value">0</div><div class="game-stat-label">Masters</div></div></div></div></div>
-<div class="game-card"><div class="game-card-header g3"><span class="game-card-icon">⚡</span><span class="game-card-title">THE FAST BREAK</span></div><div class="game-card-body"><div class="game-card-stats"><div class="game-stat"><div class="game-stat-value">156</div><div class="game-stat-label">Plays</div></div><div class="game-stat"><div class="game-stat-value">3.5</div><div class="game-stat-label">Avg</div></div><div class="game-stat"><div class="game-stat-value">0</div><div class="game-stat-label">Masters</div></div></div></div></div>
-</div>
-<div class="table-card">
-<div class="table-header"><h3 class="table-title"><span class="lang-en">10-TIER DISTRIBUTION</span><span class="lang-es">DISTRIBUCIÓN 10 NIVELES</span></h3></div>
-<div class="table-container" style="padding:20px"><table class="tier-dist-table"><thead><tr><th>Tier</th><th>🏀</th><th>📋</th><th>⚡</th></tr></thead><tbody id="tierDistTable"></tbody></table></div>
-</div>
-</section>
-<section class="page-section" id="page-activity">
-<header class="page-header">
-<h1 class="page-title"><span class="lang-en">ACTIVITY LOG</span><span class="lang-es">REGISTRO DE ACTIVIDAD</span></h1>
-<p class="page-subtitle"><span class="lang-en">Recent platform activity</span><span class="lang-es">Actividad reciente</span></p>
-</header>
-<div class="table-card">
-<div class="table-header"><h3 class="table-title"><span class="lang-en">RECENT ACTIVITY</span><span class="lang-es">ACTIVIDAD RECIENTE</span></h3></div>
-<div class="activity-list" id="activityList"></div>
-</div>
-</section>
-</main>
-</div>
-<div class="modal-overlay" id="addUserModal">
-<div class="modal">
-<div class="modal-header"><h3 class="modal-title"><span class="lang-en">ADD GOTROTTER</span><span class="lang-es">AGREGAR GOTROTTER</span></h3><button class="modal-close" onclick="closeModal('addUserModal')">×</button></div>
-<div class="modal-body">
-<div class="form-group"><label class="form-label"><span class="lang-en">Name</span><span class="lang-es">Nombre</span></label><input type="text" class="form-input" id="userName" placeholder="John Smith"></div>
-<div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" id="userEmail" placeholder="john@email.com"></div>
-<div class="form-group"><label class="form-label"><span class="lang-en">Status</span><span class="lang-es">Estado</span></label><select class="form-select" id="userStatus"><option value="trial">Trial (7 days free)</option><option value="paid">Paid ($5/month)</option></select></div>
-</div>
-<div class="modal-footer"><button class="btn btn-secondary" onclick="closeModal('addUserModal')"><span class="lang-en">Cancel</span><span class="lang-es">Cancelar</span></button><button class="btn btn-primary" onclick="createUser()"><span class="lang-en">Add User</span><span class="lang-es">Agregar</span></button></div>
-</div>
-</div>
+
 <script>
-var tierList=['TRYOUT 1','TRYOUT 2','TRYOUT 3','ROOKIE','SOPHOMORE','VETERAN','ALL-STAR','ELITE','CHAMPION','MASTER'];
-var tierClasses=['tryout','tryout','tryout','rookie','sophomore','veteran','allstar','elite','champion','master'];
-var users=[
-{id:1,name:'María García',email:'maria@email.com',status:'paid',g1:5,g2:4,g3:3,lastActive:'2026-01-05'},
-{id:2,name:'Roberto López',email:'roberto@email.com',status:'paid',g1:7,g2:6,g3:5,lastActive:'2026-01-05'},
-{id:3,name:'Carmen Rivera',email:'carmen@email.com',status:'paid',g1:10,g2:8,g3:7,lastActive:'2026-01-04'},
-{id:4,name:'José Martínez',email:'jose@email.com',status:'paid',g1:3,g2:2,g3:2,lastActive:'2026-01-05'},
-{id:5,name:'Ana Rodríguez',email:'ana@email.com',status:'trial',g1:2,g2:1,g3:1,lastActive:'2026-01-03'},
-{id:6,name:'Pedro Santos',email:'pedro@email.com',status:'paid',g1:4,g2:3,g3:3,lastActive:'2026-01-05'},
-{id:7,name:'Luis Hernández',email:'luis@email.com',status:'paid',g1:8,g2:7,g3:6,lastActive:'2026-01-04'},
-{id:8,name:'Rosa Díaz',email:'rosa@email.com',status:'trial',g1:1,g2:1,g3:1,lastActive:'2026-01-05'}
-];
-var activity=[
-{icon:'user',text:'Rosa Díaz started free trial',time:'5 minutes ago'},
-{icon:'game',text:'Roberto López reached ALL-STAR in Masters of the Game',time:'12 minutes ago'},
-{icon:'user',text:'Pedro Santos converted from trial to paid ($5/mo)',time:'1 hour ago'},
-{icon:'game',text:'Carmen Rivera became a MASTER! 👑',time:'3 hours ago'},
-{icon:'user',text:'Ana Rodríguez started free trial',time:'1 day ago'}
-];
-var currentLang=localStorage.getItem('gt-admin-lang')||'en';
-function setLang(l){currentLang=l;localStorage.setItem('gt-admin-lang',l);document.body.className=l;document.querySelectorAll('.lang-btn').forEach(function(b){b.classList.toggle('active',b.textContent.trim()===l.toUpperCase());});}
-setLang(currentLang);
-document.querySelectorAll('.pin-input').forEach(function(input,idx,inputs){
-input.addEventListener('input',function(){if(this.value.length===1&&idx<inputs.length-1)inputs[idx+1].focus();});
-input.addEventListener('keydown',function(e){if(e.key==='Backspace'&&this.value===''&&idx>0)inputs[idx-1].focus();if(e.key==='Enter')attemptLogin();});
-});
-function attemptLogin(){
-var pin='';for(var i=1;i<=4;i++)pin+=document.getElementById('pin'+i).value;
-if(pin==='1628'){sessionStorage.setItem('gostar-admin-auth','true');document.getElementById('loginScreen').classList.add('hidden');document.getElementById('dashboard').classList.add('visible');loadDashboard();}
-else{document.getElementById('loginError').classList.add('show');for(var i=1;i<=4;i++)document.getElementById('pin'+i).value='';document.getElementById('pin1').focus();setTimeout(function(){document.getElementById('loginError').classList.remove('show');},3000);}
-}
-function logout(){sessionStorage.removeItem('gostar-admin-auth');document.getElementById('dashboard').classList.remove('visible');document.getElementById('loginScreen').classList.remove('hidden');for(var i=1;i<=4;i++)document.getElementById('pin'+i).value='';document.getElementById('pin1').focus();}
-if(sessionStorage.getItem('gostar-admin-auth')==='true'){document.getElementById('loginScreen').classList.add('hidden');document.getElementById('dashboard').classList.add('visible');loadDashboard();}
-function showPage(page,btn){document.querySelectorAll('.page-section').forEach(function(s){s.classList.remove('active');});document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active');});document.getElementById('page-'+page).classList.add('active');btn.classList.add('active');}
-function openModal(id){document.getElementById(id).classList.add('show');}
-function closeModal(id){document.getElementById(id).classList.remove('show');}
-function getTierBadge(level){var idx=Math.min(level-1,9);if(idx<0)idx=0;return '<span class="tier-badge '+tierClasses[idx]+'">'+tierList[idx]+'</span>';}
-function getStatusBadge(status){return '<span class="badge badge-'+status+'">'+(status==='trial'?'Trial':'Paid')+'</span>';}
-function loadDashboard(){
-var paidUsers=users.filter(function(u){return u.status==='paid';}).length;
-var trialUsers=users.filter(function(u){return u.status==='trial';}).length;
-document.getElementById('totalUsers').textContent=users.length;
-document.getElementById('monthlyRevenue').textContent=paidUsers*5;
-document.getElementById('trialUsers').textContent=trialUsers;
-var html='';
-users.forEach(function(u){html+='<tr><td>'+u.name+'</td><td>'+u.email+'</td><td>'+getStatusBadge(u.status)+'</td><td>'+getTierBadge(u.g1)+'</td><td>'+getTierBadge(u.g2)+'</td><td>'+getTierBadge(u.g3)+'</td><td>'+u.lastActive+'</td></tr>';});
-document.getElementById('usersTable').innerHTML=html;
-html='';
-tierList.forEach(function(tier,idx){
-var g1=users.filter(function(u){return u.g1===idx+1;}).length;
-var g2=users.filter(function(u){return u.g2===idx+1;}).length;
-var g3=users.filter(function(u){return u.g3===idx+1;}).length;
-html+='<tr><td><span class="tier-badge '+tierClasses[idx]+'">'+tier+'</span></td><td>'+g1+'</td><td>'+g2+'</td><td>'+g3+'</td></tr>';
-});
-document.getElementById('tierDistTable').innerHTML=html;
-html='';
-activity.forEach(function(a){html+='<div class="activity-item"><div class="activity-icon '+a.icon+'">'+(a.icon==='user'?'🏀':'🎮')+'</div><div class="activity-content"><div class="activity-text">'+a.text+'</div><div class="activity-time">'+a.time+'</div></div></div>';});
-document.getElementById('activityList').innerHTML=html;
-}
-function createUser(){
-var name=document.getElementById('userName').value;
-var email=document.getElementById('userEmail').value;
-var status=document.getElementById('userStatus').value;
-if(!name||!email){alert('Enter name and email');return;}
-users.push({id:users.length+1,name:name,email:email,status:status,g1:1,g2:1,g3:1,lastActive:new Date().toISOString().split('T')[0]});
-closeModal('addUserModal');loadDashboard();
-document.getElementById('userName').value='';document.getElementById('userEmail').value='';
-}
-function exportUsers(){
-var csv='Name,Email,Status,Masters,Playbook,FastBreak,LastActive\n';
-users.forEach(function(u){csv+=u.name+','+u.email+','+u.status+','+tierList[u.g1-1]+','+tierList[u.g2-1]+','+tierList[u.g3-1]+','+u.lastActive+'\n';});
-var blob=new Blob([csv],{type:'text/csv'});
-var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='gotrotters-export.csv';a.click();
-}
-document.getElementById('pin1').focus();
+(function() {
+    'use strict';
+
+    var tierList = ['TRYOUT 1','TRYOUT 2','TRYOUT 3','ROOKIE','SOPHOMORE','VETERAN','ALL-STAR','ELITE','CHAMPION','MASTER'];
+    var tierClasses = ['tryout','tryout','tryout','rookie','sophomore','veteran','allstar','elite','champion','master'];
+
+    var users = [
+        {id:1, name:'María García', email:'maria@email.com', status:'paid', g1:5, g2:4, g3:3, lastActive:'2026-01-05'},
+        {id:2, name:'Roberto López', email:'roberto@email.com', status:'paid', g1:7, g2:6, g3:5, lastActive:'2026-01-05'},
+        {id:3, name:'Carmen Rivera', email:'carmen@email.com', status:'paid', g1:10, g2:8, g3:7, lastActive:'2026-01-04'},
+        {id:4, name:'José Martínez', email:'jose@email.com', status:'paid', g1:3, g2:2, g3:2, lastActive:'2026-01-05'},
+        {id:5, name:'Ana Rodríguez', email:'ana@email.com', status:'trial', g1:2, g2:1, g3:1, lastActive:'2026-01-03'},
+        {id:6, name:'Pedro Santos', email:'pedro@email.com', status:'paid', g1:4, g2:3, g3:3, lastActive:'2026-01-05'},
+        {id:7, name:'Luis Hernández', email:'luis@email.com', status:'paid', g1:8, g2:7, g3:6, lastActive:'2026-01-04'},
+        {id:8, name:'Rosa Díaz', email:'rosa@email.com', status:'trial', g1:1, g2:1, g3:1, lastActive:'2026-01-05'}
+    ];
+
+    var gameStats = {
+        g1: {name: 'MASTERS OF THE GAME', icon: '🏀', plays: 245, avg: 4.2, masters: 1},
+        g2: {name: 'THE PLAYBOOK', icon: '📋', plays: 187, avg: 3.8, masters: 0},
+        g3: {name: 'THE FAST BREAK', icon: '⚡', plays: 156, avg: 3.5, masters: 0}
+    };
+
+    var activities = [
+        {id:1, type:'user', text:'Rosa Díaz started free trial', time:'5 minutes ago'},
+        {id:2, type:'game', text:'Roberto López reached ALL-STAR in Masters of the Game', time:'12 minutes ago'},
+        {id:3, type:'user', text:'Pedro Santos converted from trial to paid ($5/mo)', time:'1 hour ago'},
+        {id:4, type:'game', text:'Carmen Rivera became a MASTER! 👑', time:'3 hours ago'},
+        {id:5, type:'user', text:'Ana Rodríguez started free trial', time:'1 day ago'}
+    ];
+
+    var nextUserId = 9;
+    var nextActivityId = 6;
+    var deleteTarget = null;
+    var currentLang = localStorage.getItem('gt-admin-lang') || 'en';
+
+    function init() {
+        setLang(currentLang);
+        setupPinInputs();
+        setupEventListeners();
+        populateTierSelects();
+        if (sessionStorage.getItem('gostar-admin-auth') === 'true') {
+            showDashboard();
+        }
+    }
+
+    function setLang(lang) {
+        currentLang = lang;
+        localStorage.setItem('gt-admin-lang', lang);
+        document.body.className = lang;
+        document.getElementById('btnEn').className = lang === 'en' ? 'lang-btn active' : 'lang-btn';
+        document.getElementById('btnEs').className = lang === 'es' ? 'lang-btn active' : 'lang-btn';
+    }
+
+    function setupPinInputs() {
+        var pins = [document.getElementById('pin1'), document.getElementById('pin2'), document.getElementById('pin3'), document.getElementById('pin4')];
+        pins.forEach(function(input, idx) {
+            input.addEventListener('input', function() {
+                if (this.value.length === 1 && idx < 3) pins[idx + 1].focus();
+            });
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Backspace' && this.value === '' && idx > 0) pins[idx - 1].focus();
+                if (e.key === 'Enter') attemptLogin();
+            });
+        });
+        pins[0].focus();
+    }
+
+    function attemptLogin() {
+        var pin = '';
+        for (var i = 1; i <= 4; i++) pin += document.getElementById('pin' + i).value;
+        if (pin === '1628') {
+            sessionStorage.setItem('gostar-admin-auth', 'true');
+            showDashboard();
+        } else {
+            document.getElementById('loginError').classList.add('show');
+            for (var i = 1; i <= 4; i++) document.getElementById('pin' + i).value = '';
+            document.getElementById('pin1').focus();
+            setTimeout(function() { document.getElementById('loginError').classList.remove('show'); }, 3000);
+        }
+    }
+
+    function showDashboard() {
+        document.getElementById('loginScreen').classList.add('hidden');
+        document.getElementById('dashboard').classList.add('visible');
+        renderAll();
+    }
+
+    function logout() {
+        sessionStorage.removeItem('gostar-admin-auth');
+        document.getElementById('dashboard').classList.remove('visible');
+        document.getElementById('loginScreen').classList.remove('hidden');
+        for (var i = 1; i <= 4; i++) document.getElementById('pin' + i).value = '';
+        document.getElementById('pin1').focus();
+    }
+
+    function setupEventListeners() {
+        document.getElementById('loginBtn').addEventListener('click', attemptLogin);
+        document.getElementById('logoutBtn').addEventListener('click', logout);
+        document.getElementById('btnEn').addEventListener('click', function() { setLang('en'); });
+        document.getElementById('btnEs').addEventListener('click', function() { setLang('es'); });
+
+        document.querySelectorAll('.nav-item').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var page = this.getAttribute('data-page');
+                showPage(page);
+                document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
+                this.classList.add('active');
+            });
+        });
+
+        document.querySelectorAll('[data-close]').forEach(function(btn) {
+            btn.addEventListener('click', function() { closeModal(this.getAttribute('data-close')); });
+        });
+
+        document.getElementById('addUserBtn').addEventListener('click', openAddUserModal);
+        document.getElementById('saveUserBtn').addEventListener('click', saveUser);
+        document.getElementById('exportBtn').addEventListener('click', exportUsers);
+        document.getElementById('addActivityBtn').addEventListener('click', openAddActivityModal);
+        document.getElementById('saveActivityBtn').addEventListener('click', saveActivity);
+        document.getElementById('clearActivityBtn').addEventListener('click', function() {
+            deleteTarget = {type: 'clearActivity'};
+            document.getElementById('deleteText').textContent = currentLang === 'es' ? 'Esto eliminará todas las entradas.' : 'This will remove all entries.';
+            openModal('deleteModal');
+        });
+        document.getElementById('saveGameBtn').addEventListener('click', saveGameStats);
+        document.getElementById('confirmDeleteBtn').addEventListener('click', confirmDelete);
+
+        document.querySelectorAll('.modal-overlay').forEach(function(overlay) {
+            overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.classList.remove('show'); });
+        });
+    }
+
+    function showPage(page) {
+        document.querySelectorAll('.page-section').forEach(function(s) { s.classList.remove('active'); });
+        document.getElementById('page-' + page).classList.add('active');
+    }
+
+    function openModal(id) { document.getElementById(id).classList.add('show'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+
+    function showToast(message, isError) {
+        var toast = document.getElementById('toast');
+        document.getElementById('toastText').textContent = message;
+        document.getElementById('toastIcon').textContent = isError ? '✗' : '✓';
+        toast.classList.toggle('error', isError);
+        toast.classList.add('show');
+        setTimeout(function() { toast.classList.remove('show'); }, 3000);
+    }
+
+    function getTierBadge(level) {
+        var idx = Math.min(Math.max(level - 1, 0), 9);
+        return '<span class="tier-badge ' + tierClasses[idx] + '">' + tierList[idx] + '</span>';
+    }
+
+    function getStatusBadge(status) {
+        return '<span class="badge badge-' + status + '">' + (status === 'trial' ? 'Trial' : 'Paid') + '</span>';
+    }
+
+    function populateTierSelects() {
+        var html = '';
+        tierList.forEach(function(tier, idx) { html += '<option value="' + (idx + 1) + '">' + (idx + 1) + ' - ' + tier + '</option>'; });
+        ['userG1', 'userG2', 'userG3'].forEach(function(id) { document.getElementById(id).innerHTML = html; });
+    }
+
+    function renderAll() {
+        renderStats();
+        renderOverviewGames();
+        renderUsersTable();
+        renderAnalyticsGames();
+        renderTierDistribution();
+        renderActivityList();
+    }
+
+    function renderStats() {
+        var paid = users.filter(function(u) { return u.status === 'paid'; }).length;
+        var trial = users.filter(function(u) { return u.status === 'trial'; }).length;
+        var masters = users.filter(function(u) { return u.g1 === 10 || u.g2 === 10 || u.g3 === 10; }).length;
+        document.getElementById('totalUsers').textContent = users.length;
+        document.getElementById('monthlyRevenue').textContent = paid * 5;
+        document.getElementById('trialUsers').textContent = trial;
+        document.getElementById('totalMasters').textContent = masters;
+    }
+
+    function renderOverviewGames() {
+        var html = '';
+        ['g1', 'g2', 'g3'].forEach(function(key, idx) {
+            var g = gameStats[key];
+            var players = users.filter(function(u) { return u[key] > 0; }).length;
+            var avg = players > 0 ? (users.reduce(function(sum, u) { return sum + u[key]; }, 0) / players).toFixed(1) : '0';
+            var masterCount = users.filter(function(u) { return u[key] === 10; }).length;
+            html += '<div class="game-card"><div class="game-card-header g' + (idx+1) + '"><span class="game-card-icon">' + g.icon + '</span><span class="game-card-title">' + g.name + '</span></div><div class="game-card-body"><div class="game-card-stats"><div class="game-stat"><div class="game-stat-value">' + players + '</div><div class="game-stat-label">Players</div></div><div class="game-stat"><div class="game-stat-value">' + avg + '</div><div class="game-stat-label">Avg Tier</div></div><div class="game-stat"><div class="game-stat-value">' + masterCount + '</div><div class="game-stat-label">Masters</div></div></div></div></div>';
+        });
+        document.getElementById('overviewGames').innerHTML = html;
+    }
+
+    function renderUsersTable() {
+        var html = '';
+        users.forEach(function(u) {
+            html += '<tr><td>' + u.name + '</td><td>' + u.email + '</td><td>' + getStatusBadge(u.status) + '</td><td>' + getTierBadge(u.g1) + '</td><td>' + getTierBadge(u.g2) + '</td><td>' + getTierBadge(u.g3) + '</td><td>' + u.lastActive + '</td><td><div class="action-btns"><button class="action-btn" onclick="window.editUser(' + u.id + ')" title="Edit">✏️</button><button class="action-btn delete" onclick="window.deleteUser(' + u.id + ')" title="Delete">🗑️</button></div></td></tr>';
+        });
+        document.getElementById('usersTable').innerHTML = html;
+    }
+
+    function renderAnalyticsGames() {
+        var html = '';
+        ['g1', 'g2', 'g3'].forEach(function(key, idx) {
+            var g = gameStats[key];
+            html += '<div class="game-card"><div class="game-card-header g' + (idx+1) + '"><span class="game-card-icon">' + g.icon + '</span><span class="game-card-title">' + g.name + '</span><button class="game-card-edit" onclick="window.editGame(\'' + key + '\')">✏️ Edit</button></div><div class="game-card-body"><div class="game-card-stats"><div class="game-stat"><div class="game-stat-value">' + g.plays + '</div><div class="game-stat-label">Plays</div></div><div class="game-stat"><div class="game-stat-value">' + g.avg + '</div><div class="game-stat-label">Avg</div></div><div class="game-stat"><div class="game-stat-value">' + g.masters + '</div><div class="game-stat-label">Masters</div></div></div></div></div>';
+        });
+        document.getElementById('analyticsGames').innerHTML = html;
+    }
+
+    function renderTierDistribution() {
+        var html = '';
+        tierList.forEach(function(tier, idx) {
+            var level = idx + 1;
+            var g1 = users.filter(function(u) { return u.g1 === level; }).length;
+            var g2 = users.filter(function(u) { return u.g2 === level; }).length;
+            var g3 = users.filter(function(u) { return u.g3 === level; }).length;
+            html += '<tr><td>' + getTierBadge(level) + '</td><td>' + g1 + '</td><td>' + g2 + '</td><td>' + g3 + '</td></tr>';
+        });
+        document.getElementById('tierDistTable').innerHTML = html;
+    }
+
+    function renderActivityList() {
+        if (activities.length === 0) {
+            document.getElementById('activityList').innerHTML = '<div style="padding:40px;text-align:center;color:var(--muted)">No activity yet</div>';
+            return;
+        }
+        var html = '';
+        activities.forEach(function(a) {
+            html += '<div class="activity-item"><div class="activity-icon ' + a.type + '">' + (a.type === 'user' ? '🏀' : '🎮') + '</div><div class="activity-content"><div class="activity-text">' + a.text + '</div><div class="activity-time">' + a.time + '</div></div><div class="activity-actions"><button class="action-btn" onclick="window.editActivity(' + a.id + ')" title="Edit">✏️</button><button class="action-btn delete" onclick="window.deleteActivity(' + a.id + ')" title="Delete">🗑️</button></div></div>';
+        });
+        document.getElementById('activityList').innerHTML = html;
+    }
+
+    function openAddUserModal() {
+        document.getElementById('userModalTitle').textContent = currentLang === 'es' ? 'AGREGAR GOTROTTER' : 'ADD GOTROTTER';
+        document.getElementById('userId').value = '';
+        document.getElementById('userName').value = '';
+        document.getElementById('userEmail').value = '';
+        document.getElementById('userStatus').value = 'trial';
+        document.getElementById('userG1').value = '1';
+        document.getElementById('userG2').value = '1';
+        document.getElementById('userG3').value = '1';
+        openModal('userModal');
+    }
+
+    window.editUser = function(id) {
+        var user = users.find(function(u) { return u.id === id; });
+        if (!user) return;
+        document.getElementById('userModalTitle').textContent = currentLang === 'es' ? 'EDITAR GOTROTTER' : 'EDIT GOTROTTER';
+        document.getElementById('userId').value = id;
+        document.getElementById('userName').value = user.name;
+        document.getElementById('userEmail').value = user.email;
+        document.getElementById('userStatus').value = user.status;
+        document.getElementById('userG1').value = user.g1;
+        document.getElementById('userG2').value = user.g2;
+        document.getElementById('userG3').value = user.g3;
+        openModal('userModal');
+    };
+
+    function saveUser() {
+        var id = document.getElementById('userId').value;
+        var name = document.getElementById('userName').value.trim();
+        var email = document.getElementById('userEmail').value.trim();
+        var status = document.getElementById('userStatus').value;
+        var g1 = parseInt(document.getElementById('userG1').value);
+        var g2 = parseInt(document.getElementById('userG2').value);
+        var g3 = parseInt(document.getElementById('userG3').value);
+        if (!name || !email) { showToast(currentLang === 'es' ? 'Ingresa nombre y email' : 'Enter name and email', true); return; }
+        if (id) {
+            var idx = users.findIndex(function(u) { return u.id === parseInt(id); });
+            if (idx > -1) { users[idx].name = name; users[idx].email = email; users[idx].status = status; users[idx].g1 = g1; users[idx].g2 = g2; users[idx].g3 = g3; }
+        } else {
+            users.push({ id: nextUserId++, name: name, email: email, status: status, g1: g1, g2: g2, g3: g3, lastActive: new Date().toISOString().split('T')[0] });
+        }
+        closeModal('userModal');
+        renderAll();
+        showToast(currentLang === 'es' ? 'Guardado' : 'Saved');
+    }
+
+    window.deleteUser = function(id) {
+        var user = users.find(function(u) { return u.id === id; });
+        if (!user) return;
+        deleteTarget = {type: 'user', id: id};
+        document.getElementById('deleteText').innerHTML = (currentLang === 'es' ? 'Eliminar ' : 'Delete ') + '<strong style="color:var(--orange)">' + user.name + '</strong>?';
+        openModal('deleteModal');
+    };
+
+    window.editGame = function(key) {
+        var g = gameStats[key];
+        document.getElementById('gameModalTitle').textContent = 'EDIT: ' + g.name;
+        document.getElementById('gameId').value = key;
+        document.getElementById('gamePlays').value = g.plays;
+        document.getElementById('gameAvg').value = g.avg;
+        document.getElementById('gameMasters').value = g.masters;
+        openModal('gameModal');
+    };
+
+    function saveGameStats() {
+        var key = document.getElementById('gameId').value;
+        gameStats[key].plays = parseInt(document.getElementById('gamePlays').value) || 0;
+        gameStats[key].avg = parseFloat(document.getElementById('gameAvg').value) || 0;
+        gameStats[key].masters = parseInt(document.getElementById('gameMasters').value) || 0;
+        closeModal('gameModal');
+        renderAll();
+        showToast(currentLang === 'es' ? 'Guardado' : 'Saved');
+    }
+
+    function openAddActivityModal() {
+        document.getElementById('activityModalTitle').textContent = currentLang === 'es' ? 'AGREGAR ACTIVIDAD' : 'ADD ACTIVITY';
+        document.getElementById('activityId').value = '';
+        document.getElementById('activityType').value = 'user';
+        document.getElementById('activityText').value = '';
+        document.getElementById('activityTime').value = '';
+        openModal('activityModal');
+    }
+
+    window.editActivity = function(id) {
+        var item = activities.find(function(a) { return a.id === id; });
+        if (!item) return;
+        document.getElementById('activityModalTitle').textContent = currentLang === 'es' ? 'EDITAR ACTIVIDAD' : 'EDIT ACTIVITY';
+        document.getElementById('activityId').value = id;
+        document.getElementById('activityType').value = item.type;
+        document.getElementById('activityText').value = item.text;
+        document.getElementById('activityTime').value = item.time;
+        openModal('activityModal');
+    };
+
+    function saveActivity() {
+        var id = document.getElementById('activityId').value;
+        var type = document.getElementById('activityType').value;
+        var text = document.getElementById('activityText').value.trim();
+        var time = document.getElementById('activityTime').value.trim() || 'Just now';
+        if (!text) { showToast(currentLang === 'es' ? 'Ingresa descripción' : 'Enter description', true); return; }
+        if (id) {
+            var idx = activities.findIndex(function(a) { return a.id === parseInt(id); });
+            if (idx > -1) { activities[idx].type = type; activities[idx].text = text; activities[idx].time = time; }
+        } else {
+            activities.unshift({ id: nextActivityId++, type: type, text: text, time: time });
+        }
+        closeModal('activityModal');
+        renderActivityList();
+        showToast(currentLang === 'es' ? 'Guardado' : 'Saved');
+    }
+
+    window.deleteActivity = function(id) {
+        deleteTarget = {type: 'activity', id: id};
+        document.getElementById('deleteText').textContent = currentLang === 'es' ? 'Eliminar esta entrada?' : 'Delete this entry?';
+        openModal('deleteModal');
+    };
+
+    function confirmDelete() {
+        if (!deleteTarget) return;
+        if (deleteTarget.type === 'user') {
+            users = users.filter(function(u) { return u.id !== deleteTarget.id; });
+            renderAll();
+        } else if (deleteTarget.type === 'activity') {
+            activities = activities.filter(function(a) { return a.id !== deleteTarget.id; });
+            renderActivityList();
+        } else if (deleteTarget.type === 'clearActivity') {
+            activities = [];
+            renderActivityList();
+        }
+        deleteTarget = null;
+        closeModal('deleteModal');
+        showToast(currentLang === 'es' ? 'Eliminado' : 'Deleted');
+    }
+
+    function exportUsers() {
+        var csv = 'Name,Email,Status,Masters,Playbook,FastBreak,LastActive\n';
+        users.forEach(function(u) { csv += u.name + ',' + u.email + ',' + u.status + ',' + tierList[u.g1 - 1] + ',' + tierList[u.g2 - 1] + ',' + tierList[u.g3 - 1] + ',' + u.lastActive + '\n'; });
+        var blob = new Blob([csv], {type: 'text/csv'});
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'gotrotters-export.csv';
+        a.click();
+        showToast(currentLang === 'es' ? 'Exportado' : 'Exported');
+    }
+
+    init();
+})();
 </script>
 </body>
 </html>
