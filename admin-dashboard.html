@@ -383,14 +383,14 @@ tr:hover { background: var(--card-hover); }
 .badge-paid { background: rgba(0,217,165,0.15); color: var(--teal); }
 
 .tier-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 6px; font-size: 0.65rem; font-weight: 700; }
-.tier-badge.tryout { background: rgba(155,89,182,0.2); color: #b57edc; }
-.tier-badge.rookie { background: rgba(255,215,0,0.2); color: var(--gold); }
-.tier-badge.jv { background: rgba(255,107,0,0.2); color: var(--orange); }
-.tier-badge.varsity { background: rgba(0,217,165,0.2); color: var(--teal); }
-.tier-badge.college { background: rgba(52,152,219,0.2); color: var(--blue); }
-.tier-badge.pro { background: rgba(155,89,182,0.2); color: var(--purple); }
-.tier-badge.allstar { background: rgba(255,215,0,0.2); color: var(--gold); }
-.tier-badge.legend { background: rgba(255,107,0,0.2); color: var(--orange); }
+.tier-badge.practice { background: rgba(155,89,182,0.2); color: #b57edc; }
+.tier-badge.level3 { background: rgba(255,215,0,0.2); color: var(--gold); }
+.tier-badge.level4 { background: rgba(255,107,0,0.2); color: var(--orange); }
+.tier-badge.level5 { background: rgba(0,217,165,0.2); color: var(--teal); }
+.tier-badge.level6 { background: rgba(52,152,219,0.2); color: var(--blue); }
+.tier-badge.level7 { background: rgba(155,89,182,0.2); color: var(--purple); }
+.tier-badge.level8 { background: rgba(255,215,0,0.2); color: var(--gold); }
+.tier-badge.level9 { background: rgba(255,107,0,0.2); color: var(--orange); }
 .tier-badge.master { background: linear-gradient(135deg, rgba(255,215,0,0.3), rgba(255,107,0,0.3)); color: var(--gold); }
 
 .action-btns { display: flex; gap: 6px; }
@@ -668,7 +668,7 @@ tr:hover { background: var(--card-hover); }
                     </div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-card-icon purple">⭐</div>
+                    <div class="stat-card-icon purple">👑</div>
                     <div class="stat-card-value" id="totalMasters">1</div>
                     <div class="stat-card-label">Masters</div>
                 </div>
@@ -890,7 +890,7 @@ tr:hover { background: var(--card-hover); }
             </div>
             <div class="form-group">
                 <label class="form-label"><span class="lang-en">Description</span><span class="lang-es">Descripción</span></label>
-                <input type="text" class="form-input" id="activityText" placeholder="Carmen Rivera reached MASTER tier">
+                <input type="text" class="form-input" id="activityText" placeholder="Carmen Rivera reached MASTER 10">
             </div>
             <div class="form-group">
                 <label class="form-label"><span class="lang-en">Time</span><span class="lang-es">Tiempo</span></label>
@@ -913,8 +913,9 @@ tr:hover { background: var(--card-hover); }
 (function() {
     'use strict';
 
-    var tierList = ['TRYOUT 1','TRYOUT 2','ROOKIE','JV','VARSITY','COLLEGE','PRO','ALL-STAR','LEGEND','MASTER'];
-    var tierClasses = ['tryout','tryout','rookie','jv','varsity','college','pro','allstar','legend','master'];
+    // NEW TIER NAMING SYSTEM
+    var tierList = ['PRACTICE 1','PRACTICE 2','LEVEL 3/10','LEVEL 4/10','LEVEL 5/10','LEVEL 6/10','LEVEL 7/10','LEVEL 8/10','LEVEL 9/10','MASTER 10'];
+    var tierClasses = ['practice','practice','level3','level4','level5','level6','level7','level8','level9','master'];
 
     var users = [
         {id:1, name:'María García', email:'maria@email.com', status:'paid', g1:5, g2:4, g3:3, lastActive:'2026-01-05'},
@@ -935,9 +936,9 @@ tr:hover { background: var(--card-hover); }
 
     var activities = [
         {id:1, type:'user', text:'Rosa Díaz started free trial', time:'5 minutes ago'},
-        {id:2, type:'game', text:'Roberto López reached ALL-STAR in Masters of the Game', time:'12 minutes ago'},
+        {id:2, type:'game', text:'Roberto López reached LEVEL 8/10 in Masters of the Game', time:'12 minutes ago'},
         {id:3, type:'user', text:'Pedro Santos converted from trial to paid ($5/mo)', time:'1 hour ago'},
-        {id:4, type:'game', text:'Carmen Rivera became a MASTER! 👑', time:'3 hours ago'},
+        {id:4, type:'game', text:'Carmen Rivera became a MASTER 10! 👑', time:'3 hours ago'},
         {id:5, type:'user', text:'Ana Rodríguez started free trial', time:'1 day ago'}
     ];
 
