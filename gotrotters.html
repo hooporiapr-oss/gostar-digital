@@ -38,8 +38,8 @@ body[data-lang="en"] .lang-es{display:none!important}
 .tier-btn.selected{border-color:var(--secondary);background:rgba(255,107,0,0.1)}
 .tier-btn.locked{opacity:0.4;cursor:not-allowed}
 .tier-btn.mastered{border-color:var(--success);background:rgba(0,217,165,0.08)}
-.tier-btn.tryout{border-color:var(--tryout);background:rgba(155,89,182,0.1)}
-.tier-btn.tryout.selected{border-color:var(--tryout);background:rgba(155,89,182,0.2)}
+.tier-btn.practice{border-color:var(--tryout);background:rgba(155,89,182,0.1)}
+.tier-btn.practice.selected{border-color:var(--tryout);background:rgba(155,89,182,0.2)}
 .tier-icon{font-size:1.5rem;min-width:40px;text-align:center}
 .tier-info{flex:1}
 .tier-name{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;color:var(--text-light)}
@@ -48,7 +48,7 @@ body[data-lang="en"] .lang-es{display:none!important}
 .tier-status.mastered{background:var(--success);color:var(--bg-dark)}
 .tier-status.locked{background:rgba(255,255,255,0.1);color:var(--text-muted)}
 .tier-status.current{background:var(--secondary);color:var(--text-light)}
-.tier-status.tryout{background:var(--tryout);color:var(--text-light)}
+.tier-status.practice{background:var(--tryout);color:var(--text-light)}
 .rhythm-section{width:100%;max-width:380px;margin-bottom:20px}
 .rhythm-grid{display:flex;gap:8px;justify-content:center}
 .rhythm-btn{padding:10px 14px;background:var(--bg-card);border:2px solid transparent;border-radius:10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;min-width:85px}
@@ -164,7 +164,7 @@ body[data-lang="en"] .lang-es{display:none!important}
 </div>
 </div>
 
-<button class="start-btn" onclick="startGame()"><span class="lang-en">START TRAINING</span><span class="lang-es">COMENZAR</span></button>
+<button class="start-btn" onclick="startGame()"><span class="lang-en">LET'S GO</span><span class="lang-es">PA'LANTE</span></button>
 
 <div class="stats-summary">
 <div class="stat-item"><div class="stat-value" id="currentLevel">1</div><div class="stat-label"><span class="lang-en">Level</span><span class="lang-es">Nivel</span></div></div>
@@ -174,7 +174,7 @@ body[data-lang="en"] .lang-es{display:none!important}
 </div>
 
 <div class="screen" id="countdownScreen">
-<div class="countdown-tier" id="countdownTier">TRYOUT 1</div>
+<div class="countdown-tier" id="countdownTier">PRACTICE 1</div>
 <div class="main-icon">🏀</div>
 <div class="countdown-number" id="countdownNum">3</div>
 <div class="countdown-text"><span class="lang-en">GET READY</span><span class="lang-es">¡PREPÁRATE!</span></div>
@@ -183,7 +183,7 @@ body[data-lang="en"] .lang-es{display:none!important}
 <div class="screen" id="gameScreen">
 <div class="scoreboard">
 <div class="scoreboard-main">
-<div class="scoreboard-tier" id="gameTier">TRYOUT 1</div>
+<div class="scoreboard-tier" id="gameTier">PRACTICE 1</div>
 <div class="scoreboard-score" id="scoreDisplay">0</div>
 </div>
 <div class="half-display">
@@ -228,11 +228,11 @@ body[data-lang="en"] .lang-es{display:none!important}
 </div>
 <div class="squad-welcome" id="squadWelcome" style="display:none">
 <div class="squad-welcome-title">🏀 <span class="lang-en">WELCOME TO THE SQUAD!</span><span class="lang-es">¡BIENVENIDO AL EQUIPO!</span></div>
-<div class="squad-welcome-text"><span class="lang-en">You passed tryouts! You're now a GoTrotter!</span><span class="lang-es">¡Pasaste las pruebas! ¡Eres un GoTrotter!</span></div>
+<div class="squad-welcome-text"><span class="lang-en">You passed practice! You're now a GoTrotter!</span><span class="lang-es">¡Pasaste la práctica! ¡Eres un GoTrotter!</span></div>
 </div>
 <div class="next-level-preview" id="nextLevelBox" style="display:none">
 <div class="next-level-label"><span class="lang-en">NEXT LEVEL</span><span class="lang-es">SIGUIENTE NIVEL</span></div>
-<div class="next-level-name" id="nextLevelName">TRYOUT 2</div>
+<div class="next-level-name" id="nextLevelName">PRACTICE 2</div>
 </div>
 <div class="continue-timer" id="continueTimer"><span class="lang-en">Continuing in <span id="timerCount">5</span>...</span><span class="lang-es">Continuando en <span id="timerCountEs">5</span>...</span></div>
 <div class="action-buttons">
@@ -270,21 +270,20 @@ function playBeep(freq, dur) {
     osc.stop(audioCtx.currentTime + dur);
 }
 
-// 10 TIER SYSTEM - 2 TRYOUTS + 8 SQUAD LEVELS
-// plays = number of sequences per half (internal only, not shown to user)
+// 10 TIER SYSTEM - NEW NAMING
 var tiers = {
-    tryout1: {name: 'TRYOUT 1', icon: '📋', stars: 2, seqMin: 2, seqMax: 2, plays: 2, isTryout: true},
-    tryout2: {name: 'TRYOUT 2', icon: '📝', stars: 3, seqMin: 2, seqMax: 3, plays: 2, isTryout: true},
-    rookie: {name: 'ROOKIE', icon: '🌟', stars: 4, seqMin: 3, seqMax: 4, plays: 3, isTryout: false},
-    jv: {name: 'JV', icon: '🏀', stars: 5, seqMin: 4, seqMax: 5, plays: 3, isTryout: false},
-    varsity: {name: 'VARSITY', icon: '🎽', stars: 6, seqMin: 5, seqMax: 6, plays: 3, isTryout: false},
-    college: {name: 'COLLEGE', icon: '🎓', stars: 7, seqMin: 6, seqMax: 7, plays: 4, isTryout: false},
-    pro: {name: 'PRO', icon: '💰', stars: 8, seqMin: 7, seqMax: 8, plays: 4, isTryout: false},
-    allstar: {name: 'ALL-STAR', icon: '⭐', stars: 9, seqMin: 8, seqMax: 9, plays: 4, isTryout: false},
-    legend: {name: 'LEGEND', icon: '🏆', stars: 10, seqMin: 9, seqMax: 10, plays: 5, isTryout: false},
-    master: {name: 'MASTER', icon: '🔥', stars: 12, seqMin: 10, seqMax: 12, plays: 5, isTryout: false}
+    practice1: {name: 'PRACTICE 1', icon: '📋', stars: 2, seqMin: 2, seqMax: 2, plays: 2, isPractice: true},
+    practice2: {name: 'PRACTICE 2', icon: '📝', stars: 3, seqMin: 2, seqMax: 3, plays: 2, isPractice: true},
+    level3: {name: 'LEVEL 3/10', icon: '🌟', stars: 4, seqMin: 3, seqMax: 4, plays: 3, isPractice: false},
+    level4: {name: 'LEVEL 4/10', icon: '🏀', stars: 5, seqMin: 4, seqMax: 5, plays: 3, isPractice: false},
+    level5: {name: 'LEVEL 5/10', icon: '🎽', stars: 6, seqMin: 5, seqMax: 6, plays: 3, isPractice: false},
+    level6: {name: 'LEVEL 6/10', icon: '🎓', stars: 7, seqMin: 6, seqMax: 7, plays: 4, isPractice: false},
+    level7: {name: 'LEVEL 7/10', icon: '💰', stars: 8, seqMin: 7, seqMax: 8, plays: 4, isPractice: false},
+    level8: {name: 'LEVEL 8/10', icon: '⭐', stars: 9, seqMin: 8, seqMax: 9, plays: 4, isPractice: false},
+    level9: {name: 'LEVEL 9/10', icon: '🏆', stars: 10, seqMin: 9, seqMax: 10, plays: 5, isPractice: false},
+    master: {name: 'MASTER 10', icon: '👑', stars: 12, seqMin: 10, seqMax: 12, plays: 5, isPractice: false}
 };
-var tierList = ['tryout1', 'tryout2', 'rookie', 'jv', 'varsity', 'college', 'pro', 'allstar', 'legend', 'master'];
+var tierList = ['practice1', 'practice2', 'level3', 'level4', 'level5', 'level6', 'level7', 'level8', 'level9', 'master'];
 
 var rhythms = {
     steady: {ms: 650, pause: 380, label: 'STEADY • 90 BPM'},
@@ -298,7 +297,7 @@ function getProgress() {
 }
 function saveProgress(p) { localStorage.setItem('gotrotters-mastery', JSON.stringify(p)); }
 
-var selTier = 'tryout1', selRhythm = 'showtime';
+var selTier = 'practice1', selRhythm = 'showtime';
 var currentHalf = 1, play = 1, score = 0;
 var balls = [], seq = [], idx = 0, done = [], showing = false;
 var correct = 0, attempts = 0;
@@ -325,7 +324,7 @@ function renderTiers() {
         if (id === selTier) classes += ' selected';
         if (!unlocked) classes += ' locked';
         if (mastered) classes += ' mastered';
-        if (t.isTryout && unlocked && !mastered) classes += ' tryout';
+        if (t.isPractice && unlocked && !mastered) classes += ' practice';
         btn.className = classes;
         
         if (unlocked) {
@@ -340,8 +339,8 @@ function renderTiers() {
             statusHtml = '<span class="tier-status mastered">✓</span>';
         } else if (!unlocked) {
             statusHtml = '<span class="tier-status locked">🔒</span>';
-        } else if (t.isTryout) {
-            statusHtml = '<span class="tier-status tryout">' + (currentLang === 'es' ? 'PRUEBA' : 'TRYOUT') + '</span>';
+        } else if (t.isPractice) {
+            statusHtml = '<span class="tier-status practice">' + (currentLang === 'es' ? 'PRÁCTICA' : 'PRACTICE') + '</span>';
         } else if (idx === unlockedIdx) {
             statusHtml = '<span class="tier-status current">' + (currentLang === 'es' ? 'ACTUAL' : 'CURRENT') + '</span>';
         }
@@ -615,8 +614,8 @@ function endGame() {
     var currentIdx = tierList.indexOf(selTier);
     var canAdvance = isPerfect && currentIdx < tierList.length - 1;
     
-    // Check if passing tryout2 to become official squad member
-    var joiningSquad = isPerfect && selTier === 'tryout2';
+    // Check if passing practice2 to become official squad member
+    var joiningSquad = isPerfect && selTier === 'practice2';
     
     if (isPerfect) {
         prog.perfect[selTier] = (prog.perfect[selTier] || 0) + 1;
@@ -643,7 +642,7 @@ function endGame() {
     document.getElementById('finalScore').textContent = score;
     document.getElementById('finalCorrect').textContent = correct + '/' + attempts;
     
-    // Squad welcome for passing tryouts
+    // Squad welcome for passing practice
     document.getElementById('squadWelcome').style.display = joiningSquad ? 'block' : 'none';
     
     // Next level preview
