@@ -110,7 +110,7 @@ body.en .lang-es{display:none !important}
 <div class="game-progress">
 <div class="progress-row">
 <span class="progress-label"><span class="lang-en">Level</span><span class="lang-es">Nivel</span></span>
-<span class="progress-value" id="game1Level">TRYOUT 1</span>
+<span class="progress-value" id="game1Level">PRACTICE 1</span>
 </div>
 <div class="progress-bar"><div class="progress-fill" id="game1Progress" style="width:10%"></div></div>
 </div>
@@ -127,7 +127,7 @@ body.en .lang-es{display:none !important}
 <div class="game-progress">
 <div class="progress-row">
 <span class="progress-label"><span class="lang-en">Level</span><span class="lang-es">Nivel</span></span>
-<span class="progress-value" id="game2Level">TRYOUT 1</span>
+<span class="progress-value" id="game2Level">PRACTICE 1</span>
 </div>
 <div class="progress-bar"><div class="progress-fill" id="game2Progress" style="width:10%"></div></div>
 </div>
@@ -144,7 +144,7 @@ body.en .lang-es{display:none !important}
 <div class="game-progress">
 <div class="progress-row">
 <span class="progress-label"><span class="lang-en">Level</span><span class="lang-es">Nivel</span></span>
-<span class="progress-value" id="game3Level">TRYOUT 1</span>
+<span class="progress-value" id="game3Level">PRACTICE 1</span>
 </div>
 <div class="progress-bar"><div class="progress-fill" id="game3Progress" style="width:10%"></div></div>
 </div>
@@ -181,8 +181,8 @@ body.en .lang-es{display:none !important}
 </main>
 
 <script>
-// Tier list for display
-var tierList = ['TRYOUT 1', 'TRYOUT 2', 'ROOKIE', 'JV', 'VARSITY', 'COLLEGE', 'PRO', 'ALL-STAR', 'LEGEND', 'MASTER'];
+// Tier list for display - NEW NAMING SYSTEM
+var tierList = ['PRACTICE 1', 'PRACTICE 2', 'LEVEL 3/10', 'LEVEL 4/10', 'LEVEL 5/10', 'LEVEL 6/10', 'LEVEL 7/10', 'LEVEL 8/10', 'LEVEL 9/10', 'MASTER 10'];
 
 // Language
 var lang = localStorage.getItem('gt-lang') || 'en';
@@ -217,7 +217,7 @@ function loadProgress() {
     try {
         var g1 = JSON.parse(localStorage.getItem('gotrotters-mastery')) || {};
         var g1Level = g1.unlockedLevel || 0;
-        document.getElementById('game1Level').textContent = tierList[g1Level] || 'TRYOUT 1';
+        document.getElementById('game1Level').textContent = tierList[g1Level] || 'PRACTICE 1';
         document.getElementById('game1Progress').style.width = ((g1Level + 1) / 10 * 100) + '%';
     } catch(e) {}
 
@@ -225,7 +225,7 @@ function loadProgress() {
     try {
         var g2 = JSON.parse(localStorage.getItem('playbook-mastery')) || {};
         var g2Forward = g2.forward ? (g2.forward.unlockedLevel || 0) : 0;
-        document.getElementById('game2Level').textContent = tierList[g2Forward] || 'TRYOUT 1';
+        document.getElementById('game2Level').textContent = tierList[g2Forward] || 'PRACTICE 1';
         document.getElementById('game2Progress').style.width = ((g2Forward + 1) / 10 * 100) + '%';
     } catch(e) {}
 
@@ -233,7 +233,7 @@ function loadProgress() {
     try {
         var g3 = JSON.parse(localStorage.getItem('fastbreak-mastery')) || {};
         var g3Level = g3.unlockedLevel || 0;
-        document.getElementById('game3Level').textContent = tierList[g3Level] || 'TRYOUT 1';
+        document.getElementById('game3Level').textContent = tierList[g3Level] || 'PRACTICE 1';
         document.getElementById('game3Progress').style.width = ((g3Level + 1) / 10 * 100) + '%';
     } catch(e) {}
 
