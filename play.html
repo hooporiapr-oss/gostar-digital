@@ -57,7 +57,7 @@ body.en .lang-es{display:none !important}
 .chat-dot{width:8px;height:8px;background:var(--teal);border-radius:50%;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
 .chat-header-right{display:flex;align-items:center;gap:10px}
-.chat-lang-btn{padding:6px 12px;border:2px solid var(--orange);background:transparent;color:var(--orange);border-radius:15px;font-weight:700;font-size:0.7rem;cursor:pointer}
+.chat-lang-btn{padding:6px 12px;border:2px solid var(--orange);background:transparent;color:var(--orange);border-radius:15px;font-weight:700;font-size:0.7rem;cursor:pointer;transition:all 0.3s}
 .chat-lang-btn.active{background:var(--orange);color:var(--dark)}
 .chat-close{width:36px;height:36px;background:rgba(255,255,255,0.1);border:none;border-radius:50%;color:var(--muted);font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
 
@@ -170,7 +170,7 @@ body.en .lang-es{display:none !important}
 
 <div class="chat-input-area" id="chatInputArea">
 <div class="chat-input-row">
-<input type="text" class="chat-input" id="chatInput" placeholder="Type here..." maxlength="100">
+<input type="text" class="chat-input" id="chatInput" maxlength="100">
 <button class="chat-send" id="chatSend">
 <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
 </button>
@@ -190,13 +190,25 @@ body.en .lang-es{display:none !important}
         document.querySelectorAll('.lang-btn, .chat-lang-btn').forEach(function(b) {
             b.classList.toggle('active', b.dataset.lang === l);
         });
-        document.getElementById('chatInput').placeholder = l === 'es' ? 'Escribe aquí...' : 'Type here...';
+        updatePlaceholder();
+    }
+    
+    function updatePlaceholder() {
+        var input = document.getElementById('chatInput');
+        if (input) {
+            input.placeholder = lang === 'es' ? 'Escribe aquí...' : 'Type here...';
+        }
     }
     
     setLang(lang);
     
+    // Bind language buttons
     document.querySelectorAll('.lang-btn, .chat-lang-btn').forEach(function(b) {
-        b.addEventListener('click', function() { setLang(this.dataset.lang); });
+        b.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            setLang(this.dataset.lang);
+        });
     });
     
     // ========== ELEMENTS ==========
@@ -210,7 +222,7 @@ body.en .lang-es{display:none !important}
     var chatClose = document.getElementById('chatClose');
     
     // ========== STATE ==========
-    var currentFlow = null; // 'new', 'returning', 'facility'
+    var currentFlow = null;
     var currentStep = null;
     var tempData = {};
     
@@ -238,6 +250,11 @@ body.en .lang-es{display:none !important}
         return Math.max(0, 7 - diff);
     }
     
+    // ========== BILINGUAL HELPER ==========
+    function bi(en, es) {
+        return '<span class="lang-en">' + en + '</span><span class="lang-es">' + es + '</span>';
+    }
+    
     // ========== CHAT HELPERS ==========
     function addMsg(content, isUser, options) {
         var msg = document.createElement('div');
@@ -250,7 +267,8 @@ body.en .lang-es{display:none !important}
             html += '<div class="chat-options">';
             options.forEach(function(opt) {
                 var cls = opt.primary ? 'chat-option primary' : 'chat-option';
-                html += '<button class="' + cls + '" data-action="' + opt.action + '">' + opt.label + '</button>';
+                var label = opt.labelEn ? bi(opt.labelEn, opt.labelEs) : opt.label;
+                html += '<button class="' + cls + '" data-action="' + opt.action + '">' + label + '</button>';
             });
             html += '</div>';
         }
@@ -260,7 +278,6 @@ body.en .lang-es{display:none !important}
         chatBody.appendChild(msg);
         chatBody.scrollTop = chatBody.scrollHeight;
         
-        // Bind option clicks
         msg.querySelectorAll('.chat-option').forEach(function(btn) {
             btn.addEventListener('click', function() {
                 handleOption(this.dataset.action);
@@ -291,9 +308,9 @@ body.en .lang-es{display:none !important}
         }, delay);
     }
     
-    function showInput(placeholder) {
+    function showInput(placeholderEn, placeholderEs) {
         chatInputArea.classList.add('visible');
-        chatInput.placeholder = placeholder || (lang === 'es' ? 'Escribe aquí...' : 'Type here...');
+        chatInput.placeholder = lang === 'es' ? (placeholderEs || 'Escribe aquí...') : (placeholderEn || 'Type here...');
         chatInput.value = '';
         setTimeout(function() { chatInput.focus(); }, 100);
     }
@@ -302,7 +319,7 @@ body.en .lang-es{display:none !important}
         chatInputArea.classList.remove('visible');
     }
     
-    function addPinInput(isCreate) {
+    function addPinInput() {
         var msg = document.createElement('div');
         msg.className = 'chat-msg bot';
         msg.innerHTML = '<div class="chat-msg-avatar">🏀</div><div class="chat-msg-bubble">' +
@@ -312,7 +329,7 @@ body.en .lang-es{display:none !important}
             '<input type="tel" class="pin-digit" maxlength="1" data-idx="2">' +
             '<input type="tel" class="pin-digit" maxlength="1" data-idx="3">' +
             '</div>' +
-            '<button class="pin-submit" id="pinSubmit">' + (lang === 'es' ? 'CONFIRMAR' : 'CONFIRM') + '</button>' +
+            '<button class="pin-submit" id="pinSubmit">' + bi('CONFIRM', 'CONFIRMAR') + '</button>' +
             '</div>';
         chatBody.appendChild(msg);
         chatBody.scrollTop = chatBody.scrollHeight;
@@ -323,26 +340,18 @@ body.en .lang-es{display:none !important}
         function checkComplete() {
             var pin = '';
             digits.forEach(function(d) { pin += d.value; });
-            if (pin.length === 4) {
-                submitBtn.classList.add('ready');
-            } else {
-                submitBtn.classList.remove('ready');
-            }
+            submitBtn.classList.toggle('ready', pin.length === 4);
         }
         
         digits.forEach(function(d, i) {
             d.addEventListener('input', function() {
                 this.value = this.value.replace(/[^0-9]/g, '');
-                if (this.value && i < 3) {
-                    digits[i + 1].focus();
-                }
+                if (this.value && i < 3) digits[i + 1].focus();
                 this.classList.toggle('filled', this.value !== '');
                 checkComplete();
             });
             d.addEventListener('keydown', function(e) {
-                if (e.key === 'Backspace' && !this.value && i > 0) {
-                    digits[i - 1].focus();
-                }
+                if (e.key === 'Backspace' && !this.value && i > 0) digits[i - 1].focus();
             });
         });
         
@@ -378,45 +387,45 @@ body.en .lang-es{display:none !important}
         chatBody.innerHTML = '';
         hideInput();
         
-        // Check if returning user
         var user = getUser();
         
         if (user && user.pin) {
-            // Has account - show quick options
-            var daysLeft = getTrialDaysLeft(user.trialStart);
-            var greeting = lang === 'es' 
-                ? '¡Hola! 🏀 Bienvenido de vuelta a <strong>GoTrotters</strong>!'
-                : 'Hey! 🏀 Welcome back to <strong>GoTrotters</strong>!';
+            var greeting = bi(
+                'Hey! 🏀 Welcome back to <strong>GoTrotters</strong>!',
+                '¡Hola! 🏀 Bienvenido de vuelta a <strong>GoTrotters</strong>!'
+            );
             
             setTimeout(function() {
                 addMsg(greeting, false);
                 
-                var subtext = lang === 'es'
-                    ? '¿Eres <strong>' + user.name + '</strong>?'
-                    : 'Are you <strong>' + user.name + '</strong>?';
+                var subtext = bi(
+                    'Are you <strong>' + user.name + '</strong>?',
+                    '¿Eres <strong>' + user.name + '</strong>?'
+                );
                 
                 botSay(subtext, [
-                    {label: lang === 'es' ? '✅ Sí, soy yo' : '✅ Yes, that\'s me', action: 'confirm_user'},
-                    {label: lang === 'es' ? '👤 No, soy nuevo' : '👤 No, I\'m new', action: 'new'}
+                    {labelEn: '✅ Yes, that\'s me', labelEs: '✅ Sí, soy yo', action: 'confirm_user'},
+                    {labelEn: '👤 No, I\'m new', labelEs: '👤 No, soy nuevo', action: 'new'}
                 ], 600);
             }, 400);
         } else {
-            // New visitor
-            var greeting = lang === 'es' 
-                ? '¡Qué pasa! 🏀 Soy <strong>GoTrotter</strong> — tu entrenador de memoria 24/7!'
-                : 'Yo! 🏀 I\'m <strong>GoTrotter</strong> — your 24/7 memory coach!';
+            var greeting = bi(
+                'Yo! 🏀 I\'m <strong>GoTrotter</strong> — your 24/7 memory coach!',
+                '¡Qué pasa! 🏀 Soy <strong>GoTrotter</strong> — tu entrenador de memoria 24/7!'
+            );
             
             setTimeout(function() {
                 addMsg(greeting, false);
                 
-                var question = lang === 'es'
-                    ? '¿Cómo te ayudo hoy?'
-                    : 'How can I help you today?';
+                var question = bi(
+                    'How can I help you today?',
+                    '¿Cómo te ayudo hoy?'
+                );
                 
                 botSay(question, [
-                    {label: lang === 'es' ? '🆕 Soy Nuevo' : '🆕 I\'m New', action: 'new'},
-                    {label: lang === 'es' ? '🔑 Ya Tengo Cuenta' : '🔑 I Have Account', action: 'returning'},
-                    {label: lang === 'es' ? '🏢 Instalación' : '🏢 Facility', action: 'facility'}
+                    {labelEn: '🆕 I\'m New', labelEs: '🆕 Soy Nuevo', action: 'new'},
+                    {labelEn: '🔑 I Have Account', labelEs: '🔑 Ya Tengo Cuenta', action: 'returning'},
+                    {labelEn: '🏢 Facility', labelEs: '🏢 Instalación', action: 'facility'}
                 ], 600);
             }, 400);
         }
@@ -424,7 +433,6 @@ body.en .lang-es{display:none !important}
     
     // ========== HANDLE OPTIONS ==========
     function handleOption(action) {
-        // Disable all options after click
         document.querySelectorAll('.chat-option').forEach(function(b) {
             b.style.pointerEvents = 'none';
             b.style.opacity = '0.5';
@@ -434,19 +442,21 @@ body.en .lang-es{display:none !important}
             case 'new':
                 currentFlow = 'new';
                 currentStep = 'ask_name';
-                var msg = lang === 'es'
-                    ? '¡Genial! 🎉 Vamos a comenzar tu <strong>prueba gratis de 7 días</strong>.\n\n¿Cómo te llamas?'
-                    : 'Awesome! 🎉 Let\'s get you started with a <strong>FREE 7-day trial</strong>.\n\nWhat\'s your name?';
+                var msg = bi(
+                    'Awesome! 🎉 Let\'s get you started with a <strong>FREE 7-day trial</strong>.<br><br>What\'s your name?',
+                    '¡Genial! 🎉 Vamos a comenzar tu <strong>prueba gratis de 7 días</strong>.<br><br>¿Cómo te llamas?'
+                );
                 botSay(msg, null, 600);
-                setTimeout(function() { showInput(lang === 'es' ? 'Tu nombre...' : 'Your name...'); }, 1500);
+                setTimeout(function() { showInput('Your name...', 'Tu nombre...'); }, 1500);
                 break;
                 
             case 'returning':
                 currentFlow = 'returning';
                 currentStep = 'ask_pin';
-                var msg = lang === 'es'
-                    ? '¡Bienvenido de vuelta! 🏀\n\nIngresa tu PIN de 4 dígitos:'
-                    : 'Welcome back! 🏀\n\nEnter your 4-digit PIN:';
+                var msg = bi(
+                    'Welcome back! 🏀<br><br>Enter your 4-digit PIN:',
+                    '¡Bienvenido de vuelta! 🏀<br><br>Ingresa tu PIN de 4 dígitos:'
+                );
                 botSay(msg, null, 600);
                 setTimeout(addPinInput, 1500);
                 break;
@@ -454,19 +464,18 @@ body.en .lang-es{display:none !important}
             case 'facility':
                 currentFlow = 'facility';
                 currentStep = 'ask_facility_code';
-                var msg = lang === 'es'
-                    ? '¡Perfecto! 🏢\n\n¿Cuál es el código de tu instalación?'
-                    : 'Perfect! 🏢\n\nWhat\'s your facility code?';
+                var msg = bi(
+                    'Perfect! 🏢<br><br>What\'s your facility code?',
+                    '¡Perfecto! 🏢<br><br>¿Cuál es el código de tu instalación?'
+                );
                 botSay(msg, null, 600);
-                setTimeout(function() { showInput(lang === 'es' ? 'Código de instalación...' : 'Facility code...'); }, 1500);
+                setTimeout(function() { showInput('Facility code...', 'Código de instalación...'); }, 1500);
                 break;
                 
             case 'confirm_user':
                 currentFlow = 'returning';
                 currentStep = 'ask_pin';
-                var msg = lang === 'es'
-                    ? '¡Excelente! Ingresa tu PIN:'
-                    : 'Great! Enter your PIN:';
+                var msg = bi('Great! Enter your PIN:', '¡Excelente! Ingresa tu PIN:');
                 botSay(msg, null, 400);
                 setTimeout(addPinInput, 1200);
                 break;
@@ -488,27 +497,30 @@ body.en .lang-es{display:none !important}
         if (currentFlow === 'new' && currentStep === 'ask_name') {
             tempData.name = text;
             currentStep = 'ask_pin_create';
-            var msg = lang === 'es'
-                ? '¡Mucho gusto, <strong>' + text + '</strong>! 🏀\n\nAhora crea un PIN de 4 dígitos que puedas recordar:'
-                : 'Nice to meet you, <strong>' + text + '</strong>! 🏀\n\nNow create a 4-digit PIN you\'ll remember:';
+            var msg = bi(
+                'Nice to meet you, <strong>' + text + '</strong>! 🏀<br><br>Now create a 4-digit PIN you\'ll remember:',
+                '¡Mucho gusto, <strong>' + text + '</strong>! 🏀<br><br>Ahora crea un PIN de 4 dígitos que puedas recordar:'
+            );
             botSay(msg, null, 600);
             setTimeout(addPinInput, 1500);
         }
         else if (currentFlow === 'facility' && currentStep === 'ask_facility_code') {
             tempData.facilityCode = text.toUpperCase();
             currentStep = 'ask_facility_name';
-            var msg = lang === 'es'
-                ? '¡Código recibido! 🏢\n\n¿Cuál es tu nombre?'
-                : 'Got it! 🏢\n\nWhat\'s your name?';
+            var msg = bi(
+                'Got it! 🏢<br><br>What\'s your name?',
+                '¡Código recibido! 🏢<br><br>¿Cuál es tu nombre?'
+            );
             botSay(msg, null, 600);
-            setTimeout(function() { showInput(lang === 'es' ? 'Tu nombre...' : 'Your name...'); }, 1500);
+            setTimeout(function() { showInput('Your name...', 'Tu nombre...'); }, 1500);
         }
         else if (currentFlow === 'facility' && currentStep === 'ask_facility_name') {
             tempData.name = text;
             currentStep = 'ask_facility_pin';
-            var msg = lang === 'es'
-                ? '¡Hola <strong>' + text + '</strong>! 🏀\n\nCrea tu PIN de 4 dígitos:'
-                : 'Hey <strong>' + text + '</strong>! 🏀\n\nCreate your 4-digit PIN:';
+            var msg = bi(
+                'Hey <strong>' + text + '</strong>! 🏀<br><br>Create your 4-digit PIN:',
+                '¡Hola <strong>' + text + '</strong>! 🏀<br><br>Crea tu PIN de 4 dígitos:'
+            );
             botSay(msg, null, 600);
             setTimeout(addPinInput, 1500);
         }
@@ -516,14 +528,13 @@ body.en .lang-es{display:none !important}
     
     // ========== HANDLE PIN SUBMIT ==========
     function handlePinSubmit(pin) {
-        // Disable PIN inputs
         document.querySelectorAll('.pin-digit').forEach(function(d) { d.disabled = true; });
-        document.getElementById('pinSubmit').style.opacity = '0.5';
+        var submitBtn = document.getElementById('pinSubmit');
+        if (submitBtn) submitBtn.style.opacity = '0.5';
         
         addMsg('••••', true);
         
         if (currentFlow === 'new' && currentStep === 'ask_pin_create') {
-            // Create new user
             var userData = {
                 name: tempData.name,
                 pin: pin,
@@ -533,21 +544,21 @@ body.en .lang-es{display:none !important}
             saveUser(userData);
             setSession(userData.name, userData.pin);
             
-            var msg = lang === 'es'
-                ? '🎉 <strong>¡LISTO!</strong>\n\n¡Bienvenido al equipo, <strong>' + tempData.name + '</strong>!\n\nTu prueba gratis de <strong>7 días</strong> comienza ahora. Entrena tu memoria y conviértete en un <span class="highlight">MASTER</span>.'
-                : '🎉 <strong>YOU\'RE IN!</strong>\n\nWelcome to the squad, <strong>' + tempData.name + '</strong>!\n\nYour <strong>7-day free trial</strong> starts now. Train your memory and become a <span class="highlight">MASTER</span>.';
+            var msg = bi(
+                '🎉 <strong>YOU\'RE IN!</strong><br><br>Welcome to the squad, <strong>' + tempData.name + '</strong>!<br><br>Your <strong>7-day free trial</strong> starts now. Train your memory and become a <span class="highlight">MASTER</span>.',
+                '🎉 <strong>¡LISTO!</strong><br><br>¡Bienvenido al equipo, <strong>' + tempData.name + '</strong>!<br><br>Tu prueba gratis de <strong>7 días</strong> comienza ahora. Entrena tu memoria y conviértete en un <span class="highlight">MASTER</span>.'
+            );
             
             botSay(msg, null, 800);
             
             setTimeout(function() {
-                var trialMsg = '<div class="trial-badge">🆓 ' + (lang === 'es' ? '7 DÍAS GRATIS' : '7-DAY FREE TRIAL') + '</div>';
-                botSay(trialMsg + (lang === 'es' ? '\n\n¿Listo para entrenar?' : '\n\nReady to train?'), [
-                    {label: lang === 'es' ? '🏀 PA\'LANTE!' : '🏀 LET\'S GO!', action: 'start_training', primary: true}
+                var trialMsg = '<div class="trial-badge">🆓 ' + bi('7-DAY FREE TRIAL', '7 DÍAS GRATIS') + '</div><br><br>' + bi('Ready to train?', '¿Listo para entrenar?');
+                botSay(trialMsg, [
+                    {labelEn: '🏀 LET\'S GO!', labelEs: '🏀 PA\'LANTE!', action: 'start_training', primary: true}
                 ], 800);
             }, 2000);
         }
         else if (currentFlow === 'returning' && currentStep === 'ask_pin') {
-            // Verify existing user
             var user = getUser();
             if (user && user.pin === pin) {
                 setSession(user.name, user.pin);
@@ -555,28 +566,26 @@ body.en .lang-es{display:none !important}
                 var daysLeft = getTrialDaysLeft(user.trialStart);
                 var trialInfo = '';
                 if (user.type === 'trial' && daysLeft > 0) {
-                    trialInfo = '<div class="trial-badge">🆓 ' + daysLeft + (lang === 'es' ? ' DÍAS RESTANTES' : ' DAYS LEFT') + '</div>';
+                    trialInfo = '<div class="trial-badge">🆓 ' + daysLeft + bi(' DAYS LEFT', ' DÍAS RESTANTES') + '</div>';
                 } else if (user.type === 'trial' && daysLeft <= 0) {
-                    trialInfo = '<div class="trial-badge" style="border-color:var(--danger);color:var(--danger);">⚠️ ' + (lang === 'es' ? 'PRUEBA EXPIRADA' : 'TRIAL EXPIRED') + '</div>';
+                    trialInfo = '<div class="trial-badge" style="border-color:var(--danger);color:var(--danger);">⚠️ ' + bi('TRIAL EXPIRED', 'PRUEBA EXPIRADA') + '</div>';
                 }
                 
-                var msg = lang === 'es'
-                    ? '🏀 <strong>¡Bienvenido de vuelta, ' + user.name + '!</strong>\n\n' + trialInfo + '\n\n¿Listo para entrenar?'
-                    : '🏀 <strong>Welcome back, ' + user.name + '!</strong>\n\n' + trialInfo + '\n\nReady to train?';
+                var msg = bi(
+                    '🏀 <strong>Welcome back, ' + user.name + '!</strong><br><br>' + trialInfo + '<br><br>Ready to train?',
+                    '🏀 <strong>¡Bienvenido de vuelta, ' + user.name + '!</strong><br><br>' + trialInfo + '<br><br>¿Listo para entrenar?'
+                );
                 
                 botSay(msg, [
-                    {label: lang === 'es' ? '🏀 PA\'LANTE!' : '🏀 LET\'S GO!', action: 'start_training', primary: true}
+                    {labelEn: '🏀 LET\'S GO!', labelEs: '🏀 PA\'LANTE!', action: 'start_training', primary: true}
                 ], 800);
             } else {
-                var msg = lang === 'es'
-                    ? '❌ PIN incorrecto. Intenta de nuevo:'
-                    : '❌ Wrong PIN. Try again:';
+                var msg = bi('❌ Wrong PIN. Try again:', '❌ PIN incorrecto. Intenta de nuevo:');
                 botSay(msg, null, 600);
                 setTimeout(addPinInput, 1400);
             }
         }
         else if (currentFlow === 'facility' && currentStep === 'ask_facility_pin') {
-            // Create facility user
             var userData = {
                 name: tempData.name,
                 pin: pin,
@@ -588,12 +597,13 @@ body.en .lang-es{display:none !important}
             setSession(userData.name, userData.pin);
             sessionStorage.setItem('gostar-facility-code', tempData.facilityCode);
             
-            var msg = lang === 'es'
-                ? '🏢 <strong>¡CONECTADO!</strong>\n\n¡Bienvenido, <strong>' + tempData.name + '</strong>!\n\nEstás conectado a la instalación <strong>' + tempData.facilityCode + '</strong>.'
-                : '🏢 <strong>CONNECTED!</strong>\n\nWelcome, <strong>' + tempData.name + '</strong>!\n\nYou\'re connected to facility <strong>' + tempData.facilityCode + '</strong>.';
+            var msg = bi(
+                '🏢 <strong>CONNECTED!</strong><br><br>Welcome, <strong>' + tempData.name + '</strong>!<br><br>You\'re connected to facility <strong>' + tempData.facilityCode + '</strong>.',
+                '🏢 <strong>¡CONECTADO!</strong><br><br>¡Bienvenido, <strong>' + tempData.name + '</strong>!<br><br>Estás conectado a la instalación <strong>' + tempData.facilityCode + '</strong>.'
+            );
             
             botSay(msg, [
-                {label: lang === 'es' ? '🏀 PA\'LANTE!' : '🏀 LET\'S GO!', action: 'start_training', primary: true}
+                {labelEn: '🏀 LET\'S GO!', labelEs: '🏀 PA\'LANTE!', action: 'start_training', primary: true}
             ], 800);
         }
     }
@@ -617,14 +627,6 @@ body.en .lang-es{display:none !important}
             chatInput.value = '';
         }
     });
-    
-    // ========== AUTO-LOGIN CHECK ==========
-    // If already has session, go straight to game-hub
-    if (sessionStorage.getItem('gostar-user-pin')) {
-        // Already logged in this session
-        // Optional: uncomment to auto-redirect
-        // window.location.href = 'game-hub.html';
-    }
     
 })();
 </script>
