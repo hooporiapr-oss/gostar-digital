@@ -8,7 +8,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;600;700;800;900&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
 html{height:100%;overflow-y:scroll}
-:root{--ball-orange:#FF6B00;--ball-dark:#CC5500;--secondary:#FF6B00;--bg-dark:#0a0a12;--bg-card:#12121a;--text-light:#FFFFFF;--text-muted:#8892a0;--success:#00D9A5;--danger:#FF4757;--gold:#FFD700;--tryout:#9B59B6;--tile1:#FF6B00;--tile2:#00D9A5;--tile3:#3498db;--tile4:#9B59B6;--tile5:#FFD700;--tile6:#E74C3C;--tile7:#1ABC9C;--tile8:#E91E63;--tile9:#00BCD4}
+:root{--ball-orange:#FF6B00;--ball-dark:#CC5500;--secondary:#FF6B00;--bg-dark:#0a0a12;--bg-card:#12121a;--text-light:#FFFFFF;--text-muted:#8892a0;--success:#00D9A5;--danger:#FF4757;--gold:#FFD700;--practice:#9B59B6;--tile1:#FF6B00;--tile2:#00D9A5;--tile3:#3498db;--tile4:#9B59B6;--tile5:#FFD700;--tile6:#E74C3C;--tile7:#1ABC9C;--tile8:#E91E63;--tile9:#00BCD4}
 body{font-family:'Nunito',sans-serif;background:var(--bg-dark);color:var(--text-light);min-height:100%}
 body[data-lang="es"] .lang-en{display:none!important}
 body[data-lang="en"] .lang-es{display:none!important}
@@ -40,7 +40,7 @@ body[data-lang="en"] .lang-es{display:none!important}
 .tier-btn.selected{border-color:var(--secondary);background:rgba(255,107,0,0.1)}
 .tier-btn.locked{opacity:0.4;cursor:not-allowed}
 .tier-btn.mastered{border-color:var(--success);background:rgba(0,217,165,0.08)}
-.tier-btn.tryout{border-color:var(--tryout);background:rgba(155,89,182,0.1)}
+.tier-btn.practice{border-color:var(--practice);background:rgba(155,89,182,0.1)}
 .tier-icon{font-size:1.3rem;min-width:35px;text-align:center}
 .tier-info{flex:1}
 .tier-name{font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:2px;color:var(--text-light)}
@@ -49,7 +49,7 @@ body[data-lang="en"] .lang-es{display:none!important}
 .tier-status.mastered{background:var(--success);color:var(--bg-dark)}
 .tier-status.locked{background:rgba(255,255,255,0.1);color:var(--text-muted)}
 .tier-status.current{background:var(--secondary);color:var(--text-light)}
-.tier-status.tryout{background:var(--tryout);color:var(--text-light)}
+.tier-status.practice{background:var(--practice);color:var(--text-light)}
 
 /* Speed Selection */
 .speed-section{width:100%;max-width:380px;margin-bottom:15px}
@@ -197,7 +197,7 @@ body[data-lang="en"] .lang-es{display:none!important}
 </div>
 </div>
 
-<button class="start-btn" onclick="startGame()"><span class="lang-en">START TRAINING</span><span class="lang-es">COMENZAR</span></button>
+<button class="start-btn" onclick="startGame()"><span class="lang-en">LET'S GO</span><span class="lang-es">PA'LANTE</span></button>
 
 <div class="stats-summary">
 <div class="stat-item"><div class="stat-value" id="currentLevel">1</div><div class="stat-label"><span class="lang-en">Level</span><span class="lang-es">Nivel</span></div></div>
@@ -208,7 +208,7 @@ body[data-lang="en"] .lang-es{display:none!important}
 
 <!-- COUNTDOWN SCREEN -->
 <div class="screen" id="countdownScreen">
-<div class="countdown-tier" id="countdownTier">TRYOUT 1</div>
+<div class="countdown-tier" id="countdownTier">PRACTICE 1</div>
 <div class="main-icon">⚡</div>
 <div class="countdown-number" id="countdownNum">3</div>
 <div class="countdown-text"><span class="lang-en">GET READY</span><span class="lang-es">¡PREPÁRATE!</span></div>
@@ -218,7 +218,7 @@ body[data-lang="en"] .lang-es{display:none!important}
 <div class="screen" id="gameScreen">
 <div class="scoreboard">
 <div class="scoreboard-main">
-<div class="scoreboard-tier" id="gameTier">TRYOUT 1</div>
+<div class="scoreboard-tier" id="gameTier">PRACTICE 1</div>
 <div class="scoreboard-score" id="scoreDisplay">0</div>
 </div>
 <div class="sequence-counter">
@@ -269,11 +269,11 @@ body[data-lang="en"] .lang-es{display:none!important}
 </div>
 <div class="squad-welcome" id="squadWelcome" style="display:none">
 <div class="squad-welcome-title">🏀 <span class="lang-en">WELCOME TO THE SQUAD!</span><span class="lang-es">¡BIENVENIDO AL EQUIPO!</span></div>
-<div class="squad-welcome-text"><span class="lang-en">You passed tryouts! You're now a GoTrotter!</span><span class="lang-es">¡Pasaste las pruebas! ¡Eres un GoTrotter!</span></div>
+<div class="squad-welcome-text"><span class="lang-en">You passed practice! You're now a GoTrotter!</span><span class="lang-es">¡Pasaste la práctica! ¡Eres un GoTrotter!</span></div>
 </div>
 <div class="next-level-preview" id="nextLevelBox" style="display:none">
 <div class="next-level-label"><span class="lang-en">NEXT LEVEL</span><span class="lang-es">SIGUIENTE NIVEL</span></div>
-<div class="next-level-name" id="nextLevelName">TRYOUT 2</div>
+<div class="next-level-name" id="nextLevelName">PRACTICE 2</div>
 </div>
 <div class="continue-timer" id="continueTimer"><span class="lang-en">Continuing in <span id="timerCount">5</span>...</span><span class="lang-es">Continuando en <span id="timerCountEs">5</span>...</span></div>
 <div class="action-buttons">
@@ -333,23 +333,20 @@ var speeds = {
     fast: {ms: 300, label: 'MASTER • 300ms'}
 };
 
-// 10 TIER SYSTEM
-// tiles = grid size (4=2x2, 9=3x3)
-// targetSeq = sequence length needed to complete each play
-// plays = number of growing sequences per half
+// 10 TIER SYSTEM - NEW NAMING
 var tiers = {
-    tryout1: {name: 'TRYOUT 1', icon: '📋', tiles: 4, targetSeq: 3, plays: 2, isTryout: true},
-    tryout2: {name: 'TRYOUT 2', icon: '📝', tiles: 4, targetSeq: 4, plays: 2, isTryout: true},
-    rookie: {name: 'ROOKIE', icon: '🌟', tiles: 4, targetSeq: 5, plays: 2, isTryout: false},
-    jv: {name: 'JV', icon: '🏀', tiles: 4, targetSeq: 6, plays: 3, isTryout: false},
-    varsity: {name: 'VARSITY', icon: '🎽', tiles: 9, targetSeq: 6, plays: 3, isTryout: false},
-    college: {name: 'COLLEGE', icon: '🎓', tiles: 9, targetSeq: 7, plays: 3, isTryout: false},
-    pro: {name: 'PRO', icon: '💰', tiles: 9, targetSeq: 8, plays: 3, isTryout: false},
-    allstar: {name: 'ALL-STAR', icon: '⭐', tiles: 9, targetSeq: 9, plays: 4, isTryout: false},
-    legend: {name: 'LEGEND', icon: '🏆', tiles: 9, targetSeq: 10, plays: 4, isTryout: false},
-    master: {name: 'MASTER', icon: '🔥', tiles: 9, targetSeq: 12, plays: 4, isTryout: false}
+    practice1: {name: 'PRACTICE 1', icon: '📋', tiles: 4, targetSeq: 3, plays: 2, isPractice: true},
+    practice2: {name: 'PRACTICE 2', icon: '📝', tiles: 4, targetSeq: 4, plays: 2, isPractice: true},
+    level3: {name: 'LEVEL 3/10', icon: '🌟', tiles: 4, targetSeq: 5, plays: 2, isPractice: false},
+    level4: {name: 'LEVEL 4/10', icon: '🏀', tiles: 4, targetSeq: 6, plays: 3, isPractice: false},
+    level5: {name: 'LEVEL 5/10', icon: '🎽', tiles: 9, targetSeq: 6, plays: 3, isPractice: false},
+    level6: {name: 'LEVEL 6/10', icon: '🎓', tiles: 9, targetSeq: 7, plays: 3, isPractice: false},
+    level7: {name: 'LEVEL 7/10', icon: '💰', tiles: 9, targetSeq: 8, plays: 3, isPractice: false},
+    level8: {name: 'LEVEL 8/10', icon: '⭐', tiles: 9, targetSeq: 9, plays: 4, isPractice: false},
+    level9: {name: 'LEVEL 9/10', icon: '🏆', tiles: 9, targetSeq: 10, plays: 4, isPractice: false},
+    master: {name: 'MASTER 10', icon: '👑', tiles: 9, targetSeq: 12, plays: 4, isPractice: false}
 };
-var tierList = ['tryout1', 'tryout2', 'rookie', 'jv', 'varsity', 'college', 'pro', 'allstar', 'legend', 'master'];
+var tierList = ['practice1', 'practice2', 'level3', 'level4', 'level5', 'level6', 'level7', 'level8', 'level9', 'master'];
 
 function getProgress() {
     try { return JSON.parse(localStorage.getItem('fastbreak-mastery')) || {unlockedLevel: 0, perfect: {}, best: 0}; }
@@ -358,7 +355,7 @@ function getProgress() {
 function saveProgress(p) { localStorage.setItem('fastbreak-mastery', JSON.stringify(p)); }
 
 // State
-var selTier = 'tryout1', selSpeed = 'normal';
+var selTier = 'practice1', selSpeed = 'normal';
 var currentHalf = 1, play = 1, score = 0;
 var sequence = [], userIdx = 0;
 var correct = 0, attempts = 0, longestSeq = 0;
@@ -394,7 +391,7 @@ function renderTiers() {
         if (id === selTier) classes += ' selected';
         if (!unlocked) classes += ' locked';
         if (mastered) classes += ' mastered';
-        if (t.isTryout && unlocked && !mastered) classes += ' tryout';
+        if (t.isPractice && unlocked && !mastered) classes += ' practice';
         btn.className = classes;
         
         if (unlocked) {
@@ -409,8 +406,8 @@ function renderTiers() {
             statusHtml = '<span class="tier-status mastered">✓</span>';
         } else if (!unlocked) {
             statusHtml = '<span class="tier-status locked">🔒</span>';
-        } else if (t.isTryout) {
-            statusHtml = '<span class="tier-status tryout">' + (currentLang === 'es' ? 'PRUEBA' : 'TRYOUT') + '</span>';
+        } else if (t.isPractice) {
+            statusHtml = '<span class="tier-status practice">' + (currentLang === 'es' ? 'PRÁCTICA' : 'PRACTICE') + '</span>';
         } else if (idx === unlockedIdx) {
             statusHtml = '<span class="tier-status current">' + (currentLang === 'es' ? 'ACTUAL' : 'CURRENT') + '</span>';
         }
@@ -590,7 +587,7 @@ function handleTileClick(idx) {
                 updateScore();
                 updateAccuracy();
                 setTilesDisabled(true);
-                setMsg((currentLang === 'es' ? '¡Meta alcanzada! +' : 'Target reached! +') + pts, 'success');
+                setMsg((currentLang === 'es' ? '¡Wepa! +' : 'Target reached! +') + pts, 'success');
                 
                 setTimeout(nextPlay, 1200);
             } else {
@@ -669,7 +666,7 @@ function endGame() {
     
     var currentIdx = tierList.indexOf(selTier);
     var canAdvance = isPerfect && currentIdx < tierList.length - 1;
-    var joiningSquad = isPerfect && selTier === 'tryout2';
+    var joiningSquad = isPerfect && selTier === 'practice2';
     
     if (isPerfect) {
         prog.perfect[selTier] = (prog.perfect[selTier] || 0) + 1;
