@@ -115,6 +115,8 @@ body.en .lang-es{display:none !important}
 
 .chat-header{padding:15px 20px;background:linear-gradient(135deg,rgba(255,107,0,0.15),rgba(0,217,165,0.08));border-bottom:2px solid rgba(255,107,0,0.2);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .chat-header-left{display:flex;align-items:center;gap:12px}
+.chat-home{display:flex;align-items:center;justify-content:center;width:36px;height:36px;background:rgba(255,255,255,0.1);border-radius:10px;text-decoration:none;font-size:1.1rem;transition:all 0.2s}
+.chat-home:hover{background:rgba(255,107,0,0.3)}
 .chat-avatar{width:42px;height:42px;background:linear-gradient(135deg,var(--orange),var(--teal));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px}
 .chat-title{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px}
 .chat-title .go{color:var(--orange)}
@@ -127,6 +129,16 @@ body.en .lang-es{display:none !important}
 .chat-lang.active{background:var(--orange);color:var(--dark)}
 .chat-close{width:32px;height:32px;background:rgba(255,255,255,0.1);border:none;border-radius:50%;color:var(--muted);font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
 .chat-close:hover{background:rgba(255,255,255,0.2);color:var(--text)}
+
+/* Chat Input Bar */
+.chat-input-bar{padding:15px 20px;background:var(--darker);border-top:1px solid rgba(255,255,255,0.08);flex-shrink:0}
+.chat-input-row{display:flex;align-items:center;gap:10px;background:var(--card);border:2px solid rgba(255,255,255,0.1);border-radius:25px;padding:6px 6px 6px 18px;transition:border-color 0.2s}
+.chat-input-row:focus-within{border-color:var(--orange)}
+.chat-input{flex:1;background:none;border:none;color:var(--text);font-size:0.95rem;font-family:'Outfit',sans-serif;outline:none}
+.chat-input::placeholder{color:var(--muted)}
+.chat-send{width:40px;height:40px;background:linear-gradient(135deg,var(--orange),var(--teal));border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform 0.2s}
+.chat-send:hover{transform:scale(1.05)}
+.chat-send svg{width:18px;height:18px;fill:var(--text)}
 
 .chat-body{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:12px}
 
@@ -164,8 +176,9 @@ body.en .lang-es{display:none !important}
 .triad-item{min-width:80px}
 .games{flex-direction:column;align-items:center}
 .game-card{width:100%;max-width:300px}
-.chat-modal{right:10px;bottom:90px;width:calc(100vw - 20px);height:calc(100vh - 120px);max-height:none;border-radius:20px}
+.chat-modal.active{position:fixed;top:0;left:0;right:0;bottom:0;width:100%;height:100%;max-width:100%;max-height:100%;border-radius:0;border:none}
 .chat-fab{bottom:20px;right:15px;width:60px;height:60px;font-size:26px}
+.chat-fab.hidden{display:none}
 .notjust{margin:40px 10px 0}
 }
 </style>
@@ -310,6 +323,7 @@ body.en .lang-es{display:none !important}
 <div class="chat-modal" id="chatModal">
 <div class="chat-header">
 <div class="chat-header-left">
+<a href="#" class="chat-home" id="chatHome" title="Home">🏠</a>
 <div class="chat-avatar">🏀</div>
 <div>
 <div class="chat-title"><span class="go">GO</span><span class="tr">TROTTER</span>™ AI</div>
@@ -323,6 +337,14 @@ body.en .lang-es{display:none !important}
 </div>
 </div>
 <div class="chat-body" id="chatBody"></div>
+<div class="chat-input-bar">
+<div class="chat-input-row">
+<input type="text" class="chat-input" id="chatInput" placeholder="Ask Coach anything...">
+<button class="chat-send" id="chatSend">
+<svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+</button>
+</div>
+</div>
 </div>
 
 <script>
@@ -353,10 +375,20 @@ body.en .lang-es{display:none !important}
     var chatModal = document.getElementById('chatModal');
     var chatBody = document.getElementById('chatBody');
     var chatClose = document.getElementById('chatClose');
+    var chatHome = document.getElementById('chatHome');
+    var chatInput = document.getElementById('chatInput');
+    var chatSend = document.getElementById('chatSend');
     
     // ========== BILINGUAL HELPER ==========
     function bi(en, es) {
         return '<span class="lang-en">' + en + '</span><span class="lang-es">' + es + '</span>';
+    }
+    
+    // Update placeholder based on language
+    function updateInputPlaceholder() {
+        if (chatInput) {
+            chatInput.placeholder = lang === 'es' ? 'Pregúntale al Coach...' : 'Ask Coach anything...';
+        }
     }
     
     // ========== CHAT HELPERS ==========
@@ -520,8 +552,50 @@ body.en .lang-es{display:none !important}
         chatFab.classList.remove('hidden');
     }
     
+    function goHome() {
+        closeChat();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    
+    function handleUserInput() {
+        var text = chatInput.value.trim();
+        if (!text) return;
+        
+        addMsg(text, true);
+        chatInput.value = '';
+        
+        // Coach response
+        addTyping();
+        setTimeout(function() {
+            removeTyping();
+            var response = bi(
+                'Great question! 🏀 I\'m Coach GoTrotter AI. Right now I can help you learn about <strong>Team GoTrotters</strong>, <strong>The Triad Circuit</strong>, and our <strong>10-Tier Structure</strong>. Tap one of the topics in the menu to get started, or ask me about pricing, how it works, or joining the team!',
+                '¡Buena pregunta! 🏀 Soy Coach GoTrotter AI. Ahora mismo puedo ayudarte a conocer <strong>Team GoTrotters</strong>, <strong>El Circuito Tríada</strong>, y nuestra <strong>Estructura de 10 Niveles</strong>. Toca un tema del menú para comenzar, o pregúntame sobre precios, cómo funciona, o cómo unirte al equipo!'
+            );
+            addMsg(response, false, [
+                {label: bi('💰 Pricing', '💰 Precio'), action: 'pricing'},
+                {label: bi('🏀 Join Team', '🏀 Unirme'), action: 'join'}
+            ]);
+        }, 1000);
+    }
+    
     chatFab.addEventListener('click', openChat);
     chatClose.addEventListener('click', closeChat);
+    chatHome.addEventListener('click', function(e) {
+        e.preventDefault();
+        goHome();
+    });
+    chatSend.addEventListener('click', handleUserInput);
+    chatInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') handleUserInput();
+    });
+    
+    // Update placeholder on language change
+    document.querySelectorAll('.lang-btn, .chat-lang').forEach(function(b) {
+        b.addEventListener('click', function() {
+            setTimeout(updateInputPlaceholder, 50);
+        });
+    });
     
 })();
 </script>
