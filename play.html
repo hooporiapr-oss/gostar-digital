@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>GoTrotters™ - Let's Go!</title>
+<title>GoTrotters™ - Join the Team</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -50,9 +50,10 @@ body.en .lang-es{display:none !important}
 .chat-header{padding:15px 20px;background:linear-gradient(135deg,rgba(255,107,0,0.1),rgba(0,217,165,0.05));border-bottom:2px solid rgba(255,107,0,0.3);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .chat-header-left{display:flex;align-items:center;gap:12px}
 .chat-avatar{width:45px;height:45px;background:linear-gradient(135deg,var(--orange),var(--teal));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px}
-.chat-title{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:2px}
+.chat-title{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:2px}
 .chat-title .go{color:var(--orange)}
 .chat-title .tr{color:var(--teal)}
+.chat-subtitle{font-size:0.65rem;color:var(--muted);letter-spacing:1px}
 .chat-status{display:flex;align-items:center;gap:6px;font-size:0.7rem;color:var(--teal)}
 .chat-dot{width:8px;height:8px;background:var(--teal);border-radius:50%;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
@@ -130,18 +131,18 @@ body.en .lang-es{display:none !important}
 
 <div class="logo-section">
 <div class="logo"><span class="go">GO</span><span class="trotters">TROTTERS</span><sup style="font-size:0.3em;vertical-align:super;">™</sup></div>
-<div class="tagline"><span class="lang-en">MOBILE MEMORY TRAINING</span><span class="lang-es">ENTRENAMIENTO DE MEMORIA MÓVIL</span></div>
+<div class="tagline">TEAM GOTROTTERS</div>
 </div>
 
 <div class="hero-icon">🏀</div>
 
 <div class="hero-text">
-<p><span class="lang-en"><strong>Train your brain anywhere.</strong> Your phone. Your coach. $5/month.</span><span class="lang-es"><strong>Entrena tu cerebro donde sea.</strong> Tu teléfono. Tu entrenador. $5/mes.</span></p>
+<p><span class="lang-en"><strong>The Triad Circuit.</strong> 10-tier progression. Coach GoTrotter AI. $5/month.</span><span class="lang-es"><strong>El Circuito Tríada.</strong> Progresión de 10 niveles. Coach GoTrotter AI. $5/mes.</span></p>
 </div>
 
 <button class="go-btn" id="goBtn">
 <span class="go-btn-icon">🏀</span>
-<span class="lang-en">LET'S GO</span><span class="lang-es">PA'LANTE</span>
+<span class="lang-en">JOIN THE TEAM</span><span class="lang-es">ÚNETE AL EQUIPO</span>
 </button>
 
 <div class="footer-text">
@@ -156,7 +157,8 @@ body.en .lang-es{display:none !important}
 <div class="chat-avatar">🏀</div>
 <div>
 <div class="chat-title"><span class="go">GO</span><span class="tr">TROTTER</span>™ AI</div>
-<div class="chat-status"><span class="chat-dot"></span><span class="lang-en">Your Coach</span><span class="lang-es">Tu Entrenador</span></div>
+<div class="chat-subtitle">Coach, Team GoTrotters</div>
+<div class="chat-status"><span class="chat-dot"></span><span class="lang-en">Online</span><span class="lang-es">En Línea</span></div>
 </div>
 </div>
 <div class="chat-header-right">
@@ -391,8 +393,8 @@ body.en .lang-es{display:none !important}
         
         if (user && user.pin) {
             var greeting = bi(
-                'Hey! 🏀 Welcome back to <strong>GoTrotters</strong>!',
-                '¡Hola! 🏀 Bienvenido de vuelta a <strong>GoTrotters</strong>!'
+                'Hey! 🏀 Welcome back to <strong>Team GoTrotters</strong>!',
+                '¡Hola! 🏀 ¡Bienvenido de vuelta a <strong>Team GoTrotters</strong>!'
             );
             
             setTimeout(function() {
@@ -410,16 +412,16 @@ body.en .lang-es{display:none !important}
             }, 400);
         } else {
             var greeting = bi(
-                'Yo! 🏀 I\'m <strong>GoTrotter</strong> — your 24/7 memory coach!',
-                '¡Qué pasa! 🏀 Soy <strong>GoTrotter</strong> — tu entrenador de memoria 24/7!'
+                'Hey! 🏀 I\'m <strong>GoTrotter™ AI</strong> — Coach, Team GoTrotters.',
+                '¡Qué pasa! 🏀 Soy <strong>GoTrotter™ AI</strong> — Coach, Team GoTrotters.'
             );
             
             setTimeout(function() {
                 addMsg(greeting, false);
                 
                 var question = bi(
-                    'How can I help you today?',
-                    '¿Cómo te ayudo hoy?'
+                    'Welcome to Team GoTrotters. I\'m here to guide you through The Triad Circuit.<br><br>What do you want to know?',
+                    'Bienvenido a Team GoTrotters. Estoy aquí para guiarte a través del Circuito Tríada.<br><br>¿Qué quieres saber?'
                 );
                 
                 botSay(question, [
@@ -443,8 +445,8 @@ body.en .lang-es{display:none !important}
                 currentFlow = 'new';
                 currentStep = 'ask_name';
                 var msg = bi(
-                    'Awesome! 🎉 Let\'s get you started with a <strong>FREE 7-day trial</strong>.<br><br>What\'s your name?',
-                    '¡Genial! 🎉 Vamos a comenzar tu <strong>prueba gratis de 7 días</strong>.<br><br>¿Cómo te llamas?'
+                    'Let\'s get you on the team! 🎉<br><br>Start with a <strong>FREE 7-day trial</strong>. The Triad Circuit. 10-tier structure. I\'ll be your Coach.<br><br>What\'s your name?',
+                    '¡Vamos a ponerte en el equipo! 🎉<br><br>Comienza con una <strong>prueba gratis de 7 días</strong>. El Circuito Tríada. Estructura de 10 niveles. Seré tu Coach.<br><br>¿Cómo te llamas?'
                 );
                 botSay(msg, null, 600);
                 setTimeout(function() { showInput('Your name...', 'Tu nombre...'); }, 1500);
@@ -545,18 +547,18 @@ body.en .lang-es{display:none !important}
             setSession(userData.name, userData.pin);
             
             var msg = bi(
-                '🎉 <strong>YOU\'RE IN!</strong><br><br>Welcome to the squad, <strong>' + tempData.name + '</strong>!<br><br>Your <strong>7-day free trial</strong> starts now. Train your memory and become a <span class="highlight">MASTER</span>.',
-                '🎉 <strong>¡LISTO!</strong><br><br>¡Bienvenido al equipo, <strong>' + tempData.name + '</strong>!<br><br>Tu prueba gratis de <strong>7 días</strong> comienza ahora. Entrena tu memoria y conviértete en un <span class="highlight">MASTER</span>.'
+                '🎉 <strong>YOU\'RE ON THE TEAM!</strong><br><br>Welcome to Team GoTrotters, <strong>' + tempData.name + '</strong>!<br><br>Your <strong>7-day free trial</strong> starts now.<br><br>The Triad Circuit:<br>🧠 Memory — Circuit 1<br>⚡ Mental Agility — Circuit 2<br>👁️ Visual Tracking — Circuit 3<br><br>10 tiers. From PRACTICE 1 to MASTER 10. Let\'s see what you\'ve got.',
+                '🎉 <strong>¡ESTÁS EN EL EQUIPO!</strong><br><br>¡Bienvenido a Team GoTrotters, <strong>' + tempData.name + '</strong>!<br><br>Tu <strong>prueba gratis de 7 días</strong> comienza ahora.<br><br>El Circuito Tríada:<br>🧠 Memoria — Circuito 1<br>⚡ Agilidad Mental — Circuito 2<br>👁️ Seguimiento Visual — Circuito 3<br><br>10 niveles. De PRACTICE 1 a MASTER 10. Veamos lo que tienes.'
             );
             
             botSay(msg, null, 800);
             
             setTimeout(function() {
-                var trialMsg = '<div class="trial-badge">🆓 ' + bi('7-DAY FREE TRIAL', '7 DÍAS GRATIS') + '</div><br><br>' + bi('Ready to train?', '¿Listo para entrenar?');
+                var trialMsg = '<div class="trial-badge">🆓 ' + bi('7-DAY FREE TRIAL', '7 DÍAS GRATIS') + '</div><br><br>' + bi('Ready to get to work?', '¿Listo para trabajar?');
                 botSay(trialMsg, [
                     {labelEn: '🏀 LET\'S GO!', labelEs: '🏀 PA\'LANTE!', action: 'start_training', primary: true}
                 ], 800);
-            }, 2000);
+            }, 2500);
         }
         else if (currentFlow === 'returning' && currentStep === 'ask_pin') {
             var user = getUser();
@@ -572,8 +574,8 @@ body.en .lang-es{display:none !important}
                 }
                 
                 var msg = bi(
-                    '🏀 <strong>Welcome back, ' + user.name + '!</strong><br><br>' + trialInfo + '<br><br>Ready to train?',
-                    '🏀 <strong>¡Bienvenido de vuelta, ' + user.name + '!</strong><br><br>' + trialInfo + '<br><br>¿Listo para entrenar?'
+                    '🏀 <strong>Welcome back, ' + user.name + '!</strong><br><br>' + trialInfo + '<br><br>Ready to get to work?',
+                    '🏀 <strong>¡Bienvenido de vuelta, ' + user.name + '!</strong><br><br>' + trialInfo + '<br><br>¿Listo para trabajar?'
                 );
                 
                 botSay(msg, [
@@ -598,8 +600,8 @@ body.en .lang-es{display:none !important}
             sessionStorage.setItem('gostar-facility-code', tempData.facilityCode);
             
             var msg = bi(
-                '🏢 <strong>CONNECTED!</strong><br><br>Welcome, <strong>' + tempData.name + '</strong>!<br><br>You\'re connected to facility <strong>' + tempData.facilityCode + '</strong>.',
-                '🏢 <strong>¡CONECTADO!</strong><br><br>¡Bienvenido, <strong>' + tempData.name + '</strong>!<br><br>Estás conectado a la instalación <strong>' + tempData.facilityCode + '</strong>.'
+                '🏢 <strong>CONNECTED!</strong><br><br>Welcome to Team GoTrotters, <strong>' + tempData.name + '</strong>!<br><br>You\'re connected to facility <strong>' + tempData.facilityCode + '</strong>.',
+                '🏢 <strong>¡CONECTADO!</strong><br><br>¡Bienvenido a Team GoTrotters, <strong>' + tempData.name + '</strong>!<br><br>Estás conectado a la instalación <strong>' + tempData.facilityCode + '</strong>.'
             );
             
             botSay(msg, [
