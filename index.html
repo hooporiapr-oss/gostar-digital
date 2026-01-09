@@ -130,6 +130,17 @@ body.en .lang-es{display:none !important}
 .chat-close{width:32px;height:32px;background:rgba(255,255,255,0.1);border:none;border-radius:50%;color:var(--muted);font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
 .chat-close:hover{background:rgba(255,255,255,0.2);color:var(--text)}
 
+/* Mobile: Hide header lang toggle, show sub-header */
+@media(max-width:768px){
+.chat-header .chat-header-right .chat-lang{display:none}
+}
+.chat-lang-bar{display:none;padding:10px;background:var(--darker);border-bottom:1px solid rgba(255,255,255,0.08);justify-content:center;gap:8px}
+.chat-lang-mobile{padding:6px 16px;border:2px solid var(--orange);background:transparent;color:var(--orange);border-radius:15px;font-weight:700;font-size:0.75rem;cursor:pointer;transition:all 0.3s}
+.chat-lang-mobile.active{background:var(--orange);color:var(--dark)}
+@media(max-width:768px){
+.chat-lang-bar{display:flex}
+}
+
 /* Hamburger Menu */
 .chat-hamburger{width:36px;height:36px;background:rgba(255,255,255,0.1);border:none;border-radius:10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;transition:all 0.2s}
 .chat-hamburger:hover{background:rgba(255,107,0,0.3)}
@@ -140,7 +151,10 @@ body.en .lang-es{display:none !important}
 
 .chat-menu{position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(180deg,var(--dark) 0%,var(--darker) 100%);z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:15px;padding:30px;opacity:0;pointer-events:none;transition:opacity 0.3s}
 .chat-menu.active{opacity:1;pointer-events:auto}
-.chat-menu-title{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:3px;color:var(--gold);margin-bottom:10px}
+.chat-menu-title{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:3px;color:var(--gold);margin-bottom:5px}
+.chat-menu-lang{display:flex;gap:10px;margin-bottom:15px}
+.chat-menu-lang-btn{padding:10px 24px;border:2px solid var(--orange);background:transparent;color:var(--orange);border-radius:20px;font-weight:700;font-size:0.85rem;cursor:pointer;transition:all 0.3s}
+.chat-menu-lang-btn.active{background:var(--orange);color:var(--dark)}
 .chat-menu-item{width:100%;max-width:300px;padding:18px 24px;background:var(--card);border:2px solid rgba(255,255,255,0.08);border-radius:16px;color:var(--text);font-size:1rem;font-weight:600;text-align:center;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:10px}
 .chat-menu-item:hover{border-color:var(--orange);transform:scale(1.02)}
 .chat-menu-item.primary{background:linear-gradient(135deg,var(--orange),var(--orange-dark));border:none}
@@ -357,9 +371,19 @@ body.en .lang-es{display:none !important}
 </div>
 </div>
 
+<!-- Mobile Language Bar -->
+<div class="chat-lang-bar">
+<button class="chat-lang-mobile active" data-lang="en">EN</button>
+<button class="chat-lang-mobile" data-lang="es">ES</button>
+</div>
+
 <!-- Full Screen Menu -->
 <div class="chat-menu" id="chatMenu">
 <div class="chat-menu-title"><span class="lang-en">MENU</span><span class="lang-es">MENÚ</span></div>
+<div class="chat-menu-lang">
+<button class="chat-menu-lang-btn active" data-lang="en">ENGLISH</button>
+<button class="chat-menu-lang-btn" data-lang="es">ESPAÑOL</button>
+</div>
 <button class="chat-menu-item" data-topic="team">🏀 <span class="lang-en">Team GoTrotters</span><span class="lang-es">Team GoTrotters</span></button>
 <button class="chat-menu-item" data-topic="circuit">🔥 <span class="lang-en">The Triad Circuit</span><span class="lang-es">El Circuito Tríada</span></button>
 <button class="chat-menu-item" data-topic="tiers">🏆 <span class="lang-en">10-Tier Structure</span><span class="lang-es">Estructura de 10 Niveles</span></button>
@@ -388,14 +412,14 @@ body.en .lang-es{display:none !important}
         lang = l;
         localStorage.setItem('gt-lang', l);
         document.body.className = l;
-        document.querySelectorAll('.lang-btn, .chat-lang').forEach(function(b) {
+        document.querySelectorAll('.lang-btn, .chat-lang, .chat-lang-mobile, .chat-menu-lang-btn').forEach(function(b) {
             b.classList.toggle('active', b.dataset.lang === l);
         });
     }
     
     setLang(lang);
     
-    document.querySelectorAll('.lang-btn, .chat-lang').forEach(function(b) {
+    document.querySelectorAll('.lang-btn, .chat-lang, .chat-lang-mobile, .chat-menu-lang-btn').forEach(function(b) {
         b.addEventListener('click', function(e) {
             e.preventDefault();
             setLang(this.dataset.lang);
@@ -689,7 +713,7 @@ body.en .lang-es{display:none !important}
     });
     
     // Update placeholder on language change
-    document.querySelectorAll('.lang-btn, .chat-lang').forEach(function(b) {
+    document.querySelectorAll('.lang-btn, .chat-lang, .chat-lang-mobile, .chat-menu-lang-btn').forEach(function(b) {
         b.addEventListener('click', function() {
             setTimeout(updateInputPlaceholder, 50);
         });
