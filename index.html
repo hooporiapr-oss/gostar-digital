@@ -130,6 +130,23 @@ body.en .lang-es{display:none !important}
 .chat-close{width:32px;height:32px;background:rgba(255,255,255,0.1);border:none;border-radius:50%;color:var(--muted);font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
 .chat-close:hover{background:rgba(255,255,255,0.2);color:var(--text)}
 
+/* Hamburger Menu */
+.chat-hamburger{width:36px;height:36px;background:rgba(255,255,255,0.1);border:none;border-radius:10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;transition:all 0.2s}
+.chat-hamburger:hover{background:rgba(255,107,0,0.3)}
+.chat-hamburger span{width:18px;height:2px;background:var(--text);border-radius:2px;transition:all 0.3s}
+.chat-hamburger.active span:nth-child(1){transform:rotate(45deg) translate(4px,4px)}
+.chat-hamburger.active span:nth-child(2){opacity:0}
+.chat-hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(4px,-4px)}
+
+.chat-menu{position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(180deg,var(--dark) 0%,var(--darker) 100%);z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:15px;padding:30px;opacity:0;pointer-events:none;transition:opacity 0.3s}
+.chat-menu.active{opacity:1;pointer-events:auto}
+.chat-menu-title{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:3px;color:var(--gold);margin-bottom:10px}
+.chat-menu-item{width:100%;max-width:300px;padding:18px 24px;background:var(--card);border:2px solid rgba(255,255,255,0.08);border-radius:16px;color:var(--text);font-size:1rem;font-weight:600;text-align:center;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:10px}
+.chat-menu-item:hover{border-color:var(--orange);transform:scale(1.02)}
+.chat-menu-item.primary{background:linear-gradient(135deg,var(--orange),var(--orange-dark));border:none}
+.chat-menu-close{margin-top:20px;padding:12px 30px;background:transparent;border:2px solid var(--muted);border-radius:25px;color:var(--muted);font-size:0.9rem;cursor:pointer;transition:all 0.2s}
+.chat-menu-close:hover{border-color:var(--text);color:var(--text)}
+
 /* Chat Input Bar */
 .chat-input-bar{padding:15px 20px;background:var(--darker);border-top:1px solid rgba(255,255,255,0.08);flex-shrink:0}
 .chat-input-row{display:flex;align-items:center;gap:10px;background:var(--card);border:2px solid rgba(255,255,255,0.1);border-radius:25px;padding:6px 6px 6px 18px;transition:border-color 0.2s}
@@ -323,6 +340,9 @@ body.en .lang-es{display:none !important}
 <div class="chat-modal" id="chatModal">
 <div class="chat-header">
 <div class="chat-header-left">
+<button class="chat-hamburger" id="chatHamburger">
+<span></span><span></span><span></span>
+</button>
 <a href="#" class="chat-home" id="chatHome" title="Home">🏠</a>
 <div class="chat-avatar">🏀</div>
 <div>
@@ -336,6 +356,18 @@ body.en .lang-es{display:none !important}
 <button class="chat-close" id="chatClose">×</button>
 </div>
 </div>
+
+<!-- Full Screen Menu -->
+<div class="chat-menu" id="chatMenu">
+<div class="chat-menu-title"><span class="lang-en">MENU</span><span class="lang-es">MENÚ</span></div>
+<button class="chat-menu-item" data-topic="team">🏀 <span class="lang-en">Team GoTrotters</span><span class="lang-es">Team GoTrotters</span></button>
+<button class="chat-menu-item" data-topic="circuit">🔥 <span class="lang-en">The Triad Circuit</span><span class="lang-es">El Circuito Tríada</span></button>
+<button class="chat-menu-item" data-topic="tiers">🏆 <span class="lang-en">10-Tier Structure</span><span class="lang-es">Estructura de 10 Niveles</span></button>
+<button class="chat-menu-item" data-topic="pricing">💰 <span class="lang-en">Pricing</span><span class="lang-es">Precio</span></button>
+<button class="chat-menu-item primary" data-topic="join">🚀 <span class="lang-en">Join the Team</span><span class="lang-es">Únete al Equipo</span></button>
+<button class="chat-menu-close" id="chatMenuClose"><span class="lang-en">✕ Close Menu</span><span class="lang-es">✕ Cerrar Menú</span></button>
+</div>
+
 <div class="chat-body" id="chatBody"></div>
 <div class="chat-input-bar">
 <div class="chat-input-row">
@@ -378,6 +410,9 @@ body.en .lang-es{display:none !important}
     var chatHome = document.getElementById('chatHome');
     var chatInput = document.getElementById('chatInput');
     var chatSend = document.getElementById('chatSend');
+    var chatHamburger = document.getElementById('chatHamburger');
+    var chatMenu = document.getElementById('chatMenu');
+    var chatMenuClose = document.getElementById('chatMenuClose');
     
     // ========== BILINGUAL HELPER ==========
     function bi(en, es) {
@@ -388,6 +423,51 @@ body.en .lang-es{display:none !important}
     function updateInputPlaceholder() {
         if (chatInput) {
             chatInput.placeholder = lang === 'es' ? 'Pregúntale al Coach...' : 'Ask Coach anything...';
+        }
+    }
+    
+    // ========== MENU FUNCTIONS ==========
+    function openMenu() {
+        chatHamburger.classList.add('active');
+        chatMenu.classList.add('active');
+    }
+    
+    function closeMenu() {
+        chatHamburger.classList.remove('active');
+        chatMenu.classList.remove('active');
+    }
+    
+    function toggleMenu() {
+        if (chatMenu.classList.contains('active')) {
+            closeMenu();
+        } else {
+            openMenu();
+        }
+    }
+    
+    function handleTopic(topic) {
+        // Map menu topics to actions
+        var topicMap = {
+            'team': 'howworks',
+            'circuit': 'triad',
+            'tiers': 'tiers',
+            'pricing': 'pricing',
+            'join': 'start'
+        };
+        
+        if (topic === 'pricing') {
+            addTyping();
+            setTimeout(function() {
+                removeTyping();
+                addMsg(bi(
+                    '💰 <strong>Simple pricing:</strong><br><br>• <strong>$5/month</strong> per person<br>• 7-day FREE trial<br>• Cancel anytime<br>• All 3 Circuits included<br>• Full 10-Tier progression<br><br>No contracts. No hidden fees. Just you and Coach GoTrotter AI.',
+                    '💰 <strong>Precio simple:</strong><br><br>• <strong>$5/mes</strong> por persona<br>• Prueba GRATIS de 7 días<br>• Cancela cuando quieras<br>• Los 3 Circuitos incluidos<br>• Progresión completa de 10 niveles<br><br>Sin contratos. Sin cargos ocultos. Solo tú y Coach GoTrotter AI.'
+                ), false, [
+                    {label: bi('🚀 Start Free Trial', '🚀 Comenzar Prueba Gratis'), action: 'start', primary: true}
+                ]);
+            }, 800);
+        } else {
+            handleAction(topicMap[topic] || topic);
         }
     }
     
@@ -519,7 +599,12 @@ body.en .lang-es{display:none !important}
                     ], 1500);
                 }, 1500);
                 break;
-                
+            
+            case 'pricing':
+                handleTopic('pricing');
+                break;
+            
+            case 'join':
             case 'start':
                 window.location.href = 'play.html';
                 break;
@@ -588,6 +673,19 @@ body.en .lang-es{display:none !important}
     chatSend.addEventListener('click', handleUserInput);
     chatInput.addEventListener('keydown', function(e) {
         if (e.key === 'Enter') handleUserInput();
+    });
+    
+    // Hamburger menu
+    chatHamburger.addEventListener('click', toggleMenu);
+    chatMenuClose.addEventListener('click', closeMenu);
+    
+    // Menu items click
+    document.querySelectorAll('.chat-menu-item').forEach(function(item) {
+        item.addEventListener('click', function() {
+            var topic = this.dataset.topic;
+            closeMenu();
+            handleTopic(topic);
+        });
     });
     
     // Update placeholder on language change
