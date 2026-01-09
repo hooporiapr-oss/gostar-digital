@@ -171,7 +171,7 @@ body.en .lang-es{display:none !important}
 .chat-send:hover{transform:scale(1.05)}
 .chat-send svg{width:18px;height:18px;fill:var(--text)}
 
-.chat-body{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:12px}
+.chat-body{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth}
 
 .chat-msg{display:flex;gap:10px;max-width:90%;animation:msgIn 0.3s ease}
 @keyframes msgIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
@@ -516,11 +516,20 @@ body.en .lang-es{display:none !important}
         html += '</div>';
         msg.innerHTML = html;
         chatBody.appendChild(msg);
-        chatBody.scrollTop = chatBody.scrollHeight;
+        smoothScrollChat();
         
         msg.querySelectorAll('.chat-opt').forEach(function(btn) {
             btn.addEventListener('click', function() { handleAction(this.dataset.action); });
         });
+    }
+    
+    function smoothScrollChat() {
+        setTimeout(function() {
+            chatBody.scrollTo({
+                top: chatBody.scrollHeight,
+                behavior: 'smooth'
+            });
+        }, 50);
     }
     
     function addTyping() {
@@ -529,7 +538,7 @@ body.en .lang-es{display:none !important}
         msg.id = 'typingIndicator';
         msg.innerHTML = '<div class="msg-avatar">🏀</div><div class="msg-bubble"><div class="chat-typing"><span></span><span></span><span></span></div></div>';
         chatBody.appendChild(msg);
-        chatBody.scrollTop = chatBody.scrollHeight;
+        smoothScrollChat();
     }
     
     function removeTyping() {
