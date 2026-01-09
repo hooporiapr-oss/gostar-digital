@@ -507,7 +507,8 @@ body.en .lang-es{display:none !important}
             html += '<div class="chat-options">';
             options.forEach(function(opt) {
                 var cls = opt.primary ? 'chat-opt primary' : 'chat-opt';
-                html += '<button class="' + cls + '" data-action="' + opt.action + '">' + bi(opt.en, opt.es) + '</button>';
+                var label = opt.label ? opt.label : bi(opt.en, opt.es);
+                html += '<button class="' + cls + '" data-action="' + opt.action + '">' + label + '</button>';
             });
             html += '</div>';
         }
@@ -673,18 +674,70 @@ body.en .lang-es{display:none !important}
         addMsg(text, true);
         chatInput.value = '';
         
-        // Coach response
+        var lower = text.toLowerCase();
+        
+        // Keyword detection
         addTyping();
         setTimeout(function() {
             removeTyping();
-            var response = bi(
-                'Great question! 🏀 I\'m Coach GoTrotter AI. Right now I can help you learn about <strong>Team GoTrotters</strong>, <strong>The Triad Circuit</strong>, and our <strong>10-Tier Structure</strong>. Tap one of the topics in the menu to get started, or ask me about pricing, how it works, or joining the team!',
-                '¡Buena pregunta! 🏀 Soy Coach GoTrotter AI. Ahora mismo puedo ayudarte a conocer <strong>Team GoTrotters</strong>, <strong>El Circuito Tríada</strong>, y nuestra <strong>Estructura de 10 Niveles</strong>. Toca un tema del menú para comenzar, o pregúntame sobre precios, cómo funciona, o cómo unirte al equipo!'
-            );
-            addMsg(response, false, [
-                {label: bi('💰 Pricing', '💰 Precio'), action: 'pricing'},
-                {label: bi('🏀 Join Team', '🏀 Unirme'), action: 'join'}
-            ]);
+            
+            // Pricing keywords
+            if (lower.match(/price|pricing|cost|how much|\$|dinero|precio|costo|cuanto/)) {
+                handleTopic('pricing');
+            }
+            // Join/signup keywords
+            else if (lower.match(/join|sign up|signup|start|trial|free|register|unir|comenzar|registrar|prueba/)) {
+                var response = bi(
+                    '🚀 Ready to join Team GoTrotters? Start your <strong>FREE 7-day trial</strong> right now!',
+                    '🚀 ¿Listo para unirte a Team GoTrotters? ¡Comienza tu <strong>prueba GRATIS de 7 días</strong> ahora!'
+                );
+                addMsg(response, false, [
+                    {label: bi('🏀 Start Free Trial', '🏀 Comenzar Prueba'), action: 'start', primary: true}
+                ]);
+            }
+            // Circuit/training keywords
+            else if (lower.match(/circuit|triad|training|exercise|game|circuito|triada|entrenamiento|ejercicio|juego/)) {
+                handleAction('triad');
+            }
+            // Tier/level keywords
+            else if (lower.match(/tier|level|master|practice|progress|nivel|maestro|practica|progreso/)) {
+                handleAction('tiers');
+            }
+            // Coach/AI keywords
+            else if (lower.match(/coach|ai|how.*work|what.*do|como.*funciona|que.*hace/)) {
+                handleAction('howworks');
+            }
+            // Senior/elderly keywords
+            else if (lower.match(/senior|elderly|older|adult|nursing|facility|mayor|anciano|adulto|hogar/)) {
+                handleAction('seniors');
+            }
+            // Athlete keywords
+            else if (lower.match(/athlete|sport|basketball|player|atleta|deporte|baloncesto|jugador/)) {
+                handleAction('athletes');
+            }
+            // Professional keywords
+            else if (lower.match(/professional|work|business|job|profesional|trabajo|negocio|empleo/)) {
+                handleAction('professionals');
+            }
+            // Greeting
+            else if (lower.match(/^(hi|hello|hey|hola|buenas|saludos)/)) {
+                var response = bi(
+                    'Hey! 🏀 I\'m Coach GoTrotter AI. How can I help you today? Ask me about pricing, how it works, or tap the menu ☰ to explore!',
+                    '¡Hola! 🏀 Soy Coach GoTrotter AI. ¿En qué te puedo ayudar? Pregúntame sobre precios, cómo funciona, o toca el menú ☰ para explorar!'
+                );
+                addMsg(response, false);
+            }
+            // Default response
+            else {
+                var response = bi(
+                    'Great question! 🏀 I can help you with:<br><br>• <strong>Pricing</strong> - $5/month<br>• <strong>The Triad Circuit</strong> - 3 circuits<br>• <strong>10-Tier Structure</strong> - PRACTICE 1 to MASTER 10<br>• <strong>Join the Team</strong> - Free trial<br><br>Tap the menu ☰ or ask me anything!',
+                    '¡Buena pregunta! 🏀 Te puedo ayudar con:<br><br>• <strong>Precio</strong> - $5/mes<br>• <strong>El Circuito Tríada</strong> - 3 circuitos<br>• <strong>Estructura de 10 Niveles</strong> - PRACTICE 1 a MASTER 10<br>• <strong>Únete al Equipo</strong> - Prueba gratis<br><br>¡Toca el menú ☰ o pregúntame lo que quieras!'
+                );
+                addMsg(response, false, [
+                    {label: bi('💰 Pricing', '💰 Precio'), action: 'pricing'},
+                    {label: bi('🏀 Join Team', '🏀 Unirme'), action: 'join'}
+                ]);
+            }
         }, 1000);
     }
     
