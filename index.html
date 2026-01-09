@@ -681,8 +681,19 @@ body.en .lang-es{display:none !important}
         setTimeout(function() {
             removeTyping();
             
+            // About GoTrotter/company keywords
+            if (lower.match(/where.*from|who.*made|who.*created|about.*gotrotter|gotrotter.*from|company|location|founded|origin|puerto rico|de donde|quien.*creo|sobre.*gotrotter|empresa|ubicacion|fundado|origen/)) {
+                var response = bi(
+                    '🏀 <strong>Team GoTrotters</strong> is from <strong>Puerto Rico</strong>! 🇵🇷<br><br>We\'re a homegrown platform built with passion in the heart of the Caribbean. Coach GoTrotter AI is here to guide you through The Triad Circuit.<br><br>¡Pa\'lante! 💪',
+                    '🏀 <strong>Team GoTrotters</strong> es de <strong>Puerto Rico</strong>! 🇵🇷<br><br>Somos una plataforma local construida con pasión en el corazón del Caribe. Coach GoTrotter AI está aquí para guiarte por El Circuito Tríada.<br><br>¡Pa\'lante! 💪'
+                );
+                addMsg(response, false, [
+                    {label: bi('🔥 Learn More', '🔥 Saber Más'), action: 'howworks'},
+                    {label: bi('🏀 Join Team', '🏀 Unirme'), action: 'join'}
+                ]);
+            }
             // Pricing keywords
-            if (lower.match(/price|pricing|cost|how much|\$|dinero|precio|costo|cuanto/)) {
+            else if (lower.match(/price|pricing|cost|how much|\$|dinero|precio|costo|cuanto/)) {
                 handleTopic('pricing');
             }
             // Join/signup keywords
@@ -700,7 +711,7 @@ body.en .lang-es{display:none !important}
                 handleAction('triad');
             }
             // Tier/level keywords
-            else if (lower.match(/tier|level|master|practice|progress|nivel|maestro|practica|progreso/)) {
+            else if (lower.match(/tier|level|master|practice|progress|nivel|maestro|}practica|progreso/)) {
                 handleAction('tiers');
             }
             // Coach/AI keywords
@@ -726,6 +737,17 @@ body.en .lang-es{display:none !important}
                     '¡Hola! 🏀 Soy Coach GoTrotter AI. ¿En qué te puedo ayudar? Pregúntame sobre precios, cómo funciona, o toca el menú ☰ para explorar!'
                 );
                 addMsg(response, false);
+            }
+            // What is GoTrotter
+            else if (lower.match(/what.*is.*gotrotter|what.*gotrotter|que.*es.*gotrotter/)) {
+                var response = bi(
+                    '🏀 <strong>Team GoTrotters</strong> is your personal pathway to sharper performance!<br><br>Led by <strong>Coach GoTrotter AI</strong>, you\'ll progress through <strong>The Triad Circuit</strong> (3 circuits) and climb our <strong>10-Tier Structure</strong> from PRACTICE 1 to MASTER 10.<br><br>Built in Puerto Rico 🇵🇷 with love!',
+                    '🏀 <strong>Team GoTrotters</strong> es tu camino personal hacia un mejor rendimiento!<br><br>Guiado por <strong>Coach GoTrotter AI</strong>, progresarás por <strong>El Circuito Tríada</strong> (3 circuitos) y subirás nuestra <strong>Estructura de 10 Niveles</strong> desde PRACTICE 1 hasta MASTER 10.<br><br>¡Hecho en Puerto Rico 🇵🇷 con amor!'
+                );
+                addMsg(response, false, [
+                    {label: bi('💰 Pricing', '💰 Precio'), action: 'pricing'},
+                    {label: bi('🏀 Join Team', '🏀 Unirme'), action: 'join'}
+                ]);
             }
             // Default response
             else {
