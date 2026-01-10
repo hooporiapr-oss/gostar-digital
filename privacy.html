@@ -45,7 +45,8 @@ a:hover{color:var(--teal)}
 .footer-links{display:flex;justify-content:center;gap:30px;flex-wrap:wrap;margin-bottom:15px}
 .footer-links a{color:var(--muted);text-decoration:none;font-size:0.9rem;transition:color 0.3s}
 .footer-links a:hover{color:var(--orange)}
-.footer-copy{font-size:0.8rem;color:var(--muted)}
+.footer-copy{font-size:0.8rem;color:var(--muted);margin-bottom:15px}
+.trademark-notice{font-size:0.7rem;color:var(--muted);max-width:500px;margin:0 auto}
 
 @media(max-width:768px){
     .nav{padding:15px 20px}
@@ -63,8 +64,8 @@ a:hover{color:var(--teal)}
 <nav class="nav">
     <a href="index.html" class="nav-logo"><span class="go">Go</span><span class="trotters">Trotters</span></a>
     <div class="nav-lang">
-        <button class="lang-btn active">EN</button>
-        <button class="lang-btn">ES</button>
+        <button class="lang-btn active" id="btn-en">EN</button>
+        <button class="lang-btn" id="btn-es">ES</button>
     </div>
 </nav>
 
@@ -83,17 +84,17 @@ a:hover{color:var(--teal)}
     <div class="content-card">
         <!-- ENGLISH -->
         <div class="lang-en">
-            <p>GoStar Digital LLC ("we", "our", or "us") operates the GoTrotters cognitive training platform. We are committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard information when you use our platform.</p>
+            <p>GoStar Digital LLC ("we", "our", or "us") operates the GoTrotters™ M³ Training platform. We are committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard information when you use our platform.</p>
             
             <div class="highlight">
-                <p>🏀 <strong>GoTrotters is designed with privacy in mind.</strong> We collect only what's necessary to deliver a great cognitive training experience.</p>
+                <p>🏀 <strong>GoTrotters is designed with privacy in mind.</strong> We collect only what's necessary to deliver a great training experience.</p>
             </div>
 
             <h2>INFORMATION WE COLLECT</h2>
             <p>We collect information that you or your facility provides directly to us:</p>
             <ul>
                 <li><strong>Account Information:</strong> Username, 4-digit PIN, facility association</li>
-                <li><strong>Training Data:</strong> Game scores, tier progression (PRACTICE through MASTER 10), session times, personal bests</li>
+                <li><strong>Training Data:</strong> Scores, tier progression (PRACTICE 1 through MASTER 10), session times, personal bests</li>
                 <li><strong>Usage Data:</strong> Features used, language preferences</li>
                 <li><strong>Facility Data:</strong> Facility name, contact information, license details</li>
             </ul>
@@ -101,8 +102,8 @@ a:hover{color:var(--teal)}
             <h2>HOW WE USE INFORMATION</h2>
             <p>We use the information we collect to:</p>
             <ul>
-                <li>Provide and improve our cognitive training platform</li>
-                <li>Track GoTrotter progress through our 10-tier system</li>
+                <li>Provide and improve the M³ Training platform</li>
+                <li>Track your progress through our 10-tier system</li>
                 <li>Generate progress reports for facilities and families</li>
                 <li>Personalize the training experience</li>
                 <li>Communicate about account and service updates</li>
@@ -112,7 +113,7 @@ a:hover{color:var(--teal)}
             <h2>DATA SHARING</h2>
             <p><strong>We do not sell your personal information.</strong> We may share information with:</p>
             <ul>
-                <li><strong>Licensed Facilities:</strong> Facilities that manage GoTrotter accounts can view training progress and activity</li>
+                <li><strong>Licensed Facilities:</strong> Facilities that manage accounts can view training progress and activity</li>
                 <li><strong>Family Members:</strong> Authorized family "cheerleaders" can view their loved one's progress</li>
                 <li><strong>Service Providers:</strong> Third parties that help operate our platform (hosting, payment processing via Stripe)</li>
                 <li><strong>Legal Requirements:</strong> When required by law or to protect our rights</li>
@@ -129,7 +130,7 @@ a:hover{color:var(--teal)}
             </ul>
 
             <h2>DATA RETENTION</h2>
-            <p>We retain GoTrotter training data for the duration of the facility's active license. After a license expires:</p>
+            <p>We retain training data for the duration of the facility's active license. After a license expires:</p>
             <ul>
                 <li>Trial data is preserved for 30 days</li>
                 <li>Paid license data is retained for 90 days after expiration</li>
@@ -147,30 +148,30 @@ a:hover{color:var(--teal)}
             </ul>
 
             <h2>CHILDREN'S PRIVACY</h2>
-            <p>GoTrotters is designed primarily for adult cognitive wellness, particularly seniors in care facilities. We do not knowingly collect personal information from children under 13. If you believe we have collected information from a child, please contact us immediately.</p>
+            <p>GoTrotters is designed primarily for adult wellness, particularly seniors in care facilities. We do not knowingly collect personal information from children under 13. If you believe we have collected information from a child, please contact us immediately.</p>
 
             <h2>CHANGES TO THIS POLICY</h2>
             <p>We may update this Privacy Policy from time to time. We will notify facilities of significant changes via email and update the "Last updated" date above.</p>
 
             <h2>CONTACT US</h2>
             <p>If you have questions about this Privacy Policy or your data, please contact us:</p>
-            <p><strong>Email:</strong> <a href="mailto:info@gostardigital.com">info@gostardigital.com</a></p>
+            <p><strong>Email:</strong> support@gostar.digital</p>
             <p><strong>Location:</strong> Puerto Rico, USA 🇵🇷</p>
         </div>
 
         <!-- SPANISH -->
         <div class="lang-es">
-            <p>GoStar Digital LLC ("nosotros", "nuestro") opera la plataforma de entrenamiento cognitivo GoTrotters. Estamos comprometidos a proteger su privacidad. Esta Política de Privacidad explica cómo recopilamos, usamos y protegemos la información cuando usa nuestra plataforma.</p>
+            <p>GoStar Digital LLC ("nosotros", "nuestro") opera la plataforma de entrenamiento GoTrotters™ M³. Estamos comprometidos a proteger su privacidad. Esta Política de Privacidad explica cómo recopilamos, usamos y protegemos la información cuando usa nuestra plataforma.</p>
             
             <div class="highlight">
-                <p>🏀 <strong>GoTrotters está diseñado con la privacidad en mente.</strong> Solo recopilamos lo necesario para ofrecer una excelente experiencia de entrenamiento cognitivo.</p>
+                <p>🏀 <strong>GoTrotters está diseñado con la privacidad en mente.</strong> Solo recopilamos lo necesario para ofrecer una excelente experiencia de entrenamiento.</p>
             </div>
 
             <h2>INFORMACIÓN QUE RECOPILAMOS</h2>
             <p>Recopilamos información que usted o su instalación nos proporciona directamente:</p>
             <ul>
                 <li><strong>Información de Cuenta:</strong> Nombre de usuario, PIN de 4 dígitos, asociación de instalación</li>
-                <li><strong>Datos de Entrenamiento:</strong> Puntuaciones, progresión de niveles (PRACTICE hasta MASTER 10), tiempos de sesión, mejores marcas</li>
+                <li><strong>Datos de Entrenamiento:</strong> Puntuaciones, progresión de niveles (PRACTICE 1 hasta MASTER 10), tiempos de sesión, mejores marcas</li>
                 <li><strong>Datos de Uso:</strong> Funciones utilizadas, preferencias de idioma</li>
                 <li><strong>Datos de Instalación:</strong> Nombre de instalación, información de contacto, detalles de licencia</li>
             </ul>
@@ -178,8 +179,8 @@ a:hover{color:var(--teal)}
             <h2>CÓMO USAMOS LA INFORMACIÓN</h2>
             <p>Usamos la información que recopilamos para:</p>
             <ul>
-                <li>Proporcionar y mejorar nuestra plataforma de entrenamiento cognitivo</li>
-                <li>Rastrear el progreso de GoTrotters a través de nuestro sistema de 10 niveles</li>
+                <li>Proporcionar y mejorar la plataforma de entrenamiento M³</li>
+                <li>Rastrear su progreso a través de nuestro sistema de 10 niveles</li>
                 <li>Generar informes de progreso para instalaciones y familias</li>
                 <li>Personalizar la experiencia de entrenamiento</li>
                 <li>Comunicar actualizaciones de cuenta y servicio</li>
@@ -189,7 +190,7 @@ a:hover{color:var(--teal)}
             <h2>COMPARTIR DATOS</h2>
             <p><strong>No vendemos su información personal.</strong> Podemos compartir información con:</p>
             <ul>
-                <li><strong>Instalaciones Licenciadas:</strong> Las instalaciones que administran cuentas de GoTrotters pueden ver el progreso y la actividad de entrenamiento</li>
+                <li><strong>Instalaciones Licenciadas:</strong> Las instalaciones que administran cuentas pueden ver el progreso y la actividad de entrenamiento</li>
                 <li><strong>Miembros de Familia:</strong> Familiares autorizados como "porristas" pueden ver el progreso de su ser querido</li>
                 <li><strong>Proveedores de Servicios:</strong> Terceros que ayudan a operar nuestra plataforma (hosting, procesamiento de pagos vía Stripe)</li>
                 <li><strong>Requisitos Legales:</strong> Cuando sea requerido por ley o para proteger nuestros derechos</li>
@@ -206,7 +207,7 @@ a:hover{color:var(--teal)}
             </ul>
 
             <h2>RETENCIÓN DE DATOS</h2>
-            <p>Retenemos los datos de entrenamiento de GoTrotters durante la vigencia de la licencia activa de la instalación. Después de que una licencia expira:</p>
+            <p>Retenemos los datos de entrenamiento durante la vigencia de la licencia activa de la instalación. Después de que una licencia expira:</p>
             <ul>
                 <li>Los datos de prueba se preservan por 30 días</li>
                 <li>Los datos de licencia pagada se retienen por 90 días después de la expiración</li>
@@ -224,14 +225,14 @@ a:hover{color:var(--teal)}
             </ul>
 
             <h2>PRIVACIDAD DE MENORES</h2>
-            <p>GoTrotters está diseñado principalmente para el bienestar cognitivo de adultos, particularmente personas mayores en hogares de cuidado. No recopilamos intencionalmente información personal de niños menores de 13 años. Si cree que hemos recopilado información de un menor, contáctenos inmediatamente.</p>
+            <p>GoTrotters está diseñado principalmente para el bienestar de adultos, particularmente personas mayores en hogares de cuidado. No recopilamos intencionalmente información personal de niños menores de 13 años. Si cree que hemos recopilado información de un menor, contáctenos inmediatamente.</p>
 
             <h2>CAMBIOS A ESTA POLÍTICA</h2>
             <p>Podemos actualizar esta Política de Privacidad de vez en cuando. Notificaremos a las instalaciones de cambios significativos por correo electrónico y actualizaremos la fecha de "Última actualización" arriba.</p>
 
             <h2>CONTÁCTENOS</h2>
             <p>Si tiene preguntas sobre esta Política de Privacidad o sus datos, contáctenos:</p>
-            <p><strong>Email:</strong> <a href="mailto:info@gostardigital.com">info@gostardigital.com</a></p>
+            <p><strong>Email:</strong> support@gostar.digital</p>
             <p><strong>Ubicación:</strong> Puerto Rico, EE.UU. 🇵🇷</p>
         </div>
     </div>
@@ -247,34 +248,24 @@ a:hover{color:var(--teal)}
         <a href="terms.html"><span class="lang-en">Terms of Use</span><span class="lang-es">Términos</span></a>
     </div>
     <p class="footer-copy">© 2026 GoStar Digital LLC • Puerto Rico 🇵🇷</p>
+    <p class="trademark-notice"><span class="lang-en">GoTrotters™ and GoTrotter™ are trademarks of GoStar Digital LLC. All rights reserved.</span><span class="lang-es">GoTrotters™ y GoTrotter™ son marcas registradas de GoStar Digital LLC. Todos los derechos reservados.</span></p>
 </footer>
 
 <script>
-(function(){
-    var lang = localStorage.getItem('gt-lang') || 'en';
-    document.body.className = lang;
-    
-    function setLang(l) {
-        lang = l;
-        localStorage.setItem('gt-lang', l);
-        document.body.className = l;
-        updateButtons();
-    }
-    
-    function updateButtons() {
-        document.querySelectorAll('.lang-btn').forEach(function(b) {
-            b.classList.toggle('active', b.textContent.trim() === lang.toUpperCase());
-        });
-    }
-    
-    updateButtons();
-    
-    document.querySelectorAll('.lang-btn').forEach(function(b) {
-        b.addEventListener('click', function() {
-            setLang(this.textContent.trim().toLowerCase());
-        });
-    });
-})();
+var lang = localStorage.getItem('gt-lang') || 'en';
+
+function setLang(l) {
+    lang = l;
+    localStorage.setItem('gt-lang', l);
+    document.body.className = l;
+    document.getElementById('btn-en').className = l === 'en' ? 'lang-btn active' : 'lang-btn';
+    document.getElementById('btn-es').className = l === 'es' ? 'lang-btn active' : 'lang-btn';
+}
+
+setLang(lang);
+
+document.getElementById('btn-en').addEventListener('click', function() { setLang('en'); });
+document.getElementById('btn-es').addEventListener('click', function() { setLang('es'); });
 </script>
 </body>
 </html>
