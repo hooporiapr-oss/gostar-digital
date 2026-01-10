@@ -30,6 +30,7 @@ body.en .lang-es{display:none !important}
 .content-card{background:linear-gradient(145deg,var(--card) 0%,var(--darker) 100%);border:1px solid rgba(255,255,255,0.05);border-radius:24px;padding:50px;margin-bottom:30px}
 h2{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:2px;color:var(--teal);margin:30px 0 15px}
 h2:first-child{margin-top:0}
+h3{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:1px;color:var(--orange);margin:20px 0 10px}
 p{color:var(--muted);margin-bottom:16px}
 ul{color:var(--muted);margin:16px 0 16px 24px}
 li{margin-bottom:10px}
@@ -37,9 +38,8 @@ a{color:var(--orange);text-decoration:none}
 a:hover{color:var(--teal)}
 .highlight{background:rgba(255,107,0,0.1);border-left:4px solid var(--orange);padding:20px;border-radius:0 12px 12px 0;margin:20px 0}
 .highlight p{margin:0;color:var(--text)}
-.pricing-summary{background:rgba(0,217,165,0.1);border:1px solid rgba(0,217,165,0.3);border-radius:16px;padding:25px;margin:20px 0}
-.pricing-summary h3{color:var(--teal);margin-bottom:15px;font-size:1.1rem}
-.pricing-summary ul{margin:0}
+.pricing-summary{background:rgba(0,217,165,0.1);border:1px solid rgba(0,217,165,0.2);border-radius:16px;padding:25px;margin:20px 0}
+.pricing-summary h3{color:var(--teal);margin-top:0}
 
 .footer{padding:50px 20px 30px;background:var(--darker);text-align:center;border-top:1px solid rgba(255,255,255,0.05)}
 .footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:3px;margin-bottom:20px}
@@ -48,7 +48,8 @@ a:hover{color:var(--teal)}
 .footer-links{display:flex;justify-content:center;gap:30px;flex-wrap:wrap;margin-bottom:15px}
 .footer-links a{color:var(--muted);text-decoration:none;font-size:0.9rem;transition:color 0.3s}
 .footer-links a:hover{color:var(--orange)}
-.footer-copy{font-size:0.8rem;color:var(--muted)}
+.footer-copy{font-size:0.8rem;color:var(--muted);margin-bottom:15px}
+.trademark-notice{font-size:0.7rem;color:var(--muted);max-width:500px;margin:0 auto}
 
 @media(max-width:768px){
     .nav{padding:15px 20px}
@@ -66,8 +67,8 @@ a:hover{color:var(--teal)}
 <nav class="nav">
     <a href="index.html" class="nav-logo"><span class="go">Go</span><span class="trotters">Trotters</span></a>
     <div class="nav-lang">
-        <button class="lang-btn active">EN</button>
-        <button class="lang-btn">ES</button>
+        <button class="lang-btn active" id="btn-en">EN</button>
+        <button class="lang-btn" id="btn-es">ES</button>
     </div>
 </nav>
 
@@ -86,19 +87,19 @@ a:hover{color:var(--teal)}
     <div class="content-card">
         <!-- ENGLISH -->
         <div class="lang-en">
-            <p>Welcome to GoTrotters! These Terms of Use ("Terms") govern your use of the GoTrotters cognitive training platform operated by GoStar Digital LLC ("we", "our", or "us"). By using our platform, you agree to these Terms.</p>
+            <p>Welcome to GoTrotters! These Terms of Use ("Terms") govern your use of the GoTrotters™ M³ Training platform operated by GoStar Digital LLC ("we", "our", or "us"). By using our platform, you agree to these Terms.</p>
             
             <div class="highlight">
-                <p>🏀 <strong>Simple Terms:</strong> Use GoTrotters to train your memory, climb the tiers, and have fun. Don't misuse it. Pay for your license. We'll provide a great platform.</p>
+                <p>🏀 <strong>Simple Terms:</strong> Use GoTrotters to train, climb the tiers, and have fun. Don't misuse it. Pay for your license. We'll provide a great platform.</p>
             </div>
 
             <h2>1. ACCEPTANCE OF TERMS</h2>
             <p>By accessing or using GoTrotters, you agree to be bound by these Terms and our <a href="privacy.html">Privacy Policy</a>. If you are using the platform on behalf of a facility or organization, you represent that you have authority to bind that entity to these Terms.</p>
 
             <h2>2. DESCRIPTION OF SERVICE</h2>
-            <p>GoTrotters is a cognitive wellness platform that provides:</p>
+            <p>GoTrotters is a wellness platform that provides:</p>
             <ul>
-                <li>Basketball-themed cognitive training games (The 3 Point Play)</li>
+                <li>The M³ Circuit (3 circuits: Memory, Mental Agility, Mira Tracking)</li>
                 <li>10-tier progression system (PRACTICE 1 through MASTER 10)</li>
                 <li>Facility dashboard and progress tracking</li>
                 <li>Family "cheerleader" access for loved ones</li>
@@ -115,7 +116,7 @@ a:hover{color:var(--teal)}
             <p>GoTrotters is licensed on a per-user monthly basis. Simple, accessible, no complicated tiers. By purchasing a license, you agree to the following:</p>
             
             <div class="pricing-summary">
-                <h3>🏀 JOIN THE GOTROTTERS SQUAD</h3>
+                <h3>🏀 JOIN TEAM GOTROTTERS</h3>
                 <ul>
                     <li><strong>Free Trial:</strong> 7 days, 1 user, full access — No credit card required</li>
                     <li><strong>GoTrotters:</strong> $5/month per user — Add unlimited users anytime</li>
@@ -127,17 +128,17 @@ a:hover{color:var(--teal)}
             <p><strong>Cancellation:</strong> Cancel anytime. Access continues until end of current billing period.</p>
             
             <div class="highlight">
-                <p>🎯 <strong>Memory training is important. We make it accessible.</strong> No complicated pricing tiers. No negotiations. Just $5/month per user. That's it.</p>
+                <p>🎯 <strong>Training is important. We make it accessible.</strong> No complicated pricing tiers. No negotiations. Just $5/month per user. That's it.</p>
             </div>
 
             <h2>5. FREE TRIAL</h2>
             <p>We offer a 7-day free trial with the following terms:</p>
             <ul>
                 <li>1 user, full platform access</li>
-                <li>All 3 games (The 3 Point Play)</li>
+                <li>All 3 circuits (The M³ Circuit)</li>
                 <li>All 10 progression levels (PRACTICE 1 through MASTER 10)</li>
                 <li>No credit card required</li>
-                <li>No automatic billing — you choose when to join the Squad</li>
+                <li>No automatic billing — you choose when to join the Team</li>
             </ul>
 
             <h2>6. ACCEPTABLE USE</h2>
@@ -152,14 +153,14 @@ a:hover{color:var(--teal)}
             </ul>
 
             <h2>7. INTELLECTUAL PROPERTY</h2>
-            <p>GoTrotters, including all content, features, games, the 10-tier progression system, GoTrotter AI, and related branding are owned by GoStar Digital LLC. You may not copy, modify, or distribute our intellectual property without written permission.</p>
-            <p>"GoTrotters" and the GoTrotters logo are trademarks of GoStar Digital LLC.</p>
+            <p>GoTrotters, including all content, features, the M³ Circuit, the 10-tier progression system, GoTrotter AI, and related branding are owned by GoStar Digital LLC. You may not copy, modify, or distribute our intellectual property without written permission.</p>
+            <p>"GoTrotters™", "GoTrotter™" and the GoTrotters logo are trademarks of GoStar Digital LLC.</p>
 
             <h2>8. DISCLAIMER OF WARRANTIES</h2>
             <p>GoTrotters is provided "as is" without warranties of any kind. We do not guarantee that:</p>
             <ul>
                 <li>The service will be uninterrupted or error-free</li>
-                <li>The platform will produce specific cognitive outcomes</li>
+                <li>The platform will produce specific outcomes</li>
                 <li>All features will be available at all times</li>
             </ul>
             <p><strong>GoTrotters is not a medical device and is not intended to diagnose, treat, or cure any condition.</strong></p>
@@ -179,106 +180,106 @@ a:hover{color:var(--teal)}
 
             <h2>13. CONTACT US</h2>
             <p>If you have questions about these Terms, please contact us:</p>
-            <p><strong>Email:</strong> <a href="mailto:info@gostardigital.com">info@gostardigital.com</a></p>
+            <p><strong>Email:</strong> support@gostar.digital</p>
             <p><strong>Location:</strong> Puerto Rico, USA 🇵🇷</p>
         </div>
 
         <!-- SPANISH -->
         <div class="lang-es">
-            <p>¡Bienvenido a GoTrotters! Estos Términos de Uso ("Términos") rigen su uso de la plataforma de entrenamiento cognitivo GoTrotters operada por GoStar Digital LLC ("nosotros", "nuestro"). Al usar nuestra plataforma, acepta estos Términos.</p>
+            <p>¡Bienvenido a GoTrotters! Estos Términos de Uso ("Términos") rigen su uso de la plataforma de entrenamiento GoTrotters™ M³ operada por GoStar Digital LLC ("nosotros", "nuestro"). Al usar nuestra plataforma, acepta estos Términos.</p>
             
             <div class="highlight">
-                <p>🏀 <strong>Términos Simples:</strong> Use GoTrotters para entrenar su memoria, subir de nivel y divertirse. No lo use mal. Pague su licencia. Nosotros proveeremos una gran plataforma.</p>
+                <p>🏀 <strong>Términos Simples:</strong> Use GoTrotters para entrenar, subir de nivel y divertirse. No lo use mal. Pague su licencia. Nosotros proveeremos una gran plataforma.</p>
             </div>
 
             <h2>1. ACEPTACIÓN DE TÉRMINOS</h2>
             <p>Al acceder o usar GoTrotters, acepta estar sujeto a estos Términos y nuestra <a href="privacy.html">Política de Privacidad</a>. Si usa la plataforma en nombre de una instalación u organización, representa que tiene autoridad para vincular esa entidad a estos Términos.</p>
 
             <h2>2. DESCRIPCIÓN DEL SERVICIO</h2>
-            <p>GoTrotters es una plataforma de bienestar cognitivo que proporciona:</p>
+            <p>GoTrotters es una plataforma de bienestar que proporciona:</p>
             <ul>
-                <li>Juegos de entrenamiento cognitivo con tema de baloncesto (El Tiro de 3 Puntos)</li>
+                <li>El Circuito M³ (3 circuitos: Memoria, Agilidad Mental, Mira Tracking)</li>
                 <li>Sistema de progresión de 10 niveles (PRACTICE 1 hasta MASTER 10)</li>
-                <li>Panel de instalación y seguimiento de progreso</li>
-                <li>Acceso familiar como "porristas" para seres queridos</li>
+                <li>Panel de control de instalación y seguimiento de progreso</li>
+                <li>Acceso familiar de "porristas" para seres queridos</li>
                 <li>Soporte bilingüe (Inglés/Español)</li>
             </ul>
 
             <h2>3. REGISTRO DE CUENTA</h2>
             <p><strong>Instalaciones:</strong> Deben registrarse con información de contacto válida y aceptar los términos de licencia.</p>
-            <p><strong>GoTrotters (Usuarios):</strong> Son registrados a través de su instalación o mediante el registro conversacional de GoTrotter AI. Cada GoTrotter recibe un PIN único de 4 dígitos.</p>
+            <p><strong>GoTrotters (Usuarios):</strong> Se registran a través de su instalación o mediante el onboarding conversacional de GoTrotter AI. Cada GoTrotter recibe un PIN único de 4 dígitos.</p>
             <p><strong>Miembros de Familia:</strong> Pueden ser invitados como "porristas" para seguir el progreso de su ser querido.</p>
             <p>Usted es responsable de mantener la confidencialidad de sus credenciales de cuenta y de todas las actividades bajo su cuenta.</p>
 
             <h2>4. LICENCIA Y PRECIOS</h2>
-            <p>GoTrotters se licencia por usuario mensualmente. Simple, accesible, sin niveles complicados. Al comprar una licencia, acepta lo siguiente:</p>
+            <p>GoTrotters se licencia mensualmente por usuario. Simple, accesible, sin niveles complicados. Al comprar una licencia, acepta lo siguiente:</p>
             
             <div class="pricing-summary">
-                <h3>🏀 ÚNETE AL ESCUADRÓN GOTROTTERS</h3>
+                <h3>🏀 ÚNETE A TEAM GOTROTTERS</h3>
                 <ul>
                     <li><strong>Prueba Gratis:</strong> 7 días, 1 usuario, acceso completo — Sin tarjeta de crédito</li>
-                    <li><strong>GoTrotters:</strong> $5/mes por usuario — Agrega usuarios ilimitados en cualquier momento</li>
+                    <li><strong>GoTrotters:</strong> $5/mes por usuario — Agregue usuarios ilimitados en cualquier momento</li>
                 </ul>
             </div>
             
             <p><strong>Pago:</strong> Pago mensual con tarjeta de crédito (Stripe)</p>
-            <p><strong>Agregar Usuarios:</strong> Agrega tantos usuarios como necesites, cuando quieras</p>
-            <p><strong>Cancelación:</strong> Cancela en cualquier momento. El acceso continúa hasta el final del período de facturación.</p>
+            <p><strong>Agregar Usuarios:</strong> Agregue tantos usuarios como necesite, en cualquier momento</p>
+            <p><strong>Cancelación:</strong> Cancele en cualquier momento. El acceso continúa hasta el final del período de facturación actual.</p>
             
             <div class="highlight">
-                <p>🎯 <strong>El entrenamiento de memoria es importante. Lo hacemos accesible.</strong> Sin niveles de precios complicados. Sin negociaciones. Solo $5/mes por usuario. Eso es todo.</p>
+                <p>🎯 <strong>El entrenamiento es importante. Lo hacemos accesible.</strong> Sin niveles de precios complicados. Sin negociaciones. Solo $5/mes por usuario. Eso es todo.</p>
             </div>
 
-            <h2>5. PRUEBA GRATIS</h2>
-            <p>Ofrecemos una prueba gratis de 7 días con los siguientes términos:</p>
+            <h2>5. PRUEBA GRATUITA</h2>
+            <p>Ofrecemos una prueba gratuita de 7 días con los siguientes términos:</p>
             <ul>
                 <li>1 usuario, acceso completo a la plataforma</li>
-                <li>Los 3 juegos (El Tiro de 3 Puntos)</li>
+                <li>Los 3 circuitos (El Circuito M³)</li>
                 <li>Los 10 niveles de progresión (PRACTICE 1 hasta MASTER 10)</li>
                 <li>Sin tarjeta de crédito requerida</li>
-                <li>Sin facturación automática — tú eliges cuándo unirte al Escuadrón</li>
+                <li>Sin facturación automática — usted elige cuándo unirse al Equipo</li>
             </ul>
 
             <h2>6. USO ACEPTABLE</h2>
             <p>Usted acepta NO:</p>
             <ul>
                 <li>Compartir códigos de acceso o PINs con usuarios no autorizados</li>
-                <li>Intentar ingeniería inversa o copiar la plataforma</li>
+                <li>Intentar realizar ingeniería inversa o copiar la plataforma</li>
                 <li>Usar la plataforma para cualquier propósito ilegal</li>
                 <li>Interferir o interrumpir el servicio</li>
                 <li>Crear cuentas falsas o manipular la progresión de niveles</li>
-                <li>Revender o sublicenciar acceso sin autorización</li>
+                <li>Revender o sublicenciar el acceso sin autorización</li>
             </ul>
 
             <h2>7. PROPIEDAD INTELECTUAL</h2>
-            <p>GoTrotters, incluyendo todo el contenido, características, juegos, el sistema de progresión de 10 niveles, GoTrotter AI, y marca relacionada son propiedad de GoStar Digital LLC. No puede copiar, modificar o distribuir nuestra propiedad intelectual sin permiso escrito.</p>
-            <p>"GoTrotters" y el logo de GoTrotters son marcas registradas de GoStar Digital LLC.</p>
+            <p>GoTrotters, incluyendo todo el contenido, características, el Circuito M³, el sistema de progresión de 10 niveles, GoTrotter AI, y la marca relacionada son propiedad de GoStar Digital LLC. No puede copiar, modificar o distribuir nuestra propiedad intelectual sin permiso escrito.</p>
+            <p>"GoTrotters™", "GoTrotter™" y el logo de GoTrotters son marcas registradas de GoStar Digital LLC.</p>
 
             <h2>8. DESCARGO DE GARANTÍAS</h2>
             <p>GoTrotters se proporciona "tal cual" sin garantías de ningún tipo. No garantizamos que:</p>
             <ul>
                 <li>El servicio será ininterrumpido o libre de errores</li>
-                <li>La plataforma producirá resultados cognitivos específicos</li>
-                <li>Todas las funciones estarán disponibles en todo momento</li>
+                <li>La plataforma producirá resultados específicos</li>
+                <li>Todas las características estarán disponibles en todo momento</li>
             </ul>
             <p><strong>GoTrotters no es un dispositivo médico y no está destinado a diagnosticar, tratar o curar ninguna condición.</strong></p>
 
             <h2>9. LIMITACIÓN DE RESPONSABILIDAD</h2>
-            <p>En la máxima medida permitida por la ley, GoStar Digital LLC no será responsable por daños indirectos, incidentales, especiales o consecuentes derivados de su uso de GoTrotters. Nuestra responsabilidad total no excederá el monto que pagó por su licencia en los 12 meses anteriores al reclamo.</p>
+            <p>En la máxima medida permitida por la ley, GoStar Digital LLC no será responsable por daños indirectos, incidentales, especiales o consecuentes derivados de su uso de GoTrotters. Nuestra responsabilidad total no excederá el monto que pagó por su licencia en los 12 meses anteriores a la reclamación.</p>
 
             <h2>10. TERMINACIÓN</h2>
             <p>Podemos suspender o terminar su acceso si viola estos Términos.</p>
-            <p>Al terminar, su acceso a la plataforma finalizará y sus datos se retendrán según nuestra política de retención de datos (90 días para licencias pagadas).</p>
+            <p>Al terminar, su acceso a la plataforma finalizará, y sus datos se retendrán según nuestra política de retención de datos (90 días para licencias pagadas).</p>
 
             <h2>11. CAMBIOS A LOS TÉRMINOS</h2>
-            <p>Podemos actualizar estos Términos de vez en cuando. Notificaremos a las instalaciones de cambios significativos por correo electrónico. El uso continuo de la plataforma después de los cambios constituye aceptación de los nuevos Términos.</p>
+            <p>Podemos actualizar estos Términos de vez en cuando. Notificaremos a las instalaciones de cambios significativos por correo electrónico. El uso continuo de la plataforma después de los cambios constituye la aceptación de los nuevos Términos.</p>
 
             <h2>12. LEY APLICABLE</h2>
             <p>Estos Términos se rigen por las leyes del Estado Libre Asociado de Puerto Rico, EE.UU. Cualquier disputa se resolverá en los tribunales de Puerto Rico.</p>
 
             <h2>13. CONTÁCTENOS</h2>
             <p>Si tiene preguntas sobre estos Términos, contáctenos:</p>
-            <p><strong>Email:</strong> <a href="mailto:info@gostardigital.com">info@gostardigital.com</a></p>
+            <p><strong>Email:</strong> support@gostar.digital</p>
             <p><strong>Ubicación:</strong> Puerto Rico, EE.UU. 🇵🇷</p>
         </div>
     </div>
@@ -294,34 +295,24 @@ a:hover{color:var(--teal)}
         <a href="terms.html"><span class="lang-en">Terms of Use</span><span class="lang-es">Términos</span></a>
     </div>
     <p class="footer-copy">© 2026 GoStar Digital LLC • Puerto Rico 🇵🇷</p>
+    <p class="trademark-notice"><span class="lang-en">GoTrotters™ and GoTrotter™ are trademarks of GoStar Digital LLC. All rights reserved.</span><span class="lang-es">GoTrotters™ y GoTrotter™ son marcas registradas de GoStar Digital LLC. Todos los derechos reservados.</span></p>
 </footer>
 
 <script>
-(function(){
-    var lang = localStorage.getItem('gt-lang') || 'en';
-    document.body.className = lang;
-    
-    function setLang(l) {
-        lang = l;
-        localStorage.setItem('gt-lang', l);
-        document.body.className = l;
-        updateButtons();
-    }
-    
-    function updateButtons() {
-        document.querySelectorAll('.lang-btn').forEach(function(b) {
-            b.classList.toggle('active', b.textContent.trim() === lang.toUpperCase());
-        });
-    }
-    
-    updateButtons();
-    
-    document.querySelectorAll('.lang-btn').forEach(function(b) {
-        b.addEventListener('click', function() {
-            setLang(this.textContent.trim().toLowerCase());
-        });
-    });
-})();
+var lang = localStorage.getItem('gt-lang') || 'en';
+
+function setLang(l) {
+    lang = l;
+    localStorage.setItem('gt-lang', l);
+    document.body.className = l;
+    document.getElementById('btn-en').className = l === 'en' ? 'lang-btn active' : 'lang-btn';
+    document.getElementById('btn-es').className = l === 'es' ? 'lang-btn active' : 'lang-btn';
+}
+
+setLang(lang);
+
+document.getElementById('btn-en').addEventListener('click', function() { setLang('en'); });
+document.getElementById('btn-es').addEventListener('click', function() { setLang('es'); });
 </script>
 </body>
 </html>
