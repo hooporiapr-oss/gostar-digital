@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>The M³ Circuit - Team GoTrotters</title>
+<title>M³ Performance System - Team GoTrotters</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -102,16 +102,17 @@ body.en .lang-es{display:none !important}
 <main class="main">
 <section class="welcome-section">
 <div class="welcome-badge">TEAM GOTROTTERS</div>
-<h1 class="welcome-title"><span class="lang-en">THE M³ CIRCUIT</span><span class="lang-es">EL CIRCUITO M³</span></h1>
-<p class="welcome-subtitle"><span class="lang-en">Three circuits. 10-tier progression. Coach GoTrotter AI guides your journey.</span><span class="lang-es">Tres circuitos. Progresión de 10 niveles. Coach GoTrotter AI guía tu camino.</span></p>
+<h1 class="welcome-title"><span class="lang-en">M³ PERFORMANCE SYSTEM</span><span class="lang-es">SISTEMA DE RENDIMIENTO M³</span></h1>
+<p class="welcome-subtitle" style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:3px;color:var(--gold);margin-bottom:10px;"><span class="lang-en">MAP. MOVE. MATCH.</span><span class="lang-es">UBICAR. MOVER. COORDINAR.</span></p>
+<p class="welcome-subtitle"><span class="lang-en">Three Performance circuits. 10-tier progression. Coach GoTrotter AI guides your journey.</span><span class="lang-es">Tres circuitos de Rendimiento. Progresión de 10 niveles. Coach GoTrotter AI guía tu camino.</span></p>
 </section>
 
 <div class="circuits-grid">
-<!-- CIRCUIT 1: MEMORY -->
+<!-- CIRCUIT 1: MAP -->
 <div class="circuit-card" onclick="playCircuit('gotrotters.html')">
 <div class="circuit-number">CIRCUIT 1</div>
 <div class="circuit-icon">🧠</div>
-<h2 class="circuit-title">MEMORY</h2>
+<h2 class="circuit-title">MAP</h2>
 <p class="circuit-desc"><span class="lang-en">Watch the sequence light up. Remember the positions. Tap them in order.</span><span class="lang-es">Mira la secuencia iluminarse. Recuerda las posiciones. Tócalas en orden.</span></p>
 <div class="circuit-progress">
 <div class="progress-row">
@@ -123,11 +124,11 @@ body.en .lang-es{display:none !important}
 <button class="play-btn"><span class="lang-en">START →</span><span class="lang-es">INICIAR →</span></button>
 </div>
 
-<!-- CIRCUIT 2: MENTAL AGILITY -->
+<!-- CIRCUIT 2: MOVE -->
 <div class="circuit-card" onclick="playCircuit('playbook.html')">
 <div class="circuit-number">CIRCUIT 2</div>
 <div class="circuit-icon">⚡</div>
-<h2 class="circuit-title">MENTAL AGILITY</h2>
+<h2 class="circuit-title">MOVE</h2>
 <p class="circuit-desc"><span class="lang-en">Watch the number sequence. Call it back. Forward, backward, or alternating.</span><span class="lang-es">Mira la secuencia de números. Repítela. Adelante, reversa, o alternando.</span></p>
 <div class="circuit-progress">
 <div class="progress-row">
@@ -139,11 +140,11 @@ body.en .lang-es{display:none !important}
 <button class="play-btn"><span class="lang-en">START →</span><span class="lang-es">INICIAR →</span></button>
 </div>
 
-<!-- CIRCUIT 3: MIRA TRACKING -->
+<!-- CIRCUIT 3: MATCH -->
 <div class="circuit-card" onclick="playCircuit('fastbreak.html')">
 <div class="circuit-number">CIRCUIT 3</div>
 <div class="circuit-icon">👁️</div>
-<h2 class="circuit-title">MIRA TRACKING</h2>
+<h2 class="circuit-title">MATCH</h2>
 <p class="circuit-desc"><span class="lang-en">Watch the tiles light up. Repeat the sequence. It grows longer each time!</span><span class="lang-es">Mira las fichas iluminarse. Repite la secuencia. ¡Crece cada vez!</span></p>
 <div class="circuit-progress">
 <div class="progress-row">
@@ -233,7 +234,7 @@ if (!userPin && window.location.hostname === 'gostar.digital') {
 
 // Load progress for each circuit
 function loadProgress() {
-    // Circuit 1: Memory (gotrotters)
+    // Circuit 1: Map (gotrotters)
     try {
         var c1 = JSON.parse(localStorage.getItem('gotrotters-mastery')) || {};
         var c1Level = c1.unlockedLevel || 0;
@@ -241,7 +242,7 @@ function loadProgress() {
         document.getElementById('circuit1Progress').style.width = ((c1Level + 1) / 10 * 100) + '%';
     } catch(e) {}
 
-    // Circuit 2: Mental Agility (playbook)
+    // Circuit 2: Move (playbook)
     try {
         var c2 = JSON.parse(localStorage.getItem('playbook-mastery')) || {};
         var c2Forward = c2.forward ? (c2.forward.unlockedLevel || 0) : 0;
@@ -249,7 +250,7 @@ function loadProgress() {
         document.getElementById('circuit2Progress').style.width = ((c2Forward + 1) / 10 * 100) + '%';
     } catch(e) {}
 
-    // Circuit 3: Mira Tracking (fastbreak)
+    // Circuit 3: Match (fastbreak)
     try {
         var c3 = JSON.parse(localStorage.getItem('fastbreak-mastery')) || {};
         var c3Level = c3.unlockedLevel || 0;
