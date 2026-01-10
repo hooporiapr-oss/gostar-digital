@@ -610,8 +610,8 @@ tr:hover { background: var(--card-hover); }
             </button>
             <button class="nav-item" data-page="circuits">
                 <span class="nav-item-icon">🔺</span>
-                <span class="lang-en">M³ Circuit</span>
-                <span class="lang-es">Circuito M³</span>
+                <span class="lang-en">M³ Performance System</span>
+                <span class="lang-es">Sistema de Rendimiento M³</span>
             </button>
             <button class="nav-item" data-page="activity">
                 <span class="nav-item-icon">📋</span>
@@ -636,8 +636,8 @@ tr:hover { background: var(--card-hover); }
             <header class="page-header">
                 <h1 class="page-title">TEAM GOTROTTERS</h1>
                 <p class="page-subtitle">
-                    <span class="lang-en">Coach Dashboard • The M³ Circuit • 10-Tier Structure</span>
-                    <span class="lang-es">Panel del Coach • El Circuito M³ • Estructura 10 Niveles</span>
+                    <span class="lang-en">Coach Dashboard • M³ Performance System • 10-Tier Structure</span>
+                    <span class="lang-es">Panel del Coach • Sistema de Rendimiento M³ • Estructura 10 Niveles</span>
                 </p>
             </header>
             <div class="team-banner">
@@ -810,7 +810,7 @@ tr:hover { background: var(--card-hover); }
                 <label class="form-label">10-Tier Structure</label>
                 <div class="form-row">
                     <div>
-                        <label class="form-label" style="font-size:0.7rem">🧠 Memory</label>
+                        <label class="form-label" style="font-size:0.7rem">🧠 Map</label>
                         <select class="form-select" id="userC1"></select>
                     </div>
                     <div>
@@ -925,9 +925,9 @@ tr:hover { background: var(--card-hover); }
 
     // THE TRIAD CIRCUIT
     var circuits = {
-        c1: {name: 'MEMORY', icon: '🧠', label: 'Circuit 1', sessions: 245, avg: 4.2, masters: 1},
-        c2: {name: 'MENTAL AGILITY', icon: '⚡', label: 'Circuit 2', sessions: 187, avg: 3.8, masters: 0},
-        c3: {name: 'MIRA TRACKING', icon: '👁️', label: 'Circuit 3', sessions: 156, avg: 3.5, masters: 0}
+        c1: {name: 'MAP', icon: '🧠', label: 'Circuit 1', sessions: 245, avg: 4.2, masters: 1},
+        c2: {name: 'MOVE', icon: '⚡', label: 'Circuit 2', sessions: 187, avg: 3.8, masters: 0},
+        c3: {name: 'MATCH', icon: '👁️', label: 'Circuit 3', sessions: 156, avg: 3.5, masters: 0}
     };
 
     // TEAM GOTROTTERS
@@ -944,7 +944,7 @@ tr:hover { background: var(--card-hover); }
 
     var activities = [
         {id:1, type:'user', text:'Rosa Díaz joined Team GoTrotters (trial)', time:'5 minutes ago'},
-        {id:2, type:'circuit', text:'Roberto López reached LEVEL 8 in Memory', time:'12 minutes ago'},
+        {id:2, type:'circuit', text:'Roberto López reached LEVEL 8 in Map', time:'12 minutes ago'},
         {id:3, type:'user', text:'Pedro Santos converted to paid ($5/mo)', time:'1 hour ago'},
         {id:4, type:'circuit', text:'Carmen Rivera reached MASTER 10! 👑', time:'3 hours ago'},
         {id:5, type:'user', text:'Ana Rodríguez joined Team GoTrotters (trial)', time:'1 day ago'}
@@ -1285,7 +1285,7 @@ tr:hover { background: var(--card-hover); }
     }
 
     function exportUsers() {
-        var csv = 'Name,Email,Status,Memory,Agility,Tracking,LastActive\n';
+        var csv = 'Name,Email,Status,Map,Move,Match,LastActive\n';
         users.forEach(function(u) { csv += u.name + ',' + u.email + ',' + u.status + ',' + tierList[u.c1 - 1] + ',' + tierList[u.c2 - 1] + ',' + tierList[u.c3 - 1] + ',' + u.lastActive + '\n'; });
         var blob = new Blob([csv], {type: 'text/csv'});
         var a = document.createElement('a');
