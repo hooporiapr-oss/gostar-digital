@@ -45,7 +45,6 @@ body.en .lang-es{display:none !important}
 
 .hero-cta{padding:20px 55px;font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:5px;background:linear-gradient(135deg,var(--orange) 0%,var(--orange-dark) 100%);color:var(--text);border:none;border-radius:60px;cursor:pointer;box-shadow:0 10px 40px rgba(255,107,0,0.5);transition:all 0.3s;display:inline-flex;align-items:center;gap:12px;text-decoration:none}
 .hero-cta:hover{transform:translateY(-4px) scale(1.02);box-shadow:0 15px 50px rgba(255,107,0,0.6)}
-.hero-cta-icon{font-size:1.4rem}
 
 .hero-sub{margin-top:25px;font-size:0.85rem;color:var(--muted)}
 .hero-sub strong{color:var(--teal)}
@@ -103,14 +102,14 @@ body.en .lang-es{display:none !important}
 .footer-links a:hover{color:var(--text)}
 .footer-copy{font-size:0.75rem;color:var(--muted)}
 
-/* ========== GOTROTTER AI CHAT - STAR BUTTON ========== */
+/* ========== GOTROTTER AI CHAT - COSMIC CHAT BUTTON ========== */
 .chat-fab{
     position:fixed;
-    bottom:25px;
-    right:25px;
+    bottom:20px;
+    right:20px;
     z-index:1000;
-    width:90px;
-    height:90px;
+    width:85px;
+    height:85px;
     background:transparent;
     border:none;
     border-radius:50%;
@@ -123,79 +122,42 @@ body.en .lang-es{display:none !important}
     overflow:visible
 }
 
-/* Outer glow ring */
-.chat-fab::before{
-    content:'';
-    position:absolute;
-    inset:-12px;
-    border-radius:50%;
-    background:radial-gradient(circle,rgba(59,130,246,0.5) 0%,rgba(0,217,165,0.3) 40%,transparent 70%);
-    animation:fabGlow 2s ease-in-out infinite;
-    z-index:-1
-}
-
-/* Pulse ring */
-.chat-fab::after{
-    content:'';
-    position:absolute;
-    inset:-25px;
-    border-radius:50%;
-    border:2px solid rgba(59,130,246,0.4);
-    animation:fabRing 2.5s ease-out infinite;
-    z-index:-2
-}
-
 .chat-fab-img{
     width:100%;
     height:100%;
-    object-fit:contain;
-    filter:drop-shadow(0 0 15px rgba(59,130,246,0.9)) drop-shadow(0 0 30px rgba(0,217,165,0.6));
-    animation:fabFloat 3s ease-in-out infinite, fabSparkle 4s ease-in-out infinite;
+    object-fit:cover;
+    border-radius:50%;
+    animation:fabFloat 3s ease-in-out infinite;
     transition:all 0.3s
 }
 
 .chat-fab:hover .chat-fab-img{
-    transform:scale(1.15);
-    filter:drop-shadow(0 0 25px rgba(255,255,255,0.9)) drop-shadow(0 0 50px rgba(59,130,246,1)) drop-shadow(0 0 80px rgba(0,217,165,0.8))
+    transform:scale(1.1);
+    filter:brightness(1.2)
 }
 
 .chat-fab.hidden{transform:scale(0);opacity:0;pointer-events:none}
 
 .chat-fab-badge{
     position:absolute;
-    bottom:0px;
-    right:-5px;
+    bottom:-2px;
+    right:-2px;
     background:linear-gradient(135deg,var(--orange),#FF8533);
     color:var(--text);
-    font-size:0.75rem;
+    font-size:0.7rem;
     font-weight:800;
-    padding:6px 12px;
-    border-radius:14px;
+    padding:5px 10px;
+    border-radius:12px;
     font-family:'Bebas Neue',sans-serif;
     letter-spacing:1px;
-    box-shadow:0 4px 20px rgba(255,107,0,0.7);
+    box-shadow:0 4px 15px rgba(255,107,0,0.6);
     animation:badgePop 2s ease-in-out infinite;
     z-index:10
 }
 
-@keyframes fabGlow{
-    0%,100%{opacity:0.5;transform:scale(1)}
-    50%{opacity:1;transform:scale(1.15)}
-}
-
-@keyframes fabRing{
-    0%{transform:scale(0.8);opacity:0.8}
-    100%{transform:scale(1.5);opacity:0}
-}
-
 @keyframes fabFloat{
     0%,100%{transform:translateY(0)}
-    50%{transform:translateY(-8px)}
-}
-
-@keyframes fabSparkle{
-    0%,100%{filter:drop-shadow(0 0 15px rgba(59,130,246,0.9)) drop-shadow(0 0 30px rgba(0,217,165,0.6)) brightness(1)}
-    50%{filter:drop-shadow(0 0 20px rgba(255,255,255,0.7)) drop-shadow(0 0 40px rgba(59,130,246,1)) brightness(1.1)}
+    50%{transform:translateY(-6px)}
 }
 
 @keyframes badgePop{
@@ -204,7 +166,7 @@ body.en .lang-es{display:none !important}
 }
 
 /* Chat Modal */
-.chat-modal{position:fixed;bottom:100px;right:25px;width:380px;max-width:calc(100vw - 40px);height:550px;max-height:calc(100vh - 140px);background:var(--dark);border:2px solid rgba(255,107,0,0.3);border-radius:24px;z-index:1001;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.5);transform:scale(0.8) translateY(20px);opacity:0;pointer-events:none;transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1)}
+.chat-modal{position:fixed;bottom:115px;right:20px;width:380px;max-width:calc(100vw - 40px);height:550px;max-height:calc(100vh - 140px);background:var(--dark);border:2px solid rgba(255,107,0,0.3);border-radius:24px;z-index:1001;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.5);transform:scale(0.8) translateY(20px);opacity:0;pointer-events:none;transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1)}
 .chat-modal.active{transform:scale(1) translateY(0);opacity:1;pointer-events:auto}
 
 .chat-header{padding:15px 20px;background:linear-gradient(135deg,rgba(255,107,0,0.15),rgba(0,217,165,0.08));border-bottom:2px solid rgba(255,107,0,0.2);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
@@ -224,7 +186,6 @@ body.en .lang-es{display:none !important}
 .chat-close{width:32px;height:32px;background:rgba(255,255,255,0.1);border:none;border-radius:50%;color:var(--muted);font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
 .chat-close:hover{background:rgba(255,255,255,0.2);color:var(--text)}
 
-/* Mobile: Hide header lang toggle, show sub-header */
 @media(max-width:768px){
 .chat-header .chat-header-right .chat-lang{display:none}
 }
@@ -235,7 +196,6 @@ body.en .lang-es{display:none !important}
 .chat-lang-bar{display:flex}
 }
 
-/* Hamburger Menu */
 .chat-hamburger{width:36px;height:36px;background:rgba(255,255,255,0.1);border:none;border-radius:10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;transition:all 0.2s}
 .chat-hamburger:hover{background:rgba(255,107,0,0.3)}
 .chat-hamburger span{width:18px;height:2px;background:var(--text);border-radius:2px;transition:all 0.3s}
@@ -255,7 +215,6 @@ body.en .lang-es{display:none !important}
 .chat-menu-close{margin-top:20px;padding:12px 30px;background:transparent;border:2px solid var(--muted);border-radius:25px;color:var(--muted);font-size:0.9rem;cursor:pointer;transition:all 0.2s}
 .chat-menu-close:hover{border-color:var(--text);color:var(--text)}
 
-/* Chat Input Bar */
 .chat-input-bar{padding:15px 20px;background:var(--darker);border-top:1px solid rgba(255,255,255,0.08);flex-shrink:0}
 .chat-input-row{display:flex;align-items:center;gap:10px;background:var(--card);border:2px solid rgba(255,255,255,0.1);border-radius:25px;padding:6px 6px 6px 18px;transition:border-color 0.2s}
 .chat-input-row:focus-within{border-color:var(--orange)}
@@ -290,7 +249,6 @@ body.en .lang-es{display:none !important}
 .chat-typing span:nth-child(3){animation-delay:0.4s}
 @keyframes typing{0%,100%{transform:translateY(0);opacity:0.4}50%{transform:translateY(-6px);opacity:1}}
 
-/* Scroll */
 .chat-body::-webkit-scrollbar{width:6px}
 .chat-body::-webkit-scrollbar-track{background:transparent}
 .chat-body::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:3px}
@@ -302,7 +260,7 @@ body.en .lang-es{display:none !important}
 .games{flex-direction:column;align-items:center}
 .game-card{width:100%;max-width:300px}
 .chat-modal.active{position:fixed;top:0;left:0;right:0;bottom:0;width:100%;height:100%;max-width:100%;max-height:100%;border-radius:0;border:none}
-.chat-fab{bottom:20px;right:15px;width:75px;height:75px}
+.chat-fab{bottom:15px;right:15px;width:70px;height:70px}
 .chat-fab.hidden{display:none}
 .notjust{margin:40px 10px 0}
 }
@@ -439,9 +397,9 @@ body.en .lang-es{display:none !important}
 </div>
 </footer>
 
-<!-- GOTROTTER AI CHAT FAB - STAR IMAGE -->
+<!-- GOTROTTER AI CHAT FAB - COSMIC CHAT BUBBLE -->
 <button class="chat-fab" id="chatFab">
-<img src="chat_star.png" alt="Chat with GoTrotter AI" class="chat-fab-img">
+<img src="go_chat.png" alt="Chat with GoTrotter AI" class="chat-fab-img">
 <span class="chat-fab-badge">AI</span>
 </button>
 
@@ -466,13 +424,11 @@ body.en .lang-es{display:none !important}
 </div>
 </div>
 
-<!-- Mobile Language Bar -->
 <div class="chat-lang-bar">
 <button class="chat-lang-mobile active" data-lang="en">EN</button>
 <button class="chat-lang-mobile" data-lang="es">ES</button>
 </div>
 
-<!-- Full Screen Menu -->
 <div class="chat-menu" id="chatMenu">
 <div class="chat-menu-title"><span class="lang-en">MENU</span><span class="lang-es">MENÚ</span></div>
 <div class="chat-menu-lang">
@@ -500,7 +456,6 @@ body.en .lang-es{display:none !important}
 
 <script>
 (function(){
-    // ========== LANGUAGE ==========
     var lang = localStorage.getItem('gt-lang') || 'en';
     
     function setLang(l) {
@@ -521,7 +476,6 @@ body.en .lang-es{display:none !important}
         });
     });
     
-    // ========== CHAT ELEMENTS ==========
     var chatFab = document.getElementById('chatFab');
     var chatModal = document.getElementById('chatModal');
     var chatBody = document.getElementById('chatBody');
@@ -533,19 +487,16 @@ body.en .lang-es{display:none !important}
     var chatMenu = document.getElementById('chatMenu');
     var chatMenuClose = document.getElementById('chatMenuClose');
     
-    // ========== BILINGUAL HELPER ==========
     function bi(en, es) {
         return '<span class="lang-en">' + en + '</span><span class="lang-es">' + es + '</span>';
     }
     
-    // Update placeholder based on language
     function updateInputPlaceholder() {
         if (chatInput) {
             chatInput.placeholder = lang === 'es' ? 'Pregunta lo que quieras...' : 'Ask anything...';
         }
     }
     
-    // ========== MENU FUNCTIONS ==========
     function openMenu() {
         chatHamburger.classList.add('active');
         chatMenu.classList.add('active');
@@ -565,7 +516,6 @@ body.en .lang-es{display:none !important}
     }
     
     function handleTopic(topic) {
-        // Map menu topics to actions
         var topicMap = {
             'team': 'howworks',
             'circuit': 'triad',
@@ -590,7 +540,6 @@ body.en .lang-es{display:none !important}
         }
     }
     
-    // ========== CHAT HELPERS ==========
     function addMsg(content, isUser, options) {
         var msg = document.createElement('div');
         msg.className = 'chat-msg ' + (isUser ? 'user' : 'bot');
@@ -650,7 +599,6 @@ body.en .lang-es{display:none !important}
         }, delay);
     }
     
-    // ========== CONVERSATION CONTENT ==========
     var content = {
         welcome: {
             en: "Hey! 🏀 I'm <strong>GoTrotter AI</strong>.<br><br>Welcome to <span class=\"hl\">GoTrotters</span>. I'm here to guide you through <span class=\"hl\">The M³ Circuit</span>:<br><br>🧠 <strong>Memory</strong> — Circuit 1<br>⚡ <strong>Mental Agility</strong> — Circuit 2<br>👁️ <strong>Mira Tracking</strong> — Circuit 3<br><br>10 tiers. From PRACTICE 1 to MASTER 10. Let's see what you've got.",
@@ -662,37 +610,17 @@ body.en .lang-es{display:none !important}
         },
         topics: {
             triad: {
-                en: "🔺 <strong>The M³ Circuit</strong><br><br>Most apps only work one area. That's not how we do it here. GoTrotters™ is <span class=\"hl\">The M³ Circuit</span> — three connected challenges:<br><br><strong>🧠 MEMORY</strong><br>The foundation. Where were the positions? What was the sequence? You build pattern recognition and retention.<br><br><strong>⚡ MENTAL AGILITY</strong><br>Speed increases as you advance tiers. You learn to work FASTER under pressure. Mental flexibility — adapting when it gets harder.<br><br><strong>👁️ MIRA TRACKING</strong><br>Your eyes scan the court. Follow the pattern. Track digits as they appear. Eye-mind coordination matters for everyone:<br>• Seniors: driving, reading, daily independence<br>• Athletes: tracking ball, opponents, teammates<br>• Students: reading speed and comprehension<br>• Everyone: navigating the visual world<br><br>Three circuits working together. That's how you make progress.",
-                es: "🔺 <strong>El Circuito M³</strong><br><br>La mayoría de las apps solo trabajan un área. Así no lo hacemos aquí. GoTrotters™ es <span class=\"hl\">El Circuito M³</span> — tres desafíos conectados:<br><br><strong>🧠 MEMORIA</strong><br>La base. ¿Dónde estaban las posiciones? ¿Cuál era la secuencia? Construyes reconocimiento de patrones y retención.<br><br><strong>⚡ AGILIDAD MENTAL</strong><br>La velocidad aumenta a medida que avanzas. Aprendes a trabajar MÁS RÁPIDO bajo presión. Flexibilidad mental — adaptándote cuando se pone más difícil.<br><br><strong>👁️ MIRA TRACKING</strong><br>Tus ojos escanean la cancha. Siguen el patrón. Rastrean dígitos mientras aparecen. La coordinación ojo-mente importa para todos:<br>• Adultos mayores: conducir, leer, independencia diaria<br>• Atletas: seguir la pelota, oponentes, compañeros<br>• Estudiantes: velocidad de lectura y comprensión<br>• Todos: navegar el mundo visual<br><br>Tres circuitos trabajando juntos. Así es como progresas."
-            },
-            athletes: {
-                en: "🏀 <strong>Athletes & GoTrotters</strong><br><br>Elite athletes don't just condition their bodies — they sharpen their MINDS.<br><br><strong>🧠 Memory:</strong> Playbooks, opponent tendencies, in-game adjustments<br><br><strong>⚡ Mental Agility:</strong> Split-second decisions, reading the play, adapting on the fly<br><br><strong>👁️ Mira Tracking:</strong> Following the ball, scanning the court, tracking multiple players<br><br>LeBron studies film for hours. Why? Because <span class=\"hl\">mental advantage wins games</span>.<br><br>GoTrotters™ was built with a basketball theme because athletes get it: repetition, progression, structured practice. That's how GoTrotters builds champions.",
-                es: "🏀 <strong>Atletas y GoTrotters</strong><br><br>Los atletas de élite no solo acondicionan sus cuerpos — afinan sus MENTES.<br><br><strong>🧠 Memoria:</strong> Jugadas, tendencias del oponente, ajustes durante el juego<br><br><strong>⚡ Agilidad Mental:</strong> Decisiones en fracciones de segundo, leer la jugada, adaptarse al instante<br><br><strong>👁️ Mira Tracking:</strong> Seguir la pelota, escanear la cancha, rastrear múltiples jugadores<br><br>LeBron estudia video por horas. ¿Por qué? Porque la <span class=\"hl\">ventaja mental gana juegos</span>.<br><br>GoTrotters™ fue construido con un tema de baloncesto porque los atletas lo entienden: repetición, progresión, práctica estructurada. Así es como GoTrotters construye campeones."
-            },
-            seniors: {
-                en: "🧠 <strong>Seniors & GoTrotters</strong><br><br>For seniors, mental activity isn't optional — it's essential maintenance. GoTrotter AI is here to help.<br><br><strong>🧠 Memory:</strong> Names, appointments, medications, daily tasks<br><br><strong>⚡ Mental Agility:</strong> Quick thinking in conversations, problem-solving, staying sharp<br><br><strong>👁️ Mira Tracking:</strong> THIS IS HUGE for seniors. Mira tracking affects:<br>• Safe driving<br>• Reading and comprehension<br>• Balance and navigation<br>• Maintaining independence<br><br>GoTrotters™ was designed with <span class=\"hl\">nursing homes and care facilities</span> in mind. GoTrotter AI guides each resident through the 10-tier structure — achievable milestones, celebrated progress. Because dignity matters at every age.",
-                es: "🧠 <strong>Adultos Mayores y GoTrotters</strong><br><br>Para adultos mayores, la actividad mental no es opcional — es mantenimiento esencial. GoTrotter AI está aquí para ayudar.<br><br><strong>🧠 Memoria:</strong> Nombres, citas, medicamentos, tareas diarias<br><br><strong>⚡ Agilidad Mental:</strong> Pensamiento rápido en conversaciones, resolución de problemas, mantenerse agudo<br><br><strong>👁️ Mira Tracking:</strong> ESTO ES ENORME para adultos mayores. Mira tracking afecta:<br>• Conducir con seguridad<br>• Lectura y comprensión<br>• Balance y navegación<br>• Mantener independencia<br><br>GoTrotters™ fue diseñado pensando en <span class=\"hl\">hogares de ancianos e instalaciones de cuidado</span>. GoTrotter AI guía a cada residente a través de la estructura de 10 niveles — hitos alcanzables, progreso celebrado. Porque la dignidad importa a cualquier edad."
-            },
-            everyday: {
-                en: "🏠 <strong>Everyday Life & GoTrotters</strong><br><br>You don't have to be an athlete or a senior to join. The <span class=\"hl\">M³ Circuit</span> powers daily life:<br><br><strong>🧠 Memory:</strong><br>• Grocery lists without checking your phone<br>• Recipes while cooking<br>• Names at social events<br>• Where you parked, where you put your keys<br><br><strong>⚡ Mental Agility:</strong><br>• Quick thinking in conversations<br>• Multitasking at work<br>• Problem-solving on the fly<br><br><strong>👁️ Mira Tracking:</strong><br>• Reading faster<br>• Driving safely<br>• Finding things in crowded spaces<br><br>Memory is <span class=\"hl\">life's operating system</span>. When it runs better — with agility and tracking — everything runs better. That's why you join GoTrotters.",
-                es: "🏠 <strong>Vida Cotidiana y GoTrotters</strong><br><br>No tienes que ser atleta ni adulto mayor para unirte. El <span class=\"hl\">Circuito M³</span> impulsa la vida diaria:<br><br><strong>🧠 Memoria:</strong><br>• Listas de compras sin revisar el teléfono<br>• Recetas mientras cocinas<br>• Nombres en eventos sociales<br>• Dónde estacionaste, dónde pusiste las llaves<br><br><strong>⚡ Agilidad Mental:</strong><br>• Pensamiento rápido en conversaciones<br>• Multitarea en el trabajo<br>• Resolver problemas al instante<br><br><strong>👁️ Mira Tracking:</strong><br>• Leer más rápido<br>• Conducir con seguridad<br>• Encontrar cosas en espacios llenos<br><br>La memoria es el <span class=\"hl\">sistema operativo de la vida</span>. Cuando funciona mejor — con agilidad y seguimiento — todo funciona mejor. Por eso te unes a GoTrotters."
+                en: "🔺 <strong>The M³ Circuit</strong><br><br>GoTrotters™ is <span class=\"hl\">The M³ Circuit</span> — three connected challenges:<br><br><strong>🧠 MEMORY</strong><br>The foundation. Pattern recognition and retention.<br><br><strong>⚡ MENTAL AGILITY</strong><br>Speed increases as you advance. Mental flexibility under pressure.<br><br><strong>👁️ MIRA TRACKING</strong><br>Eye-mind coordination. Scan and track visually.<br><br>Three circuits working together. That's how you make progress.",
+                es: "🔺 <strong>El Circuito M³</strong><br><br>GoTrotters™ es <span class=\"hl\">El Circuito M³</span> — tres desafíos conectados:<br><br><strong>🧠 MEMORIA</strong><br>La base. Reconocimiento de patrones y retención.<br><br><strong>⚡ AGILIDAD MENTAL</strong><br>La velocidad aumenta a medida que avanzas. Flexibilidad mental bajo presión.<br><br><strong>👁️ MIRA TRACKING</strong><br>Coordinación ojo-mente. Escanea y rastrea visualmente.<br><br>Tres circuitos trabajando juntos. Así es como progresas."
             },
             tiers: {
-                en: "🏆 <strong>The 10-Tier Structure</strong><br><br>I guide you through 10 tiers. Each tier = <span class=\"hl\">clear milestones</span> and <span class=\"hl\">measurable progress</span> across all three circuits.<br><br><strong>FOUNDATION (Tiers 1-2):</strong><br>🔹 <span class=\"hl\">PRACTICE 1</span> — Learn the basics<br>🔹 <span class=\"hl\">PRACTICE 2</span> — Build confidence<br><br><strong>DEVELOPMENT (Tiers 3-6):</strong><br>🔸 Increasing speed (Mental Agility)<br>🔸 Longer sequences (Memory)<br>🔸 More complex patterns (Mira Tracking)<br><br><strong>ADVANCED (Tiers 7-9):</strong><br>🔶 Elite-level challenge<br>🔶 All three circuits pushed to limits<br><br><strong>MASTERY (Tier 10):</strong><br>👑 <span class=\"hl\">MASTER 10</span> — The ultimate milestone<br><br>No shortcuts. You <span class=\"hl\">earn</span> every level. That's how GoTrotters works.",
-                es: "🏆 <strong>La Estructura de 10 Niveles</strong><br><br>Te guío a través de 10 niveles. Cada nivel = <span class=\"hl\">hitos claros</span> y <span class=\"hl\">progreso medible</span> en los tres circuitos.<br><br><strong>FUNDACIÓN (Niveles 1-2):</strong><br>🔹 <span class=\"hl\">PRACTICE 1</span> — Aprende lo básico<br>🔹 <span class=\"hl\">PRACTICE 2</span> — Construye confianza<br><br><strong>DESARROLLO (Niveles 3-6):</strong><br>🔸 Velocidad creciente (Agilidad Mental)<br>🔸 Secuencias más largas (Memoria)<br>🔸 Patrones más complejos (Mira Tracking)<br><br><strong>AVANZADO (Niveles 7-9):</strong><br>🔶 Desafío nivel élite<br>🔶 Los tres circuitos llevados al límite<br><br><strong>MAESTRÍA (Nivel 10):</strong><br>👑 <span class=\"hl\">MASTER 10</span> — El hito máximo<br><br>Sin atajos. Te <span class=\"hl\">ganas</span> cada nivel. Así funciona GoTrotters."
-            },
-            professionals: {
-                en: "💼 <strong>Professionals & GoTrotters</strong><br><br>In business, mental performance IS your edge. That's why high performers join.<br><br><strong>🧠 Memory:</strong><br>• Client names and details<br>• Presentation content<br>• Procedures and protocols<br>• Deal terms and negotiations<br><br><strong>⚡ Mental Agility:</strong><br>• Quick decisions in meetings<br>• Adapting to unexpected situations<br>• Processing information fast<br><br><strong>👁️ Mira Tracking:</strong><br>• Scanning documents efficiently<br>• Reading data and charts<br>• Managing visual information overload<br><br>Surgeons, lawyers, executives, salespeople — the professional who <span class=\"hl\">thinks faster and remembers more</span> wins. Join GoTrotters.",
-                es: "💼 <strong>Profesionales y GoTrotters</strong><br><br>En los negocios, el rendimiento mental ES tu ventaja. Por eso los de alto rendimiento se unen al equipo.<br><br><strong>🧠 Memoria:</strong><br>• Nombres y detalles de clientes<br>• Contenido de presentaciones<br>• Procedimientos y protocolos<br>• Términos de negocios y negociaciones<br><br><strong>⚡ Agilidad Mental:</strong><br>• Decisiones rápidas en reuniones<br>• Adaptarse a situaciones inesperadas<br>• Procesar información rápido<br><br><strong>👁️ Mira Tracking:</strong><br>• Escanear documentos eficientemente<br>• Leer datos y gráficos<br>• Manejar sobrecarga de información visual<br><br>Cirujanos, abogados, ejecutivos, vendedores — el profesional que <span class=\"hl\">piensa más rápido y recuerda más</span> gana. Únete a GoTrotters."
+                en: "🏆 <strong>The 10-Tier Structure</strong><br><br>I guide you through 10 tiers:<br><br><strong>FOUNDATION (Tiers 1-2):</strong><br>🔹 PRACTICE 1 — Learn the basics<br>🔹 PRACTICE 2 — Build confidence<br><br><strong>DEVELOPMENT (Tiers 3-6):</strong><br>🔸 Increasing speed and complexity<br><br><strong>ADVANCED (Tiers 7-9):</strong><br>🔶 Elite-level challenge<br><br><strong>MASTERY (Tier 10):</strong><br>👑 MASTER 10 — The ultimate milestone<br><br>No shortcuts. You <span class=\"hl\">earn</span> every level.",
+                es: "🏆 <strong>La Estructura de 10 Niveles</strong><br><br>Te guío a través de 10 niveles:<br><br><strong>FUNDACIÓN (Niveles 1-2):</strong><br>🔹 PRACTICE 1 — Aprende lo básico<br>🔹 PRACTICE 2 — Construye confianza<br><br><strong>DESARROLLO (Niveles 3-6):</strong><br>🔸 Velocidad y complejidad creciente<br><br><strong>AVANZADO (Niveles 7-9):</strong><br>🔶 Desafío nivel élite<br><br><strong>MAESTRÍA (Nivel 10):</strong><br>👑 MASTER 10 — El hito máximo<br><br>Sin atajos. Te <span class=\"hl\">ganas</span> cada nivel."
             },
             howworks: {
-                en: "🤖 <strong>About GoTrotter AI</strong><br><br>I'm <span class=\"hl\">GoTrotter AI</span> — GoTrotter AI.<br><br>I guide you through <strong>The M³ Circuit</strong>:<br><br>🧠 <span class=\"hl\">MEMORY</span> — Circuit 1<br>Spatial memory + retention + recall<br><br>⚡ <span class=\"hl\">MENTAL AGILITY</span> — Circuit 2<br>Processing speed + mental flexibility<br><br>👁️ <span class=\"hl\">MIRA TRACKING</span> — Circuit 3<br>Eye-mind coordination + scanning<br><br><strong>The 10-Tier Structure:</strong><br>From PRACTICE 1 to MASTER 10. I track your progress. I push you to the next level. I celebrate your milestones.<br><br><strong>$5/month.</strong> Your mind is the ultimate athlete. <span class=\"hl\">Let's put it to work.</span> 🏀",
-                es: "🤖 <strong>Sobre GoTrotter AI</strong><br><br>Soy <span class=\"hl\">GoTrotter AI</span> — GoTrotter AI.<br><br>Te guío a través de <strong>El Circuito M³</strong>:<br><br>🧠 <span class=\"hl\">MEMORY</span> — Circuito 1<br>Memoria espacial + retención + recuerdo<br><br>⚡ <span class=\"hl\">MENTAL AGILITY</span> — Circuito 2<br>Velocidad de procesamiento + flexibilidad mental<br><br>👁️ <span class=\"hl\">MIRA TRACKING</span> — Circuito 3<br>Coordinación ojo-mente + escaneo<br><br><strong>La Estructura de 10 Niveles:</strong><br>Desde PRACTICE 1 hasta MASTER 10. Sigo tu progreso. Te empujo al siguiente nivel. Celebro tus hitos.<br><br><strong>$5/mes.</strong> Tu mente es el atleta definitivo. <span class=\"hl\">Vamos a ponerla a trabajar.</span> 🏀"
+                en: "🤖 <strong>About GoTrotter AI</strong><br><br>I'm <span class=\"hl\">GoTrotter AI</span> — your guide through <strong>The M³ Circuit</strong>.<br><br>🧠 <span class=\"hl\">MEMORY</span> — Circuit 1<br>⚡ <span class=\"hl\">MENTAL AGILITY</span> — Circuit 2<br>👁️ <span class=\"hl\">MIRA TRACKING</span> — Circuit 3<br><br>From PRACTICE 1 to MASTER 10. I track your progress. I push you to the next level.<br><br><strong>$5/month.</strong> Your mind is the ultimate athlete. 🏀",
+                es: "🤖 <strong>Sobre GoTrotter AI</strong><br><br>Soy <span class=\"hl\">GoTrotter AI</span> — tu guía a través de <strong>El Circuito M³</strong>.<br><br>🧠 <span class=\"hl\">MEMORY</span> — Circuito 1<br>⚡ <span class=\"hl\">MENTAL AGILITY</span> — Circuito 2<br>👁️ <span class=\"hl\">MIRA TRACKING</span> — Circuito 3<br><br>Desde PRACTICE 1 hasta MASTER 10. Sigo tu progreso. Te empujo al siguiente nivel.<br><br><strong>$5/mes.</strong> Tu mente es el atleta definitivo. 🏀"
             }
-        },
-        ready: {
-            en: "🎯 Ready to get to work?",
-            es: "🎯 ¿Listo para trabajar?"
         },
         more: {
             en: "What else you want to know?",
@@ -700,7 +628,6 @@ body.en .lang-es{display:none !important}
         }
     };
     
-    // ========== HANDLE ACTIONS ==========
     function handleAction(action) {
         document.querySelectorAll('.chat-opt').forEach(function(b) {
             b.style.pointerEvents = 'none';
@@ -709,11 +636,7 @@ body.en .lang-es{display:none !important}
         
         switch(action) {
             case 'triad':
-            case 'athletes':
-            case 'seniors':
-            case 'everyday':
             case 'tiers':
-            case 'professionals':
             case 'howworks':
                 botSay(bi(content.topics[action].en, content.topics[action].es), null, 800);
                 setTimeout(function() {
@@ -721,9 +644,6 @@ body.en .lang-es{display:none !important}
                         {en: '🤖 About GoTrotter AI', es: '🤖 Sobre GoTrotter AI', action: 'howworks'},
                         {en: '🔺 The M³ Circuit', es: '🔺 El Circuito M³', action: 'triad'},
                         {en: '🏆 10-Tier Structure', es: '🏆 Estructura 10 Niveles', action: 'tiers'},
-                        {en: '🏀 For Athletes', es: '🏀 Para Atletas', action: 'athletes'},
-                        {en: '🧠 For Seniors', es: '🧠 Para Adultos Mayores', action: 'seniors'},
-                        {en: '💼 For Professionals', es: '💼 Para Profesionales', action: 'professionals'},
                         {en: '🎯 Get Started!', es: '🎯 ¡Comienza Ahora!', action: 'start', primary: true}
                     ], 1500);
                 }, 1500);
@@ -740,7 +660,6 @@ body.en .lang-es{display:none !important}
         }
     }
     
-    // ========== OPEN/CLOSE CHAT ==========
     function openChat() {
         chatModal.classList.add('active');
         chatFab.classList.add('hidden');
@@ -752,9 +671,6 @@ body.en .lang-es{display:none !important}
                     {en: '🤖 About GoTrotter AI', es: '🤖 Sobre GoTrotter AI', action: 'howworks'},
                     {en: '🔺 The M³ Circuit', es: '🔺 El Circuito M³', action: 'triad'},
                     {en: '🏆 10-Tier Structure', es: '🏆 Estructura 10 Niveles', action: 'tiers'},
-                    {en: '🏀 For Athletes', es: '🏀 Para Atletas', action: 'athletes'},
-                    {en: '🧠 For Seniors', es: '🧠 Para Adultos Mayores', action: 'seniors'},
-                    {en: '💼 For Professionals', es: '💼 Para Profesionales', action: 'professionals'},
                     {en: '🎯 Get Started!', es: '🎯 ¡Comienza Ahora!', action: 'start', primary: true}
                 ], 800);
             }, 300);
@@ -780,84 +696,30 @@ body.en .lang-es{display:none !important}
         
         var lower = text.toLowerCase();
         
-        // Keyword detection
         addTyping();
         setTimeout(function() {
             removeTyping();
             
-            // About GoTrotter/company keywords
-            if (lower.match(/where.*from|who.*made|who.*created|about.*gotrotter|gotrotter.*from|company|location|founded|origin|puerto rico|de donde|quien.*creo|sobre.*gotrotter|empresa|ubicacion|fundado|origen/)) {
-                var response = bi(
-                    '🏀 <strong>GoTrotters</strong> is from <strong>Puerto Rico</strong>! 🇵🇷<br><br>We\'re a homegrown platform built with passion in the heart of the Caribbean. GoTrotter AI is here to guide you through The M³ Circuit.<br><br>¡Pa\'lante! 💪',
-                    '🏀 <strong>GoTrotters</strong> es de <strong>Puerto Rico</strong>! 🇵🇷<br><br>Somos una plataforma local construida con pasión en el corazón del Caribe. GoTrotter AI está aquí para guiarte por El Circuito M³.<br><br>¡Pa\'lante! 💪'
-                );
-                addMsg(response, false, [
-                    {label: bi('🔥 Learn More', '🔥 Saber Más'), action: 'howworks'},
-                    {label: bi('🏀 Join', '🏀 Unirme'), action: 'join'}
-                ]);
-            }
-            // Pricing keywords
-            else if (lower.match(/price|pricing|cost|how much|\$|dinero|precio|costo|cuanto/)) {
+            if (lower.match(/price|pricing|cost|how much|\$|precio|costo|cuanto/)) {
                 handleTopic('pricing');
-            }
-            // Join/signup keywords
-            else if (lower.match(/join|sign up|signup|start|trial|free|register|unir|comenzar|registrar|prueba/)) {
+            } else if (lower.match(/join|sign up|start|trial|free|register|unir|comenzar/)) {
                 var response = bi(
-                    '🚀 Ready to join GoTrotters? Start your <strong>FREE 7-day trial</strong> right now!',
-                    '🚀 ¿Listo para unirte a GoTrotters? ¡Comienza tu <strong>prueba GRATIS de 7 días</strong> ahora!'
+                    '🚀 Ready to join? Start your <strong>FREE 7-day trial</strong> now!',
+                    '🚀 ¿Listo para unirte? ¡Comienza tu <strong>prueba GRATIS de 7 días</strong> ahora!'
                 );
                 addMsg(response, false, [
                     {label: bi('🏀 Start Free Trial', '🏀 Comenzar Prueba'), action: 'start', primary: true}
                 ]);
-            }
-            // Circuit/training keywords
-            else if (lower.match(/circuit|triad|m3|mira|training|exercise|game|circuito|triada|entrenamiento|ejercicio|juego/)) {
+            } else if (lower.match(/circuit|triad|m3|mira|training/)) {
                 handleAction('triad');
-            }
-            // Tier/level keywords
-            else if (lower.match(/tier|level|master|practice|progress|nivel|maestro|}practica|progreso/)) {
+            } else if (lower.match(/tier|level|master|practice|progress/)) {
                 handleAction('tiers');
-            }
-            // Coach/AI keywords
-            else if (lower.match(/coach|ai|how.*work|what.*do|como.*funciona|que.*hace/)) {
+            } else if (lower.match(/coach|ai|how.*work|what.*do/)) {
                 handleAction('howworks');
-            }
-            // Senior/elderly keywords
-            else if (lower.match(/senior|elderly|older|adult|nursing|facility|mayor|anciano|adulto|hogar/)) {
-                handleAction('seniors');
-            }
-            // Athlete keywords
-            else if (lower.match(/athlete|sport|basketball|player|atleta|deporte|baloncesto|jugador/)) {
-                handleAction('athletes');
-            }
-            // Professional keywords
-            else if (lower.match(/professional|work|business|job|profesional|trabajo|negocio|empleo/)) {
-                handleAction('professionals');
-            }
-            // Greeting
-            else if (lower.match(/^(hi|hello|hey|hola|buenas|saludos)/)) {
+            } else {
                 var response = bi(
-                    'Hey! 🏀 I\'m GoTrotter AI. How can I help you today? Ask me about pricing, how it works, or tap the menu ☰ to explore!',
-                    '¡Hola! 🏀 Soy GoTrotter AI. ¿En qué te puedo ayudar? Pregúntame sobre precios, cómo funciona, o toca el menú ☰ para explorar!'
-                );
-                addMsg(response, false);
-            }
-            // What is GoTrotter
-            else if (lower.match(/what.*is.*gotrotter|what.*gotrotter|que.*es.*gotrotter/)) {
-                var response = bi(
-                    '🏀 <strong>GoTrotters</strong> is your personal pathway to sharper performance!<br><br>Led by <strong>GoTrotter AI</strong>, you\'ll progress through <strong>The M³ Circuit</strong> (3 circuits) and climb our <strong>10-Tier Structure</strong> from PRACTICE 1 to MASTER 10.<br><br>Built in Puerto Rico 🇵🇷 with love!',
-                    '🏀 <strong>GoTrotters</strong> es tu camino personal hacia un mejor rendimiento!<br><br>Guiado por <strong>GoTrotter AI</strong>, progresarás por <strong>El Circuito M³</strong> (3 circuitos) y subirás nuestra <strong>Estructura de 10 Niveles</strong> desde PRACTICE 1 hasta MASTER 10.<br><br>¡Hecho en Puerto Rico 🇵🇷 con amor!'
-                );
-                addMsg(response, false, [
-                    {label: bi('💰 Pricing', '💰 Precio'), action: 'pricing'},
-                    {label: bi('🏀 Join', '🏀 Unirme'), action: 'join'}
-                ]);
-            }
-            // Default response
-            else {
-                var response = bi(
-                    'Great question! 🏀 I can help you with:<br><br>• <strong>Pricing</strong> - $5/month<br>• <strong>The M³ Circuit</strong> - 3 circuits<br>• <strong>10-Tier Structure</strong> - PRACTICE 1 to MASTER 10<br>• <strong>Get Started</strong> - Free trial<br><br>Tap the menu ☰ or ask me anything!',
-                    '¡Buena pregunta! 🏀 Te puedo ayudar con:<br><br>• <strong>Precio</strong> - $5/mes<br>• <strong>El Circuito M³</strong> - 3 circuitos<br>• <strong>Estructura de 10 Niveles</strong> - PRACTICE 1 a MASTER 10<br>• <strong>Comienza Ahora</strong> - Prueba gratis<br><br>¡Toca el menú ☰ o pregúntame lo que quieras!'
+                    'Great question! 🏀 I can help with:<br><br>• <strong>Pricing</strong> - $5/month<br>• <strong>The M³ Circuit</strong> - 3 circuits<br>• <strong>10-Tier Structure</strong><br>• <strong>Get Started</strong> - Free trial<br><br>Tap the menu ☰ or ask me anything!',
+                    '¡Buena pregunta! 🏀 Te puedo ayudar con:<br><br>• <strong>Precio</strong> - $5/mes<br>• <strong>El Circuito M³</strong> - 3 circuitos<br>• <strong>Estructura de 10 Niveles</strong><br>• <strong>Comienza Ahora</strong> - Prueba gratis<br><br>¡Toca el menú ☰ o pregúntame!'
                 );
                 addMsg(response, false, [
                     {label: bi('💰 Pricing', '💰 Precio'), action: 'pricing'},
@@ -878,11 +740,9 @@ body.en .lang-es{display:none !important}
         if (e.key === 'Enter') handleUserInput();
     });
     
-    // Hamburger menu
     chatHamburger.addEventListener('click', toggleMenu);
     chatMenuClose.addEventListener('click', closeMenu);
     
-    // Menu items click
     document.querySelectorAll('.chat-menu-item').forEach(function(item) {
         item.addEventListener('click', function() {
             var topic = this.dataset.topic;
@@ -891,7 +751,6 @@ body.en .lang-es{display:none !important}
         });
     });
     
-    // Update placeholder on language change
     document.querySelectorAll('.lang-btn, .chat-lang, .chat-lang-mobile, .chat-menu-lang-btn').forEach(function(b) {
         b.addEventListener('click', function() {
             setTimeout(updateInputPlaceholder, 50);
