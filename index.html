@@ -103,11 +103,105 @@ body.en .lang-es{display:none !important}
 .footer-links a:hover{color:var(--text)}
 .footer-copy{font-size:0.75rem;color:var(--muted)}
 
-/* ========== GOTROTTER AI CHAT ========== */
-.chat-fab{position:fixed;bottom:25px;right:25px;z-index:1000;width:65px;height:65px;background:linear-gradient(135deg,var(--orange),var(--teal));border:none;border-radius:50%;cursor:pointer;box-shadow:0 5px 25px rgba(255,107,0,0.5);transition:all 0.3s;display:flex;align-items:center;justify-content:center;font-size:28px}
-.chat-fab:hover{transform:scale(1.1);box-shadow:0 8px 35px rgba(255,107,0,0.6)}
+/* ========== GOTROTTER AI CHAT - STAR BUTTON ========== */
+.chat-fab{
+    position:fixed;
+    bottom:25px;
+    right:25px;
+    z-index:1000;
+    width:90px;
+    height:90px;
+    background:transparent;
+    border:none;
+    border-radius:50%;
+    cursor:pointer;
+    transition:all 0.3s;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:0;
+    overflow:visible
+}
+
+/* Outer glow ring */
+.chat-fab::before{
+    content:'';
+    position:absolute;
+    inset:-12px;
+    border-radius:50%;
+    background:radial-gradient(circle,rgba(59,130,246,0.5) 0%,rgba(0,217,165,0.3) 40%,transparent 70%);
+    animation:fabGlow 2s ease-in-out infinite;
+    z-index:-1
+}
+
+/* Pulse ring */
+.chat-fab::after{
+    content:'';
+    position:absolute;
+    inset:-25px;
+    border-radius:50%;
+    border:2px solid rgba(59,130,246,0.4);
+    animation:fabRing 2.5s ease-out infinite;
+    z-index:-2
+}
+
+.chat-fab-img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    filter:drop-shadow(0 0 15px rgba(59,130,246,0.9)) drop-shadow(0 0 30px rgba(0,217,165,0.6));
+    animation:fabFloat 3s ease-in-out infinite, fabSparkle 4s ease-in-out infinite;
+    transition:all 0.3s
+}
+
+.chat-fab:hover .chat-fab-img{
+    transform:scale(1.15);
+    filter:drop-shadow(0 0 25px rgba(255,255,255,0.9)) drop-shadow(0 0 50px rgba(59,130,246,1)) drop-shadow(0 0 80px rgba(0,217,165,0.8))
+}
+
 .chat-fab.hidden{transform:scale(0);opacity:0;pointer-events:none}
-.chat-fab-badge{position:absolute;top:-5px;right:-5px;background:var(--teal);color:var(--dark);font-size:0.6rem;font-weight:800;padding:4px 8px;border-radius:10px;font-family:'Outfit',sans-serif}
+
+.chat-fab-badge{
+    position:absolute;
+    bottom:0px;
+    right:-5px;
+    background:linear-gradient(135deg,var(--orange),#FF8533);
+    color:var(--text);
+    font-size:0.75rem;
+    font-weight:800;
+    padding:6px 12px;
+    border-radius:14px;
+    font-family:'Bebas Neue',sans-serif;
+    letter-spacing:1px;
+    box-shadow:0 4px 20px rgba(255,107,0,0.7);
+    animation:badgePop 2s ease-in-out infinite;
+    z-index:10
+}
+
+@keyframes fabGlow{
+    0%,100%{opacity:0.5;transform:scale(1)}
+    50%{opacity:1;transform:scale(1.15)}
+}
+
+@keyframes fabRing{
+    0%{transform:scale(0.8);opacity:0.8}
+    100%{transform:scale(1.5);opacity:0}
+}
+
+@keyframes fabFloat{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-8px)}
+}
+
+@keyframes fabSparkle{
+    0%,100%{filter:drop-shadow(0 0 15px rgba(59,130,246,0.9)) drop-shadow(0 0 30px rgba(0,217,165,0.6)) brightness(1)}
+    50%{filter:drop-shadow(0 0 20px rgba(255,255,255,0.7)) drop-shadow(0 0 40px rgba(59,130,246,1)) brightness(1.1)}
+}
+
+@keyframes badgePop{
+    0%,100%{transform:scale(1)}
+    50%{transform:scale(1.1)}
+}
 
 /* Chat Modal */
 .chat-modal{position:fixed;bottom:100px;right:25px;width:380px;max-width:calc(100vw - 40px);height:550px;max-height:calc(100vh - 140px);background:var(--dark);border:2px solid rgba(255,107,0,0.3);border-radius:24px;z-index:1001;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.5);transform:scale(0.8) translateY(20px);opacity:0;pointer-events:none;transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1)}
@@ -208,7 +302,7 @@ body.en .lang-es{display:none !important}
 .games{flex-direction:column;align-items:center}
 .game-card{width:100%;max-width:300px}
 .chat-modal.active{position:fixed;top:0;left:0;right:0;bottom:0;width:100%;height:100%;max-width:100%;max-height:100%;border-radius:0;border:none}
-.chat-fab{bottom:20px;right:15px;width:60px;height:60px;font-size:26px}
+.chat-fab{bottom:20px;right:15px;width:75px;height:75px}
 .chat-fab.hidden{display:none}
 .notjust{margin:40px 10px 0}
 }
@@ -345,9 +439,9 @@ body.en .lang-es{display:none !important}
 </div>
 </footer>
 
-<!-- GOTROTTER AI CHAT FAB -->
+<!-- GOTROTTER AI CHAT FAB - STAR IMAGE -->
 <button class="chat-fab" id="chatFab">
-🏀
+<img src="chat_star.png" alt="Chat with GoTrotter AI" class="chat-fab-img">
 <span class="chat-fab-badge">AI</span>
 </button>
 
