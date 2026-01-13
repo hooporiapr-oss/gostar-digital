@@ -319,40 +319,40 @@ body.en .lang-es { display: none !important; }
     letter-spacing: 1px;
 }
 
-.circuit-overview {
+.gear-overview {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 20px;
     margin-bottom: 30px;
 }
 
-.circuit-card {
+.gear-card {
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: 16px;
     overflow: hidden;
 }
 
-.circuit-card-header {
+.gear-card-header {
     padding: 16px 20px;
     display: flex;
     align-items: center;
     gap: 12px;
 }
 
-.circuit-card-header.c1 { background: linear-gradient(135deg, rgba(255,107,0,0.2), transparent); border-bottom: 2px solid var(--orange); }
-.circuit-card-header.c2 { background: linear-gradient(135deg, rgba(0,217,165,0.2), transparent); border-bottom: 2px solid var(--teal); }
-.circuit-card-header.c3 { background: linear-gradient(135deg, rgba(255,215,0,0.2), transparent); border-bottom: 2px solid var(--gold); }
+.gear-card-header.g1 { background: linear-gradient(135deg, rgba(255,107,0,0.2), transparent); border-bottom: 2px solid var(--orange); }
+.gear-card-header.g2 { background: linear-gradient(135deg, rgba(0,217,165,0.2), transparent); border-bottom: 2px solid var(--teal); }
+.gear-card-header.g3 { background: linear-gradient(135deg, rgba(255,215,0,0.2), transparent); border-bottom: 2px solid var(--gold); }
 
-.circuit-card-icon { font-size: 1.5rem; }
-.circuit-card-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 2px; flex: 1; }
-.circuit-card-num { font-size: 0.7rem; color: var(--muted); }
+.gear-card-icon { font-size: 1.5rem; }
+.gear-card-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 2px; flex: 1; }
+.gear-card-num { font-size: 0.7rem; color: var(--muted); }
 
-.circuit-card-body { padding: 20px; }
-.circuit-card-stats { display: flex; gap: 20px; }
-.circuit-stat { text-align: center; flex: 1; }
-.circuit-stat-value { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; }
-.circuit-stat-label { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; }
+.gear-card-body { padding: 20px; }
+.gear-card-stats { display: flex; gap: 20px; }
+.gear-stat { text-align: center; flex: 1; }
+.gear-stat-value { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; }
+.gear-stat-label { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; }
 
 .table-card {
     background: var(--card);
@@ -418,7 +418,7 @@ th {
 td { font-size: 0.9rem; }
 tr:hover { background: var(--card-hover); }
 
-.tier-badge {
+.shift-badge {
     display: inline-flex;
     align-items: center;
     gap: 4px;
@@ -428,9 +428,9 @@ tr:hover { background: var(--card-hover); }
     font-weight: 700;
 }
 
-.tier-badge.practice { background: rgba(155,89,182,0.2); color: #b57edc; }
-.tier-badge.level { background: rgba(255,215,0,0.2); color: var(--gold); }
-.tier-badge.master { background: linear-gradient(135deg, rgba(255,215,0,0.3), rgba(255,107,0,0.3)); color: var(--gold); }
+.shift-badge.practice { background: rgba(155,89,182,0.2); color: #b57edc; }
+.shift-badge.level { background: rgba(255,215,0,0.2); color: var(--gold); }
+.shift-badge.master { background: linear-gradient(135deg, rgba(255,215,0,0.3), rgba(255,107,0,0.3)); color: var(--gold); }
 
 .status-badge {
     display: inline-block;
@@ -610,8 +610,8 @@ tr:hover { background: var(--card-hover); }
         <header class="page-header">
             <h1 class="page-title">TEAM GOTROTTERS</h1>
             <p class="page-subtitle">
-                <span class="lang-en">Facility Dashboard • M³ Performance System • 10-Tier Structure</span>
-                <span class="lang-es">Panel de Instalación • Sistema de Rendimiento M³ • Estructura de 10 Niveles</span>
+                <span class="lang-en">Facility Dashboard • M³ Performance Engine • 10-Shift Structure</span>
+                <span class="lang-es">Panel de Instalación • Motor de Rendimiento M³ • Estructura de 10 Cambios</span>
             </p>
         </header>
 
@@ -634,10 +634,10 @@ tr:hover { background: var(--card-hover); }
             </div>
             <div class="stat-card">
                 <div class="stat-card-icon gold">🏆</div>
-                <div class="stat-card-value" id="avgTier">4.2</div>
+                <div class="stat-card-value" id="avgShift">4.2</div>
                 <div class="stat-card-label">
-                    <span class="lang-en">Avg Tier</span>
-                    <span class="lang-es">Nivel Promedio</span>
+                    <span class="lang-en">Avg Shift</span>
+                    <span class="lang-es">Cambio Promedio</span>
                 </div>
             </div>
             <div class="stat-card">
@@ -647,72 +647,72 @@ tr:hover { background: var(--card-hover); }
             </div>
         </div>
 
-        <div class="circuit-overview">
-            <div class="circuit-card">
-                <div class="circuit-card-header c1">
-                    <span class="circuit-card-icon">🧠</span>
-                    <span class="circuit-card-title"><span class="lang-en">MAP</span><span class="lang-es">UBICAR</span></span>
-                    <span class="circuit-card-num"><span class="lang-en">CIRCUIT 1</span><span class="lang-es">CIRCUITO 1</span></span>
+        <div class="gear-overview">
+            <div class="gear-card">
+                <div class="gear-card-header g1">
+                    <span class="gear-card-icon">🧠</span>
+                    <span class="gear-card-title"><span class="lang-en">MAP</span><span class="lang-es">UBICAR</span></span>
+                    <span class="gear-card-num"><span class="lang-en">GEAR 1</span><span class="lang-es">ENGRANAJE 1</span></span>
                 </div>
-                <div class="circuit-card-body">
-                    <div class="circuit-card-stats">
-                        <div class="circuit-stat">
-                            <div class="circuit-stat-value" id="c1Sessions">156</div>
-                            <div class="circuit-stat-label"><span class="lang-en">Sessions</span><span class="lang-es">Sesiones</span></div>
+                <div class="gear-card-body">
+                    <div class="gear-card-stats">
+                        <div class="gear-stat">
+                            <div class="gear-stat-value" id="g1Sessions">156</div>
+                            <div class="gear-stat-label"><span class="lang-en">Sessions</span><span class="lang-es">Sesiones</span></div>
                         </div>
-                        <div class="circuit-stat">
-                            <div class="circuit-stat-value" id="c1Avg">4.5</div>
-                            <div class="circuit-stat-label"><span class="lang-en">Avg Tier</span><span class="lang-es">Nivel Prom</span></div>
+                        <div class="gear-stat">
+                            <div class="gear-stat-value" id="g1Avg">4.5</div>
+                            <div class="gear-stat-label"><span class="lang-en">Avg Shift</span><span class="lang-es">Cambio Prom</span></div>
                         </div>
-                        <div class="circuit-stat">
-                            <div class="circuit-stat-value" id="c1Masters">2</div>
-                            <div class="circuit-stat-label">Masters</div>
+                        <div class="gear-stat">
+                            <div class="gear-stat-value" id="g1Masters">2</div>
+                            <div class="gear-stat-label">Masters</div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="circuit-card">
-                <div class="circuit-card-header c2">
-                    <span class="circuit-card-icon">⚡</span>
-                    <span class="circuit-card-title"><span class="lang-en">MOVE</span><span class="lang-es">MOVER</span></span>
-                    <span class="circuit-card-num"><span class="lang-en">CIRCUIT 2</span><span class="lang-es">CIRCUITO 2</span></span>
+            <div class="gear-card">
+                <div class="gear-card-header g2">
+                    <span class="gear-card-icon">⚡</span>
+                    <span class="gear-card-title"><span class="lang-en">MOVE</span><span class="lang-es">MOVER</span></span>
+                    <span class="gear-card-num"><span class="lang-en">GEAR 2</span><span class="lang-es">ENGRANAJE 2</span></span>
                 </div>
-                <div class="circuit-card-body">
-                    <div class="circuit-card-stats">
-                        <div class="circuit-stat">
-                            <div class="circuit-stat-value" id="c2Sessions">132</div>
-                            <div class="circuit-stat-label"><span class="lang-en">Sessions</span><span class="lang-es">Sesiones</span></div>
+                <div class="gear-card-body">
+                    <div class="gear-card-stats">
+                        <div class="gear-stat">
+                            <div class="gear-stat-value" id="g2Sessions">132</div>
+                            <div class="gear-stat-label"><span class="lang-en">Sessions</span><span class="lang-es">Sesiones</span></div>
                         </div>
-                        <div class="circuit-stat">
-                            <div class="circuit-stat-value" id="c2Avg">3.8</div>
-                            <div class="circuit-stat-label"><span class="lang-en">Avg Tier</span><span class="lang-es">Nivel Prom</span></div>
+                        <div class="gear-stat">
+                            <div class="gear-stat-value" id="g2Avg">3.8</div>
+                            <div class="gear-stat-label"><span class="lang-en">Avg Shift</span><span class="lang-es">Cambio Prom</span></div>
                         </div>
-                        <div class="circuit-stat">
-                            <div class="circuit-stat-value" id="c2Masters">1</div>
-                            <div class="circuit-stat-label">Masters</div>
+                        <div class="gear-stat">
+                            <div class="gear-stat-value" id="g2Masters">1</div>
+                            <div class="gear-stat-label">Masters</div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="circuit-card">
-                <div class="circuit-card-header c3">
-                    <span class="circuit-card-icon">👁️</span>
-                    <span class="circuit-card-title"><span class="lang-en">MATCH</span><span class="lang-es">COORDINAR</span></span>
-                    <span class="circuit-card-num"><span class="lang-en">CIRCUIT 3</span><span class="lang-es">CIRCUITO 3</span></span>
+            <div class="gear-card">
+                <div class="gear-card-header g3">
+                    <span class="gear-card-icon">👁️</span>
+                    <span class="gear-card-title"><span class="lang-en">MATCH</span><span class="lang-es">COORDINAR</span></span>
+                    <span class="gear-card-num"><span class="lang-en">GEAR 3</span><span class="lang-es">ENGRANAJE 3</span></span>
                 </div>
-                <div class="circuit-card-body">
-                    <div class="circuit-card-stats">
-                        <div class="circuit-stat">
-                            <div class="circuit-stat-value" id="c3Sessions">98</div>
-                            <div class="circuit-stat-label"><span class="lang-en">Sessions</span><span class="lang-es">Sesiones</span></div>
+                <div class="gear-card-body">
+                    <div class="gear-card-stats">
+                        <div class="gear-stat">
+                            <div class="gear-stat-value" id="g3Sessions">98</div>
+                            <div class="gear-stat-label"><span class="lang-en">Sessions</span><span class="lang-es">Sesiones</span></div>
                         </div>
-                        <div class="circuit-stat">
-                            <div class="circuit-stat-value" id="c3Avg">3.2</div>
-                            <div class="circuit-stat-label"><span class="lang-en">Avg Tier</span><span class="lang-es">Nivel Prom</span></div>
+                        <div class="gear-stat">
+                            <div class="gear-stat-value" id="g3Avg">3.2</div>
+                            <div class="gear-stat-label"><span class="lang-en">Avg Shift</span><span class="lang-es">Cambio Prom</span></div>
                         </div>
-                        <div class="circuit-stat">
-                            <div class="circuit-stat-value" id="c3Masters">0</div>
-                            <div class="circuit-stat-label">Masters</div>
+                        <div class="gear-stat">
+                            <div class="gear-stat-value" id="g3Masters">0</div>
+                            <div class="gear-stat-label">Masters</div>
                         </div>
                     </div>
                 </div>
@@ -791,7 +791,7 @@ tr:hover { background: var(--card-hover); }
 (function() {
     'use strict';
 
-    var tierList = ['PRACTICE 1','PRACTICE 2','LEVEL 3','LEVEL 4','LEVEL 5','LEVEL 6','LEVEL 7','LEVEL 8','LEVEL 9','MASTER 10'];
+    var shiftList = ['PRACTICE 1','PRACTICE 2','SHIFT 3','SHIFT 4','SHIFT 5','SHIFT 6','SHIFT 7','SHIFT 8','SHIFT 9','MASTER 10'];
 
     var facilities = {
         'SANJUAN01': { name: 'San Juan Senior Living', pin: '1628' },
@@ -800,18 +800,18 @@ tr:hover { background: var(--card-hover); }
     };
 
     var residents = [
-        {id:1, name:'María García', room:'101A', pin:'1234', c1:7, c2:5, c3:4, status:'active', lastActive:'2026-01-09'},
-        {id:2, name:'Roberto López', room:'102B', pin:'5678', c1:10, c2:8, c3:6, status:'active', lastActive:'2026-01-09'},
-        {id:3, name:'Carmen Rivera', room:'103A', pin:'9012', c1:10, c2:9, c3:7, status:'active', lastActive:'2026-01-08'},
-        {id:4, name:'José Martínez', room:'104C', pin:'3456', c1:4, c2:3, c3:2, status:'active', lastActive:'2026-01-09'},
-        {id:5, name:'Ana Rodríguez', room:'105B', pin:'7890', c1:3, c2:2, c3:2, status:'inactive', lastActive:'2026-01-05'},
-        {id:6, name:'Pedro Santos', room:'106A', pin:'2345', c1:5, c2:4, c3:3, status:'active', lastActive:'2026-01-09'},
-        {id:7, name:'Luis Hernández', room:'107C', pin:'6789', c1:8, c2:7, c3:5, status:'active', lastActive:'2026-01-08'},
-        {id:8, name:'Rosa Díaz', room:'108B', pin:'0123', c1:2, c2:1, c3:1, status:'active', lastActive:'2026-01-09'},
-        {id:9, name:'Miguel Torres', room:'109A', pin:'4567', c1:6, c2:5, c3:4, status:'active', lastActive:'2026-01-08'},
-        {id:10, name:'Elena Vega', room:'110C', pin:'8901', c1:4, c2:3, c3:3, status:'inactive', lastActive:'2026-01-03'},
-        {id:11, name:'Fernando Cruz', room:'111B', pin:'2345', c1:5, c2:4, c3:3, status:'active', lastActive:'2026-01-09'},
-        {id:12, name:'Isabel Morales', room:'112A', pin:'6780', c1:3, c2:2, c3:2, status:'active', lastActive:'2026-01-07'}
+        {id:1, name:'María García', room:'101A', pin:'1234', g1:7, g2:5, g3:4, status:'active', lastActive:'2026-01-09'},
+        {id:2, name:'Roberto López', room:'102B', pin:'5678', g1:10, g2:8, g3:6, status:'active', lastActive:'2026-01-09'},
+        {id:3, name:'Carmen Rivera', room:'103A', pin:'9012', g1:10, g2:9, g3:7, status:'active', lastActive:'2026-01-08'},
+        {id:4, name:'José Martínez', room:'104C', pin:'3456', g1:4, g2:3, g3:2, status:'active', lastActive:'2026-01-09'},
+        {id:5, name:'Ana Rodríguez', room:'105B', pin:'7890', g1:3, g2:2, g3:2, status:'inactive', lastActive:'2026-01-05'},
+        {id:6, name:'Pedro Santos', room:'106A', pin:'2345', g1:5, g2:4, g3:3, status:'active', lastActive:'2026-01-09'},
+        {id:7, name:'Luis Hernández', room:'107C', pin:'6789', g1:8, g2:7, g3:5, status:'active', lastActive:'2026-01-08'},
+        {id:8, name:'Rosa Díaz', room:'108B', pin:'0123', g1:2, g2:1, g3:1, status:'active', lastActive:'2026-01-09'},
+        {id:9, name:'Miguel Torres', room:'109A', pin:'4567', g1:6, g2:5, g3:4, status:'active', lastActive:'2026-01-08'},
+        {id:10, name:'Elena Vega', room:'110C', pin:'8901', g1:4, g2:3, g3:3, status:'inactive', lastActive:'2026-01-03'},
+        {id:11, name:'Fernando Cruz', room:'111B', pin:'2345', g1:5, g2:4, g3:3, status:'active', lastActive:'2026-01-09'},
+        {id:12, name:'Isabel Morales', room:'112A', pin:'6780', g1:3, g2:2, g3:2, status:'active', lastActive:'2026-01-07'}
     ];
 
     var nextResidentId = 13;
@@ -905,9 +905,9 @@ tr:hover { background: var(--card-hover); }
         setTimeout(function() { toast.classList.remove('show'); }, 3000);
     }
 
-    function getTierBadge(level) {
-        var tierClass = level <= 2 ? 'practice' : (level === 10 ? 'master' : 'level');
-        return '<span class="tier-badge ' + tierClass + '">' + tierList[level - 1] + '</span>';
+    function getShiftBadge(level) {
+        var shiftClass = level <= 2 ? 'practice' : (level === 10 ? 'master' : 'level');
+        return '<span class="shift-badge ' + shiftClass + '">' + shiftList[level - 1] + '</span>';
     }
 
     function getStatusBadge(status) {
@@ -916,42 +916,42 @@ tr:hover { background: var(--card-hover); }
 
     function renderAll() {
         renderStats();
-        renderCircuitStats();
+        renderGearStats();
         renderResidentsTable();
     }
 
     function renderStats() {
         var activeToday = residents.filter(function(r) { return r.lastActive === '2026-01-09'; }).length;
-        var masters = residents.filter(function(r) { return r.c1 === 10 || r.c2 === 10 || r.c3 === 10; }).length;
-        var avgTier = residents.reduce(function(sum, r) { return sum + (r.c1 + r.c2 + r.c3) / 3; }, 0) / residents.length;
+        var masters = residents.filter(function(r) { return r.g1 === 10 || r.g2 === 10 || r.g3 === 10; }).length;
+        var avgShift = residents.reduce(function(sum, r) { return sum + (r.g1 + r.g2 + r.g3) / 3; }, 0) / residents.length;
 
         document.getElementById('totalResidents').textContent = residents.length;
         document.getElementById('activeToday').textContent = activeToday;
-        document.getElementById('avgTier').textContent = avgTier.toFixed(1);
+        document.getElementById('avgShift').textContent = avgShift.toFixed(1);
         document.getElementById('totalMasters').textContent = masters;
     }
 
-    function renderCircuitStats() {
-        var c1Sum = residents.reduce(function(s, r) { return s + r.c1; }, 0);
-        var c1Masters = residents.filter(function(r) { return r.c1 === 10; }).length;
-        document.getElementById('c1Avg').textContent = (c1Sum / residents.length).toFixed(1);
-        document.getElementById('c1Masters').textContent = c1Masters;
+    function renderGearStats() {
+        var g1Sum = residents.reduce(function(s, r) { return s + r.g1; }, 0);
+        var g1Masters = residents.filter(function(r) { return r.g1 === 10; }).length;
+        document.getElementById('g1Avg').textContent = (g1Sum / residents.length).toFixed(1);
+        document.getElementById('g1Masters').textContent = g1Masters;
 
-        var c2Sum = residents.reduce(function(s, r) { return s + r.c2; }, 0);
-        var c2Masters = residents.filter(function(r) { return r.c2 === 10; }).length;
-        document.getElementById('c2Avg').textContent = (c2Sum / residents.length).toFixed(1);
-        document.getElementById('c2Masters').textContent = c2Masters;
+        var g2Sum = residents.reduce(function(s, r) { return s + r.g2; }, 0);
+        var g2Masters = residents.filter(function(r) { return r.g2 === 10; }).length;
+        document.getElementById('g2Avg').textContent = (g2Sum / residents.length).toFixed(1);
+        document.getElementById('g2Masters').textContent = g2Masters;
 
-        var c3Sum = residents.reduce(function(s, r) { return s + r.c3; }, 0);
-        var c3Masters = residents.filter(function(r) { return r.c3 === 10; }).length;
-        document.getElementById('c3Avg').textContent = (c3Sum / residents.length).toFixed(1);
-        document.getElementById('c3Masters').textContent = c3Masters;
+        var g3Sum = residents.reduce(function(s, r) { return s + r.g3; }, 0);
+        var g3Masters = residents.filter(function(r) { return r.g3 === 10; }).length;
+        document.getElementById('g3Avg').textContent = (g3Sum / residents.length).toFixed(1);
+        document.getElementById('g3Masters').textContent = g3Masters;
     }
 
     function renderResidentsTable() {
         var html = '';
         residents.forEach(function(r) {
-            html += '<tr><td>' + r.name + '</td><td>' + r.room + '</td><td>' + getStatusBadge(r.status) + '</td><td>' + getTierBadge(r.c1) + '</td><td>' + getTierBadge(r.c2) + '</td><td>' + getTierBadge(r.c3) + '</td><td>' + r.lastActive + '</td><td><div class="action-btns"><button class="action-btn" onclick="window.editResident(' + r.id + ')" title="Edit">✏️</button></div></td></tr>';
+            html += '<tr><td>' + r.name + '</td><td>' + r.room + '</td><td>' + getStatusBadge(r.status) + '</td><td>' + getShiftBadge(r.g1) + '</td><td>' + getShiftBadge(r.g2) + '</td><td>' + getShiftBadge(r.g3) + '</td><td>' + r.lastActive + '</td><td><div class="action-btns"><button class="action-btn" onclick="window.editResident(' + r.id + ')" title="Edit">✏️</button></div></td></tr>';
         });
         document.getElementById('residentsTable').innerHTML = html;
     }
@@ -1000,7 +1000,7 @@ tr:hover { background: var(--card-hover); }
                 name: name,
                 room: room,
                 pin: pin,
-                c1: 1, c2: 1, c3: 1,
+                g1: 1, g2: 1, g3: 1,
                 status: 'active',
                 lastActive: new Date().toISOString().split('T')[0]
             });
@@ -1014,7 +1014,7 @@ tr:hover { background: var(--card-hover); }
     function exportData() {
         var csv = 'Name,Room,Status,Map,Move,Match,LastActive\n';
         residents.forEach(function(r) {
-            csv += r.name + ',' + r.room + ',' + r.status + ',' + tierList[r.c1 - 1] + ',' + tierList[r.c2 - 1] + ',' + tierList[r.c3 - 1] + ',' + r.lastActive + '\n';
+            csv += r.name + ',' + r.room + ',' + r.status + ',' + shiftList[r.g1 - 1] + ',' + shiftList[r.g2 - 1] + ',' + shiftList[r.g3 - 1] + ',' + r.lastActive + '\n';
         });
         var blob = new Blob([csv], {type: 'text/csv'});
         var a = document.createElement('a');
