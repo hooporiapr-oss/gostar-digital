@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Team GoTrotters™ - Circuit 1: MAP</title>
+<title>Team GoTrotters™ - Gear 1: MAP</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;600;700;800;900&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
@@ -27,28 +27,28 @@ body[data-lang="en"] .lang-es{display:none!important}
 .mastery-quote{max-width:340px;padding:18px;background:rgba(255,107,0,0.05);border-left:4px solid var(--secondary);border-radius:0 15px 15px 0;margin-bottom:25px}
 .mastery-quote-text{font-style:italic;color:var(--text-light);font-size:0.95rem;line-height:1.5;margin-bottom:8px}
 .mastery-quote-attr{font-size:0.8rem;color:var(--secondary);font-weight:700}
-.tier-section{width:100%;max-width:380px;margin-bottom:20px}
+.shift-section{width:100%;max-width:380px;margin-bottom:20px}
 .section-label{font-family:'Bebas Neue',sans-serif;font-size:0.85rem;letter-spacing:4px;color:var(--text-muted);margin-bottom:12px}
-.tier-grid{display:flex;flex-direction:column;gap:6px;max-height:280px;overflow-y:auto;padding-right:5px}
-.tier-grid::-webkit-scrollbar{width:4px}
-.tier-grid::-webkit-scrollbar-track{background:rgba(255,255,255,0.05);border-radius:2px}
-.tier-grid::-webkit-scrollbar-thumb{background:var(--secondary);border-radius:2px}
-.tier-btn{display:flex;align-items:center;gap:12px;padding:12px 15px;background:var(--bg-card);border:2px solid transparent;border-radius:10px;cursor:pointer;transition:all 0.3s ease;text-align:left}
-.tier-btn:hover:not(.locked){border-color:var(--secondary);transform:translateX(5px)}
-.tier-btn.selected{border-color:var(--secondary);background:rgba(255,107,0,0.1)}
-.tier-btn.locked{opacity:0.4;cursor:not-allowed}
-.tier-btn.mastered{border-color:var(--success);background:rgba(0,217,165,0.08)}
-.tier-btn.practice{border-color:var(--tryout);background:rgba(155,89,182,0.1)}
-.tier-btn.practice.selected{border-color:var(--tryout);background:rgba(155,89,182,0.2)}
-.tier-icon{font-size:1.5rem;min-width:40px;text-align:center}
-.tier-info{flex:1}
-.tier-name{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;color:var(--text-light)}
-.tier-desc{font-size:0.7rem;color:var(--text-muted)}
-.tier-status{font-size:0.65rem;padding:3px 8px;border-radius:8px;font-weight:700}
-.tier-status.mastered{background:var(--success);color:var(--bg-dark)}
-.tier-status.locked{background:rgba(255,255,255,0.1);color:var(--text-muted)}
-.tier-status.current{background:var(--secondary);color:var(--text-light)}
-.tier-status.practice{background:var(--tryout);color:var(--text-light)}
+.shift-grid{display:flex;flex-direction:column;gap:6px;max-height:280px;overflow-y:auto;padding-right:5px}
+.shift-grid::-webkit-scrollbar{width:4px}
+.shift-grid::-webkit-scrollbar-track{background:rgba(255,255,255,0.05);border-radius:2px}
+.shift-grid::-webkit-scrollbar-thumb{background:var(--secondary);border-radius:2px}
+.shift-btn{display:flex;align-items:center;gap:12px;padding:12px 15px;background:var(--bg-card);border:2px solid transparent;border-radius:10px;cursor:pointer;transition:all 0.3s ease;text-align:left}
+.shift-btn:hover:not(.locked){border-color:var(--secondary);transform:translateX(5px)}
+.shift-btn.selected{border-color:var(--secondary);background:rgba(255,107,0,0.1)}
+.shift-btn.locked{opacity:0.4;cursor:not-allowed}
+.shift-btn.mastered{border-color:var(--success);background:rgba(0,217,165,0.08)}
+.shift-btn.practice{border-color:var(--tryout);background:rgba(155,89,182,0.1)}
+.shift-btn.practice.selected{border-color:var(--tryout);background:rgba(155,89,182,0.2)}
+.shift-icon{font-size:1.5rem;min-width:40px;text-align:center}
+.shift-info{flex:1}
+.shift-name{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;color:var(--text-light)}
+.shift-desc{font-size:0.7rem;color:var(--text-muted)}
+.shift-status{font-size:0.65rem;padding:3px 8px;border-radius:8px;font-weight:700}
+.shift-status.mastered{background:var(--success);color:var(--bg-dark)}
+.shift-status.locked{background:rgba(255,255,255,0.1);color:var(--text-muted)}
+.shift-status.current{background:var(--secondary);color:var(--text-light)}
+.shift-status.practice{background:var(--tryout);color:var(--text-light)}
 .rhythm-section{width:100%;max-width:380px;margin-bottom:20px}
 .rhythm-grid{display:flex;gap:8px;justify-content:center}
 .rhythm-btn{padding:10px 14px;background:var(--bg-card);border:2px solid transparent;border-radius:10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;min-width:85px}
@@ -63,13 +63,13 @@ body[data-lang="en"] .lang-es{display:none!important}
 .stat-value{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--secondary)}
 .stat-label{font-size:0.65rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px}
 #countdownScreen{justify-content:center}
-.countdown-tier{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:4px;color:var(--text-muted);margin-bottom:10px}
+.countdown-shift{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:4px;color:var(--text-muted);margin-bottom:10px}
 .countdown-number{font-family:'Bebas Neue',sans-serif;font-size:7rem;color:var(--secondary);text-shadow:0 0 50px rgba(255,107,0,0.5)}
 .countdown-text{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:5px;color:var(--text-muted)}
 #gameScreen{justify-content:flex-start;padding-top:70px}
 .scoreboard{width:100%;max-width:380px;background:linear-gradient(180deg,#0a0a0a 0%,#050505 100%);border:3px solid #222;border-radius:12px;padding:12px 18px;margin-bottom:12px}
 .scoreboard-main{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-.scoreboard-tier{font-family:'Bebas Neue',sans-serif;font-size:0.8rem;letter-spacing:2px;color:var(--text-muted);padding:4px 10px;background:rgba(255,255,255,0.05);border-radius:8px}
+.scoreboard-shift{font-family:'Bebas Neue',sans-serif;font-size:0.8rem;letter-spacing:2px;color:var(--text-muted);padding:4px 10px;background:rgba(255,255,255,0.05);border-radius:8px}
 .scoreboard-score{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--secondary);text-shadow:0 0 20px rgba(255,107,0,0.4)}
 .half-display{display:flex;justify-content:center;gap:10px;margin-bottom:8px}
 .half-indicator{padding:6px 16px;border-radius:15px;font-family:'Bebas Neue',sans-serif;font-size:0.8rem;letter-spacing:2px}
@@ -142,17 +142,17 @@ body[data-lang="en"] .lang-es{display:none!important}
 
 <div class="screen active" id="welcomeScreen">
 <div class="main-logo">GOTROTTERS</div>
-<div class="main-subtitle"><span class="lang-en">CIRCUIT 1 • MAP</span><span class="lang-es">CIRCUITO 1 • UBICAR</span></div>
-<div class="main-icon">🏀</div>
+<div class="main-subtitle"><span class="lang-en">GEAR 1 • MAP</span><span class="lang-es">ENGRANAJE 1 • UBICAR</span></div>
+<div class="main-icon">🧠</div>
 <div class="mastery-badge"><span class="lang-en">🎯 100% ACCURACY TO ADVANCE</span><span class="lang-es">🎯 100% PARA AVANZAR</span></div>
 <div class="mastery-quote">
 <div class="mastery-quote-text"><span class="lang-en">"Train until you can't get it wrong. That's mastery."</span><span class="lang-es">"Entrena hasta que no puedas fallar. Eso es maestría."</span></div>
 <div class="mastery-quote-attr">— GoTrotters</div>
 </div>
 
-<div class="tier-section">
-<div class="section-label"><span class="lang-en">SELECT YOUR LEVEL</span><span class="lang-es">ESCOGE TU NIVEL</span></div>
-<div class="tier-grid" id="tierGrid"></div>
+<div class="shift-section">
+<div class="section-label"><span class="lang-en">SELECT YOUR SHIFT</span><span class="lang-es">ESCOGE TU CAMBIO</span></div>
+<div class="shift-grid" id="shiftGrid"></div>
 </div>
 
 <div class="rhythm-section">
@@ -167,15 +167,15 @@ body[data-lang="en"] .lang-es{display:none!important}
 <button class="start-btn" onclick="startGame()"><span class="lang-en">LET'S GO</span><span class="lang-es">PA'LANTE</span></button>
 
 <div class="stats-summary">
-<div class="stat-item"><div class="stat-value" id="currentLevel">1</div><div class="stat-label"><span class="lang-en">Level</span><span class="lang-es">Nivel</span></div></div>
+<div class="stat-item"><div class="stat-value" id="currentShift">1</div><div class="stat-label"><span class="lang-en">Shift</span><span class="lang-es">Cambio</span></div></div>
 <div class="stat-item"><div class="stat-value" id="perfectGames">0</div><div class="stat-label"><span class="lang-en">Perfect</span><span class="lang-es">Perfectos</span></div></div>
 <div class="stat-item"><div class="stat-value" id="bestScore">0</div><div class="stat-label"><span class="lang-en">Best</span><span class="lang-es">Mejor</span></div></div>
 </div>
 </div>
 
 <div class="screen" id="countdownScreen">
-<div class="countdown-tier" id="countdownTier">PRACTICE 1</div>
-<div class="main-icon">🏀</div>
+<div class="countdown-shift" id="countdownShift">PRACTICE 1</div>
+<div class="main-icon">🧠</div>
 <div class="countdown-number" id="countdownNum">3</div>
 <div class="countdown-text"><span class="lang-en">GET READY</span><span class="lang-es">¡PREPÁRATE!</span></div>
 </div>
@@ -183,7 +183,7 @@ body[data-lang="en"] .lang-es{display:none!important}
 <div class="screen" id="gameScreen">
 <div class="scoreboard">
 <div class="scoreboard-main">
-<div class="scoreboard-tier" id="gameTier">PRACTICE 1</div>
+<div class="scoreboard-shift" id="gameShift">PRACTICE 1</div>
 <div class="scoreboard-score" id="scoreDisplay">0</div>
 </div>
 <div class="half-display">
@@ -231,7 +231,7 @@ body[data-lang="en"] .lang-es{display:none!important}
 <div class="squad-welcome-text"><span class="lang-en">You passed practice! You're now a GoTrotter!</span><span class="lang-es">¡Pasaste la práctica! ¡Eres un GoTrotter!</span></div>
 </div>
 <div class="next-level-preview" id="nextLevelBox" style="display:none">
-<div class="next-level-label"><span class="lang-en">NEXT LEVEL</span><span class="lang-es">SIGUIENTE NIVEL</span></div>
+<div class="next-level-label"><span class="lang-en">NEXT SHIFT</span><span class="lang-es">SIGUIENTE CAMBIO</span></div>
 <div class="next-level-name" id="nextLevelName">PRACTICE 2</div>
 </div>
 <div class="continue-timer" id="continueTimer"><span class="lang-en">Continuing in <span id="timerCount">5</span>...</span><span class="lang-es">Continuando en <span id="timerCountEs">5</span>...</span></div>
@@ -270,20 +270,20 @@ function playBeep(freq, dur) {
     osc.stop(audioCtx.currentTime + dur);
 }
 
-// 10 TIER SYSTEM - NEW NAMING
-var tiers = {
+// 10 SHIFT SYSTEM
+var shifts = {
     practice1: {name: 'PRACTICE 1', icon: '📋', stars: 2, seqMin: 2, seqMax: 2, plays: 2, isPractice: true},
     practice2: {name: 'PRACTICE 2', icon: '📝', stars: 3, seqMin: 2, seqMax: 3, plays: 2, isPractice: true},
-    level3: {name: 'LEVEL 3/10', icon: '🌟', stars: 4, seqMin: 3, seqMax: 4, plays: 3, isPractice: false},
-    level4: {name: 'LEVEL 4/10', icon: '🏀', stars: 5, seqMin: 4, seqMax: 5, plays: 3, isPractice: false},
-    level5: {name: 'LEVEL 5/10', icon: '🎽', stars: 6, seqMin: 5, seqMax: 6, plays: 3, isPractice: false},
-    level6: {name: 'LEVEL 6/10', icon: '🎓', stars: 7, seqMin: 6, seqMax: 7, plays: 4, isPractice: false},
-    level7: {name: 'LEVEL 7/10', icon: '💰', stars: 8, seqMin: 7, seqMax: 8, plays: 4, isPractice: false},
-    level8: {name: 'LEVEL 8/10', icon: '⭐', stars: 9, seqMin: 8, seqMax: 9, plays: 4, isPractice: false},
-    level9: {name: 'LEVEL 9/10', icon: '🏆', stars: 10, seqMin: 9, seqMax: 10, plays: 5, isPractice: false},
+    shift3: {name: 'SHIFT 3', icon: '🌟', stars: 4, seqMin: 3, seqMax: 4, plays: 3, isPractice: false},
+    shift4: {name: 'SHIFT 4', icon: '🏀', stars: 5, seqMin: 4, seqMax: 5, plays: 3, isPractice: false},
+    shift5: {name: 'SHIFT 5', icon: '🎽', stars: 6, seqMin: 5, seqMax: 6, plays: 3, isPractice: false},
+    shift6: {name: 'SHIFT 6', icon: '🎓', stars: 7, seqMin: 6, seqMax: 7, plays: 4, isPractice: false},
+    shift7: {name: 'SHIFT 7', icon: '💰', stars: 8, seqMin: 7, seqMax: 8, plays: 4, isPractice: false},
+    shift8: {name: 'SHIFT 8', icon: '⭐', stars: 9, seqMin: 8, seqMax: 9, plays: 4, isPractice: false},
+    shift9: {name: 'SHIFT 9', icon: '🏆', stars: 10, seqMin: 9, seqMax: 10, plays: 5, isPractice: false},
     master: {name: 'MASTER 10', icon: '👑', stars: 12, seqMin: 10, seqMax: 12, plays: 5, isPractice: false}
 };
-var tierList = ['practice1', 'practice2', 'level3', 'level4', 'level5', 'level6', 'level7', 'level8', 'level9', 'master'];
+var shiftList = ['practice1', 'practice2', 'shift3', 'shift4', 'shift5', 'shift6', 'shift7', 'shift8', 'shift9', 'master'];
 
 var rhythms = {
     steady: {ms: 650, pause: 380, label: 'STEADY • 90 BPM'},
@@ -292,12 +292,12 @@ var rhythms = {
 };
 
 function getProgress() {
-    try { return JSON.parse(localStorage.getItem('gotrotters-mastery')) || {unlockedLevel: 0, perfect: {}, best: 0}; }
-    catch (e) { return {unlockedLevel: 0, perfect: {}, best: 0}; }
+    try { return JSON.parse(localStorage.getItem('gotrotters-mastery')) || {unlockedShift: 0, perfect: {}, best: 0}; }
+    catch (e) { return {unlockedShift: 0, perfect: {}, best: 0}; }
 }
 function saveProgress(p) { localStorage.setItem('gotrotters-mastery', JSON.stringify(p)); }
 
-var selTier = 'practice1', selRhythm = 'showtime';
+var selShift = 'practice1', selRhythm = 'showtime';
 var currentHalf = 1, play = 1, score = 0;
 var balls = [], seq = [], idx = 0, done = [], showing = false;
 var correct = 0, attempts = 0;
@@ -308,58 +308,58 @@ function showScreen(id) {
     document.getElementById(id).classList.add('active');
 }
 
-function renderTiers() {
-    var grid = document.getElementById('tierGrid');
+function renderShifts() {
+    var grid = document.getElementById('shiftGrid');
     grid.innerHTML = '';
     var prog = getProgress();
-    var unlockedIdx = prog.unlockedLevel || 0;
+    var unlockedIdx = prog.unlockedShift || prog.unlockedLevel || 0;
     
-    tierList.forEach(function(id, idx) {
-        var t = tiers[id];
+    shiftList.forEach(function(id, idx) {
+        var s = shifts[id];
         var unlocked = idx <= unlockedIdx;
         var mastered = idx < unlockedIdx;
         
         var btn = document.createElement('div');
-        var classes = 'tier-btn';
-        if (id === selTier) classes += ' selected';
+        var classes = 'shift-btn';
+        if (id === selShift) classes += ' selected';
         if (!unlocked) classes += ' locked';
         if (mastered) classes += ' mastered';
-        if (t.isPractice && unlocked && !mastered) classes += ' practice';
+        if (s.isPractice && unlocked && !mastered) classes += ' practice';
         btn.className = classes;
         
         if (unlocked) {
             btn.onclick = function() {
-                selTier = id;
-                renderTiers();
+                selShift = id;
+                renderShifts();
             };
         }
         
         var statusHtml = '';
         if (mastered) {
-            statusHtml = '<span class="tier-status mastered">✓</span>';
+            statusHtml = '<span class="shift-status mastered">✓</span>';
         } else if (!unlocked) {
-            statusHtml = '<span class="tier-status locked">🔒</span>';
-        } else if (t.isPractice) {
-            statusHtml = '<span class="tier-status practice">' + (currentLang === 'es' ? 'PRÁCTICA' : 'PRACTICE') + '</span>';
+            statusHtml = '<span class="shift-status locked">🔒</span>';
+        } else if (s.isPractice) {
+            statusHtml = '<span class="shift-status practice">' + (currentLang === 'es' ? 'PRÁCTICA' : 'PRACTICE') + '</span>';
         } else if (idx === unlockedIdx) {
-            statusHtml = '<span class="tier-status current">' + (currentLang === 'es' ? 'ACTUAL' : 'CURRENT') + '</span>';
+            statusHtml = '<span class="shift-status current">' + (currentLang === 'es' ? 'ACTUAL' : 'CURRENT') + '</span>';
         }
         
-        btn.innerHTML = '<span class="tier-icon">' + t.icon + '</span>' +
-            '<div class="tier-info"><div class="tier-name">' + t.name + '</div>' +
-            '<div class="tier-desc">' + t.stars + ' balls</div></div>' + statusHtml;
+        btn.innerHTML = '<span class="shift-icon">' + s.icon + '</span>' +
+            '<div class="shift-info"><div class="shift-name">' + s.name + '</div>' +
+            '<div class="shift-desc">' + s.stars + ' balls</div></div>' + statusHtml;
         
         grid.appendChild(btn);
     });
     
     var totalPerfect = 0;
     for (var k in prog.perfect) totalPerfect += prog.perfect[k];
-    document.getElementById('currentLevel').textContent = unlockedIdx + 1;
+    document.getElementById('currentShift').textContent = unlockedIdx + 1;
     document.getElementById('perfectGames').textContent = totalPerfect;
     document.getElementById('bestScore').textContent = prog.best || 0;
     
-    // Auto-select current level
-    selTier = tierList[Math.min(unlockedIdx, tierList.length - 1)];
+    // Auto-select current shift
+    selShift = shiftList[Math.min(unlockedIdx, shiftList.length - 1)];
 }
 
 function selectRhythm(r) {
@@ -373,7 +373,7 @@ function startGame() {
     currentHalf = 1; play = 1; score = 0; correct = 0; attempts = 0;
     document.getElementById('rhythmBadgeText').textContent = rhythms[selRhythm].label;
     document.getElementById('rhythmBadge').classList.add('visible');
-    document.getElementById('countdownTier').textContent = tiers[selTier].name;
+    document.getElementById('countdownShift').textContent = shifts[selShift].name;
     updateHalfDisplay();
     showScreen('countdownScreen');
     countdown(3);
@@ -392,7 +392,7 @@ function countdown(n) {
 }
 
 function initRound() {
-    document.getElementById('gameTier').textContent = tiers[selTier].name;
+    document.getElementById('gameShift').textContent = shifts[selShift].name;
     updateHalfDisplay();
     updateAccuracy();
     startPlay();
@@ -494,10 +494,10 @@ function disableBalls(d) {
 
 function startPlay() {
     idx = 0; done = [];
-    var t = tiers[selTier];
-    makeBalls(t.stars);
+    var s = shifts[selShift];
+    makeBalls(s.stars);
     renderBalls();
-    var len = t.seqMin + Math.floor(Math.random() * (t.seqMax - t.seqMin + 1));
+    var len = s.seqMin + Math.floor(Math.random() * (s.seqMax - s.seqMin + 1));
     var avail = [];
     for (var i = 0; i < balls.length; i++) avail.push(i);
     seq = [];
@@ -575,8 +575,8 @@ function clickBall(i) {
 
 function nextPlay() {
     play++;
-    var t = tiers[selTier];
-    if (play > t.plays) {
+    var s = shifts[selShift];
+    if (play > s.plays) {
         if (currentHalf === 1) { showHalftime(); }
         else { endGame(); }
         return;
@@ -611,16 +611,17 @@ function endGame() {
     var prog = getProgress();
     if (score > prog.best) prog.best = score;
     
-    var currentIdx = tierList.indexOf(selTier);
-    var canAdvance = isPerfect && currentIdx < tierList.length - 1;
+    var currentIdx = shiftList.indexOf(selShift);
+    var canAdvance = isPerfect && currentIdx < shiftList.length - 1;
     
     // Check if passing practice2 to become official squad member
-    var joiningSquad = isPerfect && selTier === 'practice2';
+    var joiningSquad = isPerfect && selShift === 'practice2';
     
     if (isPerfect) {
-        prog.perfect[selTier] = (prog.perfect[selTier] || 0) + 1;
-        if (currentIdx >= prog.unlockedLevel && currentIdx < tierList.length - 1) {
-            prog.unlockedLevel = currentIdx + 1;
+        prog.perfect[selShift] = (prog.perfect[selShift] || 0) + 1;
+        var unlockedIdx = prog.unlockedShift || prog.unlockedLevel || 0;
+        if (currentIdx >= unlockedIdx && currentIdx < shiftList.length - 1) {
+            prog.unlockedShift = currentIdx + 1;
         }
     }
     saveProgress(prog);
@@ -635,8 +636,8 @@ function endGame() {
     document.getElementById('resultAccuracy').textContent = pct + '%';
     document.getElementById('resultAccuracy').className = 'result-accuracy ' + (isPerfect ? 'perfect' : 'miss');
     
-    var msgEN = isPerfect ? 'Map mastered at this level!' : 'You need 100% to advance. You got this!';
-    var msgES = isPerfect ? '¡Ubicar dominado en este nivel!' : 'Necesitas 100% para avanzar. ¡Tú puedes!';
+    var msgEN = isPerfect ? 'Map mastered at this shift!' : 'You need 100% to advance. You got this!';
+    var msgES = isPerfect ? '¡Ubicar dominado en este cambio!' : 'Necesitas 100% para avanzar. ¡Tú puedes!';
     document.getElementById('resultMessage').innerHTML = '<span class="lang-en">' + msgEN + '</span><span class="lang-es">' + msgES + '</span>';
     
     document.getElementById('finalScore').textContent = score;
@@ -647,8 +648,8 @@ function endGame() {
     
     // Next level preview
     if (canAdvance) {
-        var nextTier = tierList[currentIdx + 1];
-        document.getElementById('nextLevelName').textContent = tiers[nextTier].icon + ' ' + tiers[nextTier].name;
+        var nextShift = shiftList[currentIdx + 1];
+        document.getElementById('nextLevelName').textContent = shifts[nextShift].icon + ' ' + shifts[nextShift].name;
         document.getElementById('nextLevelBox').style.display = 'block';
         document.getElementById('advanceBtn').style.display = 'block';
         document.getElementById('retryBtn').style.display = 'none';
@@ -666,7 +667,7 @@ function endGame() {
     var code = sessionStorage.getItem('gostar-user-code');
     var name = sessionStorage.getItem('gostar-user-name');
     if (pin || (code && name)) {
-        var data = {game: 'gotrotters', score: score, tier: selTier, accuracy: pct, perfect: isPerfect};
+        var data = {game: 'gotrotters', score: score, shift: selShift, accuracy: pct, perfect: isPerfect};
         if (pin) data.pin = pin; else { data.accessCode = code; data.username = name; }
         fetch('/api/game/session', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data)}).catch(function(){});
     }
@@ -692,8 +693,8 @@ function startAutoTimer(isPerfect, canAdvance) {
 
 function advanceNow() {
     if (autoTimer) clearInterval(autoTimer);
-    var currentIdx = tierList.indexOf(selTier);
-    if (currentIdx < tierList.length - 1) selTier = tierList[currentIdx + 1];
+    var currentIdx = shiftList.indexOf(selShift);
+    if (currentIdx < shiftList.length - 1) selShift = shiftList[currentIdx + 1];
     startGame();
 }
 
@@ -705,7 +706,7 @@ function retryNow() {
 function goHome() {
     if (autoTimer) clearInterval(autoTimer);
     document.getElementById('rhythmBadge').classList.remove('visible');
-    renderTiers();
+    renderShifts();
     showScreen('welcomeScreen');
 }
 
@@ -713,7 +714,7 @@ function goHome() {
 document.querySelectorAll('.lang-btn').forEach(function(b) {
     b.classList.toggle('active', b.textContent.trim() === currentLang.toUpperCase());
 });
-renderTiers();
+renderShifts();
 
 // Auth check
 if (window.location.hostname === 'gostar.digital' && !sessionStorage.getItem('gostar-user-pin')) {
