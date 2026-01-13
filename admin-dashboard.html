@@ -328,9 +328,9 @@ body.en .lang-es { display: none !important; }
 .stat-card-value { font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; letter-spacing: 2px; margin-bottom: 5px; }
 .stat-card-label { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
 
-.circuit-cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 30px; }
+.gear-cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 30px; }
 
-.circuit-card {
+.gear-card {
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: 16px;
@@ -338,17 +338,17 @@ body.en .lang-es { display: none !important; }
     transition: all 0.3s;
 }
 
-.circuit-card:hover { transform: translateY(-3px); }
+.gear-card:hover { transform: translateY(-3px); }
 
-.circuit-card-header { padding: 16px 20px; display: flex; align-items: center; gap: 12px; }
-.circuit-card-header.c1 { background: linear-gradient(135deg, rgba(255,107,0,0.2), transparent); border-bottom: 2px solid var(--orange); }
-.circuit-card-header.c2 { background: linear-gradient(135deg, rgba(0,217,165,0.2), transparent); border-bottom: 2px solid var(--teal); }
-.circuit-card-header.c3 { background: linear-gradient(135deg, rgba(255,215,0,0.2), transparent); border-bottom: 2px solid var(--gold); }
-.circuit-card-icon { font-size: 1.5rem; }
-.circuit-card-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 2px; flex: 1; }
-.circuit-card-num { font-size: 0.7rem; color: var(--muted); }
+.gear-card-header { padding: 16px 20px; display: flex; align-items: center; gap: 12px; }
+.gear-card-header.g1 { background: linear-gradient(135deg, rgba(255,107,0,0.2), transparent); border-bottom: 2px solid var(--orange); }
+.gear-card-header.g2 { background: linear-gradient(135deg, rgba(0,217,165,0.2), transparent); border-bottom: 2px solid var(--teal); }
+.gear-card-header.g3 { background: linear-gradient(135deg, rgba(255,215,0,0.2), transparent); border-bottom: 2px solid var(--gold); }
+.gear-card-icon { font-size: 1.5rem; }
+.gear-card-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 2px; flex: 1; }
+.gear-card-num { font-size: 0.7rem; color: var(--muted); }
 
-.circuit-card-edit {
+.gear-card-edit {
     background: transparent;
     border: 1px solid var(--border);
     color: var(--muted);
@@ -359,12 +359,12 @@ body.en .lang-es { display: none !important; }
     transition: all 0.2s;
 }
 
-.circuit-card-edit:hover { border-color: var(--orange); color: var(--orange); }
-.circuit-card-body { padding: 20px; }
-.circuit-card-stats { display: flex; gap: 20px; }
-.circuit-stat { text-align: center; flex: 1; }
-.circuit-stat-value { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; }
-.circuit-stat-label { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; }
+.gear-card-edit:hover { border-color: var(--orange); color: var(--orange); }
+.gear-card-body { padding: 20px; }
+.gear-card-stats { display: flex; gap: 20px; }
+.gear-stat { text-align: center; flex: 1; }
+.gear-stat-value { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; }
+.gear-stat-label { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; }
 
 .table-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; margin-bottom: 30px; }
 .table-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
@@ -389,16 +389,16 @@ tr:hover { background: var(--card-hover); }
 .badge-trial { background: rgba(155,89,182,0.15); color: var(--purple); }
 .badge-paid { background: rgba(0,217,165,0.15); color: var(--teal); }
 
-.tier-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 6px; font-size: 0.65rem; font-weight: 700; }
-.tier-badge.practice { background: rgba(155,89,182,0.2); color: #b57edc; }
-.tier-badge.level3 { background: rgba(255,215,0,0.2); color: var(--gold); }
-.tier-badge.level4 { background: rgba(255,107,0,0.2); color: var(--orange); }
-.tier-badge.level5 { background: rgba(0,217,165,0.2); color: var(--teal); }
-.tier-badge.level6 { background: rgba(52,152,219,0.2); color: var(--blue); }
-.tier-badge.level7 { background: rgba(155,89,182,0.2); color: var(--purple); }
-.tier-badge.level8 { background: rgba(255,215,0,0.2); color: var(--gold); }
-.tier-badge.level9 { background: rgba(255,107,0,0.2); color: var(--orange); }
-.tier-badge.master { background: linear-gradient(135deg, rgba(255,215,0,0.3), rgba(255,107,0,0.3)); color: var(--gold); }
+.shift-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 6px; font-size: 0.65rem; font-weight: 700; }
+.shift-badge.practice { background: rgba(155,89,182,0.2); color: #b57edc; }
+.shift-badge.level3 { background: rgba(255,215,0,0.2); color: var(--gold); }
+.shift-badge.level4 { background: rgba(255,107,0,0.2); color: var(--orange); }
+.shift-badge.level5 { background: rgba(0,217,165,0.2); color: var(--teal); }
+.shift-badge.level6 { background: rgba(52,152,219,0.2); color: var(--blue); }
+.shift-badge.level7 { background: rgba(155,89,182,0.2); color: var(--purple); }
+.shift-badge.level8 { background: rgba(255,215,0,0.2); color: var(--gold); }
+.shift-badge.level9 { background: rgba(255,107,0,0.2); color: var(--orange); }
+.shift-badge.master { background: linear-gradient(135deg, rgba(255,215,0,0.3), rgba(255,107,0,0.3)); color: var(--gold); }
 
 .action-btns { display: flex; gap: 6px; }
 
@@ -446,17 +446,17 @@ tr:hover { background: var(--card-hover); }
 }
 
 .activity-icon.user { background: rgba(0,217,165,0.15); color: var(--teal); }
-.activity-icon.circuit { background: rgba(155,89,182,0.15); color: var(--purple); }
+.activity-icon.gear { background: rgba(155,89,182,0.15); color: var(--purple); }
 .activity-content { flex: 1; }
 .activity-text { font-size: 0.9rem; margin-bottom: 3px; }
 .activity-time { font-size: 0.75rem; color: var(--muted); }
 .activity-actions { display: flex; gap: 6px; opacity: 0; transition: opacity 0.2s; }
 .activity-item:hover .activity-actions { opacity: 1; }
 
-.tier-dist-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-.tier-dist-table th, .tier-dist-table td { padding: 10px 12px; text-align: center; border: 1px solid var(--border); font-size: 0.8rem; }
-.tier-dist-table th { background: var(--darker); font-weight: 600; color: var(--muted); }
-.tier-dist-table td { background: var(--card); }
+.shift-dist-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+.shift-dist-table th, .shift-dist-table td { padding: 10px 12px; text-align: center; border: 1px solid var(--border); font-size: 0.8rem; }
+.shift-dist-table th { background: var(--darker); font-weight: 600; color: var(--muted); }
+.shift-dist-table td { background: var(--card); }
 
 .modal-overlay {
     position: fixed;
@@ -608,10 +608,10 @@ tr:hover { background: var(--card-hover); }
                 <span class="lang-en">Team Members</span>
                 <span class="lang-es">Miembros</span>
             </button>
-            <button class="nav-item" data-page="circuits">
-                <span class="nav-item-icon">🔺</span>
-                <span class="lang-en">M³ Performance System</span>
-                <span class="lang-es">Sistema de Rendimiento M³</span>
+            <button class="nav-item" data-page="gears">
+                <span class="nav-item-icon">⚙️</span>
+                <span class="lang-en">M³ Performance Engine</span>
+                <span class="lang-es">Motor de Rendimiento M³</span>
             </button>
             <button class="nav-item" data-page="activity">
                 <span class="nav-item-icon">📋</span>
@@ -636,8 +636,8 @@ tr:hover { background: var(--card-hover); }
             <header class="page-header">
                 <h1 class="page-title">TEAM GOTROTTERS</h1>
                 <p class="page-subtitle">
-                    <span class="lang-en">Coach Dashboard • M³ Performance System • 10-Tier Structure</span>
-                    <span class="lang-es">Panel del Coach • Sistema de Rendimiento M³ • Estructura 10 Niveles</span>
+                    <span class="lang-en">Coach Dashboard • M³ Performance Engine • 10-Shift Structure</span>
+                    <span class="lang-es">Panel del Coach • Motor de Rendimiento M³ • Estructura 10 Cambios</span>
                 </p>
             </header>
             <div class="team-banner">
@@ -682,7 +682,7 @@ tr:hover { background: var(--card-hover); }
                     <div class="stat-card-label">MASTER 10</div>
                 </div>
             </div>
-            <div class="circuit-cards-grid" id="overviewCircuits"></div>
+            <div class="gear-cards-grid" id="overviewGears"></div>
         </section>
 
         <section class="page-section" id="page-team">
@@ -727,23 +727,23 @@ tr:hover { background: var(--card-hover); }
             </div>
         </section>
 
-        <section class="page-section" id="page-circuits">
+        <section class="page-section" id="page-gears">
             <header class="page-header">
-                <h1 class="page-title">THE TRIAD CIRCUIT</h1>
+                <h1 class="page-title">THE M³ GEARS</h1>
                 <p class="page-subtitle">
-                    <span class="lang-en">Three circuits • 10-tier progression • Coach-led</span>
-                    <span class="lang-es">Tres circuitos • Progresión de 10 niveles • Guiado por Coach</span>
+                    <span class="lang-en">Three gears • 10-shift progression • Coach-led</span>
+                    <span class="lang-es">Tres engranajes • Progresión de 10 cambios • Guiado por Coach</span>
                 </p>
             </header>
-            <div class="circuit-cards-grid" id="circuitsAnalytics"></div>
+            <div class="gear-cards-grid" id="gearsAnalytics"></div>
             <div class="table-card">
                 <div class="table-header">
-                    <h3 class="table-title">10-TIER DISTRIBUTION</h3>
+                    <h3 class="table-title">10-SHIFT DISTRIBUTION</h3>
                 </div>
                 <div class="table-container" style="padding:20px">
-                    <table class="tier-dist-table">
-                        <thead><tr><th>Tier</th><th>🧠</th><th>⚡</th><th>👁️</th></tr></thead>
-                        <tbody id="tierDistTable"></tbody>
+                    <table class="shift-dist-table">
+                        <thead><tr><th>Shift</th><th>🧠</th><th>⚡</th><th>👁️</th></tr></thead>
+                        <tbody id="shiftDistTable"></tbody>
                     </table>
                 </div>
             </div>
@@ -807,19 +807,19 @@ tr:hover { background: var(--card-hover); }
                 </select>
             </div>
             <div class="form-group">
-                <label class="form-label">10-Tier Structure</label>
+                <label class="form-label">10-Shift Structure</label>
                 <div class="form-row">
                     <div>
                         <label class="form-label" style="font-size:0.7rem">🧠 Map</label>
-                        <select class="form-select" id="userC1"></select>
+                        <select class="form-select" id="userG1"></select>
                     </div>
                     <div>
-                        <label class="form-label" style="font-size:0.7rem">⚡ Agility</label>
-                        <select class="form-select" id="userC2"></select>
+                        <label class="form-label" style="font-size:0.7rem">⚡ Move</label>
+                        <select class="form-select" id="userG2"></select>
                     </div>
                     <div>
-                        <label class="form-label" style="font-size:0.7rem">👁️ Tracking</label>
-                        <select class="form-select" id="userC3"></select>
+                        <label class="form-label" style="font-size:0.7rem">👁️ Match</label>
+                        <select class="form-select" id="userG3"></select>
                     </div>
                 </div>
             </div>
@@ -851,30 +851,30 @@ tr:hover { background: var(--card-hover); }
     </div>
 </div>
 
-<div class="modal-overlay" id="circuitModal">
+<div class="modal-overlay" id="gearModal">
     <div class="modal">
         <div class="modal-header">
-            <h3 class="modal-title" id="circuitModalTitle">EDIT CIRCUIT</h3>
-            <button class="modal-close" data-close="circuitModal">×</button>
+            <h3 class="modal-title" id="gearModalTitle">EDIT GEAR</h3>
+            <button class="modal-close" data-close="gearModal">×</button>
         </div>
         <div class="modal-body">
-            <input type="hidden" id="circuitId">
+            <input type="hidden" id="gearId">
             <div class="form-group">
                 <label class="form-label"><span class="lang-en">Total Sessions</span><span class="lang-es">Sesiones Totales</span></label>
-                <input type="number" class="form-input" id="circuitSessions" min="0">
+                <input type="number" class="form-input" id="gearSessions" min="0">
             </div>
             <div class="form-group">
-                <label class="form-label"><span class="lang-en">Average Tier</span><span class="lang-es">Nivel Promedio</span></label>
-                <input type="number" class="form-input" id="circuitAvg" min="1" max="10" step="0.1">
+                <label class="form-label"><span class="lang-en">Average Shift</span><span class="lang-es">Cambio Promedio</span></label>
+                <input type="number" class="form-input" id="gearAvg" min="1" max="10" step="0.1">
             </div>
             <div class="form-group">
                 <label class="form-label"><span class="lang-en">Masters Count</span><span class="lang-es">Cantidad de Masters</span></label>
-                <input type="number" class="form-input" id="circuitMasters" min="0">
+                <input type="number" class="form-input" id="gearMasters" min="0">
             </div>
         </div>
         <div class="modal-footer">
-            <button class="btn btn-secondary" data-close="circuitModal"><span class="lang-en">Cancel</span><span class="lang-es">Cancelar</span></button>
-            <button class="btn btn-primary" id="saveCircuitBtn"><span class="lang-en">Save</span><span class="lang-es">Guardar</span></button>
+            <button class="btn btn-secondary" data-close="gearModal"><span class="lang-en">Cancel</span><span class="lang-es">Cancelar</span></button>
+            <button class="btn btn-primary" id="saveGearBtn"><span class="lang-en">Save</span><span class="lang-es">Guardar</span></button>
         </div>
     </div>
 </div>
@@ -891,7 +891,7 @@ tr:hover { background: var(--card-hover); }
                 <label class="form-label"><span class="lang-en">Type</span><span class="lang-es">Tipo</span></label>
                 <select class="form-select" id="activityType">
                     <option value="user">🏀 Team Activity</option>
-                    <option value="circuit">🔺 Circuit Progress</option>
+                    <option value="gear">⚙️ Gear Progress</option>
                 </select>
             </div>
             <div class="form-group">
@@ -919,34 +919,34 @@ tr:hover { background: var(--card-hover); }
 (function() {
     'use strict';
 
-    // 10-TIER STRUCTURE
-    var tierList = ['PRACTICE 1','PRACTICE 2','LEVEL 3','LEVEL 4','LEVEL 5','LEVEL 6','LEVEL 7','LEVEL 8','LEVEL 9','MASTER 10'];
-    var tierClasses = ['practice','practice','level3','level4','level5','level6','level7','level8','level9','master'];
+    // 10-SHIFT STRUCTURE
+    var shiftList = ['PRACTICE 1','PRACTICE 2','SHIFT 3','SHIFT 4','SHIFT 5','SHIFT 6','SHIFT 7','SHIFT 8','SHIFT 9','MASTER 10'];
+    var shiftClasses = ['practice','practice','level3','level4','level5','level6','level7','level8','level9','master'];
 
-    // THE TRIAD CIRCUIT
-    var circuits = {
-        c1: {name: 'MAP', icon: '🧠', label: 'Circuit 1', sessions: 245, avg: 4.2, masters: 1},
-        c2: {name: 'MOVE', icon: '⚡', label: 'Circuit 2', sessions: 187, avg: 3.8, masters: 0},
-        c3: {name: 'MATCH', icon: '👁️', label: 'Circuit 3', sessions: 156, avg: 3.5, masters: 0}
+    // THE M³ GEARS
+    var gears = {
+        g1: {name: 'MAP', icon: '🧠', label: 'Gear 1', sessions: 245, avg: 4.2, masters: 1},
+        g2: {name: 'MOVE', icon: '⚡', label: 'Gear 2', sessions: 187, avg: 3.8, masters: 0},
+        g3: {name: 'MATCH', icon: '👁️', label: 'Gear 3', sessions: 156, avg: 3.5, masters: 0}
     };
 
     // TEAM GOTROTTERS
     var users = [
-        {id:1, name:'María García', email:'maria@email.com', status:'paid', c1:5, c2:4, c3:3, lastActive:'2026-01-09'},
-        {id:2, name:'Roberto López', email:'roberto@email.com', status:'paid', c1:7, c2:6, c3:5, lastActive:'2026-01-09'},
-        {id:3, name:'Carmen Rivera', email:'carmen@email.com', status:'paid', c1:10, c2:8, c3:7, lastActive:'2026-01-08'},
-        {id:4, name:'José Martínez', email:'jose@email.com', status:'paid', c1:3, c2:2, c3:2, lastActive:'2026-01-09'},
-        {id:5, name:'Ana Rodríguez', email:'ana@email.com', status:'trial', c1:2, c2:1, c3:1, lastActive:'2026-01-07'},
-        {id:6, name:'Pedro Santos', email:'pedro@email.com', status:'paid', c1:4, c2:3, c3:3, lastActive:'2026-01-09'},
-        {id:7, name:'Luis Hernández', email:'luis@email.com', status:'paid', c1:8, c2:7, c3:6, lastActive:'2026-01-08'},
-        {id:8, name:'Rosa Díaz', email:'rosa@email.com', status:'trial', c1:1, c2:1, c3:1, lastActive:'2026-01-09'}
+        {id:1, name:'María García', email:'maria@email.com', status:'paid', g1:5, g2:4, g3:3, lastActive:'2026-01-09'},
+        {id:2, name:'Roberto López', email:'roberto@email.com', status:'paid', g1:7, g2:6, g3:5, lastActive:'2026-01-09'},
+        {id:3, name:'Carmen Rivera', email:'carmen@email.com', status:'paid', g1:10, g2:8, g3:7, lastActive:'2026-01-08'},
+        {id:4, name:'José Martínez', email:'jose@email.com', status:'paid', g1:3, g2:2, g3:2, lastActive:'2026-01-09'},
+        {id:5, name:'Ana Rodríguez', email:'ana@email.com', status:'trial', g1:2, g2:1, g3:1, lastActive:'2026-01-07'},
+        {id:6, name:'Pedro Santos', email:'pedro@email.com', status:'paid', g1:4, g2:3, g3:3, lastActive:'2026-01-09'},
+        {id:7, name:'Luis Hernández', email:'luis@email.com', status:'paid', g1:8, g2:7, g3:6, lastActive:'2026-01-08'},
+        {id:8, name:'Rosa Díaz', email:'rosa@email.com', status:'trial', g1:1, g2:1, g3:1, lastActive:'2026-01-09'}
     ];
 
     var activities = [
         {id:1, type:'user', text:'Rosa Díaz joined Team GoTrotters (trial)', time:'5 minutes ago'},
-        {id:2, type:'circuit', text:'Roberto López reached LEVEL 8 in Map', time:'12 minutes ago'},
+        {id:2, type:'gear', text:'Roberto López reached SHIFT 8 in Map', time:'12 minutes ago'},
         {id:3, type:'user', text:'Pedro Santos converted to paid ($5/mo)', time:'1 hour ago'},
-        {id:4, type:'circuit', text:'Carmen Rivera reached MASTER 10! 👑', time:'3 hours ago'},
+        {id:4, type:'gear', text:'Carmen Rivera reached MASTER 10! 👑', time:'3 hours ago'},
         {id:5, type:'user', text:'Ana Rodríguez joined Team GoTrotters (trial)', time:'1 day ago'}
     ];
 
@@ -957,7 +957,7 @@ tr:hover { background: var(--card-hover); }
         setLang(currentLang);
         setupPinInputs();
         setupEventListeners();
-        populateTierSelects();
+        populateShiftSelects();
         if (sessionStorage.getItem('gostar-admin-auth') === 'true') showDashboard();
     }
 
@@ -1038,7 +1038,7 @@ tr:hover { background: var(--card-hover); }
             document.getElementById('deleteText').textContent = currentLang === 'es' ? 'Esto eliminará todas las entradas.' : 'This will remove all entries.';
             openModal('deleteModal');
         });
-        document.getElementById('saveCircuitBtn').addEventListener('click', saveCircuitStats);
+        document.getElementById('saveGearBtn').addEventListener('click', saveGearStats);
         document.getElementById('confirmDeleteBtn').addEventListener('click', confirmDelete);
 
         document.querySelectorAll('.modal-overlay').forEach(function(overlay) {
@@ -1063,79 +1063,79 @@ tr:hover { background: var(--card-hover); }
         setTimeout(function() { toast.classList.remove('show'); }, 3000);
     }
 
-    function getTierBadge(level) {
+    function getShiftBadge(level) {
         var idx = Math.min(Math.max(level - 1, 0), 9);
-        return '<span class="tier-badge ' + tierClasses[idx] + '">' + tierList[idx] + '</span>';
+        return '<span class="shift-badge ' + shiftClasses[idx] + '">' + shiftList[idx] + '</span>';
     }
 
     function getStatusBadge(status) {
         return '<span class="badge badge-' + status + '">' + (status === 'trial' ? 'Trial' : 'Paid') + '</span>';
     }
 
-    function populateTierSelects() {
+    function populateShiftSelects() {
         var html = '';
-        tierList.forEach(function(tier, idx) { html += '<option value="' + (idx + 1) + '">' + (idx + 1) + ' - ' + tier + '</option>'; });
-        ['userC1', 'userC2', 'userC3'].forEach(function(id) { document.getElementById(id).innerHTML = html; });
+        shiftList.forEach(function(shift, idx) { html += '<option value="' + (idx + 1) + '">' + (idx + 1) + ' - ' + shift + '</option>'; });
+        ['userG1', 'userG2', 'userG3'].forEach(function(id) { document.getElementById(id).innerHTML = html; });
     }
 
     function renderAll() {
         renderStats();
-        renderOverviewCircuits();
+        renderOverviewGears();
         renderUsersTable();
-        renderCircuitsAnalytics();
-        renderTierDistribution();
+        renderGearsAnalytics();
+        renderShiftDistribution();
         renderActivityList();
     }
 
     function renderStats() {
         var paid = users.filter(function(u) { return u.status === 'paid'; }).length;
         var trial = users.filter(function(u) { return u.status === 'trial'; }).length;
-        var masters = users.filter(function(u) { return u.c1 === 10 || u.c2 === 10 || u.c3 === 10; }).length;
+        var masters = users.filter(function(u) { return u.g1 === 10 || u.g2 === 10 || u.g3 === 10; }).length;
         document.getElementById('totalUsers').textContent = users.length;
         document.getElementById('monthlyRevenue').textContent = paid * 5;
         document.getElementById('trialUsers').textContent = trial;
         document.getElementById('totalMasters').textContent = masters;
     }
 
-    function renderOverviewCircuits() {
+    function renderOverviewGears() {
         var html = '';
-        ['c1', 'c2', 'c3'].forEach(function(key, idx) {
-            var c = circuits[key];
+        ['g1', 'g2', 'g3'].forEach(function(key, idx) {
+            var g = gears[key];
             var members = users.filter(function(u) { return u[key] > 0; }).length;
             var avg = members > 0 ? (users.reduce(function(sum, u) { return sum + u[key]; }, 0) / members).toFixed(1) : '0';
             var masterCount = users.filter(function(u) { return u[key] === 10; }).length;
-            html += '<div class="circuit-card"><div class="circuit-card-header c' + (idx+1) + '"><span class="circuit-card-icon">' + c.icon + '</span><span class="circuit-card-title">' + c.name + '</span><span class="circuit-card-num">' + c.label + '</span></div><div class="circuit-card-body"><div class="circuit-card-stats"><div class="circuit-stat"><div class="circuit-stat-value">' + members + '</div><div class="circuit-stat-label">Members</div></div><div class="circuit-stat"><div class="circuit-stat-value">' + avg + '</div><div class="circuit-stat-label">Avg Tier</div></div><div class="circuit-stat"><div class="circuit-stat-value">' + masterCount + '</div><div class="circuit-stat-label">Masters</div></div></div></div></div>';
+            html += '<div class="gear-card"><div class="gear-card-header g' + (idx+1) + '"><span class="gear-card-icon">' + g.icon + '</span><span class="gear-card-title">' + g.name + '</span><span class="gear-card-num">' + g.label + '</span></div><div class="gear-card-body"><div class="gear-card-stats"><div class="gear-stat"><div class="gear-stat-value">' + members + '</div><div class="gear-stat-label">Members</div></div><div class="gear-stat"><div class="gear-stat-value">' + avg + '</div><div class="gear-stat-label">Avg Shift</div></div><div class="gear-stat"><div class="gear-stat-value">' + masterCount + '</div><div class="gear-stat-label">Masters</div></div></div></div></div>';
         });
-        document.getElementById('overviewCircuits').innerHTML = html;
+        document.getElementById('overviewGears').innerHTML = html;
     }
 
     function renderUsersTable() {
         var html = '';
         users.forEach(function(u) {
-            html += '<tr><td>' + u.name + '</td><td>' + u.email + '</td><td>' + getStatusBadge(u.status) + '</td><td>' + getTierBadge(u.c1) + '</td><td>' + getTierBadge(u.c2) + '</td><td>' + getTierBadge(u.c3) + '</td><td>' + u.lastActive + '</td><td><div class="action-btns"><button class="action-btn" onclick="window.editUser(' + u.id + ')" title="Edit">✏️</button><button class="action-btn delete" onclick="window.deleteUser(' + u.id + ')" title="Delete">🗑️</button></div></td></tr>';
+            html += '<tr><td>' + u.name + '</td><td>' + u.email + '</td><td>' + getStatusBadge(u.status) + '</td><td>' + getShiftBadge(u.g1) + '</td><td>' + getShiftBadge(u.g2) + '</td><td>' + getShiftBadge(u.g3) + '</td><td>' + u.lastActive + '</td><td><div class="action-btns"><button class="action-btn" onclick="window.editUser(' + u.id + ')" title="Edit">✏️</button><button class="action-btn delete" onclick="window.deleteUser(' + u.id + ')" title="Delete">🗑️</button></div></td></tr>';
         });
         document.getElementById('usersTable').innerHTML = html;
     }
 
-    function renderCircuitsAnalytics() {
+    function renderGearsAnalytics() {
         var html = '';
-        ['c1', 'c2', 'c3'].forEach(function(key, idx) {
-            var c = circuits[key];
-            html += '<div class="circuit-card"><div class="circuit-card-header c' + (idx+1) + '"><span class="circuit-card-icon">' + c.icon + '</span><span class="circuit-card-title">' + c.name + '</span><span class="circuit-card-num">' + c.label + '</span><button class="circuit-card-edit" onclick="window.editCircuit(\'' + key + '\')">✏️ Edit</button></div><div class="circuit-card-body"><div class="circuit-card-stats"><div class="circuit-stat"><div class="circuit-stat-value">' + c.sessions + '</div><div class="circuit-stat-label">Sessions</div></div><div class="circuit-stat"><div class="circuit-stat-value">' + c.avg + '</div><div class="circuit-stat-label">Avg</div></div><div class="circuit-stat"><div class="circuit-stat-value">' + c.masters + '</div><div class="circuit-stat-label">Masters</div></div></div></div></div>';
+        ['g1', 'g2', 'g3'].forEach(function(key, idx) {
+            var g = gears[key];
+            html += '<div class="gear-card"><div class="gear-card-header g' + (idx+1) + '"><span class="gear-card-icon">' + g.icon + '</span><span class="gear-card-title">' + g.name + '</span><span class="gear-card-num">' + g.label + '</span><button class="gear-card-edit" onclick="window.editGear(\'' + key + '\')">✏️ Edit</button></div><div class="gear-card-body"><div class="gear-card-stats"><div class="gear-stat"><div class="gear-stat-value">' + g.sessions + '</div><div class="gear-stat-label">Sessions</div></div><div class="gear-stat"><div class="gear-stat-value">' + g.avg + '</div><div class="gear-stat-label">Avg</div></div><div class="gear-stat"><div class="gear-stat-value">' + g.masters + '</div><div class="gear-stat-label">Masters</div></div></div></div></div>';
         });
-        document.getElementById('circuitsAnalytics').innerHTML = html;
+        document.getElementById('gearsAnalytics').innerHTML = html;
     }
 
-    function renderTierDistribution() {
+    function renderShiftDistribution() {
         var html = '';
-        tierList.forEach(function(tier, idx) {
+        shiftList.forEach(function(shift, idx) {
             var level = idx + 1;
-            var c1 = users.filter(function(u) { return u.c1 === level; }).length;
-            var c2 = users.filter(function(u) { return u.c2 === level; }).length;
-            var c3 = users.filter(function(u) { return u.c3 === level; }).length;
-            html += '<tr><td>' + getTierBadge(level) + '</td><td>' + c1 + '</td><td>' + c2 + '</td><td>' + c3 + '</td></tr>';
+            var g1 = users.filter(function(u) { return u.g1 === level; }).length;
+            var g2 = users.filter(function(u) { return u.g2 === level; }).length;
+            var g3 = users.filter(function(u) { return u.g3 === level; }).length;
+            html += '<tr><td>' + getShiftBadge(level) + '</td><td>' + g1 + '</td><td>' + g2 + '</td><td>' + g3 + '</td></tr>';
         });
-        document.getElementById('tierDistTable').innerHTML = html;
+        document.getElementById('shiftDistTable').innerHTML = html;
     }
 
     function renderActivityList() {
@@ -1145,7 +1145,7 @@ tr:hover { background: var(--card-hover); }
         }
         var html = '';
         activities.forEach(function(a) {
-            html += '<div class="activity-item"><div class="activity-icon ' + a.type + '">' + (a.type === 'user' ? '🏀' : '🔺') + '</div><div class="activity-content"><div class="activity-text">' + a.text + '</div><div class="activity-time">' + a.time + '</div></div><div class="activity-actions"><button class="action-btn" onclick="window.editActivity(' + a.id + ')" title="Edit">✏️</button><button class="action-btn delete" onclick="window.deleteActivity(' + a.id + ')" title="Delete">🗑️</button></div></div>';
+            html += '<div class="activity-item"><div class="activity-icon ' + a.type + '">' + (a.type === 'user' ? '🏀' : '⚙️') + '</div><div class="activity-content"><div class="activity-text">' + a.text + '</div><div class="activity-time">' + a.time + '</div></div><div class="activity-actions"><button class="action-btn" onclick="window.editActivity(' + a.id + ')" title="Edit">✏️</button><button class="action-btn delete" onclick="window.deleteActivity(' + a.id + ')" title="Delete">🗑️</button></div></div>';
         });
         document.getElementById('activityList').innerHTML = html;
     }
@@ -1156,9 +1156,9 @@ tr:hover { background: var(--card-hover); }
         document.getElementById('userName').value = '';
         document.getElementById('userEmail').value = '';
         document.getElementById('userStatus').value = 'trial';
-        document.getElementById('userC1').value = '1';
-        document.getElementById('userC2').value = '1';
-        document.getElementById('userC3').value = '1';
+        document.getElementById('userG1').value = '1';
+        document.getElementById('userG2').value = '1';
+        document.getElementById('userG3').value = '1';
         openModal('userModal');
     }
 
@@ -1170,9 +1170,9 @@ tr:hover { background: var(--card-hover); }
         document.getElementById('userName').value = user.name;
         document.getElementById('userEmail').value = user.email;
         document.getElementById('userStatus').value = user.status;
-        document.getElementById('userC1').value = user.c1;
-        document.getElementById('userC2').value = user.c2;
-        document.getElementById('userC3').value = user.c3;
+        document.getElementById('userG1').value = user.g1;
+        document.getElementById('userG2').value = user.g2;
+        document.getElementById('userG3').value = user.g3;
         openModal('userModal');
     };
 
@@ -1181,15 +1181,15 @@ tr:hover { background: var(--card-hover); }
         var name = document.getElementById('userName').value.trim();
         var email = document.getElementById('userEmail').value.trim();
         var status = document.getElementById('userStatus').value;
-        var c1 = parseInt(document.getElementById('userC1').value);
-        var c2 = parseInt(document.getElementById('userC2').value);
-        var c3 = parseInt(document.getElementById('userC3').value);
+        var g1 = parseInt(document.getElementById('userG1').value);
+        var g2 = parseInt(document.getElementById('userG2').value);
+        var g3 = parseInt(document.getElementById('userG3').value);
         if (!name || !email) { showToast(currentLang === 'es' ? 'Ingresa nombre y email' : 'Enter name and email', true); return; }
         if (id) {
             var idx = users.findIndex(function(u) { return u.id === parseInt(id); });
-            if (idx > -1) { users[idx].name = name; users[idx].email = email; users[idx].status = status; users[idx].c1 = c1; users[idx].c2 = c2; users[idx].c3 = c3; }
+            if (idx > -1) { users[idx].name = name; users[idx].email = email; users[idx].status = status; users[idx].g1 = g1; users[idx].g2 = g2; users[idx].g3 = g3; }
         } else {
-            users.push({ id: nextUserId++, name: name, email: email, status: status, c1: c1, c2: c2, c3: c3, lastActive: new Date().toISOString().split('T')[0] });
+            users.push({ id: nextUserId++, name: name, email: email, status: status, g1: g1, g2: g2, g3: g3, lastActive: new Date().toISOString().split('T')[0] });
         }
         closeModal('userModal');
         renderAll();
@@ -1204,22 +1204,22 @@ tr:hover { background: var(--card-hover); }
         openModal('deleteModal');
     };
 
-    window.editCircuit = function(key) {
-        var c = circuits[key];
-        document.getElementById('circuitModalTitle').textContent = 'EDIT: ' + c.name;
-        document.getElementById('circuitId').value = key;
-        document.getElementById('circuitSessions').value = c.sessions;
-        document.getElementById('circuitAvg').value = c.avg;
-        document.getElementById('circuitMasters').value = c.masters;
-        openModal('circuitModal');
+    window.editGear = function(key) {
+        var g = gears[key];
+        document.getElementById('gearModalTitle').textContent = 'EDIT: ' + g.name;
+        document.getElementById('gearId').value = key;
+        document.getElementById('gearSessions').value = g.sessions;
+        document.getElementById('gearAvg').value = g.avg;
+        document.getElementById('gearMasters').value = g.masters;
+        openModal('gearModal');
     };
 
-    function saveCircuitStats() {
-        var key = document.getElementById('circuitId').value;
-        circuits[key].sessions = parseInt(document.getElementById('circuitSessions').value) || 0;
-        circuits[key].avg = parseFloat(document.getElementById('circuitAvg').value) || 0;
-        circuits[key].masters = parseInt(document.getElementById('circuitMasters').value) || 0;
-        closeModal('circuitModal');
+    function saveGearStats() {
+        var key = document.getElementById('gearId').value;
+        gears[key].sessions = parseInt(document.getElementById('gearSessions').value) || 0;
+        gears[key].avg = parseFloat(document.getElementById('gearAvg').value) || 0;
+        gears[key].masters = parseInt(document.getElementById('gearMasters').value) || 0;
+        closeModal('gearModal');
         renderAll();
         showToast(currentLang === 'es' ? 'Guardado' : 'Saved');
     }
@@ -1286,7 +1286,7 @@ tr:hover { background: var(--card-hover); }
 
     function exportUsers() {
         var csv = 'Name,Email,Status,Map,Move,Match,LastActive\n';
-        users.forEach(function(u) { csv += u.name + ',' + u.email + ',' + u.status + ',' + tierList[u.c1 - 1] + ',' + tierList[u.c2 - 1] + ',' + tierList[u.c3 - 1] + ',' + u.lastActive + '\n'; });
+        users.forEach(function(u) { csv += u.name + ',' + u.email + ',' + u.status + ',' + shiftList[u.g1 - 1] + ',' + shiftList[u.g2 - 1] + ',' + shiftList[u.g3 - 1] + ',' + u.lastActive + '\n'; });
         var blob = new Blob([csv], {type: 'text/csv'});
         var a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
