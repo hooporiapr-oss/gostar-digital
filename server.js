@@ -6,6 +6,18 @@ const bcrypt = require('bcryptjs');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// ============ STRIPE SETUP ============
+const Stripe = require('stripe');
+const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
+
+// Stripe Price IDs (set these in Render environment variables)
+const PRICE_IDS = {
+    individual_monthly: process.env.STRIPE_PRICE_INDIVIDUAL_MONTHLY,
+    individual_annual: process.env.STRIPE_PRICE_INDIVIDUAL_ANNUAL,
+    family_monthly: process.env.STRIPE_PRICE_FAMILY_MONTHLY,
+    family_annual: process.env.STRIPE_PRICE_FAMILY_ANNUAL
+};
+
 // Admin credentials (legacy Basic Auth)
 const ADMIN_USER = process.env.ADMIN_USER || 'admin';
 const ADMIN_PASS = process.env.ADMIN_PASS || 'GoStar2025';
@@ -13,7 +25,45 @@ const ADMIN_PASS = process.env.ADMIN_PASS || 'GoStar2025';
 // Admin PIN (new dashboard auth)
 const ADMIN_PIN = process.env.ADMIN_PIN || '1234';
 
-// Middleware
+// ============ STRIPE WEBHOOK (must be before JSON parser) ============
+app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), function(req, res) {
+    var sig = req.headers['stripe-signature'];
+    var webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+    
+    var event;
+    try {
+        event = stripe.webhooks.constructEvent(req.body, sig, webhookSecret);
+    } catch (err) {
+        console.error('Webhook signature verification failed:', err.message);
+        return res.status(400).send('Webhook Error: ' + err.message);
+    }
+    
+    // Handle the event
+    switch (event.type) {
+        case 'checkout.session.completed':
+            var session = event.data.object;
+            handleCheckoutComplete(session);
+            break;
+        case 'customer.subscription.updated':
+            var subscription = event.data.object;
+            handleSubscriptionUpdate(subscription);
+            break;
+        case 'customer.subscription.deleted':
+            var subscription = event.data.object;
+            handleSubscriptionCanceled(subscription);
+            break;
+        case 'invoice.payment_failed':
+            var invoice = event.data.object;
+            handlePaymentFailed(invoice);
+            break;
+        default:
+            console.log('Unhandled event type:', event.type);
+    }
+    
+    res.json({ received: true });
+});
+
+// Middleware (after webhook route)
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname));
@@ -24,6 +74,7 @@ const LICENSES_FILE = path.join(DATA_DIR, 'licenses.json');
 const CODES_FILE = path.join(DATA_DIR, 'codes.json');
 const USERS_FILE = path.join(DATA_DIR, 'users.json');
 const ACTIVITY_FILE = path.join(DATA_DIR, 'activity.json');
+const SUBSCRIBERS_FILE = path.join(DATA_DIR, 'subscribers.json');
 
 // Ensure data directory and files exist
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR);
@@ -31,6 +82,7 @@ if (!fs.existsSync(LICENSES_FILE)) fs.writeFileSync(LICENSES_FILE, '[]');
 if (!fs.existsSync(CODES_FILE)) fs.writeFileSync(CODES_FILE, '[]');
 if (!fs.existsSync(USERS_FILE)) fs.writeFileSync(USERS_FILE, '[]');
 if (!fs.existsSync(ACTIVITY_FILE)) fs.writeFileSync(ACTIVITY_FILE, '[]');
+if (!fs.existsSync(SUBSCRIBERS_FILE)) fs.writeFileSync(SUBSCRIBERS_FILE, '[]');
 
 // Helper functions
 function readJSON(file) {
@@ -90,7 +142,10 @@ function generateLicensePin() {
 // Generate unique 4-digit PIN for user login
 function generateUserPin() {
     var users = readJSON(USERS_FILE);
+    var subscribers = readJSON(SUBSCRIBERS_FILE);
     var existingPins = users.map(function(u) { return u.pin; }).filter(function(p) { return p; });
+    var subscriberPins = subscribers.map(function(s) { return s.pin; }).filter(function(p) { return p; });
+    existingPins = existingPins.concat(subscriberPins);
     
     var pin;
     var attempts = 0;
@@ -105,6 +160,476 @@ function generateUserPin() {
 function generateToken() {
     return Buffer.from(Date.now() + '-' + Math.random().toString(36).substring(2, 15)).toString('base64');
 }
+
+// ============ STRIPE WEBHOOK HANDLERS ============
+
+function handleCheckoutComplete(session) {
+    var customerEmail = session.customer_email || session.customer_details?.email;
+    var customerId = session.customer;
+    var subscriptionId = session.subscription;
+    
+    if (!customerEmail) {
+        console.error('No email in checkout session');
+        return;
+    }
+    
+    var subscribers = readJSON(SUBSCRIBERS_FILE);
+    
+    // Check if subscriber exists
+    var existingIndex = -1;
+    for (var i = 0; i < subscribers.length; i++) {
+        if (subscribers[i].email.toLowerCase() === customerEmail.toLowerCase()) {
+            existingIndex = i;
+            break;
+        }
+    }
+    
+    var planType = 'individual'; // default
+    var billingCycle = 'monthly';
+    
+    // Determine plan from price
+    if (session.metadata && session.metadata.plan) {
+        planType = session.metadata.plan;
+    }
+    if (session.metadata && session.metadata.billing) {
+        billingCycle = session.metadata.billing;
+    }
+    
+    if (existingIndex !== -1) {
+        // Update existing subscriber
+        subscribers[existingIndex].stripe_customer_id = customerId;
+        subscribers[existingIndex].stripe_subscription_id = subscriptionId;
+        subscribers[existingIndex].status = 'active';
+        subscribers[existingIndex].plan = planType;
+        subscribers[existingIndex].billing_cycle = billingCycle;
+        subscribers[existingIndex].updated_at = new Date().toISOString();
+    } else {
+        // Create new subscriber
+        var newSubscriber = {
+            email: customerEmail.toLowerCase(),
+            pin: generateUserPin(),
+            stripe_customer_id: customerId,
+            stripe_subscription_id: subscriptionId,
+            plan: planType,
+            billing_cycle: billingCycle,
+            status: 'active',
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+            // Game stats
+            sessions_map: 0,
+            sessions_move: 0,
+            sessions_match: 0,
+            best_map: 0,
+            best_move: 0,
+            best_match: 0,
+            streak: 0
+        };
+        subscribers.push(newSubscriber);
+    }
+    
+    writeJSON(SUBSCRIBERS_FILE, subscribers);
+    logActivity('subscription_created', customerEmail, null, planType + ' ' + billingCycle + ' subscription');
+    console.log('Subscription created for:', customerEmail);
+}
+
+function handleSubscriptionUpdate(subscription) {
+    var customerId = subscription.customer;
+    var status = subscription.status;
+    
+    var subscribers = readJSON(SUBSCRIBERS_FILE);
+    
+    for (var i = 0; i < subscribers.length; i++) {
+        if (subscribers[i].stripe_customer_id === customerId) {
+            subscribers[i].status = status;
+            subscribers[i].updated_at = new Date().toISOString();
+            
+            if (subscription.cancel_at_period_end) {
+                subscribers[i].cancels_at = new Date(subscription.current_period_end * 1000).toISOString();
+            } else {
+                subscribers[i].cancels_at = null;
+            }
+            
+            writeJSON(SUBSCRIBERS_FILE, subscribers);
+            logActivity('subscription_updated', subscribers[i].email, null, 'Status: ' + status);
+            break;
+        }
+    }
+}
+
+function handleSubscriptionCanceled(subscription) {
+    var customerId = subscription.customer;
+    
+    var subscribers = readJSON(SUBSCRIBERS_FILE);
+    
+    for (var i = 0; i < subscribers.length; i++) {
+        if (subscribers[i].stripe_customer_id === customerId) {
+            subscribers[i].status = 'canceled';
+            subscribers[i].updated_at = new Date().toISOString();
+            
+            writeJSON(SUBSCRIBERS_FILE, subscribers);
+            logActivity('subscription_canceled', subscribers[i].email, null, 'Subscription ended');
+            break;
+        }
+    }
+}
+
+function handlePaymentFailed(invoice) {
+    var customerId = invoice.customer;
+    
+    var subscribers = readJSON(SUBSCRIBERS_FILE);
+    
+    for (var i = 0; i < subscribers.length; i++) {
+        if (subscribers[i].stripe_customer_id === customerId) {
+            subscribers[i].status = 'past_due';
+            subscribers[i].updated_at = new Date().toISOString();
+            
+            writeJSON(SUBSCRIBERS_FILE, subscribers);
+            logActivity('payment_failed', subscribers[i].email, null, 'Payment failed');
+            break;
+        }
+    }
+}
+
+// ============ STRIPE API ROUTES ============
+
+// Create Checkout Session
+app.post('/api/stripe/checkout', function(req, res) {
+    var plan = req.body.plan || 'individual';
+    var billing = req.body.billing || 'monthly';
+    var email = req.body.email;
+    
+    // Determine price ID
+    var priceKey = plan + '_' + billing;
+    var priceId = PRICE_IDS[priceKey];
+    
+    if (!priceId) {
+        return res.status(400).json({ error: 'Invalid plan or billing cycle' });
+    }
+    
+    var sessionConfig = {
+        mode: 'subscription',
+        payment_method_types: ['card'],
+        line_items: [{
+            price: priceId,
+            quantity: 1
+        }],
+        success_url: process.env.SITE_URL + '/play.html?success=true&session_id={CHECKOUT_SESSION_ID}',
+        cancel_url: process.env.SITE_URL + '/play.html?canceled=true',
+        metadata: {
+            plan: plan,
+            billing: billing
+        },
+        subscription_data: {
+            trial_period_days: 7,
+            metadata: {
+                plan: plan,
+                billing: billing
+            }
+        }
+    };
+    
+    // Pre-fill email if provided
+    if (email) {
+        sessionConfig.customer_email = email;
+    }
+    
+    stripe.checkout.sessions.create(sessionConfig)
+        .then(function(session) {
+            res.json({ url: session.url, sessionId: session.id });
+        })
+        .catch(function(err) {
+            console.error('Stripe checkout error:', err);
+            res.status(500).json({ error: 'Failed to create checkout session' });
+        });
+});
+
+// Check subscription status by email
+app.get('/api/stripe/status/:email', function(req, res) {
+    var email = req.params.email.toLowerCase();
+    
+    var subscribers = readJSON(SUBSCRIBERS_FILE);
+    var subscriber = null;
+    
+    for (var i = 0; i < subscribers.length; i++) {
+        if (subscribers[i].email === email) {
+            subscriber = subscribers[i];
+            break;
+        }
+    }
+    
+    if (!subscriber) {
+        return res.json({ 
+            subscribed: false,
+            status: null
+        });
+    }
+    
+    var isActive = subscriber.status === 'active' || subscriber.status === 'trialing';
+    
+    res.json({
+        subscribed: isActive,
+        status: subscriber.status,
+        plan: subscriber.plan,
+        billing_cycle: subscriber.billing_cycle,
+        pin: isActive ? subscriber.pin : null,
+        cancels_at: subscriber.cancels_at || null
+    });
+});
+
+// Check subscription status by PIN
+app.get('/api/stripe/status/pin/:pin', function(req, res) {
+    var pin = req.params.pin;
+    
+    var subscribers = readJSON(SUBSCRIBERS_FILE);
+    var subscriber = null;
+    
+    for (var i = 0; i < subscribers.length; i++) {
+        if (subscribers[i].pin === pin) {
+            subscriber = subscribers[i];
+            break;
+        }
+    }
+    
+    if (!subscriber) {
+        return res.json({ 
+            subscribed: false,
+            status: null
+        });
+    }
+    
+    var isActive = subscriber.status === 'active' || subscriber.status === 'trialing';
+    
+    res.json({
+        subscribed: isActive,
+        status: subscriber.status,
+        plan: subscriber.plan,
+        email: subscriber.email,
+        billing_cycle: subscriber.billing_cycle
+    });
+});
+
+// Create Customer Portal session (manage/cancel subscription)
+app.post('/api/stripe/portal', function(req, res) {
+    var email = req.body.email;
+    
+    if (!email) {
+        return res.status(400).json({ error: 'Email required' });
+    }
+    
+    var subscribers = readJSON(SUBSCRIBERS_FILE);
+    var subscriber = null;
+    
+    for (var i = 0; i < subscribers.length; i++) {
+        if (subscribers[i].email.toLowerCase() === email.toLowerCase()) {
+            subscriber = subscribers[i];
+            break;
+        }
+    }
+    
+    if (!subscriber || !subscriber.stripe_customer_id) {
+        return res.status(404).json({ error: 'No subscription found' });
+    }
+    
+    stripe.billingPortal.sessions.create({
+        customer: subscriber.stripe_customer_id,
+        return_url: process.env.SITE_URL + '/play.html'
+    })
+    .then(function(session) {
+        res.json({ url: session.url });
+    })
+    .catch(function(err) {
+        console.error('Portal error:', err);
+        res.status(500).json({ error: 'Failed to create portal session' });
+    });
+});
+
+// Login subscriber with PIN
+app.post('/api/subscriber/login', function(req, res) {
+    var pin = req.body.pin;
+    
+    if (!pin) {
+        return res.status(400).json({ error: 'PIN required' });
+    }
+    
+    var subscribers = readJSON(SUBSCRIBERS_FILE);
+    var subscriber = null;
+    
+    for (var i = 0; i < subscribers.length; i++) {
+        if (subscribers[i].pin === pin) {
+            subscriber = subscribers[i];
+            break;
+        }
+    }
+    
+    if (!subscriber) {
+        return res.status(401).json({ error: 'Invalid PIN' });
+    }
+    
+    var isActive = subscriber.status === 'active' || subscriber.status === 'trialing';
+    
+    if (!isActive) {
+        return res.status(401).json({ error: 'Subscription inactive. Please renew.' });
+    }
+    
+    logActivity('subscriber_login', subscriber.email, null, 'Subscriber logged in');
+    
+    res.json({
+        success: true,
+        email: subscriber.email,
+        plan: subscriber.plan,
+        status: subscriber.status
+    });
+});
+
+// Track subscriber game session
+app.post('/api/subscriber/session', function(req, res) {
+    var pin = req.body.pin;
+    var game = req.body.game;
+    var score = req.body.score;
+    
+    if (!pin || !game) {
+        return res.status(400).json({ error: 'PIN and game required' });
+    }
+    
+    var validGames = ['map', 'move', 'match'];
+    if (validGames.indexOf(game) === -1) {
+        return res.status(400).json({ error: 'Invalid game type' });
+    }
+    
+    var subscribers = readJSON(SUBSCRIBERS_FILE);
+    var subIndex = -1;
+    
+    for (var i = 0; i < subscribers.length; i++) {
+        if (subscribers[i].pin === pin) {
+            subIndex = i;
+            break;
+        }
+    }
+    
+    if (subIndex === -1) {
+        return res.status(404).json({ error: 'Subscriber not found' });
+    }
+    
+    var subscriber = subscribers[subIndex];
+    var isActive = subscriber.status === 'active' || subscriber.status === 'trialing';
+    
+    if (!isActive) {
+        return res.status(401).json({ error: 'Subscription inactive' });
+    }
+    
+    // Update session count
+    var sessionKey = 'sessions_' + game;
+    if (!subscribers[subIndex][sessionKey]) {
+        subscribers[subIndex][sessionKey] = 0;
+    }
+    subscribers[subIndex][sessionKey]++;
+    
+    // Update best score
+    if (score !== undefined) {
+        var bestKey = 'best_' + game;
+        if (!subscribers[subIndex][bestKey] || score > subscribers[subIndex][bestKey]) {
+            subscribers[subIndex][bestKey] = score;
+        }
+    }
+    
+    // Update streak
+    var today = new Date().toISOString().split('T')[0];
+    var lastStreakDate = subscribers[subIndex].lastStreakDate;
+    
+    if (!lastStreakDate) {
+        subscribers[subIndex].streak = 1;
+        subscribers[subIndex].lastStreakDate = today;
+    } else if (lastStreakDate !== today) {
+        var lastDate = new Date(lastStreakDate);
+        var todayDate = new Date(today);
+        var diffDays = Math.floor((todayDate - lastDate) / (1000 * 60 * 60 * 24));
+        
+        if (diffDays === 1) {
+            subscribers[subIndex].streak = (subscribers[subIndex].streak || 0) + 1;
+        } else if (diffDays > 1) {
+            subscribers[subIndex].streak = 1;
+        }
+        subscribers[subIndex].lastStreakDate = today;
+    }
+    
+    subscribers[subIndex].lastActive = new Date().toISOString();
+    writeJSON(SUBSCRIBERS_FILE, subscribers);
+    
+    res.json({
+        success: true,
+        sessions: subscribers[subIndex][sessionKey],
+        streak: subscribers[subIndex].streak,
+        personalBest: subscribers[subIndex]['best_' + game]
+    });
+});
+
+// Get subscriber stats
+app.get('/api/subscriber/stats/:pin', function(req, res) {
+    var pin = req.params.pin;
+    
+    var subscribers = readJSON(SUBSCRIBERS_FILE);
+    var subscriber = null;
+    
+    for (var i = 0; i < subscribers.length; i++) {
+        if (subscribers[i].pin === pin) {
+            subscriber = subscribers[i];
+            break;
+        }
+    }
+    
+    if (!subscriber) {
+        return res.status(404).json({ error: 'Subscriber not found' });
+    }
+    
+    res.json({
+        success: true,
+        email: subscriber.email,
+        plan: subscriber.plan,
+        status: subscriber.status,
+        stats: {
+            sessions: {
+                map: subscriber.sessions_map || 0,
+                move: subscriber.sessions_move || 0,
+                match: subscriber.sessions_match || 0
+            },
+            totalSessions: (subscriber.sessions_map || 0) + (subscriber.sessions_move || 0) + (subscriber.sessions_match || 0),
+            streak: subscriber.streak || 0,
+            personalBests: {
+                map: subscriber.best_map || 0,
+                move: subscriber.best_move || 0,
+                match: subscriber.best_match || 0
+            }
+        }
+    });
+});
+
+// ============ ADMIN: View Subscribers ============
+
+app.get('/api/admin/subscribers', adminTokenAuth, function(req, res) {
+    try {
+        var subscribers = readJSON(SUBSCRIBERS_FILE);
+        
+        var result = subscribers.map(function(s, index) {
+            return {
+                id: index,
+                email: s.email,
+                pin: s.pin,
+                plan: s.plan,
+                billing_cycle: s.billing_cycle,
+                status: s.status,
+                created_at: s.created_at,
+                sessions_total: (s.sessions_map || 0) + (s.sessions_move || 0) + (s.sessions_match || 0),
+                streak: s.streak || 0,
+                last_active: s.lastActive || s.created_at
+            };
+        });
+        
+        res.json({ success: true, subscribers: result });
+    } catch (err) {
+        console.error('Error fetching subscribers:', err);
+        res.json({ success: true, subscribers: [] });
+    }
+});
 
 // Basic Auth for Admin (legacy)
 function adminAuth(req, res, next) {
@@ -1209,7 +1734,8 @@ app.post('/api/trial/register', function(req, res) {
 // ============ START SERVER ============
 
 app.listen(PORT, function() {
-    console.log('GoStar Digital running on port ' + PORT);
+    console.log('GoTrotters running on port ' + PORT);
     console.log('Admin Dashboard: /admin-dashboard');
     console.log('Legacy Admin: /admin');
+    console.log('Stripe integration: ' + (process.env.STRIPE_SECRET_KEY ? 'ENABLED' : 'NOT CONFIGURED'));
 });
