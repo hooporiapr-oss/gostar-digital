@@ -386,8 +386,10 @@ td { font-size: 0.9rem; }
 tr:hover { background: var(--card-hover); }
 
 .badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-.badge-trial { background: rgba(155,89,182,0.15); color: var(--purple); }
-.badge-paid { background: rgba(0,217,165,0.15); color: var(--teal); }
+.badge-trial, .badge-trialing { background: rgba(155,89,182,0.15); color: var(--purple); }
+.badge-paid, .badge-active { background: rgba(0,217,165,0.15); color: var(--teal); }
+.badge-canceled { background: rgba(255,71,87,0.15); color: var(--danger); }
+.badge-past_due { background: rgba(255,215,0,0.15); color: var(--gold); }
 
 .shift-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 6px; font-size: 0.65rem; font-weight: 700; }
 .shift-badge.practice { background: rgba(155,89,182,0.2); color: #b57edc; }
@@ -447,6 +449,9 @@ tr:hover { background: var(--card-hover); }
 
 .activity-icon.user { background: rgba(0,217,165,0.15); color: var(--teal); }
 .activity-icon.gear { background: rgba(155,89,182,0.15); color: var(--purple); }
+.activity-icon.subscription { background: rgba(255,107,0,0.15); color: var(--orange); }
+.activity-icon.game { background: rgba(59,130,246,0.15); color: var(--blue); }
+.activity-icon.facility { background: rgba(255,215,0,0.15); color: var(--gold); }
 .activity-content { flex: 1; }
 .activity-text { font-size: 0.9rem; margin-bottom: 3px; }
 .activity-time { font-size: 0.75rem; color: var(--muted); }
@@ -541,6 +546,27 @@ tr:hover { background: var(--card-hover); }
 .toast-icon { font-size: 1.2rem; }
 .toast-text { font-size: 0.9rem; }
 
+.loading-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--muted);
+    border-top-color: var(--orange);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--muted);
+}
+
+.empty-state-icon { font-size: 3rem; margin-bottom: 15px; }
+.empty-state-text { font-size: 1rem; }
+
 @media (max-width: 1024px) {
     .sidebar { width: 80px; padding: 15px 0; }
     .sidebar-header { padding: 0 10px 15px; }
@@ -603,15 +629,15 @@ tr:hover { background: var(--card-hover); }
                 <span class="lang-en">Overview</span>
                 <span class="lang-es">Resumen</span>
             </button>
-            <button class="nav-item" data-page="team">
-                <span class="nav-item-icon">🏀</span>
-                <span class="lang-en">Team Members</span>
-                <span class="lang-es">Miembros</span>
+            <button class="nav-item" data-page="subscribers">
+                <span class="nav-item-icon">💳</span>
+                <span class="lang-en">Subscribers</span>
+                <span class="lang-es">Suscriptores</span>
             </button>
-            <button class="nav-item" data-page="gears">
-                <span class="nav-item-icon">⚙️</span>
-                <span class="lang-en">M³ Performance Engine</span>
-                <span class="lang-es">Motor de Rendimiento M³</span>
+            <button class="nav-item" data-page="facilities">
+                <span class="nav-item-icon">🏢</span>
+                <span class="lang-en">Facilities</span>
+                <span class="lang-es">Centros</span>
             </button>
             <button class="nav-item" data-page="activity">
                 <span class="nav-item-icon">📋</span>
@@ -632,79 +658,154 @@ tr:hover { background: var(--card-hover); }
     </aside>
 
     <main class="main-content">
+        <!-- OVERVIEW PAGE -->
         <section class="page-section active" id="page-overview">
             <header class="page-header">
-                <h1 class="page-title">TEAM GOTROTTERS</h1>
+                <h1 class="page-title">GOTROTTERS ADMIN</h1>
                 <p class="page-subtitle">
-                    <span class="lang-en">Coach Dashboard • M³ Performance Engine • 10-Shift Structure</span>
-                    <span class="lang-es">Panel del Coach • Motor de Rendimiento M³ • Estructura 10 Cambios</span>
+                    <span class="lang-en">Platform Overview • Subscribers & Facilities</span>
+                    <span class="lang-es">Resumen de Plataforma • Suscriptores y Centros</span>
                 </p>
             </header>
-            <div class="team-banner">
-                <div class="team-banner-text">
-                    <span class="lang-en">Membership:</span>
-                    <span class="lang-es">Membresía:</span> 
-                    <strong>$5<span class="lang-en">/month per member</span><span class="lang-es">/mes por miembro</span></strong>
-                </div>
-                <div class="team-banner-badge">
-                    <span class="lang-en">Join the Team</span>
-                    <span class="lang-es">Únete al Equipo</span>
-                </div>
-            </div>
             <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="stat-card-icon teal">🏀</div>
-                    <div class="stat-card-value" id="totalUsers">8</div>
+                    <div class="stat-card-icon teal">💳</div>
+                    <div class="stat-card-value" id="totalSubscribers">0</div>
                     <div class="stat-card-label">
-                        <span class="lang-en">Team Members</span>
-                        <span class="lang-es">Miembros</span>
+                        <span class="lang-en">Subscribers</span>
+                        <span class="lang-es">Suscriptores</span>
                     </div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-card-icon orange">💰</div>
-                    <div class="stat-card-value">$<span id="monthlyRevenue">30</span></div>
+                    <div class="stat-card-icon orange">🏢</div>
+                    <div class="stat-card-value" id="totalFacilities">0</div>
                     <div class="stat-card-label">
-                        <span class="lang-en">Monthly Revenue</span>
-                        <span class="lang-es">Ingreso Mensual</span>
+                        <span class="lang-en">Facilities</span>
+                        <span class="lang-es">Centros</span>
                     </div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-card-icon gold">🆓</div>
-                    <div class="stat-card-value" id="trialUsers">2</div>
+                    <div class="stat-card-icon gold">👥</div>
+                    <div class="stat-card-value" id="totalUsers">0</div>
                     <div class="stat-card-label">
-                        <span class="lang-en">On Trial</span>
+                        <span class="lang-en">Facility Users</span>
+                        <span class="lang-es">Usuarios de Centros</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-icon purple">🎮</div>
+                    <div class="stat-card-value" id="totalSessions">0</div>
+                    <div class="stat-card-label">
+                        <span class="lang-en">Total Sessions</span>
+                        <span class="lang-es">Sesiones Totales</span>
+                    </div>
+                </div>
+            </div>
+            <div class="table-card">
+                <div class="table-header">
+                    <h3 class="table-title">
+                        <span class="lang-en">RECENT ACTIVITY</span>
+                        <span class="lang-es">ACTIVIDAD RECIENTE</span>
+                    </h3>
+                </div>
+                <div class="activity-list" id="overviewActivity"></div>
+            </div>
+        </section>
+
+        <!-- SUBSCRIBERS PAGE -->
+        <section class="page-section" id="page-subscribers">
+            <header class="page-header">
+                <h1 class="page-title">
+                    <span class="lang-en">SUBSCRIBERS</span>
+                    <span class="lang-es">SUSCRIPTORES</span>
+                </h1>
+                <p class="page-subtitle">
+                    <span class="lang-en">Stripe subscription management</span>
+                    <span class="lang-es">Gestión de suscripciones Stripe</span>
+                </p>
+            </header>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-card-icon teal">✅</div>
+                    <div class="stat-card-value" id="activeSubscribers">0</div>
+                    <div class="stat-card-label">
+                        <span class="lang-en">Active</span>
+                        <span class="lang-es">Activos</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-icon purple">🆓</div>
+                    <div class="stat-card-value" id="trialingSubscribers">0</div>
+                    <div class="stat-card-label">
+                        <span class="lang-en">Trialing</span>
                         <span class="lang-es">En Prueba</span>
                     </div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-card-icon purple">👑</div>
-                    <div class="stat-card-value" id="totalMasters">1</div>
-                    <div class="stat-card-label">MASTER 10</div>
+                    <div class="stat-card-icon gold">👨‍👩‍👧‍👦</div>
+                    <div class="stat-card-value" id="familyPlans">0</div>
+                    <div class="stat-card-label">
+                        <span class="lang-en">Family Plans</span>
+                        <span class="lang-es">Planes Familiares</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-icon orange">👤</div>
+                    <div class="stat-card-value" id="individualPlans">0</div>
+                    <div class="stat-card-label">
+                        <span class="lang-en">Individual Plans</span>
+                        <span class="lang-es">Planes Individuales</span>
+                    </div>
                 </div>
             </div>
-            <div class="gear-cards-grid" id="overviewGears"></div>
+            <div class="table-card">
+                <div class="table-header">
+                    <h3 class="table-title">ALL SUBSCRIBERS</h3>
+                    <div class="table-actions">
+                        <button class="btn btn-secondary" id="refreshSubscribersBtn">🔄 
+                            <span class="lang-en">Refresh</span>
+                            <span class="lang-es">Actualizar</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Email</th>
+                                <th>PIN</th>
+                                <th><span class="lang-en">Plan</span><span class="lang-es">Plan</span></th>
+                                <th><span class="lang-en">Status</span><span class="lang-es">Estado</span></th>
+                                <th><span class="lang-en">Family</span><span class="lang-es">Familia</span></th>
+                                <th><span class="lang-en">Created</span><span class="lang-es">Creado</span></th>
+                            </tr>
+                        </thead>
+                        <tbody id="subscribersTable"></tbody>
+                    </table>
+                </div>
+            </div>
         </section>
 
-        <section class="page-section" id="page-team">
+        <!-- FACILITIES PAGE -->
+        <section class="page-section" id="page-facilities">
             <header class="page-header">
                 <h1 class="page-title">
-                    <span class="lang-en">TEAM MEMBERS</span>
-                    <span class="lang-es">MIEMBROS DEL EQUIPO</span>
+                    <span class="lang-en">FACILITIES</span>
+                    <span class="lang-es">CENTROS</span>
                 </h1>
                 <p class="page-subtitle">
-                    <span class="lang-en">All GoTrotters • $5/month per member</span>
-                    <span class="lang-es">Todos los GoTrotters • $5/mes por miembro</span>
+                    <span class="lang-en">Nursing homes & facilities</span>
+                    <span class="lang-es">Hogares de ancianos y centros</span>
                 </p>
             </header>
             <div class="table-card">
                 <div class="table-header">
-                    <h3 class="table-title">ALL GOTROTTERS</h3>
+                    <h3 class="table-title">ALL FACILITIES</h3>
                     <div class="table-actions">
-                        <button class="btn btn-primary" id="addUserBtn">+ 
-                            <span class="lang-en">Add Member</span>
-                            <span class="lang-es">Agregar</span>
+                        <button class="btn btn-secondary" id="refreshFacilitiesBtn">🔄 
+                            <span class="lang-en">Refresh</span>
+                            <span class="lang-es">Actualizar</span>
                         </button>
-                        <button class="btn btn-secondary" id="exportBtn">📥 Export</button>
                     </div>
                 </div>
                 <div class="table-container">
@@ -712,43 +813,20 @@ tr:hover { background: var(--card-hover); }
                         <thead>
                             <tr>
                                 <th><span class="lang-en">Name</span><span class="lang-es">Nombre</span></th>
-                                <th>Email</th>
+                                <th><span class="lang-en">License</span><span class="lang-es">Licencia</span></th>
+                                <th><span class="lang-en">Users</span><span class="lang-es">Usuarios</span></th>
+                                <th><span class="lang-en">Sessions</span><span class="lang-es">Sesiones</span></th>
                                 <th><span class="lang-en">Status</span><span class="lang-es">Estado</span></th>
-                                <th>🧠</th>
-                                <th>⚡</th>
-                                <th>👁️</th>
-                                <th><span class="lang-en">Last Active</span><span class="lang-es">Última Vez</span></th>
-                                <th><span class="lang-en">Actions</span><span class="lang-es">Acciones</span></th>
+                                <th><span class="lang-en">Expires</span><span class="lang-es">Expira</span></th>
                             </tr>
                         </thead>
-                        <tbody id="usersTable"></tbody>
+                        <tbody id="facilitiesTable"></tbody>
                     </table>
                 </div>
             </div>
         </section>
 
-        <section class="page-section" id="page-gears">
-            <header class="page-header">
-                <h1 class="page-title">THE M³ GEARS</h1>
-                <p class="page-subtitle">
-                    <span class="lang-en">Three gears • 10-shift progression • Coach-led</span>
-                    <span class="lang-es">Tres engranajes • Progresión de 10 cambios • Guiado por Coach</span>
-                </p>
-            </header>
-            <div class="gear-cards-grid" id="gearsAnalytics"></div>
-            <div class="table-card">
-                <div class="table-header">
-                    <h3 class="table-title">10-SHIFT DISTRIBUTION</h3>
-                </div>
-                <div class="table-container" style="padding:20px">
-                    <table class="shift-dist-table">
-                        <thead><tr><th>Shift</th><th>🧠</th><th>⚡</th><th>👁️</th></tr></thead>
-                        <tbody id="shiftDistTable"></tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
+        <!-- ACTIVITY PAGE -->
         <section class="page-section" id="page-activity">
             <header class="page-header">
                 <h1 class="page-title">
@@ -756,24 +834,20 @@ tr:hover { background: var(--card-hover); }
                     <span class="lang-es">REGISTRO DE ACTIVIDAD</span>
                 </h1>
                 <p class="page-subtitle">
-                    <span class="lang-en">Recent team activity</span>
-                    <span class="lang-es">Actividad reciente del equipo</span>
+                    <span class="lang-en">All platform activity</span>
+                    <span class="lang-es">Toda la actividad de la plataforma</span>
                 </p>
             </header>
             <div class="table-card">
                 <div class="table-header">
                     <h3 class="table-title">
-                        <span class="lang-en">RECENT ACTIVITY</span>
-                        <span class="lang-es">ACTIVIDAD RECIENTE</span>
+                        <span class="lang-en">ALL ACTIVITY</span>
+                        <span class="lang-es">TODA LA ACTIVIDAD</span>
                     </h3>
                     <div class="table-actions">
-                        <button class="btn btn-primary" id="addActivityBtn">+ 
-                            <span class="lang-en">Add Entry</span>
-                            <span class="lang-es">Agregar</span>
-                        </button>
-                        <button class="btn btn-danger" id="clearActivityBtn">
-                            <span class="lang-en">Clear All</span>
-                            <span class="lang-es">Limpiar Todo</span>
+                        <button class="btn btn-secondary" id="refreshActivityBtn">🔄 
+                            <span class="lang-en">Refresh</span>
+                            <span class="lang-es">Actualizar</span>
                         </button>
                     </div>
                 </div>
@@ -781,54 +855,6 @@ tr:hover { background: var(--card-hover); }
             </div>
         </section>
     </main>
-</div>
-
-<div class="modal-overlay" id="userModal">
-    <div class="modal">
-        <div class="modal-header">
-            <h3 class="modal-title" id="userModalTitle">ADD GOTROTTER</h3>
-            <button class="modal-close" data-close="userModal">×</button>
-        </div>
-        <div class="modal-body">
-            <input type="hidden" id="userId">
-            <div class="form-group">
-                <label class="form-label"><span class="lang-en">Name</span><span class="lang-es">Nombre</span></label>
-                <input type="text" class="form-input" id="userName" placeholder="John Smith">
-            </div>
-            <div class="form-group">
-                <label class="form-label">Email</label>
-                <input type="email" class="form-input" id="userEmail" placeholder="john@email.com">
-            </div>
-            <div class="form-group">
-                <label class="form-label"><span class="lang-en">Status</span><span class="lang-es">Estado</span></label>
-                <select class="form-select" id="userStatus">
-                    <option value="trial">Trial (7 days free)</option>
-                    <option value="paid">Paid ($5/month)</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label class="form-label">10-Shift Structure</label>
-                <div class="form-row">
-                    <div>
-                        <label class="form-label" style="font-size:0.7rem">🧠 Map</label>
-                        <select class="form-select" id="userG1"></select>
-                    </div>
-                    <div>
-                        <label class="form-label" style="font-size:0.7rem">⚡ Move</label>
-                        <select class="form-select" id="userG2"></select>
-                    </div>
-                    <div>
-                        <label class="form-label" style="font-size:0.7rem">👁️ Match</label>
-                        <select class="form-select" id="userG3"></select>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-secondary" data-close="userModal"><span class="lang-en">Cancel</span><span class="lang-es">Cancelar</span></button>
-            <button class="btn btn-primary" id="saveUserBtn"><span class="lang-en">Save</span><span class="lang-es">Guardar</span></button>
-        </div>
-    </div>
 </div>
 
 <div class="modal-overlay" id="deleteModal">
@@ -851,65 +877,6 @@ tr:hover { background: var(--card-hover); }
     </div>
 </div>
 
-<div class="modal-overlay" id="gearModal">
-    <div class="modal">
-        <div class="modal-header">
-            <h3 class="modal-title" id="gearModalTitle">EDIT GEAR</h3>
-            <button class="modal-close" data-close="gearModal">×</button>
-        </div>
-        <div class="modal-body">
-            <input type="hidden" id="gearId">
-            <div class="form-group">
-                <label class="form-label"><span class="lang-en">Total Sessions</span><span class="lang-es">Sesiones Totales</span></label>
-                <input type="number" class="form-input" id="gearSessions" min="0">
-            </div>
-            <div class="form-group">
-                <label class="form-label"><span class="lang-en">Average Shift</span><span class="lang-es">Cambio Promedio</span></label>
-                <input type="number" class="form-input" id="gearAvg" min="1" max="10" step="0.1">
-            </div>
-            <div class="form-group">
-                <label class="form-label"><span class="lang-en">Masters Count</span><span class="lang-es">Cantidad de Masters</span></label>
-                <input type="number" class="form-input" id="gearMasters" min="0">
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-secondary" data-close="gearModal"><span class="lang-en">Cancel</span><span class="lang-es">Cancelar</span></button>
-            <button class="btn btn-primary" id="saveGearBtn"><span class="lang-en">Save</span><span class="lang-es">Guardar</span></button>
-        </div>
-    </div>
-</div>
-
-<div class="modal-overlay" id="activityModal">
-    <div class="modal">
-        <div class="modal-header">
-            <h3 class="modal-title" id="activityModalTitle">ADD ACTIVITY</h3>
-            <button class="modal-close" data-close="activityModal">×</button>
-        </div>
-        <div class="modal-body">
-            <input type="hidden" id="activityId">
-            <div class="form-group">
-                <label class="form-label"><span class="lang-en">Type</span><span class="lang-es">Tipo</span></label>
-                <select class="form-select" id="activityType">
-                    <option value="user">🏀 Team Activity</option>
-                    <option value="gear">⚙️ Gear Progress</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label class="form-label"><span class="lang-en">Description</span><span class="lang-es">Descripción</span></label>
-                <input type="text" class="form-input" id="activityText" placeholder="Carmen Rivera reached MASTER 10">
-            </div>
-            <div class="form-group">
-                <label class="form-label"><span class="lang-en">Time</span><span class="lang-es">Tiempo</span></label>
-                <input type="text" class="form-input" id="activityTime" placeholder="5 minutes ago">
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-secondary" data-close="activityModal"><span class="lang-en">Cancel</span><span class="lang-es">Cancelar</span></button>
-            <button class="btn btn-primary" id="saveActivityBtn"><span class="lang-en">Save</span><span class="lang-es">Guardar</span></button>
-        </div>
-    </div>
-</div>
-
 <div class="toast" id="toast">
     <span class="toast-icon" id="toastIcon">✓</span>
     <span class="toast-text" id="toastText">Saved</span>
@@ -919,46 +886,23 @@ tr:hover { background: var(--card-hover); }
 (function() {
     'use strict';
 
-    // 10-SHIFT STRUCTURE
-    var shiftList = ['PRACTICE 1','PRACTICE 2','SHIFT 3','SHIFT 4','SHIFT 5','SHIFT 6','SHIFT 7','SHIFT 8','SHIFT 9','MASTER 10'];
-    var shiftClasses = ['practice','practice','level3','level4','level5','level6','level7','level8','level9','master'];
-
-    // THE M³ GEARS
-    var gears = {
-        g1: {name: 'MAP', icon: '🧠', label: 'Gear 1', sessions: 245, avg: 4.2, masters: 1},
-        g2: {name: 'MOVE', icon: '⚡', label: 'Gear 2', sessions: 187, avg: 3.8, masters: 0},
-        g3: {name: 'MATCH', icon: '👁️', label: 'Gear 3', sessions: 156, avg: 3.5, masters: 0}
-    };
-
-    // TEAM GOTROTTERS
-    var users = [
-        {id:1, name:'María García', email:'maria@email.com', status:'paid', g1:5, g2:4, g3:3, lastActive:'2026-01-09'},
-        {id:2, name:'Roberto López', email:'roberto@email.com', status:'paid', g1:7, g2:6, g3:5, lastActive:'2026-01-09'},
-        {id:3, name:'Carmen Rivera', email:'carmen@email.com', status:'paid', g1:10, g2:8, g3:7, lastActive:'2026-01-08'},
-        {id:4, name:'José Martínez', email:'jose@email.com', status:'paid', g1:3, g2:2, g3:2, lastActive:'2026-01-09'},
-        {id:5, name:'Ana Rodríguez', email:'ana@email.com', status:'trial', g1:2, g2:1, g3:1, lastActive:'2026-01-07'},
-        {id:6, name:'Pedro Santos', email:'pedro@email.com', status:'paid', g1:4, g2:3, g3:3, lastActive:'2026-01-09'},
-        {id:7, name:'Luis Hernández', email:'luis@email.com', status:'paid', g1:8, g2:7, g3:6, lastActive:'2026-01-08'},
-        {id:8, name:'Rosa Díaz', email:'rosa@email.com', status:'trial', g1:1, g2:1, g3:1, lastActive:'2026-01-09'}
-    ];
-
-    var activities = [
-        {id:1, type:'user', text:'Rosa Díaz joined Team GoTrotters (trial)', time:'5 minutes ago'},
-        {id:2, type:'gear', text:'Roberto López reached SHIFT 8 in Map', time:'12 minutes ago'},
-        {id:3, type:'user', text:'Pedro Santos converted to paid ($5/mo)', time:'1 hour ago'},
-        {id:4, type:'gear', text:'Carmen Rivera reached MASTER 10! 👑', time:'3 hours ago'},
-        {id:5, type:'user', text:'Ana Rodríguez joined Team GoTrotters (trial)', time:'1 day ago'}
-    ];
-
-    var nextUserId = 9, nextActivityId = 6, deleteTarget = null;
+    var authToken = null;
+    var subscribers = [];
+    var facilities = [];
+    var users = [];
+    var activities = [];
     var currentLang = localStorage.getItem('gt-admin-lang') || 'en';
 
     function init() {
         setLang(currentLang);
         setupPinInputs();
         setupEventListeners();
-        populateShiftSelects();
-        if (sessionStorage.getItem('gostar-admin-auth') === 'true') showDashboard();
+        
+        // Check existing session
+        var savedToken = sessionStorage.getItem('gostar-admin-token');
+        if (savedToken) {
+            verifyToken(savedToken);
+        }
     }
 
     function setLang(lang) {
@@ -972,7 +916,9 @@ tr:hover { background: var(--card-hover); }
     function setupPinInputs() {
         var pins = [document.getElementById('pin1'), document.getElementById('pin2'), document.getElementById('pin3'), document.getElementById('pin4')];
         pins.forEach(function(input, idx) {
-            input.addEventListener('input', function() { if (this.value.length === 1 && idx < 3) pins[idx + 1].focus(); });
+            input.addEventListener('input', function() { 
+                if (this.value.length === 1 && idx < 3) pins[idx + 1].focus(); 
+            });
             input.addEventListener('keydown', function(e) {
                 if (e.key === 'Backspace' && this.value === '' && idx > 0) pins[idx - 1].focus();
                 if (e.key === 'Enter') attemptLogin();
@@ -984,25 +930,71 @@ tr:hover { background: var(--card-hover); }
     function attemptLogin() {
         var pin = '';
         for (var i = 1; i <= 4; i++) pin += document.getElementById('pin' + i).value;
-        if (pin === '1628') {
-            sessionStorage.setItem('gostar-admin-auth', 'true');
-            showDashboard();
-        } else {
-            document.getElementById('loginError').classList.add('show');
-            for (var i = 1; i <= 4; i++) document.getElementById('pin' + i).value = '';
-            document.getElementById('pin1').focus();
-            setTimeout(function() { document.getElementById('loginError').classList.remove('show'); }, 3000);
-        }
+        
+        if (pin.length !== 4) return;
+        
+        fetch('/api/admin/verify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ pin: pin })
+        })
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+            if (data.success && data.token) {
+                authToken = data.token;
+                sessionStorage.setItem('gostar-admin-token', authToken);
+                showDashboard();
+            } else {
+                showLoginError();
+            }
+        })
+        .catch(function(err) {
+            console.error('Login error:', err);
+            showLoginError();
+        });
+    }
+
+    function verifyToken(token) {
+        fetch('/api/admin/verify-token', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token: token })
+        })
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+            if (data.success) {
+                authToken = token;
+                showDashboard();
+            } else {
+                sessionStorage.removeItem('gostar-admin-token');
+            }
+        })
+        .catch(function() {
+            sessionStorage.removeItem('gostar-admin-token');
+        });
+    }
+
+    function showLoginError() {
+        document.getElementById('loginError').classList.add('show');
+        for (var i = 1; i <= 4; i++) document.getElementById('pin' + i).value = '';
+        document.getElementById('pin1').focus();
+        setTimeout(function() { document.getElementById('loginError').classList.remove('show'); }, 3000);
     }
 
     function showDashboard() {
         document.getElementById('loginScreen').classList.add('hidden');
         document.getElementById('dashboard').classList.add('visible');
-        renderAll();
+        loadAllData();
     }
 
     function logout() {
-        sessionStorage.removeItem('gostar-admin-auth');
+        fetch('/api/admin/logout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token: authToken })
+        });
+        authToken = null;
+        sessionStorage.removeItem('gostar-admin-token');
         document.getElementById('dashboard').classList.remove('visible');
         document.getElementById('loginScreen').classList.remove('hidden');
         for (var i = 1; i <= 4; i++) document.getElementById('pin' + i).value = '';
@@ -1028,18 +1020,9 @@ tr:hover { background: var(--card-hover); }
             btn.addEventListener('click', function() { closeModal(this.getAttribute('data-close')); });
         });
 
-        document.getElementById('addUserBtn').addEventListener('click', openAddUserModal);
-        document.getElementById('saveUserBtn').addEventListener('click', saveUser);
-        document.getElementById('exportBtn').addEventListener('click', exportUsers);
-        document.getElementById('addActivityBtn').addEventListener('click', openAddActivityModal);
-        document.getElementById('saveActivityBtn').addEventListener('click', saveActivity);
-        document.getElementById('clearActivityBtn').addEventListener('click', function() {
-            deleteTarget = {type: 'clearActivity'};
-            document.getElementById('deleteText').textContent = currentLang === 'es' ? 'Esto eliminará todas las entradas.' : 'This will remove all entries.';
-            openModal('deleteModal');
-        });
-        document.getElementById('saveGearBtn').addEventListener('click', saveGearStats);
-        document.getElementById('confirmDeleteBtn').addEventListener('click', confirmDelete);
+        document.getElementById('refreshSubscribersBtn').addEventListener('click', loadSubscribers);
+        document.getElementById('refreshFacilitiesBtn').addEventListener('click', loadFacilities);
+        document.getElementById('refreshActivityBtn').addEventListener('click', loadActivity);
 
         document.querySelectorAll('.modal-overlay').forEach(function(overlay) {
             overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.classList.remove('show'); });
@@ -1063,236 +1046,230 @@ tr:hover { background: var(--card-hover); }
         setTimeout(function() { toast.classList.remove('show'); }, 3000);
     }
 
-    function getShiftBadge(level) {
-        var idx = Math.min(Math.max(level - 1, 0), 9);
-        return '<span class="shift-badge ' + shiftClasses[idx] + '">' + shiftList[idx] + '</span>';
+    function apiGet(endpoint) {
+        return fetch(endpoint, {
+            headers: { 'Authorization': 'Bearer ' + authToken }
+        }).then(function(res) { return res.json(); });
     }
 
-    function getStatusBadge(status) {
-        return '<span class="badge badge-' + status + '">' + (status === 'trial' ? 'Trial' : 'Paid') + '</span>';
+    function loadAllData() {
+        loadSubscribers();
+        loadFacilities();
+        loadActivity();
     }
 
-    function populateShiftSelects() {
-        var html = '';
-        shiftList.forEach(function(shift, idx) { html += '<option value="' + (idx + 1) + '">' + (idx + 1) + ' - ' + shift + '</option>'; });
-        ['userG1', 'userG2', 'userG3'].forEach(function(id) { document.getElementById(id).innerHTML = html; });
+    function loadSubscribers() {
+        apiGet('/api/admin/subscribers')
+            .then(function(data) {
+                if (data.success) {
+                    subscribers = data.subscribers || [];
+                    renderSubscribers();
+                    updateOverviewStats();
+                }
+            })
+            .catch(function(err) {
+                console.error('Error loading subscribers:', err);
+                subscribers = [];
+                renderSubscribers();
+            });
     }
 
-    function renderAll() {
-        renderStats();
-        renderOverviewGears();
-        renderUsersTable();
-        renderGearsAnalytics();
-        renderShiftDistribution();
-        renderActivityList();
+    function loadFacilities() {
+        apiGet('/api/admin/facilities')
+            .then(function(data) {
+                if (data.success) {
+                    facilities = data.facilities || [];
+                    renderFacilities();
+                    updateOverviewStats();
+                }
+            })
+            .catch(function(err) {
+                console.error('Error loading facilities:', err);
+                facilities = [];
+                renderFacilities();
+            });
+
+        apiGet('/api/admin/users')
+            .then(function(data) {
+                if (data.success) {
+                    users = data.users || [];
+                    updateOverviewStats();
+                }
+            })
+            .catch(function(err) {
+                console.error('Error loading users:', err);
+                users = [];
+            });
     }
 
-    function renderStats() {
-        var paid = users.filter(function(u) { return u.status === 'paid'; }).length;
-        var trial = users.filter(function(u) { return u.status === 'trial'; }).length;
-        var masters = users.filter(function(u) { return u.g1 === 10 || u.g2 === 10 || u.g3 === 10; }).length;
+    function loadActivity() {
+        apiGet('/api/admin/activity')
+            .then(function(data) {
+                if (data.success) {
+                    activities = data.activities || [];
+                    renderActivity();
+                    renderOverviewActivity();
+                }
+            })
+            .catch(function(err) {
+                console.error('Error loading activity:', err);
+                activities = [];
+                renderActivity();
+            });
+    }
+
+    function updateOverviewStats() {
+        document.getElementById('totalSubscribers').textContent = subscribers.length;
+        document.getElementById('totalFacilities').textContent = facilities.length;
         document.getElementById('totalUsers').textContent = users.length;
-        document.getElementById('monthlyRevenue').textContent = paid * 5;
-        document.getElementById('trialUsers').textContent = trial;
-        document.getElementById('totalMasters').textContent = masters;
+        
+        var totalSessions = facilities.reduce(function(sum, f) { return sum + (f.total_sessions || 0); }, 0);
+        document.getElementById('totalSessions').textContent = totalSessions;
+
+        // Subscriber stats
+        var active = subscribers.filter(function(s) { return s.status === 'active'; }).length;
+        var trialing = subscribers.filter(function(s) { return s.status === 'trialing'; }).length;
+        var family = subscribers.filter(function(s) { return s.plan_type && s.plan_type.includes('family'); }).length;
+        var individual = subscribers.filter(function(s) { return s.plan_type && s.plan_type.includes('individual'); }).length;
+
+        document.getElementById('activeSubscribers').textContent = active;
+        document.getElementById('trialingSubscribers').textContent = trialing;
+        document.getElementById('familyPlans').textContent = family;
+        document.getElementById('individualPlans').textContent = individual;
     }
 
-    function renderOverviewGears() {
-        var html = '';
-        ['g1', 'g2', 'g3'].forEach(function(key, idx) {
-            var g = gears[key];
-            var members = users.filter(function(u) { return u[key] > 0; }).length;
-            var avg = members > 0 ? (users.reduce(function(sum, u) { return sum + u[key]; }, 0) / members).toFixed(1) : '0';
-            var masterCount = users.filter(function(u) { return u[key] === 10; }).length;
-            html += '<div class="gear-card"><div class="gear-card-header g' + (idx+1) + '"><span class="gear-card-icon">' + g.icon + '</span><span class="gear-card-title">' + g.name + '</span><span class="gear-card-num">' + g.label + '</span></div><div class="gear-card-body"><div class="gear-card-stats"><div class="gear-stat"><div class="gear-stat-value">' + members + '</div><div class="gear-stat-label">Members</div></div><div class="gear-stat"><div class="gear-stat-value">' + avg + '</div><div class="gear-stat-label">Avg Shift</div></div><div class="gear-stat"><div class="gear-stat-value">' + masterCount + '</div><div class="gear-stat-label">Masters</div></div></div></div></div>';
-        });
-        document.getElementById('overviewGears').innerHTML = html;
-    }
-
-    function renderUsersTable() {
-        var html = '';
-        users.forEach(function(u) {
-            html += '<tr><td>' + u.name + '</td><td>' + u.email + '</td><td>' + getStatusBadge(u.status) + '</td><td>' + getShiftBadge(u.g1) + '</td><td>' + getShiftBadge(u.g2) + '</td><td>' + getShiftBadge(u.g3) + '</td><td>' + u.lastActive + '</td><td><div class="action-btns"><button class="action-btn" onclick="window.editUser(' + u.id + ')" title="Edit">✏️</button><button class="action-btn delete" onclick="window.deleteUser(' + u.id + ')" title="Delete">🗑️</button></div></td></tr>';
-        });
-        document.getElementById('usersTable').innerHTML = html;
-    }
-
-    function renderGearsAnalytics() {
-        var html = '';
-        ['g1', 'g2', 'g3'].forEach(function(key, idx) {
-            var g = gears[key];
-            html += '<div class="gear-card"><div class="gear-card-header g' + (idx+1) + '"><span class="gear-card-icon">' + g.icon + '</span><span class="gear-card-title">' + g.name + '</span><span class="gear-card-num">' + g.label + '</span><button class="gear-card-edit" onclick="window.editGear(\'' + key + '\')">✏️ Edit</button></div><div class="gear-card-body"><div class="gear-card-stats"><div class="gear-stat"><div class="gear-stat-value">' + g.sessions + '</div><div class="gear-stat-label">Sessions</div></div><div class="gear-stat"><div class="gear-stat-value">' + g.avg + '</div><div class="gear-stat-label">Avg</div></div><div class="gear-stat"><div class="gear-stat-value">' + g.masters + '</div><div class="gear-stat-label">Masters</div></div></div></div></div>';
-        });
-        document.getElementById('gearsAnalytics').innerHTML = html;
-    }
-
-    function renderShiftDistribution() {
-        var html = '';
-        shiftList.forEach(function(shift, idx) {
-            var level = idx + 1;
-            var g1 = users.filter(function(u) { return u.g1 === level; }).length;
-            var g2 = users.filter(function(u) { return u.g2 === level; }).length;
-            var g3 = users.filter(function(u) { return u.g3 === level; }).length;
-            html += '<tr><td>' + getShiftBadge(level) + '</td><td>' + g1 + '</td><td>' + g2 + '</td><td>' + g3 + '</td></tr>';
-        });
-        document.getElementById('shiftDistTable').innerHTML = html;
-    }
-
-    function renderActivityList() {
-        if (activities.length === 0) {
-            document.getElementById('activityList').innerHTML = '<div style="padding:40px;text-align:center;color:var(--muted)">No activity yet</div>';
+    function renderSubscribers() {
+        var tbody = document.getElementById('subscribersTable');
+        
+        if (subscribers.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--muted)"><span class="lang-en">No subscribers yet</span><span class="lang-es">Aún no hay suscriptores</span></td></tr>';
             return;
         }
+
         var html = '';
-        activities.forEach(function(a) {
-            html += '<div class="activity-item"><div class="activity-icon ' + a.type + '">' + (a.type === 'user' ? '🏀' : '⚙️') + '</div><div class="activity-content"><div class="activity-text">' + a.text + '</div><div class="activity-time">' + a.time + '</div></div><div class="activity-actions"><button class="action-btn" onclick="window.editActivity(' + a.id + ')" title="Edit">✏️</button><button class="action-btn delete" onclick="window.deleteActivity(' + a.id + ')" title="Delete">🗑️</button></div></div>';
+        subscribers.forEach(function(sub) {
+            var statusClass = 'badge-' + (sub.status || 'unknown');
+            var planDisplay = (sub.plan_type || 'unknown').replace('_', ' ');
+            var createdDate = sub.created_at ? new Date(sub.created_at).toLocaleDateString() : '-';
+            
+            html += '<tr>';
+            html += '<td>' + (sub.email || '-') + '</td>';
+            html += '<td><strong style="color:var(--orange)">' + (sub.pin || '-') + '</strong></td>';
+            html += '<td>' + planDisplay + '</td>';
+            html += '<td><span class="badge ' + statusClass + '">' + (sub.status || 'unknown') + '</span></td>';
+            html += '<td>' + (sub.family_members_count || 0) + ' members</td>';
+            html += '<td>' + createdDate + '</td>';
+            html += '</tr>';
         });
-        document.getElementById('activityList').innerHTML = html;
+        
+        tbody.innerHTML = html;
     }
 
-    function openAddUserModal() {
-        document.getElementById('userModalTitle').textContent = currentLang === 'es' ? 'AGREGAR GOTROTTER' : 'ADD GOTROTTER';
-        document.getElementById('userId').value = '';
-        document.getElementById('userName').value = '';
-        document.getElementById('userEmail').value = '';
-        document.getElementById('userStatus').value = 'trial';
-        document.getElementById('userG1').value = '1';
-        document.getElementById('userG2').value = '1';
-        document.getElementById('userG3').value = '1';
-        openModal('userModal');
-    }
-
-    window.editUser = function(id) {
-        var user = users.find(function(u) { return u.id === id; });
-        if (!user) return;
-        document.getElementById('userModalTitle').textContent = currentLang === 'es' ? 'EDITAR GOTROTTER' : 'EDIT GOTROTTER';
-        document.getElementById('userId').value = id;
-        document.getElementById('userName').value = user.name;
-        document.getElementById('userEmail').value = user.email;
-        document.getElementById('userStatus').value = user.status;
-        document.getElementById('userG1').value = user.g1;
-        document.getElementById('userG2').value = user.g2;
-        document.getElementById('userG3').value = user.g3;
-        openModal('userModal');
-    };
-
-    function saveUser() {
-        var id = document.getElementById('userId').value;
-        var name = document.getElementById('userName').value.trim();
-        var email = document.getElementById('userEmail').value.trim();
-        var status = document.getElementById('userStatus').value;
-        var g1 = parseInt(document.getElementById('userG1').value);
-        var g2 = parseInt(document.getElementById('userG2').value);
-        var g3 = parseInt(document.getElementById('userG3').value);
-        if (!name || !email) { showToast(currentLang === 'es' ? 'Ingresa nombre y email' : 'Enter name and email', true); return; }
-        if (id) {
-            var idx = users.findIndex(function(u) { return u.id === parseInt(id); });
-            if (idx > -1) { users[idx].name = name; users[idx].email = email; users[idx].status = status; users[idx].g1 = g1; users[idx].g2 = g2; users[idx].g3 = g3; }
-        } else {
-            users.push({ id: nextUserId++, name: name, email: email, status: status, g1: g1, g2: g2, g3: g3, lastActive: new Date().toISOString().split('T')[0] });
+    function renderFacilities() {
+        var tbody = document.getElementById('facilitiesTable');
+        
+        if (facilities.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--muted)"><span class="lang-en">No facilities yet</span><span class="lang-es">Aún no hay centros</span></td></tr>';
+            return;
         }
-        closeModal('userModal');
-        renderAll();
-        showToast(currentLang === 'es' ? 'Guardado' : 'Saved');
+
+        var html = '';
+        facilities.forEach(function(fac) {
+            var statusClass = fac.status === 'active' ? 'badge-active' : (fac.status === 'expired' ? 'badge-canceled' : 'badge-trialing');
+            var expiresDate = fac.expires_at ? new Date(fac.expires_at).toLocaleDateString() : '-';
+            
+            html += '<tr>';
+            html += '<td><strong>' + (fac.name || '-') + '</strong></td>';
+            html += '<td><code style="background:var(--darker);padding:4px 8px;border-radius:4px">' + (fac.license_key || '-') + '</code></td>';
+            html += '<td>' + (fac.user_count || 0) + ' / ' + (fac.user_limit || 0) + '</td>';
+            html += '<td>' + (fac.total_sessions || 0) + '</td>';
+            html += '<td><span class="badge ' + statusClass + '">' + (fac.status || 'unknown') + '</span></td>';
+            html += '<td>' + expiresDate + '</td>';
+            html += '</tr>';
+        });
+        
+        tbody.innerHTML = html;
     }
 
-    window.deleteUser = function(id) {
-        var user = users.find(function(u) { return u.id === id; });
-        if (!user) return;
-        deleteTarget = {type: 'user', id: id};
-        document.getElementById('deleteText').innerHTML = (currentLang === 'es' ? 'Eliminar ' : 'Delete ') + '<strong style="color:var(--orange)">' + user.name + '</strong>?';
-        openModal('deleteModal');
-    };
-
-    window.editGear = function(key) {
-        var g = gears[key];
-        document.getElementById('gearModalTitle').textContent = 'EDIT: ' + g.name;
-        document.getElementById('gearId').value = key;
-        document.getElementById('gearSessions').value = g.sessions;
-        document.getElementById('gearAvg').value = g.avg;
-        document.getElementById('gearMasters').value = g.masters;
-        openModal('gearModal');
-    };
-
-    function saveGearStats() {
-        var key = document.getElementById('gearId').value;
-        gears[key].sessions = parseInt(document.getElementById('gearSessions').value) || 0;
-        gears[key].avg = parseFloat(document.getElementById('gearAvg').value) || 0;
-        gears[key].masters = parseInt(document.getElementById('gearMasters').value) || 0;
-        closeModal('gearModal');
-        renderAll();
-        showToast(currentLang === 'es' ? 'Guardado' : 'Saved');
+    function getActivityIcon(type) {
+        var icons = {
+            'subscription_created': { icon: '💳', class: 'subscription' },
+            'subscription_updated': { icon: '💳', class: 'subscription' },
+            'subscription_canceled': { icon: '❌', class: 'subscription' },
+            'subscriber_login': { icon: '🔑', class: 'subscription' },
+            'user_register': { icon: '👤', class: 'user' },
+            'user_login': { icon: '🔑', class: 'user' },
+            'game_session': { icon: '🎮', class: 'game' },
+            'facility_login': { icon: '🏢', class: 'facility' },
+            'family_member_added': { icon: '👨‍👩‍👧', class: 'subscription' },
+            'family_member_removed': { icon: '👤', class: 'subscription' }
+        };
+        return icons[type] || { icon: '📋', class: 'gear' };
     }
 
-    function openAddActivityModal() {
-        document.getElementById('activityModalTitle').textContent = currentLang === 'es' ? 'AGREGAR ACTIVIDAD' : 'ADD ACTIVITY';
-        document.getElementById('activityId').value = '';
-        document.getElementById('activityType').value = 'user';
-        document.getElementById('activityText').value = '';
-        document.getElementById('activityTime').value = '';
-        openModal('activityModal');
+    function formatTimeAgo(timestamp) {
+        if (!timestamp) return '-';
+        var date = new Date(timestamp);
+        var now = new Date();
+        var diff = Math.floor((now - date) / 1000);
+        
+        if (diff < 60) return currentLang === 'es' ? 'hace ' + diff + 's' : diff + 's ago';
+        if (diff < 3600) return currentLang === 'es' ? 'hace ' + Math.floor(diff/60) + 'm' : Math.floor(diff/60) + 'm ago';
+        if (diff < 86400) return currentLang === 'es' ? 'hace ' + Math.floor(diff/3600) + 'h' : Math.floor(diff/3600) + 'h ago';
+        return currentLang === 'es' ? 'hace ' + Math.floor(diff/86400) + 'd' : Math.floor(diff/86400) + 'd ago';
     }
 
-    window.editActivity = function(id) {
-        var item = activities.find(function(a) { return a.id === id; });
-        if (!item) return;
-        document.getElementById('activityModalTitle').textContent = currentLang === 'es' ? 'EDITAR ACTIVIDAD' : 'EDIT ACTIVITY';
-        document.getElementById('activityId').value = id;
-        document.getElementById('activityType').value = item.type;
-        document.getElementById('activityText').value = item.text;
-        document.getElementById('activityTime').value = item.time;
-        openModal('activityModal');
-    };
-
-    function saveActivity() {
-        var id = document.getElementById('activityId').value;
-        var type = document.getElementById('activityType').value;
-        var text = document.getElementById('activityText').value.trim();
-        var time = document.getElementById('activityTime').value.trim() || 'Just now';
-        if (!text) { showToast(currentLang === 'es' ? 'Ingresa descripción' : 'Enter description', true); return; }
-        if (id) {
-            var idx = activities.findIndex(function(a) { return a.id === parseInt(id); });
-            if (idx > -1) { activities[idx].type = type; activities[idx].text = text; activities[idx].time = time; }
-        } else {
-            activities.unshift({ id: nextActivityId++, type: type, text: text, time: time });
+    function renderActivity() {
+        var container = document.getElementById('activityList');
+        
+        if (activities.length === 0) {
+            container.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📋</div><div class="empty-state-text"><span class="lang-en">No activity yet</span><span class="lang-es">Aún no hay actividad</span></div></div>';
+            return;
         }
-        closeModal('activityModal');
-        renderActivityList();
-        showToast(currentLang === 'es' ? 'Guardado' : 'Saved');
+
+        var html = '';
+        activities.slice(0, 50).forEach(function(act) {
+            var iconInfo = getActivityIcon(act.type);
+            var description = act.details || act.type || 'Activity';
+            if (act.username) description = '<strong>' + act.username + '</strong> - ' + description;
+            if (act.facility) description += ' (' + act.facility + ')';
+            
+            html += '<div class="activity-item">';
+            html += '<div class="activity-icon ' + iconInfo.class + '">' + iconInfo.icon + '</div>';
+            html += '<div class="activity-content">';
+            html += '<div class="activity-text">' + description + '</div>';
+            html += '<div class="activity-time">' + formatTimeAgo(act.timestamp) + '</div>';
+            html += '</div>';
+            html += '</div>';
+        });
+        
+        container.innerHTML = html;
     }
 
-    window.deleteActivity = function(id) {
-        deleteTarget = {type: 'activity', id: id};
-        document.getElementById('deleteText').textContent = currentLang === 'es' ? 'Eliminar esta entrada?' : 'Delete this entry?';
-        openModal('deleteModal');
-    };
-
-    function confirmDelete() {
-        if (!deleteTarget) return;
-        if (deleteTarget.type === 'user') {
-            users = users.filter(function(u) { return u.id !== deleteTarget.id; });
-            renderAll();
-        } else if (deleteTarget.type === 'activity') {
-            activities = activities.filter(function(a) { return a.id !== deleteTarget.id; });
-            renderActivityList();
-        } else if (deleteTarget.type === 'clearActivity') {
-            activities = [];
-            renderActivityList();
+    function renderOverviewActivity() {
+        var container = document.getElementById('overviewActivity');
+        
+        if (activities.length === 0) {
+            container.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📋</div><div class="empty-state-text"><span class="lang-en">No activity yet</span><span class="lang-es">Aún no hay actividad</span></div></div>';
+            return;
         }
-        deleteTarget = null;
-        closeModal('deleteModal');
-        showToast(currentLang === 'es' ? 'Eliminado' : 'Deleted');
-    }
 
-    function exportUsers() {
-        var csv = 'Name,Email,Status,Map,Move,Match,LastActive\n';
-        users.forEach(function(u) { csv += u.name + ',' + u.email + ',' + u.status + ',' + shiftList[u.g1 - 1] + ',' + shiftList[u.g2 - 1] + ',' + shiftList[u.g3 - 1] + ',' + u.lastActive + '\n'; });
-        var blob = new Blob([csv], {type: 'text/csv'});
-        var a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = 'team-gotrotters-export.csv';
-        a.click();
-        showToast(currentLang === 'es' ? 'Exportado' : 'Exported');
+        var html = '';
+        activities.slice(0, 10).forEach(function(act) {
+            var iconInfo = getActivityIcon(act.type);
+            var description = act.details || act.type || 'Activity';
+            if (act.username) description = '<strong>' + act.username + '</strong> - ' + description;
+            
+            html += '<div class="activity-item">';
+            html += '<div class="activity-icon ' + iconInfo.class + '">' + iconInfo.icon + '</div>';
+            html += '<div class="activity-content">';
+            html += '<div class="activity-text">' + description + '</div>';
+            html += '<div class="activity-time">' + formatTimeAgo(act.timestamp) + '</div>';
+            html += '</div>';
+            html += '</div>';
+        });
+        
+        container.innerHTML = html;
     }
 
     init();
