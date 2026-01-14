@@ -528,16 +528,38 @@ body.en .lang-es{display:none !important}
             }
         });
     }
+    
+    // ========== UPDATED: Auto-fetch PIN using session_id ==========
     function checkUrlParams() {
         var params = new URLSearchParams(window.location.search);
+        
         if (params.get('success') === 'true') {
+            var sessionId = params.get('session_id');
             window.history.replaceState({}, '', window.location.pathname);
+            
             setTimeout(function() {
                 openChat();
-                setTimeout(function() { addEmailInput(); }, 500);
+                setTimeout(function() {
+                    // Show loading message
+                    addMsg(bi(
+                        '🎉 <strong>PAYMENT SUCCESSFUL!</strong><br><br>Loading your account...',
+                        '🎉 <strong>¡PAGO EXITOSO!</strong><br><br>Cargando tu cuenta...'
+                    ), false);
+                    addTyping();
+                    
+                    // If we have session_id, auto-fetch PIN (no email needed!)
+                    if (sessionId) {
+                        fetchPinBySession(sessionId);
+                    } else {
+                        // Fallback to email input
+                        removeTyping();
+                        addEmailInput();
+                    }
+                }, 500);
             }, 300);
             return true;
         }
+        
         if (params.get('canceled') === 'true') {
             window.history.replaceState({}, '', window.location.pathname);
             setTimeout(function() {
@@ -554,6 +576,53 @@ body.en .lang-es{display:none !important}
         }
         return false;
     }
+    
+    // ========== NEW: Fetch PIN by Stripe Session ID ==========
+    function fetchPinBySession(sessionId) {
+        var retryCount = 0;
+        var maxRetries = 5;
+        
+        function attemptFetch() {
+            fetch('/api/stripe/session/' + sessionId)
+                .then(function(res) { return res.json(); })
+                .then(function(data) {
+                    removeTyping();
+                    
+                    if (data.success && data.pin) {
+                        // SUCCESS! Show PIN automatically
+                        showPinDisplay(data.pin, data.email, data.plan_type, data.status);
+                    } else if (data.email && !data.success && retryCount < maxRetries) {
+                        // Webhook might still be processing, retry
+                        retryCount++;
+                        addMsg(bi(
+                            '⏳ Setting up your account... (' + retryCount + '/' + maxRetries + ')',
+                            '⏳ Configurando tu cuenta... (' + retryCount + '/' + maxRetries + ')'
+                        ), false);
+                        addTyping();
+                        setTimeout(attemptFetch, 2000);
+                    } else if (data.email) {
+                        // Have email but no subscriber yet - try one more lookup
+                        addMsg(bi(
+                            '⏳ Almost there! Checking your account...',
+                            '⏳ ¡Casi listo! Verificando tu cuenta...'
+                        ), false);
+                        handleEmailLookup(data.email);
+                    } else {
+                        // No email found - fallback to manual entry
+                        addEmailInput();
+                    }
+                })
+                .catch(function(err) {
+                    removeTyping();
+                    console.error('Session lookup error:', err);
+                    // Fallback to email input
+                    addEmailInput();
+                });
+        }
+        
+        attemptFetch();
+    }
+    
     function openChat() {
         landing.classList.add('hidden');
         chatScreen.classList.add('active');
