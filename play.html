@@ -317,11 +317,13 @@ body.en .lang-es{display:none !important}
             '<input type="tel" class="pin-digit" maxlength="1" data-idx="3">' +
             '</div>' +
             '<button class="pin-submit" id="pinSubmit">' + bi("LET'S GO!", "PA'LANTE!") + '</button>' +
+            '<div style="margin-top:15px;"><a href="#" class="forgot-pin-link" style="color:var(--muted);font-size:0.8rem;text-decoration:underline;">' + bi('Forgot PIN?', '¿Olvidaste tu PIN?') + '</a></div>' +
             '</div>';
         chatBody.appendChild(msg);
         chatBody.scrollTop = chatBody.scrollHeight;
         var digits = msg.querySelectorAll('.pin-digit');
         var submitBtn = msg.querySelector('#pinSubmit');
+        var forgotLink = msg.querySelector('.forgot-pin-link');
         function checkComplete() {
             var pin = '';
             digits.forEach(function(d) { pin += d.value; });
@@ -344,7 +346,69 @@ body.en .lang-es{display:none !important}
             digits.forEach(function(d) { pin += d.value; });
             handlePinSubmit(pin);
         });
+        forgotLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            addForgotPinInput();
+        });
         setTimeout(function() { digits[0].focus(); }, 100);
+    }
+    function addForgotPinInput() {
+        var msg = document.createElement('div');
+        msg.className = 'chat-msg bot';
+        msg.innerHTML = '<div class="chat-msg-avatar"><img src="go_chat.png" class="chat-msg-avatar-img"></div><div class="chat-msg-bubble">' +
+            bi(
+                '🔑 <strong>No problem!</strong><br><br>Enter your email to recover your PIN:',
+                '🔑 <strong>¡No hay problema!</strong><br><br>Ingresa tu email para recuperar tu PIN:'
+            ) +
+            '<div class="email-input-container">' +
+            '<input type="email" class="email-input" id="forgotEmailInput" placeholder="' + (lang === 'es' ? 'tu@email.com' : 'your@email.com') + '">' +
+            '<button class="email-submit" id="forgotEmailSubmit">' + bi('RECOVER PIN', 'RECUPERAR PIN') + '</button>' +
+            '</div>' +
+            '</div>';
+        chatBody.appendChild(msg);
+        chatBody.scrollTop = chatBody.scrollHeight;
+        var emailInput = msg.querySelector('#forgotEmailInput');
+        var emailSubmit = msg.querySelector('#forgotEmailSubmit');
+        emailInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') handleForgotPinLookup(this.value);
+        });
+        emailSubmit.addEventListener('click', function() {
+            handleForgotPinLookup(emailInput.value);
+        });
+        setTimeout(function() { emailInput.focus(); }, 100);
+    }
+    function handleForgotPinLookup(email) {
+        email = email.trim().toLowerCase();
+        if (!email || !email.includes('@')) {
+            alert(lang === 'es' ? 'Por favor ingresa un email válido' : 'Please enter a valid email');
+            return;
+        }
+        var submitBtn = document.getElementById('forgotEmailSubmit');
+        if (submitBtn) {
+            submitBtn.classList.add('loading');
+            submitBtn.innerHTML = bi('LOADING...', 'CARGANDO...');
+        }
+        fetch('/api/stripe/status/' + encodeURIComponent(email))
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+                if (data.subscribed && data.pin) {
+                    showPinDisplay(data.pin, email, data.plan_type, data.status);
+                } else {
+                    botSay(bi(
+                        '❌ No subscription found for that email.<br><br>Make sure you entered the correct email.',
+                        '❌ No se encontró suscripción para ese email.<br><br>Asegúrate de ingresar el email correcto.'
+                    ), [
+                        {labelEn: '🔄 Try Again', labelEs: '🔄 Intentar de Nuevo', action: 'forgot_pin'},
+                        {labelEn: '🆕 Subscribe', labelEs: '🆕 Suscribirme', action: 'new'}
+                    ], 600);
+                }
+            })
+            .catch(function(err) {
+                console.error('Forgot PIN lookup error:', err);
+                botSay(bi('❌ Connection error. Please try again.', '❌ Error de conexión. Por favor intenta de nuevo.'), [
+                    {labelEn: '🔄 Try Again', labelEs: '🔄 Intentar de Nuevo', action: 'forgot_pin'}
+                ], 600);
+            });
     }
     function addEmailInput() {
         var msg = document.createElement('div');
@@ -693,6 +757,9 @@ body.en .lang-es{display:none !important}
                 break;
             case 'retry_email':
                 addEmailInput();
+                break;
+            case 'forgot_pin':
+                addForgotPinInput();
                 break;
         }
     }
