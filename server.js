@@ -1256,6 +1256,10 @@ app.post('/api/game/session', function(req, res) {
     
     var users = readJSON(USERS_FILE);
     var userIndex = -1;
+    var isSubscriber = false;
+    var subscriberEmail = null;
+    
+    // First check facility users
     if (pin) {
         for (var i = 0; i < users.length; i++) {
             if (users[i].pin === pin) { userIndex = i; break; }
@@ -1267,80 +1271,178 @@ app.post('/api/game/session', function(req, res) {
             }
         }
     }
-    if (userIndex === -1) return res.status(404).json({ error: 'User not found' });
     
-    var user = users[userIndex];
-    var sessionKey = 'sessions_' + game;
-    if (!users[userIndex][sessionKey]) users[userIndex][sessionKey] = 0;
-    users[userIndex][sessionKey]++;
-    users[userIndex].lastActive = new Date().toISOString();
-    
-    var today = new Date().toISOString().split('T')[0];
-    var lastStreakDate = users[userIndex].lastStreakDate;
-    if (!lastStreakDate) {
-        users[userIndex].streak = 1;
-        users[userIndex].lastStreakDate = today;
-    } else if (lastStreakDate !== today) {
-        var lastDate = new Date(lastStreakDate);
-        var todayDate = new Date(today);
-        var diffDays = Math.floor((todayDate - lastDate) / (1000 * 60 * 60 * 24));
-        if (diffDays === 1) {
-            users[userIndex].streak = (users[userIndex].streak || 0) + 1;
-        } else if (diffDays > 1) {
-            users[userIndex].streak = 1;
-        }
-        users[userIndex].lastStreakDate = today;
-    }
-    
-    if (score !== undefined) {
-        var bestKey = 'best_' + game;
-        if (!users[userIndex][bestKey] || score > users[userIndex][bestKey]) {
-            users[userIndex][bestKey] = score;
-        }
-    }
-    
-    if (game === 'gonogo' && req.body.rt) {
-        var rt = req.body.rt;
-        if (!users[userIndex].rt_history) users[userIndex].rt_history = [];
-        users[userIndex].rt_history.push({
-            date: new Date().toISOString(), average: rt.average || 0, fastest: rt.fastest || 0,
-            slowest: rt.slowest || 0, consistency: rt.consistency || 0, totalTaps: rt.totalTaps || 0,
-            accuracy: req.body.accuracy || 0, score: score || 0
-        });
-        if (users[userIndex].rt_history.length > 50) {
-            users[userIndex].rt_history = users[userIndex].rt_history.slice(-50);
-        }
-        if (!users[userIndex].best_rt || (rt.average > 0 && rt.average < users[userIndex].best_rt)) {
-            users[userIndex].best_rt = rt.average;
-        }
-        users[userIndex].latest_rt = { average: rt.average, fastest: rt.fastest, consistency: rt.consistency };
-    }
-    
-    writeJSON(USERS_FILE, users);
-    
-    var codes = readJSON(CODES_FILE);
-    var licenses = readJSON(LICENSES_FILE);
-    var facilityName = 'Unknown';
-    for (var c = 0; c < codes.length; c++) {
-        if (codes[c].code === user.code) {
-            for (var l = 0; l < licenses.length; l++) {
-                if (licenses[l].key === codes[c].licenseKey) { facilityName = licenses[l].facilityName; break; }
+    // If not found in facility users, check subscribers
+    if (userIndex === -1 && pin) {
+        var subscribers = readJSON(SUBSCRIBERS_FILE);
+        for (var s = 0; s < subscribers.length; s++) {
+            if (subscribers[s].pin === pin) {
+                isSubscriber = true;
+                subscriberEmail = subscribers[s].email;
+                
+                // Initialize session tracking for subscriber if needed
+                if (!subscribers[s].sessions) subscribers[s].sessions = {};
+                if (!subscribers[s].sessions[game]) subscribers[s].sessions[game] = 0;
+                subscribers[s].sessions[game]++;
+                subscribers[s].lastActive = new Date().toISOString();
+                
+                // Track best scores
+                if (score !== undefined) {
+                    if (!subscribers[s].best) subscribers[s].best = {};
+                    if (!subscribers[s].best[game] || score > subscribers[s].best[game]) {
+                        subscribers[s].best[game] = score;
+                    }
+                }
+                
+                // Track streak
+                var today = new Date().toISOString().split('T')[0];
+                if (!subscribers[s].lastStreakDate) {
+                    subscribers[s].streak = 1;
+                    subscribers[s].lastStreakDate = today;
+                } else if (subscribers[s].lastStreakDate !== today) {
+                    var lastDate = new Date(subscribers[s].lastStreakDate);
+                    var todayDate = new Date(today);
+                    var diffDays = Math.floor((todayDate - lastDate) / (1000 * 60 * 60 * 24));
+                    if (diffDays === 1) {
+                        subscribers[s].streak = (subscribers[s].streak || 0) + 1;
+                    } else if (diffDays > 1) {
+                        subscribers[s].streak = 1;
+                    }
+                    subscribers[s].lastStreakDate = today;
+                }
+                
+                writeJSON(SUBSCRIBERS_FILE, subscribers);
+                
+                var gameNames = { sequence: 'Sequence Memory', startrail: 'StarTrail', duo: 'Pattern Duo', gonogo: 'Go/No-Go' };
+                var gameName = gameNames[game] || game;
+                var scoreText = score !== undefined ? ' (Score: ' + score + ')' : '';
+                logActivity('game_session', subscriberEmail, null, gameName + scoreText);
+                
+                return res.json({ 
+                    success: true, 
+                    sessions: subscribers[s].sessions[game],
+                    streak: subscribers[s].streak || 1,
+                    personalBest: subscribers[s].best ? subscribers[s].best[game] : score
+                });
             }
-            break;
+            
+            // Check family members
+            if (subscribers[s].family_members) {
+                for (var m = 0; m < subscribers[s].family_members.length; m++) {
+                    if (subscribers[s].family_members[m].pin === pin) {
+                        isSubscriber = true;
+                        var memberName = subscribers[s].family_members[m].name;
+                        
+                        // Initialize session tracking for family member
+                        if (!subscribers[s].family_members[m].sessions) subscribers[s].family_members[m].sessions = {};
+                        if (!subscribers[s].family_members[m].sessions[game]) subscribers[s].family_members[m].sessions[game] = 0;
+                        subscribers[s].family_members[m].sessions[game]++;
+                        subscribers[s].family_members[m].lastActive = new Date().toISOString();
+                        
+                        // Track best scores for family member
+                        if (score !== undefined) {
+                            if (!subscribers[s].family_members[m].best) subscribers[s].family_members[m].best = {};
+                            if (!subscribers[s].family_members[m].best[game] || score > subscribers[s].family_members[m].best[game]) {
+                                subscribers[s].family_members[m].best[game] = score;
+                            }
+                        }
+                        
+                        writeJSON(SUBSCRIBERS_FILE, subscribers);
+                        
+                        var gameNames2 = { sequence: 'Sequence Memory', startrail: 'StarTrail', duo: 'Pattern Duo', gonogo: 'Go/No-Go' };
+                        var gameName2 = gameNames2[game] || game;
+                        var scoreText2 = score !== undefined ? ' (Score: ' + score + ')' : '';
+                        logActivity('game_session', memberName, null, gameName2 + scoreText2);
+                        
+                        return res.json({ 
+                            success: true, 
+                            sessions: subscribers[s].family_members[m].sessions[game],
+                            streak: 1,
+                            personalBest: subscribers[s].family_members[m].best ? subscribers[s].family_members[m].best[game] : score
+                        });
+                    }
+                }
+            }
         }
     }
     
-    var gameNames = { sequence: 'Sequence Memory', startrail: 'StarTrail', duo: 'Pattern Duo' };
-    var gameName = gameNames[game] || game;
-    var scoreText = score !== undefined ? ' (Score: ' + score + ')' : '';
-    logActivity('game_session', user.username, facilityName, gameName + scoreText);
+    if (userIndex === -1 && !isSubscriber) return res.status(404).json({ error: 'User not found' });
     
-    res.json({ 
-        success: true, 
-        sessions: users[userIndex][sessionKey],
-        streak: users[userIndex].streak,
-        personalBest: users[userIndex]['best_' + game]
-    });
+    // Handle facility user (original logic)
+    if (userIndex !== -1) {
+        var user = users[userIndex];
+        var sessionKey = 'sessions_' + game;
+        if (!users[userIndex][sessionKey]) users[userIndex][sessionKey] = 0;
+        users[userIndex][sessionKey]++;
+        users[userIndex].lastActive = new Date().toISOString();
+        
+        var today = new Date().toISOString().split('T')[0];
+        var lastStreakDate = users[userIndex].lastStreakDate;
+        if (!lastStreakDate) {
+            users[userIndex].streak = 1;
+            users[userIndex].lastStreakDate = today;
+        } else if (lastStreakDate !== today) {
+            var lastDate = new Date(lastStreakDate);
+            var todayDate = new Date(today);
+            var diffDays = Math.floor((todayDate - lastDate) / (1000 * 60 * 60 * 24));
+            if (diffDays === 1) {
+                users[userIndex].streak = (users[userIndex].streak || 0) + 1;
+            } else if (diffDays > 1) {
+                users[userIndex].streak = 1;
+            }
+            users[userIndex].lastStreakDate = today;
+        }
+        
+        if (score !== undefined) {
+            var bestKey = 'best_' + game;
+            if (!users[userIndex][bestKey] || score > users[userIndex][bestKey]) {
+                users[userIndex][bestKey] = score;
+            }
+        }
+        
+        if (game === 'gonogo' && req.body.rt) {
+            var rt = req.body.rt;
+            if (!users[userIndex].rt_history) users[userIndex].rt_history = [];
+            users[userIndex].rt_history.push({
+                date: new Date().toISOString(), average: rt.average || 0, fastest: rt.fastest || 0,
+                slowest: rt.slowest || 0, consistency: rt.consistency || 0, totalTaps: rt.totalTaps || 0,
+                accuracy: req.body.accuracy || 0, score: score || 0
+            });
+            if (users[userIndex].rt_history.length > 50) {
+                users[userIndex].rt_history = users[userIndex].rt_history.slice(-50);
+            }
+            if (!users[userIndex].best_rt || (rt.average > 0 && rt.average < users[userIndex].best_rt)) {
+                users[userIndex].best_rt = rt.average;
+            }
+            users[userIndex].latest_rt = { average: rt.average, fastest: rt.fastest, consistency: rt.consistency };
+        }
+        
+        writeJSON(USERS_FILE, users);
+        
+        var codes = readJSON(CODES_FILE);
+        var licenses = readJSON(LICENSES_FILE);
+        var facilityName = 'Unknown';
+        for (var c = 0; c < codes.length; c++) {
+            if (codes[c].code === user.code) {
+                for (var l = 0; l < licenses.length; l++) {
+                    if (licenses[l].key === codes[c].licenseKey) { facilityName = licenses[l].facilityName; break; }
+                }
+                break;
+            }
+        }
+        
+        var gameNames = { sequence: 'Sequence Memory', startrail: 'StarTrail', duo: 'Pattern Duo' };
+        var gameName = gameNames[game] || game;
+        var scoreText = score !== undefined ? ' (Score: ' + score + ')' : '';
+        logActivity('game_session', user.username, facilityName, gameName + scoreText);
+        
+        res.json({ 
+            success: true, 
+            sessions: users[userIndex][sessionKey],
+            streak: users[userIndex].streak,
+            personalBest: users[userIndex]['best_' + game]
+        });
+    }
 });
 
 app.get('/api/game/stats/pin/:pin', function(req, res) {
