@@ -8,25 +8,17 @@
 <meta name="keywords" content="cognitive training, brain games, memory exercises, senior fitness, mental agility, GoTrotters, M3 Performance">
 <meta name="author" content="GoStar Digital LLC">
 <meta name="robots" content="index, follow">
-
-<!-- Open Graph (Facebook, LinkedIn) -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://gotrotter.ai/play.html">
 <meta property="og:title" content="GoTrotters™ - Join the Team">
 <meta property="og:description" content="Join Team GoTrotters. Start your FREE 7-day trial. GoTrotter AI guides you through the M³ Performance Engine.">
 <meta property="og:image" content="https://gotrotter.ai/m3_logo.png">
 <meta property="og:site_name" content="GoTrotters">
-
-<!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="GoTrotters™ - Join the Team">
 <meta name="twitter:description" content="Join Team GoTrotters. Start your FREE 7-day trial. GoTrotter AI guides you through the M³ Performance Engine.">
 <meta name="twitter:image" content="https://gotrotter.ai/m3_logo.png">
-
-<!-- Canonical URL -->
 <link rel="canonical" href="https://gotrotter.ai/play.html">
-
-<!-- Google Analytics 4 -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-08WZ11ZC5X"></script>
 <script>
 window.dataLayer = window.dataLayer || [];
@@ -43,40 +35,29 @@ html,body{height:100%;overflow:hidden}
 body{font-family:'Outfit',sans-serif;background:var(--dark);color:var(--text)}
 body.es .lang-en{display:none !important}
 body.en .lang-es{display:none !important}
-
-/* LANDING SCREEN */
 .landing{position:fixed;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;background:radial-gradient(ellipse at center top,rgba(255,107,0,0.15) 0%,transparent 50%),radial-gradient(ellipse at 80% 80%,rgba(0,217,165,0.1) 0%,transparent 40%),var(--dark);z-index:1;transition:opacity 0.4s,transform 0.4s}
 .landing.hidden{opacity:0;transform:scale(0.95);pointer-events:none}
-
 .lang-toggle{position:absolute;top:20px;right:20px;display:flex;gap:5px}
 .lang-btn{padding:8px 14px;border:2px solid var(--orange);background:transparent;color:var(--orange);border-radius:20px;font-family:'Outfit',sans-serif;font-weight:700;font-size:0.8rem;cursor:pointer;transition:all 0.3s}
 .lang-btn.active{background:var(--orange);color:var(--dark)}
-
 .logo-section{margin-bottom:30px}
 .logo{font-family:'Bebas Neue',sans-serif;font-size:clamp(3.5rem,12vw,5rem);letter-spacing:4px;line-height:1}
 .logo .go{color:var(--orange)}
 .logo .trotters{color:var(--teal)}
 .tagline{font-family:'Bebas Neue',sans-serif;font-size:clamp(1rem,3vw,1.3rem);letter-spacing:3px;color:var(--gold);margin-top:5px}
-
 .hero-icon{width:100px;height:100px;margin-bottom:20px;animation:bounce 2s infinite;border-radius:50%;object-fit:cover}
 @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-
 .hero-text{max-width:320px;margin-bottom:40px}
 .hero-text p{font-size:1.1rem;color:var(--muted);line-height:1.6}
 .hero-text strong{color:var(--text)}
-
 .go-btn{padding:22px 60px;font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:5px;background:linear-gradient(135deg,var(--orange) 0%,var(--orange-dark) 100%);color:var(--text);border:none;border-radius:60px;cursor:pointer;box-shadow:0 10px 40px rgba(255,107,0,0.5);transition:all 0.3s;display:flex;align-items:center;gap:12px}
 .go-btn:hover{transform:translateY(-4px) scale(1.02);box-shadow:0 15px 50px rgba(255,107,0,0.6)}
 .go-btn:active{transform:translateY(0) scale(0.98)}
 .go-btn-icon{width:32px;height:32px;border-radius:50%;object-fit:cover}
-
 .footer-text{position:absolute;bottom:25px;font-size:0.75rem;color:var(--muted)}
 .footer-text a{color:var(--teal);text-decoration:none}
-
-/* CHAT SCREEN */
 .chat-screen{position:fixed;top:0;left:0;right:0;bottom:0;background:var(--dark);display:flex;flex-direction:column;z-index:10;opacity:0;transform:translateY(100%);transition:opacity 0.4s,transform 0.4s;pointer-events:none}
 .chat-screen.active{opacity:1;transform:translateY(0);pointer-events:auto}
-
 .chat-header{padding:15px 20px;background:linear-gradient(135deg,rgba(255,107,0,0.1),rgba(0,217,165,0.05));border-bottom:2px solid rgba(255,107,0,0.3);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .chat-header-left{display:flex;align-items:center;gap:12px}
 .chat-avatar{width:45px;height:45px;border-radius:50%;display:flex;align-items:center;justify-content:center;overflow:hidden;background:transparent}
@@ -92,9 +73,7 @@ body.en .lang-es{display:none !important}
 .chat-lang-btn{padding:6px 12px;border:2px solid var(--orange);background:transparent;color:var(--orange);border-radius:15px;font-weight:700;font-size:0.7rem;cursor:pointer;transition:all 0.3s}
 .chat-lang-btn.active{background:var(--orange);color:var(--dark)}
 .chat-close{width:36px;height:36px;background:rgba(255,255,255,0.1);border:none;border-radius:50%;color:var(--muted);font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
-
 .chat-body{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:15px}
-
 .chat-msg{display:flex;gap:10px;max-width:90%;animation:msgIn 0.3s ease}
 @keyframes msgIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 .chat-msg.bot{align-self:flex-start}
@@ -107,21 +86,17 @@ body.en .lang-es{display:none !important}
 .chat-msg.user .chat-msg-bubble{background:linear-gradient(135deg,var(--blue),#2563EB);border:none}
 .chat-msg-bubble strong{color:var(--orange)}
 .chat-msg-bubble .highlight{color:var(--teal)}
-
 .chat-options{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
 .chat-option{padding:12px 20px;background:rgba(0,217,165,0.1);border:2px solid rgba(0,217,165,0.4);color:var(--teal);border-radius:25px;font-weight:700;font-size:0.85rem;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:8px}
 .chat-option:hover{background:rgba(0,217,165,0.2);transform:scale(1.02)}
 .chat-option:active{transform:scale(0.98)}
 .chat-option.primary{background:linear-gradient(135deg,var(--orange),var(--orange-dark));border:none;color:var(--text)}
 .chat-option.secondary{background:rgba(255,107,0,0.1);border:2px solid rgba(255,107,0,0.4);color:var(--orange)}
-.chat-option-icon{width:20px;height:20px;border-radius:50%;object-fit:cover}
-
 .chat-typing{display:flex;gap:5px;padding:10px 0}
 .chat-typing span{width:10px;height:10px;background:var(--muted);border-radius:50%;animation:typing 1.4s infinite}
 .chat-typing span:nth-child(2){animation-delay:0.2s}
 .chat-typing span:nth-child(3){animation-delay:0.4s}
 @keyframes typing{0%,100%{transform:translateY(0);opacity:0.5}50%{transform:translateY(-8px);opacity:1}}
-
 .chat-input-area{padding:15px 20px;border-top:1px solid rgba(255,255,255,0.1);background:var(--darker);flex-shrink:0;display:none}
 .chat-input-area.visible{display:block}
 .chat-input-row{display:flex;gap:10px;align-items:center;background:var(--card);border:2px solid rgba(255,255,255,0.1);border-radius:50px;padding:6px 6px 6px 20px}
@@ -130,18 +105,13 @@ body.en .lang-es{display:none !important}
 .chat-input::placeholder{color:var(--muted)}
 .chat-send{width:44px;height:44px;background:linear-gradient(135deg,var(--orange),var(--teal));border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .chat-send svg{width:20px;height:20px;fill:var(--text)}
-
-/* PIN Input Special */
 .pin-input-container{display:flex;gap:12px;justify-content:center;margin-top:15px}
 .pin-digit{width:50px;height:60px;background:var(--card);border:3px solid rgba(255,255,255,0.2);border-radius:12px;font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--text);text-align:center;outline:none;transition:all 0.2s}
 .pin-digit:focus{border-color:var(--orange);box-shadow:0 0 20px rgba(255,107,0,0.3)}
 .pin-digit.filled{border-color:var(--teal);background:rgba(0,217,165,0.1)}
-
 .pin-submit{margin-top:20px;padding:14px 40px;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;background:linear-gradient(135deg,var(--orange),var(--orange-dark));color:var(--text);border:none;border-radius:30px;cursor:pointer;opacity:0.5;pointer-events:none;transition:all 0.3s}
 .pin-submit.ready{opacity:1;pointer-events:auto}
 .pin-submit.ready:hover{transform:scale(1.05)}
-
-/* Plan Cards */
 .plan-cards{display:flex;flex-direction:column;gap:12px;margin-top:15px;width:100%}
 .plan-card{background:var(--card);border:2px solid rgba(255,255,255,0.1);border-radius:16px;padding:16px;cursor:pointer;transition:all 0.2s;display:flex;justify-content:space-between;align-items:center}
 .plan-card:hover{border-color:var(--orange);transform:translateX(5px)}
@@ -153,67 +123,61 @@ body.en .lang-es{display:none !important}
 .plan-desc{font-size:0.75rem;color:var(--muted);margin-top:4px}
 .plan-price{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--orange)}
 .plan-price span{font-size:0.8rem;color:var(--muted)}
-
 .billing-toggle{display:flex;gap:8px;margin-top:15px;justify-content:center}
 .billing-btn{padding:10px 20px;background:var(--card);border:2px solid rgba(255,255,255,0.1);border-radius:20px;color:var(--muted);font-weight:700;font-size:0.8rem;cursor:pointer;transition:all 0.2s}
 .billing-btn.active{border-color:var(--teal);background:rgba(0,217,165,0.1);color:var(--teal)}
 .billing-btn .save-badge{font-size:0.65rem;background:var(--success);color:var(--dark);padding:2px 6px;border-radius:8px;margin-left:6px}
-
 .subscribe-btn{margin-top:20px;padding:16px 40px;font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:3px;background:linear-gradient(135deg,var(--orange),var(--orange-dark));color:var(--text);border:none;border-radius:30px;cursor:pointer;box-shadow:0 5px 25px rgba(255,107,0,0.4);transition:all 0.3s;opacity:0.5;pointer-events:none}
 .subscribe-btn.ready{opacity:1;pointer-events:auto}
 .subscribe-btn.ready:hover{transform:scale(1.05);box-shadow:0 8px 30px rgba(255,107,0,0.5)}
 .subscribe-btn.loading{opacity:0.7;pointer-events:none}
-
-/* Trial Badge */
 .trial-badge{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.3);border-radius:20px;font-size:0.8rem;color:var(--gold);margin-top:10px}
-
 .status-badge{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:20px;font-size:0.8rem;margin-top:10px}
 .status-badge.active{background:rgba(0,217,165,0.1);border:1px solid rgba(0,217,165,0.3);color:var(--teal)}
 .status-badge.trialing{background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.3);color:var(--gold)}
-.status-badge.expired{background:rgba(255,71,87,0.1);border:1px solid rgba(255,71,87,0.3);color:var(--danger)}
-
-/* Success Animation */
+.pin-display{background:linear-gradient(135deg,rgba(0,217,165,0.2),rgba(255,107,0,0.2));border:3px solid var(--teal);border-radius:20px;padding:25px;margin:15px 0;text-align:center}
+.pin-display-label{font-size:0.85rem;color:var(--muted);margin-bottom:10px;letter-spacing:1px}
+.pin-display-value{font-family:'Bebas Neue',sans-serif;font-size:3.5rem;letter-spacing:15px;color:var(--teal);text-shadow:0 0 30px rgba(0,217,165,0.5)}
+.pin-display-note{font-size:0.75rem;color:var(--gold);margin-top:10px}
+.email-input-container{margin-top:15px}
+.email-input{width:100%;padding:14px 20px;background:var(--card);border:2px solid rgba(255,255,255,0.2);border-radius:12px;font-family:'Outfit',sans-serif;font-size:1rem;color:var(--text);outline:none;transition:all 0.2s}
+.email-input:focus{border-color:var(--orange);box-shadow:0 0 20px rgba(255,107,0,0.2)}
+.email-input::placeholder{color:var(--muted)}
+.email-submit{margin-top:15px;padding:14px 40px;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;background:linear-gradient(135deg,var(--orange),var(--orange-dark));color:var(--text);border:none;border-radius:30px;cursor:pointer;transition:all 0.3s}
+.email-submit:hover{transform:scale(1.05)}
+.email-submit.loading{opacity:0.7;pointer-events:none}
 .success-burst{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);font-size:6rem;z-index:100;animation:burst 0.8s ease-out forwards;pointer-events:none}
 @keyframes burst{0%{opacity:1;transform:translate(-50%,-50%) scale(0.5)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.2)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.5)}}
-
 @media(max-width:400px){
 .go-btn{padding:18px 45px;font-size:1.5rem}
 .pin-digit{width:45px;height:55px;font-size:1.8rem}
 .plan-card{padding:12px}
+.pin-display-value{font-size:2.8rem;letter-spacing:10px}
 }
 </style>
 </head>
 <body class="en">
-
-<!-- LANDING SCREEN -->
 <div class="landing" id="landing">
 <div class="lang-toggle">
 <button class="lang-btn active" data-lang="en">EN</button>
 <button class="lang-btn" data-lang="es">ES</button>
 </div>
-
 <div class="logo-section">
 <div class="logo"><span class="go">GO</span><span class="trotters">TROTTERS</span><sup style="font-size:0.3em;vertical-align:super;">™</sup></div>
 <div class="tagline">TEAM GOTROTTERS</div>
 </div>
-
 <img src="m3_logo.png" alt="M³ Performance Engine" class="hero-icon">
-
 <div class="hero-text">
 <p><span class="lang-en"><strong>The M³ Performance Engine.</strong> 10-shift progression. Coach GoTrotter AI. $5/month.</span><span class="lang-es"><strong>El Motor de Rendimiento M³.</strong> Progresión de 10 cambios. Coach GoTrotter AI. $5/mes.</span></p>
 </div>
-
 <button class="go-btn" id="goBtn">
 <img src="go_chat.png" alt="" class="go-btn-icon">
 <span class="lang-en">JOIN THE TEAM</span><span class="lang-es">ÚNETE AL EQUIPO</span>
 </button>
-
 <div class="footer-text">
 <span class="lang-en">Powered by</span><span class="lang-es">Impulsado por</span> <a href="https://gostar.digital">GoStar Digital</a> 🌴
 </div>
 </div>
-
-<!-- CHAT SCREEN -->
 <div class="chat-screen" id="chatScreen">
 <div class="chat-header">
 <div class="chat-header-left">
@@ -230,9 +194,7 @@ body.en .lang-es{display:none !important}
 <button class="chat-close" id="chatClose">×</button>
 </div>
 </div>
-
 <div class="chat-body" id="chatBody"></div>
-
 <div class="chat-input-area" id="chatInputArea">
 <div class="chat-input-row">
 <input type="text" class="chat-input" id="chatInput" maxlength="100">
@@ -242,12 +204,9 @@ body.en .lang-es{display:none !important}
 </div>
 </div>
 </div>
-
 <script>
 (function() {
-    // ========== LANGUAGE ==========
     var lang = localStorage.getItem('gt-lang') || 'en';
-    
     function setLang(l) {
         lang = l;
         localStorage.setItem('gt-lang', l);
@@ -255,19 +214,8 @@ body.en .lang-es{display:none !important}
         document.querySelectorAll('.lang-btn, .chat-lang-btn').forEach(function(b) {
             b.classList.toggle('active', b.dataset.lang === l);
         });
-        updatePlaceholder();
     }
-    
-    function updatePlaceholder() {
-        var input = document.getElementById('chatInput');
-        if (input) {
-            input.placeholder = lang === 'es' ? 'Escribe aquí...' : 'Type here...';
-        }
-    }
-    
     setLang(lang);
-    
-    // Bind language buttons
     document.querySelectorAll('.lang-btn, .chat-lang-btn').forEach(function(b) {
         b.addEventListener('click', function(e) {
             e.preventDefault();
@@ -275,8 +223,6 @@ body.en .lang-es{display:none !important}
             setLang(this.dataset.lang);
         });
     });
-    
-    // ========== ELEMENTS ==========
     var landing = document.getElementById('landing');
     var chatScreen = document.getElementById('chatScreen');
     var chatBody = document.getElementById('chatBody');
@@ -285,43 +231,31 @@ body.en .lang-es{display:none !important}
     var chatSend = document.getElementById('chatSend');
     var goBtn = document.getElementById('goBtn');
     var chatClose = document.getElementById('chatClose');
-    
-    // ========== STATE ==========
     var currentFlow = null;
     var currentStep = null;
     var tempData = {};
     var selectedPlan = 'individual';
     var selectedBilling = 'monthly';
-    
-    // ========== STORAGE ==========
     function getUser() {
         try { return JSON.parse(localStorage.getItem('gotrotter-user')) || null; }
         catch(e) { return null; }
     }
-    
     function saveUser(data) {
         localStorage.setItem('gotrotter-user', JSON.stringify(data));
     }
-    
     function setSession(name, pin) {
         sessionStorage.setItem('gostar-user-pin', pin);
         sessionStorage.setItem('gostar-user-name', name);
     }
-    
-    // ========== BILINGUAL HELPER ==========
     function bi(en, es) {
         return '<span class="lang-en">' + en + '</span><span class="lang-es">' + es + '</span>';
     }
-    
-    // ========== CHAT HELPERS ==========
     function addMsg(content, isUser, options) {
         var msg = document.createElement('div');
         msg.className = 'chat-msg ' + (isUser ? 'user' : 'bot');
-        
         var avatarContent = isUser ? '👤' : '<img src="go_chat.png" class="chat-msg-avatar-img">';
         var html = '<div class="chat-msg-avatar">' + avatarContent + '</div>';
         html += '<div class="chat-msg-bubble">' + content;
-        
         if (options && options.length) {
             html += '<div class="chat-options">';
             options.forEach(function(opt) {
@@ -329,24 +263,20 @@ body.en .lang-es{display:none !important}
                 if (opt.primary) cls += ' primary';
                 if (opt.secondary) cls += ' secondary';
                 var label = opt.labelEn ? bi(opt.labelEn, opt.labelEs) : opt.label;
-                var iconHtml = opt.icon ? '<img src="go_chat.png" class="chat-option-icon">' : '';
-                html += '<button class="' + cls + '" data-action="' + opt.action + '">' + iconHtml + label + '</button>';
+                html += '<button class="' + cls + '" data-action="' + opt.action + '">' + label + '</button>';
             });
             html += '</div>';
         }
-        
         html += '</div>';
         msg.innerHTML = html;
         chatBody.appendChild(msg);
         chatBody.scrollTop = chatBody.scrollHeight;
-        
         msg.querySelectorAll('.chat-option').forEach(function(btn) {
             btn.addEventListener('click', function() {
                 handleOption(this.dataset.action);
             });
         });
     }
-    
     function addTyping() {
         var msg = document.createElement('div');
         msg.className = 'chat-msg bot';
@@ -355,12 +285,10 @@ body.en .lang-es{display:none !important}
         chatBody.appendChild(msg);
         chatBody.scrollTop = chatBody.scrollHeight;
     }
-    
     function removeTyping() {
         var t = document.getElementById('typingMsg');
         if (t) t.remove();
     }
-    
     function botSay(content, options, delay) {
         delay = delay || 800;
         addTyping();
@@ -369,18 +297,15 @@ body.en .lang-es{display:none !important}
             addMsg(content, false, options);
         }, delay);
     }
-    
     function showInput(placeholderEn, placeholderEs) {
         chatInputArea.classList.add('visible');
         chatInput.placeholder = lang === 'es' ? (placeholderEs || 'Escribe aquí...') : (placeholderEn || 'Type here...');
         chatInput.value = '';
         setTimeout(function() { chatInput.focus(); }, 100);
     }
-    
     function hideInput() {
         chatInputArea.classList.remove('visible');
     }
-    
     function addPinInput() {
         var msg = document.createElement('div');
         msg.className = 'chat-msg bot';
@@ -391,20 +316,17 @@ body.en .lang-es{display:none !important}
             '<input type="tel" class="pin-digit" maxlength="1" data-idx="2">' +
             '<input type="tel" class="pin-digit" maxlength="1" data-idx="3">' +
             '</div>' +
-            '<button class="pin-submit" id="pinSubmit">' + bi('CONFIRM', 'CONFIRMAR') + '</button>' +
+            '<button class="pin-submit" id="pinSubmit">' + bi("LET'S GO!", "PA'LANTE!") + '</button>' +
             '</div>';
         chatBody.appendChild(msg);
         chatBody.scrollTop = chatBody.scrollHeight;
-        
         var digits = msg.querySelectorAll('.pin-digit');
         var submitBtn = msg.querySelector('#pinSubmit');
-        
         function checkComplete() {
             var pin = '';
             digits.forEach(function(d) { pin += d.value; });
             submitBtn.classList.toggle('ready', pin.length === 4);
         }
-        
         digits.forEach(function(d, i) {
             d.addEventListener('input', function() {
                 this.value = this.value.replace(/[^0-9]/g, '');
@@ -416,17 +338,97 @@ body.en .lang-es{display:none !important}
                 if (e.key === 'Backspace' && !this.value && i > 0) digits[i - 1].focus();
             });
         });
-        
         submitBtn.addEventListener('click', function() {
             if (!this.classList.contains('ready')) return;
             var pin = '';
             digits.forEach(function(d) { pin += d.value; });
             handlePinSubmit(pin);
         });
-        
         setTimeout(function() { digits[0].focus(); }, 100);
     }
-    
+    function addEmailInput() {
+        var msg = document.createElement('div');
+        msg.className = 'chat-msg bot';
+        msg.innerHTML = '<div class="chat-msg-avatar"><img src="go_chat.png" class="chat-msg-avatar-img"></div><div class="chat-msg-bubble">' +
+            bi(
+                '🎉 <strong>WELCOME TO TEAM GOTROTTERS!</strong><br><br>Your <strong>7-day free trial</strong> has started!<br><br>Enter the email you used at checkout to get your PIN:',
+                '🎉 <strong>¡BIENVENIDO A TEAM GOTROTTERS!</strong><br><br>¡Tu <strong>prueba gratis de 7 días</strong> ha comenzado!<br><br>Ingresa el email que usaste en el pago para obtener tu PIN:'
+            ) +
+            '<div class="email-input-container">' +
+            '<input type="email" class="email-input" id="emailInput" placeholder="' + (lang === 'es' ? 'tu@email.com' : 'your@email.com') + '">' +
+            '<button class="email-submit" id="emailSubmit">' + bi('GET MY PIN', 'OBTENER MI PIN') + '</button>' +
+            '</div>' +
+            '</div>';
+        chatBody.appendChild(msg);
+        chatBody.scrollTop = chatBody.scrollHeight;
+        var emailInput = msg.querySelector('#emailInput');
+        var emailSubmit = msg.querySelector('#emailSubmit');
+        emailInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') handleEmailLookup(this.value);
+        });
+        emailSubmit.addEventListener('click', function() {
+            handleEmailLookup(emailInput.value);
+        });
+        setTimeout(function() { emailInput.focus(); }, 100);
+    }
+    function handleEmailLookup(email) {
+        email = email.trim().toLowerCase();
+        if (!email || !email.includes('@')) {
+            alert(lang === 'es' ? 'Por favor ingresa un email válido' : 'Please enter a valid email');
+            return;
+        }
+        var submitBtn = document.getElementById('emailSubmit');
+        if (submitBtn) {
+            submitBtn.classList.add('loading');
+            submitBtn.innerHTML = bi('LOADING...', 'CARGANDO...');
+        }
+        fetch('/api/stripe/status/' + encodeURIComponent(email))
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+                if (data.subscribed && data.pin) {
+                    showPinDisplay(data.pin, email, data.plan, data.status);
+                } else {
+                    botSay(bi(
+                        '❌ No subscription found for that email.<br><br>Make sure you entered the same email you used at checkout.',
+                        '❌ No se encontró suscripción para ese email.<br><br>Asegúrate de ingresar el mismo email que usaste en el pago.'
+                    ), [
+                        {labelEn: '🔄 Try Again', labelEs: '🔄 Intentar de Nuevo', action: 'retry_email'},
+                        {labelEn: '🆕 Subscribe', labelEs: '🆕 Suscribirme', action: 'new'}
+                    ], 600);
+                }
+            })
+            .catch(function(err) {
+                console.error('Email lookup error:', err);
+                botSay(bi('❌ Connection error. Please try again.', '❌ Error de conexión. Por favor intenta de nuevo.'), [
+                    {labelEn: '🔄 Try Again', labelEs: '🔄 Intentar de Nuevo', action: 'retry_email'}
+                ], 600);
+            });
+    }
+    function showPinDisplay(pin, email, plan, status) {
+        var userData = { email: email, pin: pin, plan: plan, type: 'subscriber' };
+        saveUser(userData);
+        setSession(email, pin);
+        showSuccess('🎉');
+        var statusText = status === 'trialing' ? bi('🆓 FREE TRIAL ACTIVE', '🆓 PRUEBA GRATIS ACTIVA') : bi('✅ SUBSCRIPTION ACTIVE', '✅ SUSCRIPCIÓN ACTIVA');
+        var msg = document.createElement('div');
+        msg.className = 'chat-msg bot';
+        msg.innerHTML = '<div class="chat-msg-avatar"><img src="go_chat.png" class="chat-msg-avatar-img"></div><div class="chat-msg-bubble">' +
+            '<div class="pin-display">' +
+            '<div class="pin-display-label">' + bi('YOUR LOGIN PIN', 'TU PIN DE ACCESO') + '</div>' +
+            '<div class="pin-display-value">' + pin + '</div>' +
+            '<div class="pin-display-note">📝 ' + bi('Save this PIN!', '¡Guarda este PIN!') + '</div>' +
+            '</div>' +
+            '<div class="status-badge ' + status + '">' + statusText + '</div>' +
+            '<div class="chat-options">' +
+            '<button class="chat-option primary" data-action="start_training">' + bi("🏀 LET'S GO!", "🏀 PA'LANTE!") + '</button>' +
+            '</div>' +
+            '</div>';
+        chatBody.appendChild(msg);
+        chatBody.scrollTop = chatBody.scrollHeight;
+        msg.querySelectorAll('.chat-option').forEach(function(btn) {
+            btn.addEventListener('click', function() { handleOption(this.dataset.action); });
+        });
+    }
     function addPlanSelector() {
         var msg = document.createElement('div');
         msg.className = 'chat-msg bot';
@@ -452,13 +454,11 @@ body.en .lang-es{display:none !important}
             '</div>';
         chatBody.appendChild(msg);
         chatBody.scrollTop = chatBody.scrollHeight;
-        
         var planCards = msg.querySelectorAll('.plan-card');
         var billingBtns = msg.querySelectorAll('.billing-btn');
         var subscribeBtn = msg.querySelector('#subscribeBtn');
         var priceIndividual = msg.querySelector('#priceIndividual');
         var priceFamily = msg.querySelector('#priceFamily');
-        
         function updatePrices() {
             if (selectedBilling === 'monthly') {
                 priceIndividual.innerHTML = '$5<span>/mo</span>';
@@ -468,7 +468,6 @@ body.en .lang-es{display:none !important}
                 priceFamily.innerHTML = '$200<span>/yr</span>';
             }
         }
-        
         planCards.forEach(function(card) {
             card.addEventListener('click', function() {
                 planCards.forEach(function(c) { c.classList.remove('selected'); });
@@ -476,7 +475,6 @@ body.en .lang-es{display:none !important}
                 selectedPlan = this.dataset.plan;
             });
         });
-        
         billingBtns.forEach(function(btn) {
             btn.addEventListener('click', function() {
                 billingBtns.forEach(function(b) { b.classList.remove('active'); });
@@ -485,12 +483,8 @@ body.en .lang-es{display:none !important}
                 updatePrices();
             });
         });
-        
-        subscribeBtn.addEventListener('click', function() {
-            handleSubscribe();
-        });
+        subscribeBtn.addEventListener('click', function() { handleSubscribe(); });
     }
-    
     function showSuccess(emoji) {
         var burst = document.createElement('div');
         burst.className = 'success-burst';
@@ -498,32 +492,20 @@ body.en .lang-es{display:none !important}
         document.body.appendChild(burst);
         setTimeout(function() { burst.remove(); }, 800);
     }
-    
     function goToGameHub() {
         showSuccess('🏆');
-        setTimeout(function() {
-            window.location.href = 'game-hub.html';
-        }, 1000);
+        setTimeout(function() { window.location.href = 'game-hub.html'; }, 1000);
     }
-    
-    // ========== STRIPE CHECKOUT ==========
     function handleSubscribe() {
         var subscribeBtn = document.getElementById('subscribeBtn');
         if (subscribeBtn) {
             subscribeBtn.classList.add('loading');
             subscribeBtn.innerHTML = bi('LOADING...', 'CARGANDO...');
         }
-        
-        var email = tempData.email || null;
-        
         fetch('/api/stripe/checkout', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                plan: selectedPlan,
-                billing: selectedBilling,
-                email: email
-            })
+            body: JSON.stringify({ plan: selectedPlan, billing: selectedBilling })
         })
         .then(function(res) { return res.json(); })
         .then(function(data) {
@@ -546,49 +528,22 @@ body.en .lang-es{display:none !important}
             }
         });
     }
-    
-    // ========== CHECK URL PARAMS (after Stripe redirect) ==========
     function checkUrlParams() {
         var params = new URLSearchParams(window.location.search);
-        
         if (params.get('success') === 'true') {
-            // Clear URL params
             window.history.replaceState({}, '', window.location.pathname);
-            
-            // Show success flow
             setTimeout(function() {
                 openChat();
-                setTimeout(function() {
-                    var msg = bi(
-                        '🎉 <strong>PAYMENT SUCCESSFUL!</strong><br><br>Welcome to Team GoTrotters!<br><br>Your <strong>7-day free trial</strong> has started. You won\'t be charged until the trial ends.<br><br>Check your email for your <strong>login PIN</strong>.',
-                        '🎉 <strong>¡PAGO EXITOSO!</strong><br><br>¡Bienvenido a Team GoTrotters!<br><br>Tu <strong>prueba gratis de 7 días</strong> ha comenzado. No se te cobrará hasta que termine la prueba.<br><br>Revisa tu email para tu <strong>PIN de acceso</strong>.'
-                    );
-                    addMsg(msg, false);
-                    
-                    botSay(bi(
-                        'Enter your PIN to continue:',
-                        'Ingresa tu PIN para continuar:'
-                    ), null, 1200);
-                    
-                    currentFlow = 'subscriber';
-                    currentStep = 'ask_pin';
-                    setTimeout(addPinInput, 2200);
-                }, 500);
+                setTimeout(function() { addEmailInput(); }, 500);
             }, 300);
             return true;
         }
-        
         if (params.get('canceled') === 'true') {
             window.history.replaceState({}, '', window.location.pathname);
-            
             setTimeout(function() {
                 openChat();
                 setTimeout(function() {
-                    var msg = bi(
-                        'No worries! 🏀<br><br>You can subscribe anytime. Ready to join the team?',
-                        '¡Sin problema! 🏀<br><br>Puedes suscribirte cuando quieras. ¿Listo para unirte al equipo?'
-                    );
-                    addMsg(msg, false, [
+                    addMsg(bi('No worries! 🏀<br><br>You can subscribe anytime.', '¡Sin problema! 🏀<br><br>Puedes suscribirte cuando quieras.'), false, [
                         {labelEn: '🆕 Subscribe', labelEs: '🆕 Suscribirme', action: 'new'},
                         {labelEn: '🔑 I Have PIN', labelEs: '🔑 Tengo PIN', action: 'returning'},
                         {labelEn: '🏢 Facility', labelEs: '🏢 Instalación', action: 'facility'}
@@ -597,222 +552,125 @@ body.en .lang-es{display:none !important}
             }, 300);
             return true;
         }
-        
         return false;
     }
-    
-    // ========== OPEN CHAT ==========
     function openChat() {
         landing.classList.add('hidden');
         chatScreen.classList.add('active');
         chatBody.innerHTML = '';
         hideInput();
-        
         var user = getUser();
-        
         if (user && user.pin && user.type === 'subscriber') {
-            // Returning subscriber
-            var greeting = bi(
-                'Hey! 🏀 Welcome back to <strong>Team GoTrotters</strong>!',
-                '¡Hola! 🏀 ¡Bienvenido de vuelta a <strong>Team GoTrotters</strong>!'
-            );
-            
             setTimeout(function() {
-                addMsg(greeting, false);
-                
-                var subtext = bi(
-                    'Enter your PIN to continue:',
-                    'Ingresa tu PIN para continuar:'
-                );
-                
+                addMsg(bi('Hey! 🏀 Welcome back to <strong>Team GoTrotters</strong>!', '¡Hola! 🏀 ¡Bienvenido de vuelta a <strong>Team GoTrotters</strong>!'), false);
                 currentFlow = 'subscriber';
                 currentStep = 'ask_pin';
-                
-                botSay(subtext, null, 600);
+                botSay(bi('Enter your PIN to continue:', 'Ingresa tu PIN para continuar:'), null, 600);
                 setTimeout(addPinInput, 1500);
             }, 400);
         } else if (user && user.pin && user.type === 'facility') {
-            // Returning facility user
-            var greeting = bi(
-                'Hey! 🏀 Welcome back to <strong>Team GoTrotters</strong>!',
-                '¡Hola! 🏀 ¡Bienvenido de vuelta a <strong>Team GoTrotters</strong>!'
-            );
-            
             setTimeout(function() {
-                addMsg(greeting, false);
-                
-                var subtext = bi(
-                    'Are you <strong>' + user.name + '</strong>?',
-                    '¿Eres <strong>' + user.name + '</strong>?'
-                );
-                
-                botSay(subtext, [
-                    {labelEn: '✅ Yes, that\'s me', labelEs: '✅ Sí, soy yo', action: 'confirm_facility_user'},
-                    {labelEn: '👤 No, I\'m new', labelEs: '👤 No, soy nuevo', action: 'new'}
+                addMsg(bi('Hey! 🏀 Welcome back!', '¡Hola! 🏀 ¡Bienvenido de vuelta!'), false);
+                botSay(bi('Are you <strong>' + user.name + '</strong>?', '¿Eres <strong>' + user.name + '</strong>?'), [
+                    {labelEn: '✅ Yes', labelEs: '✅ Sí', action: 'confirm_facility_user'},
+                    {labelEn: '👤 No', labelEs: '👤 No', action: 'new'}
                 ], 600);
             }, 400);
         } else {
-            // New visitor
-            var greeting = bi(
-                'Hey! 🏀 I\'m <strong>GoTrotter™ AI</strong> — Coach, Team GoTrotters.',
-                '¡Qué pasa! 🏀 Soy <strong>GoTrotter™ AI</strong> — Coach, Team GoTrotters.'
-            );
-            
             setTimeout(function() {
-                addMsg(greeting, false);
-                
-                var question = bi(
-                    'Welcome to Team GoTrotters. I\'m here to guide you through The M³ Performance Engine.<br><br>What brings you here?',
-                    'Bienvenido a Team GoTrotters. Estoy aquí para guiarte a través del Motor de Rendimiento M³.<br><br>¿Qué te trae por aquí?'
-                );
-                
-                botSay(question, [
+                addMsg(bi('Hey! 🏀 I\'m <strong>GoTrotter™ AI</strong> — Coach, Team GoTrotters.', '¡Qué pasa! 🏀 Soy <strong>GoTrotter™ AI</strong> — Coach, Team GoTrotters.'), false);
+                botSay(bi('Welcome to Team GoTrotters.<br><br>What brings you here?', 'Bienvenido a Team GoTrotters.<br><br>¿Qué te trae por aquí?'), [
                     {labelEn: '🆕 I\'m New — Subscribe', labelEs: '🆕 Soy Nuevo — Suscribirme', action: 'new', primary: true},
                     {labelEn: '🔑 I Have PIN', labelEs: '🔑 Tengo PIN', action: 'returning'},
-                    {labelEn: '🏢 Facility Code', labelEs: '🏢 Código de Instalación', action: 'facility'}
+                    {labelEn: '🏢 Facility Code', labelEs: '🏢 Código Instalación', action: 'facility'}
                 ], 600);
             }, 400);
         }
     }
-    
-    // ========== HANDLE OPTIONS ==========
     function handleOption(action) {
         document.querySelectorAll('.chat-option').forEach(function(b) {
             b.style.pointerEvents = 'none';
             b.style.opacity = '0.5';
         });
-        
         switch(action) {
             case 'new':
                 currentFlow = 'new';
-                currentStep = 'select_plan';
-                var msg = bi(
-                    'Let\'s get you on the team! 🎉<br><br>The M³ Performance Engine. 3 gears. 10 shifts. I\'ll be your Coach.<br><br>Choose your plan:',
-                    '¡Vamos a ponerte en el equipo! 🎉<br><br>El Motor de Rendimiento M³. 3 engranajes. 10 cambios. Seré tu Coach.<br><br>Elige tu plan:'
-                );
-                botSay(msg, null, 600);
+                botSay(bi("Let's get you on the team! 🎉<br><br>Choose your plan:", '¡Vamos a ponerte en el equipo! 🎉<br><br>Elige tu plan:'), null, 600);
                 setTimeout(addPlanSelector, 1500);
                 break;
-                
             case 'returning':
                 currentFlow = 'subscriber';
                 currentStep = 'ask_pin';
-                var msg = bi(
-                    'Welcome back! 🏀<br><br>Enter your 4-digit PIN:',
-                    '¡Bienvenido de vuelta! 🏀<br><br>Ingresa tu PIN de 4 dígitos:'
-                );
-                botSay(msg, null, 600);
+                botSay(bi('Welcome back! 🏀<br><br>Enter your 4-digit PIN:', '¡Bienvenido! 🏀<br><br>Ingresa tu PIN de 4 dígitos:'), null, 600);
                 setTimeout(addPinInput, 1500);
                 break;
-                
             case 'facility':
                 currentFlow = 'facility';
                 currentStep = 'ask_facility_code';
-                var msg = bi(
-                    'Perfect! 🏢<br><br>What\'s your facility code?',
-                    '¡Perfecto! 🏢<br><br>¿Cuál es el código de tu instalación?'
-                );
-                botSay(msg, null, 600);
-                setTimeout(function() { showInput('Facility code...', 'Código de instalación...'); }, 1500);
+                botSay(bi('Perfect! 🏢<br><br>What\'s your facility code?', '¡Perfecto! 🏢<br><br>¿Cuál es tu código de instalación?'), null, 600);
+                setTimeout(function() { showInput('Facility code...', 'Código...'); }, 1500);
                 break;
-                
             case 'confirm_facility_user':
                 currentFlow = 'facility';
                 currentStep = 'ask_pin';
-                var msg = bi('Great! Enter your PIN:', '¡Excelente! Ingresa tu PIN:');
-                botSay(msg, null, 400);
+                botSay(bi('Great! Enter your PIN:', '¡Excelente! Ingresa tu PIN:'), null, 400);
                 setTimeout(addPinInput, 1200);
                 break;
-                
             case 'start_training':
                 goToGameHub();
                 break;
-                
             case 'manage_subscription':
                 handleManageSubscription();
                 break;
+            case 'retry_email':
+                addEmailInput();
+                break;
         }
     }
-    
-    // ========== HANDLE TEXT INPUT ==========
     function handleTextInput(text) {
         text = text.trim();
         if (!text) return;
-        
         addMsg(text, true);
         hideInput();
-        
         if (currentFlow === 'facility' && currentStep === 'ask_facility_code') {
             tempData.facilityCode = text.toUpperCase();
             currentStep = 'ask_facility_name';
-            var msg = bi(
-                'Got it! 🏢<br><br>What\'s your name?',
-                '¡Código recibido! 🏢<br><br>¿Cuál es tu nombre?'
-            );
-            botSay(msg, null, 600);
+            botSay(bi('Got it! 🏢<br><br>What\'s your name?', '¡Recibido! 🏢<br><br>¿Cuál es tu nombre?'), null, 600);
             setTimeout(function() { showInput('Your name...', 'Tu nombre...'); }, 1500);
         }
         else if (currentFlow === 'facility' && currentStep === 'ask_facility_name') {
             tempData.name = text;
-            currentStep = 'registering_facility';
-            
-            // Register with server
             fetch('/api/play/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    accessCode: tempData.facilityCode,
-                    username: tempData.name
-                })
+                body: JSON.stringify({ accessCode: tempData.facilityCode, username: tempData.name })
             })
             .then(function(res) { return res.json(); })
             .then(function(data) {
                 if (data.success) {
-                    var userData = {
-                        name: data.username,
-                        pin: data.pin,
-                        facilityCode: tempData.facilityCode,
-                        type: 'facility',
-                        created: new Date().toISOString()
-                    };
+                    var userData = { name: data.username, pin: data.pin, facilityCode: tempData.facilityCode, type: 'facility' };
                     saveUser(userData);
                     setSession(userData.name, userData.pin);
-                    sessionStorage.setItem('gostar-facility-code', tempData.facilityCode);
-                    
                     var msg = bi(
-                        '🏢 <strong>YOU\'RE ON THE TEAM!</strong><br><br>Welcome, <strong>' + data.username + '</strong>!<br><br>Your PIN: <strong>' + data.pin + '</strong><br><br>Remember this PIN for next time!',
-                        '🏢 <strong>¡ESTÁS EN EL EQUIPO!</strong><br><br>¡Bienvenido, <strong>' + data.username + '</strong>!<br><br>Tu PIN: <strong>' + data.pin + '</strong><br><br>¡Recuerda este PIN para la próxima!'
-                    );
-                    
-                    botSay(msg, [
-                        {labelEn: '🏀 LET\'S GO!', labelEs: '🏀 PA\'LANTE!', action: 'start_training', primary: true}
-                    ], 800);
+                        '🏢 <strong>YOU\'RE ON THE TEAM!</strong><br><br>Welcome, <strong>' + data.username + '</strong>!',
+                        '🏢 <strong>¡ESTÁS EN EL EQUIPO!</strong><br><br>¡Bienvenido, <strong>' + data.username + '</strong>!'
+                    ) + '<div class="pin-display"><div class="pin-display-label">' + bi('YOUR PIN', 'TU PIN') + '</div><div class="pin-display-value">' + data.pin + '</div><div class="pin-display-note">📝 ' + bi('Save this!', '¡Guárdalo!') + '</div></div>';
+                    botSay(msg, [{labelEn: "🏀 LET'S GO!", labelEs: "🏀 PA'LANTE!", action: 'start_training', primary: true}], 800);
                 } else {
-                    var msg = bi('❌ ' + (data.error || 'Registration failed'), '❌ ' + (data.error || 'Error de registro'));
-                    botSay(msg, [
-                        {labelEn: '🔄 Try Again', labelEs: '🔄 Intentar de Nuevo', action: 'facility'}
-                    ], 600);
+                    botSay(bi('❌ ' + (data.error || 'Error'), '❌ ' + (data.error || 'Error')), [{labelEn: '🔄 Try Again', labelEs: '🔄 Intentar', action: 'facility'}], 600);
                 }
             })
-            .catch(function(err) {
-                var msg = bi('❌ Connection error', '❌ Error de conexión');
-                botSay(msg, [
-                    {labelEn: '🔄 Try Again', labelEs: '🔄 Intentar de Nuevo', action: 'facility'}
-                ], 600);
+            .catch(function() {
+                botSay(bi('❌ Connection error', '❌ Error de conexión'), [{labelEn: '🔄 Try Again', labelEs: '🔄 Intentar', action: 'facility'}], 600);
             });
         }
     }
-    
-    // ========== HANDLE PIN SUBMIT ==========
     function handlePinSubmit(pin) {
         document.querySelectorAll('.pin-digit').forEach(function(d) { d.disabled = true; });
         var submitBtn = document.getElementById('pinSubmit');
         if (submitBtn) submitBtn.style.opacity = '0.5';
-        
         addMsg('••••', true);
-        
         if (currentFlow === 'subscriber' && currentStep === 'ask_pin') {
-            // Check PIN against server (subscriber first, then facility)
             fetch('/api/subscriber/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -821,64 +679,30 @@ body.en .lang-es{display:none !important}
             .then(function(res) { return res.json(); })
             .then(function(data) {
                 if (data.success) {
-                    // Save locally
-                    var userData = {
-                        email: data.email,
-                        pin: pin,
-                        plan: data.plan,
-                        type: 'subscriber'
-                    };
+                    var userData = { email: data.email, pin: pin, plan: data.plan, type: 'subscriber' };
                     saveUser(userData);
                     setSession(data.email, pin);
-                    
-                    var statusBadge = '';
-                    if (data.status === 'trialing') {
-                        statusBadge = '<div class="status-badge trialing">🆓 ' + bi('FREE TRIAL', 'PRUEBA GRATIS') + '</div>';
-                    } else if (data.status === 'active') {
-                        statusBadge = '<div class="status-badge active">✅ ' + bi('ACTIVE', 'ACTIVO') + '</div>';
-                    }
-                    
-                    var msg = bi(
-                        '🏀 <strong>Welcome back!</strong><br><br>' + statusBadge + '<br><br>The M³ Performance Engine:<br>🧠 Map — Gear 1<br>⚡ Move — Gear 2<br>👁️ Match — Gear 3<br><br>Ready to train?',
-                        '🏀 <strong>¡Bienvenido de vuelta!</strong><br><br>' + statusBadge + '<br><br>El Motor de Rendimiento M³:<br>🧠 Ubicar — Engranaje 1<br>⚡ Mover — Engranaje 2<br>👁️ Coordinar — Engranaje 3<br><br>¿Listo para entrenar?'
-                    );
-                    
-                    botSay(msg, [
-                        {labelEn: '🏀 LET\'S GO!', labelEs: '🏀 PA\'LANTE!', action: 'start_training', primary: true},
-                        {labelEn: '⚙️ Manage Subscription', labelEs: '⚙️ Gestionar Suscripción', action: 'manage_subscription', secondary: true}
+                    var statusBadge = data.status === 'trialing' ? '<div class="status-badge trialing">🆓 ' + bi('FREE TRIAL', 'PRUEBA GRATIS') + '</div>' : '<div class="status-badge active">✅ ' + bi('ACTIVE', 'ACTIVO') + '</div>';
+                    botSay(bi('🏀 <strong>Welcome back!</strong>', '🏀 <strong>¡Bienvenido!</strong>') + '<br><br>' + statusBadge + '<br><br>' + bi('Ready to train?', '¿Listo para entrenar?'), [
+                        {labelEn: "🏀 LET'S GO!", labelEs: "🏀 PA'LANTE!", action: 'start_training', primary: true},
+                        {labelEn: '⚙️ Manage', labelEs: '⚙️ Gestionar', action: 'manage_subscription', secondary: true}
                     ], 800);
                 } else {
-                    // Try facility login
                     tryFacilityLogin(pin);
                 }
             })
-            .catch(function(err) {
-                console.error('Login error:', err);
-                // Try facility login as fallback
-                tryFacilityLogin(pin);
-            });
+            .catch(function() { tryFacilityLogin(pin); });
         }
         else if (currentFlow === 'facility' && currentStep === 'ask_pin') {
             var user = getUser();
             if (user && user.pin === pin) {
                 setSession(user.name, user.pin);
-                sessionStorage.setItem('gostar-facility-code', user.facilityCode || user.accessCode);
-                
-                var msg = bi(
-                    '🏀 <strong>Welcome back, ' + user.name + '!</strong><br><br>Ready to train?',
-                    '🏀 <strong>¡Bienvenido de vuelta, ' + user.name + '!</strong><br><br>¿Listo para entrenar?'
-                );
-                
-                botSay(msg, [
-                    {labelEn: '🏀 LET\'S GO!', labelEs: '🏀 PA\'LANTE!', action: 'start_training', primary: true}
-                ], 800);
+                botSay(bi('🏀 <strong>Welcome back, ' + user.name + '!</strong>', '🏀 <strong>¡Bienvenido, ' + user.name + '!</strong>'), [{labelEn: "🏀 LET'S GO!", labelEs: "🏀 PA'LANTE!", action: 'start_training', primary: true}], 800);
             } else {
-                // Try server login
                 tryFacilityLogin(pin);
             }
         }
     }
-    
     function tryFacilityLogin(pin) {
         fetch('/api/play/login', {
             method: 'POST',
@@ -888,47 +712,27 @@ body.en .lang-es{display:none !important}
         .then(function(res) { return res.json(); })
         .then(function(data) {
             if (data.success) {
-                var userData = {
-                    name: data.username,
-                    pin: data.pin,
-                    accessCode: data.accessCode,
-                    type: 'facility'
-                };
+                var userData = { name: data.username, pin: data.pin, accessCode: data.accessCode, type: 'facility' };
                 saveUser(userData);
                 setSession(data.username, data.pin);
-                
-                var msg = bi(
-                    '🏀 <strong>Welcome back, ' + data.username + '!</strong><br><br>Ready to train?',
-                    '🏀 <strong>¡Bienvenido de vuelta, ' + data.username + '!</strong><br><br>¿Listo para entrenar?'
-                );
-                
-                botSay(msg, [
-                    {labelEn: '🏀 LET\'S GO!', labelEs: '🏀 PA\'LANTE!', action: 'start_training', primary: true}
-                ], 800);
+                botSay(bi('🏀 <strong>Welcome back, ' + data.username + '!</strong>', '🏀 <strong>¡Bienvenido, ' + data.username + '!</strong>'), [{labelEn: "🏀 LET'S GO!", labelEs: "🏀 PA'LANTE!", action: 'start_training', primary: true}], 800);
             } else {
-                var msg = bi('❌ Invalid PIN. Try again:', '❌ PIN inválido. Intenta de nuevo:');
-                botSay(msg, null, 600);
+                botSay(bi('❌ Invalid PIN. Try again:', '❌ PIN inválido. Intenta:'), null, 600);
                 setTimeout(addPinInput, 1400);
             }
         })
-        .catch(function(err) {
-            var msg = bi('❌ Invalid PIN. Try again:', '❌ PIN inválido. Intenta de nuevo:');
-            botSay(msg, null, 600);
+        .catch(function() {
+            botSay(bi('❌ Invalid PIN. Try again:', '❌ PIN inválido. Intenta:'), null, 600);
             setTimeout(addPinInput, 1400);
         });
     }
-    
-    // ========== MANAGE SUBSCRIPTION ==========
     function handleManageSubscription() {
         var user = getUser();
         if (!user || !user.email) {
-            var msg = bi('Please login first.', 'Por favor inicia sesión primero.');
-            botSay(msg, null, 400);
+            botSay(bi('Please login first.', 'Por favor inicia sesión primero.'), null, 400);
             return;
         }
-        
         addTyping();
-        
         fetch('/api/stripe/portal', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -937,46 +741,30 @@ body.en .lang-es{display:none !important}
         .then(function(res) { return res.json(); })
         .then(function(data) {
             removeTyping();
-            if (data.url) {
-                window.location.href = data.url;
-            } else {
-                var msg = bi('❌ Could not open subscription portal.', '❌ No se pudo abrir el portal de suscripción.');
-                addMsg(msg, false);
-            }
+            if (data.url) window.location.href = data.url;
+            else addMsg(bi('❌ Could not open portal.', '❌ No se pudo abrir el portal.'), false);
         })
-        .catch(function(err) {
+        .catch(function() {
             removeTyping();
-            var msg = bi('❌ Connection error.', '❌ Error de conexión.');
-            addMsg(msg, false);
+            addMsg(bi('❌ Connection error.', '❌ Error de conexión.'), false);
         });
     }
-    
-    // ========== EVENT LISTENERS ==========
     goBtn.addEventListener('click', openChat);
-    
     chatClose.addEventListener('click', function() {
         chatScreen.classList.remove('active');
         landing.classList.remove('hidden');
     });
-    
     chatSend.addEventListener('click', function() {
         handleTextInput(chatInput.value);
         chatInput.value = '';
     });
-    
     chatInput.addEventListener('keydown', function(e) {
         if (e.key === 'Enter') {
             handleTextInput(chatInput.value);
             chatInput.value = '';
         }
     });
-    
-    // ========== INIT ==========
-    // Check for Stripe redirect params first
-    if (!checkUrlParams()) {
-        // Normal page load
-    }
-    
+    if (!checkUrlParams()) { }
 })();
 </script>
 </body>
