@@ -1202,6 +1202,10 @@ tr.clickable:hover { background: var(--card-hover); }
                             <span class="lang-en">Refresh</span>
                             <span class="lang-es">Actualizar</span>
                         </button>
+                        <button class="btn btn-danger" id="clearAllActivityBtn">🗑️ 
+                            <span class="lang-en">Clear All</span>
+                            <span class="lang-es">Limpiar Todo</span>
+                        </button>
                     </div>
                 </div>
                 <div style="padding: 15px 20px 5px;">
@@ -1505,6 +1509,7 @@ tr.clickable:hover { background: var(--card-hover); }
         document.getElementById('refreshSubscribersBtn').addEventListener('click', loadSubscribers);
         document.getElementById('refreshFacilitiesBtn').addEventListener('click', loadFacilities);
         document.getElementById('refreshActivityBtn').addEventListener('click', loadActivity);
+        document.getElementById('clearAllActivityBtn').addEventListener('click', promptClearAllActivity);
         document.getElementById('saveSubscriberBtn').addEventListener('click', saveSubscriber);
         document.getElementById('confirmDeleteSubscriberBtn').addEventListener('click', confirmDeleteSubscriber);
         document.getElementById('confirmDeleteActivityBtn').addEventListener('click', confirmDeleteActivity);
@@ -2016,16 +2021,19 @@ tr.clickable:hover { background: var(--card-hover); }
             var userGames = {};
             var otherActivities = [];
             var allIds = [];
+            var allIndices = [];
             
             dayActivities.forEach(function(act) {
                 if (act.id) allIds.push(act.id);
+                if (act._originalIndex !== undefined) allIndices.push(act._originalIndex);
                 
                 if (act.type === 'game_session' && act.username) {
                     if (!userGames[act.username]) {
-                        userGames[act.username] = { count: 0, games: [], ids: [], details: act.details, timestamp: act.timestamp };
+                        userGames[act.username] = { count: 0, games: [], ids: [], indices: [], details: act.details, timestamp: act.timestamp };
                     }
                     userGames[act.username].count++;
                     if (act.id) userGames[act.username].ids.push(act.id);
+                    if (act._originalIndex !== undefined) userGames[act.username].indices.push(act._originalIndex);
                     if (act.details) {
                         var gameName = act.details.split('|')[0].trim();
                         if (userGames[act.username].games.indexOf(gameName) === -1) {
@@ -2037,7 +2045,7 @@ tr.clickable:hover { background: var(--card-hover); }
                 }
             });
             
-            result[dateKey] = { aggregated: userGames, other: otherActivities, allIds: allIds };
+            result[dateKey] = { aggregated: userGames, other: otherActivities, allIds: allIds, allIndices: allIndices };
         }
         
         return result;
@@ -2053,14 +2061,26 @@ tr.clickable:hover { background: var(--card-hover); }
             return;
         }
 
-        // Filter activities
-        var filtered = activities.filter(function(act) {
-            if (currentActivityFilter === 'all') return true;
-            var category = getActivityCategory(act.type);
-            if (currentActivityFilter === 'milestone') {
-                return category === 'milestone' || isMilestone(act.details);
+        // Filter activities but keep original index
+        var filtered = [];
+        activities.forEach(function(act, idx) {
+            var include = false;
+            if (currentActivityFilter === 'all') {
+                include = true;
+            } else {
+                var category = getActivityCategory(act.type);
+                if (currentActivityFilter === 'milestone') {
+                    include = category === 'milestone' || isMilestone(act.details);
+                } else {
+                    include = category === currentActivityFilter;
+                }
             }
-            return category === currentActivityFilter;
+            if (include) {
+                var actWithIndex = {};
+                for (var key in act) { actWithIndex[key] = act[key]; }
+                actWithIndex._originalIndex = idx;
+                filtered.push(actWithIndex);
+            }
         });
 
         if (filtered.length === 0) {
@@ -2115,6 +2135,7 @@ tr.clickable:hover { background: var(--card-hover); }
                 var hasMilestone = isMilestone(description);
                 var iconClass = hasMilestone ? 'milestone' : (act.type && act.type.includes('subscription') ? 'subscription' : 'game');
                 var actId = act.id || '';
+                var actIndex = act._originalIndex;
                 
                 html += '<div class="aggregated-item">';
                 html += '<div class="aggregated-icon ' + iconClass + '">' + iconInfo.icon + '</div>';
@@ -2126,7 +2147,8 @@ tr.clickable:hover { background: var(--card-hover); }
                 html += '</div>';
                 if (act.facility) html += '<div class="aggregated-details">' + act.facility + '</div>';
                 html += '</div>';
-                if (actId) html += '<button class="activity-delete-btn" onclick="window.promptDeleteSingle(\'' + actId + '\', \'' + (act.username || '') + '\')" title="' + (currentLang === 'es' ? 'Eliminar' : 'Delete') + '">🗑️</button>';
+                // Always show delete button - use ID if available, otherwise use index
+                html += '<button class="activity-delete-btn" onclick="window.promptDeleteSingle(\'' + actId + '\', \'' + (act.username || '') + '\', ' + actIndex + ')" title="' + (currentLang === 'es' ? 'Eliminar' : 'Delete') + '">🗑️</button>';
                 html += '</div>';
             });
             
@@ -2165,8 +2187,8 @@ tr.clickable:hover { background: var(--card-hover); }
         openModal('deleteActivityModal');
     };
 
-    window.promptDeleteSingle = function(actId, username) {
-        pendingActivityDelete = { type: 'single', ids: [actId], date: null, username: username };
+    window.promptDeleteSingle = function(actId, username, actIndex) {
+        pendingActivityDelete = { type: 'single', ids: actId ? [actId] : [], date: null, username: username, index: actIndex };
         document.getElementById('deleteActivityTitle').innerHTML = currentLang === 'es' ? '¿ELIMINAR ACTIVIDAD?' : 'DELETE ACTIVITY?';
         document.getElementById('deleteActivityText').innerHTML = currentLang === 'es' 
             ? 'Esto eliminará esta actividad' + (username ? ' de <strong>' + username + '</strong>' : '') + '.'
@@ -2175,12 +2197,29 @@ tr.clickable:hover { background: var(--card-hover); }
         openModal('deleteActivityModal');
     };
 
+    function promptClearAllActivity() {
+        pendingActivityDelete = { type: 'all', ids: [], date: null, username: null };
+        document.getElementById('deleteActivityTitle').innerHTML = currentLang === 'es' ? '¿LIMPIAR TODA LA ACTIVIDAD?' : 'CLEAR ALL ACTIVITY?';
+        document.getElementById('deleteActivityText').innerHTML = currentLang === 'es' 
+            ? 'Esto eliminará <strong>TODA</strong> la actividad registrada. Esta acción no se puede deshacer.'
+            : 'This will delete <strong>ALL</strong> recorded activity. This cannot be undone.';
+        document.getElementById('deleteActivitySummary').style.display = 'block';
+        document.getElementById('deleteActivityCount').textContent = activities.length;
+        openModal('deleteActivityModal');
+    }
+
     function confirmDeleteActivity() {
         var deleteInfo = pendingActivityDelete;
         closeModal('deleteActivityModal');
         
-        if (deleteInfo.type === 'single' && deleteInfo.ids.length > 0) {
-            deleteActivityById(deleteInfo.ids[0]);
+        if (deleteInfo.type === 'all') {
+            deleteAllActivity();
+        } else if (deleteInfo.type === 'single') {
+            if (deleteInfo.ids.length > 0 && deleteInfo.ids[0]) {
+                deleteActivityById(deleteInfo.ids[0]);
+            } else if (deleteInfo.index !== undefined) {
+                deleteActivityByIndex(deleteInfo.index);
+            }
         } else if (deleteInfo.type === 'day' && deleteInfo.date) {
             deleteActivitiesByDate(deleteInfo.date);
         } else if (deleteInfo.type === 'user_day' && deleteInfo.date && deleteInfo.username) {
@@ -2188,8 +2227,44 @@ tr.clickable:hover { background: var(--card-hover); }
         }
     }
 
+    function deleteAllActivity() {
+        fetch(API_BASE + '/admin/activity/all', {
+            method: 'DELETE',
+            headers: { 'Authorization': 'Bearer ' + authToken }
+        })
+        .then(function(res) {
+            if (res.ok) {
+                showToast(currentLang === 'es' ? 'Toda la actividad eliminada' : 'All activity deleted');
+                loadActivity();
+            } else {
+                throw new Error('Delete failed');
+            }
+        })
+        .catch(function(err) {
+            showToast(currentLang === 'es' ? 'Error al eliminar' : 'Delete failed', true);
+        });
+    }
+
     function deleteActivityById(actId) {
         fetch(API_BASE + '/admin/activity/' + actId, {
+            method: 'DELETE',
+            headers: { 'Authorization': 'Bearer ' + authToken }
+        })
+        .then(function(res) {
+            if (res.ok) {
+                showToast(currentLang === 'es' ? 'Actividad eliminada' : 'Activity deleted');
+                loadActivity();
+            } else {
+                throw new Error('Delete failed');
+            }
+        })
+        .catch(function(err) {
+            showToast(currentLang === 'es' ? 'Error al eliminar' : 'Delete failed', true);
+        });
+    }
+
+    function deleteActivityByIndex(index) {
+        fetch(API_BASE + '/admin/activity/by-index/' + index, {
             method: 'DELETE',
             headers: { 'Authorization': 'Bearer ' + authToken }
         })
