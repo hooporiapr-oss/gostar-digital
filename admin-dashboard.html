@@ -835,6 +835,58 @@ tr.clickable:hover { background: var(--card-hover); }
     font-weight: 700;
 }
 
+.activity-delete-btn {
+    opacity: 0;
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+.aggregated-item:hover .activity-delete-btn,
+.day-group-header:hover .day-delete-btn { opacity: 1; }
+.activity-delete-btn:hover { background: rgba(255,71,87,0.15); color: var(--danger); }
+
+.day-delete-btn {
+    opacity: 0;
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    transition: all 0.2s;
+    margin-right: 10px;
+}
+
+.day-delete-btn:hover { background: rgba(255,71,87,0.15); color: var(--danger); }
+
+.delete-activity-summary {
+    background: var(--darker);
+    border-radius: 10px;
+    padding: 15px;
+    margin: 15px 0;
+}
+
+.delete-activity-count {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    color: var(--danger);
+    text-align: center;
+}
+
+.delete-activity-label {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.85rem;
+}
+
 @media (max-width: 1024px) {
     .sidebar { width: 80px; padding: 15px 0; }
     .sidebar-header { padding: 0 10px 15px; }
@@ -1281,6 +1333,30 @@ tr.clickable:hover { background: var(--card-hover); }
     </div>
 </div>
 
+<div class="modal-overlay" id="deleteActivityModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 class="modal-title"><span class="lang-en">DELETE ACTIVITY</span><span class="lang-es">ELIMINAR ACTIVIDAD</span></h3>
+            <button class="modal-close" data-close="deleteActivityModal">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="confirm-dialog">
+                <div class="confirm-dialog-icon">🗑️</div>
+                <div class="confirm-dialog-title" id="deleteActivityTitle"><span class="lang-en">DELETE ACTIVITY?</span><span class="lang-es">¿ELIMINAR ACTIVIDAD?</span></div>
+                <div class="confirm-dialog-text" id="deleteActivityText"></div>
+                <div class="delete-activity-summary" id="deleteActivitySummary" style="display:none">
+                    <div class="delete-activity-count" id="deleteActivityCount">0</div>
+                    <div class="delete-activity-label"><span class="lang-en">activities will be deleted</span><span class="lang-es">actividades serán eliminadas</span></div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" data-close="deleteActivityModal"><span class="lang-en">Cancel</span><span class="lang-es">Cancelar</span></button>
+            <button class="btn btn-danger" id="confirmDeleteActivityBtn"><span class="lang-en">Delete</span><span class="lang-es">Eliminar</span></button>
+        </div>
+    </div>
+</div>
+
 <div class="toast" id="toast">
     <span class="toast-icon" id="toastIcon">✓</span>
     <span class="toast-text" id="toastText">Saved</span>
@@ -1297,6 +1373,7 @@ tr.clickable:hover { background: var(--card-hover); }
     var activities = [];
     var currentLang = localStorage.getItem('gt-admin-lang') || 'en';
     var currentActivityFilter = 'all';
+    var pendingActivityDelete = { type: null, ids: [], date: null, username: null };
 
     function init() {
         setLang(currentLang);
@@ -1430,6 +1507,7 @@ tr.clickable:hover { background: var(--card-hover); }
         document.getElementById('refreshActivityBtn').addEventListener('click', loadActivity);
         document.getElementById('saveSubscriberBtn').addEventListener('click', saveSubscriber);
         document.getElementById('confirmDeleteSubscriberBtn').addEventListener('click', confirmDeleteSubscriber);
+        document.getElementById('confirmDeleteActivityBtn').addEventListener('click', confirmDeleteActivity);
         
         // Activity filters
         document.querySelectorAll('.filter-btn').forEach(function(btn) {
@@ -1937,13 +2015,17 @@ tr.clickable:hover { background: var(--card-hover); }
             var dayActivities = grouped[dateKey];
             var userGames = {};
             var otherActivities = [];
+            var allIds = [];
             
             dayActivities.forEach(function(act) {
+                if (act.id) allIds.push(act.id);
+                
                 if (act.type === 'game_session' && act.username) {
                     if (!userGames[act.username]) {
-                        userGames[act.username] = { count: 0, games: [], details: act.details, timestamp: act.timestamp };
+                        userGames[act.username] = { count: 0, games: [], ids: [], details: act.details, timestamp: act.timestamp };
                     }
                     userGames[act.username].count++;
+                    if (act.id) userGames[act.username].ids.push(act.id);
                     if (act.details) {
                         var gameName = act.details.split('|')[0].trim();
                         if (userGames[act.username].games.indexOf(gameName) === -1) {
@@ -1955,7 +2037,7 @@ tr.clickable:hover { background: var(--card-hover); }
                 }
             });
             
-            result[dateKey] = { aggregated: userGames, other: otherActivities };
+            result[dateKey] = { aggregated: userGames, other: otherActivities, allIds: allIds };
         }
         
         return result;
@@ -1994,15 +2076,18 @@ tr.clickable:hover { background: var(--card-hover); }
         dateKeys.slice(0, 14).forEach(function(dateKey, dayIndex) {
             var dayData = aggregated[dateKey];
             var totalItems = Object.keys(dayData.aggregated).length + dayData.other.length;
+            var totalCount = dayData.allIds.length;
             var isCollapsed = dayIndex > 1 ? ' collapsed' : '';
+            var idsJson = JSON.stringify(dayData.allIds);
             
             html += '<div class="day-group' + isCollapsed + '" data-date="' + dateKey + '">';
-            html += '<div class="day-group-header" onclick="window.toggleDayGroup(this)">';
-            html += '<div class="day-group-title">';
+            html += '<div class="day-group-header">';
+            html += '<div class="day-group-title" onclick="window.toggleDayGroup(this.parentElement)">';
             html += '<span>' + formatDateLabel(dateKey) + '</span>';
             html += '<span class="day-group-count">' + totalItems + '</span>';
             html += '</div>';
-            html += '<span class="day-group-toggle">▼</span>';
+            html += '<button class="day-delete-btn" onclick="event.stopPropagation(); window.promptDeleteDay(\'' + dateKey + '\', ' + totalCount + ')" title="' + (currentLang === 'es' ? 'Eliminar día' : 'Delete day') + '">🗑️ ' + (currentLang === 'es' ? 'Día' : 'Day') + '</button>';
+            html += '<span class="day-group-toggle" onclick="window.toggleDayGroup(this.parentElement)">▼</span>';
             html += '</div>';
             
             html += '<div class="day-group-items">';
@@ -2011,6 +2096,7 @@ tr.clickable:hover { background: var(--card-hover); }
             for (var username in dayData.aggregated) {
                 var userData = dayData.aggregated[username];
                 var gamesPlayed = userData.games.join(', ') || 'Games';
+                var userIdsJson = JSON.stringify(userData.ids);
                 
                 html += '<div class="aggregated-item">';
                 html += '<div class="aggregated-icon game">🎮</div>';
@@ -2018,6 +2104,7 @@ tr.clickable:hover { background: var(--card-hover); }
                 html += '<div class="aggregated-text"><strong>' + username + '</strong> ' + (currentLang === 'es' ? 'jugó' : 'played') + ' <strong>' + userData.count + '</strong> ' + (userData.count === 1 ? (currentLang === 'es' ? 'sesión' : 'session') : (currentLang === 'es' ? 'sesiones' : 'sessions')) + '</div>';
                 html += '<div class="aggregated-details">' + gamesPlayed + '</div>';
                 html += '</div>';
+                html += '<button class="activity-delete-btn" onclick="window.promptDeleteUserSessions(\'' + dateKey + '\', \'' + username + '\', ' + userData.count + ')" title="' + (currentLang === 'es' ? 'Eliminar' : 'Delete') + '">🗑️</button>';
                 html += '</div>';
             }
             
@@ -2027,6 +2114,7 @@ tr.clickable:hover { background: var(--card-hover); }
                 var description = act.details || act.type || 'Activity';
                 var hasMilestone = isMilestone(description);
                 var iconClass = hasMilestone ? 'milestone' : (act.type && act.type.includes('subscription') ? 'subscription' : 'game');
+                var actId = act.id || '';
                 
                 html += '<div class="aggregated-item">';
                 html += '<div class="aggregated-icon ' + iconClass + '">' + iconInfo.icon + '</div>';
@@ -2038,6 +2126,7 @@ tr.clickable:hover { background: var(--card-hover); }
                 html += '</div>';
                 if (act.facility) html += '<div class="aggregated-details">' + act.facility + '</div>';
                 html += '</div>';
+                if (actId) html += '<button class="activity-delete-btn" onclick="window.promptDeleteSingle(\'' + actId + '\', \'' + (act.username || '') + '\')" title="' + (currentLang === 'es' ? 'Eliminar' : 'Delete') + '">🗑️</button>';
                 html += '</div>';
             });
             
@@ -2052,6 +2141,106 @@ tr.clickable:hover { background: var(--card-hover); }
         var group = header.parentElement;
         group.classList.toggle('collapsed');
     };
+
+    // Delete activity prompts
+    window.promptDeleteDay = function(dateKey, count) {
+        pendingActivityDelete = { type: 'day', ids: [], date: dateKey, username: null };
+        document.getElementById('deleteActivityTitle').innerHTML = currentLang === 'es' ? '¿ELIMINAR DÍA COMPLETO?' : 'DELETE ENTIRE DAY?';
+        document.getElementById('deleteActivityText').innerHTML = currentLang === 'es' 
+            ? 'Esto eliminará <strong>todas las actividades</strong> del ' + formatDateLabel(dateKey) + '.'
+            : 'This will delete <strong>all activities</strong> from ' + formatDateLabel(dateKey) + '.';
+        document.getElementById('deleteActivitySummary').style.display = 'block';
+        document.getElementById('deleteActivityCount').textContent = count;
+        openModal('deleteActivityModal');
+    };
+
+    window.promptDeleteUserSessions = function(dateKey, username, count) {
+        pendingActivityDelete = { type: 'user_day', ids: [], date: dateKey, username: username };
+        document.getElementById('deleteActivityTitle').innerHTML = currentLang === 'es' ? '¿ELIMINAR SESIONES?' : 'DELETE SESSIONS?';
+        document.getElementById('deleteActivityText').innerHTML = currentLang === 'es' 
+            ? 'Esto eliminará todas las sesiones de <strong>' + username + '</strong> del ' + formatDateLabel(dateKey) + '.'
+            : 'This will delete all sessions for <strong>' + username + '</strong> from ' + formatDateLabel(dateKey) + '.';
+        document.getElementById('deleteActivitySummary').style.display = 'block';
+        document.getElementById('deleteActivityCount').textContent = count;
+        openModal('deleteActivityModal');
+    };
+
+    window.promptDeleteSingle = function(actId, username) {
+        pendingActivityDelete = { type: 'single', ids: [actId], date: null, username: username };
+        document.getElementById('deleteActivityTitle').innerHTML = currentLang === 'es' ? '¿ELIMINAR ACTIVIDAD?' : 'DELETE ACTIVITY?';
+        document.getElementById('deleteActivityText').innerHTML = currentLang === 'es' 
+            ? 'Esto eliminará esta actividad' + (username ? ' de <strong>' + username + '</strong>' : '') + '.'
+            : 'This will delete this activity' + (username ? ' for <strong>' + username + '</strong>' : '') + '.';
+        document.getElementById('deleteActivitySummary').style.display = 'none';
+        openModal('deleteActivityModal');
+    };
+
+    function confirmDeleteActivity() {
+        var deleteInfo = pendingActivityDelete;
+        closeModal('deleteActivityModal');
+        
+        if (deleteInfo.type === 'single' && deleteInfo.ids.length > 0) {
+            deleteActivityById(deleteInfo.ids[0]);
+        } else if (deleteInfo.type === 'day' && deleteInfo.date) {
+            deleteActivitiesByDate(deleteInfo.date);
+        } else if (deleteInfo.type === 'user_day' && deleteInfo.date && deleteInfo.username) {
+            deleteActivitiesByUserDate(deleteInfo.username, deleteInfo.date);
+        }
+    }
+
+    function deleteActivityById(actId) {
+        fetch(API_BASE + '/admin/activity/' + actId, {
+            method: 'DELETE',
+            headers: { 'Authorization': 'Bearer ' + authToken }
+        })
+        .then(function(res) {
+            if (res.ok) {
+                showToast(currentLang === 'es' ? 'Actividad eliminada' : 'Activity deleted');
+                loadActivity();
+            } else {
+                throw new Error('Delete failed');
+            }
+        })
+        .catch(function(err) {
+            showToast(currentLang === 'es' ? 'Error al eliminar' : 'Delete failed', true);
+        });
+    }
+
+    function deleteActivitiesByDate(dateKey) {
+        fetch(API_BASE + '/admin/activity/by-date/' + dateKey, {
+            method: 'DELETE',
+            headers: { 'Authorization': 'Bearer ' + authToken }
+        })
+        .then(function(res) {
+            if (res.ok) {
+                showToast(currentLang === 'es' ? 'Actividades eliminadas' : 'Activities deleted');
+                loadActivity();
+            } else {
+                throw new Error('Delete failed');
+            }
+        })
+        .catch(function(err) {
+            showToast(currentLang === 'es' ? 'Error al eliminar' : 'Delete failed', true);
+        });
+    }
+
+    function deleteActivitiesByUserDate(username, dateKey) {
+        fetch(API_BASE + '/admin/activity/by-user-date/' + encodeURIComponent(username) + '/' + dateKey, {
+            method: 'DELETE',
+            headers: { 'Authorization': 'Bearer ' + authToken }
+        })
+        .then(function(res) {
+            if (res.ok) {
+                showToast(currentLang === 'es' ? 'Sesiones eliminadas' : 'Sessions deleted');
+                loadActivity();
+            } else {
+                throw new Error('Delete failed');
+            }
+        })
+        .catch(function(err) {
+            showToast(currentLang === 'es' ? 'Error al eliminar' : 'Delete failed', true);
+        });
+    }
 
     function renderOverviewActivity() {
         var container = document.getElementById('overviewActivity');
