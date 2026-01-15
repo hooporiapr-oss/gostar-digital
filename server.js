@@ -20,9 +20,13 @@ const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
 // Stripe Price IDs (set these in Render environment variables)
 const STRIPE_PRICES = {
     individual_monthly: process.env.STRIPE_PRICE_INDIVIDUAL_MONTHLY,
-    individual_annual: process.env.STRIPE_PRICE_INDIVIDUAL_ANNUAL,
-    family_monthly: process.env.STRIPE_PRICE_FAMILY_MONTHLY,
-    family_annual: process.env.STRIPE_PRICE_FAMILY_ANNUAL
+    individual_annual: process.env.STRIPE_PRICE_INDIVIDUAL_ANNUAL
+};
+
+// Facility Stripe Price IDs
+const FACILITY_PRICES = {
+    facility_monthly: process.env.STRIPE_PRICE_FACILITY_MONTHLY,
+    facility_annual: process.env.STRIPE_PRICE_FACILITY_ANNUAL
 };
 
 // Initialize Stripe (only if key is set)
@@ -41,6 +45,7 @@ const CODES_FILE = path.join(DATA_DIR, 'codes.json');
 const USERS_FILE = path.join(DATA_DIR, 'users.json');
 const ACTIVITY_FILE = path.join(DATA_DIR, 'activity.json');
 const SUBSCRIBERS_FILE = path.join(DATA_DIR, 'subscribers.json');
+const FACILITIES_FILE = path.join(DATA_DIR, 'facilities.json');
 
 // Ensure data directory and files exist
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR);
@@ -49,6 +54,7 @@ if (!fs.existsSync(CODES_FILE)) fs.writeFileSync(CODES_FILE, '[]');
 if (!fs.existsSync(USERS_FILE)) fs.writeFileSync(USERS_FILE, '[]');
 if (!fs.existsSync(ACTIVITY_FILE)) fs.writeFileSync(ACTIVITY_FILE, '[]');
 if (!fs.existsSync(SUBSCRIBERS_FILE)) fs.writeFileSync(SUBSCRIBERS_FILE, '[]');
+if (!fs.existsSync(FACILITIES_FILE)) fs.writeFileSync(FACILITIES_FILE, '[]');
 
 // ============ STRIPE WEBHOOK (must be before JSON parser) ============
 app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), function(req, res) {
@@ -181,6 +187,12 @@ function getShiftFromScore(score) {
 function handleCheckoutComplete(session) {
     console.log('Checkout completed:', session.id);
     
+    // Check if this is a facility checkout
+    if (session.metadata?.is_facility === 'true') {
+        handleFacilityCheckout(session);
+        return;
+    }
+    
     var subscribers = readJSON(SUBSCRIBERS_FILE);
     var email = session.customer_email || session.customer_details?.email;
     var customerId = session.customer;
@@ -229,7 +241,9 @@ function handleCheckoutComplete(session) {
 function handleSubscriptionUpdate(subscription) {
     console.log('Subscription updated:', subscription.id);
     
+    // Check subscribers first
     var subscribers = readJSON(SUBSCRIBERS_FILE);
+    var found = false;
     
     for (var i = 0; i < subscribers.length; i++) {
         if (subscribers[i].stripe_subscription_id === subscription.id) {
@@ -238,27 +252,41 @@ function handleSubscriptionUpdate(subscription) {
             if (subscription.status === 'past_due') {
                 logActivity('subscription_past_due', subscribers[i].email, null, 'Payment past due');
             }
+            found = true;
             break;
         }
     }
     
-    writeJSON(SUBSCRIBERS_FILE, subscribers);
+    if (found) {
+        writeJSON(SUBSCRIBERS_FILE, subscribers);
+    } else {
+        // Check facilities
+        handleFacilitySubscriptionUpdate(subscription);
+    }
 }
 
 function handleSubscriptionCanceled(subscription) {
     console.log('Subscription canceled:', subscription.id);
     
+    // Check subscribers first
     var subscribers = readJSON(SUBSCRIBERS_FILE);
+    var found = false;
     
     for (var i = 0; i < subscribers.length; i++) {
         if (subscribers[i].stripe_subscription_id === subscription.id) {
             subscribers[i].status = 'canceled';
             logActivity('subscription_canceled', subscribers[i].email, null, 'Subscription canceled');
+            found = true;
             break;
         }
     }
     
-    writeJSON(SUBSCRIBERS_FILE, subscribers);
+    if (found) {
+        writeJSON(SUBSCRIBERS_FILE, subscribers);
+    } else {
+        // Check facilities
+        handleFacilitySubscriptionCanceled(subscription);
+    }
 }
 
 function handlePaymentFailed(invoice) {
@@ -1290,7 +1318,726 @@ app.delete('/api/admin/licenses/:key', adminAuth, function(req, res) {
     res.json({ success: true });
 });
 
-// ============ FACILITY ROUTES ============
+// ============ NEW FACILITY SYSTEM ============
+
+// Generate unique facility code
+function generateFacilityCode() {
+    var facilities = readJSON(FACILITIES_FILE);
+    var existingCodes = facilities.map(function(f) { return f.facilityCode; });
+    var code;
+    do {
+        code = 'FAC-' + Math.random().toString(36).substr(2, 6).toUpperCase();
+    } while (existingCodes.indexOf(code) !== -1);
+    return code;
+}
+
+// Generate unique PIN for facility
+function generateFacilityPin() {
+    var facilities = readJSON(FACILITIES_FILE);
+    var existingPins = facilities.map(function(f) { return f.userPin; });
+    var pin;
+    do {
+        pin = String(Math.floor(1000 + Math.random() * 9000));
+    } while (existingPins.indexOf(pin) !== -1);
+    return pin;
+}
+
+// Generate admin PIN for facility dashboard
+function generateAdminPin() {
+    return String(Math.floor(1000 + Math.random() * 9000));
+}
+
+// Get user limit from facility plan
+// Trial = 10 users, Paid = unlimited
+function getFacilityUserLimit(planType, status) {
+    if (status === 'trialing') {
+        return 10;
+    }
+    return 999999; // Unlimited when paid
+}
+
+// Facility token auth middleware
+function facilityTokenAuth(req, res, next) {
+    var authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return res.status(401).json({ error: 'No token provided' });
+    }
+    var token = authHeader.split(' ')[1];
+    
+    // Token format: facilityCode:adminPin
+    var parts = token.split(':');
+    if (parts.length !== 2) {
+        return res.status(401).json({ error: 'Invalid token format' });
+    }
+    
+    var facilityCode = parts[0];
+    var adminPin = parts[1];
+    
+    var facilities = readJSON(FACILITIES_FILE);
+    var facility = null;
+    for (var i = 0; i < facilities.length; i++) {
+        if (facilities[i].facilityCode === facilityCode && facilities[i].adminPin === adminPin) {
+            facility = facilities[i];
+            break;
+        }
+    }
+    
+    if (!facility) {
+        return res.status(401).json({ error: 'Invalid credentials' });
+    }
+    
+    if (facility.status !== 'active' && facility.status !== 'trialing') {
+        return res.status(401).json({ error: 'Subscription not active' });
+    }
+    
+    req.facility = facility;
+    next();
+}
+
+// Facility Stripe Checkout
+app.post('/api/facility/checkout', function(req, res) {
+    if (!stripe) {
+        return res.status(500).json({ error: 'Stripe not configured' });
+    }
+    
+    var planType = req.body.planType || 'facility_monthly';
+    var facilityName = req.body.facilityName;
+    var email = req.body.email;
+    
+    if (!facilityName || !email) {
+        return res.status(400).json({ error: 'Facility name and email required' });
+    }
+    
+    var priceId = FACILITY_PRICES[planType];
+    
+    if (!priceId) {
+        return res.status(400).json({ error: 'Invalid plan type: ' + planType });
+    }
+    
+    var baseUrl = process.env.SITE_URL || process.env.BASE_URL || 'https://gotrotter.ai';
+    var successUrl = baseUrl + '/facility-success.html?session_id={CHECKOUT_SESSION_ID}';
+    var cancelUrl = baseUrl + '/facility-pricing.html?canceled=true';
+    
+    stripe.checkout.sessions.create({
+        mode: 'subscription',
+        payment_method_types: ['card'],
+        customer_email: email,
+        line_items: [{
+            price: priceId,
+            quantity: 1
+        }],
+        success_url: successUrl,
+        cancel_url: cancelUrl,
+        subscription_data: {
+            trial_period_days: 7,
+            metadata: {
+                plan_type: planType,
+                facility_name: facilityName,
+                is_facility: 'true'
+            }
+        },
+        metadata: {
+            plan_type: planType,
+            facility_name: facilityName,
+            is_facility: 'true'
+        }
+    }).then(function(session) {
+        console.log('Facility checkout session created:', session.id);
+        res.json({ url: session.url, sessionId: session.id });
+    }).catch(function(err) {
+        console.error('Facility checkout error:', err.message);
+        res.status(500).json({ error: 'Failed to create checkout session' });
+    });
+});
+
+// Handle facility subscription from webhook
+function handleFacilityCheckout(session) {
+    var email = session.customer_email || session.customer_details?.email;
+    var customerId = session.customer;
+    var subscriptionId = session.subscription;
+    var planType = session.metadata?.plan_type || 'facility_monthly';
+    var facilityName = session.metadata?.facility_name || 'New Facility';
+    var userLimit = getFacilityUserLimit(planType, 'trialing'); // Start with trial limit (10)
+    
+    var facilities = readJSON(FACILITIES_FILE);
+    
+    // Check if facility already exists for this email
+    var existingIndex = -1;
+    for (var i = 0; i < facilities.length; i++) {
+        if (facilities[i].email === email) {
+            existingIndex = i;
+            break;
+        }
+    }
+    
+    if (existingIndex === -1) {
+        // Create new facility
+        var newFacility = {
+            id: 'fac_' + Date.now(),
+            facilityCode: generateFacilityCode(),
+            facilityName: facilityName,
+            email: email,
+            adminPin: generateAdminPin(),
+            userPin: generateFacilityPin(),
+            userLimit: userLimit,
+            planType: planType,
+            status: 'trialing',
+            stripe_customer_id: customerId,
+            stripe_subscription_id: subscriptionId,
+            residents: [],
+            createdAt: new Date().toISOString(),
+            current_period_end: null
+        };
+        facilities.push(newFacility);
+        logActivity('facility_created', email, facilityName, 'New facility subscription: ' + planType);
+    } else {
+        // Update existing facility
+        facilities[existingIndex].stripe_customer_id = customerId;
+        facilities[existingIndex].stripe_subscription_id = subscriptionId;
+        facilities[existingIndex].planType = planType;
+        facilities[existingIndex].userLimit = userLimit;
+        facilities[existingIndex].status = 'trialing';
+        logActivity('facility_updated', email, facilityName, 'Facility subscription updated: ' + planType);
+    }
+    
+    writeJSON(FACILITIES_FILE, facilities);
+}
+
+// Handle facility subscription update
+function handleFacilitySubscriptionUpdate(subscription) {
+    var facilities = readJSON(FACILITIES_FILE);
+    
+    for (var i = 0; i < facilities.length; i++) {
+        if (facilities[i].stripe_subscription_id === subscription.id) {
+            facilities[i].status = subscription.status;
+            facilities[i].current_period_end = new Date(subscription.current_period_end * 1000).toISOString();
+            
+            // Update user limit based on status (10 for trial, unlimited for active)
+            facilities[i].userLimit = getFacilityUserLimit(facilities[i].planType, subscription.status);
+            
+            if (subscription.status === 'active') {
+                logActivity('facility_activated', facilities[i].email, facilities[i].facilityName, 'Subscription active - unlimited users');
+            } else if (subscription.status === 'past_due') {
+                logActivity('facility_past_due', facilities[i].email, facilities[i].facilityName, 'Payment past due');
+            }
+            break;
+        }
+    }
+    
+    writeJSON(FACILITIES_FILE, facilities);
+}
+
+// Handle facility subscription canceled
+function handleFacilitySubscriptionCanceled(subscription) {
+    var facilities = readJSON(FACILITIES_FILE);
+    
+    for (var i = 0; i < facilities.length; i++) {
+        if (facilities[i].stripe_subscription_id === subscription.id) {
+            facilities[i].status = 'canceled';
+            logActivity('facility_canceled', facilities[i].email, facilities[i].facilityName, 'Facility subscription canceled');
+            break;
+        }
+    }
+    
+    writeJSON(FACILITIES_FILE, facilities);
+}
+
+// Facility Dashboard Login
+app.post('/api/facility/dashboard/login', function(req, res) {
+    var facilityCode = req.body.facilityCode;
+    var adminPin = req.body.adminPin;
+    
+    if (!facilityCode || !adminPin) {
+        return res.status(400).json({ error: 'Facility code and admin PIN required' });
+    }
+    
+    var facilities = readJSON(FACILITIES_FILE);
+    var facility = null;
+    
+    for (var i = 0; i < facilities.length; i++) {
+        if (facilities[i].facilityCode === facilityCode && facilities[i].adminPin === adminPin) {
+            facility = facilities[i];
+            break;
+        }
+    }
+    
+    if (!facility) {
+        return res.status(401).json({ error: 'Invalid credentials' });
+    }
+    
+    if (facility.status !== 'active' && facility.status !== 'trialing') {
+        return res.status(401).json({ error: 'Subscription not active' });
+    }
+    
+    logActivity('facility_dashboard_login', null, facility.facilityName, 'Dashboard accessed');
+    
+    // Return token for subsequent requests
+    var token = facility.facilityCode + ':' + facility.adminPin;
+    
+    res.json({
+        success: true,
+        token: token,
+        facility: {
+            facilityCode: facility.facilityCode,
+            facilityName: facility.facilityName,
+            userPin: facility.userPin,
+            userLimit: facility.userLimit,
+            planType: facility.planType,
+            status: facility.status,
+            residentCount: facility.residents ? facility.residents.length : 0
+        }
+    });
+});
+
+// Get facility dashboard data
+app.get('/api/facility/dashboard', facilityTokenAuth, function(req, res) {
+    var facility = req.facility;
+    
+    // Calculate stats
+    var residents = facility.residents || [];
+    var today = new Date().toISOString().split('T')[0];
+    var activeToday = residents.filter(function(r) { return r.lastActive === today; }).length;
+    
+    var totalShifts = 0;
+    var masterCount = 0;
+    var g1Sum = 0, g2Sum = 0, g3Sum = 0;
+    var g1Masters = 0, g2Masters = 0, g3Masters = 0;
+    var g1Sessions = 0, g2Sessions = 0, g3Sessions = 0;
+    
+    residents.forEach(function(r) {
+        var g1 = r.g1 || 1;
+        var g2 = r.g2 || 1;
+        var g3 = r.g3 || 1;
+        
+        g1Sum += g1;
+        g2Sum += g2;
+        g3Sum += g3;
+        
+        if (g1 === 10) g1Masters++;
+        if (g2 === 10) g2Masters++;
+        if (g3 === 10) g3Masters++;
+        
+        if (g1 === 10 || g2 === 10 || g3 === 10) masterCount++;
+        
+        totalShifts += g1 + g2 + g3;
+        
+        g1Sessions += r.g1Sessions || 0;
+        g2Sessions += r.g2Sessions || 0;
+        g3Sessions += r.g3Sessions || 0;
+    });
+    
+    var avgShift = residents.length > 0 ? (totalShifts / (residents.length * 3)).toFixed(1) : '0.0';
+    
+    res.json({
+        success: true,
+        facility: {
+            facilityCode: facility.facilityCode,
+            facilityName: facility.facilityName,
+            userPin: facility.userPin,
+            userLimit: facility.userLimit,
+            planType: facility.planType,
+            status: facility.status,
+            current_period_end: facility.current_period_end
+        },
+        stats: {
+            totalResidents: residents.length,
+            activeToday: activeToday,
+            avgShift: avgShift,
+            masterCount: masterCount
+        },
+        gearStats: {
+            g1: { sessions: g1Sessions, avg: residents.length > 0 ? (g1Sum / residents.length).toFixed(1) : '0.0', masters: g1Masters },
+            g2: { sessions: g2Sessions, avg: residents.length > 0 ? (g2Sum / residents.length).toFixed(1) : '0.0', masters: g2Masters },
+            g3: { sessions: g3Sessions, avg: residents.length > 0 ? (g3Sum / residents.length).toFixed(1) : '0.0', masters: g3Masters }
+        },
+        residents: residents
+    });
+});
+
+// Add resident
+app.post('/api/facility/dashboard/residents', facilityTokenAuth, function(req, res) {
+    var facility = req.facility;
+    var name = req.body.name;
+    var room = req.body.room || '';
+    
+    if (!name) {
+        return res.status(400).json({ error: 'Name required' });
+    }
+    
+    var facilities = readJSON(FACILITIES_FILE);
+    var facilityIndex = -1;
+    for (var i = 0; i < facilities.length; i++) {
+        if (facilities[i].facilityCode === facility.facilityCode) {
+            facilityIndex = i;
+            break;
+        }
+    }
+    
+    if (facilityIndex === -1) {
+        return res.status(404).json({ error: 'Facility not found' });
+    }
+    
+    if (!facilities[facilityIndex].residents) {
+        facilities[facilityIndex].residents = [];
+    }
+    
+    if (facilities[facilityIndex].residents.length >= facilities[facilityIndex].userLimit) {
+        return res.status(400).json({ error: 'User limit reached (' + facilities[facilityIndex].userLimit + ')' });
+    }
+    
+    var newResident = {
+        id: 'res_' + Date.now(),
+        name: name,
+        room: room,
+        status: 'active',
+        g1: 1, g2: 1, g3: 1,
+        g1Sessions: 0, g2Sessions: 0, g3Sessions: 0,
+        lastActive: null,
+        createdAt: new Date().toISOString()
+    };
+    
+    facilities[facilityIndex].residents.push(newResident);
+    writeJSON(FACILITIES_FILE, facilities);
+    
+    logActivity('resident_added', name, facility.facilityName, 'New resident added');
+    
+    res.json({ success: true, resident: newResident });
+});
+
+// Update resident
+app.put('/api/facility/dashboard/residents/:residentId', facilityTokenAuth, function(req, res) {
+    var facility = req.facility;
+    var residentId = req.params.residentId;
+    
+    var facilities = readJSON(FACILITIES_FILE);
+    var facilityIndex = -1;
+    for (var i = 0; i < facilities.length; i++) {
+        if (facilities[i].facilityCode === facility.facilityCode) {
+            facilityIndex = i;
+            break;
+        }
+    }
+    
+    if (facilityIndex === -1) {
+        return res.status(404).json({ error: 'Facility not found' });
+    }
+    
+    var residents = facilities[facilityIndex].residents || [];
+    var residentIndex = -1;
+    for (var j = 0; j < residents.length; j++) {
+        if (residents[j].id === residentId) {
+            residentIndex = j;
+            break;
+        }
+    }
+    
+    if (residentIndex === -1) {
+        return res.status(404).json({ error: 'Resident not found' });
+    }
+    
+    if (req.body.name) facilities[facilityIndex].residents[residentIndex].name = req.body.name;
+    if (req.body.room !== undefined) facilities[facilityIndex].residents[residentIndex].room = req.body.room;
+    if (req.body.status) facilities[facilityIndex].residents[residentIndex].status = req.body.status;
+    
+    writeJSON(FACILITIES_FILE, facilities);
+    
+    res.json({ success: true, resident: facilities[facilityIndex].residents[residentIndex] });
+});
+
+// Delete resident
+app.delete('/api/facility/dashboard/residents/:residentId', facilityTokenAuth, function(req, res) {
+    var facility = req.facility;
+    var residentId = req.params.residentId;
+    
+    var facilities = readJSON(FACILITIES_FILE);
+    var facilityIndex = -1;
+    for (var i = 0; i < facilities.length; i++) {
+        if (facilities[i].facilityCode === facility.facilityCode) {
+            facilityIndex = i;
+            break;
+        }
+    }
+    
+    if (facilityIndex === -1) {
+        return res.status(404).json({ error: 'Facility not found' });
+    }
+    
+    var residents = facilities[facilityIndex].residents || [];
+    var residentName = '';
+    for (var j = 0; j < residents.length; j++) {
+        if (residents[j].id === residentId) {
+            residentName = residents[j].name;
+            break;
+        }
+    }
+    
+    facilities[facilityIndex].residents = residents.filter(function(r) { return r.id !== residentId; });
+    writeJSON(FACILITIES_FILE, facilities);
+    
+    logActivity('resident_deleted', residentName, facility.facilityName, 'Resident removed');
+    
+    res.json({ success: true });
+});
+
+// Get facility by Stripe session ID (for success page)
+app.get('/api/facility/by-session/:sessionId', function(req, res) {
+    var sessionId = req.params.sessionId;
+    
+    if (!stripe) {
+        return res.status(500).json({ error: 'Stripe not configured' });
+    }
+    
+    stripe.checkout.sessions.retrieve(sessionId)
+        .then(function(session) {
+            var email = session.customer_email || session.customer_details?.email;
+            
+            if (!email) {
+                return res.status(404).json({ error: 'No email in session' });
+            }
+            
+            var facilities = readJSON(FACILITIES_FILE);
+            var facility = null;
+            
+            for (var i = 0; i < facilities.length; i++) {
+                if (facilities[i].email === email) {
+                    facility = facilities[i];
+                    break;
+                }
+            }
+            
+            if (!facility) {
+                return res.json({ success: false, error: 'Facility not found yet' });
+            }
+            
+            res.json({
+                success: true,
+                facility: {
+                    facilityName: facility.facilityName,
+                    facilityCode: facility.facilityCode,
+                    adminPin: facility.adminPin,
+                    userPin: facility.userPin,
+                    userLimit: facility.userLimit,
+                    planType: facility.planType
+                }
+            });
+        })
+        .catch(function(err) {
+            console.error('Error retrieving session:', err);
+            res.status(500).json({ error: 'Failed to retrieve session' });
+        });
+});
+
+// User PIN Login - Get facility and residents list
+app.post('/api/facility/user-login', function(req, res) {
+    var userPin = req.body.pin;
+    
+    if (!userPin) {
+        return res.status(400).json({ error: 'PIN required' });
+    }
+    
+    var facilities = readJSON(FACILITIES_FILE);
+    var facility = null;
+    
+    for (var i = 0; i < facilities.length; i++) {
+        if (facilities[i].userPin === userPin) {
+            facility = facilities[i];
+            break;
+        }
+    }
+    
+    if (!facility) {
+        return res.status(401).json({ error: 'Invalid PIN' });
+    }
+    
+    if (facility.status !== 'active' && facility.status !== 'trialing') {
+        return res.status(401).json({ error: 'Subscription not active' });
+    }
+    
+    var activeResidents = (facility.residents || []).filter(function(r) {
+        return r.status === 'active';
+    }).map(function(r) {
+        return { id: r.id, name: r.name };
+    });
+    
+    res.json({
+        success: true,
+        facilityName: facility.facilityName,
+        facilityCode: facility.facilityCode,
+        residents: activeResidents
+    });
+});
+
+// Select resident to play
+app.post('/api/facility/select-resident', function(req, res) {
+    var userPin = req.body.pin;
+    var residentId = req.body.residentId;
+    
+    if (!userPin || !residentId) {
+        return res.status(400).json({ error: 'PIN and resident ID required' });
+    }
+    
+    var facilities = readJSON(FACILITIES_FILE);
+    var facility = null;
+    var facilityIndex = -1;
+    
+    for (var i = 0; i < facilities.length; i++) {
+        if (facilities[i].userPin === userPin) {
+            facility = facilities[i];
+            facilityIndex = i;
+            break;
+        }
+    }
+    
+    if (!facility) {
+        return res.status(401).json({ error: 'Invalid PIN' });
+    }
+    
+    var residents = facility.residents || [];
+    var resident = null;
+    var residentIndex = -1;
+    
+    for (var j = 0; j < residents.length; j++) {
+        if (residents[j].id === residentId) {
+            resident = residents[j];
+            residentIndex = j;
+            break;
+        }
+    }
+    
+    if (!resident) {
+        return res.status(404).json({ error: 'Resident not found' });
+    }
+    
+    // Update last active
+    facilities[facilityIndex].residents[residentIndex].lastActive = new Date().toISOString().split('T')[0];
+    writeJSON(FACILITIES_FILE, facilities);
+    
+    logActivity('resident_login', resident.name, facility.facilityName, 'Resident started session');
+    
+    res.json({
+        success: true,
+        facilityCode: facility.facilityCode,
+        resident: {
+            id: resident.id,
+            name: resident.name,
+            g1: resident.g1 || 1,
+            g2: resident.g2 || 1,
+            g3: resident.g3 || 1
+        }
+    });
+});
+
+// Record resident game session
+app.post('/api/facility/game-session', function(req, res) {
+    var facilityCode = req.body.facilityCode;
+    var residentId = req.body.residentId;
+    var gear = req.body.gear; // 'g1', 'g2', 'g3'
+    var newShift = req.body.newShift;
+    var gameName = req.body.gameName;
+    
+    if (!facilityCode || !residentId || !gear) {
+        return res.status(400).json({ error: 'Missing required fields' });
+    }
+    
+    var facilities = readJSON(FACILITIES_FILE);
+    var facilityIndex = -1;
+    var facility = null;
+    
+    for (var i = 0; i < facilities.length; i++) {
+        if (facilities[i].facilityCode === facilityCode) {
+            facility = facilities[i];
+            facilityIndex = i;
+            break;
+        }
+    }
+    
+    if (!facility) {
+        return res.status(404).json({ error: 'Facility not found' });
+    }
+    
+    var residents = facility.residents || [];
+    var residentIndex = -1;
+    var resident = null;
+    
+    for (var j = 0; j < residents.length; j++) {
+        if (residents[j].id === residentId) {
+            resident = residents[j];
+            residentIndex = j;
+            break;
+        }
+    }
+    
+    if (!resident) {
+        return res.status(404).json({ error: 'Resident not found' });
+    }
+    
+    // Update session count
+    var sessionKey = gear + 'Sessions';
+    facilities[facilityIndex].residents[residentIndex][sessionKey] = (resident[sessionKey] || 0) + 1;
+    
+    // Update shift level if provided
+    if (newShift && newShift > (resident[gear] || 1)) {
+        facilities[facilityIndex].residents[residentIndex][gear] = newShift;
+    }
+    
+    // Update last active
+    facilities[facilityIndex].residents[residentIndex].lastActive = new Date().toISOString().split('T')[0];
+    
+    writeJSON(FACILITIES_FILE, facilities);
+    
+    var shiftNames = ['','PRACTICE 1','PRACTICE 2','SHIFT 3','SHIFT 4','SHIFT 5','SHIFT 6','SHIFT 7','SHIFT 8','SHIFT 9','MASTER 10'];
+    var details = gameName ? gameName + ' | ' + shiftNames[resident[gear] || 1] : shiftNames[resident[gear] || 1];
+    
+    logActivity('game_session', resident.name, facility.facilityName, details);
+    
+    res.json({ success: true });
+});
+
+// Serve facility pages
+app.get('/facility-dashboard', function(req, res) {
+    res.sendFile(path.join(__dirname, 'facility-dashboard.html'));
+});
+
+app.get('/facility-pricing', function(req, res) {
+    res.sendFile(path.join(__dirname, 'facility-pricing.html'));
+});
+
+app.get('/facility-success', function(req, res) {
+    res.sendFile(path.join(__dirname, 'facility-success.html'));
+});
+
+app.get('/facility-play', function(req, res) {
+    res.sendFile(path.join(__dirname, 'facility-play.html'));
+});
+
+// Admin: Get all facilities
+app.get('/api/admin/facilities-new', adminTokenAuth, function(req, res) {
+    try {
+        var facilities = readJSON(FACILITIES_FILE);
+        var result = facilities.map(function(f) {
+            return {
+                id: f.id,
+                facilityCode: f.facilityCode,
+                facilityName: f.facilityName,
+                email: f.email,
+                userPin: f.userPin,
+                adminPin: f.adminPin,
+                userLimit: f.userLimit,
+                residentCount: f.residents ? f.residents.length : 0,
+                planType: f.planType,
+                status: f.status,
+                createdAt: f.createdAt,
+                current_period_end: f.current_period_end
+            };
+        });
+        res.json({ success: true, facilities: result });
+    } catch (err) {
+        console.error('Error fetching facilities:', err);
+        res.json({ success: true, facilities: [] });
+    }
+});
+
+// ============ LEGACY FACILITY ROUTES ============
 
 app.get('/facility', function(req, res) {
     res.sendFile(path.join(__dirname, 'facility-login.html'));
