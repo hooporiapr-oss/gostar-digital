@@ -798,6 +798,105 @@ app.get('/api/admin/subscriber/:pin', adminTokenAuth, function(req, res) {
     }
 });
 
+// Edit subscriber (admin)
+app.put('/api/admin/subscriber/:pin', adminTokenAuth, function(req, res) {
+    try {
+        var pin = req.params.pin;
+        var subscribers = readJSON(SUBSCRIBERS_FILE);
+        var found = false;
+        
+        for (var i = 0; i < subscribers.length; i++) {
+            if (subscribers[i].pin === pin) {
+                // Update main subscriber
+                if (req.body.email) subscribers[i].email = req.body.email;
+                if (req.body.status) subscribers[i].status = req.body.status;
+                if (req.body.plan_type) subscribers[i].plan_type = req.body.plan_type;
+                if (req.body.pin && req.body.pin !== pin) {
+                    // Check if new PIN is unique
+                    var pinExists = subscribers.some(function(s) { return s.pin === req.body.pin; });
+                    if (!pinExists) {
+                        subscribers[i].pin = req.body.pin;
+                    }
+                }
+                found = true;
+                logActivity('subscriber_updated', subscribers[i].email, null, 'Subscriber updated by admin');
+                break;
+            }
+            // Check family members
+            if (subscribers[i].family_members) {
+                for (var j = 0; j < subscribers[i].family_members.length; j++) {
+                    if (subscribers[i].family_members[j].pin === pin) {
+                        if (req.body.name) subscribers[i].family_members[j].name = req.body.name;
+                        if (req.body.pin && req.body.pin !== pin) {
+                            var pinExists = subscribers.some(function(s) { 
+                                return s.pin === req.body.pin || (s.family_members && s.family_members.some(function(m) { return m.pin === req.body.pin; }));
+                            });
+                            if (!pinExists) {
+                                subscribers[i].family_members[j].pin = req.body.pin;
+                            }
+                        }
+                        found = true;
+                        logActivity('family_member_updated', subscribers[i].family_members[j].name, null, 'Family member updated by admin');
+                        break;
+                    }
+                }
+            }
+        }
+        
+        if (!found) {
+            return res.status(404).json({ success: false, error: 'Subscriber not found' });
+        }
+        
+        writeJSON(SUBSCRIBERS_FILE, subscribers);
+        res.json({ success: true });
+    } catch (err) {
+        console.error('Error updating subscriber:', err);
+        res.status(500).json({ success: false, error: 'Server error' });
+    }
+});
+
+// Delete subscriber (admin)
+app.delete('/api/admin/subscriber/:pin', adminTokenAuth, function(req, res) {
+    try {
+        var pin = req.params.pin;
+        var subscribers = readJSON(SUBSCRIBERS_FILE);
+        var found = false;
+        var deletedEmail = null;
+        
+        for (var i = 0; i < subscribers.length; i++) {
+            if (subscribers[i].pin === pin) {
+                deletedEmail = subscribers[i].email;
+                subscribers.splice(i, 1);
+                found = true;
+                logActivity('subscriber_deleted', deletedEmail, null, 'Subscriber deleted by admin');
+                break;
+            }
+            // Check family members
+            if (subscribers[i].family_members) {
+                for (var j = 0; j < subscribers[i].family_members.length; j++) {
+                    if (subscribers[i].family_members[j].pin === pin) {
+                        var deletedName = subscribers[i].family_members[j].name;
+                        subscribers[i].family_members.splice(j, 1);
+                        found = true;
+                        logActivity('family_member_deleted', deletedName, null, 'Family member deleted by admin');
+                        break;
+                    }
+                }
+            }
+        }
+        
+        if (!found) {
+            return res.status(404).json({ success: false, error: 'Subscriber not found' });
+        }
+        
+        writeJSON(SUBSCRIBERS_FILE, subscribers);
+        res.json({ success: true });
+    } catch (err) {
+        console.error('Error deleting subscriber:', err);
+        res.status(500).json({ success: false, error: 'Server error' });
+    }
+});
+
 // Health check
 app.get('/health', function(req, res) {
     res.json({ status: 'healthy', timestamp: new Date().toISOString() });
