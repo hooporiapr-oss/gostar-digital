@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>M³ Performance System - Team GoTrotters</title>
+<title>GoTrotters™ - Performance Training</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -32,6 +32,8 @@ body.en .lang-es{display:none !important}
 .welcome-section{text-align:center;margin-bottom:50px}
 .welcome-badge{display:inline-block;padding:8px 20px;background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.3);border-radius:50px;font-size:0.8rem;color:var(--gold);letter-spacing:2px;margin-bottom:15px}
 .welcome-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,6vw,3.5rem);letter-spacing:4px;margin-bottom:10px}
+.welcome-title .go{color:var(--orange)}
+.welcome-title .trotters{color:var(--teal)}
 .welcome-subtitle{font-size:1rem;color:var(--muted);max-width:500px;margin:0 auto}
 
 .circuits-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:25px;margin-bottom:50px}
@@ -72,20 +74,29 @@ body.en .lang-es{display:none !important}
 .tier-badge.level{background:rgba(255,215,0,0.2);color:var(--gold)}
 .tier-badge.master{background:linear-gradient(135deg,rgba(255,215,0,0.3),rgba(255,107,0,0.3));color:var(--gold)}
 
-.quote-section{text-align:center;padding:30px;background:linear-gradient(135deg,rgba(255,107,0,0.05) 0%,rgba(0,217,165,0.05) 100%);border-radius:20px}
+.quote-section{text-align:center;padding:30px;background:linear-gradient(135deg,rgba(255,107,0,0.05) 0%,rgba(0,217,165,0.05) 100%);border-radius:20px;margin-bottom:100px}
 .quote-text{font-family:'Bebas Neue',sans-serif;font-size:clamp(1rem,3vw,1.5rem);letter-spacing:2px;color:var(--gold);margin-bottom:10px}
 .quote-author{font-size:0.85rem;color:var(--muted)}
+
+.chat-fab{position:fixed;bottom:30px;right:30px;width:70px;height:70px;border-radius:50%;background:linear-gradient(135deg,var(--orange),var(--orange-dark));border:none;cursor:pointer;box-shadow:0 6px 30px rgba(255,107,0,0.5);z-index:200;display:flex;align-items:center;justify-content:center;transition:all 0.3s;animation:fabPulse 2s infinite}
+.chat-fab:hover{transform:scale(1.1);box-shadow:0 8px 40px rgba(255,107,0,0.6)}
+.chat-fab img{width:45px;height:45px;border-radius:50%}
+.chat-fab-label{position:absolute;right:85px;background:var(--card);padding:10px 16px;border-radius:20px;font-size:0.85rem;font-weight:600;white-space:nowrap;box-shadow:0 4px 15px rgba(0,0,0,0.3);opacity:0;transform:translateX(10px);transition:all 0.3s}
+.chat-fab:hover .chat-fab-label{opacity:1;transform:translateX(0)}
+@keyframes fabPulse{0%,100%{box-shadow:0 6px 30px rgba(255,107,0,0.5)}50%{box-shadow:0 6px 40px rgba(255,107,0,0.7)}}
 
 @media(max-width:600px){
 .user-name{display:none}
 .circuits-grid{grid-template-columns:1fr}
+.chat-fab{bottom:20px;right:20px;width:60px;height:60px}
+.chat-fab img{width:38px;height:38px}
 }
 </style>
 </head>
 <body class="en">
 
 <header class="header">
-<a href="index.html" class="logo"><span class="go">Go</span><span class="trotters">Trotters</span></a>
+<a href="index.html" class="logo"><span class="go">GO</span><span class="trotters">TROTTERS</span><sup style="font-size:0.5em;vertical-align:super;">™</sup></a>
 <div class="header-right">
 <div class="lang-toggle">
 <button class="lang-btn active" id="btn-en">EN</button>
@@ -101,8 +112,8 @@ body.en .lang-es{display:none !important}
 
 <main class="main">
 <section class="welcome-section">
-<div class="welcome-badge">TEAM GOTROTTERS</div>
-<h1 class="welcome-title"><span class="lang-en">M³ PERFORMANCE SYSTEM</span><span class="lang-es">SISTEMA DE RENDIMIENTO M³</span></h1>
+<div class="welcome-badge">PERFORMANCE TRAINING</div>
+<h1 class="welcome-title"><span class="go">GO</span><span class="trotters">TROTTERS</span><sup style="font-size:0.4em;vertical-align:super;">™</sup></h1>
 <p class="welcome-subtitle" style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:3px;color:var(--gold);margin-bottom:10px;"><span class="lang-en">MAP. MOVE. MATCH.</span><span class="lang-es">UBICAR. MOVER. COORDINAR.</span></p>
 <p class="welcome-subtitle"><span class="lang-en">Three Performance circuits. 10-tier progression. Coach GoTrotter AI guides your journey.</span><span class="lang-es">Tres circuitos de Rendimiento. Progresión de 10 niveles. Coach GoTrotter AI guía tu camino.</span></p>
 </section>
@@ -201,6 +212,12 @@ body.en .lang-es{display:none !important}
 </section>
 </main>
 
+<!-- GoTrotter AI Chat Button -->
+<button class="chat-fab" id="chatFab" onclick="window.location.href='index.html'">
+<span class="chat-fab-label"><span class="lang-en">Need Help?</span><span class="lang-es">¿Necesitas Ayuda?</span></span>
+<img src="go_chat.png" alt="GoTrotter AI">
+</button>
+
 <script>
 // 10-TIER STRUCTURE
 var tierList = ['PRACTICE 1', 'PRACTICE 2', 'LEVEL 3', 'LEVEL 4', 'LEVEL 5', 'LEVEL 6', 'LEVEL 7', 'LEVEL 8', 'LEVEL 9', 'MASTER 10'];
@@ -226,8 +243,8 @@ document.getElementById('btn-es').className = lang === 'es' ? 'lang-btn active' 
 var userPin = sessionStorage.getItem('gostar-user-pin');
 var userName = sessionStorage.getItem('gostar-user-name') || 'GoTrotter';
 
-if (!userPin && window.location.hostname === 'gostar.digital') {
-    window.location.replace('play.html');
+if (!userPin && window.location.hostname === 'gotrotter.ai') {
+    window.location.replace('index.html');
 } else {
     document.getElementById('userName').textContent = userName;
 }
@@ -320,7 +337,7 @@ function logout() {
     sessionStorage.removeItem('gostar-user-pin');
     sessionStorage.removeItem('gostar-user-name');
     sessionStorage.removeItem('gostar-facility-pin');
-    window.location.href = 'play.html';
+    window.location.href = 'index.html';
 }
 
 loadProgress();
