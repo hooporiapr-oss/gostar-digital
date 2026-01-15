@@ -109,6 +109,7 @@ function writeJSON(file, data) {
 function logActivity(type, username, facility, details) {
     var activities = readJSON(ACTIVITY_FILE);
     activities.unshift({
+        id: 'act_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
         timestamp: new Date().toISOString(),
         type: type,
         username: username || null,
@@ -1102,6 +1103,73 @@ app.get('/api/admin/activity', adminTokenAuth, function(req, res) {
     } catch (err) {
         console.error('Error fetching activities:', err);
         res.json({ success: true, activities: [] });
+    }
+});
+
+// Delete single activity by ID
+app.delete('/api/admin/activity/:id', adminTokenAuth, function(req, res) {
+    try {
+        var actId = req.params.id;
+        var activities = readJSON(ACTIVITY_FILE);
+        var newActivities = activities.filter(function(act) { return act.id !== actId; });
+        
+        if (newActivities.length === activities.length) {
+            return res.status(404).json({ success: false, error: 'Activity not found' });
+        }
+        
+        writeJSON(ACTIVITY_FILE, newActivities);
+        console.log('Deleted activity:', actId);
+        res.json({ success: true, deleted: 1 });
+    } catch (err) {
+        console.error('Error deleting activity:', err);
+        res.status(500).json({ success: false, error: 'Delete failed' });
+    }
+});
+
+// Delete all activities by date
+app.delete('/api/admin/activity/by-date/:date', adminTokenAuth, function(req, res) {
+    try {
+        var dateKey = req.params.date;
+        var activities = readJSON(ACTIVITY_FILE);
+        var originalCount = activities.length;
+        
+        var newActivities = activities.filter(function(act) {
+            if (!act.timestamp) return true;
+            var actDate = new Date(act.timestamp).toISOString().split('T')[0];
+            return actDate !== dateKey;
+        });
+        
+        var deletedCount = originalCount - newActivities.length;
+        writeJSON(ACTIVITY_FILE, newActivities);
+        console.log('Deleted', deletedCount, 'activities for date:', dateKey);
+        res.json({ success: true, deleted: deletedCount });
+    } catch (err) {
+        console.error('Error deleting activities by date:', err);
+        res.status(500).json({ success: false, error: 'Delete failed' });
+    }
+});
+
+// Delete activities by user and date
+app.delete('/api/admin/activity/by-user-date/:username/:date', adminTokenAuth, function(req, res) {
+    try {
+        var username = decodeURIComponent(req.params.username);
+        var dateKey = req.params.date;
+        var activities = readJSON(ACTIVITY_FILE);
+        var originalCount = activities.length;
+        
+        var newActivities = activities.filter(function(act) {
+            if (!act.timestamp || act.username !== username) return true;
+            var actDate = new Date(act.timestamp).toISOString().split('T')[0];
+            return actDate !== dateKey || act.type !== 'game_session';
+        });
+        
+        var deletedCount = originalCount - newActivities.length;
+        writeJSON(ACTIVITY_FILE, newActivities);
+        console.log('Deleted', deletedCount, 'sessions for user:', username, 'on date:', dateKey);
+        res.json({ success: true, deleted: deletedCount });
+    } catch (err) {
+        console.error('Error deleting activities by user/date:', err);
+        res.status(500).json({ success: false, error: 'Delete failed' });
     }
 });
 
