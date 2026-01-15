@@ -1106,27 +1106,19 @@ app.get('/api/admin/activity', adminTokenAuth, function(req, res) {
     }
 });
 
-// Delete single activity by ID
-app.delete('/api/admin/activity/:id', adminTokenAuth, function(req, res) {
+// Delete ALL activities
+app.delete('/api/admin/activity/all', adminTokenAuth, function(req, res) {
     try {
-        var actId = req.params.id;
-        var activities = readJSON(ACTIVITY_FILE);
-        var newActivities = activities.filter(function(act) { return act.id !== actId; });
-        
-        if (newActivities.length === activities.length) {
-            return res.status(404).json({ success: false, error: 'Activity not found' });
-        }
-        
-        writeJSON(ACTIVITY_FILE, newActivities);
-        console.log('Deleted activity:', actId);
-        res.json({ success: true, deleted: 1 });
+        writeJSON(ACTIVITY_FILE, []);
+        console.log('Deleted ALL activities');
+        res.json({ success: true, deleted: 'all' });
     } catch (err) {
-        console.error('Error deleting activity:', err);
+        console.error('Error deleting all activities:', err);
         res.status(500).json({ success: false, error: 'Delete failed' });
     }
 });
 
-// Delete all activities by date
+// Delete all activities by date (MUST come before :id route)
 app.delete('/api/admin/activity/by-date/:date', adminTokenAuth, function(req, res) {
     try {
         var dateKey = req.params.date;
@@ -1149,7 +1141,7 @@ app.delete('/api/admin/activity/by-date/:date', adminTokenAuth, function(req, re
     }
 });
 
-// Delete activities by user and date
+// Delete activities by user and date (MUST come before :id route)
 app.delete('/api/admin/activity/by-user-date/:username/:date', adminTokenAuth, function(req, res) {
     try {
         var username = decodeURIComponent(req.params.username);
@@ -1169,6 +1161,46 @@ app.delete('/api/admin/activity/by-user-date/:username/:date', adminTokenAuth, f
         res.json({ success: true, deleted: deletedCount });
     } catch (err) {
         console.error('Error deleting activities by user/date:', err);
+        res.status(500).json({ success: false, error: 'Delete failed' });
+    }
+});
+
+// Delete by index (for activities without IDs)
+app.delete('/api/admin/activity/by-index/:index', adminTokenAuth, function(req, res) {
+    try {
+        var index = parseInt(req.params.index);
+        var activities = readJSON(ACTIVITY_FILE);
+        
+        if (index < 0 || index >= activities.length) {
+            return res.status(404).json({ success: false, error: 'Activity not found' });
+        }
+        
+        activities.splice(index, 1);
+        writeJSON(ACTIVITY_FILE, activities);
+        console.log('Deleted activity at index:', index);
+        res.json({ success: true, deleted: 1 });
+    } catch (err) {
+        console.error('Error deleting activity by index:', err);
+        res.status(500).json({ success: false, error: 'Delete failed' });
+    }
+});
+
+// Delete single activity by ID (MUST come LAST)
+app.delete('/api/admin/activity/:id', adminTokenAuth, function(req, res) {
+    try {
+        var actId = req.params.id;
+        var activities = readJSON(ACTIVITY_FILE);
+        var newActivities = activities.filter(function(act) { return act.id !== actId; });
+        
+        if (newActivities.length === activities.length) {
+            return res.status(404).json({ success: false, error: 'Activity not found' });
+        }
+        
+        writeJSON(ACTIVITY_FILE, newActivities);
+        console.log('Deleted activity:', actId);
+        res.json({ success: true, deleted: 1 });
+    } catch (err) {
+        console.error('Error deleting activity:', err);
         res.status(500).json({ success: false, error: 'Delete failed' });
     }
 });
