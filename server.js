@@ -23,12 +23,6 @@ const STRIPE_PRICES = {
     individual_annual: process.env.STRIPE_PRICE_INDIVIDUAL_ANNUAL
 };
 
-// Facility Stripe Price IDs
-const FACILITY_PRICES = {
-    facility_monthly: process.env.STRIPE_PRICE_FACILITY_MONTHLY,
-    facility_annual: process.env.STRIPE_PRICE_FACILITY_ANNUAL
-};
-
 // Initialize Stripe (only if key is set)
 let stripe = null;
 if (STRIPE_SECRET_KEY) {
@@ -45,7 +39,6 @@ const CODES_FILE = path.join(DATA_DIR, 'codes.json');
 const USERS_FILE = path.join(DATA_DIR, 'users.json');
 const ACTIVITY_FILE = path.join(DATA_DIR, 'activity.json');
 const SUBSCRIBERS_FILE = path.join(DATA_DIR, 'subscribers.json');
-const FACILITIES_FILE = path.join(DATA_DIR, 'facilities.json');
 
 // Ensure data directory and files exist
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR);
@@ -54,7 +47,6 @@ if (!fs.existsSync(CODES_FILE)) fs.writeFileSync(CODES_FILE, '[]');
 if (!fs.existsSync(USERS_FILE)) fs.writeFileSync(USERS_FILE, '[]');
 if (!fs.existsSync(ACTIVITY_FILE)) fs.writeFileSync(ACTIVITY_FILE, '[]');
 if (!fs.existsSync(SUBSCRIBERS_FILE)) fs.writeFileSync(SUBSCRIBERS_FILE, '[]');
-if (!fs.existsSync(FACILITIES_FILE)) fs.writeFileSync(FACILITIES_FILE, '[]');
 
 // ============ STRIPE WEBHOOK (must be before JSON parser) ============
 app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), function(req, res) {
@@ -187,12 +179,6 @@ function getShiftFromScore(score) {
 function handleCheckoutComplete(session) {
     console.log('Checkout completed:', session.id);
     
-    // Check if this is a facility checkout
-    if (session.metadata?.is_facility === 'true') {
-        handleFacilityCheckout(session);
-        return;
-    }
-    
     var subscribers = readJSON(SUBSCRIBERS_FILE);
     var email = session.customer_email || session.customer_details?.email;
     var customerId = session.customer;
@@ -207,7 +193,6 @@ function handleCheckoutComplete(session) {
     }
     
     var planType = session.metadata?.plan_type || 'individual_monthly';
-    var userLimit = planType.startsWith('family') ? 5 : 1;
     
     if (subIndex === -1) {
         var newSub = {
@@ -216,11 +201,9 @@ function handleCheckoutComplete(session) {
             stripe_customer_id: customerId,
             stripe_subscription_id: subscriptionId,
             plan_type: planType,
-            user_limit: userLimit,
             status: 'trialing',
             created_at: new Date().toISOString(),
-            current_period_end: null,
-            family_members: []
+            current_period_end: null
         };
         subscribers.push(newSub);
         logActivity('subscription_created', email, null, 'New ' + planType + ' subscription');
@@ -241,9 +224,7 @@ function handleCheckoutComplete(session) {
 function handleSubscriptionUpdate(subscription) {
     console.log('Subscription updated:', subscription.id);
     
-    // Check subscribers first
     var subscribers = readJSON(SUBSCRIBERS_FILE);
-    var found = false;
     
     for (var i = 0; i < subscribers.length; i++) {
         if (subscribers[i].stripe_subscription_id === subscription.id) {
@@ -252,40 +233,24 @@ function handleSubscriptionUpdate(subscription) {
             if (subscription.status === 'past_due') {
                 logActivity('subscription_past_due', subscribers[i].email, null, 'Payment past due');
             }
-            found = true;
+            writeJSON(SUBSCRIBERS_FILE, subscribers);
             break;
         }
-    }
-    
-    if (found) {
-        writeJSON(SUBSCRIBERS_FILE, subscribers);
-    } else {
-        // Check facilities
-        handleFacilitySubscriptionUpdate(subscription);
     }
 }
 
 function handleSubscriptionCanceled(subscription) {
     console.log('Subscription canceled:', subscription.id);
     
-    // Check subscribers first
     var subscribers = readJSON(SUBSCRIBERS_FILE);
-    var found = false;
     
     for (var i = 0; i < subscribers.length; i++) {
         if (subscribers[i].stripe_subscription_id === subscription.id) {
             subscribers[i].status = 'canceled';
             logActivity('subscription_canceled', subscribers[i].email, null, 'Subscription canceled');
-            found = true;
+            writeJSON(SUBSCRIBERS_FILE, subscribers);
             break;
         }
-    }
-    
-    if (found) {
-        writeJSON(SUBSCRIBERS_FILE, subscribers);
-    } else {
-        // Check facilities
-        handleFacilitySubscriptionCanceled(subscription);
     }
 }
 
@@ -328,8 +293,8 @@ app.post('/api/stripe/checkout', function(req, res) {
     }
     
     var baseUrl = process.env.SITE_URL || process.env.BASE_URL || 'https://gotrotter.ai';
-    var successUrl = baseUrl + '/play.html?success=true&session_id={CHECKOUT_SESSION_ID}';
-    var cancelUrl = baseUrl + '/play.html?canceled=true';
+    var successUrl = baseUrl + '/?success=true&session_id={CHECKOUT_SESSION_ID}';
+    var cancelUrl = baseUrl + '/?canceled=true';
     
     stripe.checkout.sessions.create({
         mode: 'subscription',
@@ -505,7 +470,7 @@ app.post('/api/stripe/portal', function(req, res) {
     }
     
     var baseUrl = process.env.SITE_URL || process.env.BASE_URL || 'https://gotrotter.ai';
-    var returnUrl = baseUrl + '/play.html';
+    var returnUrl = baseUrl + '/';
     
     stripe.billingPortal.sessions.create({
         customer: subscriber.stripe_customer_id,
@@ -1318,957 +1283,34 @@ app.delete('/api/admin/licenses/:key', adminAuth, function(req, res) {
     res.json({ success: true });
 });
 
-// ============ NEW FACILITY SYSTEM ============
-
-// Generate unique facility code
-function generateFacilityCode() {
-    var facilities = readJSON(FACILITIES_FILE);
-    var existingCodes = facilities.map(function(f) { return f.facilityCode; });
-    var code;
-    do {
-        code = 'FAC-' + Math.random().toString(36).substr(2, 6).toUpperCase();
-    } while (existingCodes.indexOf(code) !== -1);
-    return code;
-}
-
-// Generate unique PIN for facility
-function generateFacilityPin() {
-    var facilities = readJSON(FACILITIES_FILE);
-    var existingPins = facilities.map(function(f) { return f.userPin; });
-    var pin;
-    do {
-        pin = String(Math.floor(1000 + Math.random() * 9000));
-    } while (existingPins.indexOf(pin) !== -1);
-    return pin;
-}
-
-// Generate admin PIN for facility dashboard
-function generateAdminPin() {
-    return String(Math.floor(1000 + Math.random() * 9000));
-}
-
-// Get user limit from facility plan
-// Trial = 10 users, Paid = unlimited
-function getFacilityUserLimit(planType, status) {
-    if (status === 'trialing') {
-        return 10;
-    }
-    return 999999; // Unlimited when paid
-}
-
-// Facility token auth middleware
-function facilityTokenAuth(req, res, next) {
-    var authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        return res.status(401).json({ error: 'No token provided' });
-    }
-    var token = authHeader.split(' ')[1];
-    
-    // Token format: facilityCode:adminPin
-    var parts = token.split(':');
-    if (parts.length !== 2) {
-        return res.status(401).json({ error: 'Invalid token format' });
-    }
-    
-    var facilityCode = parts[0];
-    var adminPin = parts[1];
-    
-    var facilities = readJSON(FACILITIES_FILE);
-    var facility = null;
-    for (var i = 0; i < facilities.length; i++) {
-        if (facilities[i].facilityCode === facilityCode && facilities[i].adminPin === adminPin) {
-            facility = facilities[i];
-            break;
-        }
-    }
-    
-    if (!facility) {
-        return res.status(401).json({ error: 'Invalid credentials' });
-    }
-    
-    if (facility.status !== 'active' && facility.status !== 'trialing') {
-        return res.status(401).json({ error: 'Subscription not active' });
-    }
-    
-    req.facility = facility;
-    next();
-}
-
-// Facility Stripe Checkout
-app.post('/api/facility/checkout', function(req, res) {
-    if (!stripe) {
-        return res.status(500).json({ error: 'Stripe not configured' });
-    }
-    
-    var planType = req.body.planType || 'facility_monthly';
-    var facilityName = req.body.facilityName;
-    var email = req.body.email;
-    
-    if (!facilityName || !email) {
-        return res.status(400).json({ error: 'Facility name and email required' });
-    }
-    
-    var priceId = FACILITY_PRICES[planType];
-    
-    if (!priceId) {
-        return res.status(400).json({ error: 'Invalid plan type: ' + planType });
-    }
-    
-    var baseUrl = process.env.SITE_URL || process.env.BASE_URL || 'https://gotrotter.ai';
-    var successUrl = baseUrl + '/facility-success.html?session_id={CHECKOUT_SESSION_ID}';
-    var cancelUrl = baseUrl + '/facility-pricing.html?canceled=true';
-    
-    stripe.checkout.sessions.create({
-        mode: 'subscription',
-        payment_method_types: ['card'],
-        customer_email: email,
-        line_items: [{
-            price: priceId,
-            quantity: 1
-        }],
-        success_url: successUrl,
-        cancel_url: cancelUrl,
-        subscription_data: {
-            trial_period_days: 7,
-            metadata: {
-                plan_type: planType,
-                facility_name: facilityName,
-                is_facility: 'true'
-            }
-        },
-        metadata: {
-            plan_type: planType,
-            facility_name: facilityName,
-            is_facility: 'true'
-        }
-    }).then(function(session) {
-        console.log('Facility checkout session created:', session.id);
-        res.json({ url: session.url, sessionId: session.id });
-    }).catch(function(err) {
-        console.error('Facility checkout error:', err.message);
-        res.status(500).json({ error: 'Failed to create checkout session' });
-    });
-});
-
-// Handle facility subscription from webhook
-function handleFacilityCheckout(session) {
-    var email = session.customer_email || session.customer_details?.email;
-    var customerId = session.customer;
-    var subscriptionId = session.subscription;
-    var planType = session.metadata?.plan_type || 'facility_monthly';
-    var facilityName = session.metadata?.facility_name || 'New Facility';
-    var userLimit = getFacilityUserLimit(planType, 'trialing'); // Start with trial limit (10)
-    
-    var facilities = readJSON(FACILITIES_FILE);
-    
-    // Check if facility already exists for this email
-    var existingIndex = -1;
-    for (var i = 0; i < facilities.length; i++) {
-        if (facilities[i].email === email) {
-            existingIndex = i;
-            break;
-        }
-    }
-    
-    if (existingIndex === -1) {
-        // Create new facility
-        var newFacility = {
-            id: 'fac_' + Date.now(),
-            facilityCode: generateFacilityCode(),
-            facilityName: facilityName,
-            email: email,
-            adminPin: generateAdminPin(),
-            userPin: generateFacilityPin(),
-            userLimit: userLimit,
-            planType: planType,
-            status: 'trialing',
-            stripe_customer_id: customerId,
-            stripe_subscription_id: subscriptionId,
-            residents: [],
-            createdAt: new Date().toISOString(),
-            current_period_end: null
-        };
-        facilities.push(newFacility);
-        logActivity('facility_created', email, facilityName, 'New facility subscription: ' + planType);
-    } else {
-        // Update existing facility
-        facilities[existingIndex].stripe_customer_id = customerId;
-        facilities[existingIndex].stripe_subscription_id = subscriptionId;
-        facilities[existingIndex].planType = planType;
-        facilities[existingIndex].userLimit = userLimit;
-        facilities[existingIndex].status = 'trialing';
-        logActivity('facility_updated', email, facilityName, 'Facility subscription updated: ' + planType);
-    }
-    
-    writeJSON(FACILITIES_FILE, facilities);
-}
-
-// Handle facility subscription update
-function handleFacilitySubscriptionUpdate(subscription) {
-    var facilities = readJSON(FACILITIES_FILE);
-    
-    for (var i = 0; i < facilities.length; i++) {
-        if (facilities[i].stripe_subscription_id === subscription.id) {
-            facilities[i].status = subscription.status;
-            facilities[i].current_period_end = new Date(subscription.current_period_end * 1000).toISOString();
-            
-            // Update user limit based on status (10 for trial, unlimited for active)
-            facilities[i].userLimit = getFacilityUserLimit(facilities[i].planType, subscription.status);
-            
-            if (subscription.status === 'active') {
-                logActivity('facility_activated', facilities[i].email, facilities[i].facilityName, 'Subscription active - unlimited users');
-            } else if (subscription.status === 'past_due') {
-                logActivity('facility_past_due', facilities[i].email, facilities[i].facilityName, 'Payment past due');
-            }
-            break;
-        }
-    }
-    
-    writeJSON(FACILITIES_FILE, facilities);
-}
-
-// Handle facility subscription canceled
-function handleFacilitySubscriptionCanceled(subscription) {
-    var facilities = readJSON(FACILITIES_FILE);
-    
-    for (var i = 0; i < facilities.length; i++) {
-        if (facilities[i].stripe_subscription_id === subscription.id) {
-            facilities[i].status = 'canceled';
-            logActivity('facility_canceled', facilities[i].email, facilities[i].facilityName, 'Facility subscription canceled');
-            break;
-        }
-    }
-    
-    writeJSON(FACILITIES_FILE, facilities);
-}
-
-// Facility Dashboard Login
-app.post('/api/facility/dashboard/login', function(req, res) {
-    var facilityCode = req.body.facilityCode;
-    var adminPin = req.body.adminPin;
-    
-    if (!facilityCode || !adminPin) {
-        return res.status(400).json({ error: 'Facility code and admin PIN required' });
-    }
-    
-    var facilities = readJSON(FACILITIES_FILE);
-    var facility = null;
-    
-    for (var i = 0; i < facilities.length; i++) {
-        if (facilities[i].facilityCode === facilityCode && facilities[i].adminPin === adminPin) {
-            facility = facilities[i];
-            break;
-        }
-    }
-    
-    if (!facility) {
-        return res.status(401).json({ error: 'Invalid credentials' });
-    }
-    
-    if (facility.status !== 'active' && facility.status !== 'trialing') {
-        return res.status(401).json({ error: 'Subscription not active' });
-    }
-    
-    logActivity('facility_dashboard_login', null, facility.facilityName, 'Dashboard accessed');
-    
-    // Return token for subsequent requests
-    var token = facility.facilityCode + ':' + facility.adminPin;
-    
-    res.json({
-        success: true,
-        token: token,
-        facility: {
-            facilityCode: facility.facilityCode,
-            facilityName: facility.facilityName,
-            userPin: facility.userPin,
-            userLimit: facility.userLimit,
-            planType: facility.planType,
-            status: facility.status,
-            residentCount: facility.residents ? facility.residents.length : 0
-        }
-    });
-});
-
-// Get facility dashboard data
-app.get('/api/facility/dashboard', facilityTokenAuth, function(req, res) {
-    var facility = req.facility;
-    
-    // Calculate stats
-    var residents = facility.residents || [];
-    var today = new Date().toISOString().split('T')[0];
-    var activeToday = residents.filter(function(r) { return r.lastActive === today; }).length;
-    
-    var totalShifts = 0;
-    var masterCount = 0;
-    var g1Sum = 0, g2Sum = 0, g3Sum = 0;
-    var g1Masters = 0, g2Masters = 0, g3Masters = 0;
-    var g1Sessions = 0, g2Sessions = 0, g3Sessions = 0;
-    
-    residents.forEach(function(r) {
-        var g1 = r.g1 || 1;
-        var g2 = r.g2 || 1;
-        var g3 = r.g3 || 1;
-        
-        g1Sum += g1;
-        g2Sum += g2;
-        g3Sum += g3;
-        
-        if (g1 === 10) g1Masters++;
-        if (g2 === 10) g2Masters++;
-        if (g3 === 10) g3Masters++;
-        
-        if (g1 === 10 || g2 === 10 || g3 === 10) masterCount++;
-        
-        totalShifts += g1 + g2 + g3;
-        
-        g1Sessions += r.g1Sessions || 0;
-        g2Sessions += r.g2Sessions || 0;
-        g3Sessions += r.g3Sessions || 0;
-    });
-    
-    var avgShift = residents.length > 0 ? (totalShifts / (residents.length * 3)).toFixed(1) : '0.0';
-    
-    res.json({
-        success: true,
-        facility: {
-            facilityCode: facility.facilityCode,
-            facilityName: facility.facilityName,
-            userPin: facility.userPin,
-            userLimit: facility.userLimit,
-            planType: facility.planType,
-            status: facility.status,
-            current_period_end: facility.current_period_end
-        },
-        stats: {
-            totalResidents: residents.length,
-            activeToday: activeToday,
-            avgShift: avgShift,
-            masterCount: masterCount
-        },
-        gearStats: {
-            g1: { sessions: g1Sessions, avg: residents.length > 0 ? (g1Sum / residents.length).toFixed(1) : '0.0', masters: g1Masters },
-            g2: { sessions: g2Sessions, avg: residents.length > 0 ? (g2Sum / residents.length).toFixed(1) : '0.0', masters: g2Masters },
-            g3: { sessions: g3Sessions, avg: residents.length > 0 ? (g3Sum / residents.length).toFixed(1) : '0.0', masters: g3Masters }
-        },
-        residents: residents
-    });
-});
-
-// Add resident
-app.post('/api/facility/dashboard/residents', facilityTokenAuth, function(req, res) {
-    var facility = req.facility;
-    var name = req.body.name;
-    var room = req.body.room || '';
-    
-    if (!name) {
-        return res.status(400).json({ error: 'Name required' });
-    }
-    
-    var facilities = readJSON(FACILITIES_FILE);
-    var facilityIndex = -1;
-    for (var i = 0; i < facilities.length; i++) {
-        if (facilities[i].facilityCode === facility.facilityCode) {
-            facilityIndex = i;
-            break;
-        }
-    }
-    
-    if (facilityIndex === -1) {
-        return res.status(404).json({ error: 'Facility not found' });
-    }
-    
-    if (!facilities[facilityIndex].residents) {
-        facilities[facilityIndex].residents = [];
-    }
-    
-    if (facilities[facilityIndex].residents.length >= facilities[facilityIndex].userLimit) {
-        return res.status(400).json({ error: 'User limit reached (' + facilities[facilityIndex].userLimit + ')' });
-    }
-    
-    var newResident = {
-        id: 'res_' + Date.now(),
-        name: name,
-        room: room,
-        status: 'active',
-        g1: 1, g2: 1, g3: 1,
-        g1Sessions: 0, g2Sessions: 0, g3Sessions: 0,
-        lastActive: null,
-        createdAt: new Date().toISOString()
-    };
-    
-    facilities[facilityIndex].residents.push(newResident);
-    writeJSON(FACILITIES_FILE, facilities);
-    
-    logActivity('resident_added', name, facility.facilityName, 'New resident added');
-    
-    res.json({ success: true, resident: newResident });
-});
-
-// Update resident
-app.put('/api/facility/dashboard/residents/:residentId', facilityTokenAuth, function(req, res) {
-    var facility = req.facility;
-    var residentId = req.params.residentId;
-    
-    var facilities = readJSON(FACILITIES_FILE);
-    var facilityIndex = -1;
-    for (var i = 0; i < facilities.length; i++) {
-        if (facilities[i].facilityCode === facility.facilityCode) {
-            facilityIndex = i;
-            break;
-        }
-    }
-    
-    if (facilityIndex === -1) {
-        return res.status(404).json({ error: 'Facility not found' });
-    }
-    
-    var residents = facilities[facilityIndex].residents || [];
-    var residentIndex = -1;
-    for (var j = 0; j < residents.length; j++) {
-        if (residents[j].id === residentId) {
-            residentIndex = j;
-            break;
-        }
-    }
-    
-    if (residentIndex === -1) {
-        return res.status(404).json({ error: 'Resident not found' });
-    }
-    
-    if (req.body.name) facilities[facilityIndex].residents[residentIndex].name = req.body.name;
-    if (req.body.room !== undefined) facilities[facilityIndex].residents[residentIndex].room = req.body.room;
-    if (req.body.status) facilities[facilityIndex].residents[residentIndex].status = req.body.status;
-    
-    writeJSON(FACILITIES_FILE, facilities);
-    
-    res.json({ success: true, resident: facilities[facilityIndex].residents[residentIndex] });
-});
-
-// Delete resident
-app.delete('/api/facility/dashboard/residents/:residentId', facilityTokenAuth, function(req, res) {
-    var facility = req.facility;
-    var residentId = req.params.residentId;
-    
-    var facilities = readJSON(FACILITIES_FILE);
-    var facilityIndex = -1;
-    for (var i = 0; i < facilities.length; i++) {
-        if (facilities[i].facilityCode === facility.facilityCode) {
-            facilityIndex = i;
-            break;
-        }
-    }
-    
-    if (facilityIndex === -1) {
-        return res.status(404).json({ error: 'Facility not found' });
-    }
-    
-    var residents = facilities[facilityIndex].residents || [];
-    var residentName = '';
-    for (var j = 0; j < residents.length; j++) {
-        if (residents[j].id === residentId) {
-            residentName = residents[j].name;
-            break;
-        }
-    }
-    
-    facilities[facilityIndex].residents = residents.filter(function(r) { return r.id !== residentId; });
-    writeJSON(FACILITIES_FILE, facilities);
-    
-    logActivity('resident_deleted', residentName, facility.facilityName, 'Resident removed');
-    
-    res.json({ success: true });
-});
-
-// Get facility by Stripe session ID (for success page)
-app.get('/api/facility/by-session/:sessionId', function(req, res) {
-    var sessionId = req.params.sessionId;
-    
-    if (!stripe) {
-        return res.status(500).json({ error: 'Stripe not configured' });
-    }
-    
-    stripe.checkout.sessions.retrieve(sessionId)
-        .then(function(session) {
-            var email = session.customer_email || session.customer_details?.email;
-            
-            if (!email) {
-                return res.status(404).json({ error: 'No email in session' });
-            }
-            
-            var facilities = readJSON(FACILITIES_FILE);
-            var facility = null;
-            
-            for (var i = 0; i < facilities.length; i++) {
-                if (facilities[i].email === email) {
-                    facility = facilities[i];
-                    break;
-                }
-            }
-            
-            if (!facility) {
-                return res.json({ success: false, error: 'Facility not found yet' });
-            }
-            
-            res.json({
-                success: true,
-                facility: {
-                    facilityName: facility.facilityName,
-                    facilityCode: facility.facilityCode,
-                    adminPin: facility.adminPin,
-                    userPin: facility.userPin,
-                    userLimit: facility.userLimit,
-                    planType: facility.planType
-                }
-            });
-        })
-        .catch(function(err) {
-            console.error('Error retrieving session:', err);
-            res.status(500).json({ error: 'Failed to retrieve session' });
-        });
-});
-
-// User PIN Login - Get facility and residents list
-app.post('/api/facility/user-login', function(req, res) {
-    var userPin = req.body.pin;
-    
-    if (!userPin) {
-        return res.status(400).json({ error: 'PIN required' });
-    }
-    
-    var facilities = readJSON(FACILITIES_FILE);
-    var facility = null;
-    
-    for (var i = 0; i < facilities.length; i++) {
-        if (facilities[i].userPin === userPin) {
-            facility = facilities[i];
-            break;
-        }
-    }
-    
-    if (!facility) {
-        return res.status(401).json({ error: 'Invalid PIN' });
-    }
-    
-    if (facility.status !== 'active' && facility.status !== 'trialing') {
-        return res.status(401).json({ error: 'Subscription not active' });
-    }
-    
-    var activeResidents = (facility.residents || []).filter(function(r) {
-        return r.status === 'active';
-    }).map(function(r) {
-        return { id: r.id, name: r.name };
-    });
-    
-    res.json({
-        success: true,
-        facilityName: facility.facilityName,
-        facilityCode: facility.facilityCode,
-        residents: activeResidents
-    });
-});
-
-// Select resident to play
-app.post('/api/facility/select-resident', function(req, res) {
-    var userPin = req.body.pin;
-    var residentId = req.body.residentId;
-    
-    if (!userPin || !residentId) {
-        return res.status(400).json({ error: 'PIN and resident ID required' });
-    }
-    
-    var facilities = readJSON(FACILITIES_FILE);
-    var facility = null;
-    var facilityIndex = -1;
-    
-    for (var i = 0; i < facilities.length; i++) {
-        if (facilities[i].userPin === userPin) {
-            facility = facilities[i];
-            facilityIndex = i;
-            break;
-        }
-    }
-    
-    if (!facility) {
-        return res.status(401).json({ error: 'Invalid PIN' });
-    }
-    
-    var residents = facility.residents || [];
-    var resident = null;
-    var residentIndex = -1;
-    
-    for (var j = 0; j < residents.length; j++) {
-        if (residents[j].id === residentId) {
-            resident = residents[j];
-            residentIndex = j;
-            break;
-        }
-    }
-    
-    if (!resident) {
-        return res.status(404).json({ error: 'Resident not found' });
-    }
-    
-    // Update last active
-    facilities[facilityIndex].residents[residentIndex].lastActive = new Date().toISOString().split('T')[0];
-    writeJSON(FACILITIES_FILE, facilities);
-    
-    logActivity('resident_login', resident.name, facility.facilityName, 'Resident started session');
-    
-    res.json({
-        success: true,
-        facilityCode: facility.facilityCode,
-        resident: {
-            id: resident.id,
-            name: resident.name,
-            g1: resident.g1 || 1,
-            g2: resident.g2 || 1,
-            g3: resident.g3 || 1
-        }
-    });
-});
-
-// Record resident game session
-app.post('/api/facility/game-session', function(req, res) {
-    var facilityCode = req.body.facilityCode;
-    var residentId = req.body.residentId;
-    var gear = req.body.gear; // 'g1', 'g2', 'g3'
-    var newShift = req.body.newShift;
-    var gameName = req.body.gameName;
-    
-    if (!facilityCode || !residentId || !gear) {
-        return res.status(400).json({ error: 'Missing required fields' });
-    }
-    
-    var facilities = readJSON(FACILITIES_FILE);
-    var facilityIndex = -1;
-    var facility = null;
-    
-    for (var i = 0; i < facilities.length; i++) {
-        if (facilities[i].facilityCode === facilityCode) {
-            facility = facilities[i];
-            facilityIndex = i;
-            break;
-        }
-    }
-    
-    if (!facility) {
-        return res.status(404).json({ error: 'Facility not found' });
-    }
-    
-    var residents = facility.residents || [];
-    var residentIndex = -1;
-    var resident = null;
-    
-    for (var j = 0; j < residents.length; j++) {
-        if (residents[j].id === residentId) {
-            resident = residents[j];
-            residentIndex = j;
-            break;
-        }
-    }
-    
-    if (!resident) {
-        return res.status(404).json({ error: 'Resident not found' });
-    }
-    
-    // Update session count
-    var sessionKey = gear + 'Sessions';
-    facilities[facilityIndex].residents[residentIndex][sessionKey] = (resident[sessionKey] || 0) + 1;
-    
-    // Update shift level if provided
-    if (newShift && newShift > (resident[gear] || 1)) {
-        facilities[facilityIndex].residents[residentIndex][gear] = newShift;
-    }
-    
-    // Update last active
-    facilities[facilityIndex].residents[residentIndex].lastActive = new Date().toISOString().split('T')[0];
-    
-    writeJSON(FACILITIES_FILE, facilities);
-    
-    var shiftNames = ['','PRACTICE 1','PRACTICE 2','SHIFT 3','SHIFT 4','SHIFT 5','SHIFT 6','SHIFT 7','SHIFT 8','SHIFT 9','MASTER 10'];
-    var details = gameName ? gameName + ' | ' + shiftNames[resident[gear] || 1] : shiftNames[resident[gear] || 1];
-    
-    logActivity('game_session', resident.name, facility.facilityName, details);
-    
-    res.json({ success: true });
-});
-
-// Serve facility pages
-app.get('/facility-dashboard', function(req, res) {
-    res.sendFile(path.join(__dirname, 'facility-dashboard.html'));
-});
-
-app.get('/facility-pricing', function(req, res) {
-    res.sendFile(path.join(__dirname, 'facility-pricing.html'));
-});
-
-app.get('/facility-success', function(req, res) {
-    res.sendFile(path.join(__dirname, 'facility-success.html'));
-});
-
-app.get('/facility-play', function(req, res) {
-    res.sendFile(path.join(__dirname, 'facility-play.html'));
-});
-
-// Admin: Get all facilities
-app.get('/api/admin/facilities-new', adminTokenAuth, function(req, res) {
-    try {
-        var facilities = readJSON(FACILITIES_FILE);
-        var result = facilities.map(function(f) {
-            return {
-                id: f.id,
-                facilityCode: f.facilityCode,
-                facilityName: f.facilityName,
-                email: f.email,
-                userPin: f.userPin,
-                adminPin: f.adminPin,
-                userLimit: f.userLimit,
-                residentCount: f.residents ? f.residents.length : 0,
-                planType: f.planType,
-                status: f.status,
-                createdAt: f.createdAt,
-                current_period_end: f.current_period_end
-            };
-        });
-        res.json({ success: true, facilities: result });
-    } catch (err) {
-        console.error('Error fetching facilities:', err);
-        res.json({ success: true, facilities: [] });
-    }
-});
-
-// ============ LEGACY FACILITY ROUTES ============
-
-app.get('/facility', function(req, res) {
-    res.sendFile(path.join(__dirname, 'facility-login.html'));
-});
-
-app.get('/facility/dashboard', function(req, res) {
-    res.sendFile(path.join(__dirname, 'facility.html'));
-});
-
-app.post('/api/facility/login', function(req, res) {
-    var licenseKey = req.body.licenseKey;
-    var licenses = readJSON(LICENSES_FILE);
-    var license = null;
-    for (var i = 0; i < licenses.length; i++) {
-        if (licenses[i].key === licenseKey && licenses[i].active) { license = licenses[i]; break; }
-    }
-    if (!license) return res.status(401).json({ error: 'Invalid license key' });
-    if (new Date(license.expirationDate) < new Date()) return res.status(401).json({ error: 'License expired' });
-    logActivity('facility_login', null, license.facilityName, 'Facility dashboard accessed');
-    res.json({ success: true, facilityName: license.facilityName });
-});
-
-app.get('/api/facility/:licenseKey', function(req, res) {
-    var licenseKey = req.params.licenseKey;
-    var licenses = readJSON(LICENSES_FILE);
-    var license = null;
-    for (var i = 0; i < licenses.length; i++) {
-        if (licenses[i].key === licenseKey && licenses[i].active) { license = licenses[i]; break; }
-    }
-    if (!license) return res.status(401).json({ error: 'Invalid license key' });
-    if (new Date(license.expirationDate) < new Date()) return res.status(401).json({ error: 'License expired' });
-    
-    var allCodes = readJSON(CODES_FILE);
-    var codes = allCodes.filter(function(c) { return c.licenseKey === licenseKey; });
-    var users = readJSON(USERS_FILE);
-    
-    var enrichedCodes = codes.map(function(code) {
-        var codeUsers = users.filter(function(u) { return u.code === code.code; });
-        var usedCount = codeUsers.length;
-        var totalSessions = codeUsers.reduce(function(sum, u) {
-            return sum + (u.sessions_sequence || 0) + (u.sessions_startrail || 0) + (u.sessions_duo || 0) + (u.sessions_gonogo || 0);
-        }, 0);
-        var result = {};
-        for (var key in code) { result[key] = code[key]; }
-        result.usedCount = usedCount;
-        result.remainingUsers = code.userLimit - usedCount;
-        result.totalSessions = totalSessions;
-        return result;
-    });
-    
-    var usedPool = codes.reduce(function(sum, c) { return sum + c.userLimit; }, 0);
-    var facilityCodeIds = codes.map(function(c) { return c.code; });
-    var facilityUsers = users.filter(function(u) { return facilityCodeIds.indexOf(u.code) !== -1; });
-    var enrichedUsers = facilityUsers.map(function(u) {
-        return {
-            username: u.username, pin: u.pin || null, code: u.code,
-            sessions_sequence: u.sessions_sequence || 0, sessions_startrail: u.sessions_startrail || 0,
-            sessions_duo: u.sessions_duo || 0, sessions_gonogo: u.sessions_gonogo || 0,
-            best_sequence: u.best_sequence || 0, best_startrail: u.best_startrail || 0,
-            best_duo: u.best_duo || 0, best_gonogo: u.best_gonogo || 0,
-            totalSessions: (u.sessions_sequence || 0) + (u.sessions_startrail || 0) + (u.sessions_duo || 0) + (u.sessions_gonogo || 0),
-            streak: u.streak || 0, lastActive: u.lastActive || u.createdAt, createdAt: u.createdAt,
-            best_rt: u.best_rt || null, latest_rt: u.latest_rt || null, rt_history: u.rt_history || []
-        };
-    });
-    
-    res.json({
-        facilityName: license.facilityName, expirationDate: license.expirationDate,
-        userPool: license.userPool, usedPool: usedPool, remainingPool: license.userPool - usedPool,
-        codes: enrichedCodes, users: enrichedUsers
-    });
-});
-
-app.post('/api/facility/:licenseKey/codes', function(req, res) {
-    var licenseKey = req.params.licenseKey;
-    var userLimit = req.body.userLimit;
-    var label = req.body.label;
-    var licenses = readJSON(LICENSES_FILE);
-    var license = null;
-    for (var i = 0; i < licenses.length; i++) {
-        if (licenses[i].key === licenseKey && licenses[i].active) { license = licenses[i]; break; }
-    }
-    if (!license) return res.status(401).json({ error: 'Invalid license key' });
-    if (new Date(license.expirationDate) < new Date()) return res.status(401).json({ error: 'License expired' });
-    var codes = readJSON(CODES_FILE);
-    var licenseCodes = codes.filter(function(c) { return c.licenseKey === licenseKey; });
-    var usedPool = licenseCodes.reduce(function(sum, c) { return sum + c.userLimit; }, 0);
-    var remainingPool = license.userPool - usedPool;
-    if (parseInt(userLimit) > remainingPool) {
-        return res.status(400).json({ error: 'Only ' + remainingPool + ' users remaining in pool' });
-    }
-    var newCode = {
-        code: generateKey('ACC', 6), licenseKey: licenseKey, userLimit: parseInt(userLimit),
-        label: label || '', createdAt: new Date().toISOString(), active: true
-    };
-    codes.push(newCode);
-    writeJSON(CODES_FILE, codes);
-    res.json(newCode);
-});
-
-app.delete('/api/facility/:licenseKey/codes/:code', function(req, res) {
-    var licenseKey = req.params.licenseKey;
-    var code = req.params.code;
-    var codes = readJSON(CODES_FILE);
-    var codeObj = null;
-    for (var i = 0; i < codes.length; i++) {
-        if (codes[i].code === code && codes[i].licenseKey === licenseKey) { codeObj = codes[i]; break; }
-    }
-    if (!codeObj) return res.status(404).json({ error: 'Code not found' });
-    codes = codes.filter(function(c) { return c.code !== code; });
-    writeJSON(CODES_FILE, codes);
-    var users = readJSON(USERS_FILE);
-    users = users.filter(function(u) { return u.code !== code; });
-    writeJSON(USERS_FILE, users);
-    res.json({ success: true });
-});
-
 // ============ PLAY ROUTES ============
 
-app.get('/play', function(req, res) { res.sendFile(path.join(__dirname, 'play.html')); });
+app.get('/play', function(req, res) { res.sendFile(path.join(__dirname, 'index.html')); });
 app.get('/game', function(req, res) { res.sendFile(path.join(__dirname, 'game.html')); });
 app.get('/trailtrotter', function(req, res) { res.sendFile(path.join(__dirname, 'trailtrotter.html')); });
 app.get('/gotrotters', function(req, res) { res.sendFile(path.join(__dirname, 'gotrotters.html')); });
 app.get('/go-nogo-trail', function(req, res) { res.sendFile(path.join(__dirname, 'go-nogo-trail.html')); });
 
-app.post('/api/play/verify', function(req, res) {
-    var accessCode = req.body.accessCode;
-    var codes = readJSON(CODES_FILE);
-    var code = null;
-    for (var i = 0; i < codes.length; i++) {
-        if (codes[i].code === accessCode && codes[i].active) { code = codes[i]; break; }
-    }
-    if (!code) return res.status(401).json({ error: 'Invalid access code' });
-    var licenses = readJSON(LICENSES_FILE);
-    var license = null;
-    for (var j = 0; j < licenses.length; j++) {
-        if (licenses[j].key === code.licenseKey && licenses[j].active) { license = licenses[j]; break; }
-    }
-    if (!license) return res.status(401).json({ error: 'License not found' });
-    if (new Date(license.expirationDate) < new Date()) return res.status(401).json({ error: 'Access expired' });
-    var users = readJSON(USERS_FILE);
-    var codeUsers = users.filter(function(u) { return u.code === accessCode; });
-    var usedCount = codeUsers.length;
-    var spotsLeft = code.userLimit - usedCount;
-    res.json({ success: true, facilityName: license.facilityName, spotsLeft: spotsLeft, hasSpots: spotsLeft > 0 });
-});
-
-app.post('/api/play/register', function(req, res) {
-    var accessCode = req.body.accessCode;
-    var username = req.body.username;
-    if (!accessCode || !username) return res.status(400).json({ error: 'Missing required fields' });
-    var codes = readJSON(CODES_FILE);
-    var code = null;
-    for (var i = 0; i < codes.length; i++) {
-        if (codes[i].code === accessCode && codes[i].active) { code = codes[i]; break; }
-    }
-    if (!code) return res.status(401).json({ error: 'Invalid access code' });
-    var licenses = readJSON(LICENSES_FILE);
-    var license = null;
-    for (var j = 0; j < licenses.length; j++) {
-        if (licenses[j].key === code.licenseKey && licenses[j].active) { license = licenses[j]; break; }
-    }
-    if (!license || new Date(license.expirationDate) < new Date()) return res.status(401).json({ error: 'Access expired' });
-    var users = readJSON(USERS_FILE);
-    var usedCount = users.filter(function(u) { return u.code === accessCode; }).length;
-    if (usedCount >= code.userLimit) return res.status(400).json({ error: 'User limit reached for this code' });
-    var userPin = generateUserPin();
-    users.push({
-        code: accessCode, username: username.trim(), pin: userPin, createdAt: new Date().toISOString(),
-        sessions_sequence: 0, sessions_startrail: 0, sessions_duo: 0, sessions_gonogo: 0, streak: 0
-    });
-    writeJSON(USERS_FILE, users);
-    logActivity('user_register', username, license.facilityName, 'New user registered with PIN');
-    res.json({ success: true, username: username.trim(), pin: userPin });
-});
-
+// Subscriber PIN login
 app.post('/api/play/login', function(req, res) {
     var pin = req.body.pin;
     if (!pin) return res.status(400).json({ error: 'PIN is required' });
     
-    var users = readJSON(USERS_FILE);
-    var user = null;
-    for (var i = 0; i < users.length; i++) {
-        if (users[i].pin === pin) { user = users[i]; break; }
-    }
-    
-    if (user) {
-        var codes = readJSON(CODES_FILE);
-        var code = null;
-        for (var j = 0; j < codes.length; j++) {
-            if (codes[j].code === user.code) { code = codes[j]; break; }
-        }
-        var facilityName = 'Unknown';
-        if (code) {
-            var licenses = readJSON(LICENSES_FILE);
-            for (var k = 0; k < licenses.length; k++) {
-                if (licenses[k].key === code.licenseKey) { facilityName = licenses[k].facilityName; break; }
-            }
-        }
-        logActivity('user_login', user.username, facilityName, 'User logged in with PIN');
-        return res.json({ success: true, username: user.username, pin: user.pin, accessCode: user.code, userType: 'facility' });
-    }
-    
     var subscribers = readJSON(SUBSCRIBERS_FILE);
-    var subscriber = null;
-    var isFamilyMember = false;
-    var memberName = null;
     
-    for (var s = 0; s < subscribers.length; s++) {
-        if (subscribers[s].pin === pin) { subscriber = subscribers[s]; break; }
-        if (subscribers[s].family_members) {
-            for (var m = 0; m < subscribers[s].family_members.length; m++) {
-                if (subscribers[s].family_members[m].pin === pin) {
-                    subscriber = subscribers[s];
-                    isFamilyMember = true;
-                    memberName = subscribers[s].family_members[m].name;
-                    break;
-                }
-            }
+    for (var i = 0; i < subscribers.length; i++) {
+        if (subscribers[i].pin === pin) {
+            var isActive = subscribers[i].status === 'active' || subscribers[i].status === 'trialing';
+            if (!isActive) return res.status(401).json({ error: 'Subscription not active. Renew at gotrotter.ai' });
+            logActivity('subscriber_login', subscribers[i].email, null, 'Subscriber logged in');
+            return res.json({ 
+                success: true, 
+                username: subscribers[i].email.split('@')[0],
+                pin: pin,
+                userType: 'subscriber',
+                plan_type: subscribers[i].plan_type
+            });
         }
-    }
-    
-    if (subscriber) {
-        var isActive = subscriber.status === 'active' || subscriber.status === 'trialing';
-        if (!isActive) return res.status(401).json({ error: 'Subscription is not active. Please renew at gotrotter.ai' });
-        logActivity('subscriber_login', isFamilyMember ? memberName : subscriber.email, null, 'Subscriber logged in');
-        return res.json({ 
-            success: true, 
-            username: isFamilyMember ? memberName : subscriber.email.split('@')[0],
-            pin: pin, userType: 'subscriber', plan_type: subscriber.plan_type, is_family_member: isFamilyMember
-        });
     }
     
     return res.status(401).json({ error: 'Invalid PIN' });
@@ -2278,209 +1320,69 @@ app.post('/api/play/login', function(req, res) {
 
 app.post('/api/game/session', function(req, res) {
     var pin = req.body.pin;
-    var accessCode = req.body.accessCode;
-    var username = req.body.username;
     var game = req.body.game;
     var score = req.body.score;
+    
+    if (!pin) return res.status(400).json({ error: 'PIN required' });
     if (!game) return res.status(400).json({ error: 'Missing game type' });
+    
     var validGames = ['sequence', 'startrail', 'duo', 'gonogo', 'startrotters', 'trailtrotter', 'gotrotters'];
     if (validGames.indexOf(game) === -1) return res.status(400).json({ error: 'Invalid game type' });
     
-    var users = readJSON(USERS_FILE);
-    var userIndex = -1;
-    var isSubscriber = false;
-    var subscriberEmail = null;
+    var subscribers = readJSON(SUBSCRIBERS_FILE);
     
-    // First check facility users
-    if (pin) {
-        for (var i = 0; i < users.length; i++) {
-            if (users[i].pin === pin) { userIndex = i; break; }
-        }
-    } else if (accessCode && username) {
-        for (var j = 0; j < users.length; j++) {
-            if (users[j].code === accessCode && users[j].username.toLowerCase() === username.toLowerCase()) {
-                userIndex = j; break;
-            }
-        }
-    }
-    
-    // If not found in facility users, check subscribers
-    if (userIndex === -1 && pin) {
-        var subscribers = readJSON(SUBSCRIBERS_FILE);
-        for (var s = 0; s < subscribers.length; s++) {
-            if (subscribers[s].pin === pin) {
-                isSubscriber = true;
-                subscriberEmail = subscribers[s].email;
-                
-                // Initialize session tracking for subscriber if needed
-                if (!subscribers[s].sessions) subscribers[s].sessions = {};
-                if (!subscribers[s].sessions[game]) subscribers[s].sessions[game] = 0;
-                subscribers[s].sessions[game]++;
-                subscribers[s].lastActive = new Date().toISOString();
-                
-                // Track best scores
-                if (score !== undefined) {
-                    if (!subscribers[s].best) subscribers[s].best = {};
-                    if (!subscribers[s].best[game] || score > subscribers[s].best[game]) {
-                        subscribers[s].best[game] = score;
-                    }
+    for (var i = 0; i < subscribers.length; i++) {
+        if (subscribers[i].pin === pin) {
+            // Initialize session tracking
+            if (!subscribers[i].sessions) subscribers[i].sessions = {};
+            if (!subscribers[i].sessions[game]) subscribers[i].sessions[game] = 0;
+            subscribers[i].sessions[game]++;
+            subscribers[i].lastActive = new Date().toISOString();
+            
+            // Track best scores
+            if (score !== undefined) {
+                if (!subscribers[i].best) subscribers[i].best = {};
+                if (!subscribers[i].best[game] || score > subscribers[i].best[game]) {
+                    subscribers[i].best[game] = score;
                 }
-                
-                // Track streak
-                var today = new Date().toISOString().split('T')[0];
-                if (!subscribers[s].lastStreakDate) {
-                    subscribers[s].streak = 1;
-                    subscribers[s].lastStreakDate = today;
-                } else if (subscribers[s].lastStreakDate !== today) {
-                    var lastDate = new Date(subscribers[s].lastStreakDate);
-                    var todayDate = new Date(today);
-                    var diffDays = Math.floor((todayDate - lastDate) / (1000 * 60 * 60 * 24));
-                    if (diffDays === 1) {
-                        subscribers[s].streak = (subscribers[s].streak || 0) + 1;
-                    } else if (diffDays > 1) {
-                        subscribers[s].streak = 1;
-                    }
-                    subscribers[s].lastStreakDate = today;
-                }
-                
-                writeJSON(SUBSCRIBERS_FILE, subscribers);
-                
-                var gameNames = { sequence: 'Sequence Memory', startrail: 'StarTrail', duo: 'Pattern Duo', gonogo: 'Go/No-Go' };
-                var gameName = gameNames[game] || game;
-                var scoreText = score !== undefined ? ' | Score: ' + score : '';
-                var shiftLevel = score !== undefined ? getShiftFromScore(score) : null;
-                var shiftText = shiftLevel ? ' | Shift ' + shiftLevel : '';
-                logActivity('game_session', subscriberEmail, null, gameName + scoreText + shiftText);
-                
-                return res.json({ 
-                    success: true, 
-                    sessions: subscribers[s].sessions[game],
-                    streak: subscribers[s].streak || 1,
-                    personalBest: subscribers[s].best ? subscribers[s].best[game] : score
-                });
             }
             
-            // Check family members
-            if (subscribers[s].family_members) {
-                for (var m = 0; m < subscribers[s].family_members.length; m++) {
-                    if (subscribers[s].family_members[m].pin === pin) {
-                        isSubscriber = true;
-                        var memberName = subscribers[s].family_members[m].name;
-                        
-                        // Initialize session tracking for family member
-                        if (!subscribers[s].family_members[m].sessions) subscribers[s].family_members[m].sessions = {};
-                        if (!subscribers[s].family_members[m].sessions[game]) subscribers[s].family_members[m].sessions[game] = 0;
-                        subscribers[s].family_members[m].sessions[game]++;
-                        subscribers[s].family_members[m].lastActive = new Date().toISOString();
-                        
-                        // Track best scores for family member
-                        if (score !== undefined) {
-                            if (!subscribers[s].family_members[m].best) subscribers[s].family_members[m].best = {};
-                            if (!subscribers[s].family_members[m].best[game] || score > subscribers[s].family_members[m].best[game]) {
-                                subscribers[s].family_members[m].best[game] = score;
-                            }
-                        }
-                        
-                        writeJSON(SUBSCRIBERS_FILE, subscribers);
-                        
-                        var gameNames2 = { sequence: 'Sequence Memory', startrail: 'StarTrail', duo: 'Pattern Duo', gonogo: 'Go/No-Go' };
-                        var gameName2 = gameNames2[game] || game;
-                        var scoreText2 = score !== undefined ? ' | Score: ' + score : '';
-                        var shiftLevel2 = score !== undefined ? getShiftFromScore(score) : null;
-                        var shiftText2 = shiftLevel2 ? ' | Shift ' + shiftLevel2 : '';
-                        logActivity('game_session', memberName, null, gameName2 + scoreText2 + shiftText2);
-                        
-                        return res.json({ 
-                            success: true, 
-                            sessions: subscribers[s].family_members[m].sessions[game],
-                            streak: 1,
-                            personalBest: subscribers[s].family_members[m].best ? subscribers[s].family_members[m].best[game] : score
-                        });
-                    }
+            // Track streak
+            var today = new Date().toISOString().split('T')[0];
+            if (!subscribers[i].lastStreakDate) {
+                subscribers[i].streak = 1;
+                subscribers[i].lastStreakDate = today;
+            } else if (subscribers[i].lastStreakDate !== today) {
+                var lastDate = new Date(subscribers[i].lastStreakDate);
+                var todayDate = new Date(today);
+                var diffDays = Math.floor((todayDate - lastDate) / (1000 * 60 * 60 * 24));
+                if (diffDays === 1) {
+                    subscribers[i].streak = (subscribers[i].streak || 0) + 1;
+                } else if (diffDays > 1) {
+                    subscribers[i].streak = 1;
                 }
+                subscribers[i].lastStreakDate = today;
             }
-        }
-    }
-    
-    if (userIndex === -1 && !isSubscriber) return res.status(404).json({ error: 'User not found' });
-    
-    // Handle facility user (original logic)
-    if (userIndex !== -1) {
-        var user = users[userIndex];
-        var sessionKey = 'sessions_' + game;
-        if (!users[userIndex][sessionKey]) users[userIndex][sessionKey] = 0;
-        users[userIndex][sessionKey]++;
-        users[userIndex].lastActive = new Date().toISOString();
-        
-        var today = new Date().toISOString().split('T')[0];
-        var lastStreakDate = users[userIndex].lastStreakDate;
-        if (!lastStreakDate) {
-            users[userIndex].streak = 1;
-            users[userIndex].lastStreakDate = today;
-        } else if (lastStreakDate !== today) {
-            var lastDate = new Date(lastStreakDate);
-            var todayDate = new Date(today);
-            var diffDays = Math.floor((todayDate - lastDate) / (1000 * 60 * 60 * 24));
-            if (diffDays === 1) {
-                users[userIndex].streak = (users[userIndex].streak || 0) + 1;
-            } else if (diffDays > 1) {
-                users[userIndex].streak = 1;
-            }
-            users[userIndex].lastStreakDate = today;
-        }
-        
-        if (score !== undefined) {
-            var bestKey = 'best_' + game;
-            if (!users[userIndex][bestKey] || score > users[userIndex][bestKey]) {
-                users[userIndex][bestKey] = score;
-            }
-        }
-        
-        if (game === 'gonogo' && req.body.rt) {
-            var rt = req.body.rt;
-            if (!users[userIndex].rt_history) users[userIndex].rt_history = [];
-            users[userIndex].rt_history.push({
-                date: new Date().toISOString(), average: rt.average || 0, fastest: rt.fastest || 0,
-                slowest: rt.slowest || 0, consistency: rt.consistency || 0, totalTaps: rt.totalTaps || 0,
-                accuracy: req.body.accuracy || 0, score: score || 0
+            
+            writeJSON(SUBSCRIBERS_FILE, subscribers);
+            
+            var gameNames = { sequence: 'Sequence Memory', startrail: 'StarTrail', duo: 'Pattern Duo', gonogo: 'Go/No-Go' };
+            var gameName = gameNames[game] || game;
+            var scoreText = score !== undefined ? ' | Score: ' + score : '';
+            var shiftLevel = score !== undefined ? getShiftFromScore(score) : null;
+            var shiftText = shiftLevel ? ' | Shift ' + shiftLevel : '';
+            logActivity('game_session', subscribers[i].email, null, gameName + scoreText + shiftText);
+            
+            return res.json({ 
+                success: true, 
+                sessions: subscribers[i].sessions[game],
+                streak: subscribers[i].streak || 1,
+                personalBest: subscribers[i].best ? subscribers[i].best[game] : score
             });
-            if (users[userIndex].rt_history.length > 50) {
-                users[userIndex].rt_history = users[userIndex].rt_history.slice(-50);
-            }
-            if (!users[userIndex].best_rt || (rt.average > 0 && rt.average < users[userIndex].best_rt)) {
-                users[userIndex].best_rt = rt.average;
-            }
-            users[userIndex].latest_rt = { average: rt.average, fastest: rt.fastest, consistency: rt.consistency };
         }
-        
-        writeJSON(USERS_FILE, users);
-        
-        var codes = readJSON(CODES_FILE);
-        var licenses = readJSON(LICENSES_FILE);
-        var facilityName = 'Unknown';
-        for (var c = 0; c < codes.length; c++) {
-            if (codes[c].code === user.code) {
-                for (var l = 0; l < licenses.length; l++) {
-                    if (licenses[l].key === codes[c].licenseKey) { facilityName = licenses[l].facilityName; break; }
-                }
-                break;
-            }
-        }
-        
-        var gameNames = { sequence: 'Sequence Memory', startrail: 'StarTrail', duo: 'Pattern Duo' };
-        var gameName = gameNames[game] || game;
-        var scoreText = score !== undefined ? ' | Score: ' + score : '';
-        var shiftLevel = score !== undefined ? getShiftFromScore(score) : null;
-        var shiftText = shiftLevel ? ' | Shift ' + shiftLevel : '';
-        logActivity('game_session', user.username, facilityName, gameName + scoreText + shiftText);
-        
-        res.json({ 
-            success: true, 
-            sessions: users[userIndex][sessionKey],
-            streak: users[userIndex].streak,
-            personalBest: users[userIndex]['best_' + game]
-        });
     }
+    
+    return res.status(404).json({ error: 'User not found' });
 });
 
 app.get('/api/game/stats/pin/:pin', function(req, res) {
