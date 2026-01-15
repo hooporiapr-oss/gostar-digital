@@ -567,6 +567,134 @@ tr:hover { background: var(--card-hover); }
 .empty-state-icon { font-size: 3rem; margin-bottom: 15px; }
 .empty-state-text { font-size: 1rem; }
 
+tr.clickable { cursor: pointer; transition: background 0.2s; }
+tr.clickable:hover { background: var(--card-hover); }
+
+.subscriber-detail-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+}
+
+.subscriber-avatar {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, var(--orange), var(--teal));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: var(--dark);
+    font-weight: 700;
+}
+
+.subscriber-info h4 { font-size: 1.2rem; margin-bottom: 5px; }
+.subscriber-info p { font-size: 0.85rem; color: var(--muted); }
+
+.subscriber-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.subscriber-stat {
+    background: var(--darker);
+    border-radius: 12px;
+    padding: 15px;
+    text-align: center;
+}
+
+.subscriber-stat-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    color: var(--orange);
+}
+
+.subscriber-stat-label {
+    font-size: 0.7rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.game-scores-section h5 {
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+}
+
+.game-score-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 15px;
+    background: var(--darker);
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.game-score-name {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+}
+
+.game-score-name span.icon { font-size: 1.2rem; }
+
+.game-score-stats {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.game-score-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    color: var(--text);
+}
+
+.shift-badge-large {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.shift-1, .shift-2 { background: rgba(155,89,182,0.2); color: #b57edc; }
+.shift-3 { background: rgba(255,215,0,0.2); color: var(--gold); }
+.shift-4 { background: rgba(255,107,0,0.2); color: var(--orange); }
+.shift-5 { background: rgba(0,217,165,0.2); color: var(--teal); }
+.shift-6 { background: rgba(59,130,246,0.2); color: var(--blue); }
+.shift-7 { background: rgba(155,89,182,0.2); color: var(--purple); }
+.shift-8 { background: rgba(255,215,0,0.2); color: var(--gold); }
+.shift-9 { background: rgba(255,107,0,0.2); color: var(--orange); }
+.shift-10 { background: linear-gradient(135deg, rgba(255,215,0,0.3), rgba(255,107,0,0.3)); color: var(--gold); }
+
+.family-members-section { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border); }
+
+.family-member-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 15px;
+    background: var(--darker);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.family-member-row:hover { background: var(--card-hover); }
+
 @media (max-width: 1024px) {
     .sidebar { width: 80px; padding: 15px 0; }
     .sidebar-header { padding: 0 10px 15px; }
@@ -720,8 +848,8 @@ tr:hover { background: var(--card-hover); }
                     <span class="lang-es">SUSCRIPTORES</span>
                 </h1>
                 <p class="page-subtitle">
-                    <span class="lang-en">Stripe subscription management</span>
-                    <span class="lang-es">Gestión de suscripciones Stripe</span>
+                    <span class="lang-en">Stripe subscription management • Click user for details</span>
+                    <span class="lang-es">Gestión de suscripciones Stripe • Haz clic en usuario para detalles</span>
                 </p>
             </header>
             <div class="stats-grid">
@@ -776,8 +904,9 @@ tr:hover { background: var(--card-hover); }
                                 <th>PIN</th>
                                 <th><span class="lang-en">Plan</span><span class="lang-es">Plan</span></th>
                                 <th><span class="lang-en">Status</span><span class="lang-es">Estado</span></th>
-                                <th><span class="lang-en">Family</span><span class="lang-es">Familia</span></th>
-                                <th><span class="lang-en">Created</span><span class="lang-es">Creado</span></th>
+                                <th><span class="lang-en">Sessions</span><span class="lang-es">Sesiones</span></th>
+                                <th><span class="lang-en">Streak</span><span class="lang-es">Racha</span></th>
+                                <th><span class="lang-en">Last Active</span><span class="lang-es">Última Vez</span></th>
                             </tr>
                         </thead>
                         <tbody id="subscribersTable"></tbody>
@@ -873,6 +1002,18 @@ tr:hover { background: var(--card-hover); }
         <div class="modal-footer">
             <button class="btn btn-secondary" data-close="deleteModal"><span class="lang-en">Cancel</span><span class="lang-es">Cancelar</span></button>
             <button class="btn btn-danger" id="confirmDeleteBtn"><span class="lang-en">Delete</span><span class="lang-es">Eliminar</span></button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="subscriberModal">
+    <div class="modal" style="max-width:560px">
+        <div class="modal-header">
+            <h3 class="modal-title" id="subscriberModalTitle">SUBSCRIBER DETAILS</h3>
+            <button class="modal-close" data-close="subscriberModal">×</button>
+        </div>
+        <div class="modal-body" id="subscriberModalBody">
+            <div class="loading-spinner"></div>
         </div>
     </div>
 </div>
@@ -1142,7 +1283,7 @@ tr:hover { background: var(--card-hover); }
         var tbody = document.getElementById('subscribersTable');
         
         if (subscribers.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--muted)"><span class="lang-en">No subscribers yet</span><span class="lang-es">Aún no hay suscriptores</span></td></tr>';
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--muted)"><span class="lang-en">No subscribers yet</span><span class="lang-es">Aún no hay suscriptores</span></td></tr>';
             return;
         }
 
@@ -1150,19 +1291,132 @@ tr:hover { background: var(--card-hover); }
         subscribers.forEach(function(sub) {
             var statusClass = 'badge-' + (sub.status || 'unknown');
             var planDisplay = (sub.plan_type || 'unknown').replace('_', ' ');
-            var createdDate = sub.created_at ? new Date(sub.created_at).toLocaleDateString() : '-';
+            var totalSessions = sub.sessions ? Object.values(sub.sessions).reduce(function(a,b){return a+b;}, 0) : 0;
+            var lastActive = sub.lastActive ? formatTimeAgo(sub.lastActive) : '-';
             
-            html += '<tr>';
+            html += '<tr class="clickable" onclick="window.viewSubscriber(\'' + sub.pin + '\')">';
             html += '<td>' + (sub.email || '-') + '</td>';
             html += '<td><strong style="color:var(--orange)">' + (sub.pin || '-') + '</strong></td>';
             html += '<td>' + planDisplay + '</td>';
             html += '<td><span class="badge ' + statusClass + '">' + (sub.status || 'unknown') + '</span></td>';
-            html += '<td>' + (sub.family_members_count || 0) + ' members</td>';
-            html += '<td>' + createdDate + '</td>';
+            html += '<td>' + totalSessions + '</td>';
+            html += '<td>🔥 ' + (sub.streak || 0) + '</td>';
+            html += '<td>' + lastActive + '</td>';
             html += '</tr>';
+            
+            // Also add family members as clickable rows
+            if (sub.family_members && sub.family_members.length > 0) {
+                sub.family_members.forEach(function(member) {
+                    var memberSessions = member.sessions ? Object.values(member.sessions).reduce(function(a,b){return a+b;}, 0) : 0;
+                    var memberLastActive = member.lastActive ? formatTimeAgo(member.lastActive) : '-';
+                    
+                    html += '<tr class="clickable" onclick="window.viewSubscriber(\'' + member.pin + '\')" style="background:rgba(255,107,0,0.05)">';
+                    html += '<td style="padding-left:40px">↳ ' + member.name + ' <span style="color:var(--muted);font-size:0.75rem">(family)</span></td>';
+                    html += '<td><strong style="color:var(--teal)">' + (member.pin || '-') + '</strong></td>';
+                    html += '<td>-</td>';
+                    html += '<td>-</td>';
+                    html += '<td>' + memberSessions + '</td>';
+                    html += '<td>-</td>';
+                    html += '<td>' + memberLastActive + '</td>';
+                    html += '</tr>';
+                });
+            }
         });
         
         tbody.innerHTML = html;
+    }
+
+    window.viewSubscriber = function(pin) {
+        openModal('subscriberModal');
+        document.getElementById('subscriberModalBody').innerHTML = '<div style="text-align:center;padding:40px"><div class="loading-spinner"></div></div>';
+        
+        apiGet('/api/admin/subscriber/' + pin)
+            .then(function(data) {
+                if (data.success) {
+                    renderSubscriberDetail(data.subscriber);
+                } else {
+                    document.getElementById('subscriberModalBody').innerHTML = '<div style="text-align:center;padding:40px;color:var(--danger)">Error loading subscriber</div>';
+                }
+            })
+            .catch(function(err) {
+                console.error('Error fetching subscriber:', err);
+                document.getElementById('subscriberModalBody').innerHTML = '<div style="text-align:center;padding:40px;color:var(--danger)">Error loading subscriber</div>';
+            });
+    };
+
+    function renderSubscriberDetail(sub) {
+        var initial = sub.name ? sub.name.charAt(0).toUpperCase() : '?';
+        var gameIcons = {
+            sequence: '🧠',
+            startrail: '⚡',
+            duo: '👁️',
+            gonogo: '🎯',
+            trailtrotter: '🏃',
+            gotrotters: '🏀'
+        };
+        var gameNames = {
+            sequence: 'Sequence Memory',
+            startrail: 'StarTrail',
+            duo: 'Pattern Duo',
+            gonogo: 'Go/No-Go',
+            trailtrotter: 'TrailTrotter',
+            gotrotters: 'GoTrotters'
+        };
+        
+        var html = '<div class="subscriber-detail-header">';
+        html += '<div class="subscriber-avatar">' + initial + '</div>';
+        html += '<div class="subscriber-info">';
+        html += '<h4>' + (sub.name || 'Unknown') + (sub.is_family_member ? ' <span style="color:var(--teal);font-size:0.8rem">(Family Member)</span>' : '') + '</h4>';
+        html += '<p>' + (sub.email || '-') + ' • PIN: <strong style="color:var(--orange)">' + sub.pin + '</strong></p>';
+        html += '</div>';
+        html += '</div>';
+        
+        html += '<div class="subscriber-stats-grid">';
+        html += '<div class="subscriber-stat"><div class="subscriber-stat-value">' + (sub.totalSessions || 0) + '</div><div class="subscriber-stat-label">Sessions</div></div>';
+        html += '<div class="subscriber-stat"><div class="subscriber-stat-value">🔥 ' + (sub.streak || 0) + '</div><div class="subscriber-stat-label">Streak</div></div>';
+        html += '<div class="subscriber-stat"><div class="subscriber-stat-value">' + (sub.status || '-') + '</div><div class="subscriber-stat-label">Status</div></div>';
+        html += '</div>';
+        
+        // Game scores section
+        html += '<div class="game-scores-section">';
+        html += '<h5>' + (currentLang === 'es' ? 'Mejores Puntuaciones por Juego' : 'Best Scores by Game') + '</h5>';
+        
+        var hasBestScores = sub.best && Object.keys(sub.best).length > 0;
+        if (hasBestScores) {
+            for (var game in sub.best) {
+                var scoreData = sub.best[game];
+                var icon = gameIcons[game] || '🎮';
+                var name = gameNames[game] || game;
+                var shiftClass = 'shift-' + scoreData.shift;
+                
+                html += '<div class="game-score-row">';
+                html += '<div class="game-score-name"><span class="icon">' + icon + '</span> ' + name + '</div>';
+                html += '<div class="game-score-stats">';
+                html += '<div class="game-score-value">' + scoreData.score + '</div>';
+                html += '<span class="shift-badge-large ' + shiftClass + '">Shift ' + scoreData.shift + '</span>';
+                html += '</div>';
+                html += '</div>';
+            }
+        } else {
+            html += '<div style="text-align:center;padding:20px;color:var(--muted)">' + (currentLang === 'es' ? 'Aún no hay puntuaciones' : 'No scores yet') + '</div>';
+        }
+        
+        // Sessions breakdown
+        if (sub.sessions && Object.keys(sub.sessions).length > 0) {
+            html += '<h5 style="margin-top:20px">' + (currentLang === 'es' ? 'Sesiones por Juego' : 'Sessions by Game') + '</h5>';
+            for (var game in sub.sessions) {
+                var icon = gameIcons[game] || '🎮';
+                var name = gameNames[game] || game;
+                html += '<div class="game-score-row">';
+                html += '<div class="game-score-name"><span class="icon">' + icon + '</span> ' + name + '</div>';
+                html += '<div class="game-score-value">' + sub.sessions[game] + ' sessions</div>';
+                html += '</div>';
+            }
+        }
+        
+        html += '</div>';
+        
+        document.getElementById('subscriberModalBody').innerHTML = html;
     }
 
     function renderFacilities() {
