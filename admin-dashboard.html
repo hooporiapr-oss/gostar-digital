@@ -695,6 +695,146 @@ tr.clickable:hover { background: var(--card-hover); }
 
 .family-member-row:hover { background: var(--card-hover); }
 
+.activity-filters {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+
+.filter-btn {
+    padding: 8px 16px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Outfit', sans-serif;
+}
+
+.filter-btn:hover { border-color: var(--orange); color: var(--orange); }
+.filter-btn.active { background: var(--orange); border-color: var(--orange); color: var(--text); }
+
+.activity-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.activity-summary-card {
+    background: var(--darker);
+    border-radius: 12px;
+    padding: 15px;
+    text-align: center;
+}
+
+.activity-summary-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    color: var(--orange);
+}
+
+.activity-summary-label {
+    font-size: 0.7rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.day-group {
+    margin-bottom: 15px;
+}
+
+.day-group-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: var(--darker);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-bottom: 8px;
+}
+
+.day-group-header:hover { background: var(--card-hover); }
+
+.day-group-title {
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.day-group-count {
+    background: var(--orange);
+    color: var(--text);
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.day-group-toggle {
+    color: var(--muted);
+    transition: transform 0.2s;
+}
+
+.day-group.collapsed .day-group-toggle { transform: rotate(-90deg); }
+.day-group.collapsed .day-group-items { display: none; }
+
+.day-group-items {
+    padding-left: 10px;
+    border-left: 2px solid var(--border);
+    margin-left: 20px;
+}
+
+.aggregated-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 15px;
+    background: var(--card);
+    border-radius: 8px;
+    margin-bottom: 6px;
+    transition: background 0.2s;
+}
+
+.aggregated-item:hover { background: var(--card-hover); }
+
+.aggregated-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.aggregated-icon.game { background: rgba(59,130,246,0.15); color: var(--blue); }
+.aggregated-icon.subscription { background: rgba(255,107,0,0.15); color: var(--orange); }
+.aggregated-icon.milestone { background: rgba(255,215,0,0.15); color: var(--gold); }
+
+.aggregated-content { flex: 1; }
+.aggregated-text { font-size: 0.85rem; }
+.aggregated-details { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+
+.milestone-badge {
+    background: linear-gradient(135deg, rgba(255,215,0,0.2), rgba(255,107,0,0.2));
+    color: var(--gold);
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 700;
+}
+
 @media (max-width: 1024px) {
     .sidebar { width: 80px; padding: 15px 0; }
     .sidebar-header { padding: 0 10px 15px; }
@@ -963,20 +1103,72 @@ tr.clickable:hover { background: var(--card-hover); }
                     <span class="lang-es">REGISTRO DE ACTIVIDAD</span>
                 </h1>
                 <p class="page-subtitle">
-                    <span class="lang-en">All platform activity</span>
-                    <span class="lang-es">Toda la actividad de la plataforma</span>
+                    <span class="lang-en">Platform activity summary</span>
+                    <span class="lang-es">Resumen de actividad de la plataforma</span>
                 </p>
             </header>
+            
+            <div class="activity-summary-grid">
+                <div class="activity-summary-card">
+                    <div class="activity-summary-value" id="sessionsToday">0</div>
+                    <div class="activity-summary-label">
+                        <span class="lang-en">Sessions Today</span>
+                        <span class="lang-es">Sesiones Hoy</span>
+                    </div>
+                </div>
+                <div class="activity-summary-card">
+                    <div class="activity-summary-value" id="sessionsWeek">0</div>
+                    <div class="activity-summary-label">
+                        <span class="lang-en">This Week</span>
+                        <span class="lang-es">Esta Semana</span>
+                    </div>
+                </div>
+                <div class="activity-summary-card">
+                    <div class="activity-summary-value" id="newSubsWeek">0</div>
+                    <div class="activity-summary-label">
+                        <span class="lang-en">New Subs</span>
+                        <span class="lang-es">Nuevos Subs</span>
+                    </div>
+                </div>
+                <div class="activity-summary-card">
+                    <div class="activity-summary-value" id="milestonesWeek">0</div>
+                    <div class="activity-summary-label">
+                        <span class="lang-en">Milestones</span>
+                        <span class="lang-es">Logros</span>
+                    </div>
+                </div>
+            </div>
+            
             <div class="table-card">
                 <div class="table-header">
                     <h3 class="table-title">
-                        <span class="lang-en">ALL ACTIVITY</span>
-                        <span class="lang-es">TODA LA ACTIVIDAD</span>
+                        <span class="lang-en">ACTIVITY</span>
+                        <span class="lang-es">ACTIVIDAD</span>
                     </h3>
                     <div class="table-actions">
                         <button class="btn btn-secondary" id="refreshActivityBtn">🔄 
                             <span class="lang-en">Refresh</span>
                             <span class="lang-es">Actualizar</span>
+                        </button>
+                    </div>
+                </div>
+                <div style="padding: 15px 20px 5px;">
+                    <div class="activity-filters">
+                        <button class="filter-btn active" data-filter="all">
+                            <span class="lang-en">All</span>
+                            <span class="lang-es">Todo</span>
+                        </button>
+                        <button class="filter-btn" data-filter="subscription">💳 
+                            <span class="lang-en">Subscriptions</span>
+                            <span class="lang-es">Suscripciones</span>
+                        </button>
+                        <button class="filter-btn" data-filter="game">🎮 
+                            <span class="lang-en">Games</span>
+                            <span class="lang-es">Juegos</span>
+                        </button>
+                        <button class="filter-btn" data-filter="milestone">🏆 
+                            <span class="lang-en">Milestones</span>
+                            <span class="lang-es">Logros</span>
                         </button>
                     </div>
                 </div>
@@ -1104,6 +1296,7 @@ tr.clickable:hover { background: var(--card-hover); }
     var users = [];
     var activities = [];
     var currentLang = localStorage.getItem('gt-admin-lang') || 'en';
+    var currentActivityFilter = 'all';
 
     function init() {
         setLang(currentLang);
@@ -1237,6 +1430,16 @@ tr.clickable:hover { background: var(--card-hover); }
         document.getElementById('refreshActivityBtn').addEventListener('click', loadActivity);
         document.getElementById('saveSubscriberBtn').addEventListener('click', saveSubscriber);
         document.getElementById('confirmDeleteSubscriberBtn').addEventListener('click', confirmDeleteSubscriber);
+        
+        // Activity filters
+        document.querySelectorAll('.filter-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+                this.classList.add('active');
+                currentActivityFilter = this.dataset.filter;
+                renderActivity();
+            });
+        });
 
         document.querySelectorAll('.modal-overlay').forEach(function(overlay) {
             overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.classList.remove('show'); });
@@ -1657,32 +1860,198 @@ tr.clickable:hover { background: var(--card-hover); }
         return currentLang === 'es' ? 'hace ' + Math.floor(diff/86400) + 'd' : Math.floor(diff/86400) + 'd ago';
     }
 
+    function getActivityCategory(type) {
+        if (type && type.includes('subscription') || type && type.includes('subscriber')) return 'subscription';
+        if (type === 'game_session') return 'game';
+        if (type && (type.includes('milestone') || type.includes('shift') || type.includes('master'))) return 'milestone';
+        return 'other';
+    }
+
+    function isMilestone(details) {
+        if (!details) return false;
+        var lower = details.toLowerCase();
+        return lower.includes('shift 5') || lower.includes('shift 7') || lower.includes('shift 10') || 
+               lower.includes('master') || lower.includes('streak');
+    }
+
+    function getDateKey(timestamp) {
+        if (!timestamp) return 'unknown';
+        var date = new Date(timestamp);
+        return date.toISOString().split('T')[0];
+    }
+
+    function formatDateLabel(dateKey) {
+        var today = new Date().toISOString().split('T')[0];
+        var yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+        
+        if (dateKey === today) return currentLang === 'es' ? 'Hoy' : 'Today';
+        if (dateKey === yesterday) return currentLang === 'es' ? 'Ayer' : 'Yesterday';
+        
+        var date = new Date(dateKey + 'T00:00:00');
+        var options = { weekday: 'short', month: 'short', day: 'numeric' };
+        return date.toLocaleDateString(currentLang === 'es' ? 'es-ES' : 'en-US', options);
+    }
+
+    function calculateActivityStats() {
+        var now = new Date();
+        var todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+        var weekStart = todayStart - (now.getDay() * 86400000);
+        
+        var sessionsToday = 0;
+        var sessionsWeek = 0;
+        var newSubsWeek = 0;
+        var milestonesWeek = 0;
+        
+        activities.forEach(function(act) {
+            var ts = new Date(act.timestamp).getTime();
+            var isGame = act.type === 'game_session';
+            var isSub = act.type && act.type.includes('subscription_created');
+            var isMile = isMilestone(act.details);
+            
+            if (ts >= todayStart && isGame) sessionsToday++;
+            if (ts >= weekStart) {
+                if (isGame) sessionsWeek++;
+                if (isSub) newSubsWeek++;
+                if (isMile) milestonesWeek++;
+            }
+        });
+        
+        document.getElementById('sessionsToday').textContent = sessionsToday;
+        document.getElementById('sessionsWeek').textContent = sessionsWeek;
+        document.getElementById('newSubsWeek').textContent = newSubsWeek;
+        document.getElementById('milestonesWeek').textContent = milestonesWeek;
+    }
+
+    function aggregateActivities(activityList) {
+        var grouped = {};
+        
+        activityList.forEach(function(act) {
+            var dateKey = getDateKey(act.timestamp);
+            if (!grouped[dateKey]) grouped[dateKey] = [];
+            grouped[dateKey].push(act);
+        });
+        
+        // Aggregate game sessions per user per day
+        var result = {};
+        for (var dateKey in grouped) {
+            var dayActivities = grouped[dateKey];
+            var userGames = {};
+            var otherActivities = [];
+            
+            dayActivities.forEach(function(act) {
+                if (act.type === 'game_session' && act.username) {
+                    if (!userGames[act.username]) {
+                        userGames[act.username] = { count: 0, games: [], details: act.details, timestamp: act.timestamp };
+                    }
+                    userGames[act.username].count++;
+                    if (act.details) {
+                        var gameName = act.details.split('|')[0].trim();
+                        if (userGames[act.username].games.indexOf(gameName) === -1) {
+                            userGames[act.username].games.push(gameName);
+                        }
+                    }
+                } else {
+                    otherActivities.push(act);
+                }
+            });
+            
+            result[dateKey] = { aggregated: userGames, other: otherActivities };
+        }
+        
+        return result;
+    }
+
     function renderActivity() {
         var container = document.getElementById('activityList');
+        
+        calculateActivityStats();
         
         if (activities.length === 0) {
             container.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📋</div><div class="empty-state-text"><span class="lang-en">No activity yet</span><span class="lang-es">Aún no hay actividad</span></div></div>';
             return;
         }
 
-        var html = '';
-        activities.slice(0, 50).forEach(function(act) {
-            var iconInfo = getActivityIcon(act.type);
-            var description = act.details || act.type || 'Activity';
-            if (act.username) description = '<strong>' + act.username + '</strong> - ' + description;
-            if (act.facility) description += ' (' + act.facility + ')';
+        // Filter activities
+        var filtered = activities.filter(function(act) {
+            if (currentActivityFilter === 'all') return true;
+            var category = getActivityCategory(act.type);
+            if (currentActivityFilter === 'milestone') {
+                return category === 'milestone' || isMilestone(act.details);
+            }
+            return category === currentActivityFilter;
+        });
+
+        if (filtered.length === 0) {
+            container.innerHTML = '<div class="empty-state" style="padding:30px"><div class="empty-state-text"><span class="lang-en">No matching activity</span><span class="lang-es">Sin actividad coincidente</span></div></div>';
+            return;
+        }
+
+        var aggregated = aggregateActivities(filtered);
+        var dateKeys = Object.keys(aggregated).sort().reverse();
+        
+        var html = '<div style="padding: 0 20px 20px;">';
+        
+        dateKeys.slice(0, 14).forEach(function(dateKey, dayIndex) {
+            var dayData = aggregated[dateKey];
+            var totalItems = Object.keys(dayData.aggregated).length + dayData.other.length;
+            var isCollapsed = dayIndex > 1 ? ' collapsed' : '';
             
-            html += '<div class="activity-item">';
-            html += '<div class="activity-icon ' + iconInfo.class + '">' + iconInfo.icon + '</div>';
-            html += '<div class="activity-content">';
-            html += '<div class="activity-text">' + description + '</div>';
-            html += '<div class="activity-time">' + formatTimeAgo(act.timestamp) + '</div>';
+            html += '<div class="day-group' + isCollapsed + '" data-date="' + dateKey + '">';
+            html += '<div class="day-group-header" onclick="window.toggleDayGroup(this)">';
+            html += '<div class="day-group-title">';
+            html += '<span>' + formatDateLabel(dateKey) + '</span>';
+            html += '<span class="day-group-count">' + totalItems + '</span>';
             html += '</div>';
+            html += '<span class="day-group-toggle">▼</span>';
             html += '</div>';
+            
+            html += '<div class="day-group-items">';
+            
+            // Render aggregated game sessions
+            for (var username in dayData.aggregated) {
+                var userData = dayData.aggregated[username];
+                var gamesPlayed = userData.games.join(', ') || 'Games';
+                
+                html += '<div class="aggregated-item">';
+                html += '<div class="aggregated-icon game">🎮</div>';
+                html += '<div class="aggregated-content">';
+                html += '<div class="aggregated-text"><strong>' + username + '</strong> ' + (currentLang === 'es' ? 'jugó' : 'played') + ' <strong>' + userData.count + '</strong> ' + (userData.count === 1 ? (currentLang === 'es' ? 'sesión' : 'session') : (currentLang === 'es' ? 'sesiones' : 'sessions')) + '</div>';
+                html += '<div class="aggregated-details">' + gamesPlayed + '</div>';
+                html += '</div>';
+                html += '</div>';
+            }
+            
+            // Render other activities (subscriptions, milestones, etc.)
+            dayData.other.forEach(function(act) {
+                var iconInfo = getActivityIcon(act.type);
+                var description = act.details || act.type || 'Activity';
+                var hasMilestone = isMilestone(description);
+                var iconClass = hasMilestone ? 'milestone' : (act.type && act.type.includes('subscription') ? 'subscription' : 'game');
+                
+                html += '<div class="aggregated-item">';
+                html += '<div class="aggregated-icon ' + iconClass + '">' + iconInfo.icon + '</div>';
+                html += '<div class="aggregated-content">';
+                html += '<div class="aggregated-text">';
+                if (act.username) html += '<strong>' + act.username + '</strong> - ';
+                html += description;
+                if (hasMilestone) html += ' <span class="milestone-badge">🏆</span>';
+                html += '</div>';
+                if (act.facility) html += '<div class="aggregated-details">' + act.facility + '</div>';
+                html += '</div>';
+                html += '</div>';
+            });
+            
+            html += '</div></div>';
         });
         
+        html += '</div>';
         container.innerHTML = html;
     }
+
+    window.toggleDayGroup = function(header) {
+        var group = header.parentElement;
+        group.classList.toggle('collapsed');
+    };
 
     function renderOverviewActivity() {
         var container = document.getElementById('overviewActivity');
@@ -1692,20 +2061,63 @@ tr.clickable:hover { background: var(--card-hover); }
             return;
         }
 
-        var html = '';
-        activities.slice(0, 10).forEach(function(act) {
+        // Show summary view for overview - just key events
+        var keyEvents = activities.filter(function(act) {
+            var isSub = act.type && act.type.includes('subscription');
+            var isMile = isMilestone(act.details);
+            return isSub || isMile;
+        }).slice(0, 5);
+
+        // If no key events, show aggregated today
+        if (keyEvents.length === 0) {
+            var today = new Date().toISOString().split('T')[0];
+            var todayGames = {};
+            
+            activities.forEach(function(act) {
+                if (getDateKey(act.timestamp) === today && act.type === 'game_session' && act.username) {
+                    if (!todayGames[act.username]) todayGames[act.username] = 0;
+                    todayGames[act.username]++;
+                }
+            });
+            
+            var html = '<div style="padding: 15px 20px;">';
+            var userCount = Object.keys(todayGames).length;
+            
+            if (userCount === 0) {
+                html += '<div class="aggregated-item"><div class="aggregated-icon game">📋</div><div class="aggregated-content"><div class="aggregated-text" style="color:var(--muted)">' + (currentLang === 'es' ? 'Sin actividad hoy' : 'No activity today') + '</div></div></div>';
+            } else {
+                for (var user in todayGames) {
+                    html += '<div class="aggregated-item">';
+                    html += '<div class="aggregated-icon game">🎮</div>';
+                    html += '<div class="aggregated-content">';
+                    html += '<div class="aggregated-text"><strong>' + user + '</strong> ' + (currentLang === 'es' ? 'jugó' : 'played') + ' <strong>' + todayGames[user] + '</strong> ' + (todayGames[user] === 1 ? (currentLang === 'es' ? 'sesión hoy' : 'session today') : (currentLang === 'es' ? 'sesiones hoy' : 'sessions today')) + '</div>';
+                    html += '</div></div>';
+                }
+            }
+            html += '</div>';
+            container.innerHTML = html;
+            return;
+        }
+
+        var html = '<div style="padding: 15px 20px;">';
+        keyEvents.forEach(function(act) {
             var iconInfo = getActivityIcon(act.type);
             var description = act.details || act.type || 'Activity';
-            if (act.username) description = '<strong>' + act.username + '</strong> - ' + description;
+            var hasMilestone = isMilestone(description);
+            var iconClass = hasMilestone ? 'milestone' : 'subscription';
             
-            html += '<div class="activity-item">';
-            html += '<div class="activity-icon ' + iconInfo.class + '">' + iconInfo.icon + '</div>';
-            html += '<div class="activity-content">';
-            html += '<div class="activity-text">' + description + '</div>';
-            html += '<div class="activity-time">' + formatTimeAgo(act.timestamp) + '</div>';
+            html += '<div class="aggregated-item">';
+            html += '<div class="aggregated-icon ' + iconClass + '">' + iconInfo.icon + '</div>';
+            html += '<div class="aggregated-content">';
+            html += '<div class="aggregated-text">';
+            if (act.username) html += '<strong>' + act.username + '</strong> - ';
+            html += description;
+            if (hasMilestone) html += ' <span class="milestone-badge">🏆</span>';
             html += '</div>';
-            html += '</div>';
+            html += '<div class="aggregated-details">' + formatTimeAgo(act.timestamp) + '</div>';
+            html += '</div></div>';
         });
+        html += '</div>';
         
         container.innerHTML = html;
     }
