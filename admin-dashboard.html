@@ -1018,6 +1018,77 @@ tr.clickable:hover { background: var(--card-hover); }
     </div>
 </div>
 
+<div class="modal-overlay" id="editSubscriberModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 class="modal-title" id="editSubscriberModalTitle">EDIT SUBSCRIBER</h3>
+            <button class="modal-close" data-close="editSubscriberModal">×</button>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="editSubPin">
+            <input type="hidden" id="editSubIsFamily">
+            <div class="form-group" id="editEmailGroup">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-input" id="editSubEmail" placeholder="email@example.com">
+            </div>
+            <div class="form-group" id="editNameGroup" style="display:none">
+                <label class="form-label"><span class="lang-en">Name</span><span class="lang-es">Nombre</span></label>
+                <input type="text" class="form-input" id="editSubName" placeholder="Name">
+            </div>
+            <div class="form-group">
+                <label class="form-label">PIN</label>
+                <input type="text" class="form-input" id="editSubNewPin" maxlength="4" placeholder="4-digit PIN">
+            </div>
+            <div class="form-group" id="editStatusGroup">
+                <label class="form-label"><span class="lang-en">Status</span><span class="lang-es">Estado</span></label>
+                <select class="form-select" id="editSubStatus">
+                    <option value="active">Active</option>
+                    <option value="trialing">Trialing</option>
+                    <option value="canceled">Canceled</option>
+                    <option value="past_due">Past Due</option>
+                </select>
+            </div>
+            <div class="form-group" id="editPlanGroup">
+                <label class="form-label"><span class="lang-en">Plan</span><span class="lang-es">Plan</span></label>
+                <select class="form-select" id="editSubPlan">
+                    <option value="individual_monthly">Individual Monthly</option>
+                    <option value="individual_annual">Individual Annual</option>
+                    <option value="family_monthly">Family Monthly</option>
+                    <option value="family_annual">Family Annual</option>
+                </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" data-close="editSubscriberModal"><span class="lang-en">Cancel</span><span class="lang-es">Cancelar</span></button>
+            <button class="btn btn-primary" id="saveSubscriberBtn"><span class="lang-en">Save</span><span class="lang-es">Guardar</span></button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="deleteSubscriberModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 class="modal-title"><span class="lang-en">DELETE SUBSCRIBER</span><span class="lang-es">ELIMINAR SUSCRIPTOR</span></h3>
+            <button class="modal-close" data-close="deleteSubscriberModal">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="confirm-dialog">
+                <div class="confirm-dialog-icon">⚠️</div>
+                <div class="confirm-dialog-title"><span class="lang-en">ARE YOU SURE?</span><span class="lang-es">¿ESTÁS SEGURO?</span></div>
+                <div class="confirm-dialog-text" id="deleteSubscriberText"></div>
+                <p style="color:var(--danger);font-size:0.85rem;margin-top:15px">
+                    <span class="lang-en">This action cannot be undone.</span>
+                    <span class="lang-es">Esta acción no se puede deshacer.</span>
+                </p>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" data-close="deleteSubscriberModal"><span class="lang-en">Cancel</span><span class="lang-es">Cancelar</span></button>
+            <button class="btn btn-danger" id="confirmDeleteSubscriberBtn"><span class="lang-en">Delete</span><span class="lang-es">Eliminar</span></button>
+        </div>
+    </div>
+</div>
+
 <div class="toast" id="toast">
     <span class="toast-icon" id="toastIcon">✓</span>
     <span class="toast-text" id="toastText">Saved</span>
@@ -1164,6 +1235,8 @@ tr.clickable:hover { background: var(--card-hover); }
         document.getElementById('refreshSubscribersBtn').addEventListener('click', loadSubscribers);
         document.getElementById('refreshFacilitiesBtn').addEventListener('click', loadFacilities);
         document.getElementById('refreshActivityBtn').addEventListener('click', loadActivity);
+        document.getElementById('saveSubscriberBtn').addEventListener('click', saveSubscriber);
+        document.getElementById('confirmDeleteSubscriberBtn').addEventListener('click', confirmDeleteSubscriber);
 
         document.querySelectorAll('.modal-overlay').forEach(function(overlay) {
             overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.classList.remove('show'); });
@@ -1365,9 +1438,13 @@ tr.clickable:hover { background: var(--card-hover); }
         
         var html = '<div class="subscriber-detail-header">';
         html += '<div class="subscriber-avatar">' + initial + '</div>';
-        html += '<div class="subscriber-info">';
+        html += '<div class="subscriber-info" style="flex:1">';
         html += '<h4>' + (sub.name || 'Unknown') + (sub.is_family_member ? ' <span style="color:var(--teal);font-size:0.8rem">(Family Member)</span>' : '') + '</h4>';
         html += '<p>' + (sub.email || '-') + ' • PIN: <strong style="color:var(--orange)">' + sub.pin + '</strong></p>';
+        html += '</div>';
+        html += '<div class="action-btns">';
+        html += '<button class="action-btn" onclick="window.editSubscriber(\'' + sub.pin + '\', ' + sub.is_family_member + ')" title="Edit">✏️</button>';
+        html += '<button class="action-btn delete" onclick="window.deleteSubscriber(\'' + sub.pin + '\', \'' + (sub.name || sub.email) + '\')" title="Delete">🗑️</button>';
         html += '</div>';
         html += '</div>';
         
@@ -1417,6 +1494,113 @@ tr.clickable:hover { background: var(--card-hover); }
         html += '</div>';
         
         document.getElementById('subscriberModalBody').innerHTML = html;
+        
+        // Store current subscriber data for edit
+        window.currentSubscriberData = sub;
+    }
+
+    var deleteSubscriberPin = null;
+
+    window.editSubscriber = function(pin, isFamily) {
+        closeModal('subscriberModal');
+        
+        var sub = window.currentSubscriberData;
+        if (!sub) return;
+        
+        document.getElementById('editSubPin').value = pin;
+        document.getElementById('editSubIsFamily').value = isFamily ? 'true' : 'false';
+        document.getElementById('editSubNewPin').value = pin;
+        
+        if (isFamily) {
+            document.getElementById('editEmailGroup').style.display = 'none';
+            document.getElementById('editNameGroup').style.display = 'block';
+            document.getElementById('editStatusGroup').style.display = 'none';
+            document.getElementById('editPlanGroup').style.display = 'none';
+            document.getElementById('editSubName').value = sub.name || '';
+            document.getElementById('editSubscriberModalTitle').textContent = currentLang === 'es' ? 'EDITAR MIEMBRO' : 'EDIT FAMILY MEMBER';
+        } else {
+            document.getElementById('editEmailGroup').style.display = 'block';
+            document.getElementById('editNameGroup').style.display = 'none';
+            document.getElementById('editStatusGroup').style.display = 'block';
+            document.getElementById('editPlanGroup').style.display = 'block';
+            document.getElementById('editSubEmail').value = sub.email || '';
+            document.getElementById('editSubStatus').value = sub.status || 'active';
+            document.getElementById('editSubPlan').value = sub.plan_type || 'individual_monthly';
+            document.getElementById('editSubscriberModalTitle').textContent = currentLang === 'es' ? 'EDITAR SUSCRIPTOR' : 'EDIT SUBSCRIBER';
+        }
+        
+        openModal('editSubscriberModal');
+    };
+
+    window.deleteSubscriber = function(pin, name) {
+        deleteSubscriberPin = pin;
+        document.getElementById('deleteSubscriberText').innerHTML = (currentLang === 'es' ? 'Eliminar ' : 'Delete ') + '<strong style="color:var(--orange)">' + name + '</strong>?';
+        closeModal('subscriberModal');
+        openModal('deleteSubscriberModal');
+    };
+
+    function saveSubscriber() {
+        var pin = document.getElementById('editSubPin').value;
+        var isFamily = document.getElementById('editSubIsFamily').value === 'true';
+        var newPin = document.getElementById('editSubNewPin').value;
+        
+        var body = { pin: newPin };
+        
+        if (isFamily) {
+            body.name = document.getElementById('editSubName').value;
+        } else {
+            body.email = document.getElementById('editSubEmail').value;
+            body.status = document.getElementById('editSubStatus').value;
+            body.plan_type = document.getElementById('editSubPlan').value;
+        }
+        
+        fetch('/api/admin/subscriber/' + pin, {
+            method: 'PUT',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + authToken 
+            },
+            body: JSON.stringify(body)
+        })
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+            if (data.success) {
+                closeModal('editSubscriberModal');
+                loadSubscribers();
+                showToast(currentLang === 'es' ? 'Guardado' : 'Saved');
+            } else {
+                showToast(data.error || 'Error', true);
+            }
+        })
+        .catch(function(err) {
+            console.error('Error saving subscriber:', err);
+            showToast('Error', true);
+        });
+    }
+
+    function confirmDeleteSubscriber() {
+        if (!deleteSubscriberPin) return;
+        
+        fetch('/api/admin/subscriber/' + deleteSubscriberPin, {
+            method: 'DELETE',
+            headers: { 'Authorization': 'Bearer ' + authToken }
+        })
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+            if (data.success) {
+                closeModal('deleteSubscriberModal');
+                loadSubscribers();
+                showToast(currentLang === 'es' ? 'Eliminado' : 'Deleted');
+            } else {
+                showToast(data.error || 'Error', true);
+            }
+        })
+        .catch(function(err) {
+            console.error('Error deleting subscriber:', err);
+            showToast('Error', true);
+        });
+        
+        deleteSubscriberPin = null;
     }
 
     function renderFacilities() {
