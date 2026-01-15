@@ -37,7 +37,7 @@ body.es .lang-en{display:none !important}
 body.en .lang-es{display:none !important}
 .landing{position:fixed;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;background:radial-gradient(ellipse at center top,rgba(255,107,0,0.15) 0%,transparent 50%),radial-gradient(ellipse at 80% 80%,rgba(0,217,165,0.1) 0%,transparent 40%),var(--dark);z-index:1;transition:opacity 0.4s,transform 0.4s}
 .landing.hidden{opacity:0;transform:scale(0.95);pointer-events:none}
-.lang-toggle{position:absolute;top:20px;right:20px;display:flex;gap:5px}
+.lang-toggle{position:absolute;top:15px;left:50%;transform:translateX(-50%);display:flex;gap:5px;z-index:10}
 .lang-btn{padding:8px 14px;border:2px solid var(--orange);background:transparent;color:var(--orange);border-radius:20px;font-family:'Outfit',sans-serif;font-weight:700;font-size:0.8rem;cursor:pointer;transition:all 0.3s}
 .lang-btn.active{background:var(--orange);color:var(--dark)}
 .logo-section{margin-bottom:30px}
@@ -45,7 +45,8 @@ body.en .lang-es{display:none !important}
 .logo .go{color:var(--orange)}
 .logo .trotters{color:var(--teal)}
 .tagline{font-family:'Bebas Neue',sans-serif;font-size:clamp(1rem,3vw,1.3rem);letter-spacing:3px;color:var(--gold);margin-top:5px}
-.hero-icon{width:100px;height:100px;margin-bottom:20px;animation:bounce 2s infinite;border-radius:50%;object-fit:cover}
+.hero-icon{width:100px;height:100px;margin-bottom:20px;animation:bounce 2s infinite;border-radius:50%;object-fit:cover;cursor:pointer;transition:transform 0.3s}
+.hero-icon:hover{transform:scale(1.1)}
 @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
 .hero-text{max-width:320px;margin-bottom:40px}
 .hero-text p{font-size:1.1rem;color:var(--muted);line-height:1.6}
@@ -185,7 +186,7 @@ body.en .lang-es{display:none !important}
 <div class="logo"><span class="go">GO</span><span class="trotters">TROTTERS</span><sup style="font-size:0.3em;vertical-align:super;">™</sup></div>
 <div class="tagline">PERFORMANCE TRAINING</div>
 </div>
-<img src="go_chat.png" alt="GoTrotters" class="hero-icon">
+<img src="go_chat.png" alt="GoTrotters" class="hero-icon" id="heroIcon">
 <div class="hero-text">
 <p><span class="lang-en"><strong>3 Circuits. 10 Tiers.</strong> Performance Training. $5/month.</span><span class="lang-es"><strong>3 Circuitos. 10 Niveles.</strong> Entrenamiento de Rendimiento. $5/mes.</span></p>
 <p class="hero-cta"><span class="lang-en">Questions? <a id="chatCta">Talk to GoTrotter AI →</a></span><span class="lang-es">¿Preguntas? <a id="chatCtaEs">Habla con GoTrotter AI →</a></span></p>
@@ -930,6 +931,7 @@ body.en .lang-es{display:none !important}
     document.getElementById('chatFab').addEventListener('click', openChat);
     document.getElementById('chatCta').addEventListener('click', openChat);
     document.getElementById('chatCtaEs').addEventListener('click', openChat);
+    document.getElementById('heroIcon').addEventListener('click', openChat);
     chatClose.addEventListener('click', function() {
         chatScreen.classList.remove('active');
         landing.classList.remove('hidden');
