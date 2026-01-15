@@ -161,6 +161,20 @@ function generateToken() {
     return Buffer.from(Date.now() + '-' + Math.random().toString(36).substring(2, 15)).toString('base64');
 }
 
+// Convert score to shift level (1-10)
+function getShiftFromScore(score) {
+    if (score >= 10) return 10;
+    if (score >= 9) return 9;
+    if (score >= 8) return 8;
+    if (score >= 7) return 7;
+    if (score >= 6) return 6;
+    if (score >= 5) return 5;
+    if (score >= 4) return 4;
+    if (score >= 3) return 3;
+    if (score >= 2) return 2;
+    return 1;
+}
+
 // ============ STRIPE HELPER FUNCTIONS ============
 
 function handleCheckoutComplete(session) {
@@ -702,13 +716,85 @@ app.get('/api/admin/subscribers', adminTokenAuth, function(req, res) {
                 status: sub.status,
                 created_at: sub.created_at,
                 current_period_end: sub.current_period_end,
-                family_members_count: sub.family_members ? sub.family_members.length : 0
+                family_members_count: sub.family_members ? sub.family_members.length : 0,
+                sessions: sub.sessions || {},
+                best: sub.best || {},
+                streak: sub.streak || 0,
+                lastActive: sub.lastActive || null,
+                family_members: sub.family_members || []
             };
         });
         res.json({ success: true, subscribers: result });
     } catch (err) {
         console.error('Error fetching subscribers:', err);
         res.json({ success: true, subscribers: [] });
+    }
+});
+
+// Get single subscriber details (admin)
+app.get('/api/admin/subscriber/:pin', adminTokenAuth, function(req, res) {
+    try {
+        var pin = req.params.pin;
+        var subscribers = readJSON(SUBSCRIBERS_FILE);
+        var subscriber = null;
+        var isFamilyMember = false;
+        var parentSubscriber = null;
+        
+        for (var i = 0; i < subscribers.length; i++) {
+            if (subscribers[i].pin === pin) {
+                subscriber = subscribers[i];
+                break;
+            }
+            if (subscribers[i].family_members) {
+                for (var j = 0; j < subscribers[i].family_members.length; j++) {
+                    if (subscribers[i].family_members[j].pin === pin) {
+                        subscriber = subscribers[i].family_members[j];
+                        isFamilyMember = true;
+                        parentSubscriber = subscribers[i];
+                        break;
+                    }
+                }
+            }
+        }
+        
+        if (!subscriber) {
+            return res.status(404).json({ success: false, error: 'Subscriber not found' });
+        }
+        
+        // Calculate total sessions
+        var sessions = subscriber.sessions || {};
+        var totalSessions = Object.values(sessions).reduce(function(sum, val) { return sum + val; }, 0);
+        
+        // Calculate best scores with shift levels
+        var best = subscriber.best || {};
+        var bestWithShifts = {};
+        for (var game in best) {
+            bestWithShifts[game] = {
+                score: best[game],
+                shift: getShiftFromScore(best[game])
+            };
+        }
+        
+        res.json({
+            success: true,
+            subscriber: {
+                email: isFamilyMember ? parentSubscriber.email : subscriber.email,
+                name: isFamilyMember ? subscriber.name : (subscriber.email ? subscriber.email.split('@')[0] : 'Unknown'),
+                pin: subscriber.pin,
+                plan_type: isFamilyMember ? parentSubscriber.plan_type : subscriber.plan_type,
+                status: isFamilyMember ? parentSubscriber.status : subscriber.status,
+                is_family_member: isFamilyMember,
+                sessions: sessions,
+                totalSessions: totalSessions,
+                best: bestWithShifts,
+                streak: subscriber.streak || 0,
+                lastActive: subscriber.lastActive || null,
+                created_at: subscriber.added_at || subscriber.created_at
+            }
+        });
+    } catch (err) {
+        console.error('Error fetching subscriber:', err);
+        res.status(500).json({ success: false, error: 'Server error' });
     }
 });
 
@@ -1315,8 +1401,10 @@ app.post('/api/game/session', function(req, res) {
                 
                 var gameNames = { sequence: 'Sequence Memory', startrail: 'StarTrail', duo: 'Pattern Duo', gonogo: 'Go/No-Go' };
                 var gameName = gameNames[game] || game;
-                var scoreText = score !== undefined ? ' (Score: ' + score + ')' : '';
-                logActivity('game_session', subscriberEmail, null, gameName + scoreText);
+                var scoreText = score !== undefined ? ' | Score: ' + score : '';
+                var shiftLevel = score !== undefined ? getShiftFromScore(score) : null;
+                var shiftText = shiftLevel ? ' | Shift ' + shiftLevel : '';
+                logActivity('game_session', subscriberEmail, null, gameName + scoreText + shiftText);
                 
                 return res.json({ 
                     success: true, 
@@ -1351,8 +1439,10 @@ app.post('/api/game/session', function(req, res) {
                         
                         var gameNames2 = { sequence: 'Sequence Memory', startrail: 'StarTrail', duo: 'Pattern Duo', gonogo: 'Go/No-Go' };
                         var gameName2 = gameNames2[game] || game;
-                        var scoreText2 = score !== undefined ? ' (Score: ' + score + ')' : '';
-                        logActivity('game_session', memberName, null, gameName2 + scoreText2);
+                        var scoreText2 = score !== undefined ? ' | Score: ' + score : '';
+                        var shiftLevel2 = score !== undefined ? getShiftFromScore(score) : null;
+                        var shiftText2 = shiftLevel2 ? ' | Shift ' + shiftLevel2 : '';
+                        logActivity('game_session', memberName, null, gameName2 + scoreText2 + shiftText2);
                         
                         return res.json({ 
                             success: true, 
@@ -1433,8 +1523,10 @@ app.post('/api/game/session', function(req, res) {
         
         var gameNames = { sequence: 'Sequence Memory', startrail: 'StarTrail', duo: 'Pattern Duo' };
         var gameName = gameNames[game] || game;
-        var scoreText = score !== undefined ? ' (Score: ' + score + ')' : '';
-        logActivity('game_session', user.username, facilityName, gameName + scoreText);
+        var scoreText = score !== undefined ? ' | Score: ' + score : '';
+        var shiftLevel = score !== undefined ? getShiftFromScore(score) : null;
+        var shiftText = shiftLevel ? ' | Shift ' + shiftLevel : '';
+        logActivity('game_session', user.username, facilityName, gameName + scoreText + shiftText);
         
         res.json({ 
             success: true, 
