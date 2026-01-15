@@ -162,6 +162,16 @@ body.en .lang-es{display:none !important}
 .pin-digit{width:45px;height:55px;font-size:1.8rem}
 .plan-card{padding:12px}
 .pin-display-value{font-size:2.8rem;letter-spacing:10px}
+.chat-fab{position:fixed;bottom:30px;right:30px;width:70px;height:70px;border-radius:50%;background:linear-gradient(135deg,var(--orange),var(--orange-dark));border:none;cursor:pointer;box-shadow:0 6px 30px rgba(255,107,0,0.5);z-index:100;display:flex;align-items:center;justify-content:center;transition:all 0.3s;animation:fabPulse 2s infinite}
+.chat-fab:hover{transform:scale(1.1);box-shadow:0 8px 40px rgba(255,107,0,0.6)}
+.chat-fab img{width:45px;height:45px;border-radius:50%}
+.chat-fab-label{position:absolute;right:85px;background:var(--card);padding:10px 16px;border-radius:20px;font-size:0.85rem;font-weight:600;white-space:nowrap;box-shadow:0 4px 15px rgba(0,0,0,0.3);opacity:0;transform:translateX(10px);transition:all 0.3s}
+.chat-fab:hover .chat-fab-label{opacity:1;transform:translateX(0)}
+@keyframes fabPulse{0%,100%{box-shadow:0 6px 30px rgba(255,107,0,0.5)}50%{box-shadow:0 6px 40px rgba(255,107,0,0.7)}}
+.chat-screen.active ~ .chat-fab,.chat-fab.hidden{display:none}
+.hero-cta{margin-top:15px;font-size:0.9rem;color:var(--muted)}
+.hero-cta a{color:var(--teal);text-decoration:none;font-weight:600;cursor:pointer}
+.hero-cta a:hover{text-decoration:underline}
 }
 </style>
 </head>
@@ -173,11 +183,12 @@ body.en .lang-es{display:none !important}
 </div>
 <div class="logo-section">
 <div class="logo"><span class="go">GO</span><span class="trotters">TROTTERS</span><sup style="font-size:0.3em;vertical-align:super;">™</sup></div>
-<div class="tagline">TEAM GOTROTTERS</div>
+<div class="tagline">PERFORMANCE TRAINING</div>
 </div>
 <img src="go_chat.png" alt="GoTrotters" class="hero-icon">
 <div class="hero-text">
 <p><span class="lang-en"><strong>3 Circuits. 10 Tiers.</strong> Performance Training. $5/month.</span><span class="lang-es"><strong>3 Circuitos. 10 Niveles.</strong> Entrenamiento de Rendimiento. $5/mes.</span></p>
+<p class="hero-cta"><span class="lang-en">Questions? <a id="chatCta">Talk to GoTrotter AI →</a></span><span class="lang-es">¿Preguntas? <a id="chatCtaEs">Habla con GoTrotter AI →</a></span></p>
 </div>
 <button class="go-btn" id="goBtn">
 <img src="go_chat.png" alt="" class="go-btn-icon">
@@ -187,6 +198,10 @@ body.en .lang-es{display:none !important}
 <span class="lang-en">Powered by</span><span class="lang-es">Impulsado por</span> <a href="https://gostar.digital">GoStar Digital</a> 🌴
 </div>
 </div>
+<button class="chat-fab" id="chatFab">
+<span class="chat-fab-label"><span class="lang-en">Chat with GoTrotter AI</span><span class="lang-es">Chatea con GoTrotter AI</span></span>
+<img src="go_chat.png" alt="GoTrotter AI">
+</button>
 <div class="chat-screen" id="chatScreen">
 <div class="chat-header">
 <div class="chat-header-left">
@@ -693,6 +708,7 @@ body.en .lang-es{display:none !important}
     function openChat() {
         landing.classList.add('hidden');
         chatScreen.classList.add('active');
+        document.getElementById('chatFab').classList.add('hidden');
         chatBody.innerHTML = '';
         hideInput();
         var user = getUser();
@@ -911,9 +927,13 @@ body.en .lang-es{display:none !important}
         });
     }
     goBtn.addEventListener('click', openChat);
+    document.getElementById('chatFab').addEventListener('click', openChat);
+    document.getElementById('chatCta').addEventListener('click', openChat);
+    document.getElementById('chatCtaEs').addEventListener('click', openChat);
     chatClose.addEventListener('click', function() {
         chatScreen.classList.remove('active');
         landing.classList.remove('hidden');
+        document.getElementById('chatFab').classList.remove('hidden');
     });
     chatSend.addEventListener('click', function() {
         handleTextInput(chatInput.value);
