@@ -2228,7 +2228,7 @@ tr.clickable:hover { background: var(--card-hover); }
     }
 
     function deleteAllActivity() {
-        fetch(API_BASE + '/admin/activity/all', {
+        fetch('/api/admin/activity/all', {
             method: 'DELETE',
             headers: { 'Authorization': 'Bearer ' + authToken }
         })
@@ -2246,7 +2246,7 @@ tr.clickable:hover { background: var(--card-hover); }
     }
 
     function deleteActivityById(actId) {
-        fetch(API_BASE + '/admin/activity/' + actId, {
+        fetch('/api/admin/activity/' + actId, {
             method: 'DELETE',
             headers: { 'Authorization': 'Bearer ' + authToken }
         })
@@ -2264,7 +2264,7 @@ tr.clickable:hover { background: var(--card-hover); }
     }
 
     function deleteActivityByIndex(index) {
-        fetch(API_BASE + '/admin/activity/by-index/' + index, {
+        fetch('/api/admin/activity/by-index/' + index, {
             method: 'DELETE',
             headers: { 'Authorization': 'Bearer ' + authToken }
         })
@@ -2282,7 +2282,7 @@ tr.clickable:hover { background: var(--card-hover); }
     }
 
     function deleteActivitiesByDate(dateKey) {
-        fetch(API_BASE + '/admin/activity/by-date/' + dateKey, {
+        fetch('/api/admin/activity/by-date/' + dateKey, {
             method: 'DELETE',
             headers: { 'Authorization': 'Bearer ' + authToken }
         })
@@ -2300,7 +2300,7 @@ tr.clickable:hover { background: var(--card-hover); }
     }
 
     function deleteActivitiesByUserDate(username, dateKey) {
-        fetch(API_BASE + '/admin/activity/by-user-date/' + encodeURIComponent(username) + '/' + dateKey, {
+        fetch('/api/admin/activity/by-user-date/' + encodeURIComponent(username) + '/' + dateKey, {
             method: 'DELETE',
             headers: { 'Authorization': 'Bearer ' + authToken }
         })
