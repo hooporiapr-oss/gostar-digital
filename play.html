@@ -131,6 +131,15 @@ body.en .lang-es{display:none !important}
 .subscribe-btn.ready{opacity:1;pointer-events:auto}
 .subscribe-btn.ready:hover{transform:scale(1.05);box-shadow:0 8px 30px rgba(255,107,0,0.5)}
 .subscribe-btn.loading{opacity:0.7;pointer-events:none}
+.terms-section{margin-top:20px;text-align:left;font-size:0.85rem}
+.terms-check{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;cursor:pointer}
+.terms-check input{display:none}
+.terms-checkbox{width:22px;height:22px;border:2px solid var(--muted);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;background:var(--darker)}
+.terms-check input:checked + .terms-checkbox{background:var(--teal);border-color:var(--teal)}
+.terms-check input:checked + .terms-checkbox::after{content:'✓';color:var(--dark);font-weight:700;font-size:0.9rem}
+.terms-label{color:var(--muted);line-height:1.4}
+.terms-label a{color:var(--teal);text-decoration:underline}
+.terms-label a:hover{color:var(--orange)}
 .trial-badge{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.3);border-radius:20px;font-size:0.8rem;color:var(--gold);margin-top:10px}
 .status-badge{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:20px;font-size:0.8rem;margin-top:10px}
 .status-badge.active{background:rgba(0,217,165,0.1);border:1px solid rgba(0,217,165,0.3);color:var(--teal)}
@@ -514,7 +523,11 @@ body.en .lang-es{display:none !important}
             '</div>' +
             '</div>' +
             '<div class="trial-badge">🆓 ' + bi('7-DAY FREE TRIAL INCLUDED', '7 DÍAS GRATIS INCLUIDOS') + '</div>' +
-            '<button class="subscribe-btn ready" id="subscribeBtn">' + bi('START FREE TRIAL', 'COMENZAR PRUEBA GRATIS') + '</button>' +
+            '<div class="terms-section">' +
+            '<label class="terms-check"><input type="checkbox" id="termsCheck"><span class="terms-checkbox"></span><span class="terms-label">' + bi('I agree to the <a href="/terms.html" target="_blank">Terms of Service</a>', 'Acepto los <a href="/terms.html" target="_blank">Términos de Servicio</a>') + '</span></label>' +
+            '<label class="terms-check"><input type="checkbox" id="privacyCheck"><span class="terms-checkbox"></span><span class="terms-label">' + bi('I agree to the <a href="/privacy.html" target="_blank">Privacy Policy</a>', 'Acepto la <a href="/privacy.html" target="_blank">Política de Privacidad</a>') + '</span></label>' +
+            '</div>' +
+            '<button class="subscribe-btn" id="subscribeBtn">' + bi('START FREE TRIAL', 'COMENZAR PRUEBA GRATIS') + '</button>' +
             '</div>';
         chatBody.appendChild(msg);
         chatBody.scrollTop = chatBody.scrollHeight;
@@ -523,6 +536,20 @@ body.en .lang-es{display:none !important}
         var subscribeBtn = msg.querySelector('#subscribeBtn');
         var priceIndividual = msg.querySelector('#priceIndividual');
         var priceFamily = msg.querySelector('#priceFamily');
+        var termsCheck = msg.querySelector('#termsCheck');
+        var privacyCheck = msg.querySelector('#privacyCheck');
+        
+        function checkTermsAccepted() {
+            if (termsCheck.checked && privacyCheck.checked) {
+                subscribeBtn.classList.add('ready');
+            } else {
+                subscribeBtn.classList.remove('ready');
+            }
+        }
+        
+        termsCheck.addEventListener('change', checkTermsAccepted);
+        privacyCheck.addEventListener('change', checkTermsAccepted);
+        
         function updatePrices() {
             if (selectedBilling === 'monthly') {
                 priceIndividual.innerHTML = '$5<span>/mo</span>';
@@ -547,7 +574,13 @@ body.en .lang-es{display:none !important}
                 updatePrices();
             });
         });
-        subscribeBtn.addEventListener('click', function() { handleSubscribe(); });
+        subscribeBtn.addEventListener('click', function() { 
+            if (!termsCheck.checked || !privacyCheck.checked) {
+                alert(lang === 'es' ? 'Por favor acepta los Términos de Servicio y la Política de Privacidad' : 'Please accept the Terms of Service and Privacy Policy');
+                return;
+            }
+            handleSubscribe(); 
+        });
     }
     function showSuccess(emoji) {
         var burst = document.createElement('div');
