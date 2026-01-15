@@ -131,6 +131,8 @@ body.en .lang-es{display:none !important}
 .subscribe-btn.ready{opacity:1;pointer-events:auto}
 .subscribe-btn.ready:hover{transform:scale(1.05);box-shadow:0 8px 30px rgba(255,107,0,0.5)}
 .subscribe-btn.loading{opacity:0.7;pointer-events:none}
+.facility-note{margin-top:15px;font-size:0.8rem;color:var(--muted);text-align:center}
+.facility-note a{color:var(--teal);text-decoration:underline}
 .terms-section{margin-top:20px;text-align:left;font-size:0.85rem}
 .terms-check{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;cursor:pointer}
 .terms-check input{display:none}
@@ -512,14 +514,9 @@ body.en .lang-es{display:none !important}
             '</div>' +
             '<div class="plan-cards" id="planCards">' +
             '<div class="plan-card popular selected" data-plan="individual">' +
-            '<div class="plan-card-left"><div class="plan-name">👤 ' + bi('Individual', 'Individual') + ' <span class="popular-badge">' + bi('POPULAR', 'POPULAR') + '</span></div>' +
+            '<div class="plan-card-left"><div class="plan-name">👤 ' + bi('Individual', 'Individual') + '</div>' +
             '<div class="plan-desc">' + bi('1 user • All 3 gears • 10 shifts', '1 usuario • 3 engranajes • 10 cambios') + '</div></div>' +
             '<div class="plan-price" id="priceIndividual">$5<span>/mo</span></div>' +
-            '</div>' +
-            '<div class="plan-card" data-plan="family">' +
-            '<div class="plan-card-left"><div class="plan-name">👨‍👩‍👧‍👦 ' + bi('Family', 'Familia') + '</div>' +
-            '<div class="plan-desc">' + bi('Up to 5 users • All features', 'Hasta 5 usuarios • Todas las funciones') + '</div></div>' +
-            '<div class="plan-price" id="priceFamily">$20<span>/mo</span></div>' +
             '</div>' +
             '</div>' +
             '<div class="trial-badge">🆓 ' + bi('7-DAY FREE TRIAL INCLUDED', '7 DÍAS GRATIS INCLUIDOS') + '</div>' +
@@ -528,6 +525,7 @@ body.en .lang-es{display:none !important}
             '<label class="terms-check"><input type="checkbox" id="privacyCheck"><span class="terms-checkbox"></span><span class="terms-label">' + bi('I agree to the <a href="/privacy.html" target="_blank">Privacy Policy</a>', 'Acepto la <a href="/privacy.html" target="_blank">Política de Privacidad</a>') + '</span></label>' +
             '</div>' +
             '<button class="subscribe-btn" id="subscribeBtn">' + bi('START FREE TRIAL', 'COMENZAR PRUEBA GRATIS') + '</button>' +
+            '<div class="facility-note">' + bi('🏢 For facilities & senior care centers, <a href="#" onclick="handleOption(\'facility_intro\');return false;">click here</a>', '🏢 Para centros de cuidado, <a href="#" onclick="handleOption(\'facility_intro\');return false;">haz clic aquí</a>') + '</div>' +
             '</div>';
         chatBody.appendChild(msg);
         chatBody.scrollTop = chatBody.scrollHeight;
@@ -535,7 +533,6 @@ body.en .lang-es{display:none !important}
         var billingBtns = msg.querySelectorAll('.billing-btn');
         var subscribeBtn = msg.querySelector('#subscribeBtn');
         var priceIndividual = msg.querySelector('#priceIndividual');
-        var priceFamily = msg.querySelector('#priceFamily');
         var termsCheck = msg.querySelector('#termsCheck');
         var privacyCheck = msg.querySelector('#privacyCheck');
         
@@ -553,10 +550,8 @@ body.en .lang-es{display:none !important}
         function updatePrices() {
             if (selectedBilling === 'monthly') {
                 priceIndividual.innerHTML = '$5<span>/mo</span>';
-                priceFamily.innerHTML = '$20<span>/mo</span>';
             } else {
                 priceIndividual.innerHTML = '$50<span>/yr</span>';
-                priceFamily.innerHTML = '$200<span>/yr</span>';
             }
         }
         planCards.forEach(function(card) {
@@ -663,9 +658,9 @@ body.en .lang-es{display:none !important}
                 openChat();
                 setTimeout(function() {
                     addMsg(bi('No worries! 🏀<br><br>You can subscribe anytime.', '¡Sin problema! 🏀<br><br>Puedes suscribirte cuando quieras.'), false, [
-                        {labelEn: '🆕 Subscribe', labelEs: '🆕 Suscribirme', action: 'new'},
-                        {labelEn: '🔑 I Have PIN', labelEs: '🔑 Tengo PIN', action: 'returning'},
-                        {labelEn: '🏢 Facility', labelEs: '🏢 Instalación', action: 'facility'}
+                        {labelEn: '🏢 Facility / Senior Care', labelEs: '🏢 Centro de Cuidado', action: 'facility_intro', primary: true},
+                        {labelEn: '👤 Individual', labelEs: '👤 Individual', action: 'new'},
+                        {labelEn: '🔑 I Have PIN', labelEs: '🔑 Tengo PIN', action: 'returning'}
                     ]);
                 }, 500);
             }, 300);
@@ -745,10 +740,10 @@ body.en .lang-es{display:none !important}
         } else {
             setTimeout(function() {
                 addMsg(bi('Hey! 🏀 I\'m <strong>GoTrotter™ AI</strong> — Coach, Team GoTrotters.', '¡Qué pasa! 🏀 Soy <strong>GoTrotter™ AI</strong> — Coach, Team GoTrotters.'), false);
-                botSay(bi('Welcome to Team GoTrotters.<br><br>What brings you here?', 'Bienvenido a Team GoTrotters.<br><br>¿Qué te trae por aquí?'), [
-                    {labelEn: '🆕 I\'m New — Subscribe', labelEs: '🆕 Soy Nuevo — Suscribirme', action: 'new', primary: true},
-                    {labelEn: '🔑 I Have PIN', labelEs: '🔑 Tengo PIN', action: 'returning'},
-                    {labelEn: '🏢 Facility Code', labelEs: '🏢 Código Instalación', action: 'facility'}
+                botSay(bi('Welcome to Team GoTrotters.<br><br>How can I help you?', 'Bienvenido a Team GoTrotters.<br><br>¿Cómo puedo ayudarte?'), [
+                    {labelEn: '🏢 Facility / Senior Care', labelEs: '🏢 Centro de Cuidado', action: 'facility_intro', primary: true},
+                    {labelEn: '👤 Individual', labelEs: '👤 Individual', action: 'new'},
+                    {labelEn: '🔑 I Have PIN', labelEs: '🔑 Tengo PIN', action: 'returning'}
                 ], 600);
             }, 400);
         }
@@ -769,6 +764,118 @@ body.en .lang-es{display:none !important}
                 currentStep = 'ask_pin';
                 botSay(bi('Welcome back! 🏀<br><br>Enter your 4-digit PIN:', '¡Bienvenido! 🏀<br><br>Ingresa tu PIN de 4 dígitos:'), null, 600);
                 setTimeout(addPinInput, 1500);
+                break;
+            case 'facility_intro':
+                currentFlow = 'facility_sales';
+                botSay(bi(
+                    '🏢 <strong>Perfect!</strong> GoTrotters is designed for senior care facilities.<br><br>Are you looking to:',
+                    '🏢 <strong>¡Perfecto!</strong> GoTrotters está diseñado para centros de cuidado de adultos mayores.<br><br>¿Qué buscas?'
+                ), [
+                    {labelEn: '📋 Subscribe My Facility', labelEs: '📋 Suscribir Mi Centro', action: 'facility_sales', primary: true},
+                    {labelEn: '🔑 I Have Facility Code', labelEs: '🔑 Tengo Código', action: 'facility'}
+                ], 600);
+                break;
+            case 'facility_sales':
+                currentFlow = 'facility_sales';
+                botSay(bi(
+                    '🎯 <strong>M³ COGNITIVE TRAINING</strong><br><br>' +
+                    '✅ <strong>3 Gears:</strong> MAP, MOVE, MATCH<br>' +
+                    '✅ <strong>10-Shift Progression:</strong> Practice to Master<br>' +
+                    '✅ <strong>Senior-Friendly:</strong> Large buttons, clear visuals<br>' +
+                    '✅ <strong>Bilingual:</strong> English & Spanish<br><br>' +
+                    '💰 <strong>$20/user/month</strong> or <strong>$200/user/year</strong> (save $40)<br><br>' +
+                    '🎁 <strong>7-day free trial</strong> with up to 10 users!',
+                    '🎯 <strong>ENTRENAMIENTO COGNITIVO M³</strong><br><br>' +
+                    '✅ <strong>3 Engranajes:</strong> MAP, MOVE, MATCH<br>' +
+                    '✅ <strong>10 Cambios:</strong> Práctica a Maestro<br>' +
+                    '✅ <strong>Para Mayores:</strong> Botones grandes, visuales claros<br>' +
+                    '✅ <strong>Bilingüe:</strong> Inglés y Español<br><br>' +
+                    '💰 <strong>$20/usuario/mes</strong> o <strong>$200/usuario/año</strong> (ahorra $40)<br><br>' +
+                    '🎁 <strong>7 días de prueba gratis</strong> con hasta 10 usuarios!'
+                ), [
+                    {labelEn: '🚀 View Plans & Start Trial', labelEs: '🚀 Ver Planes y Comenzar', action: 'facility_pricing', primary: true},
+                    {labelEn: '❓ I Have Questions', labelEs: '❓ Tengo Preguntas', action: 'facility_questions'}
+                ], 800);
+                break;
+            case 'facility_pricing':
+                window.location.href = 'facility-pricing.html';
+                break;
+            case 'facility_questions':
+                currentFlow = 'facility_questions';
+                botSay(bi(
+                    '💬 I\'m here to help! What would you like to know?',
+                    '💬 ¡Estoy aquí para ayudar! ¿Qué te gustaría saber?'
+                ), [
+                    {labelEn: '💵 Pricing Details', labelEs: '💵 Detalles de Precio', action: 'q_pricing'},
+                    {labelEn: '🧠 How It Works', labelEs: '🧠 Cómo Funciona', action: 'q_how'},
+                    {labelEn: '👴 Benefits for Seniors', labelEs: '👴 Beneficios para Mayores', action: 'q_benefits'},
+                    {labelEn: '🚀 Ready to Start', labelEs: '🚀 Listo para Comenzar', action: 'facility_pricing'}
+                ], 600);
+                break;
+            case 'q_pricing':
+                botSay(bi(
+                    '💰 <strong>SIMPLE PER-USER PRICING</strong><br><br>' +
+                    '• <strong>Monthly:</strong> $20/user/month<br>' +
+                    '• <strong>Annual:</strong> $200/user/year (2 months free!)<br><br>' +
+                    '🎁 <strong>Free Trial:</strong> 7 days, up to 10 users<br>' +
+                    '♾️ <strong>After Trial:</strong> Unlimited users<br><br>' +
+                    'No setup fees. Cancel anytime.',
+                    '💰 <strong>PRECIO SIMPLE POR USUARIO</strong><br><br>' +
+                    '• <strong>Mensual:</strong> $20/usuario/mes<br>' +
+                    '• <strong>Anual:</strong> $200/usuario/año (¡2 meses gratis!)<br><br>' +
+                    '🎁 <strong>Prueba Gratis:</strong> 7 días, hasta 10 usuarios<br>' +
+                    '♾️ <strong>Después:</strong> Usuarios ilimitados<br><br>' +
+                    'Sin cargos de instalación. Cancela cuando quieras.'
+                ), [
+                    {labelEn: '🚀 Start Free Trial', labelEs: '🚀 Comenzar Prueba', action: 'facility_pricing', primary: true},
+                    {labelEn: '❓ More Questions', labelEs: '❓ Más Preguntas', action: 'facility_questions'}
+                ], 600);
+                break;
+            case 'q_how':
+                botSay(bi(
+                    '🧠 <strong>M³ PERFORMANCE ENGINE</strong><br><br>' +
+                    '<strong>3 GEARS:</strong><br>' +
+                    '🧠 <strong>MAP</strong> — Memory & pattern recognition<br>' +
+                    '⚡ <strong>MOVE</strong> — Speed & number recall<br>' +
+                    '👁️ <strong>MATCH</strong> — Focus & visual sequence<br><br>' +
+                    '<strong>10 SHIFTS:</strong><br>' +
+                    'Practice 1-2 → Shift 3-9 → Master 10<br><br>' +
+                    'Residents earn every level. That\'s how Team GoTrotters works! 🏆',
+                    '🧠 <strong>MOTOR DE RENDIMIENTO M³</strong><br><br>' +
+                    '<strong>3 ENGRANAJES:</strong><br>' +
+                    '🧠 <strong>MAP</strong> — Memoria y patrones<br>' +
+                    '⚡ <strong>MOVE</strong> — Velocidad y memoria numérica<br>' +
+                    '👁️ <strong>MATCH</strong> — Enfoque y secuencia visual<br><br>' +
+                    '<strong>10 CAMBIOS:</strong><br>' +
+                    'Práctica 1-2 → Cambio 3-9 → Maestro 10<br><br>' +
+                    '¡Los residentes ganan cada nivel. Así funciona Team GoTrotters! 🏆'
+                ), [
+                    {labelEn: '🚀 Start Free Trial', labelEs: '🚀 Comenzar Prueba', action: 'facility_pricing', primary: true},
+                    {labelEn: '❓ More Questions', labelEs: '❓ Más Preguntas', action: 'facility_questions'}
+                ], 600);
+                break;
+            case 'q_benefits':
+                botSay(bi(
+                    '👴 <strong>DESIGNED FOR SENIORS</strong><br><br>' +
+                    '✅ <strong>Large buttons</strong> — Easy to tap<br>' +
+                    '✅ <strong>Clear visuals</strong> — High contrast<br>' +
+                    '✅ <strong>Simple navigation</strong> — No confusion<br>' +
+                    '✅ <strong>Bilingual</strong> — English & Spanish<br>' +
+                    '✅ <strong>Progress tracking</strong> — See improvement<br>' +
+                    '✅ <strong>Cognitive benefits</strong> — Memory, focus, speed<br><br>' +
+                    '🏀 Training the mind like athletes train the body!',
+                    '👴 <strong>DISEÑADO PARA ADULTOS MAYORES</strong><br><br>' +
+                    '✅ <strong>Botones grandes</strong> — Fácil de tocar<br>' +
+                    '✅ <strong>Visuales claros</strong> — Alto contraste<br>' +
+                    '✅ <strong>Navegación simple</strong> — Sin confusión<br>' +
+                    '✅ <strong>Bilingüe</strong> — Inglés y Español<br>' +
+                    '✅ <strong>Seguimiento de progreso</strong> — Ver mejoras<br>' +
+                    '✅ <strong>Beneficios cognitivos</strong> — Memoria, enfoque, velocidad<br><br>' +
+                    '🏀 ¡Entrenando la mente como atletas entrenan el cuerpo!'
+                ), [
+                    {labelEn: '🚀 Start Free Trial', labelEs: '🚀 Comenzar Prueba', action: 'facility_pricing', primary: true},
+                    {labelEn: '❓ More Questions', labelEs: '❓ Más Preguntas', action: 'facility_questions'}
+                ], 600);
                 break;
             case 'facility':
                 currentFlow = 'facility';
