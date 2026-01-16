@@ -305,7 +305,7 @@ app.post('/api/stripe/checkout', function(req, res) {
         }],
         success_url: successUrl,
         cancel_url: cancelUrl,
-        allow_promotion_codes: true,
+        allow_promotion_codes: false,
         subscription_data: {
             trial_period_days: 7,
             metadata: {
