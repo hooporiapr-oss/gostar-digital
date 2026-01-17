@@ -166,6 +166,21 @@ body.en .lang-es{display:none !important}
 .email-submit.loading{opacity:0.7;pointer-events:none}
 .success-burst{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);font-size:6rem;z-index:100;animation:burst 0.8s ease-out forwards;pointer-events:none}
 @keyframes burst{0%{opacity:1;transform:translate(-50%,-50%) scale(0.5)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.2)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.5)}}
+/* Confetti */
+.confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1000;overflow:hidden}
+.confetti{position:absolute;width:10px;height:10px;top:-10px;animation:confetti-fall 4s linear forwards}
+@keyframes confetti-fall{0%{transform:translateY(0) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+.confetti:nth-child(odd){background:var(--orange);border-radius:50%}
+.confetti:nth-child(even){background:var(--gold);border-radius:2px}
+.confetti:nth-child(3n){background:var(--teal)}
+.confetti:nth-child(4n){background:var(--success)}
+/* Coach Welcome Box */
+.coach-welcome-box{background:linear-gradient(135deg,rgba(0,217,165,0.15),rgba(255,107,0,0.15));border:3px solid var(--teal);border-radius:20px;padding:20px;margin:15px 0;text-align:center}
+.coach-welcome-icon{font-size:3rem;margin-bottom:10px;animation:bounce 2s infinite}
+.coach-welcome-title{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:3px;color:var(--gold);margin-bottom:10px}
+.coach-welcome-msg{font-size:0.95rem;color:var(--text);line-height:1.6}
+.coach-welcome-msg strong{color:var(--orange)}
+.coach-signature{font-size:0.8rem;color:var(--teal);margin-top:12px;font-weight:700}
 @media(max-width:400px){
 .go-btn{padding:18px 45px;font-size:1.5rem}
 .pin-digit{width:45px;height:55px;font-size:1.8rem}
@@ -185,6 +200,9 @@ body.en .lang-es{display:none !important}
 </style>
 </head>
 <body class="en">
+<!-- Confetti Container -->
+<div class="confetti-container" id="confettiContainer"></div>
+
 <div class="landing" id="landing">
 <div class="lang-toggle">
 <button class="lang-btn active" data-lang="en">EN</button>
@@ -339,6 +357,28 @@ body.en .lang-es{display:none !important}
     function hideInput() {
         chatInputArea.classList.remove('visible');
     }
+    
+    // ========== CONFETTI ==========
+    function createConfetti() {
+        var container = document.getElementById('confettiContainer');
+        for (var i = 0; i < 100; i++) {
+            setTimeout(function() {
+                var confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.animationDuration = (Math.random() * 2 + 3) + 's';
+                confetti.style.animationDelay = Math.random() * 0.5 + 's';
+                confetti.style.width = (Math.random() * 8 + 6) + 'px';
+                confetti.style.height = (Math.random() * 8 + 6) + 'px';
+                container.appendChild(confetti);
+                setTimeout(function() {
+                    if (confetti.parentNode) confetti.parentNode.removeChild(confetti);
+                }, 5000);
+            }, i * 30);
+        }
+    }
+    // ========== END CONFETTI ==========
+    
     function addPinInput() {
         var msg = document.createElement('div');
         msg.className = 'chat-msg bot';
@@ -448,8 +488,8 @@ body.en .lang-es{display:none !important}
         msg.className = 'chat-msg bot';
         msg.innerHTML = '<div class="chat-msg-avatar"><img src="go_chat.png" class="chat-msg-avatar-img"></div><div class="chat-msg-bubble">' +
             bi(
-                '🎉 <strong>WELCOME TO TEAM GOTROTTERS!</strong><br><br>Your <strong>7-day free trial</strong> has started!<br><br>Enter the email you used at checkout to get your PIN:',
-                '🎉 <strong>¡BIENVENIDO A TEAM GOTROTTERS!</strong><br><br>¡Tu <strong>prueba gratis de 7 días</strong> ha comenzado!<br><br>Ingresa el email que usaste en el pago para obtener tu PIN:'
+                'Enter the email you used at checkout to get your PIN:',
+                'Ingresa el email que usaste en el pago para obtener tu PIN:'
             ) +
             '<div class="email-input-container">' +
             '<input type="email" class="email-input" id="emailInput" placeholder="' + (lang === 'es' ? 'tu@email.com' : 'your@email.com') + '">' +
@@ -526,6 +566,27 @@ body.en .lang-es{display:none !important}
             btn.addEventListener('click', function() { handleOption(this.dataset.action); });
         });
     }
+    
+    // ========== COACH WELCOME (Draft Day) ==========
+    function showCoachWelcome() {
+        var msg = document.createElement('div');
+        msg.className = 'chat-msg bot';
+        msg.innerHTML = '<div class="chat-msg-avatar"><img src="go_chat.png" class="chat-msg-avatar-img"></div><div class="chat-msg-bubble">' +
+            '<div class="coach-welcome-box">' +
+            '<div class="coach-welcome-icon">🏀</div>' +
+            '<div class="coach-welcome-title">' + bi('WELCOME TO THE TEAM!', '¡BIENVENIDO AL EQUIPO!') + '</div>' +
+            '<div class="coach-welcome-msg">' + bi(
+                '"<strong>You did it!</strong> I\'m Coach GoTrotter AI, and I\'ll be <strong>courtside with you</strong> every workout. Together, we\'ll keep your mind sharp and strong!"',
+                '"<strong>¡Lo lograste!</strong> Soy Coach GoTrotter AI, y estaré <strong>contigo en cada ejercicio</strong>. ¡Juntos mantendremos tu mente aguda y fuerte!"'
+            ) + '</div>' +
+            '<div class="coach-signature">— Coach GoTrotter AI</div>' +
+            '</div>' +
+            '</div>';
+        chatBody.appendChild(msg);
+        chatBody.scrollTop = chatBody.scrollHeight;
+    }
+    // ========== END COACH WELCOME ==========
+    
     function addPlanSelector() {
         var msg = document.createElement('div');
         msg.className = 'chat-msg bot';
@@ -621,7 +682,7 @@ body.en .lang-es{display:none !important}
         });
     }
     
-    // ========== UPDATED: Auto-fetch PIN using session_id ==========
+    // ========== UPDATED: Success flow with Confetti + Coach Welcome ==========
     function checkUrlParams() {
         var params = new URLSearchParams(window.location.search);
         
@@ -629,24 +690,32 @@ body.en .lang-es{display:none !important}
             var sessionId = params.get('session_id');
             window.history.replaceState({}, '', window.location.pathname);
             
+            // 🎉 LAUNCH CONFETTI!
+            setTimeout(createConfetti, 100);
+            setTimeout(createConfetti, 2000);
+            
             setTimeout(function() {
                 openChat();
                 setTimeout(function() {
-                    // Show loading message
-                    addMsg(bi(
-                        '🎉 <strong>PAYMENT SUCCESSFUL!</strong><br><br>Loading your account...',
-                        '🎉 <strong>¡PAGO EXITOSO!</strong><br><br>Cargando tu cuenta...'
-                    ), false);
-                    addTyping();
+                    // Show Coach Welcome first!
+                    showCoachWelcome();
                     
-                    // If we have session_id, auto-fetch PIN (no email needed!)
-                    if (sessionId) {
-                        fetchPinBySession(sessionId);
-                    } else {
-                        // Fallback to email input
-                        removeTyping();
-                        addEmailInput();
-                    }
+                    // Then show loading message
+                    setTimeout(function() {
+                        addMsg(bi(
+                            '🎉 <strong>PAYMENT SUCCESSFUL!</strong><br><br>Loading your account...',
+                            '🎉 <strong>¡PAGO EXITOSO!</strong><br><br>Cargando tu cuenta...'
+                        ), false);
+                        addTyping();
+                        
+                        // If we have session_id, auto-fetch PIN
+                        if (sessionId) {
+                            fetchPinBySession(sessionId);
+                        } else {
+                            removeTyping();
+                            addEmailInput();
+                        }
+                    }, 1500);
                 }, 500);
             }, 300);
             return true;
@@ -668,7 +737,7 @@ body.en .lang-es{display:none !important}
         return false;
     }
     
-    // ========== NEW: Fetch PIN by Stripe Session ID ==========
+    // ========== Fetch PIN by Stripe Session ID ==========
     function fetchPinBySession(sessionId) {
         var retryCount = 0;
         var maxRetries = 5;
@@ -680,10 +749,8 @@ body.en .lang-es{display:none !important}
                     removeTyping();
                     
                     if (data.success && data.pin) {
-                        // SUCCESS! Show PIN automatically
                         showPinDisplay(data.pin, data.email, data.plan_type, data.status);
                     } else if (data.email && !data.success && retryCount < maxRetries) {
-                        // Webhook might still be processing, retry
                         retryCount++;
                         addMsg(bi(
                             '⏳ Setting up your account... (' + retryCount + '/' + maxRetries + ')',
@@ -692,21 +759,18 @@ body.en .lang-es{display:none !important}
                         addTyping();
                         setTimeout(attemptFetch, 2000);
                     } else if (data.email) {
-                        // Have email but no subscriber yet - try one more lookup
                         addMsg(bi(
                             '⏳ Almost there! Checking your account...',
                             '⏳ ¡Casi listo! Verificando tu cuenta...'
                         ), false);
                         handleEmailLookup(data.email);
                     } else {
-                        // No email found - fallback to manual entry
                         addEmailInput();
                     }
                 })
                 .catch(function(err) {
                     removeTyping();
                     console.error('Session lookup error:', err);
-                    // Fallback to email input
                     addEmailInput();
                 });
         }
