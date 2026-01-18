@@ -41,7 +41,7 @@ body.en .lang-es{display:none !important}
 .intro-title{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;letter-spacing:4px;margin-bottom:5px}
 .intro-title .laugh-title{color:var(--pink)}
 .intro-title .num{color:var(--gold)}
-.intro-session{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:3px;color:var(--text);margin-bottom:10px}
+.intro-circuit{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:3px;color:var(--text);margin-bottom:10px}
 .intro-subtitle{color:var(--gold);font-family:'Bebas Neue',sans-serif;letter-spacing:2px;margin-bottom:20px}
 .intro-desc{color:var(--muted);line-height:1.6;margin-bottom:30px}
 .intro-desc strong{color:var(--text)}
@@ -158,7 +158,7 @@ body.en .lang-es{display:none !important}
     <div class="intro-screen" id="introScreen">
         <div class="intro-coach"><img src="go_chat.png" alt="Coach GoTrotter AI" class="intro-coach-img"></div>
         <div class="intro-title"><span class="laugh-title">LAUGH</span> <span class="num">1</span></div>
-        <div class="intro-session">SILLY SCENES 🎭</div>
+        <div class="intro-circuit">SILLY SCENES 🎭</div>
         <div class="intro-subtitle">
             <span class="lang-en">MEMORY & LAUGHTER</span>
             <span class="lang-es">MEMORIA Y RISA</span>
@@ -207,8 +207,8 @@ body.en .lang-es{display:none !important}
     <div class="gameover-screen hidden" id="gameoverScreen">
         <div class="gameover-emoji" id="gameoverEmoji">🎭</div>
         <div class="gameover-title">
-            <span class="lang-en">SESSION COMPLETE!</span>
-            <span class="lang-es">¡SESIÓN COMPLETA!</span>
+            <span class="lang-en">CIRCUIT COMPLETE!</span>
+            <span class="lang-es">¡CIRCUITO COMPLETO!</span>
         </div>
         <div class="gameover-score" id="finalScore">0</div>
         <div class="gameover-msg">
@@ -276,7 +276,7 @@ body.en .lang-es{display:none !important}
     });
 
     // ============ LAUGH TRACKING SYSTEM ============
-    var sessionLaughs = 0;
+    var circuitLaughs = 0;
 
     function getDateString(date) {
         return date.toISOString().split('T')[0];
@@ -291,7 +291,7 @@ body.en .lang-es{display:none !important}
     }
 
     function addLaughs(count) {
-        sessionLaughs += count;
+        circuitLaughs += count;
         updateLaughDisplay();
         
         var today = getDateString(new Date());
@@ -323,7 +323,7 @@ body.en .lang-es{display:none !important}
     }
 
     function updateLaughDisplay() {
-        document.getElementById('laughCounterValue').textContent = sessionLaughs;
+        document.getElementById('laughCounterValue').textContent = circuitLaughs;
     }
 
     function showLaughPop(count) {
@@ -454,8 +454,8 @@ body.en .lang-es{display:none !important}
             { en: "Can your memory handle THIS? 😏", es: "¿Tu memoria puede con ESTO? 😏" }
         ],
         gameOver: {
-            en: "Great session! 🎭😂",
-            es: "¡Gran sesión! 🎭😂"
+            en: "Great circuit! 🎭😂",
+            es: "¡Gran circuito! 🎭😂"
         },
         highScore: {
             en: "LEGENDARY performance! 🏆🎭",
@@ -568,7 +568,7 @@ body.en .lang-es{display:none !important}
         streak = 0;
         round = 0;
         totalScenesWatched = 0;
-        sessionLaughs = 0;
+        circuitLaughs = 0;
         updateScore();
         updateLaughDisplay();
         updateTierBadge();
@@ -832,7 +832,7 @@ body.en .lang-es{display:none !important}
     }
 
     function endGame() {
-        // +5 laughs for session complete
+        // +5 laughs for circuit complete
         addLaughs(5);
         
         showScreen(gameoverScreen);
@@ -842,10 +842,10 @@ body.en .lang-es{display:none !important}
         
         document.getElementById('finalScore').textContent = score;
         
-        // Show laugh moments earned this session
+        // Show laugh moments earned this circuit
         var laughText = lang === 'es' ? 
-            '😂 Momentos de Risa: ' + sessionLaughs : 
-            '😂 Laugh Moments: ' + sessionLaughs;
+            '😂 Momentos de Risa: ' + circuitLaughs : 
+            '😂 Laugh Moments: ' + circuitLaughs;
         document.getElementById('laughCount').textContent = laughText;
         
         var emoji = score >= 200 ? '🤩' : score >= 100 ? '🎭' : '😄';
