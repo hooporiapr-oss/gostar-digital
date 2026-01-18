@@ -48,6 +48,20 @@ body.en .lang-es{display:none!important}
 .stat-value{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--pink)}
 .stat-label{font-size:0.7rem;color:var(--muted);letter-spacing:1px}
 
+/* Joy Dashboard */
+.joy-dashboard{background:linear-gradient(135deg,rgba(255,215,0,0.1),rgba(255,105,180,0.1));border:2px solid rgba(255,215,0,0.3);border-radius:25px;padding:25px 20px;margin:20px auto;max-width:500px;text-align:center}
+.joy-title{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:3px;margin-bottom:20px;color:var(--gold)}
+.joy-title .emoji{font-size:1.5rem}
+.joy-stats{display:flex;justify-content:space-around;gap:15px}
+.joy-stat{flex:1;background:var(--card);border-radius:15px;padding:15px 10px;position:relative;overflow:hidden}
+.joy-stat::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--pink))}
+.joy-stat-value{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;color:var(--gold);display:block}
+.joy-stat-label{font-size:0.65rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
+.joy-stat-emoji{font-size:1.5rem;margin-bottom:5px;display:block}
+.joy-message{margin-top:20px;padding:15px;background:var(--card);border-radius:15px;border-left:4px solid var(--pink)}
+.joy-message-text{font-size:0.9rem;color:var(--muted);font-style:italic}
+.joy-message-text strong{color:var(--pink)}
+
 /* Sessions Grid */
 .sessions-section{padding:20px}
 .section-title{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:3px;text-align:center;margin-bottom:25px;color:var(--text)}
@@ -111,6 +125,8 @@ body.en .lang-es{display:none!important}
 .session-card:nth-child(2){animation-delay:0.2s}
 .session-card:nth-child(3){animation-delay:0.3s}
 .session-card:nth-child(4){animation-delay:0.4s}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+.joy-stat-value{animation:pulse 2s ease-in-out infinite}
 
 /* Responsive */
 @media(max-width:400px){
@@ -121,6 +137,9 @@ body.en .lang-es{display:none!important}
 .stats-bar{gap:20px}
 .stat-value{font-size:1.5rem}
 .logo{font-size:1.2rem}
+.joy-stats{flex-wrap:wrap}
+.joy-stat{min-width:80px}
+.joy-stat-value{font-size:1.8rem}
 }
 </style>
 </head>
@@ -158,18 +177,69 @@ body.en .lang-es{display:none!important}
 </p>
 </section>
 
+<!-- JOY DASHBOARD -->
+<section class="joy-dashboard">
+<h2 class="joy-title">
+<span class="emoji">😂</span>
+<span class="lang-en"> YOUR JOY DASHBOARD </span>
+<span class="lang-es"> TU PANEL DE ALEGRÍA </span>
+<span class="emoji">😂</span>
+</h2>
+<div class="joy-stats">
+<div class="joy-stat">
+<span class="joy-stat-emoji">☀️</span>
+<span class="joy-stat-value" id="joyToday">0</span>
+<span class="joy-stat-label">
+<span class="lang-en">TODAY</span>
+<span class="lang-es">HOY</span>
+</span>
+</div>
+<div class="joy-stat">
+<span class="joy-stat-emoji">📅</span>
+<span class="joy-stat-value" id="joyWeek">0</span>
+<span class="joy-stat-label">
+<span class="lang-en">THIS WEEK</span>
+<span class="lang-es">ESTA SEMANA</span>
+</span>
+</div>
+<div class="joy-stat">
+<span class="joy-stat-emoji">🏆</span>
+<span class="joy-stat-value" id="joyTotal">0</span>
+<span class="joy-stat-label">
+<span class="lang-en">ALL TIME</span>
+<span class="lang-es">TOTAL</span>
+</span>
+</div>
+</div>
+<div class="joy-message">
+<p class="joy-message-text" id="joyMessage">
+<span class="lang-en"><strong>Start a session</strong> to earn your first laugh moments! 😂</span>
+<span class="lang-es"><strong>¡Comienza una sesión</strong> para ganar tus primeros momentos de risa! 😂</span>
+</p>
+</div>
+</section>
+
 <div class="stats-bar">
 <div class="stat">
 <div class="stat-value">4</div>
-<div class="stat-label"><span class="lang-en">SESSIONS</span><span class="lang-es">SESIONES</span></div>
+<div class="stat-label">
+<span class="lang-en">SESSIONS</span>
+<span class="lang-es">SESIONES</span>
+</div>
 </div>
 <div class="stat">
 <div class="stat-value">10</div>
-<div class="stat-label"><span class="lang-en">TIERS EACH</span><span class="lang-es">NIVELES</span></div>
+<div class="stat-label">
+<span class="lang-en">TIERS EACH</span>
+<span class="lang-es">NIVELES</span>
+</div>
 </div>
 <div class="stat">
 <div class="stat-value">∞</div>
-<div class="stat-label"><span class="lang-en">LAUGHS</span><span class="lang-es">RISAS</span></div>
+<div class="stat-label">
+<span class="lang-en">LAUGHS</span>
+<span class="lang-es">RISAS</span>
+</div>
 </div>
 </div>
 
@@ -236,7 +306,10 @@ body.en .lang-es{display:none!important}
 <img src="go_chat.png" alt="Coach GoTrotter AI">
 </div>
 <div class="coach-info">
-<h3><span class="lang-en">MEET <span>COACH GOTROTTER AI</span></span><span class="lang-es">CONOCE A <span>COACH GOTROTTER AI</span></span></h3>
+<h3>
+<span class="lang-en">MEET <span>COACH GOTROTTER AI</span></span>
+<span class="lang-es">CONOCE A <span>COACH GOTROTTER AI</span></span>
+</h3>
 <p>
 <span class="lang-en">Your 24/7 laughter coach! I'll guide you through every session with encouragement, celebration, and plenty of laughs! 🏀😂</span>
 <span class="lang-es">¡Tu coach de risa 24/7! Te guiaré en cada sesión con ánimo, celebración y muchas risas! 🏀😂</span>
@@ -254,7 +327,10 @@ body.en .lang-es{display:none!important}
 <div class="science-item">
 <div class="science-icon">🧠</div>
 <div class="science-text">
-<strong><span class="lang-en">MEMORY</span><span class="lang-es">MEMORIA</span></strong>
+<strong>
+<span class="lang-en">MEMORY</span>
+<span class="lang-es">MEMORIA</span>
+</strong>
 <span class="lang-en">Laughter enhances memory retention</span>
 <span class="lang-es">La risa mejora la retención</span>
 </div>
@@ -262,7 +338,10 @@ body.en .lang-es{display:none!important}
 <div class="science-item">
 <div class="science-icon">💊</div>
 <div class="science-text">
-<strong><span class="lang-en">CORTISOL</span><span class="lang-es">CORTISOL</span></strong>
+<strong>
+<span class="lang-en">CORTISOL</span>
+<span class="lang-es">CORTISOL</span>
+</strong>
 <span class="lang-en">Reduces stress hormones</span>
 <span class="lang-es">Reduce hormonas de estrés</span>
 </div>
@@ -270,7 +349,10 @@ body.en .lang-es{display:none!important}
 <div class="science-item">
 <div class="science-icon">❤️</div>
 <div class="science-text">
-<strong><span class="lang-en">ENDORPHINS</span><span class="lang-es">ENDORFINAS</span></strong>
+<strong>
+<span class="lang-en">ENDORPHINS</span>
+<span class="lang-es">ENDORFINAS</span>
+</strong>
 <span class="lang-en">Natural feel-good chemicals</span>
 <span class="lang-es">Químicos naturales de bienestar</span>
 </div>
@@ -300,19 +382,111 @@ body.en .lang-es{display:none!important}
 
 <script>
 (function(){
+// ============ LANGUAGE TOGGLE ============
 var lang = localStorage.getItem('lw-lang') || 'en';
-function setLang(l){
+
+function setLang(l) {
     lang = l;
     localStorage.setItem('lw-lang', l);
     document.body.className = l;
-    document.querySelectorAll('.lang-btn').forEach(function(b){
+    document.querySelectorAll('.lang-btn').forEach(function(b) {
         b.classList.toggle('active', b.dataset.lang === l);
     });
 }
+
+// Initialize language on page load
 setLang(lang);
-document.querySelectorAll('.lang-btn').forEach(function(b){
-    b.onclick = function(){ setLang(this.dataset.lang); };
+
+// Language button click handlers
+document.querySelectorAll('.lang-btn').forEach(function(b) {
+    b.addEventListener('click', function(e) {
+        e.preventDefault();
+        setLang(this.dataset.lang);
+    });
 });
+
+// ============ JOY DASHBOARD ============
+
+// Get today's date string
+function getDateString(date) {
+    return date.toISOString().split('T')[0];
+}
+
+// Get week start (Monday)
+function getWeekStart(date) {
+    var d = new Date(date);
+    var day = d.getDay();
+    var diff = d.getDate() - day + (day === 0 ? -6 : 1);
+    d.setDate(diff);
+    return getDateString(d);
+}
+
+// Load joy data from localStorage
+function loadJoyData() {
+    var today = getDateString(new Date());
+    var weekStart = getWeekStart(new Date());
+    
+    // Today's laughs
+    var todayData = JSON.parse(localStorage.getItem('lw-laughs-today') || '{}');
+    var todayCount = (todayData.date === today) ? todayData.count : 0;
+    
+    // Week's laughs
+    var weekData = JSON.parse(localStorage.getItem('lw-laughs-week') || '{}');
+    var weekCount = (weekData.weekStart === weekStart) ? weekData.count : 0;
+    
+    // Total laughs
+    var totalCount = parseInt(localStorage.getItem('lw-laughs-total') || '0');
+    
+    return { today: todayCount, week: weekCount, total: totalCount };
+}
+
+// Update joy display numbers
+function updateJoyDisplay() {
+    var data = loadJoyData();
+    
+    document.getElementById('joyToday').textContent = data.today;
+    document.getElementById('joyWeek').textContent = data.week;
+    document.getElementById('joyTotal').textContent = data.total;
+    
+    updateJoyMessage(data);
+}
+
+// Update joy message based on activity level
+function updateJoyMessage(data) {
+    if (!data) data = loadJoyData();
+    var msgEl = document.getElementById('joyMessage');
+    
+    var msgEn, msgEs;
+    
+    if (data.total === 0) {
+        msgEn = "<strong>Start a session</strong> to earn your first laugh moments! 😂";
+        msgEs = "<strong>¡Comienza una sesión</strong> para ganar tus primeros momentos de risa! 😂";
+    } else if (data.today === 0 && data.total > 0) {
+        msgEn = "<strong>Welcome back!</strong> Ready for more laugh moments? 😄";
+        msgEs = "<strong>¡Bienvenido de vuelta!</strong> ¿Listo para más momentos de risa? 😄";
+    } else if (data.today < 20) {
+        msgEn = "<strong>You're laughing!</strong> Keep it up — every giggle counts! 🎉";
+        msgEs = "<strong>¡Estás riendo!</strong> ¡Sigue así — cada risa cuenta! 🎉";
+    } else if (data.today < 50) {
+        msgEn = "<strong>Nice streak!</strong> Your brain is loving this! 🧠😂";
+        msgEs = "<strong>¡Buena racha!</strong> ¡A tu cerebro le encanta! 🧠😂";
+    } else if (data.today < 100) {
+        msgEn = "<strong>You're on FIRE!</strong> Laughter champion in the making! 🔥🏆";
+        msgEs = "<strong>¡Estás en FUEGO!</strong> ¡Campeón de la risa en formación! 🔥🏆";
+    } else {
+        msgEn = "<strong>LEGENDARY!</strong> You're a certified Joy Master! 🌟👑";
+        msgEs = "<strong>¡LEGENDARIO!</strong> ¡Eres un Maestro de la Alegría certificado! 🌟👑";
+    }
+    
+    msgEl.innerHTML = '<span class="lang-en">' + msgEn + '</span><span class="lang-es">' + msgEs + '</span>';
+}
+
+// Initialize joy dashboard
+updateJoyDisplay();
+
+// Refresh every 3 seconds (in case returning from game)
+setInterval(updateJoyDisplay, 3000);
+
 })();
 </script>
 </body>
