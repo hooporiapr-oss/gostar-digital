@@ -82,13 +82,18 @@ body.en .lang-es{display:none !important}
 .streak-display{margin-top:5px}
 .streak-value{color:var(--gold);font-weight:700}
 
+/* Laugh Counter */
+.laugh-counter{position:absolute;top:100px;left:20px;text-align:left}
+.laugh-counter-label{font-size:0.7rem;color:var(--muted);letter-spacing:1px}
+.laugh-counter-value{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--gold)}
+
 /* Game Over Screen */
 .gameover-screen{text-align:center;max-width:400px}
 .gameover-emoji{font-size:5rem;margin-bottom:20px}
 .gameover-title{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;letter-spacing:3px;margin-bottom:10px}
 .gameover-score{font-family:'Bebas Neue',sans-serif;font-size:4rem;color:var(--pink);margin:20px 0}
 .gameover-msg{color:var(--muted);line-height:1.6;margin-bottom:10px}
-.gameover-laughs{color:var(--gold);font-weight:700;margin-bottom:30px}
+.gameover-laughs{color:var(--gold);font-weight:700;margin-bottom:30px;font-size:1.2rem}
 .gameover-btns{display:flex;flex-direction:column;gap:15px}
 .retry-btn{padding:16px 40px;font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:3px;background:linear-gradient(135deg,var(--purple),var(--pink));color:var(--text);border:none;border-radius:50px;cursor:pointer;transition:all 0.3s}
 .retry-btn:hover{transform:scale(1.05)}
@@ -111,6 +116,10 @@ body.en .lang-es{display:none !important}
 .confetti:nth-child(even){background:var(--pink);border-radius:2px}
 .confetti:nth-child(3n){background:var(--gold)}
 .confetti:nth-child(4n){background:var(--teal)}
+
+/* Laugh Pop Animation */
+.laugh-pop{position:fixed;pointer-events:none;font-size:2rem;animation:laughFloat 1s ease-out forwards;z-index:999}
+@keyframes laughFloat{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-50px) scale(1.5)}}
 
 /* Hidden */
 .hidden{display:none !important}
@@ -198,8 +207,8 @@ body.en .lang-es{display:none !important}
     <div class="gameover-screen hidden" id="gameoverScreen">
         <div class="gameover-emoji" id="gameoverEmoji">🎭</div>
         <div class="gameover-title">
-            <span class="lang-en">SCENES COMPLETE!</span>
-            <span class="lang-es">¡ESCENAS COMPLETAS!</span>
+            <span class="lang-en">SESSION COMPLETE!</span>
+            <span class="lang-es">¡SESIÓN COMPLETA!</span>
         </div>
         <div class="gameover-score" id="finalScore">0</div>
         <div class="gameover-msg">
@@ -207,8 +216,8 @@ body.en .lang-es{display:none !important}
             <span class="lang-es">Escenas Absurdas Recordadas</span>
         </div>
         <div class="gameover-laughs" id="laughCount">
-            <span class="lang-en">🎭 Scenes witnessed: 10</span>
-            <span class="lang-es">🎭 Escenas vistas: 10</span>
+            <span class="lang-en">😂 Laugh Moments: 0</span>
+            <span class="lang-es">😂 Momentos de Risa: 0</span>
         </div>
         <div class="gameover-btns">
             <button class="retry-btn" id="retryBtn">
@@ -232,6 +241,12 @@ body.en .lang-es{display:none !important}
             <span class="streak-value" id="streakValue">0</span>
         </div>
     </div>
+
+    <!-- Laugh Counter -->
+    <div class="laugh-counter hidden" id="laughCounter">
+        <div class="laugh-counter-label">😂 LAUGHS</div>
+        <div class="laugh-counter-value" id="laughCounterValue">0</div>
+    </div>
 </div>
 
 <!-- Coach Bubble -->
@@ -254,8 +269,78 @@ body.en .lang-es{display:none !important}
     }
     setLang(lang);
     document.querySelectorAll('.lang-btn').forEach(function(b) {
-        b.addEventListener('click', function() { setLang(this.dataset.lang); });
+        b.addEventListener('click', function(e) {
+            e.preventDefault();
+            setLang(this.dataset.lang);
+        });
     });
+
+    // ============ LAUGH TRACKING SYSTEM ============
+    var sessionLaughs = 0;
+
+    function getDateString(date) {
+        return date.toISOString().split('T')[0];
+    }
+
+    function getWeekStart(date) {
+        var d = new Date(date);
+        var day = d.getDay();
+        var diff = d.getDate() - day + (day === 0 ? -6 : 1);
+        d.setDate(diff);
+        return getDateString(d);
+    }
+
+    function addLaughs(count) {
+        sessionLaughs += count;
+        updateLaughDisplay();
+        
+        var today = getDateString(new Date());
+        var weekStart = getWeekStart(new Date());
+        
+        // Update today's laughs
+        var todayData = JSON.parse(localStorage.getItem('lw-laughs-today') || '{}');
+        if (todayData.date !== today) {
+            todayData = { date: today, count: 0 };
+        }
+        todayData.count += count;
+        localStorage.setItem('lw-laughs-today', JSON.stringify(todayData));
+        
+        // Update week's laughs
+        var weekData = JSON.parse(localStorage.getItem('lw-laughs-week') || '{}');
+        if (weekData.weekStart !== weekStart) {
+            weekData = { weekStart: weekStart, count: 0 };
+        }
+        weekData.count += count;
+        localStorage.setItem('lw-laughs-week', JSON.stringify(weekData));
+        
+        // Update total laughs
+        var total = parseInt(localStorage.getItem('lw-laughs-total') || '0');
+        total += count;
+        localStorage.setItem('lw-laughs-total', total.toString());
+        
+        // Show floating laugh emoji
+        showLaughPop(count);
+    }
+
+    function updateLaughDisplay() {
+        document.getElementById('laughCounterValue').textContent = sessionLaughs;
+    }
+
+    function showLaughPop(count) {
+        for (var i = 0; i < Math.min(count, 3); i++) {
+            setTimeout(function() {
+                var pop = document.createElement('div');
+                pop.className = 'laugh-pop';
+                pop.textContent = '😂';
+                pop.style.left = (20 + Math.random() * 60) + '%';
+                pop.style.top = (30 + Math.random() * 40) + '%';
+                document.body.appendChild(pop);
+                setTimeout(function() {
+                    if (pop.parentNode) pop.parentNode.removeChild(pop);
+                }, 1000);
+            }, i * 150);
+        }
+    }
 
     // ============ SILLY SCENES DATABASE ============
     
@@ -369,8 +454,8 @@ body.en .lang-es{display:none !important}
             { en: "Can your memory handle THIS? 😏", es: "¿Tu memoria puede con ESTO? 😏" }
         ],
         gameOver: {
-            en: "What a show! Your brain loved it! 🎭😂",
-            es: "¡Qué show! ¡Tu cerebro lo amó! 🎭😂"
+            en: "Great session! 🎭😂",
+            es: "¡Gran sesión! 🎭😂"
         },
         highScore: {
             en: "LEGENDARY performance! 🏆🎭",
@@ -410,6 +495,7 @@ body.en .lang-es{display:none !important}
     var questionScreen = document.getElementById('questionScreen');
     var gameoverScreen = document.getElementById('gameoverScreen');
     var scoreDisplay = document.getElementById('scoreDisplay');
+    var laughCounter = document.getElementById('laughCounter');
     var coachBubble = document.getElementById('coachBubble');
     var coachText = document.getElementById('coachText');
 
@@ -482,9 +568,12 @@ body.en .lang-es{display:none !important}
         streak = 0;
         round = 0;
         totalScenesWatched = 0;
+        sessionLaughs = 0;
         updateScore();
+        updateLaughDisplay();
         updateTierBadge();
         scoreDisplay.classList.remove('hidden');
+        laughCounter.classList.remove('hidden');
         showCoach(lang === 'es' ? coachMessages.start.es : coachMessages.start.en, 2500);
         setTimeout(startRound, 2000);
     }
@@ -514,6 +603,9 @@ body.en .lang-es{display:none !important}
         
         var scene = scenesToRemember[currentSceneIndex];
         totalScenesWatched++;
+        
+        // +1 laugh for seeing absurd content
+        addLaughs(1);
         
         // Display scene
         var emojis = scene.character.emoji + ' ' + scene.action.emoji + ' ' + scene.location.emoji;
@@ -680,6 +772,14 @@ body.en .lang-es{display:none !important}
             streak++;
             updateScore();
             
+            // +1 laugh for correct answer
+            addLaughs(1);
+            
+            // +2 extra laughs for streak of 3+
+            if (streak >= 3) {
+                addLaughs(2);
+            }
+            
             var msg;
             if (streak >= 3) {
                 msg = coachMessages.streak[Math.floor(Math.random() * coachMessages.streak.length)];
@@ -713,6 +813,10 @@ body.en .lang-es{display:none !important}
                 round = 0;
                 updateTierBadge();
                 createConfetti();
+                
+                // +3 laughs for tier up
+                addLaughs(3);
+                
                 showCoach(lang === 'es' ? coachMessages.tierUp.es : coachMessages.tierUp.en, 2500);
                 
                 setTimeout(function() {
@@ -728,13 +832,21 @@ body.en .lang-es{display:none !important}
     }
 
     function endGame() {
+        // +5 laughs for session complete
+        addLaughs(5);
+        
         showScreen(gameoverScreen);
         scoreDisplay.classList.add('hidden');
+        laughCounter.classList.add('hidden');
         createConfetti();
         
         document.getElementById('finalScore').textContent = score;
-        var scenesText = lang === 'es' ? '🎭 Escenas vistas: ' + totalScenesWatched : '🎭 Scenes witnessed: ' + totalScenesWatched;
-        document.getElementById('laughCount').textContent = scenesText;
+        
+        // Show laugh moments earned this session
+        var laughText = lang === 'es' ? 
+            '😂 Momentos de Risa: ' + sessionLaughs : 
+            '😂 Laugh Moments: ' + sessionLaughs;
+        document.getElementById('laughCount').textContent = laughText;
         
         var emoji = score >= 200 ? '🤩' : score >= 100 ? '🎭' : '😄';
         document.getElementById('gameoverEmoji').textContent = emoji;
@@ -764,6 +876,7 @@ body.en .lang-es{display:none !important}
 
     // Initialize
     scoreDisplay.classList.add('hidden');
+    laughCounter.classList.add('hidden');
 })();
 </script>
 </body>
