@@ -80,11 +80,14 @@ body.en .lang-es{display:none!important}
 .score-value{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--pink)}
 .streak-display{margin-top:5px}
 .streak-value{color:var(--gold);font-weight:700}
+.laugh-counter{position:absolute;top:100px;left:20px;text-align:left}
+.laugh-counter-label{font-size:0.7rem;color:var(--muted);letter-spacing:1px}
+.laugh-counter-value{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--gold)}
 .gameover-screen{text-align:center;max-width:400px}
 .gameover-emoji{font-size:5rem;margin-bottom:20px}
 .gameover-title{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;letter-spacing:3px;margin-bottom:10px}
 .gameover-score{font-family:'Bebas Neue',sans-serif;font-size:4rem;color:var(--pink);margin:20px 0}
-.gameover-stats{color:var(--gold);margin-bottom:30px}
+.gameover-stats{color:var(--gold);margin-bottom:30px;font-size:1.2rem}
 .retry-btn{padding:16px 40px;font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:3px;background:linear-gradient(135deg,var(--purple),var(--pink));color:var(--text);border:none;border-radius:50px;cursor:pointer;margin-bottom:15px;display:block;width:100%}
 .home-btn{padding:14px 30px;font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;background:transparent;color:var(--muted);border:2px solid var(--muted);border-radius:50px;cursor:pointer;display:block;width:100%}
 .coach-bubble{position:fixed;bottom:20px;left:20px;right:20px;background:var(--card);border:2px solid var(--purple);border-radius:20px;padding:15px;display:flex;align-items:center;gap:15px;z-index:50}
@@ -94,6 +97,8 @@ body.en .lang-es{display:none!important}
 .confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1000}
 .confetti{position:absolute;width:10px;height:10px;top:-10px;animation:fall 3s linear forwards}
 @keyframes fall{to{transform:translateY(100vh) rotate(720deg);opacity:0}}
+.laugh-pop{position:fixed;pointer-events:none;font-size:2rem;animation:laughFloat 1s ease-out forwards;z-index:999}
+@keyframes laughFloat{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-50px) scale(1.5)}}
 .hidden{display:none!important}
 </style>
 </head>
@@ -122,17 +127,29 @@ body.en .lang-es{display:none!important}
 <div class="intro-coach"><img src="go_chat.png" alt="Coach" class="intro-coach-img"></div>
 <div class="intro-title"><span class="laugh-title">LAUGH</span> <span class="num">3</span></div>
 <div class="intro-session">WACKY WALKS 🚶</div>
-<div class="intro-subtitle"><span class="lang-en">SEQUENCE & MEMORY</span><span class="lang-es">SECUENCIA Y MEMORIA</span></div>
+<div class="intro-subtitle">
+<span class="lang-en">SEQUENCE & MEMORY</span>
+<span class="lang-es">SECUENCIA Y MEMORIA</span>
+</div>
 <div class="intro-desc">
 <span class="lang-en">Watch <strong>silly characters</strong> do their wacky moves!<br><br>Then repeat the sequence! 🧠<br><br>The moves are TOO funny! 😂</span>
 <span class="lang-es">¡Mira a <strong>personajes tontos</strong> hacer sus movimientos!<br><br>¡Luego repite la secuencia! 🧠<br><br>¡Los movimientos son MUY graciosos! 😂</span>
 </div>
-<button class="start-btn" id="startBtn"><span class="lang-en">LET'S WALK! 🚶</span><span class="lang-es">¡A CAMINAR! 🚶</span></button>
-<div class="intro-coach-name"><span class="lang-en">with Coach GoTrotter AI 🏀</span><span class="lang-es">con Coach GoTrotter AI 🏀</span></div>
+<button class="start-btn" id="startBtn">
+<span class="lang-en">LET'S WALK! 🚶</span>
+<span class="lang-es">¡A CAMINAR! 🚶</span>
+</button>
+<div class="intro-coach-name">
+<span class="lang-en">with Coach GoTrotter AI 🏀</span>
+<span class="lang-es">con Coach GoTrotter AI 🏀</span>
+</div>
 </div>
 
 <div class="watch-screen hidden" id="watchScreen">
-<div class="phase-label"><span class="lang-en">👀 WATCH THE WACKY WALKS!</span><span class="lang-es">👀 ¡MIRA LOS PASOS LOCOS!</span></div>
+<div class="phase-label">
+<span class="lang-en">👀 WATCH THE WACKY WALKS!</span>
+<span class="lang-es">👀 ¡MIRA LOS PASOS LOCOS!</span>
+</div>
 <div class="stage">
 <div class="walker" id="stageWalker">🐧</div>
 <div class="walk-name" id="walkName">PENGUIN WADDLE</div>
@@ -141,18 +158,30 @@ body.en .lang-es{display:none!important}
 </div>
 
 <div class="repeat-screen hidden" id="repeatScreen">
-<div class="phase-label"><span class="lang-en">🤔 REPEAT THE SEQUENCE!</span><span class="lang-es">🤔 ¡REPITE LA SECUENCIA!</span></div>
+<div class="phase-label">
+<span class="lang-en">🤔 REPEAT THE SEQUENCE!</span>
+<span class="lang-es">🤔 ¡REPITE LA SECUENCIA!</span>
+</div>
 <div class="progress-bar" id="progressBar"></div>
 <div class="walker-grid" id="walkerGrid"></div>
 </div>
 
 <div class="gameover-screen hidden" id="gameoverScreen">
 <div class="gameover-emoji" id="gameoverEmoji">🚶</div>
-<div class="gameover-title"><span class="lang-en">SESSION COMPLETE!</span><span class="lang-es">¡SESIÓN COMPLETA!</span></div>
+<div class="gameover-title">
+<span class="lang-en">SESSION COMPLETE!</span>
+<span class="lang-es">¡SESIÓN COMPLETA!</span>
+</div>
 <div class="gameover-score" id="finalScore">0</div>
-<div class="gameover-stats" id="gameStats">🚶 Sequences: 10 | 🔥 Streak: 5</div>
-<button class="retry-btn" id="retryBtn"><span class="lang-en">PLAY AGAIN 🚶</span><span class="lang-es">JUGAR DE NUEVO 🚶</span></button>
-<button class="home-btn" id="homeBtn"><span class="lang-en">← BACK</span><span class="lang-es">← VOLVER</span></button>
+<div class="gameover-stats" id="gameStats">😂 Laugh Moments: 0</div>
+<button class="retry-btn" id="retryBtn">
+<span class="lang-en">PLAY AGAIN 🚶</span>
+<span class="lang-es">JUGAR DE NUEVO 🚶</span>
+</button>
+<button class="home-btn" id="homeBtn">
+<span class="lang-en">← BACK</span>
+<span class="lang-es">← VOLVER</span>
+</button>
 </div>
 
 <div class="score-display hidden" id="scoreDisplay">
@@ -163,6 +192,11 @@ body.en .lang-es{display:none!important}
 <span class="lang-es">🔥 Racha: </span>
 <span class="streak-value" id="streakValue">0</span>
 </div>
+</div>
+
+<div class="laugh-counter hidden" id="laughCounter">
+<div class="laugh-counter-label">😂 LAUGHS</div>
+<div class="laugh-counter-value" id="laughCounterValue">0</div>
 </div>
 
 </div>
@@ -185,9 +219,80 @@ function setLang(l){
 }
 setLang(lang);
 document.querySelectorAll('.lang-btn').forEach(function(b){
-    b.onclick = function(){ setLang(this.dataset.lang); };
+    b.addEventListener('click', function(e){
+        e.preventDefault();
+        setLang(this.dataset.lang);
+    });
 });
 
+// ============ LAUGH TRACKING SYSTEM ============
+var sessionLaughs = 0;
+
+function getDateString(date) {
+    return date.toISOString().split('T')[0];
+}
+
+function getWeekStart(date) {
+    var d = new Date(date);
+    var day = d.getDay();
+    var diff = d.getDate() - day + (day === 0 ? -6 : 1);
+    d.setDate(diff);
+    return getDateString(d);
+}
+
+function addLaughs(count) {
+    sessionLaughs += count;
+    updateLaughDisplay();
+    
+    var today = getDateString(new Date());
+    var weekStart = getWeekStart(new Date());
+    
+    // Update today's laughs
+    var todayData = JSON.parse(localStorage.getItem('lw-laughs-today') || '{}');
+    if (todayData.date !== today) {
+        todayData = { date: today, count: 0 };
+    }
+    todayData.count += count;
+    localStorage.setItem('lw-laughs-today', JSON.stringify(todayData));
+    
+    // Update week's laughs
+    var weekData = JSON.parse(localStorage.getItem('lw-laughs-week') || '{}');
+    if (weekData.weekStart !== weekStart) {
+        weekData = { weekStart: weekStart, count: 0 };
+    }
+    weekData.count += count;
+    localStorage.setItem('lw-laughs-week', JSON.stringify(weekData));
+    
+    // Update total laughs
+    var total = parseInt(localStorage.getItem('lw-laughs-total') || '0');
+    total += count;
+    localStorage.setItem('lw-laughs-total', total.toString());
+    
+    // Show floating laugh emoji
+    showLaughPop(count);
+}
+
+function updateLaughDisplay() {
+    document.getElementById('laughCounterValue').textContent = sessionLaughs;
+}
+
+function showLaughPop(count) {
+    for (var i = 0; i < Math.min(count, 3); i++) {
+        setTimeout(function() {
+            var pop = document.createElement('div');
+            pop.className = 'laugh-pop';
+            pop.textContent = '😂';
+            pop.style.left = (20 + Math.random() * 60) + '%';
+            pop.style.top = (30 + Math.random() * 40) + '%';
+            document.body.appendChild(pop);
+            setTimeout(function() {
+                if (pop.parentNode) pop.parentNode.removeChild(pop);
+            }, 1000);
+        }, i * 150);
+    }
+}
+
+// ============ WALKERS DATABASE ============
 var walkers = [
     {emoji:'🐧',anim:'wobble',en:'Penguin Waddle',es:'Pingüino Tambaleante'},
     {emoji:'🤖',anim:'shake',en:'Robot Walk',es:'Paso de Robot'},
@@ -234,7 +339,7 @@ var coachMsgs = {
         {en:"Keep practicing! 👀",es:"¡Sigue practicando! 👀"}
     ],
     tierUp:{en:"TIER UP! Longer sequences! 🚶⚡",es:"¡SUBISTE! ¡Secuencias más largas! 🚶⚡"},
-    gameOver:{en:"Great session! 🚶🧠",es:"¡Buena sesión! 🚶🧠"}
+    gameOver:{en:"Great session! 🚶🧠",es:"¡Gran sesión! 🚶🧠"}
 };
 
 var tier=1,score=0,streak=0,maxStreak=0,round=0,sequencesCompleted=0;
@@ -259,6 +364,7 @@ var watchScreen=document.getElementById('watchScreen');
 var repeatScreen=document.getElementById('repeatScreen');
 var gameoverScreen=document.getElementById('gameoverScreen');
 var scoreDisplay=document.getElementById('scoreDisplay');
+var laughCounter=document.getElementById('laughCounter');
 var coachBubble=document.getElementById('coachBubble');
 var coachText=document.getElementById('coachText');
 
@@ -313,8 +419,10 @@ var roundWalkers=[];
 
 function startGame(){
     tier=1;score=0;streak=0;maxStreak=0;round=0;sequencesCompleted=0;
-    updateScore();updateTier();
+    sessionLaughs=0;
+    updateScore();updateTier();updateLaughDisplay();
     scoreDisplay.classList.remove('hidden');
+    laughCounter.classList.remove('hidden');
     var m=coachMsgs.start;
     showCoach(lang==='es'?m.es:m.en,2500);
     setTimeout(startRound,2000);
@@ -355,6 +463,9 @@ function showSequence(){
         var w=sequence[idx];
         var walker=document.getElementById('stageWalker');
         var name=document.getElementById('walkName');
+        
+        // +1 laugh for seeing wacky walk
+        addLaughs(1);
         
         walker.textContent=w.emoji;
         walker.className='walker '+w.anim;
@@ -426,6 +537,14 @@ function handleWalkerClick(btn,walker){
             if(streak>maxStreak)maxStreak=streak;
             updateScore();
             
+            // +1 laugh for completing sequence
+            addLaughs(1);
+            
+            // +2 extra laughs for streak of 3+
+            if(streak>=3){
+                addLaughs(2);
+            }
+            
             var msg;
             if(streak>=3){
                 msg=coachMsgs.streak[Math.floor(Math.random()*coachMsgs.streak.length)];
@@ -468,6 +587,8 @@ function endRound(){
             tier++;round=0;
             updateTier();
             confetti();
+            // +3 laughs for tier up
+            addLaughs(3);
             var m=coachMsgs.tierUp;
             showCoach(lang==='es'?m.es:m.en,2500);
             setTimeout(startRound,3000);
@@ -478,11 +599,21 @@ function endRound(){
 }
 
 function endGame(){
+    // +5 laughs for session complete
+    addLaughs(5);
+    
     showScreen(gameoverScreen);
     scoreDisplay.classList.add('hidden');
+    laughCounter.classList.add('hidden');
     confetti();
     document.getElementById('finalScore').textContent=score;
-    document.getElementById('gameStats').textContent='🚶 '+sequencesCompleted+' | 🔥 '+maxStreak;
+    
+    // Show laugh moments
+    var laughText = lang === 'es' ? 
+        '😂 Momentos de Risa: ' + sessionLaughs : 
+        '😂 Laugh Moments: ' + sessionLaughs;
+    document.getElementById('gameStats').textContent = laughText;
+    
     var m=coachMsgs.gameOver;
     showCoach(lang==='es'?m.es:m.en,3000);
 }
