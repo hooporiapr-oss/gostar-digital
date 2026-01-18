@@ -81,13 +81,10 @@ body.en .lang-es{display:none !important}
 .streak-display{margin-top:5px}
 .streak-value{color:var(--gold);font-weight:700}
 
-/* Round Result */
-.round-result{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;z-index:100;animation:resultPop 0.5s ease}
-@keyframes resultPop{0%{transform:translate(-50%,-50%) scale(0)}50%{transform:translate(-50%,-50%) scale(1.1)}100%{transform:translate(-50%,-50%) scale(1)}}
-.result-emoji{font-size:6rem;margin-bottom:10px}
-.result-text{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:3px}
-.result-text.correct{color:var(--success)}
-.result-text.wrong{color:var(--danger)}
+/* Laugh Counter */
+.laugh-counter{position:absolute;top:100px;left:20px;text-align:left}
+.laugh-counter-label{font-size:0.7rem;color:var(--muted);letter-spacing:1px}
+.laugh-counter-value{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--gold)}
 
 /* Game Over Screen */
 .gameover-screen{text-align:center;max-width:400px}
@@ -95,7 +92,7 @@ body.en .lang-es{display:none !important}
 .gameover-title{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;letter-spacing:3px;margin-bottom:10px}
 .gameover-score{font-family:'Bebas Neue',sans-serif;font-size:4rem;color:var(--pink);margin:20px 0}
 .gameover-msg{color:var(--muted);line-height:1.6;margin-bottom:10px}
-.gameover-laughs{color:var(--gold);font-weight:700;margin-bottom:30px}
+.gameover-laughs{color:var(--gold);font-weight:700;margin-bottom:30px;font-size:1.2rem}
 .gameover-btns{display:flex;flex-direction:column;gap:15px}
 .retry-btn{padding:16px 40px;font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:3px;background:linear-gradient(135deg,var(--purple),var(--pink));color:var(--text);border:none;border-radius:50px;cursor:pointer;transition:all 0.3s}
 .retry-btn:hover{transform:scale(1.05)}
@@ -110,12 +107,6 @@ body.en .lang-es{display:none !important}
 .coach-text{font-size:0.95rem;line-height:1.5}
 .coach-text strong{color:var(--pink)}
 
-/* Tier Complete */
-.tier-complete{text-align:center}
-.tier-stars{font-size:3rem;margin:20px 0}
-.tier-msg{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:2px;color:var(--gold);margin-bottom:20px}
-.next-tier-btn{padding:16px 40px;font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:3px;background:linear-gradient(135deg,var(--purple),var(--pink));color:var(--text);border:none;border-radius:50px;cursor:pointer;transition:all 0.3s}
-
 /* Confetti */
 .confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1000;overflow:hidden}
 .confetti{position:absolute;width:10px;height:10px;top:-10px;animation:confetti-fall 4s linear forwards}
@@ -124,6 +115,10 @@ body.en .lang-es{display:none !important}
 .confetti:nth-child(even){background:var(--pink);border-radius:2px}
 .confetti:nth-child(3n){background:var(--gold)}
 .confetti:nth-child(4n){background:var(--teal)}
+
+/* Laugh Pop Animation */
+.laugh-pop{position:fixed;pointer-events:none;font-size:2rem;animation:laughFloat 1s ease-out forwards;z-index:999}
+@keyframes laughFloat{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-50px) scale(1.5)}}
 
 /* Hidden */
 .hidden{display:none !important}
@@ -217,8 +212,8 @@ body.en .lang-es{display:none !important}
             <span class="lang-es">Parejas Recordadas</span>
         </div>
         <div class="gameover-laughs" id="laughCount">
-            <span class="lang-en">😂 Laughs earned: 5</span>
-            <span class="lang-es">😂 Risas ganadas: 5</span>
+            <span class="lang-en">😂 Laugh Moments: 0</span>
+            <span class="lang-es">😂 Momentos de Risa: 0</span>
         </div>
         <div class="gameover-btns">
             <button class="retry-btn" id="retryBtn">
@@ -233,7 +228,7 @@ body.en .lang-es{display:none !important}
     </div>
 
     <!-- Score Display -->
-    <div class="score-display" id="scoreDisplay">
+    <div class="score-display hidden" id="scoreDisplay">
         <div class="score-label">SCORE</div>
         <div class="score-value" id="currentScore">0</div>
         <div class="streak-display">
@@ -241,6 +236,12 @@ body.en .lang-es{display:none !important}
             <span class="lang-es">🔥 Racha: </span>
             <span class="streak-value" id="streakValue">0</span>
         </div>
+    </div>
+
+    <!-- Laugh Counter -->
+    <div class="laugh-counter hidden" id="laughCounter">
+        <div class="laugh-counter-label">😂 LAUGHS</div>
+        <div class="laugh-counter-value" id="laughCounterValue">0</div>
     </div>
 </div>
 
@@ -264,12 +265,81 @@ body.en .lang-es{display:none !important}
     }
     setLang(lang);
     document.querySelectorAll('.lang-btn').forEach(function(b) {
-        b.addEventListener('click', function() { setLang(this.dataset.lang); });
+        b.addEventListener('click', function(e) {
+            e.preventDefault();
+            setLang(this.dataset.lang);
+        });
     });
+
+    // ============ LAUGH TRACKING SYSTEM ============
+    var sessionLaughs = 0;
+
+    function getDateString(date) {
+        return date.toISOString().split('T')[0];
+    }
+
+    function getWeekStart(date) {
+        var d = new Date(date);
+        var day = d.getDay();
+        var diff = d.getDate() - day + (day === 0 ? -6 : 1);
+        d.setDate(diff);
+        return getDateString(d);
+    }
+
+    function addLaughs(count) {
+        sessionLaughs += count;
+        updateLaughDisplay();
+        
+        var today = getDateString(new Date());
+        var weekStart = getWeekStart(new Date());
+        
+        // Update today's laughs
+        var todayData = JSON.parse(localStorage.getItem('lw-laughs-today') || '{}');
+        if (todayData.date !== today) {
+            todayData = { date: today, count: 0 };
+        }
+        todayData.count += count;
+        localStorage.setItem('lw-laughs-today', JSON.stringify(todayData));
+        
+        // Update week's laughs
+        var weekData = JSON.parse(localStorage.getItem('lw-laughs-week') || '{}');
+        if (weekData.weekStart !== weekStart) {
+            weekData = { weekStart: weekStart, count: 0 };
+        }
+        weekData.count += count;
+        localStorage.setItem('lw-laughs-week', JSON.stringify(weekData));
+        
+        // Update total laughs
+        var total = parseInt(localStorage.getItem('lw-laughs-total') || '0');
+        total += count;
+        localStorage.setItem('lw-laughs-total', total.toString());
+        
+        // Show floating laugh emoji
+        showLaughPop(count);
+    }
+
+    function updateLaughDisplay() {
+        document.getElementById('laughCounterValue').textContent = sessionLaughs;
+    }
+
+    function showLaughPop(count) {
+        for (var i = 0; i < Math.min(count, 3); i++) {
+            setTimeout(function() {
+                var pop = document.createElement('div');
+                pop.className = 'laugh-pop';
+                pop.textContent = '😂';
+                pop.style.left = (20 + Math.random() * 60) + '%';
+                pop.style.top = (30 + Math.random() * 40) + '%';
+                document.body.appendChild(pop);
+                setTimeout(function() {
+                    if (pop.parentNode) pop.parentNode.removeChild(pop);
+                }, 1000);
+            }, i * 150);
+        }
+    }
 
     // ============ ABSURD PAIRS DATABASE ============
     var absurdPairs = [
-        // Animals + Objects
         { e1: '🐘', e2: '🩰', captionEn: 'Elephant in ballet shoes', captionEs: 'Elefante en zapatillas de ballet' },
         { e1: '🐱', e2: '💼', captionEn: 'Cat going to work', captionEs: 'Gato yendo al trabajo' },
         { e1: '🐔', e2: '👔', captionEn: 'Chicken in a suit', captionEs: 'Pollo en traje' },
@@ -280,8 +350,6 @@ body.en .lang-es{display:none !important}
         { e1: '🐢', e2: '🚀', captionEn: 'Turtle astronaut', captionEs: 'Tortuga astronauta' },
         { e1: '🦆', e2: '👑', captionEn: 'Duck royalty', captionEs: 'Pato de la realeza' },
         { e1: '🐸', e2: '☕', captionEn: 'Frog having coffee', captionEs: 'Rana tomando café' },
-        
-        // Food + Situations
         { e1: '🍕', e2: '🛁', captionEn: 'Pizza in bathtub', captionEs: 'Pizza en la bañera' },
         { e1: '🌮', e2: '🛏️', captionEn: 'Taco in bed', captionEs: 'Taco en la cama' },
         { e1: '🍔', e2: '📚', captionEn: 'Burger studying', captionEs: 'Hamburguesa estudiando' },
@@ -292,15 +360,11 @@ body.en .lang-es{display:none !important}
         { e1: '🥕', e2: '🎸', captionEn: 'Carrot rockstar', captionEs: 'Zanahoria rockera' },
         { e1: '🍳', e2: '🎭', captionEn: 'Egg actor', captionEs: 'Huevo actor' },
         { e1: '🧀', e2: '🎪', captionEn: 'Cheese at circus', captionEs: 'Queso en el circo' },
-        
-        // People + Absurd
         { e1: '👵', e2: '🚀', captionEn: 'Grandma in space', captionEs: 'Abuela en el espacio' },
         { e1: '👴', e2: '🛹', captionEn: 'Grandpa skateboarding', captionEs: 'Abuelo en patineta' },
         { e1: '👶', e2: '💻', captionEn: 'Baby CEO', captionEs: 'Bebé ejecutivo' },
         { e1: '🧑‍🍳', e2: '🎮', captionEn: 'Chef gaming', captionEs: 'Chef jugando videojuegos' },
         { e1: '👸', e2: '🔧', captionEn: 'Princess mechanic', captionEs: 'Princesa mecánica' },
-        
-        // Objects + Objects
         { e1: '🦷', e2: '🎸', captionEn: 'Tooth playing guitar', captionEs: 'Diente tocando guitarra' },
         { e1: '🧲', e2: '💃', captionEn: 'Magnet dancing', captionEs: 'Imán bailando' },
         { e1: '🔑', e2: '🎂', captionEn: 'Key birthday party', captionEs: 'Llave de cumpleaños' },
@@ -311,8 +375,6 @@ body.en .lang-es{display:none !important}
         { e1: '🧸', e2: '🏆', captionEn: 'Teddy bear champion', captionEs: 'Oso de peluche campeón' },
         { e1: '🎀', e2: '🏈', captionEn: 'Bow playing football', captionEs: 'Moño jugando fútbol' },
         { e1: '🪴', e2: '🎧', captionEn: 'Plant listening to music', captionEs: 'Planta escuchando música' },
-        
-        // Weather + Items
         { e1: '🌈', e2: '🍽️', captionEn: 'Rainbow for dinner', captionEs: 'Arcoíris para cenar' },
         { e1: '⛈️', e2: '🧁', captionEn: 'Storm baking', captionEs: 'Tormenta horneando' },
         { e1: '🌙', e2: '🛒', captionEn: 'Moon grocery shopping', captionEs: 'Luna de compras' },
@@ -322,10 +384,7 @@ body.en .lang-es{display:none !important}
 
     // ============ COACH MESSAGES ============
     var coachMessages = {
-        start: {
-            en: "Let's exercise your brain AND your smile! 😂",
-            es: "¡Ejercitemos tu cerebro Y tu sonrisa! 😂"
-        },
+        start: { en: "Let's exercise your brain AND your smile! 😂", es: "¡Ejercitemos tu cerebro Y tu sonrisa! 😂" },
         showingPair: [
             { en: "Haha! Look at THIS one! 😂", es: "¡Jaja! ¡Mira ESTA! 😂" },
             { en: "Can you believe it?! 🤣", es: "¡¿Puedes creerlo?! 🤣" },
@@ -365,60 +424,42 @@ body.en .lang-es{display:none !important}
             { en: "Oops! But that one was tricky! 😅", es: "¡Ups! ¡Pero esa era difícil! 😅" },
             { en: "Close! Stay focused! 👀", es: "¡Cerca! ¡Mantente enfocado! 👀" }
         ],
-        tierUp: {
-            en: "TIER UP! The pairs get sillier! 😂🎉",
-            es: "¡SUBISTE DE NIVEL! ¡Las parejas son más absurdas! 😂🎉"
-        },
+        tierUp: { en: "TIER UP! The pairs get sillier! 😂🎉", es: "¡SUBISTE DE NIVEL! ¡Las parejas son más absurdas! 😂🎉" },
         newTierIntro: [
             { en: "Get ready... it's getting FUNNIER! 😂", es: "Prepárate... ¡se pone MÁS GRACIOSO! 😂" },
             { en: "More pairs, more laughs! Let's GO! 🏀", es: "¡Más parejas, más risas! ¡VAMOS! 🏀" },
             { en: "Think you can handle this? 😏", es: "¿Crees que puedes con esto? 😏" }
         ],
-        gameOver: {
-            en: "Great session! 😂",
-            es: "¡Gran sesión! 😂"
-        },
-        highScore: {
-            en: "AMAZING! That was legendary! 🏆😂",
-            es: "¡INCREÍBLE! ¡Eso fue legendario! 🏆😂"
-        }
+        gameOver: { en: "Great session! 😂", es: "¡Gran sesión! 😂" },
+        highScore: { en: "AMAZING! That was legendary! 🏆😂", es: "¡INCREÍBLE! ¡Eso fue legendario! 🏆😂" }
     };
 
     // ============ GAME STATE ============
-    var tier = 1;
-    var score = 0;
-    var streak = 0;
-    var round = 0;
-    var roundsPerTier = 5;
-    var correctThisRound = 0;
-    var pairsToRemember = [];
-    var currentPairIndex = 0;
-    var timerInterval = null;
+    var tier = 1, score = 0, streak = 0, round = 0, roundsPerTier = 5;
+    var correctThisRound = 0, pairsToRemember = [], currentPairIndex = 0, timerInterval = null;
 
-    // Tier settings (pairs to remember, time per pair, fake pairs)
     var tierSettings = [
-        { pairs: 1, time: 4000, fakes: 1 },  // Tier 1
-        { pairs: 1, time: 3500, fakes: 2 },  // Tier 2
-        { pairs: 2, time: 3500, fakes: 2 },  // Tier 3
-        { pairs: 2, time: 3000, fakes: 2 },  // Tier 4
-        { pairs: 2, time: 3000, fakes: 3 },  // Tier 5
-        { pairs: 3, time: 3000, fakes: 3 },  // Tier 6
-        { pairs: 3, time: 2500, fakes: 3 },  // Tier 7
-        { pairs: 3, time: 2500, fakes: 4 },  // Tier 8
-        { pairs: 4, time: 2500, fakes: 4 },  // Tier 9
-        { pairs: 4, time: 2000, fakes: 4 }   // Tier 10
+        { pairs: 1, time: 4000, fakes: 1 },
+        { pairs: 1, time: 3500, fakes: 2 },
+        { pairs: 2, time: 3500, fakes: 2 },
+        { pairs: 2, time: 3000, fakes: 2 },
+        { pairs: 2, time: 3000, fakes: 3 },
+        { pairs: 3, time: 3000, fakes: 3 },
+        { pairs: 3, time: 2500, fakes: 3 },
+        { pairs: 3, time: 2500, fakes: 4 },
+        { pairs: 4, time: 2500, fakes: 4 },
+        { pairs: 4, time: 2000, fakes: 4 }
     ];
 
-    // DOM elements
     var introScreen = document.getElementById('introScreen');
     var memorizeScreen = document.getElementById('memorizeScreen');
     var recallScreen = document.getElementById('recallScreen');
     var gameoverScreen = document.getElementById('gameoverScreen');
     var scoreDisplay = document.getElementById('scoreDisplay');
+    var laughCounter = document.getElementById('laughCounter');
     var coachBubble = document.getElementById('coachBubble');
     var coachText = document.getElementById('coachText');
 
-    // ============ HELPER FUNCTIONS ============
     function shuffle(arr) {
         var a = arr.slice();
         for (var i = a.length - 1; i > 0; i--) {
@@ -429,9 +470,7 @@ body.en .lang-es{display:none !important}
     }
 
     function showScreen(screen) {
-        [introScreen, memorizeScreen, recallScreen, gameoverScreen].forEach(function(s) {
-            s.classList.add('hidden');
-        });
+        [introScreen, memorizeScreen, recallScreen, gameoverScreen].forEach(function(s) { s.classList.add('hidden'); });
         screen.classList.remove('hidden');
     }
 
@@ -440,16 +479,12 @@ body.en .lang-es{display:none !important}
         document.getElementById('streakValue').textContent = streak;
     }
 
-    function updateTierBadge() {
-        document.getElementById('tierBadge').textContent = 'TIER ' + tier;
-    }
+    function updateTierBadge() { document.getElementById('tierBadge').textContent = 'TIER ' + tier; }
 
     function showCoach(msg, duration) {
         coachText.innerHTML = msg;
         coachBubble.classList.remove('hidden');
-        setTimeout(function() {
-            coachBubble.classList.add('hidden');
-        }, duration || 3000);
+        setTimeout(function() { coachBubble.classList.add('hidden'); }, duration || 3000);
     }
 
     function createConfetti() {
@@ -461,53 +496,39 @@ body.en .lang-es{display:none !important}
                 confetti.style.left = Math.random() * 100 + 'vw';
                 confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
                 container.appendChild(confetti);
-                setTimeout(function() {
-                    if (confetti.parentNode) confetti.parentNode.removeChild(confetti);
-                }, 4000);
+                setTimeout(function() { if (confetti.parentNode) confetti.parentNode.removeChild(confetti); }, 4000);
             }, i * 50);
         }
     }
 
-    function bi(en, es) {
-        return '<span class="lang-en">' + en + '</span><span class="lang-es">' + es + '</span>';
-    }
-
-    // ============ GAME LOGIC ============
     function startGame() {
-        tier = 1;
-        score = 0;
-        streak = 0;
-        round = 0;
-        updateScore();
-        updateTierBadge();
+        tier = 1; score = 0; streak = 0; round = 0; sessionLaughs = 0;
+        updateScore(); updateLaughDisplay(); updateTierBadge();
         scoreDisplay.classList.remove('hidden');
+        laughCounter.classList.remove('hidden');
         showCoach(lang === 'es' ? coachMessages.start.es : coachMessages.start.en, 2500);
         setTimeout(startRound, 2000);
     }
 
     function startRound() {
-        round++;
-        correctThisRound = 0;
-        currentPairIndex = 0;
-        
+        round++; correctThisRound = 0; currentPairIndex = 0;
         var settings = tierSettings[tier - 1];
         var shuffled = shuffle(absurdPairs);
         pairsToRemember = shuffled.slice(0, settings.pairs);
-        
         showScreen(memorizeScreen);
         showNextPair();
     }
 
     function showNextPair() {
         var settings = tierSettings[tier - 1];
-        
         if (currentPairIndex >= pairsToRemember.length) {
-            // Done memorizing, start recall
             setTimeout(showRecall, 500);
             return;
         }
         
         var pair = pairsToRemember[currentPairIndex];
+        addLaughs(1);  // +1 laugh for seeing absurd pair
+        
         document.getElementById('emoji1').textContent = pair.e1;
         document.getElementById('emoji2').textContent = pair.e2;
         document.getElementById('pairCaption').textContent = lang === 'es' ? pair.captionEs : pair.captionEn;
@@ -517,7 +538,6 @@ body.en .lang-es{display:none !important}
             'Pair ' + (currentPairIndex + 1) + ' of ' + pairsToRemember.length;
         document.getElementById('pairCounter').textContent = counterText;
         
-        // Animate emojis
         document.getElementById('emoji1').style.animation = 'none';
         document.getElementById('emoji2').style.animation = 'none';
         setTimeout(function() {
@@ -525,11 +545,9 @@ body.en .lang-es{display:none !important}
             document.getElementById('emoji2').style.animation = 'popIn 0.5s ease';
         }, 10);
         
-        // Coach comments on the silly pair!
         var pairMsg = coachMessages.showingPair[Math.floor(Math.random() * coachMessages.showingPair.length)];
         showCoach(lang === 'es' ? pairMsg.es : pairMsg.en, settings.time - 500);
         
-        // Timer
         var timerFill = document.getElementById('timerFill');
         timerFill.style.width = '100%';
         var startTime = Date.now();
@@ -540,7 +558,6 @@ body.en .lang-es{display:none !important}
             var elapsed = Date.now() - startTime;
             var remaining = Math.max(0, 100 - (elapsed / duration * 100));
             timerFill.style.width = remaining + '%';
-            
             if (remaining <= 0) {
                 clearInterval(timerInterval);
                 currentPairIndex++;
@@ -551,8 +568,6 @@ body.en .lang-es{display:none !important}
 
     function showRecall() {
         showScreen(recallScreen);
-        
-        // Coach introduces recall phase
         var recallMsg = coachMessages.recallStart[Math.floor(Math.random() * coachMessages.recallStart.length)];
         showCoach(lang === 'es' ? recallMsg.es : recallMsg.en, 2500);
         
@@ -560,34 +575,23 @@ body.en .lang-es{display:none !important}
         var grid = document.getElementById('pairsGrid');
         grid.innerHTML = '';
         
-        // Get fake pairs
         var usedPairs = pairsToRemember.map(function(p) { return p.e1 + p.e2; });
-        var availableFakes = absurdPairs.filter(function(p) {
-            return usedPairs.indexOf(p.e1 + p.e2) === -1;
-        });
+        var availableFakes = absurdPairs.filter(function(p) { return usedPairs.indexOf(p.e1 + p.e2) === -1; });
         var fakePairs = shuffle(availableFakes).slice(0, settings.fakes);
-        
-        // Combine and shuffle
         var allPairs = shuffle(pairsToRemember.concat(fakePairs));
         
-        // Create cards
         allPairs.forEach(function(pair) {
             var card = document.createElement('div');
             card.className = 'pair-card';
             card.innerHTML = '<span class="emoji">' + pair.e1 + '</span><span class="plus">+</span><span class="emoji">' + pair.e2 + '</span>';
             card.dataset.isCorrect = pairsToRemember.some(function(p) { return p.e1 === pair.e1 && p.e2 === pair.e2; });
-            
-            card.addEventListener('click', function() {
-                handlePairClick(card, pair);
-            });
-            
+            card.addEventListener('click', function() { handlePairClick(card, pair); });
             grid.appendChild(card);
         });
     }
 
     function handlePairClick(card, pair) {
         if (card.classList.contains('correct') || card.classList.contains('wrong')) return;
-        
         var isCorrect = card.dataset.isCorrect === 'true';
         
         if (isCorrect) {
@@ -597,25 +601,20 @@ body.en .lang-es{display:none !important}
             correctThisRound++;
             updateScore();
             
-            // Coach reacts - streak messages for hot streaks!
-            var msg;
-            if (streak >= 3) {
-                msg = coachMessages.streak[Math.floor(Math.random() * coachMessages.streak.length)];
-            } else {
-                msg = coachMessages.correct[Math.floor(Math.random() * coachMessages.correct.length)];
-            }
+            addLaughs(1);  // +1 laugh for correct answer
+            if (streak >= 3) addLaughs(2);  // +2 extra laughs for streak
+            
+            var msg = streak >= 3 ? 
+                coachMessages.streak[Math.floor(Math.random() * coachMessages.streak.length)] :
+                coachMessages.correct[Math.floor(Math.random() * coachMessages.correct.length)];
             showCoach(lang === 'es' ? msg.es : msg.en, 2000);
             
-            // Check if all correct pairs found
             var allFound = document.querySelectorAll('.pair-card.correct').length === pairsToRemember.length;
-            if (allFound) {
-                setTimeout(endRound, 1000);
-            }
+            if (allFound) setTimeout(endRound, 1000);
         } else {
             card.classList.add('wrong');
             streak = 0;
             updateScore();
-            
             var msg = coachMessages.wrong[Math.floor(Math.random() * coachMessages.wrong.length)];
             showCoach(lang === 'es' ? msg.es : msg.en, 2000);
         }
@@ -623,22 +622,18 @@ body.en .lang-es{display:none !important}
 
     function endRound() {
         if (round >= roundsPerTier) {
-            // Tier complete
             if (tier >= 10) {
                 endGame();
             } else {
-                tier++;
-                round = 0;
+                tier++; round = 0;
                 updateTierBadge();
                 createConfetti();
+                addLaughs(3);  // +3 laughs for tier up
                 showCoach(lang === 'es' ? coachMessages.tierUp.es : coachMessages.tierUp.en, 2500);
-                
-                // Show new tier intro after tier up message
                 setTimeout(function() {
                     var introMsg = coachMessages.newTierIntro[Math.floor(Math.random() * coachMessages.newTierIntro.length)];
                     showCoach(lang === 'es' ? introMsg.es : introMsg.en, 2500);
                 }, 2500);
-                
                 setTimeout(startRound, 5000);
             }
         } else {
@@ -647,47 +642,35 @@ body.en .lang-es{display:none !important}
     }
 
     function endGame() {
+        addLaughs(5);  // +5 laughs for session complete
         showScreen(gameoverScreen);
         scoreDisplay.classList.add('hidden');
+        laughCounter.classList.add('hidden');
         createConfetti();
         
         document.getElementById('finalScore').textContent = score;
-        var laughs = Math.floor(score / 20) + 5;
-        var laughText = lang === 'es' ? '😂 Risas ganadas: ' + laughs : '😂 Laughs earned: ' + laughs;
+        var laughText = lang === 'es' ? '😂 Momentos de Risa: ' + sessionLaughs : '😂 Laugh Moments: ' + sessionLaughs;
         document.getElementById('laughCount').textContent = laughText;
         
         var emoji = score >= 200 ? '🤣' : score >= 100 ? '😂' : '😄';
         document.getElementById('gameoverEmoji').textContent = emoji;
         
-        // Coach end message - special for high scores!
         var endMsg = score >= 150 ? coachMessages.highScore : coachMessages.gameOver;
         showCoach(lang === 'es' ? endMsg.es : endMsg.en, 4000);
     }
 
-    // ============ EVENT LISTENERS ============
-    document.getElementById('startBtn').addEventListener('click', function() {
-        showScreen(memorizeScreen);
-        startGame();
-    });
-
-    document.getElementById('retryBtn').addEventListener('click', function() {
-        showScreen(memorizeScreen);
-        startGame();
-    });
-
-    document.getElementById('homeBtn').addEventListener('click', function() {
-        window.location.href = 'laugh-hub.html';
-    });
-
+    document.getElementById('startBtn').addEventListener('click', function() { showScreen(memorizeScreen); startGame(); });
+    document.getElementById('retryBtn').addEventListener('click', function() { showScreen(memorizeScreen); startGame(); });
+    document.getElementById('homeBtn').addEventListener('click', function() { window.location.href = 'laugh-hub.html'; });
     document.getElementById('backBtn').addEventListener('click', function() {
         if (confirm(lang === 'es' ? '¿Salir del juego?' : 'Exit game?')) {
-            window.location.href = 'laugh-hub.html';
             clearInterval(timerInterval);
+            window.location.href = 'laugh-hub.html';
         }
     });
 
-    // Initialize
     scoreDisplay.classList.add('hidden');
+    laughCounter.classList.add('hidden');
 })();
 </script>
 </body>
