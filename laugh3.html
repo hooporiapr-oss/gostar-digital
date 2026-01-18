@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>LAUGH 3: Wacky Walks | Laughter Workouts™</title>
+<title>LAUGH 3: Wacky Walks | Laughletico™</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -34,7 +34,7 @@ body.en .lang-es{display:none!important}
 .intro-title{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;letter-spacing:4px;margin-bottom:5px}
 .intro-title .laugh-title{color:var(--pink)}
 .intro-title .num{color:var(--gold)}
-.intro-workout{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:3px;margin-bottom:10px}
+.intro-session{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:3px;margin-bottom:10px}
 .intro-subtitle{color:var(--gold);font-family:'Bebas Neue',sans-serif;letter-spacing:2px;margin-bottom:20px}
 .intro-desc{color:var(--muted);line-height:1.6;margin-bottom:30px}
 .intro-desc strong{color:var(--text)}
@@ -121,7 +121,7 @@ body.en .lang-es{display:none!important}
 <div class="intro-screen" id="introScreen">
 <div class="intro-coach"><img src="go_chat.png" alt="Coach" class="intro-coach-img"></div>
 <div class="intro-title"><span class="laugh-title">LAUGH</span> <span class="num">3</span></div>
-<div class="intro-workout">WACKY WALKS 🚶</div>
+<div class="intro-session">WACKY WALKS 🚶</div>
 <div class="intro-subtitle"><span class="lang-en">SEQUENCE & MEMORY</span><span class="lang-es">SECUENCIA Y MEMORIA</span></div>
 <div class="intro-desc">
 <span class="lang-en">Watch <strong>silly characters</strong> do their wacky moves!<br><br>Then repeat the sequence! 🧠<br><br>The moves are TOO funny! 😂</span>
@@ -148,7 +148,7 @@ body.en .lang-es{display:none!important}
 
 <div class="gameover-screen hidden" id="gameoverScreen">
 <div class="gameover-emoji" id="gameoverEmoji">🚶</div>
-<div class="gameover-title"><span class="lang-en">WORKOUT COMPLETE!</span><span class="lang-es">¡EJERCICIO COMPLETO!</span></div>
+<div class="gameover-title"><span class="lang-en">SESSION COMPLETE!</span><span class="lang-es">¡SESIÓN COMPLETA!</span></div>
 <div class="gameover-score" id="finalScore">0</div>
 <div class="gameover-stats" id="gameStats">🚶 Sequences: 10 | 🔥 Streak: 5</div>
 <button class="retry-btn" id="retryBtn"><span class="lang-en">PLAY AGAIN 🚶</span><span class="lang-es">JUGAR DE NUEVO 🚶</span></button>
@@ -174,10 +174,10 @@ body.en .lang-es{display:none!important}
 
 <script>
 (function(){
-var lang = localStorage.getItem('gt-lang') || 'en';
+var lang = localStorage.getItem('lw-lang') || 'en';
 function setLang(l){
     lang = l;
-    localStorage.setItem('gt-lang', l);
+    localStorage.setItem('lw-lang', l);
     document.body.className = l;
     document.querySelectorAll('.lang-btn').forEach(function(b){
         b.classList.toggle('active', b.dataset.lang === l);
@@ -234,7 +234,7 @@ var coachMsgs = {
         {en:"Keep practicing! 👀",es:"¡Sigue practicando! 👀"}
     ],
     tierUp:{en:"TIER UP! Longer sequences! 🚶⚡",es:"¡SUBISTE! ¡Secuencias más largas! 🚶⚡"},
-    gameOver:{en:"Great walking workout! 🚶🧠",es:"¡Buen ejercicio de pasos! 🚶🧠"}
+    gameOver:{en:"Great session! 🚶🧠",es:"¡Buena sesión! 🚶🧠"}
 };
 
 var tier=1,score=0,streak=0,maxStreak=0,round=0,sequencesCompleted=0;
@@ -490,13 +490,11 @@ function endGame(){
 document.getElementById('startBtn').onclick=startGame;
 document.getElementById('retryBtn').onclick=startGame;
 document.getElementById('homeBtn').onclick=function(){
-    showScreen(introScreen);
-    scoreDisplay.classList.add('hidden');
+    window.location.href='laugh-hub.html';
 };
 document.getElementById('backBtn').onclick=function(){
     if(confirm(lang==='es'?'¿Salir?':'Exit?')){
-        showScreen(introScreen);
-        scoreDisplay.classList.add('hidden');
+        window.location.href='laugh-hub.html';
     }
 };
 })();
