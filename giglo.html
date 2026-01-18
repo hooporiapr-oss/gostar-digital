@@ -17,6 +17,9 @@ body.en .lang-es{display:none !important}
 /* Header */
 .game-header{padding:15px 20px;background:linear-gradient(135deg,rgba(155,89,182,0.2),rgba(255,105,180,0.1));border-bottom:2px solid rgba(155,89,182,0.3);display:flex;align-items:center;justify-content:space-between}
 .header-left{display:flex;align-items:center;gap:12px}
+.coach-header-avatar{width:40px;height:40px;border-radius:50%;overflow:hidden}
+.coach-header-img{width:100%;height:100%;object-fit:cover}
+.coach-label{font-size:0.65rem;color:var(--muted);letter-spacing:1px}
 .back-btn{width:40px;height:40px;background:rgba(255,255,255,0.1);border:none;border-radius:50%;color:var(--text);font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .game-title{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:3px}
 .game-title .gi{color:var(--purple)}
@@ -31,7 +34,9 @@ body.en .lang-es{display:none !important}
 
 /* Intro Screen */
 .intro-screen{text-align:center;max-width:400px}
-.intro-icon{font-size:5rem;margin-bottom:20px;animation:wiggle 1s infinite}
+.intro-coach{margin-bottom:15px}
+.intro-coach-img{width:100px;height:100px;border-radius:50%;object-fit:cover;border:4px solid var(--purple);animation:wiggle 1s infinite}
+.intro-coach-name{margin-top:20px;color:var(--muted);font-size:0.9rem}
 @keyframes wiggle{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(5deg)}}
 .intro-title{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;letter-spacing:4px;margin-bottom:10px}
 .intro-title .gi{color:var(--purple)}
@@ -99,7 +104,8 @@ body.en .lang-es{display:none !important}
 /* Coach Message */
 .coach-bubble{position:fixed;bottom:20px;left:20px;right:20px;background:var(--card);border:2px solid var(--purple);border-radius:20px;padding:15px 20px;display:flex;align-items:center;gap:15px;animation:slideUp 0.4s ease;z-index:50}
 @keyframes slideUp{from{transform:translateY(100px);opacity:0}to{transform:translateY(0);opacity:1}}
-.coach-avatar{width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--pink));display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0}
+.coach-avatar{width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--pink));display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;overflow:hidden}
+.coach-avatar-img{width:100%;height:100%;object-fit:cover;border-radius:50%}
 .coach-text{font-size:0.95rem;line-height:1.5}
 .coach-text strong{color:var(--pink)}
 
@@ -135,7 +141,11 @@ body.en .lang-es{display:none !important}
 <div class="game-header">
     <div class="header-left">
         <button class="back-btn" id="backBtn">←</button>
-        <div class="game-title"><span class="gi">GIG</span><span class="glo">LO</span></div>
+        <div class="coach-header-avatar"><img src="go_chat.png" alt="Coach" class="coach-header-img"></div>
+        <div>
+            <div class="game-title"><span class="gi">GIG</span><span class="glo">LO</span></div>
+            <div class="coach-label">w/ Coach GoTrotter AI</div>
+        </div>
         <div class="tier-badge" id="tierBadge">TIER 1</div>
     </div>
     <div class="lang-toggle">
@@ -147,7 +157,7 @@ body.en .lang-es{display:none !important}
 <div class="game-container" id="gameContainer">
     <!-- Intro Screen -->
     <div class="intro-screen" id="introScreen">
-        <div class="intro-icon">😂</div>
+        <div class="intro-coach"><img src="go_chat.png" alt="Coach GoTrotter AI" class="intro-coach-img"></div>
         <div class="intro-title"><span class="gi">GIG</span><span class="glo">LO</span></div>
         <div class="intro-subtitle">
             <span class="lang-en">JOY & RECOGNITION</span>
@@ -161,6 +171,10 @@ body.en .lang-es{display:none !important}
             <span class="lang-en">LET'S LAUGH! 😂</span>
             <span class="lang-es">¡A REÍR! 😂</span>
         </button>
+        <div class="intro-coach-name">
+            <span class="lang-en">with Coach GoTrotter AI 🏀</span>
+            <span class="lang-es">con Coach GoTrotter AI 🏀</span>
+        </div>
     </div>
 
     <!-- Memorize Screen -->
@@ -230,7 +244,7 @@ body.en .lang-es{display:none !important}
 
 <!-- Coach Bubble -->
 <div class="coach-bubble hidden" id="coachBubble">
-    <div class="coach-avatar">🏀</div>
+    <div class="coach-avatar"><img src="go_chat.png" alt="Coach" class="coach-avatar-img"></div>
     <div class="coach-text" id="coachText">Great job!</div>
 </div>
 
