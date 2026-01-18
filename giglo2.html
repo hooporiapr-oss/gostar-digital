@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>GIGLO 2: Goofy Sounds | Laughter Workouts™</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--orange:#FF6B00;--teal:#00D9A5;--gold:#FFD700;--purple:#9B59B6;--pink:#FF69B4;--dark:#0a0a0f;--card:#111118;--text:#FFFFFF;--muted:#8892a0;--success:#00D9A5;--danger:#FF4757}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Outfit',sans-serif;background:var(--dark);color:var(--text)}
+body.es .lang-en{display:none!important}
+body.en .lang-es{display:none!important}
+.game-header{padding:15px 20px;background:linear-gradient(135deg,rgba(155,89,182,0.2),rgba(255,105,180,0.1));border-bottom:2px solid rgba(155,89,182,0.3);display:flex;align-items:center;justify-content:space-between}
+.header-left{display:flex;align-items:center;gap:12px}
+.coach-header-avatar{width:40px;height:40px;border-radius:50%;overflow:hidden}
+.coach-header-img{width:100%;height:100%;object-fit:cover}
+.coach-label{font-size:0.65rem;color:var(--muted);letter-spacing:1px}
+.back-btn{width:40px;height:40px;background:rgba(255,255,255,0.1);border:none;border-radius:50%;color:var(--text);font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.game-title{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:2px}
+.game-title .gi{color:var(--purple)}
+.game-title .glo{color:var(--pink)}
+.game-title .num{color:var(--gold)}
+.tier-badge{background:linear-gradient(135deg,var(--purple),var(--pink));padding:6px 14px;border-radius:20px;font-weight:700;font-size:0.8rem}
+.lang-toggle{display:flex;gap:5px}
+.lang-btn{padding:6px 12px;border:2px solid var(--purple);background:transparent;color:var(--purple);border-radius:15px;font-weight:700;font-size:0.7rem;cursor:pointer}
+.lang-btn.active{background:var(--purple);color:var(--text)}
+.game-container{height:calc(100vh - 80px);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;position:relative}
+.intro-screen{text-align:center;max-width:400px}
+.intro-coach{margin-bottom:15px}
+.intro-coach-img{width:100px;height:100px;border-radius:50%;object-fit:cover;border:4px solid var(--purple);animation:wiggle 1s infinite}
+@keyframes wiggle{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(5deg)}}
+.intro-title{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;letter-spacing:4px;margin-bottom:5px}
+.intro-title .gi{color:var(--purple)}
+.intro-title .glo{color:var(--pink)}
+.intro-title .num{color:var(--gold)}
+.intro-workout{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:3px;margin-bottom:10px}
+.intro-subtitle{color:var(--gold);font-family:'Bebas Neue',sans-serif;letter-spacing:2px;margin-bottom:20px}
+.intro-desc{color:var(--muted);line-height:1.6;margin-bottom:30px}
+.intro-desc strong{color:var(--text)}
+.intro-coach-name{margin-top:20px;color:var(--muted);font-size:0.9rem}
+.start-btn{padding:18px 50px;font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:4px;background:linear-gradient(135deg,var(--purple),var(--pink));color:var(--text);border:none;border-radius:50px;cursor:pointer;box-shadow:0 8px 30px rgba(155,89,182,0.5)}
+.learn-screen{text-align:center;width:100%}
+.phase-label{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:3px;color:var(--gold);margin-bottom:15px}
+.sound-card{background:var(--card);border:3px solid var(--purple);border-radius:25px;padding:30px;margin:20px auto;max-width:300px}
+.sound-text{font-family:'Bebas Neue',sans-serif;font-size:3rem;color:var(--gold);margin-bottom:20px;animation:pulse 0.5s ease}
+@keyframes pulse{0%{transform:scale(0.8)}50%{transform:scale(1.1)}100%{transform:scale(1)}}
+.sound-emoji{font-size:5rem;margin-bottom:10px}
+.sound-label{font-size:1.1rem;color:var(--muted)}
+.timer-bar{width:80%;max-width:300px;height:8px;background:rgba(255,255,255,0.1);border-radius:10px;margin:25px auto;overflow:hidden}
+.timer-fill{height:100%;background:linear-gradient(90deg,var(--purple),var(--pink));border-radius:10px;transition:width 0.1s linear}
+.counter{color:var(--muted);font-size:0.9rem;margin-top:10px}
+.recall-screen{text-align:center;width:100%}
+.recall-sound{font-family:'Bebas Neue',sans-serif;font-size:3.5rem;color:var(--gold);margin-bottom:10px;animation:shake 0.3s ease infinite}
+@keyframes shake{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
+.recall-question{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:2px;margin-bottom:15px}
+.recall-timer{width:100%;max-width:350px;height:10px;background:rgba(255,255,255,0.1);border-radius:10px;margin:15px auto;overflow:hidden}
+.recall-timer-fill{height:100%;background:var(--success);border-radius:10px;transition:width 0.05s linear}
+.recall-timer-fill.danger{background:var(--danger)}
+.answers-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;max-width:320px;margin:0 auto}
+.answer-btn{background:var(--card);border:3px solid rgba(255,255,255,0.1);border-radius:20px;padding:15px;cursor:pointer;transition:all 0.15s;text-align:center}
+.answer-btn:active{transform:scale(0.95)}
+.answer-btn .emoji{font-size:3rem;display:block;margin-bottom:5px}
+.answer-btn .label{font-size:0.8rem;color:var(--muted)}
+.answer-btn.correct{border-color:var(--success);background:rgba(0,217,165,0.2)}
+.answer-btn.wrong{border-color:var(--danger);background:rgba(255,71,87,0.2)}
+.speed-bonus{position:fixed;top:40%;left:50%;transform:translateX(-50%);font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--gold);animation:floatUp 1s forwards;z-index:100}
+@keyframes floatUp{0%{opacity:1;transform:translateX(-50%) translateY(0)}100%{opacity:0;transform:translateX(-50%) translateY(-50px)}}
+.score-display{position:absolute;top:100px;right:20px;text-align:right}
+.score-label{font-size:0.7rem;color:var(--muted)}
+.score-value{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--pink)}
+.gameover-screen{text-align:center;max-width:400px}
+.gameover-emoji{font-size:5rem;margin-bottom:20px}
+.gameover-title{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;letter-spacing:3px;margin-bottom:10px}
+.gameover-score{font-family:'Bebas Neue',sans-serif;font-size:4rem;color:var(--pink);margin:20px 0}
+.gameover-stats{color:var(--gold);margin-bottom:30px}
+.retry-btn{padding:16px 40px;font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:3px;background:linear-gradient(135deg,var(--purple),var(--pink));color:var(--text);border:none;border-radius:50px;cursor:pointer;margin-bottom:15px;display:block;width:100%}
+.home-btn{padding:14px 30px;font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;background:transparent;color:var(--muted);border:2px solid var(--muted);border-radius:50px;cursor:pointer;display:block;width:100%}
+.coach-bubble{position:fixed;bottom:20px;left:20px;right:20px;background:var(--card);border:2px solid var(--purple);border-radius:20px;padding:15px;display:flex;align-items:center;gap:15px;z-index:50}
+.coach-avatar{width:50px;height:50px;border-radius:50%;overflow:hidden}
+.coach-avatar img{width:100%;height:100%;object-fit:cover}
+.coach-text{font-size:0.95rem;line-height:1.4}
+.confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1000}
+.confetti{position:absolute;width:10px;height:10px;top:-10px;animation:fall 3s linear forwards}
+@keyframes fall{to{transform:translateY(100vh) rotate(720deg);opacity:0}}
+.hidden{display:none!important}
+</style>
+</head>
+<body class="en">
+<div class="confetti-container" id="confettiContainer"></div>
+
+<div class="game-header">
+<div class="header-left">
+<button class="back-btn" id="backBtn">←</button>
+<div class="coach-header-avatar"><img src="go_chat.png" alt="Coach" class="coach-header-img"></div>
+<div>
+<div class="game-title"><span class="gi">GIG</span><span class="glo">LO</span> <span class="num">2</span></div>
+<div class="coach-label">w/ Coach GoTrotter AI</div>
+</div>
+<div class="tier-badge" id="tierBadge">TIER 1</div>
+</div>
+<div class="lang-toggle">
+<button class="lang-btn active" data-lang="en">EN</button>
+<button class="lang-btn" data-lang="es">ES</button>
+</div>
+</div>
+
+<div class="game-container">
+
+<div class="intro-screen" id="introScreen">
+<div class="intro-coach"><img src="go_chat.png" alt="Coach" class="intro-coach-img"></div>
+<div class="intro-title"><span class="gi">GIG</span><span class="glo">LO</span> <span class="num">2</span></div>
+<div class="intro-workout">GOOFY SOUNDS 🔊</div>
+<div class="intro-subtitle"><span class="lang-en">SPEED & RECALL</span><span class="lang-es">VELOCIDAD Y MEMORIA</span></div>
+<div class="intro-desc">
+<span class="lang-en">Learn <strong>silly sounds</strong> and what makes them!<br><br>Then match them FAST! ⚡<br><br>Speed = Bonus Points! 🏆</span>
+<span class="lang-es">Aprende <strong>sonidos tontos</strong> y qué los hace!<br><br>¡Luego empárejalos RÁPIDO! ⚡<br><br>¡Velocidad = Puntos Extra! 🏆</span>
+</div>
+<button class="start-btn" id="startBtn"><span class="lang-en">LET'S HEAR IT! 🔊</span><span class="lang-es">¡A ESCUCHAR! 🔊</span></button>
+<div class="intro-coach-name"><span class="lang-en">with Coach GoTrotter AI 🏀</span><span class="lang-es">con Coach GoTrotter AI 🏀</span></div>
+</div>
+
+<div class="learn-screen hidden" id="learnScreen">
+<div class="phase-label"><span class="lang-en">🔊 LEARN THIS SOUND!</span><span class="lang-es">🔊 ¡APRENDE ESTE SONIDO!</span></div>
+<div class="sound-card">
+<div class="sound-text" id="learnSound">BOING!</div>
+<div class="sound-emoji" id="learnEmoji">🦘</div>
+<div class="sound-label" id="learnLabel">Kangaroo</div>
+</div>
+<div class="timer-bar"><div class="timer-fill" id="timerFill"></div></div>
+<div class="counter" id="pairCounter">Sound 1 of 3</div>
+</div>
+
+<div class="recall-screen hidden" id="recallScreen">
+<div class="recall-sound" id="recallSound">BOING!</div>
+<div class="recall-question"><span class="lang-en">🤔 WHAT MAKES THIS SOUND?</span><span class="lang-es">🤔 ¿QUÉ HACE ESTE SONIDO?</span></div>
+<div class="recall-timer"><div class="recall-timer-fill" id="recallTimerFill"></div></div>
+<div class="answers-grid" id="answersGrid"></div>
+</div>
+
+<div class="gameover-screen hidden" id="gameoverScreen">
+<div class="gameover-emoji" id="gameoverEmoji">🔊</div>
+<div class="gameover-title"><span class="lang-en">WORKOUT COMPLETE!</span><span class="lang-es">¡EJERCICIO COMPLETO!</span></div>
+<div class="gameover-score" id="finalScore">0</div>
+<div class="gameover-stats" id="gameStats">🔊 Sounds: 10 | ⚡ Bonuses: 5</div>
+<button class="retry-btn" id="retryBtn"><span class="lang-en">PLAY AGAIN 🔊</span><span class="lang-es">JUGAR DE NUEVO 🔊</span></button>
+<button class="home-btn" id="homeBtn"><span class="lang-en">← BACK</span><span class="lang-es">← VOLVER</span></button>
+</div>
+
+<div class="score-display hidden" id="scoreDisplay">
+<div class="score-label">SCORE</div>
+<div class="score-value" id="currentScore">0</div>
+</div>
+
+</div>
+
+<div class="coach-bubble hidden" id="coachBubble">
+<div class="coach-avatar"><img src="go_chat.png" alt="Coach"></div>
+<div class="coach-text" id="coachText">Great!</div>
+</div>
+
+<script>
+(function(){
+var lang = localStorage.getItem('gt-lang') || 'en';
+function setLang(l){
+    lang = l;
+    localStorage.setItem('gt-lang', l);
+    document.body.className = l;
+    document.querySelectorAll('.lang-btn').forEach(function(b){
+        b.classList.toggle('active', b.dataset.lang === l);
+    });
+}
+setLang(lang);
+document.querySelectorAll('.lang-btn').forEach(function(b){
+    b.onclick = function(){ setLang(this.dataset.lang); };
+});
+
+var soundPairs = [
+    {sound:'BOING!',emoji:'🦘',en:'Kangaroo',es:'Canguro'},
+    {sound:'OINK!',emoji:'🐷',en:'Pig',es:'Cerdo'},
+    {sound:'QUACK!',emoji:'🦆',en:'Duck',es:'Pato'},
+    {sound:'MOO!',emoji:'🐄',en:'Cow',es:'Vaca'},
+    {sound:'RIBBIT!',emoji:'🐸',en:'Frog',es:'Rana'},
+    {sound:'ROAR!',emoji:'🦁',en:'Lion',es:'León'},
+    {sound:'BUZZ!',emoji:'🐝',en:'Bee',es:'Abeja'},
+    {sound:'SPLAT!',emoji:'🍅',en:'Tomato',es:'Tomate'},
+    {sound:'HONK!',emoji:'🤡',en:'Clown',es:'Payaso'},
+    {sound:'BOOM!',emoji:'💥',en:'Explosion',es:'Explosión'},
+    {sound:'DING!',emoji:'🔔',en:'Bell',es:'Campana'},
+    {sound:'WHOOSH!',emoji:'🚀',en:'Rocket',es:'Cohete'},
+    {sound:'POP!',emoji:'🎈',en:'Balloon',es:'Globo'},
+    {sound:'CRUNCH!',emoji:'🥕',en:'Carrot',es:'Zanahoria'},
+    {sound:'SIZZLE!',emoji:'🥓',en:'Bacon',es:'Tocino'},
+    {sound:'ACHOO!',emoji:'🤧',en:'Sneeze',es:'Estornudo'},
+    {sound:'SLURP!',emoji:'🍜',en:'Noodles',es:'Fideos'},
+    {sound:'CHOMP!',emoji:'🍔',en:'Burger',es:'Hamburguesa'},
+    {sound:'BONK!',emoji:'🔨',en:'Hammer',es:'Martillo'},
+    {sound:'TOOT!',emoji:'🎺',en:'Trumpet',es:'Trompeta'},
+    {sound:'VROOM!',emoji:'🏎️',en:'Race Car',es:'Auto'},
+    {sound:'BEEP!',emoji:'🤖',en:'Robot',es:'Robot'},
+    {sound:'KABOOM!',emoji:'🎆',en:'Fireworks',es:'Fuegos'},
+    {sound:'SPLASH!',emoji:'🏊',en:'Swimmer',es:'Nadador'},
+    {sound:'SNAP!',emoji:'🦀',en:'Crab',es:'Cangrejo'},
+    {sound:'ZZZZZ!',emoji:'😴',en:'Sleeping',es:'Durmiendo'},
+    {sound:'POOF!',emoji:'🧙',en:'Wizard',es:'Mago'},
+    {sound:'CLICK!',emoji:'📸',en:'Camera',es:'Cámara'},
+    {sound:'BLING!',emoji:'💎',en:'Diamond',es:'Diamante'},
+    {sound:'CRASH!',emoji:'🏺',en:'Vase',es:'Jarrón'}
+];
+
+var coachMsgs = {
+    start:{en:"Listen up! Goofy sounds incoming! 🔊😂",es:"¡Atención! ¡Vienen sonidos graciosos! 🔊😂"},
+    learn:[
+        {en:"Haha! Listen to THAT! 😂",es:"¡Jaja! ¡Escucha ESO! 😂"},
+        {en:"What a silly sound! 🔊",es:"¡Qué sonido tonto! 🔊"},
+        {en:"Remember this one! 🧠",es:"¡Recuerda este! 🧠"}
+    ],
+    recall:[
+        {en:"SPEED ROUND! Go fast! ⚡",es:"¡RONDA RÁPIDA! ¡Ve rápido! ⚡"},
+        {en:"Quick! Match it! 🏃",es:"¡Rápido! ¡Emparéjalo! 🏃"}
+    ],
+    correct:[
+        {en:"YES! Nailed it! ⚡",es:"¡SÍ! ¡Clavado! ⚡"},
+        {en:"You heard it right! 👂",es:"¡Lo escuchaste bien! 👂"},
+        {en:"BOOM! 💥",es:"¡BOOM! 💥"}
+    ],
+    speed:[
+        {en:"SPEED BONUS! +5! 🔥",es:"¡BONO VELOCIDAD! +5! 🔥"},
+        {en:"LIGHTNING FAST! ⚡",es:"¡VELOZ! ⚡"}
+    ],
+    wrong:[
+        {en:"That was tricky! 😅",es:"¡Esa era difícil! 😅"},
+        {en:"Keep trying! 👂",es:"¡Sigue intentando! 👂"}
+    ],
+    timeout:{en:"Too slow! ⏰",es:"¡Muy lento! ⏰"},
+    tierUp:{en:"TIER UP! Faster now! 🔊⚡",es:"¡SUBISTE! ¡Más rápido! 🔊⚡"},
+    gameOver:{en:"Great workout! 🔊🧠",es:"¡Buen ejercicio! 🔊🧠"}
+};
+
+var tier=1,score=0,speedBonuses=0,correctCount=0,round=0;
+var soundsToLearn=[],currentIdx=0,recallIdx=0;
+var learnTimer=null,recallTimer=null,recallStart=0;
+
+var tierSettings=[
+    {sounds:2,learnTime:3000,recallTime:4000},
+    {sounds:2,learnTime:2800,recallTime:3500},
+    {sounds:3,learnTime:2600,recallTime:3200},
+    {sounds:3,learnTime:2400,recallTime:3000},
+    {sounds:3,learnTime:2200,recallTime:2800},
+    {sounds:4,learnTime:2200,recallTime:2600},
+    {sounds:4,learnTime:2000,recallTime:2400},
+    {sounds:4,learnTime:2000,recallTime:2200},
+    {sounds:5,learnTime:1800,recallTime:2000},
+    {sounds:5,learnTime:1600,recallTime:1800}
+];
+
+var introScreen=document.getElementById('introScreen');
+var learnScreen=document.getElementById('learnScreen');
+var recallScreen=document.getElementById('recallScreen');
+var gameoverScreen=document.getElementById('gameoverScreen');
+var scoreDisplay=document.getElementById('scoreDisplay');
+var coachBubble=document.getElementById('coachBubble');
+var coachText=document.getElementById('coachText');
+
+function shuffle(a){
+    var arr=a.slice();
+    for(var i=arr.length-1;i>0;i--){
+        var j=Math.floor(Math.random()*(i+1));
+        var t=arr[i];arr[i]=arr[j];arr[j]=t;
+    }
+    return arr;
+}
+
+function showScreen(s){
+    introScreen.classList.add('hidden');
+    learnScreen.classList.add('hidden');
+    recallScreen.classList.add('hidden');
+    gameoverScreen.classList.add('hidden');
+    s.classList.remove('hidden');
+}
+
+function updateScore(){
+    document.getElementById('currentScore').textContent=score;
+}
+
+function updateTier(){
+    document.getElementById('tierBadge').textContent='TIER '+tier;
+}
+
+function showCoach(msg,dur){
+    coachText.textContent=msg;
+    coachBubble.classList.remove('hidden');
+    setTimeout(function(){coachBubble.classList.add('hidden');},dur||2500);
+}
+
+function showSpeedBonus(){
+    var b=document.createElement('div');
+    b.className='speed-bonus';
+    b.textContent='+5 SPEED!';
+    document.body.appendChild(b);
+    setTimeout(function(){if(b.parentNode)b.remove();},1000);
+}
+
+function confetti(){
+    var c=document.getElementById('confettiContainer');
+    for(var i=0;i<40;i++){
+        setTimeout(function(){
+            var p=document.createElement('div');
+            p.className='confetti';
+            p.style.left=Math.random()*100+'vw';
+            p.style.background=['#9B59B6','#FF69B4','#FFD700','#00D9A5'][Math.floor(Math.random()*4)];
+            p.style.animationDuration=(2+Math.random()*2)+'s';
+            c.appendChild(p);
+            setTimeout(function(){if(p.parentNode)p.remove();},4000);
+        },i*40);
+    }
+}
+
+function startGame(){
+    tier=1;score=0;speedBonuses=0;correctCount=0;round=0;
+    updateScore();updateTier();
+    scoreDisplay.classList.remove('hidden');
+    var m=coachMsgs.start;
+    showCoach(lang==='es'?m.es:m.en,2500);
+    setTimeout(startRound,2000);
+}
+
+function startRound(){
+    round++;
+    currentIdx=0;
+    var s=tierSettings[tier-1];
+    soundsToLearn=shuffle(soundPairs).slice(0,s.sounds);
+    showScreen(learnScreen);
+    showNextLearn();
+}
+
+function showNextLearn(){
+    if(currentIdx>=soundsToLearn.length){
+        setTimeout(startRecall,500);
+        return;
+    }
+    var s=tierSettings[tier-1];
+    var pair=soundsToLearn[currentIdx];
+    document.getElementById('learnSound').textContent=pair.sound;
+    document.getElementById('learnEmoji').textContent=pair.emoji;
+    document.getElementById('learnLabel').textContent=lang==='es'?pair.es:pair.en;
+    document.getElementById('pairCounter').textContent=(lang==='es'?'Sonido ':'Sound ')+(currentIdx+1)+' / '+soundsToLearn.length;
+    
+    var msg=coachMsgs.learn[Math.floor(Math.random()*coachMsgs.learn.length)];
+    showCoach(lang==='es'?msg.es:msg.en,s.learnTime-500);
+    
+    var fill=document.getElementById('timerFill');
+    fill.style.width='100%';
+    var start=Date.now();
+    clearInterval(learnTimer);
+    learnTimer=setInterval(function(){
+        var pct=Math.max(0,100-((Date.now()-start)/s.learnTime*100));
+        fill.style.width=pct+'%';
+        if(pct<=0){
+            clearInterval(learnTimer);
+            currentIdx++;
+            showNextLearn();
+        }
+    },50);
+}
+
+function startRecall(){
+    recallIdx=0;
+    soundsToLearn=shuffle(soundsToLearn);
+    var msg=coachMsgs.recall[Math.floor(Math.random()*coachMsgs.recall.length)];
+    showCoach(lang==='es'?msg.es:msg.en,1500);
+    setTimeout(showNextRecall,1500);
+}
+
+function showNextRecall(){
+    if(recallIdx>=soundsToLearn.length){
+        endRound();
+        return;
+    }
+    showScreen(recallScreen);
+    var s=tierSettings[tier-1];
+    var correct=soundsToLearn[recallIdx];
+    document.getElementById('recallSound').textContent=correct.sound;
+    
+    var grid=document.getElementById('answersGrid');
+    grid.innerHTML='';
+    var wrongs=shuffle(soundPairs.filter(function(p){return p.emoji!==correct.emoji;})).slice(0,3);
+    var opts=shuffle([correct].concat(wrongs));
+    
+    opts.forEach(function(opt){
+        var btn=document.createElement('div');
+        btn.className='answer-btn';
+        btn.innerHTML='<span class="emoji">'+opt.emoji+'</span><span class="label">'+(lang==='es'?opt.es:opt.en)+'</span>';
+        btn.dataset.correct=opt.emoji===correct.emoji?'1':'0';
+        btn.onclick=function(){handleAnswer(btn,correct);};
+        grid.appendChild(btn);
+    });
+    
+    recallStart=Date.now();
+    var fill=document.getElementById('recallTimerFill');
+    fill.style.width='100%';
+    fill.classList.remove('danger');
+    clearInterval(recallTimer);
+    recallTimer=setInterval(function(){
+        var pct=Math.max(0,100-((Date.now()-recallStart)/s.recallTime*100));
+        fill.style.width=pct+'%';
+        if(pct<30)fill.classList.add('danger');
+        if(pct<=0){
+            clearInterval(recallTimer);
+            handleTimeout(correct);
+        }
+    },50);
+}
+
+function handleAnswer(btn,correct){
+    clearInterval(recallTimer);
+    document.querySelectorAll('.answer-btn').forEach(function(b){b.onclick=null;});
+    var isCorrect=btn.dataset.correct==='1';
+    var time=Date.now()-recallStart;
+    var s=tierSettings[tier-1];
+    
+    if(isCorrect){
+        btn.classList.add('correct');
+        correctCount++;
+        var pts=10;
+        if(time<s.recallTime*0.4){
+            pts+=5;
+            speedBonuses++;
+            showSpeedBonus();
+            var m=coachMsgs.speed[Math.floor(Math.random()*coachMsgs.speed.length)];
+            showCoach(lang==='es'?m.es:m.en,1500);
+        }else{
+            var m=coachMsgs.correct[Math.floor(Math.random()*coachMsgs.correct.length)];
+            showCoach(lang==='es'?m.es:m.en,1500);
+        }
+        score+=pts;
+        updateScore();
+    }else{
+        btn.classList.add('wrong');
+        document.querySelectorAll('.answer-btn').forEach(function(b){
+            if(b.dataset.correct==='1')b.classList.add('correct');
+        });
+        var m=coachMsgs.wrong[Math.floor(Math.random()*coachMsgs.wrong.length)];
+        showCoach(lang==='es'?m.es:m.en,1500);
+    }
+    recallIdx++;
+    setTimeout(showNextRecall,1500);
+}
+
+function handleTimeout(correct){
+    document.querySelectorAll('.answer-btn').forEach(function(b){
+        b.onclick=null;
+        if(b.dataset.correct==='1')b.classList.add('correct');
+    });
+    var m=coachMsgs.timeout;
+    showCoach(lang==='es'?m.es:m.en,1500);
+    recallIdx++;
+    setTimeout(showNextRecall,1500);
+}
+
+function endRound(){
+    if(round>=5){
+        if(tier>=10){
+            endGame();
+        }else{
+            tier++;round=0;
+            updateTier();
+            confetti();
+            var m=coachMsgs.tierUp;
+            showCoach(lang==='es'?m.es:m.en,2500);
+            setTimeout(startRound,3000);
+        }
+    }else{
+        setTimeout(startRound,1000);
+    }
+}
+
+function endGame(){
+    showScreen(gameoverScreen);
+    scoreDisplay.classList.add('hidden');
+    confetti();
+    document.getElementById('finalScore').textContent=score;
+    document.getElementById('gameStats').textContent='🔊 '+correctCount+' | ⚡ '+speedBonuses;
+    var m=coachMsgs.gameOver;
+    showCoach(lang==='es'?m.es:m.en,3000);
+}
+
+document.getElementById('startBtn').onclick=startGame;
+document.getElementById('retryBtn').onclick=startGame;
+document.getElementById('homeBtn').onclick=function(){
+    showScreen(introScreen);
+    scoreDisplay.classList.add('hidden');
+};
+document.getElementById('backBtn').onclick=function(){
+    if(confirm(lang==='es'?'¿Salir?':'Exit?')){
+        clearInterval(learnTimer);
+        clearInterval(recallTimer);
+        showScreen(introScreen);
+        scoreDisplay.classList.add('hidden');
+    }
+};
+})();
+</script>
+</body>
+</html>
