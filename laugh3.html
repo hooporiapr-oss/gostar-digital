@@ -34,7 +34,7 @@ body.en .lang-es{display:none!important}
 .intro-title{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;letter-spacing:4px;margin-bottom:5px}
 .intro-title .laugh-title{color:var(--pink)}
 .intro-title .num{color:var(--gold)}
-.intro-session{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:3px;margin-bottom:10px}
+.intro-circuit{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:3px;margin-bottom:10px}
 .intro-subtitle{color:var(--gold);font-family:'Bebas Neue',sans-serif;letter-spacing:2px;margin-bottom:20px}
 .intro-desc{color:var(--muted);line-height:1.6;margin-bottom:30px}
 .intro-desc strong{color:var(--text)}
@@ -126,7 +126,7 @@ body.en .lang-es{display:none!important}
 <div class="intro-screen" id="introScreen">
 <div class="intro-coach"><img src="go_chat.png" alt="Coach" class="intro-coach-img"></div>
 <div class="intro-title"><span class="laugh-title">LAUGH</span> <span class="num">3</span></div>
-<div class="intro-session">WACKY WALKS 🚶</div>
+<div class="intro-circuit">WACKY WALKS 🚶</div>
 <div class="intro-subtitle">
 <span class="lang-en">SEQUENCE & MEMORY</span>
 <span class="lang-es">SECUENCIA Y MEMORIA</span>
@@ -169,8 +169,8 @@ body.en .lang-es{display:none!important}
 <div class="gameover-screen hidden" id="gameoverScreen">
 <div class="gameover-emoji" id="gameoverEmoji">🚶</div>
 <div class="gameover-title">
-<span class="lang-en">SESSION COMPLETE!</span>
-<span class="lang-es">¡SESIÓN COMPLETA!</span>
+<span class="lang-en">CIRCUIT COMPLETE!</span>
+<span class="lang-es">¡CIRCUITO COMPLETO!</span>
 </div>
 <div class="gameover-score" id="finalScore">0</div>
 <div class="gameover-stats" id="gameStats">😂 Laugh Moments: 0</div>
@@ -226,7 +226,7 @@ document.querySelectorAll('.lang-btn').forEach(function(b){
 });
 
 // ============ LAUGH TRACKING SYSTEM ============
-var sessionLaughs = 0;
+var circuitLaughs = 0;
 
 function getDateString(date) {
     return date.toISOString().split('T')[0];
@@ -241,7 +241,7 @@ function getWeekStart(date) {
 }
 
 function addLaughs(count) {
-    sessionLaughs += count;
+    circuitLaughs += count;
     updateLaughDisplay();
     
     var today = getDateString(new Date());
@@ -273,7 +273,7 @@ function addLaughs(count) {
 }
 
 function updateLaughDisplay() {
-    document.getElementById('laughCounterValue').textContent = sessionLaughs;
+    document.getElementById('laughCounterValue').textContent = circuitLaughs;
 }
 
 function showLaughPop(count) {
@@ -339,7 +339,7 @@ var coachMsgs = {
         {en:"Keep practicing! 👀",es:"¡Sigue practicando! 👀"}
     ],
     tierUp:{en:"TIER UP! Longer sequences! 🚶⚡",es:"¡SUBISTE! ¡Secuencias más largas! 🚶⚡"},
-    gameOver:{en:"Great session! 🚶🧠",es:"¡Gran sesión! 🚶🧠"}
+    gameOver:{en:"Great circuit! 🚶🧠",es:"¡Gran circuito! 🚶🧠"}
 };
 
 var tier=1,score=0,streak=0,maxStreak=0,round=0,sequencesCompleted=0;
@@ -419,7 +419,7 @@ var roundWalkers=[];
 
 function startGame(){
     tier=1;score=0;streak=0;maxStreak=0;round=0;sequencesCompleted=0;
-    sessionLaughs=0;
+    circuitLaughs=0;
     updateScore();updateTier();updateLaughDisplay();
     scoreDisplay.classList.remove('hidden');
     laughCounter.classList.remove('hidden');
@@ -599,7 +599,7 @@ function endRound(){
 }
 
 function endGame(){
-    // +5 laughs for session complete
+    // +5 laughs for circuit complete
     addLaughs(5);
     
     showScreen(gameoverScreen);
@@ -610,8 +610,8 @@ function endGame(){
     
     // Show laugh moments
     var laughText = lang === 'es' ? 
-        '😂 Momentos de Risa: ' + sessionLaughs : 
-        '😂 Laugh Moments: ' + sessionLaughs;
+        '😂 Momentos de Risa: ' + circuitLaughs : 
+        '😂 Laugh Moments: ' + circuitLaughs;
     document.getElementById('gameStats').textContent = laughText;
     
     var m=coachMsgs.gameOver;
