@@ -324,25 +324,61 @@ body.en .lang-es{display:none !important}
             en: "Let's exercise your brain AND your smile! 😂",
             es: "¡Ejercitemos tu cerebro Y tu sonrisa! 😂"
         },
+        showingPair: [
+            { en: "Haha! Look at THIS one! 😂", es: "¡Jaja! ¡Mira ESTA! 😂" },
+            { en: "Can you believe it?! 🤣", es: "¡¿Puedes creerlo?! 🤣" },
+            { en: "This is TOO silly! 😂", es: "¡Esto es MUY absurdo! 😂" },
+            { en: "I can't stop laughing! 🤣", es: "¡No puedo parar de reír! 🤣" },
+            { en: "Wait... WHAT?! 😂", es: "Espera... ¡¿QUÉ?! 😂" },
+            { en: "Oh this is a good one! 😄", es: "¡Oh esta es buena! 😄" },
+            { en: "Try not to laugh! 🤭", es: "¡Intenta no reír! 🤭" },
+            { en: "Remember this silly one! 😂", es: "¡Recuerda esta tontería! 😂" }
+        ],
+        recallStart: [
+            { en: "Okay, which ones did you see? 🤔", es: "Bien, ¿cuáles viste? 🤔" },
+            { en: "Time to find the silly pairs! 😂", es: "¡Hora de encontrar las parejas! 😂" },
+            { en: "Can you remember? Let's see! 🧠", es: "¿Puedes recordar? ¡Veamos! 🧠" },
+            { en: "Show me what you remember! 💪", es: "¡Muéstrame lo que recuerdas! 💪" }
+        ],
         correct: [
             { en: "Ha! You remembered! 😂", es: "¡Ja! ¡Lo recordaste! 😂" },
             { en: "Your brain AND humor are sharp! 🧠😂", es: "¡Tu cerebro Y humor están afilados! 🧠😂" },
             { en: "Laughing AND learning! Perfect! 😂", es: "¡Riendo Y aprendiendo! ¡Perfecto! 😂" },
             { en: "That silly pair stuck with you! 😂", es: "¡Esa pareja absurda se quedó contigo! 😂" },
-            { en: "Memory + Joy = Brain Power! 💪😂", es: "¡Memoria + Alegría = Poder Mental! 💪😂" }
+            { en: "Memory + Joy = Brain Power! 💪😂", es: "¡Memoria + Alegría = Poder Mental! 💪😂" },
+            { en: "YES! You got it! 🎉", es: "¡SÍ! ¡Lo tienes! 🎉" },
+            { en: "That's my player! 🏀😂", es: "¡Ese es mi jugador! 🏀😂" },
+            { en: "Boom! Nailed it! 💥", es: "¡Boom! ¡Clavado! 💥" }
+        ],
+        streak: [
+            { en: "You're on FIRE! 🔥😂", es: "¡Estás en FUEGO! 🔥😂" },
+            { en: "STREAK! Keep going! 🔥🔥", es: "¡RACHA! ¡Sigue así! 🔥🔥" },
+            { en: "Unstoppable! 💪😂", es: "¡Imparable! 💪😂" },
+            { en: "Nothing can stop you! 🚀", es: "¡Nada te detiene! 🚀" }
         ],
         wrong: [
             { en: "That WAS a silly one! Try again! 😅", es: "¡Esa SÍ era absurda! ¡Intenta de nuevo! 😅" },
             { en: "So many funny pairs to remember! 😄", es: "¡Tantas parejas graciosas para recordar! 😄" },
-            { en: "Keep laughing, keep trying! 😊", es: "¡Sigue riendo, sigue intentando! 😊" }
+            { en: "Keep laughing, keep trying! 😊", es: "¡Sigue riendo, sigue intentando! 😊" },
+            { en: "Oops! But that one was tricky! 😅", es: "¡Ups! ¡Pero esa era difícil! 😅" },
+            { en: "Close! Stay focused! 👀", es: "¡Cerca! ¡Mantente enfocado! 👀" }
         ],
         tierUp: {
             en: "TIER UP! The pairs get sillier! 😂🎉",
             es: "¡SUBISTE DE NIVEL! ¡Las parejas son más absurdas! 😂🎉"
         },
+        newTierIntro: [
+            { en: "Get ready... it's getting FUNNIER! 😂", es: "Prepárate... ¡se pone MÁS GRACIOSO! 😂" },
+            { en: "More pairs, more laughs! Let's GO! 🏀", es: "¡Más parejas, más risas! ¡VAMOS! 🏀" },
+            { en: "Think you can handle this? 😏", es: "¿Crees que puedes con esto? 😏" }
+        ],
         gameOver: {
             en: "What a workout! Your brain got a great laugh! 😂",
             es: "¡Qué ejercicio! ¡Tu cerebro se rió mucho! 😂"
+        },
+        highScore: {
+            en: "AMAZING! That was legendary! 🏆😂",
+            es: "¡INCREÍBLE! ¡Eso fue legendario! 🏆😂"
         }
     };
 
@@ -487,6 +523,10 @@ body.en .lang-es{display:none !important}
             document.getElementById('emoji2').style.animation = 'popIn 0.5s ease';
         }, 10);
         
+        // Coach comments on the silly pair!
+        var pairMsg = coachMessages.showingPair[Math.floor(Math.random() * coachMessages.showingPair.length)];
+        showCoach(lang === 'es' ? pairMsg.es : pairMsg.en, settings.time - 500);
+        
         // Timer
         var timerFill = document.getElementById('timerFill');
         timerFill.style.width = '100%';
@@ -509,6 +549,10 @@ body.en .lang-es{display:none !important}
 
     function showRecall() {
         showScreen(recallScreen);
+        
+        // Coach introduces recall phase
+        var recallMsg = coachMessages.recallStart[Math.floor(Math.random() * coachMessages.recallStart.length)];
+        showCoach(lang === 'es' ? recallMsg.es : recallMsg.en, 2500);
         
         var settings = tierSettings[tier - 1];
         var grid = document.getElementById('pairsGrid');
@@ -551,7 +595,13 @@ body.en .lang-es{display:none !important}
             correctThisRound++;
             updateScore();
             
-            var msg = coachMessages.correct[Math.floor(Math.random() * coachMessages.correct.length)];
+            // Coach reacts - streak messages for hot streaks!
+            var msg;
+            if (streak >= 3) {
+                msg = coachMessages.streak[Math.floor(Math.random() * coachMessages.streak.length)];
+            } else {
+                msg = coachMessages.correct[Math.floor(Math.random() * coachMessages.correct.length)];
+            }
             showCoach(lang === 'es' ? msg.es : msg.en, 2000);
             
             // Check if all correct pairs found
@@ -579,8 +629,15 @@ body.en .lang-es{display:none !important}
                 round = 0;
                 updateTierBadge();
                 createConfetti();
-                showCoach(lang === 'es' ? coachMessages.tierUp.es : coachMessages.tierUp.en, 3000);
-                setTimeout(startRound, 3000);
+                showCoach(lang === 'es' ? coachMessages.tierUp.es : coachMessages.tierUp.en, 2500);
+                
+                // Show new tier intro after tier up message
+                setTimeout(function() {
+                    var introMsg = coachMessages.newTierIntro[Math.floor(Math.random() * coachMessages.newTierIntro.length)];
+                    showCoach(lang === 'es' ? introMsg.es : introMsg.en, 2500);
+                }, 2500);
+                
+                setTimeout(startRound, 5000);
             }
         } else {
             setTimeout(startRound, 1000);
@@ -600,7 +657,9 @@ body.en .lang-es{display:none !important}
         var emoji = score >= 200 ? '🤣' : score >= 100 ? '😂' : '😄';
         document.getElementById('gameoverEmoji').textContent = emoji;
         
-        showCoach(lang === 'es' ? coachMessages.gameOver.es : coachMessages.gameOver.en, 4000);
+        // Coach end message - special for high scores!
+        var endMsg = score >= 150 ? coachMessages.highScore : coachMessages.gameOver;
+        showCoach(lang === 'es' ? endMsg.es : endMsg.en, 4000);
     }
 
     // ============ EVENT LISTENERS ============
