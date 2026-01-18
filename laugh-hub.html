@@ -62,28 +62,28 @@ body.en .lang-es{display:none!important}
 .joy-message-text{font-size:0.9rem;color:var(--muted);font-style:italic}
 .joy-message-text strong{color:var(--pink)}
 
-/* Sessions Grid */
-.sessions-section{padding:20px}
+/* Circuits Grid */
+.circuits-section{padding:20px}
 .section-title{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:3px;text-align:center;margin-bottom:25px;color:var(--text)}
 .section-title span{color:var(--gold)}
-.sessions-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px;max-width:500px;margin:0 auto}
-.session-card{background:var(--card);border:3px solid rgba(255,255,255,0.1);border-radius:25px;padding:25px 15px;text-align:center;cursor:pointer;transition:all 0.3s;position:relative;overflow:hidden;text-decoration:none;color:var(--text)}
-.session-card::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,rgba(155,89,182,0.1),rgba(255,105,180,0.1));opacity:0;transition:opacity 0.3s}
-.session-card:hover{transform:translateY(-5px);border-color:var(--purple);box-shadow:0 15px 40px rgba(155,89,182,0.3)}
-.session-card:hover::before{opacity:1}
-.session-card:active{transform:scale(0.98)}
-.session-num{font-family:'Bebas Neue',sans-serif;font-size:0.8rem;letter-spacing:2px;color:var(--gold);margin-bottom:5px}
-.session-emoji{font-size:3.5rem;margin-bottom:10px;display:block;position:relative;z-index:1}
-.session-name{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:2px;margin-bottom:5px;position:relative;z-index:1}
-.session-desc{font-size:0.75rem;color:var(--muted);position:relative;z-index:1}
-.session-card.card-1{border-color:rgba(231,76,60,0.3)}
-.session-card.card-1 .session-name{color:#E74C3C}
-.session-card.card-2{border-color:rgba(243,156,18,0.3)}
-.session-card.card-2 .session-name{color:#F39C12}
-.session-card.card-3{border-color:rgba(46,204,113,0.3)}
-.session-card.card-3 .session-name{color:#2ECC71}
-.session-card.card-4{border-color:rgba(52,152,219,0.3)}
-.session-card.card-4 .session-name{color:#3498DB}
+.circuits-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px;max-width:500px;margin:0 auto}
+.circuit-card{background:var(--card);border:3px solid rgba(255,255,255,0.1);border-radius:25px;padding:25px 15px;text-align:center;cursor:pointer;transition:all 0.3s;position:relative;overflow:hidden;text-decoration:none;color:var(--text)}
+.circuit-card::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,rgba(155,89,182,0.1),rgba(255,105,180,0.1));opacity:0;transition:opacity 0.3s}
+.circuit-card:hover{transform:translateY(-5px);border-color:var(--purple);box-shadow:0 15px 40px rgba(155,89,182,0.3)}
+.circuit-card:hover::before{opacity:1}
+.circuit-card:active{transform:scale(0.98)}
+.circuit-num{font-family:'Bebas Neue',sans-serif;font-size:0.8rem;letter-spacing:2px;color:var(--gold);margin-bottom:5px}
+.circuit-emoji{font-size:3.5rem;margin-bottom:10px;display:block;position:relative;z-index:1}
+.circuit-name{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:2px;margin-bottom:5px;position:relative;z-index:1}
+.circuit-desc{font-size:0.75rem;color:var(--muted);position:relative;z-index:1}
+.circuit-card.card-1{border-color:rgba(231,76,60,0.3)}
+.circuit-card.card-1 .circuit-name{color:#E74C3C}
+.circuit-card.card-2{border-color:rgba(243,156,18,0.3)}
+.circuit-card.card-2 .circuit-name{color:#F39C12}
+.circuit-card.card-3{border-color:rgba(46,204,113,0.3)}
+.circuit-card.card-3 .circuit-name{color:#2ECC71}
+.circuit-card.card-4{border-color:rgba(52,152,219,0.3)}
+.circuit-card.card-4 .circuit-name{color:#3498DB}
 
 /* Coach Section */
 .coach-section{background:linear-gradient(135deg,rgba(155,89,182,0.1),rgba(255,105,180,0.05));border-top:2px solid rgba(155,89,182,0.2);border-bottom:2px solid rgba(155,89,182,0.2);padding:30px 20px;margin:30px 0;text-align:center}
@@ -120,20 +120,20 @@ body.en .lang-es{display:none!important}
 
 /* Animations */
 @keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-.session-card{animation:fadeInUp 0.5s ease forwards}
-.session-card:nth-child(1){animation-delay:0.1s}
-.session-card:nth-child(2){animation-delay:0.2s}
-.session-card:nth-child(3){animation-delay:0.3s}
-.session-card:nth-child(4){animation-delay:0.4s}
+.circuit-card{animation:fadeInUp 0.5s ease forwards}
+.circuit-card:nth-child(1){animation-delay:0.1s}
+.circuit-card:nth-child(2){animation-delay:0.2s}
+.circuit-card:nth-child(3){animation-delay:0.3s}
+.circuit-card:nth-child(4){animation-delay:0.4s}
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
 .joy-stat-value{animation:pulse 2s ease-in-out infinite}
 
 /* Responsive */
 @media(max-width:400px){
 .hero-title{font-size:2.2rem}
-.sessions-grid{gap:12px}
-.session-emoji{font-size:2.8rem}
-.session-name{font-size:1.2rem}
+.circuits-grid{gap:12px}
+.circuit-emoji{font-size:2.8rem}
+.circuit-name{font-size:1.2rem}
 .stats-bar{gap:20px}
 .stat-value{font-size:1.5rem}
 .logo{font-size:1.2rem}
@@ -172,8 +172,8 @@ body.en .lang-es{display:none!important}
 <span class="laugha-name"> LAUGHTER</span> 😂
 </div>
 <p class="hero-desc">
-<span class="lang-en"><strong>The ONLY laughter-powered memory fitness!</strong><br>4 laughter sessions for your brain.</span>
-<span class="lang-es"><strong>¡El ÚNICO fitness mental impulsado por risa!</strong><br>4 sesiones de risa para tu cerebro.</span>
+<span class="lang-en"><strong>The ONLY laughter-powered memory fitness!</strong><br>4 laughter circuits for your brain.</span>
+<span class="lang-es"><strong>¡El ÚNICO fitness mental impulsado por risa!</strong><br>4 circuitos de risa para tu cerebro.</span>
 </p>
 </section>
 
@@ -213,8 +213,8 @@ body.en .lang-es{display:none!important}
 </div>
 <div class="joy-message">
 <p class="joy-message-text" id="joyMessage">
-<span class="lang-en"><strong>Start a session</strong> to earn your first laugh moments! 😂</span>
-<span class="lang-es"><strong>¡Comienza una sesión</strong> para ganar tus primeros momentos de risa! 😂</span>
+<span class="lang-en"><strong>Start a circuit</strong> to earn your first laugh moments! 😂</span>
+<span class="lang-es"><strong>¡Comienza un circuito</strong> para ganar tus primeros momentos de risa! 😂</span>
 </p>
 </div>
 </section>
@@ -223,8 +223,8 @@ body.en .lang-es{display:none!important}
 <div class="stat">
 <div class="stat-value">4</div>
 <div class="stat-label">
-<span class="lang-en">SESSIONS</span>
-<span class="lang-es">SESIONES</span>
+<span class="lang-en">CIRCUITS</span>
+<span class="lang-es">CIRCUITOS</span>
 </div>
 </div>
 <div class="stat">
@@ -243,56 +243,56 @@ body.en .lang-es{display:none!important}
 </div>
 </div>
 
-<section class="sessions-section">
+<section class="circuits-section">
 <h2 class="section-title">
-<span class="lang-en">CHOOSE YOUR <span>LAUGHTER</span> SESSION</span>
-<span class="lang-es">ELIGE TU SESIÓN DE <span>RISA</span></span>
+<span class="lang-en">CHOOSE YOUR <span>LAUGHTER</span> CIRCUIT</span>
+<span class="lang-es">ELIGE TU CIRCUITO DE <span>RISA</span></span>
 </h2>
-<div class="sessions-grid">
-<a href="laugh1.html" class="session-card card-1">
-<div class="session-num">LAUGH 1</div>
-<span class="session-emoji">🎭</span>
-<div class="session-name">
+<div class="circuits-grid">
+<a href="laugh1.html" class="circuit-card card-1">
+<div class="circuit-num">LAUGH 1</div>
+<span class="circuit-emoji">🎭</span>
+<div class="circuit-name">
 <span class="lang-en">SILLY SCENES</span>
 <span class="lang-es">ESCENAS LOCAS</span>
 </div>
-<div class="session-desc">
+<div class="circuit-desc">
 <span class="lang-en">Memory & Laughter</span>
 <span class="lang-es">Memoria y Risa</span>
 </div>
 </a>
-<a href="laugh2.html" class="session-card card-2">
-<div class="session-num">LAUGH 2</div>
-<span class="session-emoji">🔊</span>
-<div class="session-name">
+<a href="laugh2.html" class="circuit-card card-2">
+<div class="circuit-num">LAUGH 2</div>
+<span class="circuit-emoji">🔊</span>
+<div class="circuit-name">
 <span class="lang-en">GOOFY SOUNDS</span>
 <span class="lang-es">SONIDOS TONTOS</span>
 </div>
-<div class="session-desc">
+<div class="circuit-desc">
 <span class="lang-en">Speed & Recall</span>
 <span class="lang-es">Velocidad y Memoria</span>
 </div>
 </a>
-<a href="laugh3.html" class="session-card card-3">
-<div class="session-num">LAUGH 3</div>
-<span class="session-emoji">🚶</span>
-<div class="session-name">
+<a href="laugh3.html" class="circuit-card card-3">
+<div class="circuit-num">LAUGH 3</div>
+<span class="circuit-emoji">🚶</span>
+<div class="circuit-name">
 <span class="lang-en">WACKY WALKS</span>
 <span class="lang-es">PASOS LOCOS</span>
 </div>
-<div class="session-desc">
+<div class="circuit-desc">
 <span class="lang-en">Sequence & Memory</span>
 <span class="lang-es">Secuencia y Memoria</span>
 </div>
 </a>
-<a href="laugh4.html" class="session-card card-4">
-<div class="session-num">LAUGH 4</div>
-<span class="session-emoji">🎪</span>
-<div class="session-name">
+<a href="laugh4.html" class="circuit-card card-4">
+<div class="circuit-num">LAUGH 4</div>
+<span class="circuit-emoji">🎪</span>
+<div class="circuit-name">
 <span class="lang-en">ABSURD PAIRS</span>
 <span class="lang-es">PAREJAS ABSURDAS</span>
 </div>
-<div class="session-desc">
+<div class="circuit-desc">
 <span class="lang-en">Joy & Recognition</span>
 <span class="lang-es">Alegría y Reconocimiento</span>
 </div>
@@ -311,8 +311,8 @@ body.en .lang-es{display:none!important}
 <span class="lang-es">CONOCE A <span>COACH GOTROTTER AI</span></span>
 </h3>
 <p>
-<span class="lang-en">Your 24/7 laughter coach! I'll guide you through every session with encouragement, celebration, and plenty of laughs! 🏀😂</span>
-<span class="lang-es">¡Tu coach de risa 24/7! Te guiaré en cada sesión con ánimo, celebración y muchas risas! 🏀😂</span>
+<span class="lang-en">Your 24/7 laughter coach! I'll guide you through every circuit with encouragement, celebration, and plenty of laughs! 🏀😂</span>
+<span class="lang-es">¡Tu coach de risa 24/7! Te guiaré en cada circuito con ánimo, celebración y muchas risas! 🏀😂</span>
 </p>
 </div>
 </div>
@@ -365,7 +365,7 @@ body.en .lang-es{display:none!important}
 <span class="lang-en">Ready to laugh your way to a sharper mind?</span>
 <span class="lang-es">¿Listo para reír hacia una mente más aguda?</span>
 </p>
-<a href="#" class="cta-btn" onclick="document.querySelector('.sessions-section').scrollIntoView({behavior:'smooth'});return false;">
+<a href="#" class="cta-btn" onclick="document.querySelector('.circuits-section').scrollIntoView({behavior:'smooth'});return false;">
 <span class="lang-en">START LAUGHING! 😂</span>
 <span class="lang-es">¡A REÍR! 😂</span>
 </a>
@@ -459,8 +459,8 @@ function updateJoyMessage(data) {
     var msgEn, msgEs;
     
     if (data.total === 0) {
-        msgEn = "<strong>Start a session</strong> to earn your first laugh moments! 😂";
-        msgEs = "<strong>¡Comienza una sesión</strong> para ganar tus primeros momentos de risa! 😂";
+        msgEn = "<strong>Start a circuit</strong> to earn your first laugh moments! 😂";
+        msgEs = "<strong>¡Comienza un circuito</strong> para ganar tus primeros momentos de risa! 😂";
     } else if (data.today === 0 && data.total > 0) {
         msgEn = "<strong>Welcome back!</strong> Ready for more laugh moments? 😄";
         msgEs = "<strong>¡Bienvenido de vuelta!</strong> ¿Listo para más momentos de risa? 😄";
