@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>GIGLO™ | Laughter Workouts for the Mind</title>
+<title>Laughter Workouts™ | Exercise Your Brain. Exercise Your Smile.</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -17,10 +17,9 @@ body.en .lang-es{display:none!important}
 /* Header */
 .header{padding:15px 20px;background:linear-gradient(135deg,rgba(155,89,182,0.15),rgba(255,105,180,0.1));border-bottom:2px solid rgba(155,89,182,0.3);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;backdrop-filter:blur(10px)}
 .header-left{display:flex;align-items:center;gap:12px}
-.logo{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:3px}
-.logo .gi{color:var(--purple)}
-.logo .glo{color:var(--pink)}
-.logo-tag{font-size:0.6rem;color:var(--muted);letter-spacing:1px;margin-top:-5px}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:2px}
+.logo .laughter{color:var(--purple)}
+.logo .workouts{color:var(--pink)}
 .lang-toggle{display:flex;gap:5px}
 .lang-btn{padding:8px 14px;border:2px solid var(--purple);background:transparent;color:var(--purple);border-radius:20px;font-weight:700;font-size:0.75rem;cursor:pointer;transition:all 0.3s}
 .lang-btn.active{background:var(--purple);color:var(--text)}
@@ -31,15 +30,20 @@ body.en .lang-es{display:none!important}
 .hero-coach{margin-bottom:20px}
 .hero-coach-img{width:120px;height:120px;border-radius:50%;object-fit:cover;border:4px solid var(--purple);box-shadow:0 0 40px rgba(155,89,182,0.5);animation:float 3s ease-in-out infinite}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-.hero-title{font-family:'Bebas Neue',sans-serif;font-size:4rem;letter-spacing:6px;margin-bottom:5px;text-shadow:0 0 30px rgba(155,89,182,0.5)}
-.hero-title .gi{color:var(--purple)}
-.hero-title .glo{color:var(--pink)}
-.hero-tagline{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:4px;color:var(--gold);margin-bottom:15px}
+.hero-title{font-family:'Bebas Neue',sans-serif;font-size:2.8rem;letter-spacing:4px;margin-bottom:5px;text-shadow:0 0 30px rgba(155,89,182,0.5);line-height:1.1}
+.hero-title .laughter{color:var(--purple)}
+.hero-title .workouts{color:var(--pink)}
+.hero-tm{font-size:1rem;vertical-align:super;color:var(--gold)}
+.hero-tagline{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:3px;color:var(--gold);margin-bottom:15px}
 .hero-desc{color:var(--muted);max-width:400px;margin:0 auto;line-height:1.6}
 .hero-desc strong{color:var(--text)}
 
+/* Product Badge */
+.product-badge{display:inline-block;background:linear-gradient(135deg,var(--purple),var(--pink));padding:8px 20px;border-radius:30px;margin:20px 0;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:3px}
+.product-badge .laugha-name{color:#FFD700}
+
 /* Stats Bar */
-.stats-bar{display:flex;justify-content:center;gap:30px;padding:20px;margin:20px auto;max-width:500px}
+.stats-bar{display:flex;justify-content:center;gap:30px;padding:20px;margin:10px auto;max-width:500px}
 .stat{text-align:center}
 .stat-value{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--pink)}
 .stat-label{font-size:0.7rem;color:var(--muted);letter-spacing:1px}
@@ -54,17 +58,17 @@ body.en .lang-es{display:none!important}
 .workout-card:hover{transform:translateY(-5px);border-color:var(--purple);box-shadow:0 15px 40px rgba(155,89,182,0.3)}
 .workout-card:hover::before{opacity:1}
 .workout-card:active{transform:scale(0.98)}
-.workout-num{font-family:'Bebas Neue',sans-serif;font-size:0.8rem;letter-spacing:2px;color:var(--muted);margin-bottom:5px}
+.workout-num{font-family:'Bebas Neue',sans-serif;font-size:0.8rem;letter-spacing:2px;color:var(--gold);margin-bottom:5px}
 .workout-emoji{font-size:3.5rem;margin-bottom:10px;display:block;position:relative;z-index:1}
 .workout-name{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:2px;margin-bottom:5px;position:relative;z-index:1}
 .workout-desc{font-size:0.75rem;color:var(--muted);position:relative;z-index:1}
-.workout-card.card-1{border-color:rgba(155,89,182,0.3)}
+.workout-card.card-1{border-color:rgba(231,76,60,0.3)}
 .workout-card.card-1 .workout-name{color:#E74C3C}
-.workout-card.card-2{border-color:rgba(255,105,180,0.3)}
+.workout-card.card-2{border-color:rgba(243,156,18,0.3)}
 .workout-card.card-2 .workout-name{color:#F39C12}
-.workout-card.card-3{border-color:rgba(0,217,165,0.3)}
+.workout-card.card-3{border-color:rgba(46,204,113,0.3)}
 .workout-card.card-3 .workout-name{color:#2ECC71}
-.workout-card.card-4{border-color:rgba(255,215,0,0.3)}
+.workout-card.card-4{border-color:rgba(52,152,219,0.3)}
 .workout-card.card-4 .workout-name{color:#3498DB}
 
 /* Coach Section */
@@ -85,11 +89,17 @@ body.en .lang-es{display:none!important}
 .science-text{font-size:0.7rem;color:var(--muted);line-height:1.4}
 .science-text strong{color:var(--text);display:block;margin-bottom:3px}
 
+/* CTA Section */
+.cta-section{text-align:center;padding:30px 20px}
+.cta-text{color:var(--muted);margin-bottom:15px;font-size:0.9rem}
+.cta-btn{display:inline-block;padding:16px 40px;font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:3px;background:linear-gradient(135deg,var(--purple),var(--pink));color:var(--text);border:none;border-radius:50px;cursor:pointer;text-decoration:none;box-shadow:0 8px 30px rgba(155,89,182,0.4);transition:all 0.3s}
+.cta-btn:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(155,89,182,0.5)}
+
 /* Footer */
 .footer{padding:30px 20px;text-align:center;border-top:2px solid rgba(155,89,182,0.2)}
-.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:3px;margin-bottom:10px}
-.footer-logo .gi{color:var(--purple)}
-.footer-logo .glo{color:var(--pink)}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:2px;margin-bottom:10px}
+.footer-logo .laughter{color:var(--purple)}
+.footer-logo .workouts{color:var(--pink)}
 .footer-tagline{font-size:0.8rem;color:var(--muted);margin-bottom:15px}
 .footer-copy{font-size:0.7rem;color:rgba(255,255,255,0.3)}
 
@@ -103,12 +113,13 @@ body.en .lang-es{display:none!important}
 
 /* Responsive */
 @media(max-width:400px){
-.hero-title{font-size:3rem}
+.hero-title{font-size:2.2rem}
 .workouts-grid{gap:12px}
 .workout-emoji{font-size:2.8rem}
 .workout-name{font-size:1.2rem}
 .stats-bar{gap:20px}
 .stat-value{font-size:1.5rem}
+.logo{font-size:1.2rem}
 }
 </style>
 </head>
@@ -116,10 +127,7 @@ body.en .lang-es{display:none!important}
 
 <header class="header">
 <div class="header-left">
-<div>
-<div class="logo"><span class="gi">GIG</span><span class="glo">LO</span>™</div>
-<div class="logo-tag">LAUGHTER WORKOUTS</div>
-</div>
+<div class="logo"><span class="laughter">LAUGHTER</span> <span class="workouts">WORKOUTS</span>™</div>
 </div>
 <div class="lang-toggle">
 <button class="lang-btn active" data-lang="en">EN</button>
@@ -131,14 +139,22 @@ body.en .lang-es{display:none!important}
 <div class="hero-coach">
 <img src="go_chat.png" alt="Coach GoTrotter AI" class="hero-coach-img">
 </div>
-<h1 class="hero-title"><span class="gi">GIG</span><span class="glo">LO</span></h1>
+<h1 class="hero-title">
+<span class="laughter">LAUGHTER</span><br>
+<span class="workouts">WORKOUTS</span><span class="hero-tm">™</span>
+</h1>
 <p class="hero-tagline">
-<span class="lang-en">LAUGHTER WORKOUTS FOR THE MIND</span>
-<span class="lang-es">EJERCICIOS DE RISA PARA LA MENTE</span>
+<span class="lang-en">EXERCISE YOUR BRAIN. EXERCISE YOUR SMILE.</span>
+<span class="lang-es">EJERCITA TU CEREBRO. EJERCITA TU SONRISA.</span>
 </p>
+<div class="product-badge">
+<span class="lang-en">POWERED BY</span>
+<span class="lang-es">IMPULSADO POR</span>
+<span class="laugha-name"> LAUGHTER</span> 😂
+</div>
 <p class="hero-desc">
-<span class="lang-en"><strong>Exercise your brain. Exercise your smile.</strong><br>The ONLY cognitive training built on joy!</span>
-<span class="lang-es"><strong>Ejercita tu cerebro. Ejercita tu sonrisa.</strong><br>¡El ÚNICO entrenamiento cognitivo basado en alegría!</span>
+<span class="lang-en"><strong>The ONLY cognitive training built on joy!</strong><br>4 laughter-powered workouts for your brain.</span>
+<span class="lang-es"><strong>¡El ÚNICO entrenamiento cognitivo basado en alegría!</strong><br>4 ejercicios de risa para tu cerebro.</span>
 </p>
 </section>
 
@@ -159,12 +175,12 @@ body.en .lang-es{display:none!important}
 
 <section class="workouts-section">
 <h2 class="section-title">
-<span class="lang-en">CHOOSE YOUR <span>WORKOUT</span></span>
-<span class="lang-es">ELIGE TU <span>EJERCICIO</span></span>
+<span class="lang-en">CHOOSE YOUR <span>LAUGHTER</span> WORKOUT</span>
+<span class="lang-es">ELIGE TU EJERCICIO DE <span>RISA</span></span>
 </h2>
 <div class="workouts-grid">
-<a href="giglo1.html" class="workout-card card-1">
-<div class="workout-num">GIGLO 1</div>
+<a href="laugh1.html" class="workout-card card-1">
+<div class="workout-num">LAUGH 1</div>
 <span class="workout-emoji">🎭</span>
 <div class="workout-name">
 <span class="lang-en">SILLY SCENES</span>
@@ -175,8 +191,8 @@ body.en .lang-es{display:none!important}
 <span class="lang-es">Memoria y Risa</span>
 </div>
 </a>
-<a href="giglo2.html" class="workout-card card-2">
-<div class="workout-num">GIGLO 2</div>
+<a href="laugh2.html" class="workout-card card-2">
+<div class="workout-num">LAUGH 2</div>
 <span class="workout-emoji">🔊</span>
 <div class="workout-name">
 <span class="lang-en">GOOFY SOUNDS</span>
@@ -187,8 +203,8 @@ body.en .lang-es{display:none!important}
 <span class="lang-es">Velocidad y Memoria</span>
 </div>
 </a>
-<a href="giglo3.html" class="workout-card card-3">
-<div class="workout-num">GIGLO 3</div>
+<a href="laugh3.html" class="workout-card card-3">
+<div class="workout-num">LAUGH 3</div>
 <span class="workout-emoji">🚶</span>
 <div class="workout-name">
 <span class="lang-en">WACKY WALKS</span>
@@ -199,8 +215,8 @@ body.en .lang-es{display:none!important}
 <span class="lang-es">Secuencia y Memoria</span>
 </div>
 </a>
-<a href="giglo4.html" class="workout-card card-4">
-<div class="workout-num">GIGLO 4</div>
+<a href="laugh4.html" class="workout-card card-4">
+<div class="workout-num">LAUGH 4</div>
 <span class="workout-emoji">🎪</span>
 <div class="workout-name">
 <span class="lang-en">ABSURD PAIRS</span>
@@ -220,7 +236,7 @@ body.en .lang-es{display:none!important}
 <img src="go_chat.png" alt="Coach GoTrotter AI">
 </div>
 <div class="coach-info">
-<h3><span class="lang-en">COACH <span>GOTROTTER AI</span></span><span class="lang-es">COACH <span>GOTROTTER AI</span></span></h3>
+<h3><span class="lang-en">MEET <span>COACH GOTROTTER AI</span></span><span class="lang-es">CONOCE A <span>COACH GOTROTTER AI</span></span></h3>
 <p>
 <span class="lang-en">Your 24/7 laughter coach! I'll guide you through every workout with encouragement, celebration, and plenty of laughs! 🏀😂</span>
 <span class="lang-es">¡Tu coach de risa 24/7! Te guiaré en cada ejercicio con ánimo, celebración y muchas risas! 🏀😂</span>
@@ -231,8 +247,8 @@ body.en .lang-es{display:none!important}
 
 <section class="science-section">
 <h2 class="science-title">
-<span class="lang-en">😂 WHY LAUGHTER WORKS</span>
-<span class="lang-es">😂 POR QUÉ FUNCIONA LA RISA</span>
+<span class="lang-en">😂 THE SCIENCE OF LAUGHTER</span>
+<span class="lang-es">😂 LA CIENCIA DE LA RISA</span>
 </h2>
 <div class="science-grid">
 <div class="science-item">
@@ -262,13 +278,24 @@ body.en .lang-es{display:none!important}
 </div>
 </section>
 
+<section class="cta-section">
+<p class="cta-text">
+<span class="lang-en">Ready to laugh your way to a sharper mind?</span>
+<span class="lang-es">¿Listo para reír hacia una mente más aguda?</span>
+</p>
+<a href="#" class="cta-btn" onclick="document.querySelector('.workouts-section').scrollIntoView({behavior:'smooth'});return false;">
+<span class="lang-en">START LAUGHING! 😂</span>
+<span class="lang-es">¡A REÍR! 😂</span>
+</a>
+</section>
+
 <footer class="footer">
-<div class="footer-logo"><span class="gi">GIG</span><span class="glo">LO</span>™</div>
+<div class="footer-logo"><span class="laughter">LAUGHTER</span> <span class="workouts">WORKOUTS</span>™</div>
 <div class="footer-tagline">
 <span class="lang-en">Exercise your brain. Exercise your smile.</span>
 <span class="lang-es">Ejercita tu cerebro. Ejercita tu sonrisa.</span>
 </div>
-<div class="footer-copy">© 2026 GIGLO™ by Akashic Works LLC</div>
+<div class="footer-copy">© 2026 Laughter Workouts™ by Akashic Works LLC</div>
 </footer>
 
 <script>
