@@ -249,6 +249,18 @@ body.en .lang-es{display:none!important}
 
 <script>
 (function(){
+// ============ AUTH GATE (production only) ============
+var host = window.location.hostname;
+var isProduction = host.includes('laughcourt') || host.includes('onrender') || host.includes('render');
+if (isProduction) {
+    var sessionPin = sessionStorage.getItem('lw-user-pin');
+    var userData = null;
+    try { userData = JSON.parse(localStorage.getItem('lw-user')); } catch(e) {}
+    if (!sessionPin && (!userData || !userData.pin || userData.type !== 'subscriber')) {
+        window.location.replace('index.html');
+    }
+}
+
 // Language
 var lang = localStorage.getItem('lw-lang') || 'en';
 function setLang(l) {
