@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>LAUGH HUNT 🔍 | Laughletico™</title>
+<title>LAUGH HUNT 🔍 | LaughCourt™</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -363,7 +363,7 @@ var selecting = false;
 var selectedCells = [];
 var startTime = 0;
 var timerInterval = null;
-var circuitLaughs = 0;
+var gameLaughs = 0;
 
 var introScreen = document.getElementById('introScreen');
 var gameScreen = document.getElementById('gameScreen');
@@ -387,11 +387,11 @@ function getLaughEmoji(count) {
 }
 
 function addLaughs(count) {
-    var oldEmoji = getLaughEmoji(circuitLaughs);
-    circuitLaughs += count;
-    var newEmoji = getLaughEmoji(circuitLaughs);
+    var oldEmoji = getLaughEmoji(gameLaughs);
+    gameLaughs += count;
+    var newEmoji = getLaughEmoji(gameLaughs);
     
-    document.getElementById('laughValue').textContent = circuitLaughs;
+    document.getElementById('laughValue').textContent = gameLaughs;
     
     var icon = document.getElementById('laughIcon');
     icon.classList.remove('bounce', 'evolve');
@@ -775,7 +775,7 @@ function checkWord(word) {
 // ============ GAME FLOW ============
 function startGame() {
     foundWords = [];
-    circuitLaughs = 0;
+    gameLaughs = 0;
     document.getElementById('laughIcon').textContent = '😊';
     document.getElementById('laughValue').textContent = '0';
     
@@ -821,7 +821,7 @@ function puzzleComplete() {
     // Show result
     setTimeout(function() {
         document.getElementById('finalTime').textContent = mins + ':' + (secs < 10 ? '0' : '') + secs;
-        document.getElementById('finalLaughs').textContent = circuitLaughs;
+        document.getElementById('finalLaughs').textContent = gameLaughs;
         document.getElementById('resultTitle').innerHTML = lang === 'es' ? '¡COMPLETADO!' : 'COMPLETE!';
         showScreen(resultScreen);
     }, 1000);
