@@ -153,11 +153,36 @@ body.en .lang-es{display:none!important}
 .coach-text{font-size:0.9rem;color:var(--text);line-height:1.4}
 .coach-label{font-size:0.7rem;color:var(--purple-light);margin-top:8px;font-weight:700}
 
-/* Laugh Counter */
+/* Laugh Counter - Dynamic */
 .laugh-counter{position:fixed;top:70px;right:20px;background:var(--card);border:2px solid var(--gold);border-radius:20px;padding:8px 15px;display:flex;align-items:center;gap:8px;z-index:100;opacity:0;transform:scale(0.8);transition:all 0.3s}
 .laugh-counter.visible{opacity:1;transform:scale(1)}
-.laugh-counter-icon{font-size:1.2rem}
+.laugh-counter-icon{font-size:1.4rem;transition:all 0.3s}
+.laugh-counter-icon.bounce{animation:laughBounce 0.5s ease}
+.laugh-counter-icon.evolve{animation:laughEvolve 0.6s ease}
+@keyframes laughBounce{0%{transform:scale(1)}30%{transform:scale(1.4)}50%{transform:scale(0.9)}70%{transform:scale(1.2)}100%{transform:scale(1)}}
+@keyframes laughEvolve{0%{transform:scale(1) rotate(0)}50%{transform:scale(1.5) rotate(10deg)}100%{transform:scale(1) rotate(0)}}
 .laugh-counter-value{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--gold)}
+
+/* Floating Laugh Emojis */
+.laugh-float{position:fixed;pointer-events:none;font-size:2rem;z-index:999;animation:floatUp 1.2s ease-out forwards}
+@keyframes floatUp{0%{opacity:1;transform:translateY(0) scale(1) rotate(0deg)}50%{opacity:1;transform:translateY(-40px) scale(1.3) rotate(-10deg)}100%{opacity:0;transform:translateY(-80px) scale(0.8) rotate(10deg)}}
+
+/* Laugh Burst - Multiple emojis */
+.laugh-burst{position:fixed;pointer-events:none;font-size:1.5rem;z-index:999}
+.laugh-burst.burst-1{animation:burst1 1s ease-out forwards}
+.laugh-burst.burst-2{animation:burst2 1s ease-out forwards}
+.laugh-burst.burst-3{animation:burst3 1s ease-out forwards}
+.laugh-burst.burst-4{animation:burst4 1s ease-out forwards}
+.laugh-burst.burst-5{animation:burst5 1s ease-out forwards}
+@keyframes burst1{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(-50px,-60px) scale(0.5)}}
+@keyframes burst2{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(50px,-70px) scale(0.5)}}
+@keyframes burst3{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(-30px,-80px) scale(0.5)}}
+@keyframes burst4{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(60px,-50px) scale(0.5)}}
+@keyframes burst5{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(0,-90px) scale(0.5)}}
+
+/* Laugh Rain for Perfect Games */
+.laugh-rain{position:fixed;top:-50px;font-size:2rem;z-index:1000;animation:rainFall 2s ease-in forwards;pointer-events:none}
+@keyframes rainFall{0%{opacity:1;transform:translateY(0) rotate(0deg)}100%{opacity:0;transform:translateY(100vh) rotate(360deg)}}
 
 /* Confetti */
 .confetti{position:fixed;width:10px;height:10px;top:-10px;z-index:1000;animation:fall 3s linear forwards}
@@ -182,7 +207,7 @@ body.en .lang-es{display:none!important}
 </div>
 
 <div class="laugh-counter" id="laughCounter">
-<span class="laugh-counter-icon">😂</span>
+<span class="laugh-counter-icon" id="laughIcon">😊</span>
 <span class="laugh-counter-value" id="laughValue">0</span>
 </div>
 
@@ -392,13 +417,44 @@ function hideCoach() {
     document.getElementById('coachBubble').classList.remove('visible');
 }
 
-// Laugh tracking
+// Laugh tracking with dynamic effects
 var sessionLaughs = 0;
+var laughEmojis = ['😊', '😄', '😂', '🤣'];
+
+function getLaughEmoji(count) {
+    if (count >= 30) return '🤣';
+    if (count >= 15) return '😂';
+    if (count >= 5) return '😄';
+    return '😊';
+}
+
 function addLaugh(n) {
     n = n || 1;
+    var oldEmoji = getLaughEmoji(sessionLaughs);
     sessionLaughs += n;
-    document.getElementById('laughValue').textContent = sessionLaughs;
+    var newEmoji = getLaughEmoji(sessionLaughs);
+    
+    // Update counter
+    var icon = document.getElementById('laughIcon');
+    var value = document.getElementById('laughValue');
+    value.textContent = sessionLaughs;
     document.getElementById('laughCounter').classList.add('visible');
+    
+    // Bounce animation
+    icon.classList.remove('bounce', 'evolve');
+    void icon.offsetWidth; // Trigger reflow
+    
+    // Check if emoji evolved
+    if (newEmoji !== oldEmoji) {
+        icon.textContent = newEmoji;
+        icon.classList.add('evolve');
+    } else {
+        icon.classList.add('bounce');
+    }
+    
+    // Floating laugh burst
+    createLaughBurst(n);
+    
     // Save to localStorage
     var today = new Date().toISOString().split('T')[0];
     var todayData = JSON.parse(localStorage.getItem('lw-laughs-today') || '{}');
@@ -407,6 +463,40 @@ function addLaugh(n) {
     localStorage.setItem('lw-laughs-today', JSON.stringify(todayData));
     var total = parseInt(localStorage.getItem('lw-laughs-total') || '0') + n;
     localStorage.setItem('lw-laughs-total', String(total));
+}
+
+function createLaughBurst(count) {
+    var emojis = ['😂', '🤣', '😆', '😄', '😜'];
+    var burstCount = Math.min(count + 2, 5);
+    
+    for (var i = 0; i < burstCount; i++) {
+        setTimeout(function(idx) {
+            return function() {
+                var burst = document.createElement('div');
+                burst.className = 'laugh-burst burst-' + (idx + 1);
+                burst.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                burst.style.left = (40 + Math.random() * 30) + '%';
+                burst.style.top = (30 + Math.random() * 20) + '%';
+                document.body.appendChild(burst);
+                setTimeout(function() { if (burst.parentNode) burst.remove(); }, 1000);
+            };
+        }(i), i * 80);
+    }
+}
+
+function createLaughRain() {
+    var emojis = ['😂', '🤣', '😆', '😄', '🥳', '🎉'];
+    for (var i = 0; i < 30; i++) {
+        setTimeout(function() {
+            var rain = document.createElement('div');
+            rain.className = 'laugh-rain';
+            rain.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            rain.style.left = Math.random() * 100 + 'vw';
+            rain.style.animationDuration = (1.5 + Math.random() * 1.5) + 's';
+            document.body.appendChild(rain);
+            setTimeout(function() { if (rain.parentNode) rain.remove(); }, 3000);
+        }, i * 60);
+    }
 }
 
 // Mastery storage
@@ -488,6 +578,7 @@ function startGame() {
     wrongCount = 0;
     sessionLaughs = 0;
     document.getElementById('laughCounter').classList.remove('visible');
+    document.getElementById('laughIcon').textContent = '😊';
     
     var tier = tiers[selectedTier];
     var speed = speeds[selectedSpeed];
@@ -850,11 +941,15 @@ function endGame() {
         document.getElementById('advanceBtn').style.display = 'block';
         showCoach('tierUp', 4000);
         createConfetti();
+        createLaughRain();
     } else {
         document.getElementById('nextTierBox').style.display = 'none';
         document.getElementById('advanceBtn').style.display = 'none';
         showCoach(isPerfect ? 'perfect' : 'tryAgain', 4000);
-        if (isPerfect) createConfetti();
+        if (isPerfect) {
+            createConfetti();
+            createLaughRain();
+        }
     }
     
     showScreen('resultScreen');
