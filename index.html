@@ -5,281 +5,569 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>LaughCourt™ - Exercise Your Memory. Exercise Your Smile.</title>
 <meta name="description" content="LaughCourt - The ONLY laughter-powered memory fitness! 2 games. 10 tiers. $5/month.">
-<meta name="keywords" content="laughcourt, laughter fitness, memory exercises, senior fitness, memory fitness, laughter therapy, memory training, joy games">
-<meta name="author" content="GoStar Digital LLC">
-<meta name="robots" content="index, follow">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://laughcourt.com/">
-<meta property="og:title" content="LaughCourt™ - Exercise Your Memory. Exercise Your Smile.">
-<meta property="og:description" content="The ONLY laughter-powered memory fitness! 2 games. 10 tiers. $5/month.">
-<meta property="og:image" content="https://laughcourt.com/go_chat.png">
-<meta property="og:site_name" content="LaughCourt">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="LaughCourt™ - Exercise Your Memory. Exercise Your Smile.">
-<meta name="twitter:description" content="The ONLY laughter-powered memory fitness! 2 games. 10 tiers. $5/month.">
-<meta name="twitter:image" content="https://laughcourt.com/go_chat.png">
-<link rel="canonical" href="https://laughcourt.com/">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--purple:#6B21A8;--purple-dark:#581C87;--purple-light:#9333EA;--teal:#00D9A5;--gold:#FFD700;--blue:#3B82F6;--dark:#0a0a0f;--darker:#050508;--card:#111118;--text:#FFFFFF;--muted:#8892a0;--success:#00D9A5;--danger:#FF4757}
+:root{--purple:#6B21A8;--purple-dark:#581C87;--purple-light:#9333EA;--teal:#00D9A5;--gold:#FFD700;--dark:#0a0a0f;--card:#111118;--text:#FFFFFF;--muted:#8892a0}
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%;overflow:hidden}
-body{font-family:'Outfit',sans-serif;background:var(--dark);color:var(--text)}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--dark);color:var(--text);min-height:100vh}
 body.es .lang-en{display:none !important}
 body.en .lang-es{display:none !important}
-.landing{position:fixed;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;padding:20px;padding-top:env(safe-area-inset-top,20px);background:radial-gradient(ellipse at center top,rgba(107,33,168,0.2) 0%,transparent 50%),radial-gradient(ellipse at 80% 80%,rgba(255,215,0,0.1) 0%,transparent 40%),var(--dark);z-index:1;transition:opacity 0.4s,transform 0.4s;overflow-y:auto}
-.landing.hidden{opacity:0;transform:scale(0.95);pointer-events:none}
-.lang-toggle{display:flex;gap:8px;margin-top:15px;margin-bottom:25px;flex-shrink:0}
-.lang-btn{padding:10px 18px;border:2px solid var(--gold);background:transparent;color:var(--gold);border-radius:25px;font-family:'Outfit',sans-serif;font-weight:700;font-size:0.85rem;cursor:pointer;transition:all 0.3s}
+
+/* Language Toggle */
+.lang-toggle{display:flex;gap:8px;justify-content:center;padding:20px}
+.lang-btn{padding:8px 16px;border:2px solid var(--gold);background:transparent;color:var(--gold);border-radius:20px;font-weight:700;font-size:0.8rem;cursor:pointer;transition:all 0.3s}
 .lang-btn.active{background:var(--gold);color:var(--dark)}
-.logo-section{margin-bottom:20px;flex-shrink:0}
-.logo{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.2rem,8vw,3.5rem);letter-spacing:2px;line-height:1}
+
+/* Header */
+.header{text-align:center;padding:20px}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,10vw,4rem);letter-spacing:2px}
 .logo .laugh{color:var(--gold)}
-.logo .letico{color:var(--text)}
-.tagline{font-family:'Bebas Neue',sans-serif;font-size:clamp(0.8rem,2.2vw,1.1rem);letter-spacing:3px;color:var(--purple-light);margin-top:5px}
-.hero-icon{width:90px;height:90px;margin-bottom:15px;animation:bounce 2s infinite;border-radius:50%;object-fit:cover;cursor:pointer;transition:transform 0.3s;flex-shrink:0}
-.hero-icon:hover{transform:scale(1.1)}
+.logo .court{color:var(--text)}
+.tagline{font-family:'Bebas Neue',sans-serif;font-size:clamp(0.8rem,2.5vw,1.1rem);letter-spacing:3px;color:var(--purple-light);margin-top:5px}
+
+/* Hero */
+.hero{text-align:center;padding:30px 20px}
+.hero-icon{width:100px;height:100px;border-radius:50%;object-fit:cover;animation:bounce 2s infinite}
 @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-.hero-text{max-width:320px;margin-bottom:25px;flex-shrink:0}
-.hero-text p{font-size:1rem;color:var(--muted);line-height:1.5}
+.hero-text{font-size:1rem;color:var(--muted);line-height:1.6;max-width:400px;margin:20px auto 0}
 .hero-text strong{color:var(--text)}
-.go-btn{padding:18px 45px;font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:4px;background:linear-gradient(135deg,var(--gold) 0%,#FFA500 100%);color:var(--dark);border:none;border-radius:50px;cursor:pointer;box-shadow:0 8px 30px rgba(255,215,0,0.4);transition:all 0.3s;display:flex;align-items:center;gap:10px;flex-shrink:0}
-.go-btn:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 12px 40px rgba(255,215,0,0.5)}
-.go-btn:active{transform:translateY(0) scale(0.98)}
-.go-btn-icon{width:28px;height:28px;border-radius:50%;object-fit:cover}
-.footer-text{margin-top:auto;padding:20px 0;font-size:0.7rem;color:var(--muted);flex-shrink:0}
-.footer-text a{color:var(--gold);text-decoration:none}
-@media(min-height:700px){.landing{justify-content:center;padding-top:20px}.lang-toggle{position:absolute;top:20px;left:50%;transform:translateX(-50%);margin:0}.logo{font-size:clamp(2.8rem,10vw,4rem)}.hero-icon{width:100px;height:100px}.go-btn{padding:22px 60px;font-size:1.8rem}.footer-text{position:absolute;bottom:20px;margin:0;padding:0}}
-.chat-screen{position:fixed;top:0;left:0;right:0;bottom:0;background:var(--dark);display:flex;flex-direction:column;z-index:10;opacity:0;transform:translateY(100%);transition:opacity 0.4s,transform 0.4s;pointer-events:none}
-.chat-screen.active{opacity:1;transform:translateY(0);pointer-events:auto}
-@media(min-width:768px){
-.chat-screen{top:50%;left:50%;right:auto;bottom:auto;transform:translate(-50%,-50%) scale(0.95);width:100%;max-width:480px;height:90vh;max-height:800px;border-radius:24px;border:2px solid rgba(255,215,0,0.3);box-shadow:0 25px 80px rgba(0,0,0,0.5),0 0 60px rgba(107,33,168,0.3);overflow:hidden;}
-.chat-screen.active{transform:translate(-50%,-50%) scale(1)}
-.chat-header{border-radius:24px 24px 0 0}
-.chat-input-area{border-radius:0 0 24px 24px}
-}
-.chat-header{padding:15px 20px;background:linear-gradient(135deg,rgba(107,33,168,0.2),rgba(255,215,0,0.1));border-bottom:2px solid rgba(255,215,0,0.3);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-.chat-header-left{display:flex;align-items:center;gap:12px}
-.chat-avatar{width:45px;height:45px;border-radius:50%;display:flex;align-items:center;justify-content:center;overflow:hidden;background:transparent}
-.chat-avatar-img{width:100%;height:100%;object-fit:cover;border-radius:50%}
-.chat-title{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:2px}
-.chat-title .go{color:var(--gold)}
-.chat-title .tr{color:var(--text)}
-.chat-subtitle{font-size:0.65rem;color:var(--gold);letter-spacing:1px}
-.chat-status{display:flex;align-items:center;gap:6px;font-size:0.7rem;color:var(--teal)}
-.chat-dot{width:8px;height:8px;background:var(--teal);border-radius:50%;animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
-.chat-header-right{display:flex;align-items:center;gap:10px}
-.chat-lang-btn{padding:6px 12px;border:2px solid var(--gold);background:transparent;color:var(--gold);border-radius:15px;font-weight:700;font-size:0.7rem;cursor:pointer;transition:all 0.3s}
-.chat-lang-btn.active{background:var(--gold);color:var(--dark)}
-.chat-close{width:36px;height:36px;background:rgba(255,255,255,0.1);border:none;border-radius:50%;color:var(--muted);font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.chat-body{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:15px}
-.chat-msg{display:flex;gap:10px;max-width:90%;animation:msgIn 0.3s ease}
-@keyframes msgIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.chat-msg.bot{align-self:flex-start}
-.chat-msg.user{align-self:flex-end;flex-direction:row-reverse}
-.chat-msg-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;overflow:hidden}
-.chat-msg-avatar-img{width:100%;height:100%;object-fit:cover;border-radius:50%}
-.chat-msg.bot .chat-msg-avatar{background:transparent}
-.chat-msg.user .chat-msg-avatar{background:var(--blue)}
-.chat-msg-bubble{background:var(--card);border:1px solid rgba(255,255,255,0.1);border-radius:18px;padding:14px 18px;font-size:0.95rem;line-height:1.6}
-.chat-msg.user .chat-msg-bubble{background:linear-gradient(135deg,var(--blue),#2563EB);border:none}
-.chat-msg-bubble strong{color:var(--gold)}
-.chat-msg-bubble .highlight{color:var(--teal)}
-.chat-msg-bubble .joke{color:var(--gold);font-style:italic;display:block;margin-top:10px;padding:10px;background:rgba(255,215,0,0.1);border-radius:10px;border-left:3px solid var(--gold)}
-.chat-options{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
-.chat-option{padding:12px 20px;background:rgba(255,215,0,0.1);border:2px solid rgba(255,215,0,0.4);color:var(--gold);border-radius:25px;font-weight:700;font-size:0.85rem;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:8px}
-.chat-option:hover{background:rgba(255,215,0,0.2);transform:scale(1.02)}
-.chat-option:active{transform:scale(0.98)}
-.chat-option.primary{background:linear-gradient(135deg,var(--gold),#FFA500);border:none;color:var(--dark)}
-.chat-option.secondary{background:rgba(107,33,168,0.2);border:2px solid rgba(107,33,168,0.5);color:var(--purple-light)}
-.chat-typing{display:flex;gap:5px;padding:10px 0}
-.chat-typing span{width:10px;height:10px;background:var(--muted);border-radius:50%;animation:typing 1.4s infinite}
-.chat-typing span:nth-child(2){animation-delay:0.2s}
-.chat-typing span:nth-child(3){animation-delay:0.4s}
-@keyframes typing{0%,100%{transform:translateY(0);opacity:0.5}50%{transform:translateY(-8px);opacity:1}}
-.chat-input-area{padding:15px 20px;border-top:1px solid rgba(255,255,255,0.1);background:var(--darker);flex-shrink:0;display:none}
-.chat-input-area.visible{display:block}
-.chat-input-row{display:flex;gap:10px;align-items:center;background:var(--card);border:2px solid rgba(255,255,255,0.1);border-radius:50px;padding:6px 6px 6px 20px}
-.chat-input-row:focus-within{border-color:var(--gold)}
-.chat-input{flex:1;background:none;border:none;color:var(--text);font-size:1rem;outline:none;font-family:'Outfit',sans-serif}
-.chat-input::placeholder{color:var(--muted)}
-.chat-send{width:44px;height:44px;background:linear-gradient(135deg,var(--gold),var(--purple));border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.chat-send svg{width:20px;height:20px;fill:var(--text)}
-.pin-input-container{display:flex;gap:12px;justify-content:center;margin-top:15px}
-.pin-digit{width:50px;height:60px;background:var(--card);border:3px solid rgba(255,255,255,0.2);border-radius:12px;font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--text);text-align:center;outline:none;transition:all 0.2s}
-.pin-digit:focus{border-color:var(--gold);box-shadow:0 0 20px rgba(255,215,0,0.3)}
-.pin-digit.filled{border-color:var(--teal);background:rgba(0,217,165,0.1)}
-.pin-submit{margin-top:20px;padding:14px 40px;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;background:linear-gradient(135deg,var(--gold),#FFA500);color:var(--dark);border:none;border-radius:30px;cursor:pointer;opacity:0.5;pointer-events:none;transition:all 0.3s}
-.pin-submit.ready{opacity:1;pointer-events:auto}
-.pin-submit.ready:hover{transform:scale(1.05)}
-.plan-cards{display:flex;flex-direction:column;gap:12px;margin-top:15px;width:100%}
-.plan-card{background:var(--card);border:2px solid rgba(255,255,255,0.1);border-radius:16px;padding:16px;cursor:pointer;transition:all 0.2s;display:flex;justify-content:space-between;align-items:center}
-.plan-card:hover{border-color:var(--gold);transform:translateX(5px)}
-.plan-card.selected{border-color:var(--teal);background:rgba(0,217,165,0.1)}
-.plan-card-left{text-align:left}
-.plan-name{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;color:var(--text);display:flex;align-items:center;gap:8px}
-.plan-desc{font-size:0.75rem;color:var(--muted);margin-top:4px}
-.plan-price{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--gold)}
-.plan-price span{font-size:0.8rem;color:var(--muted)}
-.subscribe-btn{margin-top:20px;padding:16px 40px;font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:3px;background:linear-gradient(135deg,var(--gold),#FFA500);color:var(--dark);border:none;border-radius:30px;cursor:pointer;box-shadow:0 5px 25px rgba(255,215,0,0.4);transition:all 0.3s;opacity:0.5;pointer-events:none}
-.subscribe-btn.ready{opacity:1;pointer-events:auto}
-.subscribe-btn.ready:hover{transform:scale(1.05);box-shadow:0 8px 30px rgba(255,215,0,0.5)}
-.subscribe-btn.loading{opacity:0.7;pointer-events:none}
-.terms-section{margin-top:20px;text-align:left;font-size:0.85rem}
-.terms-check{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;cursor:pointer}
-.terms-check input{display:none}
-.terms-checkbox{width:22px;height:22px;border:2px solid var(--muted);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;background:var(--darker)}
-.terms-check input:checked + .terms-checkbox{background:var(--teal);border-color:var(--teal)}
-.terms-check input:checked + .terms-checkbox::after{content:'✓';color:var(--dark);font-weight:700;font-size:0.9rem}
-.terms-label{color:var(--muted);line-height:1.4}
-.terms-label a{color:var(--teal);text-decoration:underline}
-.promo-badge{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:rgba(0,217,165,0.1);border:1px solid rgba(0,217,165,0.3);border-radius:20px;font-size:0.8rem;color:var(--teal);margin-top:10px}
-.status-badge{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:20px;font-size:0.8rem;margin-top:10px}
-.status-badge.active{background:rgba(0,217,165,0.1);border:1px solid rgba(0,217,165,0.3);color:var(--teal)}
-.status-badge.trialing{background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.3);color:var(--gold)}
-.pin-display{background:linear-gradient(135deg,rgba(107,33,168,0.2),rgba(255,215,0,0.2));border:3px solid var(--gold);border-radius:20px;padding:25px;margin:15px 0;text-align:center}
-.pin-display-label{font-size:0.85rem;color:var(--muted);margin-bottom:10px;letter-spacing:1px}
-.pin-display-value{font-family:'Bebas Neue',sans-serif;font-size:3.5rem;letter-spacing:15px;color:var(--gold);text-shadow:0 0 30px rgba(255,215,0,0.5)}
-.pin-display-note{font-size:0.75rem;color:var(--teal);margin-top:10px}
-.email-input-container{margin-top:15px}
-.email-input{width:100%;padding:14px 20px;background:var(--card);border:2px solid rgba(255,255,255,0.2);border-radius:12px;font-family:'Outfit',sans-serif;font-size:1rem;color:var(--text);outline:none;transition:all 0.2s}
-.email-input:focus{border-color:var(--gold);box-shadow:0 0 20px rgba(255,215,0,0.2)}
-.email-input::placeholder{color:var(--muted)}
-.email-submit{margin-top:15px;padding:14px 40px;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;background:linear-gradient(135deg,var(--gold),#FFA500);color:var(--dark);border:none;border-radius:30px;cursor:pointer;transition:all 0.3s}
-.email-submit:hover{transform:scale(1.05)}
-.email-submit.loading{opacity:0.7;pointer-events:none}
-.success-burst{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);font-size:6rem;z-index:100;animation:burst 0.8s ease-out forwards;pointer-events:none}
-@keyframes burst{0%{opacity:1;transform:translate(-50%,-50%) scale(0.5)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.2)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.5)}}
-.confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1000;overflow:hidden}
-.confetti{position:absolute;width:10px;height:10px;top:-10px;animation:confetti-fall 4s linear forwards}
-@keyframes confetti-fall{0%{transform:translateY(0) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
-.confetti:nth-child(odd){background:var(--gold);border-radius:50%}
-.confetti:nth-child(even){background:var(--purple);border-radius:2px}
-.confetti:nth-child(3n){background:var(--teal)}
-.confetti:nth-child(4n){background:var(--success)}
-.coach-welcome-box{background:linear-gradient(135deg,rgba(107,33,168,0.2),rgba(255,215,0,0.2));border:3px solid var(--gold);border-radius:20px;padding:20px;margin:15px 0;text-align:center}
-.coach-welcome-icon{font-size:3rem;margin-bottom:10px;animation:bounce 2s infinite}
-.coach-welcome-title{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:3px;color:var(--gold);margin-bottom:10px}
-.coach-welcome-msg{font-size:0.95rem;color:var(--text);line-height:1.6}
-.coach-welcome-msg strong{color:var(--gold)}
-.coach-signature{font-size:0.8rem;color:var(--purple-light);margin-top:12px;font-weight:700}
-@media(max-width:400px){.go-btn{padding:18px 45px;font-size:1.5rem}.pin-digit{width:45px;height:55px;font-size:1.8rem}.plan-card{padding:12px}.pin-display-value{font-size:2.8rem;letter-spacing:10px}}
-.chat-fab{position:fixed;bottom:30px;right:30px;width:70px;height:70px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--purple-dark));border:3px solid var(--gold);cursor:pointer;box-shadow:0 6px 30px rgba(107,33,168,0.5);z-index:100;display:flex;align-items:center;justify-content:center;transition:all 0.3s;animation:fabPulse 2s infinite}
-.chat-fab:hover{transform:scale(1.1);box-shadow:0 8px 40px rgba(107,33,168,0.6)}
-.chat-fab img{width:45px;height:45px;border-radius:50%}
-.chat-fab-label{position:absolute;right:85px;background:var(--card);padding:10px 16px;border-radius:20px;font-size:0.85rem;font-weight:600;white-space:nowrap;box-shadow:0 4px 15px rgba(0,0,0,0.3);opacity:0;transform:translateX(10px);transition:all 0.3s}
-.chat-fab:hover .chat-fab-label{opacity:1;transform:translateX(0)}
-@keyframes fabPulse{0%,100%{box-shadow:0 6px 30px rgba(107,33,168,0.5)}50%{box-shadow:0 6px 40px rgba(255,215,0,0.4)}}
-.chat-screen.active ~ .chat-fab,.chat-fab.hidden{display:none}
-.hero-cta{margin-top:12px;font-size:0.85rem;color:var(--muted)}
-.hero-cta a{color:var(--gold);text-decoration:none;font-weight:600;cursor:pointer}
-.hero-cta a:hover{text-decoration:underline}
-.game-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:15px;width:100%}
-.game-card{background:var(--card);border:2px solid rgba(107,33,168,0.3);border-radius:16px;padding:18px 12px;text-align:center;transition:all 0.2s}
+
+/* Games */
+.games{padding:30px 20px;max-width:700px;margin:0 auto}
+.section-title{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:3px;text-align:center;margin-bottom:20px;color:var(--gold)}
+.game-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}
+@media(max-width:500px){.game-grid{grid-template-columns:1fr}}
+.game-card{background:var(--card);border:2px solid rgba(107,33,168,0.3);border-radius:16px;padding:25px 15px;text-align:center;transition:all 0.3s}
 .game-card:hover{border-color:var(--gold);transform:translateY(-3px)}
-.game-emoji{font-size:2.5rem;margin-bottom:10px}
-.game-name{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;color:var(--gold)}
-.game-desc{font-size:0.75rem;color:var(--muted);margin-top:6px;line-height:1.4}
+.game-emoji{font-size:3rem;margin-bottom:10px}
+.game-name{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:2px;color:var(--gold);margin-bottom:8px}
+.game-desc{font-size:0.85rem;color:var(--muted);line-height:1.5}
+
+/* Pricing */
+.pricing{padding:30px 20px;text-align:center}
+.price-box{background:linear-gradient(135deg,rgba(107,33,168,0.2),rgba(255,215,0,0.1));border:3px solid var(--gold);border-radius:20px;padding:30px 20px;max-width:350px;margin:0 auto}
+.price-amount{font-family:'Bebas Neue',sans-serif;font-size:3.5rem;color:var(--gold)}
+.price-amount span{font-size:1.2rem;color:var(--muted)}
+.price-features{list-style:none;margin:20px 0;text-align:left;padding:0 10px}
+.price-features li{padding:8px 0;font-size:0.9rem;color:var(--muted);display:flex;align-items:center;gap:10px}
+.price-features li::before{content:'✓';color:var(--teal);font-weight:bold}
+.cta-btn{display:inline-block;padding:18px 50px;font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:3px;background:linear-gradient(135deg,var(--gold),#FFA500);color:var(--dark);border:none;border-radius:50px;cursor:pointer;text-decoration:none;box-shadow:0 8px 30px rgba(255,215,0,0.4);transition:all 0.3s;margin-top:20px}
+.cta-btn:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 12px 40px rgba(255,215,0,0.5)}
+
+/* Returning User */
+.returning{padding:20px;text-align:center}
+.returning-link{color:var(--purple-light);font-size:0.9rem;cursor:pointer;text-decoration:underline}
+.returning-link:hover{color:var(--gold)}
+
+/* Footer */
+.footer{text-align:center;padding:30px 20px;font-size:0.75rem;color:var(--muted)}
+.footer a{color:var(--gold);text-decoration:none}
+
+/* PIN Modal */
+.modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.9);z-index:100;align-items:center;justify-content:center;padding:20px}
+.modal.active{display:flex}
+.modal-content{background:var(--card);border:2px solid var(--gold);border-radius:24px;padding:40px 30px;max-width:400px;width:100%;text-align:center;position:relative}
+.modal-close{position:absolute;top:15px;right:20px;background:none;border:none;color:var(--muted);font-size:1.5rem;cursor:pointer}
+.modal-title{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:2px;color:var(--gold);margin-bottom:15px}
+.modal-text{color:var(--muted);font-size:0.95rem;margin-bottom:20px;line-height:1.5}
+.email-input{width:100%;padding:14px 20px;background:var(--dark);border:2px solid rgba(255,255,255,0.2);border-radius:12px;font-family:'Outfit',sans-serif;font-size:1rem;color:var(--text);outline:none;margin-bottom:15px}
+.email-input:focus{border-color:var(--gold)}
+.modal-btn{width:100%;padding:14px;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;background:linear-gradient(135deg,var(--gold),#FFA500);color:var(--dark);border:none;border-radius:30px;cursor:pointer;transition:all 0.3s}
+.modal-btn:hover{transform:scale(1.02)}
+.modal-btn:disabled{opacity:0.5;cursor:not-allowed}
+
+/* PIN Display */
+.pin-display{background:linear-gradient(135deg,rgba(107,33,168,0.2),rgba(255,215,0,0.2));border:3px solid var(--gold);border-radius:16px;padding:25px;margin:20px 0}
+.pin-label{font-size:0.8rem;color:var(--muted);letter-spacing:1px;margin-bottom:8px}
+.pin-value{font-family:'Bebas Neue',sans-serif;font-size:3rem;letter-spacing:12px;color:var(--gold);text-shadow:0 0 20px rgba(255,215,0,0.5)}
+.pin-note{font-size:0.8rem;color:var(--teal);margin-top:10px}
+.play-btn{margin-top:20px;padding:16px 40px;font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:2px;background:linear-gradient(135deg,var(--teal),#00B894);color:var(--dark);border:none;border-radius:30px;cursor:pointer;transition:all 0.3s}
+.play-btn:hover{transform:scale(1.05)}
+
+/* PIN Input */
+.pin-input-container{display:flex;gap:10px;justify-content:center;margin:20px 0}
+.pin-digit{width:50px;height:60px;background:var(--dark);border:2px solid rgba(255,255,255,0.2);border-radius:10px;font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--text);text-align:center;outline:none}
+.pin-digit:focus{border-color:var(--gold)}
+
+/* Success Animation */
+.confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1000;overflow:hidden}
+.confetti{position:absolute;width:10px;height:10px;top:-10px;animation:fall 4s linear forwards}
+@keyframes fall{0%{transform:translateY(0) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+
+/* Questions */
+.questions{padding:10px 20px;text-align:center}
+.questions-link{color:var(--teal);font-size:0.9rem;cursor:pointer}
+.questions-link:hover{color:var(--gold)}
+
+/* Chat FAB */
+.chat-fab{position:fixed;bottom:25px;right:25px;width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--purple-dark));border:3px solid var(--gold);cursor:pointer;box-shadow:0 5px 25px rgba(107,33,168,0.5);z-index:50;display:flex;align-items:center;justify-content:center;transition:all 0.3s;animation:fabPulse 2s infinite}
+.chat-fab:hover{transform:scale(1.1)}
+.chat-fab img{width:40px;height:40px;border-radius:50%}
+@keyframes fabPulse{0%,100%{box-shadow:0 5px 25px rgba(107,33,168,0.5)}50%{box-shadow:0 5px 35px rgba(255,215,0,0.4)}}
+
+/* Chat Modal */
+.chat-modal{display:none;position:fixed;bottom:100px;right:25px;width:350px;max-width:calc(100vw - 40px);height:500px;max-height:70vh;background:var(--card);border:2px solid var(--gold);border-radius:20px;z-index:100;flex-direction:column;overflow:hidden;box-shadow:0 10px 40px rgba(0,0,0,0.5)}
+.chat-modal.active{display:flex}
+.chat-header{padding:15px;background:linear-gradient(135deg,rgba(107,33,168,0.3),rgba(255,215,0,0.1));border-bottom:1px solid rgba(255,215,0,0.3);display:flex;align-items:center;gap:12px}
+.chat-header img{width:40px;height:40px;border-radius:50%}
+.chat-header-info{flex:1}
+.chat-header-name{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:1px;color:var(--gold)}
+.chat-header-status{font-size:0.7rem;color:var(--teal)}
+.chat-close-btn{background:none;border:none;color:var(--muted);font-size:1.3rem;cursor:pointer}
+.chat-body{flex:1;overflow-y:auto;padding:15px;display:flex;flex-direction:column;gap:12px}
+.chat-msg{max-width:85%;padding:12px 16px;border-radius:16px;font-size:0.9rem;line-height:1.5;animation:msgIn 0.3s ease}
+@keyframes msgIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.chat-msg.bot{background:var(--dark);align-self:flex-start;border-bottom-left-radius:4px}
+.chat-msg.bot strong{color:var(--gold)}
+.chat-options{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.chat-option{padding:10px 16px;background:rgba(255,215,0,0.1);border:2px solid rgba(255,215,0,0.4);color:var(--gold);border-radius:20px;font-size:0.8rem;font-weight:600;cursor:pointer;transition:all 0.2s}
+.chat-option:hover{background:rgba(255,215,0,0.2)}
+.joke-box{margin-top:10px;padding:10px;background:rgba(255,215,0,0.1);border-left:3px solid var(--gold);border-radius:8px;font-style:italic;color:var(--gold);font-size:0.85rem}
 </style>
 </head>
 <body class="en">
-<div class="confetti-container" id="confettiContainer"></div>
-<div class="landing" id="landing">
+<div class="confetti-container" id="confetti"></div>
+
+<!-- Language Toggle -->
 <div class="lang-toggle">
 <button class="lang-btn active" data-lang="en">EN</button>
 <button class="lang-btn" data-lang="es">ES</button>
 </div>
-<div class="logo-section">
-<div class="logo"><span class="laugh">LAUGH</span><span class="letico">COURT</span><sup style="font-size:0.3em;vertical-align:super;">™</sup></div>
-<div class="tagline">EXERCISE YOUR MEMORY. EXERCISE YOUR SMILE.</div>
+
+<!-- Header -->
+<header class="header">
+<div class="logo"><span class="laugh">LAUGH</span><span class="court">COURT</span><sup style="font-size:0.3em">™</sup></div>
+<div class="tagline">
+<span class="lang-en">EXERCISE YOUR MEMORY. EXERCISE YOUR SMILE.</span>
+<span class="lang-es">EJERCITA TU MEMORIA. EJERCITA TU SONRISA.</span>
 </div>
-<img src="go_chat.png" alt="Coach GoTrotter AI" class="hero-icon" id="heroIcon">
-<div class="hero-text">
-<p><span class="lang-en"><strong>2 Games. 10 Tiers.</strong> The ONLY laughter-powered memory fitness! $5/month.</span><span class="lang-es"><strong>2 Juegos. 10 Niveles.</strong> ¡El ÚNICO fitness mental impulsado por risa! $5/mes.</span></p>
-<p class="hero-cta"><span class="lang-en">Questions? <a id="chatCta">Talk to Coach GoTrotter AI 😂 →</a></span><span class="lang-es">¿Preguntas? <a id="chatCtaEs">Habla con Coach GoTrotter AI 😂 →</a></span></p>
+</header>
+
+<!-- Hero -->
+<section class="hero">
+<img src="go_chat.png" alt="Coach GoTrotter" class="hero-icon">
+<p class="hero-text">
+<span class="lang-en"><strong>2 Games. 10 Tiers.</strong> The ONLY laughter-powered memory fitness platform!</span>
+<span class="lang-es"><strong>2 Juegos. 10 Niveles.</strong> ¡La ÚNICA plataforma de fitness mental impulsada por risa!</span>
+</p>
+</section>
+
+<!-- Games -->
+<section class="games">
+<h2 class="section-title">
+<span class="lang-en">🎮 YOUR LAUGHTER GAMES</span>
+<span class="lang-es">🎮 TUS JUEGOS DE RISA</span>
+</h2>
+<div class="game-grid">
+<div class="game-card">
+<div class="game-emoji">🛤️</div>
+<div class="game-name">LAUGH TRAIL</div>
+<p class="game-desc">
+<span class="lang-en">Watch the path light up → Tap it back! Memory sequence training with laughs.</span>
+<span class="lang-es">¡Mira el camino iluminarse → Repítelo! Entrenamiento de secuencias con risas.</span>
+</p>
 </div>
-<button class="go-btn" id="goBtn">
-<img src="go_chat.png" alt="" class="go-btn-icon">
-<span class="lang-en">START LAUGHING!</span><span class="lang-es">¡A REÍR!</span>
-</button>
-<div class="footer-text">
-<span class="lang-en">Powered by</span><span class="lang-es">Impulsado por</span> <a href="https://gostar.digital">GoStar Digital</a> 🌴
+<div class="game-card">
+<div class="game-emoji">🔍</div>
+<div class="game-name">LAUGH HUNT</div>
+<p class="game-desc">
+<span class="lang-en">Find hidden words in funny categories. Discovery + attention training.</span>
+<span class="lang-es">Encuentra palabras en categorías graciosas. Descubrimiento + atención.</span>
+</p>
 </div>
 </div>
+</section>
+
+<!-- Pricing -->
+<section class="pricing">
+<div class="price-box">
+<div class="price-amount">$5<span>/mo</span></div>
+<ul class="price-features">
+<li><span class="lang-en">2 brain-boosting games</span><span class="lang-es">2 juegos para el cerebro</span></li>
+<li><span class="lang-en">10 progressive tiers</span><span class="lang-es">10 niveles progresivos</span></li>
+<li><span class="lang-en">Bilingual (EN/ES)</span><span class="lang-es">Bilingüe (EN/ES)</span></li>
+<li><span class="lang-en">Cancel anytime</span><span class="lang-es">Cancela cuando quieras</span></li>
+</ul>
+<a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="cta-btn">
+<span class="lang-en">START LAUGHING! 😂</span>
+<span class="lang-es">¡A REÍR! 😂</span>
+</a>
+</div>
+</section>
+
+<!-- Returning User -->
+<section class="returning">
+<span class="returning-link" id="returningBtn">
+<span class="lang-en">🔑 Already subscribed? Enter your PIN</span>
+<span class="lang-es">🔑 ¿Ya suscrito? Ingresa tu PIN</span>
+</span>
+</section>
+
+<!-- Questions Link -->
+<section class="questions">
+<span class="questions-link" id="questionsBtn">
+<span class="lang-en">❓ Questions? Chat with Coach GoTrotter AI</span>
+<span class="lang-es">❓ ¿Preguntas? Habla con Coach GoTrotter AI</span>
+</span>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+<span class="lang-en">Powered by</span>
+<span class="lang-es">Impulsado por</span>
+<a href="https://gostar.digital"> GoStar Digital</a> 🌴
+</footer>
+
+<!-- Chat FAB -->
 <button class="chat-fab" id="chatFab">
-<span class="chat-fab-label"><span class="lang-en">Chat with Coach 😂</span><span class="lang-es">Habla con el Coach 😂</span></span>
-<img src="go_chat.png" alt="Coach GoTrotter AI">
+<img src="go_chat.png" alt="Coach">
 </button>
-<div class="chat-screen" id="chatScreen">
+
+<!-- Success Modal (after Stripe payment) -->
+<div class="modal" id="successModal">
+<div class="modal-content">
+<button class="modal-close" id="closeSuccess">×</button>
+<div class="modal-title">🎉 <span class="lang-en">PAYMENT SUCCESSFUL!</span><span class="lang-es">¡PAGO EXITOSO!</span></div>
+<p class="modal-text">
+<span class="lang-en">Enter the email you used at checkout to get your PIN:</span>
+<span class="lang-es">Ingresa el email que usaste para obtener tu PIN:</span>
+</p>
+<input type="email" class="email-input" id="successEmail" placeholder="your@email.com">
+<button class="modal-btn" id="successBtn">
+<span class="lang-en">GET MY PIN</span>
+<span class="lang-es">OBTENER MI PIN</span>
+</button>
+<div id="pinResult"></div>
+</div>
+</div>
+
+<!-- Returning User Modal -->
+<div class="modal" id="returningModal">
+<div class="modal-content">
+<button class="modal-close" id="closeReturning">×</button>
+<div class="modal-title">🔑 <span class="lang-en">WELCOME BACK!</span><span class="lang-es">¡BIENVENIDO!</span></div>
+<p class="modal-text">
+<span class="lang-en">Enter your 4-digit PIN:</span>
+<span class="lang-es">Ingresa tu PIN de 4 dígitos:</span>
+</p>
+<div class="pin-input-container">
+<input type="tel" class="pin-digit" maxlength="1" data-idx="0">
+<input type="tel" class="pin-digit" maxlength="1" data-idx="1">
+<input type="tel" class="pin-digit" maxlength="1" data-idx="2">
+<input type="tel" class="pin-digit" maxlength="1" data-idx="3">
+</div>
+<button class="modal-btn" id="pinLoginBtn" disabled>
+<span class="lang-en">LET'S LAUGH!</span>
+<span class="lang-es">¡A REÍR!</span>
+</button>
+<p style="margin-top:15px">
+<span class="returning-link" id="forgotPinBtn">
+<span class="lang-en">Forgot PIN? Use email</span>
+<span class="lang-es">¿Olvidaste tu PIN? Usa email</span>
+</span>
+</p>
+<div id="loginResult"></div>
+</div>
+</div>
+
+<!-- Forgot PIN Modal -->
+<div class="modal" id="forgotModal">
+<div class="modal-content">
+<button class="modal-close" id="closeForgot">×</button>
+<div class="modal-title">📧 <span class="lang-en">RECOVER PIN</span><span class="lang-es">RECUPERAR PIN</span></div>
+<p class="modal-text">
+<span class="lang-en">Enter your subscription email:</span>
+<span class="lang-es">Ingresa tu email de suscripción:</span>
+</p>
+<input type="email" class="email-input" id="forgotEmail" placeholder="your@email.com">
+<button class="modal-btn" id="forgotBtn">
+<span class="lang-en">RECOVER PIN</span>
+<span class="lang-es">RECUPERAR PIN</span>
+</button>
+<div id="forgotResult"></div>
+</div>
+</div>
+
+<!-- Chat Modal -->
+<div class="chat-modal" id="chatModal">
 <div class="chat-header">
-<div class="chat-header-left">
-<div class="chat-avatar"><img src="go_chat.png" alt="Coach GoTrotter AI" class="chat-avatar-img"></div>
-<div>
-<div class="chat-title"><span class="go">GO</span><span class="tr">TROTTER</span>™ AI</div>
-<div class="chat-subtitle">Laughter Coach 😂</div>
-<div class="chat-status"><span class="chat-dot"></span><span class="lang-en">Ready to make you laugh</span><span class="lang-es">Listo para hacerte reír</span></div>
+<img src="go_chat.png" alt="Coach">
+<div class="chat-header-info">
+<div class="chat-header-name">GOTROTTER™ AI</div>
+<div class="chat-header-status">🟢 <span class="lang-en">Ready to help!</span><span class="lang-es">¡Listo para ayudar!</span></div>
 </div>
-</div>
-<div class="chat-header-right">
-<button class="chat-lang-btn active" data-lang="en">EN</button>
-<button class="chat-lang-btn" data-lang="es">ES</button>
-<button class="chat-close" id="chatClose">×</button>
-</div>
+<button class="chat-close-btn" id="chatClose">×</button>
 </div>
 <div class="chat-body" id="chatBody"></div>
-<div class="chat-input-area" id="chatInputArea">
-<div class="chat-input-row">
-<input type="text" class="chat-input" id="chatInput" maxlength="100">
-<button class="chat-send" id="chatSend">
-<svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-</button>
 </div>
-</div>
-</div>
+
 <script>
 (function(){
-var lang=localStorage.getItem('lw-lang')||'en';
-function setLang(l){lang=l;localStorage.setItem('lw-lang',l);document.body.className=l;document.querySelectorAll('.lang-btn,.chat-lang-btn').forEach(function(b){b.classList.toggle('active',b.dataset.lang===l);});}
+// Language
+var lang = localStorage.getItem('lc-lang') || 'en';
+function setLang(l) {
+    lang = l;
+    localStorage.setItem('lc-lang', l);
+    document.body.className = l;
+    document.querySelectorAll('.lang-btn').forEach(function(b) {
+        b.classList.toggle('active', b.dataset.lang === l);
+    });
+}
 setLang(lang);
-document.querySelectorAll('.lang-btn,.chat-lang-btn').forEach(function(b){b.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();setLang(this.dataset.lang);});});
-var landing=document.getElementById('landing'),chatScreen=document.getElementById('chatScreen'),chatBody=document.getElementById('chatBody'),chatInputArea=document.getElementById('chatInputArea'),chatInput=document.getElementById('chatInput'),chatSend=document.getElementById('chatSend'),goBtn=document.getElementById('goBtn'),chatClose=document.getElementById('chatClose');
-var currentFlow=null,currentStep=null,selectedPlan='individual';
-var jokes={greetings:[{en:"Why did the brain go to the gym? To work on its THINK-ing muscles! 💪🧠",es:"¿Por qué el cerebro fue al gimnasio? ¡Para trabajar sus músculos de PENSAR! 💪🧠"},{en:"I told my memory a joke... it forgot to laugh! 😂",es:"¡Le conté un chiste a mi memoria... se le olvidó reír! 😂"},{en:"What do you call a brain that tells jokes? A PUNDER-ful organ! 🎭",es:"¿Cómo llamas a un cerebro que cuenta chistes? ¡Un órgano CHIST-oso! 🎭"},{en:"My neurons are having a party... want to join? 🎉🧠",es:"Mis neuronas están de fiesta... ¿quieres unirte? 🎉🧠"},{en:"I'm not just a coach... I'm a LAUGH-lete trainer! 🏆😂",es:"No soy solo un coach... ¡soy un entrenador de RISA-letas! 🏆😂"},{en:"Warning: My jokes may cause uncontrollable smiling! 😄⚠️",es:"Advertencia: ¡Mis chistes pueden causar sonrisas incontrolables! 😄⚠️"}],encouragement:[{en:"Your brain cells are doing a happy dance right now! 💃🧠",es:"¡Tus células cerebrales están bailando de alegría ahora mismo! 💃🧠"},{en:"Warning: Side effects may include EXTREME happiness! ⚠️😊",es:"Advertencia: ¡Los efectos secundarios pueden incluir EXTREMA felicidad! ⚠️😊"},{en:"Your neurons called. They want MORE laughs! 📞🧠",es:"Tus neuronas llamaron. ¡Quieren MÁS risas! 📞🧠"},{en:"Plot twist: Getting smarter is actually FUN! 🎬😄",es:"Giro inesperado: ¡Volverse más inteligente es DIVERTIDO! 🎬😄"},{en:"Your brain just sent me a thank-you note! 💌🧠",es:"¡Tu cerebro me acaba de enviar una nota de agradecimiento! 💌🧠"}],pricing:[{en:"For less than a fancy coffee, your brain gets a spa day! ☕🧠",es:"¡Por menos que un café elegante, tu cerebro tiene un día de spa! ☕🧠"},{en:"5 bucks? That's like paying 1 cent per brain cell party! 🎉",es:"¿5 dólares? ¡Es como pagar 1 centavo por fiesta de células cerebrales! 🎉"},{en:"Skip ONE avocado toast = MONTHS of brain gains! 🥑➡️🧠",es:"¡Salta UNA tostada de aguacate = MESES de ganancias cerebrales! 🥑➡️🧠"},{en:"Cheaper than therapy, funnier than a clown! 🤡💰",es:"¡Más barato que terapia, más gracioso que un payaso! 🤡💰"}],success:[{en:"BOOM! 💥 You just made the smartest decision today!",es:"¡BOOM! 💥 ¡Acabas de tomar la decisión más inteligente de hoy!"},{en:"Your future self is already thanking you! 🙏😊",es:"¡Tu yo del futuro ya te está agradeciendo! 🙏😊"},{en:"Achievement unlocked: BRAIN CHAMPION! 🏆🧠",es:"¡Logro desbloqueado: CAMPEÓN CEREBRAL! 🏆🧠"},{en:"Welcome to the club! We have cookies... and better memory to remember where we put them! 🍪🧠",es:"¡Bienvenido al club! Tenemos galletas... ¡y mejor memoria para recordar dónde las pusimos! 🍪🧠"}],returning:[{en:"Welcome back, Brain Champion! 🏆 Ready for more laughs?",es:"¡Bienvenido de vuelta, Campeón Cerebral! 🏆 ¿Listo para más risas?"},{en:"Look who's back! Your neurons missed you! 🧠❤️",es:"¡Mira quién volvió! ¡Tus neuronas te extrañaban! 🧠❤️"},{en:"The legend returns! Let's make your brain smile! 😄",es:"¡La leyenda regresa! ¡Hagamos sonreír a tu cerebro! 😄"},{en:"Your brain cells just threw a welcome back party! 🎉🧠",es:"¡Tus células cerebrales acaban de hacer una fiesta de bienvenida! 🎉🧠"}],games:[{en:"Two games, double the fun, TRIPLE the brain gains! 🎮🧠💪",es:"¡Dos juegos, doble diversión, TRIPLE las ganancias cerebrales! 🎮🧠💪"},{en:"Your brain is about to get JACKED... with joy! 💪🧠😂",es:"¡Tu cerebro está a punto de ponerse FUERTE... de alegría! 💪🧠😂"},{en:"One for memory, one for discovery — your brain will thank you! 🧠❤️",es:"¡Uno para memoria, uno para descubrimiento — tu cerebro te lo agradecerá! 🧠❤️"}]};
-function getRandomJoke(cat){var arr=jokes[cat]||jokes.greetings;var j=arr[Math.floor(Math.random()*arr.length)];return lang==='es'?j.es:j.en;}
-function getUser(){try{return JSON.parse(localStorage.getItem('lw-user'))||null;}catch(e){return null;}}
-function saveUser(d){localStorage.setItem('lw-user',JSON.stringify(d));}
-function setSession(n,p){sessionStorage.setItem('lw-user-pin',p);sessionStorage.setItem('lw-user-name',n);}
-function bi(en,es){return'<span class="lang-en">'+en+'</span><span class="lang-es">'+es+'</span>';}
-function addMsg(c,isUser,opts){var msg=document.createElement('div');msg.className='chat-msg '+(isUser?'user':'bot');var av=isUser?'👤':'<img src="go_chat.png" class="chat-msg-avatar-img">';var h='<div class="chat-msg-avatar">'+av+'</div><div class="chat-msg-bubble">'+c;if(opts&&opts.length){h+='<div class="chat-options">';opts.forEach(function(o){var cls='chat-option';if(o.primary)cls+=' primary';if(o.secondary)cls+=' secondary';var lbl=o.labelEn?bi(o.labelEn,o.labelEs):o.label;h+='<button class="'+cls+'" data-action="'+o.action+'">'+lbl+'</button>';});h+='</div>';}h+='</div>';msg.innerHTML=h;chatBody.appendChild(msg);chatBody.scrollTop=chatBody.scrollHeight;msg.querySelectorAll('.chat-option').forEach(function(b){b.addEventListener('click',function(){handleOption(this.dataset.action);});});}
-function addTyping(){var m=document.createElement('div');m.className='chat-msg bot';m.id='typingMsg';m.innerHTML='<div class="chat-msg-avatar"><img src="go_chat.png" class="chat-msg-avatar-img"></div><div class="chat-msg-bubble"><div class="chat-typing"><span></span><span></span><span></span></div></div>';chatBody.appendChild(m);chatBody.scrollTop=chatBody.scrollHeight;}
-function removeTyping(){var t=document.getElementById('typingMsg');if(t)t.remove();}
-function botSay(c,opts,d){d=d||800;addTyping();setTimeout(function(){removeTyping();addMsg(c,false,opts);},d);}
-function botSayWithJoke(c,cat,opts,d){var j=getRandomJoke(cat);var fc=c+'<div class="joke">😂 '+j+'</div>';botSay(fc,opts,d);}
-function hideInput(){chatInputArea.classList.remove('visible');}
-function createConfetti(){var ct=document.getElementById('confettiContainer');for(var i=0;i<100;i++){setTimeout(function(){var c=document.createElement('div');c.className='confetti';c.style.left=Math.random()*100+'vw';c.style.animationDuration=(Math.random()*2+3)+'s';c.style.animationDelay=Math.random()*0.5+'s';c.style.width=(Math.random()*8+6)+'px';c.style.height=(Math.random()*8+6)+'px';ct.appendChild(c);setTimeout(function(){if(c.parentNode)c.parentNode.removeChild(c);},5000);},i*30);}}
-function addPinInput(){var m=document.createElement('div');m.className='chat-msg bot';m.innerHTML='<div class="chat-msg-avatar"><img src="go_chat.png" class="chat-msg-avatar-img"></div><div class="chat-msg-bubble"><div class="pin-input-container"><input type="tel" class="pin-digit" maxlength="1" data-idx="0"><input type="tel" class="pin-digit" maxlength="1" data-idx="1"><input type="tel" class="pin-digit" maxlength="1" data-idx="2"><input type="tel" class="pin-digit" maxlength="1" data-idx="3"></div><button class="pin-submit" id="pinSubmit">'+bi("LET'S LAUGH!","¡A REÍR!")+'</button><div style="margin-top:15px;"><a href="#" class="forgot-pin-link" style="color:var(--muted);font-size:0.8rem;text-decoration:underline;">'+bi('Forgot PIN?','¿Olvidaste tu PIN?')+'</a></div></div>';chatBody.appendChild(m);chatBody.scrollTop=chatBody.scrollHeight;var digs=m.querySelectorAll('.pin-digit'),sub=m.querySelector('#pinSubmit'),forg=m.querySelector('.forgot-pin-link');function chk(){var p='';digs.forEach(function(d){p+=d.value;});sub.classList.toggle('ready',p.length===4);}digs.forEach(function(d,i){d.addEventListener('input',function(){this.value=this.value.replace(/[^0-9]/g,'');if(this.value&&i<3)digs[i+1].focus();this.classList.toggle('filled',this.value!=='');chk();});d.addEventListener('keydown',function(e){if(e.key==='Backspace'&&!this.value&&i>0)digs[i-1].focus();});});sub.addEventListener('click',function(){if(!this.classList.contains('ready'))return;var p='';digs.forEach(function(d){p+=d.value;});handlePinSubmit(p);});forg.addEventListener('click',function(e){e.preventDefault();addForgotPinInput();});setTimeout(function(){digs[0].focus();},100);}
-function addForgotPinInput(){var jk=getRandomJoke('encouragement');var m=document.createElement('div');m.className='chat-msg bot';m.innerHTML='<div class="chat-msg-avatar"><img src="go_chat.png" class="chat-msg-avatar-img"></div><div class="chat-msg-bubble">'+bi('🔑 <strong>No problem!</strong> Even the best brains forget sometimes!<br><br>Enter your email to recover your PIN:','🔑 <strong>¡No hay problema!</strong> ¡Hasta los mejores cerebros olvidan a veces!<br><br>Ingresa tu email para recuperar tu PIN:')+'<div class="joke">😂 '+jk+'</div><div class="email-input-container"><input type="email" class="email-input" id="forgotEmailInput" placeholder="'+(lang==='es'?'tu@email.com':'your@email.com')+'"><button class="email-submit" id="forgotEmailSubmit">'+bi('RECOVER PIN','RECUPERAR PIN')+'</button></div></div>';chatBody.appendChild(m);chatBody.scrollTop=chatBody.scrollHeight;var ei=m.querySelector('#forgotEmailInput'),es=m.querySelector('#forgotEmailSubmit');ei.addEventListener('keydown',function(e){if(e.key==='Enter')handleForgotPinLookup(this.value);});es.addEventListener('click',function(){handleForgotPinLookup(ei.value);});setTimeout(function(){ei.focus();},100);}
-function handleForgotPinLookup(em){em=em.trim().toLowerCase();if(!em||!em.includes('@')){alert(lang==='es'?'Por favor ingresa un email válido':'Please enter a valid email');return;}var sb=document.getElementById('forgotEmailSubmit');if(sb){sb.classList.add('loading');sb.innerHTML=bi('SEARCHING...','BUSCANDO...');}fetch('/api/stripe/status/'+encodeURIComponent(em)).then(function(r){return r.json();}).then(function(d){if(d.subscribed&&d.pin){showPinDisplay(d.pin,em,d.plan_type,d.status);}else{botSayWithJoke(bi('❌ No subscription found for that email.<br><br>Make sure you entered the correct email!','❌ No se encontró suscripción para ese email.<br><br>¡Asegúrate de ingresar el email correcto!'),'encouragement',[{labelEn:'🔄 Try Again',labelEs:'🔄 Intentar de Nuevo',action:'forgot_pin'},{labelEn:'🆕 Subscribe',labelEs:'🆕 Suscribirme',action:'new'}],600);}}).catch(function(e){console.error(e);botSay(bi('❌ Connection error. Please try again.','❌ Error de conexión. Por favor intenta de nuevo.'),[{labelEn:'🔄 Try Again',labelEs:'🔄 Intentar de Nuevo',action:'forgot_pin'}],600);});}
-function addEmailInput(){var jk=getRandomJoke('encouragement');var m=document.createElement('div');m.className='chat-msg bot';m.innerHTML='<div class="chat-msg-avatar"><img src="go_chat.png" class="chat-msg-avatar-img"></div><div class="chat-msg-bubble">'+bi('Enter the email you used at checkout to get your PIN:','Ingresa el email que usaste en el pago para obtener tu PIN:')+'<div class="joke">😂 '+jk+'</div><div class="email-input-container"><input type="email" class="email-input" id="emailInput" placeholder="'+(lang==='es'?'tu@email.com':'your@email.com')+'"><button class="email-submit" id="emailSubmit">'+bi('GET MY PIN','OBTENER MI PIN')+'</button></div></div>';chatBody.appendChild(m);chatBody.scrollTop=chatBody.scrollHeight;var ei=m.querySelector('#emailInput'),es=m.querySelector('#emailSubmit');ei.addEventListener('keydown',function(e){if(e.key==='Enter')handleEmailLookup(this.value);});es.addEventListener('click',function(){handleEmailLookup(ei.value);});setTimeout(function(){ei.focus();},100);}
-function handleEmailLookup(em){em=em.trim().toLowerCase();if(!em||!em.includes('@')){alert(lang==='es'?'Por favor ingresa un email válido':'Please enter a valid email');return;}var sb=document.getElementById('emailSubmit');if(sb){sb.classList.add('loading');sb.innerHTML=bi('LOADING...','CARGANDO...');}fetch('/api/stripe/status/'+encodeURIComponent(em)).then(function(r){return r.json();}).then(function(d){if(d.subscribed&&d.pin){showPinDisplay(d.pin,em,d.plan,d.status);}else{botSayWithJoke(bi('❌ No subscription found for that email.','❌ No se encontró suscripción para ese email.'),'encouragement',[{labelEn:'🔄 Try Again',labelEs:'🔄 Intentar de Nuevo',action:'retry_email'},{labelEn:'🆕 Subscribe',labelEs:'🆕 Suscribirme',action:'new'}],600);}}).catch(function(e){console.error(e);botSay(bi('❌ Connection error.','❌ Error de conexión.'),[{labelEn:'🔄 Try Again',labelEs:'🔄 Intentar de Nuevo',action:'retry_email'}],600);});}
-function showPinDisplay(pin,em,pl,st){var ud={email:em,pin:pin,plan:pl,type:'subscriber'};saveUser(ud);setSession(em,pin);showSuccess('🎉');createConfetti();var jk=getRandomJoke('success');var stTxt=st==='trialing'?bi('🎫 TRIAL ACTIVE','🎫 PRUEBA ACTIVA'):bi('✅ SUBSCRIPTION ACTIVE','✅ SUSCRIPCIÓN ACTIVA');var m=document.createElement('div');m.className='chat-msg bot';m.innerHTML='<div class="chat-msg-avatar"><img src="go_chat.png" class="chat-msg-avatar-img"></div><div class="chat-msg-bubble"><div class="pin-display"><div class="pin-display-label">'+bi('YOUR LAUGH PIN','TU PIN DE RISA')+'</div><div class="pin-display-value">'+pin+'</div><div class="pin-display-note">📝 '+bi('Save this PIN!','¡Guarda este PIN!')+'</div></div><div class="joke">😂 '+jk+'</div><div class="status-badge '+st+'">'+stTxt+'</div><div class="chat-options"><button class="chat-option primary" data-action="start_training">'+bi("😂 LET'S LAUGH!","😂 ¡A REÍR!")+'</button></div></div>';chatBody.appendChild(m);chatBody.scrollTop=chatBody.scrollHeight;m.querySelectorAll('.chat-option').forEach(function(b){b.addEventListener('click',function(){handleOption(this.dataset.action);});});}
-function showCoachWelcome(){var jk=getRandomJoke('success');var m=document.createElement('div');m.className='chat-msg bot';m.innerHTML='<div class="chat-msg-avatar"><img src="go_chat.png" class="chat-msg-avatar-img"></div><div class="chat-msg-bubble"><div class="coach-welcome-box"><div class="coach-welcome-icon">😂</div><div class="coach-welcome-title">'+bi('WELCOME TO THE LAUGH SQUAD!','¡BIENVENIDO AL ESCUADRÓN DE RISA!')+'</div><div class="coach-welcome-msg">'+bi('"<strong>You did it!</strong> I\'m Coach GoTrotter AI, and I\'ll be <strong>making you laugh AND think</strong> every game. Together, we\'ll keep your mind sharp and your smile wide!"','"<strong>¡Lo lograste!</strong> Soy Coach GoTrotter AI, y estaré <strong>haciéndote reír Y pensar</strong> en cada juego. ¡Juntos mantendremos tu mente aguda y tu sonrisa amplia!"')+'</div><div class="joke">😂 '+jk+'</div><div class="coach-signature">— Coach GoTrotter AI 🏀😂</div></div></div>';chatBody.appendChild(m);chatBody.scrollTop=chatBody.scrollHeight;}
-function addGameCards(){var jk=getRandomJoke('games');var m=document.createElement('div');m.className='chat-msg bot';m.innerHTML='<div class="chat-msg-avatar"><img src="go_chat.png" class="chat-msg-avatar-img"></div><div class="chat-msg-bubble">'+bi('🎯 <strong>YOUR 2 LAUGHTER GAMES</strong><br><br>Different brain workouts, same big laughs! 🧠😂','🎯 <strong>TUS 2 JUEGOS DE RISA</strong><br><br>¡Diferentes ejercicios cerebrales, las mismas grandes risas! 🧠😂')+'<div class="game-grid"><div class="game-card"><div class="game-emoji">🛤️</div><div class="game-name">LAUGH TRAIL</div><div class="game-desc">'+bi('Watch the path light up → Tap it back! Memory sequence training.','¡Mira el camino iluminarse → Repítelo! Entrenamiento de secuencias.')+'</div></div><div class="game-card"><div class="game-emoji">🔍</div><div class="game-name">LAUGH HUNT</div><div class="game-desc">'+bi('Find hidden words in funny categories. Discovery + attention training.','Encuentra palabras en categorías graciosas. Descubrimiento + atención.')+'</div></div></div><div class="joke">😂 '+jk+'</div><div class="chat-options"><button class="chat-option primary" data-action="show_price">'+bi('💰 SEE PRICING','💰 VER PRECIOS')+'</button><button class="chat-option secondary" data-action="returning">'+bi('🔑 I Have PIN','🔑 Tengo PIN')+'</button></div></div>';chatBody.appendChild(m);chatBody.scrollTop=chatBody.scrollHeight;m.querySelectorAll('.chat-option').forEach(function(b){b.addEventListener('click',function(){handleOption(this.dataset.action);});});}
-function addPlanSelector(){var jk=getRandomJoke('pricing');var m=document.createElement('div');m.className='chat-msg bot';m.innerHTML='<div class="chat-msg-avatar"><img src="go_chat.png" class="chat-msg-avatar-img"></div><div class="chat-msg-bubble"><div class="joke">😂 '+jk+'</div><div class="plan-cards"><div class="plan-card selected" data-plan="individual"><div class="plan-card-left"><div class="plan-name">😂 '+bi('LAUGHCOURT','LAUGHCOURT')+'</div><div class="plan-desc">'+bi('2 games • 10 tiers • Full joy access','2 juegos • 10 niveles • Acceso completo')+'</div></div><div class="plan-price">$5<span>/mo</span></div></div></div><div class="promo-badge">🎟️ '+bi('PROMO CODES ACCEPTED','CÓDIGOS PROMO ACEPTADOS')+'</div><div class="terms-section"><label class="terms-check"><input type="checkbox" id="termsCheck"><span class="terms-checkbox"></span><span class="terms-label">'+bi('I agree to <a href="/terms.html" target="_blank">Terms</a> & <a href="/privacy.html" target="_blank">Privacy</a>','Acepto <a href="/terms.html" target="_blank">Términos</a> y <a href="/privacy.html" target="_blank">Privacidad</a>')+'</span></label></div><button class="subscribe-btn" id="subscribeBtn">'+bi('SUBSCRIBE NOW →','SUSCRIBIRSE →')+'</button></div>';chatBody.appendChild(m);chatBody.scrollTop=chatBody.scrollHeight;var sb=m.querySelector('#subscribeBtn'),tc=m.querySelector('#termsCheck');tc.addEventListener('change',function(){sb.classList.toggle('ready',tc.checked);});sb.addEventListener('click',function(){if(!tc.checked){alert(lang==='es'?'Por favor acepta los Términos y Privacidad':'Please accept Terms & Privacy');return;}handleSubscribe();});}
-function showSuccess(em){var b=document.createElement('div');b.className='success-burst';b.textContent=em||'😂';document.body.appendChild(b);setTimeout(function(){b.remove();},800);}
-function goToGameHub(){showSuccess('😂');setTimeout(function(){window.location.href='laugh-hub.html';},1000);}
-function handleSubscribe(){var sb=document.getElementById('subscribeBtn');if(sb){sb.classList.add('loading');sb.innerHTML=bi('LOADING...','CARGANDO...');}fetch('/api/stripe/checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({plan:selectedPlan,billing:'monthly'})}).then(function(r){return r.json();}).then(function(d){if(d.url){window.location.href=d.url;}else{alert(lang==='es'?'Error':'Error');if(sb){sb.classList.remove('loading');sb.innerHTML=bi('SUBSCRIBE NOW','SUSCRIBIRSE');}}}).catch(function(e){console.error(e);alert(lang==='es'?'Error de conexión':'Connection error');if(sb){sb.classList.remove('loading');sb.innerHTML=bi('SUBSCRIBE NOW','SUSCRIBIRSE');}});}
-function checkUrlParams(){var p=new URLSearchParams(window.location.search);if(p.get('success')==='true'){var sid=p.get('session_id');window.history.replaceState({},'',window.location.pathname);setTimeout(createConfetti,100);setTimeout(createConfetti,2000);setTimeout(function(){openChat();setTimeout(function(){showCoachWelcome();setTimeout(function(){addMsg(bi('🎉 <strong>PAYMENT SUCCESSFUL!</strong><br><br>Loading your laugh account...','🎉 <strong>¡PAGO EXITOSO!</strong><br><br>Cargando tu cuenta de risa...'),false);addTyping();if(sid){fetchPinBySession(sid);}else{removeTyping();addEmailInput();}},1500);},500);},300);return true;}if(p.get('canceled')==='true'){window.history.replaceState({},'',window.location.pathname);setTimeout(function(){openChat();setTimeout(function(){botSayWithJoke(bi('No worries! 😊 You can start laughing anytime!','¡Sin problema! 😊 ¡Puedes comenzar a reír cuando quieras!'),'encouragement',[{labelEn:'😂 TELL ME MORE',labelEs:'😂 CUÉNTAME MÁS',action:'learn_more',primary:true},{labelEn:'🔑 I Have PIN',labelEs:'🔑 Tengo PIN',action:'returning'}]);},500);},300);return true;}return false;}
-function fetchPinBySession(sid){var rc=0,mx=5;function att(){fetch('/api/stripe/session/'+sid).then(function(r){return r.json();}).then(function(d){removeTyping();if(d.success&&d.pin){showPinDisplay(d.pin,d.email,d.plan_type,d.status);}else if(d.email&&!d.success&&rc<mx){rc++;addMsg(bi('⏳ Setting up... ('+rc+'/'+mx+')','⏳ Configurando... ('+rc+'/'+mx+')'),false);addTyping();setTimeout(att,2000);}else if(d.email){handleEmailLookup(d.email);}else{addEmailInput();}}).catch(function(e){removeTyping();console.error(e);addEmailInput();});}att();}
-function openChat(){landing.classList.add('hidden');chatScreen.classList.add('active');document.getElementById('chatFab').classList.add('hidden');chatBody.innerHTML='';hideInput();var u=getUser();if(u&&u.pin&&u.type==='subscriber'){setTimeout(function(){var jk=getRandomJoke('returning');addMsg(bi('Hey! 😂 <strong>Welcome back to LaughCourt!</strong>','¡Hola! 😂 <strong>¡Bienvenido de vuelta a LaughCourt!</strong>')+'<div class="joke">😂 '+jk+'</div>',false);currentFlow='subscriber';currentStep='ask_pin';botSay(bi('Enter your PIN to continue laughing:','Ingresa tu PIN para seguir riendo:'),null,600);setTimeout(addPinInput,1500);},400);}else{setTimeout(function(){var jk=getRandomJoke('greetings');addMsg(bi('Hey! 😂 I\'m <strong>Coach GoTrotter™ AI</strong> — your Laughter Coach!','¡Hola! 😂 Soy <strong>Coach GoTrotter™ AI</strong> — ¡tu Coach de Risa!')+'<div class="joke">😂 '+jk+'</div>',false);botSay(bi('Ready to exercise your memory AND your smile? 💪😂','¿Listo para ejercitar tu memoria Y tu sonrisa? 💪😂'),[{labelEn:'😂 TELL ME MORE',labelEs:'😂 CUÉNTAME MÁS',action:'learn_more',primary:true},{labelEn:'🔑 I Have PIN',labelEs:'🔑 Tengo PIN',action:'returning'}],600);},400);}}
-function handleOption(act){document.querySelectorAll('.chat-option').forEach(function(b){b.style.pointerEvents='none';b.style.opacity='0.5';});switch(act){case'learn_more':currentFlow='sales';setTimeout(function(){addGameCards();},600);break;case'show_price':currentFlow='sales';botSayWithJoke(bi('💪 <strong>SIMPLE PRICING</strong><br><br>• <strong>$5/month</strong> — cancel anytime<br>• Buy multiple users at checkout<br>• Promo codes accepted!<br><br>Just $5 to start laughing! 😂','💪 <strong>PRECIO SIMPLE</strong><br><br>• <strong>$5/mes</strong> — cancela cuando quieras<br>• Compra múltiples usuarios<br>• ¡Códigos promo aceptados!<br><br>¡Solo $5 para comenzar a reír! 😂'),'pricing',[{labelEn:'🚀 SUBSCRIBE NOW',labelEs:'🚀 SUSCRIBIRME',action:'new',primary:true},{labelEn:'❓ QUESTIONS',labelEs:'❓ PREGUNTAS',action:'questions'}],800);break;case'questions':currentFlow='sales';botSayWithJoke(bi('💬 What would you like to know?','💬 ¿Qué te gustaría saber?'),'encouragement',[{labelEn:'🧠 How does it work?',labelEs:'🧠 ¿Cómo funciona?',action:'q_how'},{labelEn:'👴 Is it for seniors?',labelEs:'👴 ¿Es para mayores?',action:'q_who'},{labelEn:'😂 Why laughter?',labelEs:'😂 ¿Por qué risa?',action:'q_why'},{labelEn:'🚀 Ready to laugh!',labelEs:'🚀 ¡Listo para reír!',action:'new'}],600);break;case'q_how':botSayWithJoke(bi('🎮 <strong>HOW IT WORKS</strong><br><br>1️⃣ Pick a game (TRAIL or HUNT)<br>2️⃣ Complete challenges while giggling<br>3️⃣ Progress through 10 tiers<br>4️⃣ Track your journey<br><br>Each game is 5-10 minutes. Laugh daily! 😂','🎮 <strong>CÓMO FUNCIONA</strong><br><br>1️⃣ Elige un juego (TRAIL o HUNT)<br>2️⃣ Completa desafíos mientras te ríes<br>3️⃣ Progresa por 10 niveles<br>4️⃣ Sigue tu progreso<br><br>Cada juego es de 5-10 minutos. ¡Ríe diario! 😂'),'games',[{labelEn:'🚀 SUBSCRIBE NOW',labelEs:'🚀 SUSCRIBIRME',action:'new',primary:true},{labelEn:'❓ More questions',labelEs:'❓ Más preguntas',action:'questions'}],600);break;case'q_who':botSayWithJoke(bi('👥 <strong>FOR EVERYONE!</strong><br><br>✅ Seniors — stay sharp & happy<br>✅ Rehab patients — rebuild with joy<br>✅ Students — boost focus & mood<br>✅ Anyone — exercise brain + smile<br><br>Big buttons. Clear visuals. Bilingual. Easy & fun! 🎯','👥 <strong>¡PARA TODOS!</strong><br><br>✅ Adultos mayores — mantente activo<br>✅ Rehabilitación — reconstruye con alegría<br>✅ Estudiantes — mejora enfoque<br>✅ Cualquiera — ejercita cerebro + sonrisa<br><br>¡Fácil y divertido! 🎯'),'encouragement',[{labelEn:'🚀 SUBSCRIBE NOW',labelEs:'🚀 SUSCRIBIRME',action:'new',primary:true},{labelEn:'❓ More questions',labelEs:'❓ Más preguntas',action:'questions'}],600);break;case'q_why':botSayWithJoke(bi('😂 <strong>WHY LAUGHTER?</strong><br><br>🧪 <strong>SCIENCE SAYS:</strong><br>• Laughter increases dopamine → better memory<br>• Reduces cortisol → clearer thinking<br>• Activates multiple brain regions<br>• Fights isolation & depression<br><br>It\'s rehabilitation disguised as JOY! 💪😊','😂 <strong>¿POR QUÉ RISA?</strong><br><br>🧪 <strong>LA CIENCIA DICE:</strong><br>• La risa aumenta dopamina → mejor memoria<br>• Reduce cortisol → pensamiento más claro<br>• Activa múltiples regiones cerebrales<br><br>¡Es rehabilitación disfrazada de ALEGRÍA! 💪😊'),'encouragement',[{labelEn:'🚀 SUBSCRIBE NOW',labelEs:'🚀 SUSCRIBIRME',action:'new',primary:true},{labelEn:'❓ More questions',labelEs:'❓ Más preguntas',action:'questions'}],600);break;case'new':currentFlow='new';botSayWithJoke(bi("Let's get you laughing! 🎉",'¡Vamos a hacerte reír! 🎉'),'success',null,600);setTimeout(addPlanSelector,1200);break;case'returning':currentFlow='subscriber';currentStep='ask_pin';var jk=getRandomJoke('returning');botSay(bi('Welcome back! 😂<br><br>Enter your 4-digit PIN:','¡Bienvenido! 😂<br><br>Ingresa tu PIN de 4 dígitos:')+'<div class="joke">😂 '+jk+'</div>',null,600);setTimeout(addPinInput,1500);break;case'start_training':goToGameHub();break;case'manage_subscription':handleManageSubscription();break;case'retry_email':addEmailInput();break;case'forgot_pin':addForgotPinInput();break;}}
-function handleTextInput(t){t=t.trim();if(!t)return;addMsg(t,true);hideInput();setTimeout(function(){botSayWithJoke(bi('Ha! Good one! 😂 Let me help you get started...','¡Ja! ¡Buena esa! 😂 Déjame ayudarte...'),'greetings',[{labelEn:'😂 TELL ME MORE',labelEs:'😂 CUÉNTAME MÁS',action:'learn_more',primary:true},{labelEn:'🔑 I Have PIN',labelEs:'🔑 Tengo PIN',action:'returning'}]);},600);}
-function handlePinSubmit(pin){document.querySelectorAll('.pin-digit').forEach(function(d){d.disabled=true;});var sb=document.getElementById('pinSubmit');if(sb)sb.style.opacity='0.5';addMsg('••••',true);fetch('/api/subscriber/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pin:pin})}).then(function(r){return r.json();}).then(function(d){if(d.success){var ud={email:d.email,pin:pin,plan:d.plan,type:'subscriber'};saveUser(ud);setSession(d.email,pin);createConfetti();var jk=getRandomJoke('returning');var stb=d.status==='trialing'?'<div class="status-badge trialing">🎫 '+bi('TRIAL','PRUEBA')+'</div>':'<div class="status-badge active">✅ '+bi('ACTIVE','ACTIVO')+'</div>';botSay(bi('😂 <strong>Welcome back, Laugh Champion!</strong>','😂 <strong>¡Bienvenido, Campeón de Risa!</strong>')+'<br><br>'+stb+'<div class="joke">😂 '+jk+'</div><br>'+bi('Ready to laugh?','¿Listo para reír?'),[{labelEn:"😂 LET'S GO!",labelEs:"😂 ¡VAMOS!",action:'start_training',primary:true},{labelEn:'⚙️ Manage',labelEs:'⚙️ Gestionar',action:'manage_subscription',secondary:true}],800);}else{botSayWithJoke(bi('❌ Invalid PIN. Try again:','❌ PIN inválido. Intenta:'),'encouragement',null,600);setTimeout(addPinInput,1400);}}).catch(function(){botSay(bi('❌ Connection error.','❌ Error de conexión.'),null,600);setTimeout(addPinInput,1400);});}
-function handleManageSubscription(){var u=getUser();if(!u||!u.email){botSay(bi('Please login first.','Por favor inicia sesión primero.'),null,400);return;}addTyping();fetch('/api/stripe/portal',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:u.email})}).then(function(r){return r.json();}).then(function(d){removeTyping();if(d.url)window.location.href=d.url;else addMsg(bi('❌ Could not open portal.','❌ No se pudo abrir el portal.'),false);}).catch(function(){removeTyping();addMsg(bi('❌ Connection error.','❌ Error de conexión.'),false);});}
-goBtn.addEventListener('click',openChat);document.getElementById('chatFab').addEventListener('click',openChat);document.getElementById('chatCta').addEventListener('click',openChat);document.getElementById('chatCtaEs').addEventListener('click',openChat);document.getElementById('heroIcon').addEventListener('click',openChat);chatClose.addEventListener('click',function(){chatScreen.classList.remove('active');landing.classList.remove('hidden');document.getElementById('chatFab').classList.remove('hidden');});chatSend.addEventListener('click',function(){handleTextInput(chatInput.value);chatInput.value='';});chatInput.addEventListener('keydown',function(e){if(e.key==='Enter'){handleTextInput(chatInput.value);chatInput.value='';}});if(!checkUrlParams()){}
+document.querySelectorAll('.lang-btn').forEach(function(b) {
+    b.addEventListener('click', function() { setLang(this.dataset.lang); });
+});
+
+// Modals
+var successModal = document.getElementById('successModal');
+var returningModal = document.getElementById('returningModal');
+var forgotModal = document.getElementById('forgotModal');
+
+document.getElementById('returningBtn').onclick = function() { returningModal.classList.add('active'); };
+document.getElementById('closeSuccess').onclick = function() { successModal.classList.remove('active'); };
+document.getElementById('closeReturning').onclick = function() { returningModal.classList.remove('active'); };
+document.getElementById('closeForgot').onclick = function() { forgotModal.classList.remove('active'); };
+document.getElementById('forgotPinBtn').onclick = function() { 
+    returningModal.classList.remove('active'); 
+    forgotModal.classList.add('active'); 
+};
+
+// Check URL for success
+if (window.location.search.includes('success')) {
+    window.history.replaceState({}, '', window.location.pathname);
+    successModal.classList.add('active');
+    createConfetti();
+}
+
+// PIN Input handling
+var pinDigits = document.querySelectorAll('.pin-digit');
+var pinLoginBtn = document.getElementById('pinLoginBtn');
+pinDigits.forEach(function(d, i) {
+    d.addEventListener('input', function() {
+        this.value = this.value.replace(/[^0-9]/g, '');
+        if (this.value && i < 3) pinDigits[i + 1].focus();
+        checkPinReady();
+    });
+    d.addEventListener('keydown', function(e) {
+        if (e.key === 'Backspace' && !this.value && i > 0) pinDigits[i - 1].focus();
+    });
+});
+
+function checkPinReady() {
+    var pin = '';
+    pinDigits.forEach(function(d) { pin += d.value; });
+    pinLoginBtn.disabled = pin.length !== 4;
+}
+
+// Get PIN by email (after payment)
+document.getElementById('successBtn').onclick = function() {
+    var email = document.getElementById('successEmail').value.trim().toLowerCase();
+    if (!email || !email.includes('@')) { alert('Please enter valid email'); return; }
+    this.disabled = true;
+    this.textContent = 'Loading...';
+    fetch('/api/stripe/status/' + encodeURIComponent(email))
+        .then(function(r) { return r.json(); })
+        .then(function(d) {
+            if (d.subscribed && d.pin) {
+                showPinSuccess(d.pin, 'pinResult');
+            } else {
+                document.getElementById('pinResult').innerHTML = '<p style="color:#FF4757;margin-top:15px">No subscription found. Try again.</p>';
+            }
+            document.getElementById('successBtn').disabled = false;
+            document.getElementById('successBtn').innerHTML = '<span class="lang-en">GET MY PIN</span><span class="lang-es">OBTENER MI PIN</span>';
+        })
+        .catch(function() {
+            document.getElementById('pinResult').innerHTML = '<p style="color:#FF4757;margin-top:15px">Connection error.</p>';
+            document.getElementById('successBtn').disabled = false;
+        });
+};
+
+// Login with PIN
+pinLoginBtn.onclick = function() {
+    var pin = '';
+    pinDigits.forEach(function(d) { pin += d.value; });
+    this.disabled = true;
+    this.textContent = 'Loading...';
+    fetch('/api/subscriber/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pin: pin })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+        if (d.success) {
+            localStorage.setItem('lc-user', JSON.stringify({ email: d.email, pin: pin }));
+            sessionStorage.setItem('lc-pin', pin);
+            createConfetti();
+            setTimeout(function() { window.location.href = 'laugh-hub.html'; }, 1000);
+        } else {
+            document.getElementById('loginResult').innerHTML = '<p style="color:#FF4757;margin-top:15px">Invalid PIN.</p>';
+            pinLoginBtn.disabled = false;
+            pinLoginBtn.innerHTML = '<span class="lang-en">LET\'S LAUGH!</span><span class="lang-es">¡A REÍR!</span>';
+        }
+    })
+    .catch(function() {
+        document.getElementById('loginResult').innerHTML = '<p style="color:#FF4757;margin-top:15px">Connection error.</p>';
+        pinLoginBtn.disabled = false;
+    });
+};
+
+// Forgot PIN
+document.getElementById('forgotBtn').onclick = function() {
+    var email = document.getElementById('forgotEmail').value.trim().toLowerCase();
+    if (!email || !email.includes('@')) { alert('Please enter valid email'); return; }
+    this.disabled = true;
+    this.textContent = 'Loading...';
+    fetch('/api/stripe/status/' + encodeURIComponent(email))
+        .then(function(r) { return r.json(); })
+        .then(function(d) {
+            if (d.subscribed && d.pin) {
+                showPinSuccess(d.pin, 'forgotResult');
+            } else {
+                document.getElementById('forgotResult').innerHTML = '<p style="color:#FF4757;margin-top:15px">No subscription found.</p>';
+            }
+            document.getElementById('forgotBtn').disabled = false;
+            document.getElementById('forgotBtn').innerHTML = '<span class="lang-en">RECOVER PIN</span><span class="lang-es">RECUPERAR PIN</span>';
+        })
+        .catch(function() {
+            document.getElementById('forgotResult').innerHTML = '<p style="color:#FF4757;margin-top:15px">Connection error.</p>';
+            document.getElementById('forgotBtn').disabled = false;
+        });
+};
+
+function showPinSuccess(pin, targetId) {
+    createConfetti();
+    document.getElementById(targetId).innerHTML = 
+        '<div class="pin-display">' +
+        '<div class="pin-label">YOUR LAUGH PIN</div>' +
+        '<div class="pin-value">' + pin + '</div>' +
+        '<div class="pin-note">📝 Save this PIN!</div>' +
+        '</div>' +
+        '<button class="play-btn" onclick="goPlay(\'' + pin + '\')">😂 LET\'S PLAY!</button>';
+}
+
+window.goPlay = function(pin) {
+    sessionStorage.setItem('lc-pin', pin);
+    window.location.href = 'laugh-hub.html';
+};
+
+function createConfetti() {
+    var container = document.getElementById('confetti');
+    var colors = ['#FFD700', '#6B21A8', '#00D9A5', '#3B82F6'];
+    for (var i = 0; i < 80; i++) {
+        setTimeout(function() {
+            var c = document.createElement('div');
+            c.className = 'confetti';
+            c.style.left = Math.random() * 100 + 'vw';
+            c.style.background = colors[Math.floor(Math.random() * colors.length)];
+            c.style.animationDuration = (Math.random() * 2 + 3) + 's';
+            c.style.width = c.style.height = (Math.random() * 8 + 5) + 'px';
+            c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+            container.appendChild(c);
+            setTimeout(function() { c.remove(); }, 5000);
+        }, i * 30);
+    }
+}
+
+// FAQ Chat
+var chatModal = document.getElementById('chatModal');
+var chatBody = document.getElementById('chatBody');
+var chatFab = document.getElementById('chatFab');
+
+var jokes = [
+    {en:"Why did the brain go to the gym? To work on its THINK-ing muscles! 💪🧠",es:"¿Por qué el cerebro fue al gimnasio? ¡Para trabajar sus músculos de PENSAR! 💪🧠"},
+    {en:"I told my memory a joke... it forgot to laugh! 😂",es:"¡Le conté un chiste a mi memoria... se le olvidó reír! 😂"},
+    {en:"My neurons are having a party... want to join? 🎉🧠",es:"Mis neuronas están de fiesta... ¿quieres unirte? 🎉🧠"},
+    {en:"Warning: My jokes may cause uncontrollable smiling! 😄",es:"Advertencia: ¡Mis chistes pueden causar sonrisas incontrolables! 😄"},
+    {en:"Your brain cells are doing a happy dance right now! 💃🧠",es:"¡Tus células cerebrales están bailando de alegría! 💃🧠"}
+];
+
+function getJoke() {
+    var j = jokes[Math.floor(Math.random() * jokes.length)];
+    return lang === 'es' ? j.es : j.en;
+}
+
+function bi(en, es) {
+    return '<span class="lang-en">' + en + '</span><span class="lang-es">' + es + '</span>';
+}
+
+function addBotMsg(text, options) {
+    var msg = document.createElement('div');
+    msg.className = 'chat-msg bot';
+    var html = text;
+    if (options && options.length) {
+        html += '<div class="chat-options">';
+        options.forEach(function(o) {
+            html += '<button class="chat-option" data-action="' + o.action + '">' + bi(o.en, o.es) + '</button>';
+        });
+        html += '</div>';
+    }
+    msg.innerHTML = html;
+    chatBody.appendChild(msg);
+    chatBody.scrollTop = chatBody.scrollHeight;
+    msg.querySelectorAll('.chat-option').forEach(function(b) {
+        b.addEventListener('click', function() { handleFaq(this.dataset.action); });
+    });
+}
+
+function addJoke(text) {
+    return text + '<div class="joke-box">😂 ' + getJoke() + '</div>';
+}
+
+function openChat() {
+    chatModal.classList.add('active');
+    if (chatBody.children.length === 0) {
+        addBotMsg(addJoke(bi(
+            "Hey! 😂 I'm <strong>Coach GoTrotter AI</strong> — your Laughter Coach! How can I help?",
+            "¡Hola! 😂 Soy <strong>Coach GoTrotter AI</strong> — ¡tu Coach de Risa! ¿Cómo puedo ayudarte?"
+        )), [
+            {en:'🧠 How does it work?', es:'🧠 ¿Cómo funciona?', action:'how'},
+            {en:'👴 Is it for seniors?', es:'👴 ¿Es para mayores?', action:'who'},
+            {en:'😂 Why laughter?', es:'😂 ¿Por qué risa?', action:'why'},
+            {en:'💰 Pricing?', es:'💰 ¿Precio?', action:'price'}
+        ]);
+    }
+}
+
+function handleFaq(action) {
+    document.querySelectorAll('.chat-option').forEach(function(b) { b.style.opacity = '0.5'; b.style.pointerEvents = 'none'; });
+    
+    var responses = {
+        how: {
+            en: "🎮 <strong>HOW IT WORKS</strong><br><br>1️⃣ Pick a game (TRAIL or HUNT)<br>2️⃣ Complete challenges while giggling<br>3️⃣ Progress through 10 tiers<br>4️⃣ Track your journey<br><br>Each game is 5-10 minutes. Laugh daily!",
+            es: "🎮 <strong>CÓMO FUNCIONA</strong><br><br>1️⃣ Elige un juego (TRAIL o HUNT)<br>2️⃣ Completa desafíos mientras te ríes<br>3️⃣ Progresa por 10 niveles<br>4️⃣ Sigue tu progreso<br><br>¡Cada juego es de 5-10 minutos!"
+        },
+        who: {
+            en: "👥 <strong>FOR EVERYONE!</strong><br><br>✅ Seniors — stay sharp & happy<br>✅ Rehab patients — rebuild with joy<br>✅ Students — boost focus & mood<br>✅ Anyone — exercise brain + smile<br><br>Big buttons. Clear visuals. Bilingual. Easy & fun! 🎯",
+            es: "👥 <strong>¡PARA TODOS!</strong><br><br>✅ Adultos mayores — mantente activo<br>✅ Rehabilitación — reconstruye con alegría<br>✅ Estudiantes — mejora enfoque<br>✅ Cualquiera — ejercita cerebro + sonrisa<br><br>¡Fácil y divertido! 🎯"
+        },
+        why: {
+            en: "😂 <strong>WHY LAUGHTER?</strong><br><br>🧪 <strong>SCIENCE SAYS:</strong><br>• Laughter increases dopamine → better memory<br>• Reduces cortisol → clearer thinking<br>• Activates multiple brain regions<br>• Fights isolation & depression<br><br>It's rehabilitation disguised as JOY! 💪",
+            es: "😂 <strong>¿POR QUÉ RISA?</strong><br><br>🧪 <strong>LA CIENCIA DICE:</strong><br>• La risa aumenta dopamina → mejor memoria<br>• Reduce cortisol → pensamiento más claro<br>• Activa múltiples regiones cerebrales<br><br>¡Es rehabilitación disfrazada de ALEGRÍA! 💪"
+        },
+        price: {
+            en: "💰 <strong>SIMPLE PRICING</strong><br><br>• <strong>$5/month</strong> — cancel anytime<br>• 2 games, 10 tiers<br>• Bilingual (EN/ES)<br><br>Just $5 to start laughing! Click the gold button above! 😂",
+            es: "💰 <strong>PRECIO SIMPLE</strong><br><br>• <strong>$5/mes</strong> — cancela cuando quieras<br>• 2 juegos, 10 niveles<br>• Bilingüe (EN/ES)<br><br>¡Solo $5 para comenzar! ¡Haz clic en el botón dorado! 😂"
+        }
+    };
+    
+    setTimeout(function() {
+        var r = responses[action];
+        addBotMsg(addJoke(bi(r.en, r.es)), [
+            {en:'🧠 How it works', es:'🧠 Cómo funciona', action:'how'},
+            {en:'👴 Who is it for', es:'👴 Para quién es', action:'who'},
+            {en:'😂 Why laughter', es:'😂 Por qué risa', action:'why'},
+            {en:'💰 Pricing', es:'💰 Precio', action:'price'}
+        ]);
+    }, 500);
+}
+
+chatFab.onclick = openChat;
+document.getElementById('questionsBtn').onclick = openChat;
+document.getElementById('chatClose').onclick = function() { chatModal.classList.remove('active'); };
 })();
 </script>
 </body>
