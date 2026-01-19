@@ -30,9 +30,13 @@ body.en .lang-es{display:none !important}
 
 /* Hero */
 .hero{text-align:center;padding:30px 20px}
-.hero-icon{width:100px;height:100px;border-radius:50%;object-fit:cover;animation:bounce 2s infinite}
+.hero-icon{width:100px;height:100px;border-radius:50%;object-fit:cover;animation:bounce 2s infinite;cursor:pointer;transition:transform 0.3s;border:3px solid var(--gold);box-shadow:0 0 20px rgba(255,215,0,0.4)}
+.hero-icon:hover{transform:scale(1.1)}
 @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-.hero-text{font-size:1rem;color:var(--muted);line-height:1.6;max-width:400px;margin:20px auto 0}
+.hero-coach-label{font-size:0.95rem;color:var(--gold);margin:15px 0 10px;cursor:pointer;transition:all 0.3s}
+.hero-coach-label:hover{color:var(--teal);text-decoration:underline}
+.hero-coach-label strong{color:var(--text)}
+.hero-text{font-size:1rem;color:var(--muted);line-height:1.6;max-width:400px;margin:10px auto 0}
 .hero-text strong{color:var(--text)}
 
 /* Games */
@@ -148,7 +152,11 @@ body.en .lang-es{display:none !important}
 
 <!-- Hero -->
 <section class="hero">
-<img src="go_chat.png" alt="Coach GoTrotter" class="hero-icon">
+<img src="go_chat.png" alt="Coach GoTrotter" class="hero-icon" id="heroIcon">
+<p class="hero-coach-label">
+<span class="lang-en">Meet <strong>Coach GoTrotter AI</strong> — Click to Learn!</span>
+<span class="lang-es">Conoce a <strong>Coach GoTrotter AI</strong> — ¡Haz Clic!</span>
+</p>
 <p class="hero-text">
 <span class="lang-en"><strong>2 Games. 10 Tiers.</strong> The ONLY laughter-powered memory fitness platform!</span>
 <span class="lang-es"><strong>2 Juegos. 10 Niveles.</strong> ¡La ÚNICA plataforma de fitness mental impulsada por risa!</span>
@@ -482,7 +490,12 @@ var jokes = [
     {en:"I told my memory a joke... it forgot to laugh! 😂",es:"¡Le conté un chiste a mi memoria... se le olvidó reír! 😂"},
     {en:"My neurons are having a party... want to join? 🎉🧠",es:"Mis neuronas están de fiesta... ¿quieres unirte? 🎉🧠"},
     {en:"Warning: My jokes may cause uncontrollable smiling! 😄",es:"Advertencia: ¡Mis chistes pueden causar sonrisas incontrolables! 😄"},
-    {en:"Your brain cells are doing a happy dance right now! 💃🧠",es:"¡Tus células cerebrales están bailando de alegría! 💃🧠"}
+    {en:"Your brain cells are doing a happy dance right now! 💃🧠",es:"¡Tus células cerebrales están bailando de alegría! 💃🧠"},
+    {en:"Why don't scientists trust atoms? Because they make up everything... like excuses not to exercise your brain! 🔬😂",es:"¿Por qué los científicos no confían en los átomos? ¡Porque inventan todo... como excusas para no ejercitar el cerebro! 🔬😂"},
+    {en:"I'm not saying laughter is the best medicine, but it doesn't require a prescription! 💊😂",es:"No digo que la risa sea la mejor medicina, ¡pero no requiere receta! 💊😂"},
+    {en:"Your hippocampus just sent me a thank you card! 📬🧠",es:"¡Tu hipocampo me acaba de enviar una tarjeta de agradecimiento! 📬🧠"},
+    {en:"Breaking news: Your brain is getting stronger while having FUN! 📰💪",es:"Última hora: ¡Tu cerebro se fortalece mientras te DIVIERTES! 📰💪"},
+    {en:"Studies show laughing burns calories. So technically, I'm your fitness coach! 🏋️😂",es:"Los estudios dicen que reír quema calorías. ¡Técnicamente soy tu coach de fitness! 🏋️😂"}
 ];
 
 function getJoke() {
@@ -517,18 +530,22 @@ function addJoke(text) {
     return text + '<div class="joke-box">😂 ' + getJoke() + '</div>';
 }
 
+var mainMenu = [
+    {en:'🧠 Laughter Science', es:'🧠 Ciencia de la Risa', action:'science'},
+    {en:'💪 Brain Benefits', es:'💪 Beneficios Cerebrales', action:'brain'},
+    {en:'❤️ Emotional Benefits', es:'❤️ Beneficios Emocionales', action:'emotional'},
+    {en:'🏥 Rehab Benefits', es:'🏥 Beneficios de Rehabilitación', action:'rehab'},
+    {en:'⭐ What Makes Us Unique', es:'⭐ Qué Nos Hace Únicos', action:'unique'},
+    {en:'💰 Pricing', es:'💰 Precio', action:'price'}
+];
+
 function openChat() {
     chatModal.classList.add('active');
     if (chatBody.children.length === 0) {
         addBotMsg(addJoke(bi(
-            "Hey! 😂 I'm <strong>Coach GoTrotter AI</strong> — your Laughter Coach! How can I help?",
-            "¡Hola! 😂 Soy <strong>Coach GoTrotter AI</strong> — ¡tu Coach de Risa! ¿Cómo puedo ayudarte?"
-        )), [
-            {en:'🧠 How does it work?', es:'🧠 ¿Cómo funciona?', action:'how'},
-            {en:'👴 Is it for seniors?', es:'👴 ¿Es para mayores?', action:'who'},
-            {en:'😂 Why laughter?', es:'😂 ¿Por qué risa?', action:'why'},
-            {en:'💰 Pricing?', es:'💰 ¿Precio?', action:'price'}
-        ]);
+            "Hey! 😂 I'm <strong>Coach GoTrotter AI</strong> — your Laughter Coach!<br><br>I'm here to teach you why <strong>laughter + memory training</strong> is the most powerful combination for your brain! What would you like to learn?",
+            "¡Hola! 😂 Soy <strong>Coach GoTrotter AI</strong> — ¡tu Coach de Risa!<br><br>Estoy aquí para enseñarte por qué <strong>risa + entrenamiento de memoria</strong> es la combinación más poderosa para tu cerebro! ¿Qué te gustaría aprender?"
+        )), mainMenu);
     }
 }
 
@@ -536,38 +553,208 @@ function handleFaq(action) {
     document.querySelectorAll('.chat-option').forEach(function(b) { b.style.opacity = '0.5'; b.style.pointerEvents = 'none'; });
     
     var responses = {
-        how: {
-            en: "🎮 <strong>HOW IT WORKS</strong><br><br>1️⃣ Pick a game (TRAIL or HUNT)<br>2️⃣ Complete challenges while giggling<br>3️⃣ Progress through 10 tiers<br>4️⃣ Track your journey<br><br>Each game is 5-10 minutes. Laugh daily!",
-            es: "🎮 <strong>CÓMO FUNCIONA</strong><br><br>1️⃣ Elige un juego (TRAIL o HUNT)<br>2️⃣ Completa desafíos mientras te ríes<br>3️⃣ Progresa por 10 niveles<br>4️⃣ Sigue tu progreso<br><br>¡Cada juego es de 5-10 minutos!"
+        // LAUGHTER SCIENCE
+        science: {
+            en: "🧠 <strong>THE SCIENCE OF LAUGHTER</strong><br><br>Laughter isn't just fun — it's a <strong>full-body brain workout!</strong><br><br>Choose a topic to dive deeper:",
+            es: "🧠 <strong>LA CIENCIA DE LA RISA</strong><br><br>La risa no es solo diversión — ¡es un <strong>ejercicio completo para el cerebro!</strong><br><br>Elige un tema para profundizar:",
+            options: [
+                {en:'🧪 Dopamine & Memory', es:'🧪 Dopamina y Memoria', action:'dopamine'},
+                {en:'😌 Cortisol Reduction', es:'😌 Reducción de Cortisol', action:'cortisol'},
+                {en:'🌟 Endorphin Release', es:'🌟 Liberación de Endorfinas', action:'endorphins'},
+                {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}
+            ]
         },
-        who: {
-            en: "👥 <strong>FOR EVERYONE!</strong><br><br>✅ Seniors — stay sharp & happy<br>✅ Rehab patients — rebuild with joy<br>✅ Students — boost focus & mood<br>✅ Anyone — exercise brain + smile<br><br>Big buttons. Clear visuals. Bilingual. Easy & fun! 🎯",
-            es: "👥 <strong>¡PARA TODOS!</strong><br><br>✅ Adultos mayores — mantente activo<br>✅ Rehabilitación — reconstruye con alegría<br>✅ Estudiantes — mejora enfoque<br>✅ Cualquiera — ejercita cerebro + sonrisa<br><br>¡Fácil y divertido! 🎯"
+        dopamine: {
+            en: "🧪 <strong>DOPAMINE & MEMORY</strong><br><br>When you laugh, your brain releases <strong>DOPAMINE</strong> — the 'feel-good' neurotransmitter.<br><br>Here's the magic:<br>• Dopamine strengthens neural connections<br>• It enhances memory formation<br>• Information learned while laughing is <strong>retained 40% better!</strong><br>• Your brain literally WANTS to remember joyful experiences<br><br>That's why LaughCourt works — we make your brain WANT to remember! 🎯",
+            es: "🧪 <strong>DOPAMINA Y MEMORIA</strong><br><br>Cuando te ríes, tu cerebro libera <strong>DOPAMINA</strong> — el neurotransmisor del 'bienestar'.<br><br>Aquí está la magia:<br>• La dopamina fortalece las conexiones neuronales<br>• Mejora la formación de memoria<br>• ¡La información aprendida riendo se retiene <strong>40% mejor!</strong><br>• Tu cerebro QUIERE recordar experiencias alegres<br><br>¡Por eso LaughCourt funciona — hacemos que tu cerebro QUIERA recordar! 🎯",
+            options: [{en:'🧪 More Science', es:'🧪 Más Ciencia', action:'science'}, {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}]
         },
-        why: {
-            en: "😂 <strong>WHY LAUGHTER?</strong><br><br>🧪 <strong>SCIENCE SAYS:</strong><br>• Laughter increases dopamine → better memory<br>• Reduces cortisol → clearer thinking<br>• Activates multiple brain regions<br>• Fights isolation & depression<br><br>It's rehabilitation disguised as JOY! 💪",
-            es: "😂 <strong>¿POR QUÉ RISA?</strong><br><br>🧪 <strong>LA CIENCIA DICE:</strong><br>• La risa aumenta dopamina → mejor memoria<br>• Reduce cortisol → pensamiento más claro<br>• Activa múltiples regiones cerebrales<br><br>¡Es rehabilitación disfrazada de ALEGRÍA! 💪"
+        cortisol: {
+            en: "😌 <strong>CORTISOL REDUCTION</strong><br><br><strong>Cortisol</strong> is the stress hormone — and it's your brain's enemy!<br><br>High cortisol:<br>• Blocks memory formation<br>• Impairs concentration<br>• Damages brain cells over time<br><br>Laughter <strong>reduces cortisol by up to 39%!</strong><br><br>Lower stress = clearer thinking = better memory. Simple math! 📊",
+            es: "😌 <strong>REDUCCIÓN DE CORTISOL</strong><br><br><strong>El cortisol</strong> es la hormona del estrés — ¡y es el enemigo de tu cerebro!<br><br>Cortisol alto:<br>• Bloquea la formación de memoria<br>• Afecta la concentración<br>• Daña las células cerebrales con el tiempo<br><br>¡La risa <strong>reduce el cortisol hasta un 39%!</strong><br><br>Menos estrés = pensamiento más claro = mejor memoria. ¡Matemática simple! 📊",
+            options: [{en:'🧪 More Science', es:'🧪 Más Ciencia', action:'science'}, {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}]
         },
+        endorphins: {
+            en: "🌟 <strong>ENDORPHIN RELEASE</strong><br><br><strong>Endorphins</strong> are your body's natural painkillers and mood boosters!<br><br>When you laugh:<br>• Endorphins flood your brain<br>• Pain perception decreases<br>• Mood elevates naturally<br>• Your brain enters an optimal learning state<br><br>LaughCourt creates an <strong>endorphin-rich environment</strong> where your brain THRIVES! 🚀",
+            es: "🌟 <strong>LIBERACIÓN DE ENDORFINAS</strong><br><br>¡Las <strong>endorfinas</strong> son los analgésicos naturales y elevadores de ánimo de tu cuerpo!<br><br>Cuando te ríes:<br>• Las endorfinas inundan tu cerebro<br>• La percepción del dolor disminuye<br>• El ánimo se eleva naturalmente<br>• Tu cerebro entra en un estado óptimo de aprendizaje<br><br>¡LaughCourt crea un <strong>ambiente rico en endorfinas</strong> donde tu cerebro PROSPERA! 🚀",
+            options: [{en:'🧪 More Science', es:'🧪 Más Ciencia', action:'science'}, {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}]
+        },
+        
+        // BRAIN BENEFITS
+        brain: {
+            en: "💪 <strong>COGNITIVE BENEFITS</strong><br><br>LaughCourt trains your brain like an <strong>athlete trains their body!</strong><br><br>Choose a benefit to explore:",
+            es: "💪 <strong>BENEFICIOS COGNITIVOS</strong><br><br>¡LaughCourt entrena tu cerebro como un <strong>atleta entrena su cuerpo!</strong><br><br>Elige un beneficio para explorar:",
+            options: [
+                {en:'🎯 Memory Improvement', es:'🎯 Mejora de Memoria', action:'memory'},
+                {en:'👁️ Focus & Attention', es:'👁️ Enfoque y Atención', action:'focus'},
+                {en:'⚡ Processing Speed', es:'⚡ Velocidad de Procesamiento', action:'speed'},
+                {en:'🧬 Neuroplasticity', es:'🧬 Neuroplasticidad', action:'neuro'},
+                {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}
+            ]
+        },
+        memory: {
+            en: "🎯 <strong>MEMORY IMPROVEMENT</strong><br><br>Our games target <strong>both short-term and long-term memory:</strong><br><br>• <strong>LAUGH TRAIL</strong> — Sequence memory (remember patterns)<br>• <strong>LAUGH HUNT</strong> — Recognition memory (find & recall)<br><br>With 10 progressive tiers, your memory gets stronger each day!<br><br>Users report <strong>noticeable improvement in 2-3 weeks!</strong> 📈",
+            es: "🎯 <strong>MEJORA DE MEMORIA</strong><br><br>Nuestros juegos trabajan <strong>memoria a corto y largo plazo:</strong><br><br>• <strong>LAUGH TRAIL</strong> — Memoria de secuencia (recordar patrones)<br>• <strong>LAUGH HUNT</strong> — Memoria de reconocimiento (encontrar y recordar)<br><br>¡Con 10 niveles progresivos, tu memoria se fortalece cada día!<br><br>¡Los usuarios reportan <strong>mejoras notables en 2-3 semanas!</strong> 📈",
+            options: [{en:'💪 More Benefits', es:'💪 Más Beneficios', action:'brain'}, {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}]
+        },
+        focus: {
+            en: "👁️ <strong>FOCUS & ATTENTION</strong><br><br>In our distracted world, <strong>attention is a superpower!</strong><br><br>LaughCourt improves:<br>• Sustained attention (staying focused longer)<br>• Selective attention (ignoring distractions)<br>• Divided attention (multitasking ability)<br><br>The games require you to <strong>watch, listen, and respond</strong> — training your focus muscles! 💪",
+            es: "👁️ <strong>ENFOQUE Y ATENCIÓN</strong><br><br>En nuestro mundo distraído, <strong>¡la atención es un superpoder!</strong><br><br>LaughCourt mejora:<br>• Atención sostenida (enfocarse más tiempo)<br>• Atención selectiva (ignorar distracciones)<br>• Atención dividida (capacidad de multitarea)<br><br>¡Los juegos requieren <strong>observar, escuchar y responder</strong> — entrenando tus músculos de enfoque! 💪",
+            options: [{en:'💪 More Benefits', es:'💪 Más Beneficios', action:'brain'}, {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}]
+        },
+        speed: {
+            en: "⚡ <strong>PROCESSING SPEED</strong><br><br>How fast can your brain process information?<br><br>LaughCourt improves:<br>• Reaction time<br>• Decision-making speed<br>• Mental agility<br>• Quick recall ability<br><br>As you progress through tiers, the games get faster — and so does your brain! <strong>Speed is trainable!</strong> 🏎️",
+            es: "⚡ <strong>VELOCIDAD DE PROCESAMIENTO</strong><br><br>¿Qué tan rápido puede procesar información tu cerebro?<br><br>LaughCourt mejora:<br>• Tiempo de reacción<br>• Velocidad de decisión<br>• Agilidad mental<br>• Capacidad de recuerdo rápido<br><br>¡A medida que avanzas en los niveles, los juegos se aceleran — y también tu cerebro! <strong>¡La velocidad se puede entrenar!</strong> 🏎️",
+            options: [{en:'💪 More Benefits', es:'💪 Más Beneficios', action:'brain'}, {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}]
+        },
+        neuro: {
+            en: "🧬 <strong>NEUROPLASTICITY</strong><br><br>Your brain can <strong>change and grow at ANY age!</strong> This is called neuroplasticity.<br><br>LaughCourt promotes neuroplasticity by:<br>• Creating new neural pathways<br>• Strengthening existing connections<br>• Challenging your brain in new ways daily<br>• Combining emotion (laughter) with cognition<br><br><strong>It's never too late to grow your brain!</strong> 🌱🧠",
+            es: "🧬 <strong>NEUROPLASTICIDAD</strong><br><br>¡Tu cerebro puede <strong>cambiar y crecer a CUALQUIER edad!</strong> Esto se llama neuroplasticidad.<br><br>LaughCourt promueve la neuroplasticidad al:<br>• Crear nuevas vías neuronales<br>• Fortalecer conexiones existentes<br>• Desafiar tu cerebro de nuevas formas diariamente<br>• Combinar emoción (risa) con cognición<br><br><strong>¡Nunca es tarde para hacer crecer tu cerebro!</strong> 🌱🧠",
+            options: [{en:'💪 More Benefits', es:'💪 Más Beneficios', action:'brain'}, {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}]
+        },
+        
+        // EMOTIONAL BENEFITS
+        emotional: {
+            en: "❤️ <strong>EMOTIONAL BENEFITS</strong><br><br>A healthy brain is a <strong>happy brain!</strong><br><br>Choose a topic:",
+            es: "❤️ <strong>BENEFICIOS EMOCIONALES</strong><br><br>¡Un cerebro saludable es un <strong>cerebro feliz!</strong><br><br>Elige un tema:",
+            options: [
+                {en:'😊 Mood & Happiness', es:'😊 Ánimo y Felicidad', action:'mood'},
+                {en:'😰 Anxiety Relief', es:'😰 Alivio de Ansiedad', action:'anxiety'},
+                {en:'🤝 Social Connection', es:'🤝 Conexión Social', action:'social'},
+                {en:'💪 Confidence Building', es:'💪 Construir Confianza', action:'confidence'},
+                {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}
+            ]
+        },
+        mood: {
+            en: "😊 <strong>MOOD & HAPPINESS</strong><br><br>Laughter is the <strong>fastest mood elevator!</strong><br><br>LaughCourt creates:<br>• Daily moments of joy<br>• Positive habits and routines<br>• Sense of accomplishment<br>• Fun to look forward to<br><br>Many users say LaughCourt is the <strong>highlight of their day!</strong> 🌟",
+            es: "😊 <strong>ÁNIMO Y FELICIDAD</strong><br><br>¡La risa es el <strong>elevador de ánimo más rápido!</strong><br><br>LaughCourt crea:<br>• Momentos diarios de alegría<br>• Hábitos y rutinas positivas<br>• Sentido de logro<br>• Diversión que esperar<br><br>¡Muchos usuarios dicen que LaughCourt es el <strong>mejor momento de su día!</strong> 🌟",
+            options: [{en:'❤️ More Emotional', es:'❤️ Más Emocional', action:'emotional'}, {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}]
+        },
+        anxiety: {
+            en: "😰 <strong>ANXIETY RELIEF</strong><br><br>Anxiety and laughter <strong>cannot coexist!</strong><br><br>LaughCourt helps by:<br>• Breaking anxious thought patterns<br>• Reducing physical tension<br>• Providing healthy distraction<br>• Creating calm through joy<br><br>5-10 minutes of LaughCourt can <strong>reset your entire mood!</strong> 🔄",
+            es: "😰 <strong>ALIVIO DE ANSIEDAD</strong><br><br>¡La ansiedad y la risa <strong>no pueden coexistir!</strong><br><br>LaughCourt ayuda al:<br>• Romper patrones de pensamiento ansioso<br>• Reducir tensión física<br>• Proporcionar distracción saludable<br>• Crear calma a través de la alegría<br><br>¡5-10 minutos de LaughCourt pueden <strong>reiniciar todo tu ánimo!</strong> 🔄",
+            options: [{en:'❤️ More Emotional', es:'❤️ Más Emocional', action:'emotional'}, {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}]
+        },
+        social: {
+            en: "🤝 <strong>SOCIAL CONNECTION</strong><br><br>Loneliness is a <strong>silent epidemic</strong> — especially for seniors.<br><br>LaughCourt helps by:<br>• Giving something fun to share with family<br>• Creating conversation topics<br>• Building confidence for social situations<br>• Connecting through shared laughter<br><br>Families can <strong>laugh together</strong> even from a distance! 👨‍👩‍👧‍👦",
+            es: "🤝 <strong>CONEXIÓN SOCIAL</strong><br><br>La soledad es una <strong>epidemia silenciosa</strong> — especialmente para adultos mayores.<br><br>LaughCourt ayuda al:<br>• Dar algo divertido para compartir con familia<br>• Crear temas de conversación<br>• Construir confianza para situaciones sociales<br>• Conectar a través de risas compartidas<br><br>¡Las familias pueden <strong>reír juntas</strong> incluso a distancia! 👨‍👩‍👧‍👦",
+            options: [{en:'❤️ More Emotional', es:'❤️ Más Emocional', action:'emotional'}, {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}]
+        },
+        confidence: {
+            en: "💪 <strong>CONFIDENCE BUILDING</strong><br><br>Nothing builds confidence like <strong>success!</strong><br><br>LaughCourt builds confidence through:<br>• Achievable challenges<br>• Visible progress (10 tiers!)<br>• Celebrating small wins<br>• Proving 'I can do this!'\n<br><br>Watch users go from 'I can't' to <strong>'LOOK WHAT I DID!'</strong> 🏆",
+            es: "💪 <strong>CONSTRUIR CONFIANZA</strong><br><br>¡Nada construye confianza como el <strong>éxito!</strong><br><br>LaughCourt construye confianza mediante:<br>• Desafíos alcanzables<br>• Progreso visible (¡10 niveles!)<br>• Celebrar pequeñas victorias<br>• Probar '¡Yo puedo!'\n<br><br>¡Mira usuarios pasar de 'No puedo' a <strong>'¡MIRA LO QUE HICE!'</strong> 🏆",
+            options: [{en:'❤️ More Emotional', es:'❤️ Más Emocional', action:'emotional'}, {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}]
+        },
+        
+        // REHAB BENEFITS
+        rehab: {
+            en: "🏥 <strong>REHABILITATION BENEFITS</strong><br><br>LaughCourt was designed with <strong>rehab facilities in mind!</strong><br><br>Choose a topic:",
+            es: "🏥 <strong>BENEFICIOS DE REHABILITACIÓN</strong><br><br>¡LaughCourt fue diseñado pensando en <strong>centros de rehabilitación!</strong><br><br>Elige un tema:",
+            options: [
+                {en:'🧠 Cognitive Recovery', es:'🧠 Recuperación Cognitiva', action:'cognitive'},
+                {en:'🖐️ Motor Skills', es:'🖐️ Habilidades Motoras', action:'motor'},
+                {en:'🗣️ Speech Support', es:'🗣️ Apoyo del Habla', action:'speech'},
+                {en:'😊 Patient Engagement', es:'😊 Participación del Paciente', action:'engagement'},
+                {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}
+            ]
+        },
+        cognitive: {
+            en: "🧠 <strong>COGNITIVE RECOVERY</strong><br><br>For stroke, TBI, and cognitive decline patients:<br><br>• <strong>Gentle progression</strong> — start easy, build up<br>• <strong>Repetitive training</strong> — builds new pathways<br>• <strong>Positive reinforcement</strong> — celebrates every success<br>• <strong>Low frustration</strong> — laughter reduces stress<br><br>Rehab disguised as <strong>play!</strong> 🎮",
+            es: "🧠 <strong>RECUPERACIÓN COGNITIVA</strong><br><br>Para pacientes de derrame, TBI y deterioro cognitivo:<br><br>• <strong>Progresión suave</strong> — empieza fácil, avanza gradualmente<br>• <strong>Entrenamiento repetitivo</strong> — construye nuevas vías<br>• <strong>Refuerzo positivo</strong> — celebra cada éxito<br>• <strong>Baja frustración</strong> — la risa reduce el estrés<br><br>¡Rehabilitación disfrazada de <strong>juego!</strong> 🎮",
+            options: [{en:'🏥 More Rehab', es:'🏥 Más Rehabilitación', action:'rehab'}, {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}]
+        },
+        motor: {
+            en: "🖐️ <strong>MOTOR SKILLS</strong><br><br>Our games train <strong>fine motor coordination:</strong><br><br>• Tapping sequences (LAUGH TRAIL)<br>• Target selection (LAUGH HUNT)<br>• Hand-eye coordination<br>• Timing and rhythm<br><br>Big buttons + clear visuals = <strong>accessible for all abilities!</strong> ♿",
+            es: "🖐️ <strong>HABILIDADES MOTORAS</strong><br><br>Nuestros juegos entrenan la <strong>coordinación motora fina:</strong><br><br>• Secuencias de toques (LAUGH TRAIL)<br>• Selección de objetivos (LAUGH HUNT)<br>• Coordinación mano-ojo<br>• Tiempo y ritmo<br><br>¡Botones grandes + visuales claros = <strong>accesible para todas las habilidades!</strong> ♿",
+            options: [{en:'🏥 More Rehab', es:'🏥 Más Rehabilitación', action:'rehab'}, {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}]
+        },
+        speech: {
+            en: "🗣️ <strong>SPEECH THERAPY SUPPORT</strong><br><br>LaughCourt complements speech therapy:<br><br>• <strong>Word recognition</strong> in LAUGH HUNT<br>• <strong>Category association</strong> training<br>• <strong>Reading practice</strong> with fun content<br>• <strong>Bilingual support</strong> (EN/ES)<br><br>Therapists love using it as a <strong>warm-up or reward!</strong> 🎁",
+            es: "🗣️ <strong>APOYO DE TERAPIA DEL HABLA</strong><br><br>LaughCourt complementa la terapia del habla:<br><br>• <strong>Reconocimiento de palabras</strong> en LAUGH HUNT<br>• Entrenamiento de <strong>asociación de categorías</strong><br>• <strong>Práctica de lectura</strong> con contenido divertido<br>• <strong>Soporte bilingüe</strong> (EN/ES)<br><br>¡A los terapeutas les encanta usarlo como <strong>calentamiento o recompensa!</strong> 🎁",
+            options: [{en:'🏥 More Rehab', es:'🏥 Más Rehabilitación', action:'rehab'}, {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}]
+        },
+        engagement: {
+            en: "😊 <strong>PATIENT ENGAGEMENT</strong><br><br>The #1 rehab challenge? <strong>Getting patients to participate!</strong><br><br>LaughCourt solves this:<br>• It's FUN — patients WANT to play<br>• Short sessions — no fatigue<br>• Visible progress — motivation boost<br>• Social element — share with family<br><br>Patients go from <strong>'Do I have to?'</strong> to <strong>'Can I play again?'</strong> 🙋",
+            es: "😊 <strong>PARTICIPACIÓN DEL PACIENTE</strong><br><br>¿El desafío #1 en rehabilitación? <strong>¡Lograr que los pacientes participen!</strong><br><br>LaughCourt resuelve esto:<br>• Es DIVERTIDO — los pacientes QUIEREN jugar<br>• Sesiones cortas — sin fatiga<br>• Progreso visible — impulso de motivación<br>• Elemento social — compartir con familia<br><br>¡Los pacientes pasan de <strong>'¿Tengo que hacerlo?'</strong> a <strong>'¿Puedo jugar otra vez?'</strong> 🙋",
+            options: [{en:'🏥 More Rehab', es:'🏥 Más Rehabilitación', action:'rehab'}, {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}]
+        },
+        
+        // WHAT MAKES US UNIQUE
+        unique: {
+            en: "⭐ <strong>WHAT MAKES LAUGHCOURT UNIQUE</strong><br><br>We're not just another brain game. We're <strong>the ONLY one</strong> that combines:",
+            es: "⭐ <strong>QUÉ HACE ÚNICO A LAUGHCOURT</strong><br><br>No somos solo otro juego mental. Somos <strong>el ÚNICO</strong> que combina:",
+            options: [
+                {en:'😂 Laughter-Powered', es:'😂 Impulsado por Risa', action:'u_laughter'},
+                {en:'🏀 Athletic Mindset', es:'🏀 Mentalidad Atlética', action:'u_athletic'},
+                {en:'🇵🇷 Fully Bilingual', es:'🇵🇷 Totalmente Bilingüe', action:'u_bilingual'},
+                {en:'🤖 Coach-Led', es:'🤖 Guiado por Coach', action:'u_coach'},
+                {en:'🔐 Senior-Friendly', es:'🔐 Amigable para Mayores', action:'u_senior'},
+                {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}
+            ]
+        },
+        u_laughter: {
+            en: "😂 <strong>LAUGHTER-POWERED</strong><br><br>Other brain games are <strong>boring.</strong> Ours make you LAUGH!<br><br>• Funny content throughout<br>• Jokes and celebrations<br>• Joy as a training tool<br>• Positive emotional state = better learning<br><br>We're the <strong>ONLY laughter-powered</strong> memory fitness platform in the world! 🌍",
+            es: "😂 <strong>IMPULSADO POR RISA</strong><br><br>Otros juegos cerebrales son <strong>aburridos.</strong> ¡Los nuestros te hacen REÍR!<br><br>• Contenido gracioso en todo momento<br>• Chistes y celebraciones<br>• La alegría como herramienta de entrenamiento<br>• Estado emocional positivo = mejor aprendizaje<br><br>¡Somos la <strong>ÚNICA plataforma</strong> de fitness mental impulsada por risa en el mundo! 🌍",
+            options: [{en:'⭐ More Unique', es:'⭐ Más Único', action:'unique'}, {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}]
+        },
+        u_athletic: {
+            en: "🏀 <strong>ATHLETIC MINDSET</strong><br><br>We don't call it 'therapy' — we call it <strong>TRAINING!</strong><br><br>• Memory FITNESS (not treatment)<br>• Brain WORKOUTS (not exercises)\n• Progress TIERS (not levels)<br>• You're an ATHLETE (not a patient)<br><br>This mindset <strong>removes stigma</strong> and builds pride! 💪",
+            es: "🏀 <strong>MENTALIDAD ATLÉTICA</strong><br><br>No lo llamamos 'terapia' — ¡lo llamamos <strong>ENTRENAMIENTO!</strong><br><br>• FITNESS de memoria (no tratamiento)<br>• ENTRENAMIENTOS cerebrales (no ejercicios)<br>• NIVELES de progreso (no etapas)<br>• Eres un ATLETA (no un paciente)<br><br>¡Esta mentalidad <strong>elimina el estigma</strong> y construye orgullo! 💪",
+            options: [{en:'⭐ More Unique', es:'⭐ Más Único', action:'unique'}, {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}]
+        },
+        u_bilingual: {
+            en: "🇵🇷 <strong>FULLY BILINGUAL</strong><br><br>Built in Puerto Rico, for a bilingual world!<br><br>• Complete English/Spanish support<br>• Switch languages anytime<br>• Cultural relevance<br>• Serves diverse communities<br><br>No other platform offers <strong>true bilingual</strong> cognitive training! 🌎",
+            es: "🇵🇷 <strong>TOTALMENTE BILINGÜE</strong><br><br>¡Construido en Puerto Rico, para un mundo bilingüe!<br><br>• Soporte completo Inglés/Español<br>• Cambia idiomas cuando quieras<br>• Relevancia cultural<br>• Sirve comunidades diversas<br><br>¡Ninguna otra plataforma ofrece entrenamiento cognitivo <strong>verdaderamente bilingüe!</strong> 🌎",
+            options: [{en:'⭐ More Unique', es:'⭐ Más Único', action:'unique'}, {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}]
+        },
+        u_coach: {
+            en: "🤖 <strong>COACH-LED EXPERIENCE</strong><br><br>You're not alone — <strong>I'm with you!</strong><br><br>• Coach GoTrotter AI guides every session<br>• Encouragement and jokes throughout<br>• Answers questions 24/7<br>• Celebrates your wins<br><br>It's like having a <strong>personal trainer for your brain!</strong> 🧠🏆",
+            es: "🤖 <strong>EXPERIENCIA GUIADA POR COACH</strong><br><br>No estás solo — <strong>¡estoy contigo!</strong><br><br>• Coach GoTrotter AI guía cada sesión<br>• Ánimo y chistes en todo momento<br>• Responde preguntas 24/7<br>• Celebra tus victorias<br><br>¡Es como tener un <strong>entrenador personal para tu cerebro!</strong> 🧠🏆",
+            options: [{en:'⭐ More Unique', es:'⭐ Más Único', action:'unique'}, {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}]
+        },
+        u_senior: {
+            en: "🔐 <strong>SENIOR-FRIENDLY DESIGN</strong><br><br>Built FOR seniors, not adapted for them:<br><br>• <strong>PIN login</strong> — no passwords to forget<br>• <strong>Big buttons</strong> — easy to tap<br>• <strong>Clear visuals</strong> — high contrast<br>• <strong>Simple navigation</strong> — no confusion<br>• <strong>Short sessions</strong> — no fatigue<br><br>Accessibility is in our DNA! ♿❤️",
+            es: "🔐 <strong>DISEÑO AMIGABLE PARA MAYORES</strong><br><br>Construido PARA mayores, no adaptado para ellos:<br><br>• <strong>Login con PIN</strong> — sin contraseñas que olvidar<br>• <strong>Botones grandes</strong> — fáciles de tocar<br>• <strong>Visuales claros</strong> — alto contraste<br>• <strong>Navegación simple</strong> — sin confusión<br>• <strong>Sesiones cortas</strong> — sin fatiga<br><br>¡La accesibilidad está en nuestro ADN! ♿❤️",
+            options: [{en:'⭐ More Unique', es:'⭐ Más Único', action:'unique'}, {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}]
+        },
+        
+        // PRICING
         price: {
-            en: "💰 <strong>SIMPLE PRICING</strong><br><br>• <strong>$5/month</strong> — cancel anytime<br>• 2 games, 10 tiers<br>• Bilingual (EN/ES)<br><br>Just $5 to start laughing! Click the gold button above! 😂",
-            es: "💰 <strong>PRECIO SIMPLE</strong><br><br>• <strong>$5/mes</strong> — cancela cuando quieras<br>• 2 juegos, 10 niveles<br>• Bilingüe (EN/ES)<br><br>¡Solo $5 para comenzar! ¡Haz clic en el botón dorado! 😂"
+            en: "💰 <strong>SIMPLE PRICING</strong><br><br>• <strong>$5/month</strong> — that's it!<br>• 7-day FREE trial<br>• Cancel anytime<br>• 2 games included<br>• All 10 tiers<br>• Bilingual support<br>• Coach GoTrotter AI<br><br>Less than a coffee per week for a <strong>sharper, happier brain!</strong> ☕🧠<br><br>Ready to start laughing?",
+            es: "💰 <strong>PRECIO SIMPLE</strong><br><br>• <strong>$5/mes</strong> — ¡eso es todo!<br>• 7 días de prueba GRATIS<br>• Cancela cuando quieras<br>• 2 juegos incluidos<br>• Los 10 niveles<br>• Soporte bilingüe<br>• Coach GoTrotter AI<br><br>¡Menos que un café por semana para un <strong>cerebro más agudo y feliz!</strong> ☕🧠<br><br>¿Listo para empezar a reír?",
+            options: [
+                {en:'🚀 START FREE TRIAL', es:'🚀 COMENZAR PRUEBA GRATIS', action:'subscribe'},
+                {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}
+            ]
+        },
+        
+        // ACTIONS
+        menu: {
+            en: "What else would you like to learn? 😊",
+            es: "¿Qué más te gustaría aprender? 😊",
+            options: mainMenu
+        },
+        subscribe: {
+            en: "🎉 <strong>GREAT CHOICE!</strong><br><br>Click the gold <strong>'START LAUGHING!'</strong> button on the page to begin your free trial!<br><br>I'll be here to coach you every step of the way! 😂🏆",
+            es: "🎉 <strong>¡EXCELENTE ELECCIÓN!</strong><br><br>¡Haz clic en el botón dorado <strong>'¡A REÍR!'</strong> en la página para comenzar tu prueba gratis!<br><br>¡Estaré aquí para guiarte en cada paso! 😂🏆",
+            options: [{en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}]
         }
     };
     
     setTimeout(function() {
         var r = responses[action];
-        addBotMsg(addJoke(bi(r.en, r.es)), [
-            {en:'🧠 How it works', es:'🧠 Cómo funciona', action:'how'},
-            {en:'👴 Who is it for', es:'👴 Para quién es', action:'who'},
-            {en:'😂 Why laughter', es:'😂 Por qué risa', action:'why'},
-            {en:'💰 Pricing', es:'💰 Precio', action:'price'}
-        ]);
+        if (r) {
+            var opts = r.options || [{en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}];
+            addBotMsg(addJoke(bi(r.en, r.es)), opts);
+        }
     }, 500);
 }
 
 chatFab.onclick = openChat;
 document.getElementById('questionsBtn').onclick = openChat;
 document.getElementById('chatClose').onclick = function() { chatModal.classList.remove('active'); };
+document.getElementById('heroIcon').onclick = openChat;
+document.querySelector('.hero-coach-label').onclick = openChat;
 })();
 </script>
 </body>
