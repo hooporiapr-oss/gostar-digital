@@ -135,6 +135,10 @@ body.en .lang-es{display:none!important}
 <span class="lang-en">LET'S HEAR IT! 🔊</span>
 <span class="lang-es">¡A ESCUCHAR! 🔊</span>
 </button>
+<button class="test-sound-btn" id="testSoundBtn" style="margin-top:15px;padding:12px 30px;font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;background:transparent;color:var(--gold);border:2px solid var(--gold);border-radius:30px;cursor:pointer;">
+<span class="lang-en">🔊 TEST SOUND</span>
+<span class="lang-es">🔊 PROBAR SONIDO</span>
+</button>
 <div class="intro-coach-name">
 <span class="lang-en">with Coach GoTrotter AI 🏀</span>
 <span class="lang-es">con Coach GoTrotter AI 🏀</span>
@@ -230,6 +234,7 @@ document.querySelectorAll('.lang-btn').forEach(function(b){
 
 // ============ AUDIO CONTEXT & SOUND SYNTHESIS ============
 var audioCtx = null;
+var audioUnlocked = false;
 
 function initAudio() {
     if (!audioCtx) {
@@ -237,6 +242,19 @@ function initAudio() {
     }
     if (audioCtx.state === 'suspended') {
         audioCtx.resume();
+    }
+    
+    // Play a silent sound to fully unlock audio on iOS/Safari
+    if (!audioUnlocked) {
+        var osc = audioCtx.createOscillator();
+        var gain = audioCtx.createGain();
+        gain.gain.value = 0.001; // Nearly silent
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.1);
+        audioUnlocked = true;
+        console.log('Audio unlocked, context state:', audioCtx.state);
     }
 }
 
@@ -263,7 +281,7 @@ var soundFunctions = {
         osc.frequency.setValueAtTime(150, audioCtx.currentTime);
         osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.1);
         osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.3);
-        gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.8, audioCtx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
         osc.start();
         osc.stop(audioCtx.currentTime + 0.4);
@@ -302,8 +320,8 @@ var soundFunctions = {
         osc.frequency.setValueAtTime(300, audioCtx.currentTime);
         osc.frequency.linearRampToValueAtTime(500, audioCtx.currentTime + 0.05);
         osc.frequency.linearRampToValueAtTime(250, audioCtx.currentTime + 0.2);
-        gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
-        gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.05);
+        gain.gain.setValueAtTime(0.6, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.5, audioCtx.currentTime + 0.05);
         gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
         osc.start();
         osc.stop(audioCtx.currentTime + 0.25);
@@ -434,7 +452,7 @@ var soundFunctions = {
         osc.type = 'square';
         osc.frequency.setValueAtTime(400, audioCtx.currentTime);
         osc.frequency.setValueAtTime(300, audioCtx.currentTime + 0.15);
-        gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.6, audioCtx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
         osc.start();
         osc.stop(audioCtx.currentTime + 0.3);
@@ -454,9 +472,9 @@ var soundFunctions = {
         osc.type = 'sine';
         osc.frequency.setValueAtTime(150, audioCtx.currentTime);
         osc.frequency.exponentialRampToValueAtTime(30, audioCtx.currentTime + 0.5);
-        gain.gain.setValueAtTime(0.6, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.8, audioCtx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
-        gain2.gain.setValueAtTime(0.4, audioCtx.currentTime);
+        gain2.gain.setValueAtTime(0.6, audioCtx.currentTime);
         gain2.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
         osc.start();
         noise.start();
@@ -476,7 +494,7 @@ var soundFunctions = {
         osc2.type = 'sine';
         osc.frequency.value = 800;
         osc2.frequency.value = 1200;
-        gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.6, audioCtx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.8);
         osc.start();
         osc2.start();
@@ -889,9 +907,21 @@ var soundFunctions = {
 };
 
 function playSound(soundName) {
-    initAudio();
+    if (!audioCtx) {
+        initAudio();
+    }
+    if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+    }
+    console.log('Playing sound:', soundName, 'Context state:', audioCtx.state);
     if (soundFunctions[soundName]) {
-        soundFunctions[soundName]();
+        try {
+            soundFunctions[soundName]();
+        } catch(e) {
+            console.error('Sound error:', e);
+        }
+    } else {
+        console.warn('Sound not found:', soundName);
     }
 }
 
@@ -1332,6 +1362,12 @@ function endGame(){
 document.getElementById('startBtn').onclick=function() {
     initAudio();
     startGame();
+};
+document.getElementById('testSoundBtn').onclick=function() {
+    initAudio();
+    // Play a fun test sound
+    playSound('BOING!');
+    setTimeout(function(){ playSound('HONK!'); }, 500);
 };
 document.getElementById('retryBtn').onclick=startGame;
 document.getElementById('homeBtn').onclick=function(){
