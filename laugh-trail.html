@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>LAUGH TRAIL 😂 | Laughletico™</title>
+<title>LAUGH TRAIL 😂 | LaughCourt™</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -163,7 +163,7 @@ body.en .lang-es{display:none!important}
 <div class="game-container">
 <!-- Intro Screen -->
 <div class="intro-screen" id="introScreen">
-<div class="intro-icon">😂</div>
+<div class="intro-icon">🛤️</div>
 <div class="intro-title"><span class="laugh">LAUGH</span> <span class="trail">TRAIL</span></div>
 <div class="intro-subtitle">
 <span class="lang-en">FOLLOW THE FUNNY PATH</span>
@@ -180,8 +180,8 @@ body.en .lang-es{display:none!important}
 </div>
 
 <button class="start-btn" id="startBtn">
-<span class="lang-en">START TRAIL! 😂</span>
-<span class="lang-es">¡COMENZAR! 😂</span>
+<span class="lang-en">START TRAIL! 🛤️</span>
+<span class="lang-es">¡COMENZAR! 🛤️</span>
 </button>
 </div>
 
@@ -323,7 +323,7 @@ var playerIndex = 0;
 var round = 1;
 var streak = 0;
 var bestRound = 0;
-var circuitLaughs = 0;
+var gameLaughs = 0;
 var isWatching = true;
 var canTap = false;
 
@@ -349,11 +349,11 @@ function getLaughEmoji(count) {
 }
 
 function addLaughs(count) {
-    var oldEmoji = getLaughEmoji(circuitLaughs);
-    circuitLaughs += count;
-    var newEmoji = getLaughEmoji(circuitLaughs);
+    var oldEmoji = getLaughEmoji(gameLaughs);
+    gameLaughs += count;
+    var newEmoji = getLaughEmoji(gameLaughs);
     
-    document.getElementById('laughValue').textContent = circuitLaughs;
+    document.getElementById('laughValue').textContent = gameLaughs;
     
     var icon = document.getElementById('laughIcon');
     icon.classList.remove('bounce', 'evolve');
@@ -693,7 +693,7 @@ function gameOver() {
             (lang === 'es' ? '¡BUEN INTENTO!' : 'GOOD TRY!');
         document.getElementById('resultTitle').className = 'result-title ' + (round >= 5 ? 'success' : 'fail');
         document.getElementById('finalRound').textContent = round;
-        document.getElementById('finalLaughs').textContent = circuitLaughs;
+        document.getElementById('finalLaughs').textContent = gameLaughs;
         
         if (round >= 5) createConfetti();
         
@@ -705,7 +705,7 @@ function gameOver() {
 function startGame() {
     round = 1;
     streak = 0;
-    circuitLaughs = 0;
+    gameLaughs = 0;
     playerIndex = 0;
     
     document.getElementById('laughIcon').textContent = '😊';
