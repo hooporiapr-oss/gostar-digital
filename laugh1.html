@@ -153,35 +153,34 @@ body.en .lang-es{display:none!important}
 .coach-text{font-size:0.9rem;color:var(--text);line-height:1.4}
 .coach-label{font-size:0.7rem;color:var(--purple-light);margin-top:8px;font-weight:700}
 
-/* Laugh Counter - Dynamic */
+/* Laugh Counter - SYNCED WITH LAUGH4 */
 .laugh-counter{position:fixed;top:70px;right:20px;background:var(--card);border:2px solid var(--gold);border-radius:15px;padding:10px 15px;z-index:100;opacity:0;transform:scale(0.8);transition:all 0.3s;text-align:center}
 .laugh-counter.visible{opacity:1;transform:scale(1)}
 .laugh-counter-label{font-size:0.7rem;color:var(--muted);letter-spacing:1px;margin-bottom:4px}
 .laugh-counter-row{display:flex;align-items:center;justify-content:center;gap:6px}
-.laugh-counter-icon{font-size:1.8rem;display:inline-block}
-.laugh-counter-icon.bounce{animation:laughBounce 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)}
-.laugh-counter-icon.evolve{animation:laughEvolve 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55)}
-@keyframes laughBounce{0%{transform:scale(1) rotate(0)}20%{transform:scale(1.6) rotate(-10deg)}40%{transform:scale(0.8) rotate(10deg)}60%{transform:scale(1.4) rotate(-5deg)}80%{transform:scale(0.95) rotate(2deg)}100%{transform:scale(1) rotate(0)}}
-@keyframes laughEvolve{0%{transform:scale(1) rotate(0)}20%{transform:scale(2) rotate(-20deg)}40%{transform:scale(1.5) rotate(20deg)}60%{transform:scale(1.8) rotate(-10deg)}80%{transform:scale(1.2) rotate(5deg)}100%{transform:scale(1) rotate(0)}}
+.laugh-counter-icon{font-size:1.8rem;display:inline-block;transition:all 0.3s}
+.laugh-counter-icon.bounce{animation:laughBounce 0.5s ease}
+.laugh-counter-icon.evolve{animation:laughEvolve 0.6s ease}
+@keyframes laughBounce{0%{transform:scale(1)}30%{transform:scale(1.4)}50%{transform:scale(0.9)}70%{transform:scale(1.2)}100%{transform:scale(1)}}
+@keyframes laughEvolve{0%{transform:scale(1) rotate(0)}50%{transform:scale(1.5) rotate(10deg)}100%{transform:scale(1) rotate(0)}}
 .laugh-counter-value{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--gold)}
 
-/* Floating Laugh Bursts */
-.laugh-burst{position:fixed;pointer-events:none;font-size:2rem;z-index:999;opacity:1}
-.laugh-burst.burst-1{animation:burst1 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards}
-.laugh-burst.burst-2{animation:burst2 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards}
-.laugh-burst.burst-3{animation:burst3 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards}
-.laugh-burst.burst-4{animation:burst4 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards}
-.laugh-burst.burst-5{animation:burst5 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards}
-@keyframes burst1{0%{opacity:1;transform:translate(0,0) scale(0.5) rotate(0)}30%{transform:translate(-30px,-40px) scale(1.3) rotate(-20deg)}100%{opacity:0;transform:translate(-60px,-100px) scale(0.3) rotate(-45deg)}}
-@keyframes burst2{0%{opacity:1;transform:translate(0,0) scale(0.5) rotate(0)}30%{transform:translate(40px,-50px) scale(1.4) rotate(25deg)}100%{opacity:0;transform:translate(80px,-110px) scale(0.3) rotate(60deg)}}
-@keyframes burst3{0%{opacity:1;transform:translate(0,0) scale(0.5) rotate(0)}30%{transform:translate(-20px,-60px) scale(1.2) rotate(-15deg)}100%{opacity:0;transform:translate(-40px,-120px) scale(0.3) rotate(-30deg)}}
-@keyframes burst4{0%{opacity:1;transform:translate(0,0) scale(0.5) rotate(0)}30%{transform:translate(50px,-35px) scale(1.5) rotate(30deg)}100%{opacity:0;transform:translate(90px,-90px) scale(0.3) rotate(75deg)}}
-@keyframes burst5{0%{opacity:1;transform:translate(0,0) scale(0.5) rotate(0)}30%{transform:translate(0,-70px) scale(1.6) rotate(0)}100%{opacity:0;transform:translate(0,-140px) scale(0.3) rotate(20deg)}}
+/* Floating Laugh Bursts - SYNCED WITH LAUGH4 */
+.laugh-burst{position:fixed;pointer-events:none;font-size:1.5rem;z-index:999}
+.laugh-burst.burst-1{animation:burst1 1s ease-out forwards}
+.laugh-burst.burst-2{animation:burst2 1s ease-out forwards}
+.laugh-burst.burst-3{animation:burst3 1s ease-out forwards}
+.laugh-burst.burst-4{animation:burst4 1s ease-out forwards}
+.laugh-burst.burst-5{animation:burst5 1s ease-out forwards}
+@keyframes burst1{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(-50px,-60px) scale(0.5)}}
+@keyframes burst2{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(50px,-70px) scale(0.5)}}
+@keyframes burst3{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(-30px,-80px) scale(0.5)}}
+@keyframes burst4{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(60px,-50px) scale(0.5)}}
+@keyframes burst5{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(0,-90px) scale(0.5)}}
 
-/* Laugh Rain for Perfect Games */
-.laugh-rain{position:fixed;top:-50px;font-size:2.5rem;z-index:1000;pointer-events:none}
-.laugh-rain.fall{animation:rainFall 2.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards}
-@keyframes rainFall{0%{opacity:1;transform:translateY(0) rotate(0) scale(1)}50%{opacity:1;transform:translateY(50vh) rotate(180deg) scale(1.2)}100%{opacity:0;transform:translateY(100vh) rotate(360deg) scale(0.5)}}
+/* Laugh Rain - SYNCED WITH LAUGH4 */
+.laugh-rain{position:fixed;top:-50px;font-size:2rem;z-index:1000;animation:rainFall 2s ease-in forwards;pointer-events:none}
+@keyframes rainFall{0%{opacity:1;transform:translateY(0) rotate(0deg)}100%{opacity:0;transform:translateY(100vh) rotate(360deg)}}
 
 /* Confetti */
 .confetti{position:fixed;width:10px;height:10px;top:-10px;z-index:1000;animation:fall 3s linear forwards}
@@ -416,7 +415,7 @@ function hideCoach() {
     document.getElementById('coachBubble').classList.remove('visible');
 }
 
-// Laugh tracking with dynamic effects
+// ============ LAUGH TRACKING - SYNCED WITH LAUGH4 ============
 var sessionLaughs = 0;
 
 function getLaughEmoji(count) {
@@ -448,12 +447,12 @@ function addLaugh(n) {
     if (newEmoji !== oldEmoji) {
         icon.textContent = newEmoji;
         icon.classList.add('evolve');
-        // Extra burst for evolution!
-        createLaughBurst(5);
     } else {
         icon.classList.add('bounce');
-        createLaughBurst(n);
     }
+    
+    // Burst effect - SYNCED WITH LAUGH4
+    createLaughBurst(n);
     
     // Save to localStorage
     var today = new Date().toISOString().split('T')[0];
@@ -465,42 +464,38 @@ function addLaugh(n) {
     localStorage.setItem('lw-laughs-total', String(total));
 }
 
+// SYNCED WITH LAUGH4
 function createLaughBurst(count) {
-    var emojis = ['😂', '🤣', '😆', '😄', '😜', '🥳', '🎉'];
+    var emojis = ['😂', '🤣', '😆', '😄', '😜'];
     var burstCount = Math.min(count + 2, 5);
-    
     for (var i = 0; i < burstCount; i++) {
-        (function(idx) {
-            setTimeout(function() {
+        setTimeout(function(idx) {
+            return function() {
                 var burst = document.createElement('div');
-                burst.className = 'laugh-burst burst-' + ((idx % 5) + 1);
+                burst.className = 'laugh-burst burst-' + (idx + 1);
                 burst.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-                burst.style.left = (35 + Math.random() * 30) + '%';
-                burst.style.top = (25 + Math.random() * 25) + '%';
+                burst.style.left = (40 + Math.random() * 30) + '%';
+                burst.style.top = (30 + Math.random() * 20) + '%';
                 document.body.appendChild(burst);
-                setTimeout(function() { if (burst.parentNode) burst.remove(); }, 1500);
-            }, idx * 100);
-        })(i);
+                setTimeout(function() { if (burst.parentNode) burst.remove(); }, 1000);
+            };
+        }(i), i * 80);
     }
 }
 
+// SYNCED WITH LAUGH4
 function createLaughRain() {
-    var emojis = ['😂', '🤣', '😆', '😄', '🥳', '🎉', '✨', '💫', '⭐'];
-    for (var i = 0; i < 40; i++) {
-        (function(idx) {
-            setTimeout(function() {
-                var rain = document.createElement('div');
-                rain.className = 'laugh-rain';
-                rain.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-                rain.style.left = (Math.random() * 100) + 'vw';
-                rain.style.animationDuration = (2 + Math.random() * 2) + 's';
-                rain.style.animationDelay = (Math.random() * 0.5) + 's';
-                // Add class after append to trigger animation
-                document.body.appendChild(rain);
-                setTimeout(function() { rain.classList.add('fall'); }, 10);
-                setTimeout(function() { if (rain.parentNode) rain.remove(); }, 4000);
-            }, idx * 50);
-        })(i);
+    var emojis = ['😂', '🤣', '😆', '😄', '🥳', '🎉'];
+    for (var i = 0; i < 30; i++) {
+        setTimeout(function() {
+            var rain = document.createElement('div');
+            rain.className = 'laugh-rain';
+            rain.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            rain.style.left = Math.random() * 100 + 'vw';
+            rain.style.animationDuration = (1.5 + Math.random() * 1.5) + 's';
+            document.body.appendChild(rain);
+            setTimeout(function() { if (rain.parentNode) rain.remove(); }, 3000);
+        }, i * 60);
     }
 }
 
