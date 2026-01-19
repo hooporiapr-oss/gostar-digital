@@ -51,6 +51,16 @@ body.en .lang-es{display:none!important}
 .tier-status.current{background:var(--gold);color:var(--dark)}
 .tier-status.locked{background:rgba(255,255,255,0.1);color:var(--muted)}
 
+.speed-section{width:100%;max-width:350px;margin-bottom:20px}
+.speed-options{display:flex;gap:8px;justify-content:center}
+.speed-btn{flex:1;padding:12px 10px;background:var(--card);border:2px solid rgba(255,255,255,0.1);border-radius:12px;color:var(--muted);font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:2px;cursor:pointer;transition:all 0.2s}
+.speed-btn:hover{border-color:var(--purple);transform:translateY(-2px)}
+.speed-btn.selected{border-color:var(--gold);background:rgba(255,215,0,0.1);color:var(--gold)}
+.speed-btn[data-speed="slow"]{color:var(--teal)}
+.speed-btn[data-speed="slow"].selected{border-color:var(--teal);background:rgba(0,217,165,0.1)}
+.speed-btn[data-speed="fast"]{color:var(--danger)}
+.speed-btn[data-speed="fast"].selected{border-color:var(--danger);background:rgba(255,71,87,0.1)}
+
 .start-btn{padding:18px 50px;font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:4px;background:linear-gradient(135deg,var(--gold),#FFA500);color:var(--dark);border:none;border-radius:50px;cursor:pointer;box-shadow:0 5px 25px rgba(255,215,0,0.4);transition:all 0.3s}
 .start-btn:hover{transform:translateY(-3px);box-shadow:0 8px 30px rgba(255,215,0,0.5)}
 
@@ -193,6 +203,15 @@ body.en .lang-es{display:none!important}
 <div class="tier-grid" id="tierGrid"></div>
 </div>
 
+<div class="speed-section">
+<div class="section-label"><span class="lang-en">SHUFFLE SPEED</span><span class="lang-es">VELOCIDAD</span></div>
+<div class="speed-options" id="speedOptions">
+<button class="speed-btn" data-speed="slow">🐢 <span class="lang-en">SLOW</span><span class="lang-es">LENTO</span></button>
+<button class="speed-btn selected" data-speed="medium">🏃 <span class="lang-en">MEDIUM</span><span class="lang-es">MEDIO</span></button>
+<button class="speed-btn" data-speed="fast">⚡ <span class="lang-en">FAST</span><span class="lang-es">RÁPIDO</span></button>
+</div>
+</div>
+
 <button class="start-btn" id="startBtn"><span class="lang-en">LET'S SHUFFLE!</span><span class="lang-es">¡A MEZCLAR!</span></button>
 
 <div class="stats-row">
@@ -307,7 +326,7 @@ function playTone(freq, dur) {
 // Emoji pool
 var emojiPool = ['😂','🤣','😜','🤪','🥴','🤡','👻','👽','🦆','🐷','🐔','🦄','🌭','🍕','🎺','🛸','💩','🎪','🥳','🐸','🎃','🦋','🌈','🍩','🎸','🚀','🤖','👾','🐙','🦑'];
 
-// Tier config
+// Tier config (base values - modified by speed)
 var tiers = [
     {name:'TIER 1', emojis:3, rounds:4, showTime:2000, shuffles:3},
     {name:'TIER 2', emojis:3, rounds:4, showTime:1800, shuffles:4},
@@ -320,6 +339,14 @@ var tiers = [
     {name:'TIER 9', emojis:6, rounds:7, showTime:1500, shuffles:8},
     {name:'TIER 10', emojis:6, rounds:8, showTime:1200, shuffles:10}
 ];
+
+// Speed settings
+var speeds = {
+    slow: {name: 'SLOW', nameEs: 'LENTO', showMult: 1.5, shuffleDelay: 400, icon: '🐢'},
+    medium: {name: 'MEDIUM', nameEs: 'MEDIO', showMult: 1.0, shuffleDelay: 250, icon: '🏃'},
+    fast: {name: 'FAST', nameEs: 'RÁPIDO', showMult: 0.6, shuffleDelay: 150, icon: '⚡'}
+};
+var selectedSpeed = 'medium';
 
 // Coach messages
 var coachMsgs = {
@@ -463,8 +490,11 @@ function startGame() {
     document.getElementById('laughCounter').classList.remove('visible');
     
     var tier = tiers[selectedTier];
-    document.getElementById('countdownTier').textContent = tier.name;
-    document.getElementById('gameTier').textContent = tier.name;
+    var speed = speeds[selectedSpeed];
+    var speedName = lang === 'es' ? speed.nameEs : speed.name;
+    
+    document.getElementById('countdownTier').textContent = tier.name + ' • ' + speed.icon + ' ' + speedName;
+    document.getElementById('gameTier').textContent = tier.name + ' • ' + speed.icon;
     
     showScreen('countdownScreen');
     showCoach('welcome', 2500);
@@ -525,6 +555,7 @@ function nextRound() {
 
 function generateRound() {
     var tier = tiers[selectedTier];
+    var speed = speeds[selectedSpeed];
     gameActive = false;
     userAnswer = [];
     
@@ -546,12 +577,13 @@ function generateRound() {
     
     addLaugh(1); // Laugh for seeing emojis
     
-    // After show time, shuffle
+    // After show time (modified by speed), shuffle
+    var showTime = Math.round(tier.showTime * speed.showMult);
     setTimeout(function() {
         setMessage(lang === 'es' ? '🔀 MEZCLANDO...' : '🔀 SHUFFLING...', 'watch');
         showCoach('shuffle', 1500);
         animateShuffle(tier.shuffles);
-    }, tier.showTime);
+    }, showTime);
 }
 
 function renderEmojis(emojis, highlight) {
@@ -567,6 +599,7 @@ function renderEmojis(emojis, highlight) {
 
 function animateShuffle(times) {
     var tier = tiers[selectedTier];
+    var speed = speeds[selectedSpeed];
     shuffledOrder = originalOrder.slice();
     var count = 0;
     
@@ -595,7 +628,7 @@ function animateShuffle(times) {
         playTone(300 + Math.random() * 200, 0.1);
         
         count++;
-        setTimeout(doShuffle, 250);
+        setTimeout(doShuffle, speed.shuffleDelay);
     }
     
     doShuffle();
@@ -869,6 +902,15 @@ document.getElementById('halftimeBtn').onclick = continueSecondHalf;
 document.getElementById('advanceBtn').onclick = advanceToNext;
 document.getElementById('retryBtn').onclick = retryGame;
 document.getElementById('homeBtn').onclick = goHome;
+
+// Speed selection
+document.querySelectorAll('.speed-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+        document.querySelectorAll('.speed-btn').forEach(function(b) { b.classList.remove('selected'); });
+        this.classList.add('selected');
+        selectedSpeed = this.dataset.speed;
+    });
+});
 
 // Init
 buildTierGrid();
