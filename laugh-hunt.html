@@ -249,15 +249,19 @@ body.en .lang-es{display:none!important}
 
 <script>
 (function(){
-// ============ AUTH GATE (production only) ============
+// ============ AUTH GATE ============
 var host = window.location.hostname;
-var isProduction = host.includes('laughcourt') || host.includes('onrender') || host.includes('render');
-if (isProduction) {
+var isLocal = (host === 'localhost' || host === '127.0.0.1' || host === '');
+if (!isLocal) {
     var sessionPin = sessionStorage.getItem('lw-user-pin');
     var userData = null;
     try { userData = JSON.parse(localStorage.getItem('lw-user')); } catch(e) {}
-    if (!sessionPin && (!userData || !userData.pin || userData.type !== 'subscriber')) {
+    var hasValidSession = sessionPin && sessionPin.length >= 4;
+    var hasValidUser = userData && userData.pin && userData.type === 'subscriber';
+    if (!hasValidSession && !hasValidUser) {
+        document.documentElement.style.display = 'none';
         window.location.replace('index.html');
+        throw new Error('Auth required');
     }
 }
 
