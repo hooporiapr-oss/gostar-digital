@@ -29,7 +29,6 @@ body.en .lang-es{display:none!important}
 
 .game-container{height:calc(100vh - 70px);display:flex;flex-direction:column;align-items:center;padding:15px;position:relative;overflow:hidden}
 
-/* Intro Screen */
 .intro-screen{text-align:center;max-width:380px;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%}
 .intro-icon{font-size:4rem;margin-bottom:10px;animation:bounce 2s infinite}
 @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
@@ -51,7 +50,6 @@ body.en .lang-es{display:none!important}
 
 .start-btn{padding:16px 45px;font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:3px;background:linear-gradient(135deg,var(--gold),#FFA500);color:var(--dark);border:none;border-radius:40px;cursor:pointer;box-shadow:0 6px 25px rgba(255,215,0,0.4);margin-top:10px}
 
-/* Game Screen */
 .game-screen{width:100%;height:100%;display:flex;flex-direction:column;align-items:center}
 .category-box{background:linear-gradient(135deg,rgba(233,30,140,0.2),rgba(255,215,0,0.1));border:2px solid var(--hunt);border-radius:15px;padding:12px 20px;margin-bottom:10px;text-align:center;width:100%;max-width:350px}
 .category-label{font-size:0.7rem;color:var(--muted);letter-spacing:1px;margin-bottom:5px}
@@ -78,7 +76,6 @@ body.en .lang-es{display:none!important}
 .clear-btn{margin-top:10px;padding:8px 20px;background:transparent;border:2px solid var(--muted);border-radius:20px;color:var(--muted);font-family:'Bebas Neue',sans-serif;font-size:0.8rem;letter-spacing:1px;cursor:pointer;transition:all 0.2s}
 .clear-btn:hover{border-color:var(--danger);color:var(--danger)}
 
-/* Laugh Counter */
 .laugh-counter{position:fixed;top:75px;right:15px;background:var(--card);border:2px solid var(--gold);border-radius:12px;padding:8px 12px;z-index:100;text-align:center}
 .laugh-counter-label{font-size:0.6rem;color:var(--muted);letter-spacing:1px}
 .laugh-counter-row{display:flex;align-items:center;gap:5px}
@@ -89,7 +86,6 @@ body.en .lang-es{display:none!important}
 @keyframes laughEvolve{0%{transform:scale(1) rotate(0)}50%{transform:scale(1.5) rotate(10deg)}100%{transform:scale(1) rotate(0)}}
 .laugh-counter-value{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--gold)}
 
-/* Laugh Burst */
 .laugh-burst{position:fixed;pointer-events:none;font-size:1.5rem;z-index:999}
 .laugh-burst.burst-1{animation:burst1 1s ease-out forwards}
 .laugh-burst.burst-2{animation:burst2 1s ease-out forwards}
@@ -102,18 +98,15 @@ body.en .lang-es{display:none!important}
 @keyframes burst4{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(60px,-50px) scale(0.5)}}
 @keyframes burst5{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(0,-90px) scale(0.5)}}
 
-/* Laugh Rain */
 .laugh-rain{position:fixed;top:-50px;font-size:2rem;z-index:1000;animation:rainFall 2s ease-in forwards;pointer-events:none}
 @keyframes rainFall{0%{opacity:1;transform:translateY(0) rotate(0deg)}100%{opacity:0;transform:translateY(100vh) rotate(360deg)}}
 
-/* Coach Bubble */
 .coach-bubble{position:fixed;bottom:15px;left:15px;right:15px;background:var(--card);border:2px solid var(--hunt);border-radius:15px;padding:12px;display:flex;align-items:center;gap:12px;z-index:50;transform:translateY(100px);opacity:0;transition:all 0.3s ease}
 .coach-bubble.visible{transform:translateY(0);opacity:1}
 .coach-bubble-avatar{width:40px;height:40px;border-radius:50%;overflow:hidden;flex-shrink:0}
 .coach-bubble-avatar img{width:100%;height:100%;object-fit:cover}
 .coach-bubble-text{font-size:0.85rem;line-height:1.4}
 
-/* Result Screen */
 .result-screen{text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%}
 .result-icon{font-size:4rem;margin-bottom:15px}
 .result-title{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:3px;margin-bottom:10px}
@@ -125,7 +118,6 @@ body.en .lang-es{display:none!important}
 .result-btn{padding:14px 35px;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;background:linear-gradient(135deg,var(--gold),#FFA500);color:var(--dark);border:none;border-radius:30px;cursor:pointer;margin:8px}
 .result-btn.secondary{background:transparent;border:2px solid var(--muted);color:var(--muted)}
 
-/* Confetti */
 .confetti{position:fixed;width:10px;height:10px;top:-10px;z-index:1000;animation:fall 3s linear forwards}
 @keyframes fall{to{transform:translateY(100vh) rotate(720deg);opacity:0}}
 
@@ -143,9 +135,7 @@ body.en .lang-es{display:none!important}
 <div class="header-left">
 <button class="back-btn" id="backBtn">←</button>
 <div class="coach-avatar"><img src="go_chat.png" alt="Coach"></div>
-<div>
-<div class="game-title"><span class="laugh">LAUGH</span> <span class="hunt">HUNT</span></div>
-</div>
+<div><div class="game-title"><span class="laugh">LAUGH</span> <span class="hunt">HUNT</span></div></div>
 </div>
 <div class="tier-badge" id="tierBadge">TIER 1</div>
 <div class="lang-toggle">
@@ -155,91 +145,47 @@ body.en .lang-es{display:none!important}
 </div>
 
 <div class="game-container">
-<!-- Intro Screen -->
 <div class="intro-screen" id="introScreen">
 <div class="intro-icon">🔍</div>
 <div class="intro-title"><span class="laugh">LAUGH</span> <span class="hunt">HUNT</span></div>
-<div class="intro-subtitle">
-<span class="lang-en">WORD SEARCH WITH A SMILE</span>
-<span class="lang-es">SOPA DE LETRAS CON SONRISA</span>
-</div>
-<div class="intro-desc">
-<span class="lang-en"><strong>The category is the comedy!</strong> Find silly words hidden in the grid. Tap letters to select! 🔍😂</span>
-<span class="lang-es"><strong>¡La categoría es la comedia!</strong> Encuentra palabras graciosas escondidas. ¡Toca las letras para seleccionar! 🔍😂</span>
-</div>
-
+<div class="intro-subtitle"><span class="lang-en">WORD SEARCH WITH A SMILE</span><span class="lang-es">SOPA DE LETRAS CON SONRISA</span></div>
+<div class="intro-desc"><span class="lang-en"><strong>The category is the comedy!</strong> Find silly words hidden in the grid. Tap letters to select! 🔍😂</span><span class="lang-es"><strong>¡La categoría es la comedia!</strong> Encuentra palabras graciosas escondidas. ¡Toca las letras para seleccionar! 🔍😂</span></div>
 <div class="tier-section">
 <div class="section-label"><span class="lang-en">SELECT TIER</span><span class="lang-es">SELECCIONA NIVEL</span></div>
 <div class="tier-select" id="tierSelect"></div>
 </div>
-
-<button class="start-btn" id="startBtn">
-<span class="lang-en">START HUNTING! 🔍</span>
-<span class="lang-es">¡A BUSCAR! 🔍</span>
-</button>
+<button class="start-btn" id="startBtn"><span class="lang-en">START HUNTING! 🔍</span><span class="lang-es">¡A BUSCAR! 🔍</span></button>
 </div>
 
-<!-- Game Screen -->
 <div class="game-screen hidden" id="gameScreen">
 <div class="category-box">
 <div class="category-label"><span class="lang-en">FIND WORDS THAT...</span><span class="lang-es">ENCUENTRA PALABRAS QUE...</span></div>
 <div class="category-text" id="categoryText"></div>
 </div>
-
 <div class="word-list" id="wordList"></div>
-
-<div class="grid-container" id="gridContainer">
-<div class="word-grid" id="wordGrid"></div>
-</div>
-
-<button class="clear-btn" id="clearBtn">
-<span class="lang-en">CLEAR ✕</span>
-<span class="lang-es">BORRAR ✕</span>
-</button>
-
+<div class="grid-container" id="gridContainer"><div class="word-grid" id="wordGrid"></div></div>
+<button class="clear-btn" id="clearBtn"><span class="lang-en">CLEAR ✕</span><span class="lang-es">BORRAR ✕</span></button>
 <div class="stats-row">
-<div class="stat-box">
-<div class="stat-value" id="foundCount">0/5</div>
-<div class="stat-label"><span class="lang-en">FOUND</span><span class="lang-es">ENCONTRADAS</span></div>
-</div>
-<div class="stat-box">
-<div class="stat-value" id="timeDisplay">0:00</div>
-<div class="stat-label"><span class="lang-en">TIME</span><span class="lang-es">TIEMPO</span></div>
-</div>
+<div class="stat-box"><div class="stat-value" id="foundCount">0/5</div><div class="stat-label"><span class="lang-en">FOUND</span><span class="lang-es">ENCONTRADAS</span></div></div>
+<div class="stat-box"><div class="stat-value" id="timeDisplay">0:00</div><div class="stat-label"><span class="lang-en">TIME</span><span class="lang-es">TIEMPO</span></div></div>
 </div>
 </div>
 
-<!-- Result Screen -->
 <div class="result-screen hidden" id="resultScreen">
 <div class="result-icon" id="resultIcon">🎉</div>
 <div class="result-title success" id="resultTitle">PUZZLE COMPLETE!</div>
 <div class="result-stats">
-<div class="result-stat">
-<div class="result-stat-value" id="finalTime">0:00</div>
-<div class="result-stat-label"><span class="lang-en">TIME</span><span class="lang-es">TIEMPO</span></div>
+<div class="result-stat"><div class="result-stat-value" id="finalTime">0:00</div><div class="result-stat-label"><span class="lang-en">TIME</span><span class="lang-es">TIEMPO</span></div></div>
+<div class="result-stat"><div class="result-stat-value" id="finalLaughs">0</div><div class="result-stat-label">😂 LAUGHS</div></div>
 </div>
-<div class="result-stat">
-<div class="result-stat-value" id="finalLaughs">0</div>
-<div class="result-stat-label">😂 LAUGHS</div>
-</div>
-</div>
-<button class="result-btn" id="nextBtn">
-<span class="lang-en">NEXT PUZZLE →</span>
-<span class="lang-es">SIGUIENTE →</span>
-</button>
-<button class="result-btn secondary" id="homeBtn">
-<span class="lang-en">← BACK</span>
-<span class="lang-es">← VOLVER</span>
-</button>
+<button class="result-btn" id="nextBtn"><span class="lang-en">NEXT PUZZLE →</span><span class="lang-es">SIGUIENTE →</span></button>
+<button class="result-btn secondary" id="homeBtn"><span class="lang-en">← BACK</span><span class="lang-es">← VOLVER</span></button>
 </div>
 </div>
 
 <div class="laugh-counter" id="laughCounter">
 <div class="laugh-counter-label">😂 LAUGHS</div>
-<div class="laugh-counter-row">
-<span class="laugh-counter-icon" id="laughIcon">😊</span>
-<span class="laugh-counter-value" id="laughValue">0</span>
-</div>
+<div class="laugh-counter-row"><span class="laugh-counter-icon" id="laughIcon">😊</span><span class="laugh-counter-value" id="laughValue">0</span></div>
 </div>
 
 <div class="coach-bubble" id="coachBubble">
@@ -249,7 +195,6 @@ body.en .lang-es{display:none!important}
 
 <script>
 (function(){
-// ============ AUTH GATE ============
 var host = window.location.hostname;
 var isLocal = (host === 'localhost' || host === '127.0.0.1' || host === '');
 if (!isLocal) {
@@ -265,614 +210,120 @@ if (!isLocal) {
     }
 }
 
-// Language
 var lang = localStorage.getItem('lw-lang') || 'en';
-function setLang(l) {
-    lang = l;
-    localStorage.setItem('lw-lang', l);
-    document.body.className = l;
-    document.querySelectorAll('.lang-btn').forEach(function(b) {
-        b.classList.toggle('active', b.dataset.lang === l);
-    });
-}
+function setLang(l) { lang = l; localStorage.setItem('lw-lang', l); document.body.className = l; document.querySelectorAll('.lang-btn').forEach(function(b) { b.classList.toggle('active', b.dataset.lang === l); }); }
 setLang(lang);
-document.querySelectorAll('.lang-btn').forEach(function(b) {
-    b.addEventListener('click', function(e) { e.preventDefault(); setLang(this.dataset.lang); });
-});
+document.querySelectorAll('.lang-btn').forEach(function(b) { b.addEventListener('click', function(e) { e.preventDefault(); setLang(this.dataset.lang); }); });
 
-// ============ FUNNY CATEGORIES ============
 var categories = [
-    // Tier 1-3 (6x6, 4-5 words, short words)
-    {
-        en: "Things that should NOT have legs",
-        es: "Cosas que NO deberían tener piernas",
-        words: ["PIZZA", "COUCH", "EGG", "LAMP", "CAKE"]
-    },
-    {
-        en: "What's in Coach's gym bag?",
-        es: "¿Qué hay en la bolsa del Coach?",
-        words: ["JOKES", "SOCKS", "SNACK", "TAPE", "GUM"]
-    },
-    {
-        en: "Things you blame the dog for",
-        es: "Cosas que culpas al perro",
-        words: ["SMELL", "NOISE", "MESS", "CRUMB", "HOLE"]
-    },
-    {
-        en: "Bad hiding spots",
-        es: "Malos escondites",
-        words: ["LAMP", "PLANT", "COAT", "CHAIR", "RUG"]
-    },
-    {
-        en: "Things that make funny sounds",
-        es: "Cosas que hacen sonidos graciosos",
-        words: ["BELLY", "NOSE", "DOOR", "SHOE", "FROG"]
-    },
-    // Tier 4-6 (8x8, 5-6 words)
-    {
-        en: "Grandma's suspicious snacks",
-        es: "Bocadillos sospechosos de la abuela",
-        words: ["BUTTER", "CANDY", "COOKIE", "CHEESE", "JELLY", "PICKLE"]
-    },
-    {
-        en: "Things that don't belong in soup",
-        es: "Cosas que no van en la sopa",
-        words: ["PHONE", "REMOTE", "WALLET", "KEYS", "SOCKS", "WATCH"]
-    },
-    {
-        en: "Excuses for being late",
-        es: "Excusas por llegar tarde",
-        words: ["TRAFFIC", "ALARM", "SHOWER", "COFFEE", "PARKED", "LOCKED"]
-    },
-    {
-        en: "Things that mysteriously disappear",
-        es: "Cosas que desaparecen misteriosamente",
-        words: ["REMOTE", "SOCKS", "PENS", "SNACKS", "MONEY", "KEYS"]
-    },
-    // Tier 7-10 (10x10, 6-8 words)
-    {
-        en: "Things you pretend to understand",
-        es: "Cosas que finges entender",
-        words: ["CRYPTO", "TAXES", "DREAMS", "WEATHER", "SCIENCE", "COOKING", "FASHION"]
-    },
-    {
-        en: "Bad advice that sounds good",
-        es: "Malos consejos que suenan bien",
-        words: ["RELAX", "IGNORE", "LATER", "BUTTER", "SUGAR", "CHEESE", "SLEEP"]
-    },
-    {
-        en: "Things Coach yells at the TV",
-        es: "Cosas que el Coach le grita a la TV",
-        words: ["TRAVEL", "FOUL", "CHARGE", "BLOCK", "SHOOT", "PASS", "DEFENSE"]
-    }
+    {en:"Things that should NOT have legs",es:"Cosas que NO deberían tener piernas",words:["PIZZA","COUCH","EGG","LAMP","CAKE"]},
+    {en:"What's in Coach's gym bag?",es:"¿Qué hay en la bolsa del Coach?",words:["JOKES","SOCKS","SNACK","TAPE","GUM"]},
+    {en:"Things you blame the dog for",es:"Cosas que culpas al perro",words:["SMELL","NOISE","MESS","CRUMB","HOLE"]},
+    {en:"Bad hiding spots",es:"Malos escondites",words:["LAMP","PLANT","COAT","CHAIR","RUG"]},
+    {en:"Things that make funny sounds",es:"Cosas que hacen sonidos graciosos",words:["BELLY","NOSE","DOOR","SHOE","FROG"]},
+    {en:"Grandma's suspicious snacks",es:"Bocadillos sospechosos de la abuela",words:["BUTTER","CANDY","COOKIE","CHEESE","JELLY","PICKLE"]},
+    {en:"Things that don't belong in soup",es:"Cosas que no van en la sopa",words:["PHONE","REMOTE","WALLET","KEYS","SOCKS","WATCH"]},
+    {en:"Excuses for being late",es:"Excusas por llegar tarde",words:["TRAFFIC","ALARM","SHOWER","COFFEE","PARKED","LOCKED"]},
+    {en:"Things that mysteriously disappear",es:"Cosas que desaparecen misteriosamente",words:["REMOTE","SOCKS","PENS","SNACKS","MONEY","KEYS"]},
+    {en:"Things you pretend to understand",es:"Cosas que finges entender",words:["CRYPTO","TAXES","DREAMS","WEATHER","SCIENCE","COOKING","FASHION"]},
+    {en:"Bad advice that sounds good",es:"Malos consejos que suenan bien",words:["RELAX","IGNORE","LATER","BUTTER","SUGAR","CHEESE","SLEEP"]},
+    {en:"Things Coach yells at the TV",es:"Cosas que el Coach le grita a la TV",words:["TRAVEL","FOUL","CHARGE","BLOCK","SHOOT","PASS","DEFENSE"]}
 ];
 
 var coachMessages = {
-    start: [
-        {en: "Let's hunt for laughs! 🔍😂", es: "¡Busquemos risas! 🔍😂"},
-        {en: "Your brain is about to smile! 🧠😄", es: "¡Tu cerebro va a sonreír! 🧠😄"}
-    ],
-    found: [
-        {en: "YES! Found it! 🎯", es: "¡SÍ! ¡Encontrado! 🎯"},
-        {en: "Sharp eyes! 👀✨", es: "¡Ojos agudos! 👀✨"},
-        {en: "You're on FIRE! 🔥", es: "¡Estás EN LLAMAS! 🔥"},
-        {en: "Brain power! 💪🧠", es: "¡Poder cerebral! 💪🧠"}
-    ],
-    complete: [
-        {en: "PUZZLE MASTER! 🏆", es: "¡MAESTRO DE PUZZLES! 🏆"},
-        {en: "You found them ALL! 🎉", es: "¡Los encontraste TODOS! 🎉"}
-    ],
-    category: [
-        {en: "This one's gonna make you smile! 😏", es: "¡Este te va a hacer sonreír! 😏"},
-        {en: "Oh this category is GOOD! 😂", es: "¡Esta categoría está BUENA! 😂"}
-    ]
+    start: [{en:"Let's hunt for laughs! 🔍😂",es:"¡Busquemos risas! 🔍😂"},{en:"Your brain is about to smile! 🧠😄",es:"¡Tu cerebro va a sonreír! 🧠😄"}],
+    found: [{en:"YES! Found it! 🎯",es:"¡SÍ! ¡Encontrado! 🎯"},{en:"Sharp eyes! 👀✨",es:"¡Ojos agudos! 👀✨"},{en:"You're on FIRE! 🔥",es:"¡Estás EN LLAMAS! 🔥"},{en:"Brain power! 💪🧠",es:"¡Poder cerebral! 💪🧠"}],
+    complete: [{en:"PUZZLE MASTER! 🏆",es:"¡MAESTRO DE PUZZLES! 🏆"},{en:"You found them ALL! 🎉",es:"¡Los encontraste TODOS! 🎉"}],
+    category: [{en:"This one's gonna make you smile! 😏",es:"¡Este te va a hacer sonreír! 😏"},{en:"Oh this category is GOOD! 😂",es:"¡Esta categoría está BUENA! 😂"}]
 };
 
-// ============ GAME STATE ============
-var selectedTier = 0;
-var currentCategory = null;
-var gridSize = 6;
-var grid = [];
-var wordPositions = [];
-var foundWords = [];
-var selecting = false;
-var selectedCells = [];
-var startTime = 0;
-var timerInterval = null;
-var gameLaughs = 0;
+var selectedTier = 0, currentCategory = null, gridSize = 6, grid = [], wordPositions = [], foundWords = [], selectedCells = [], startTime = 0, timerInterval = null, gameLaughs = 0;
+var introScreen = document.getElementById('introScreen'), gameScreen = document.getElementById('gameScreen'), resultScreen = document.getElementById('resultScreen'), coachBubble = document.getElementById('coachBubble'), coachText = document.getElementById('coachText');
 
-var introScreen = document.getElementById('introScreen');
-var gameScreen = document.getElementById('gameScreen');
-var resultScreen = document.getElementById('resultScreen');
-var coachBubble = document.getElementById('coachBubble');
-var coachText = document.getElementById('coachText');
-
-// ============ MASTERY ============
-function getMastery() {
-    try { return JSON.parse(localStorage.getItem('laughhunt-mastery')) || {currentTier:1, unlockedTiers:[1]}; }
-    catch(e) { return {currentTier:1, unlockedTiers:[1]}; }
+// ============ SERVER SYNC ============
+function getUserPin() {
+    var pin = sessionStorage.getItem('lw-user-pin');
+    if (pin) return pin;
+    try { var userData = JSON.parse(localStorage.getItem('lw-user')); if (userData && userData.pin) return userData.pin; } catch(e) {}
+    return null;
 }
+
+function syncToServer(finalTier, finalLaughs) {
+    var pin = getUserPin();
+    if (!pin) { console.log('No PIN found, skipping server sync'); return; }
+    
+    fetch('/api/game/session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pin: pin, game: 'laughhunt', laughs: finalLaughs, tier: finalTier })
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) { if (data.success) console.log('Session synced:', data); })
+    .catch(function(err) { console.error('Sync error:', err); });
+}
+
+function getMastery() { try { return JSON.parse(localStorage.getItem('laughhunt-mastery')) || {currentTier:1, unlockedTiers:[1]}; } catch(e) { return {currentTier:1, unlockedTiers:[1]}; } }
 function saveMastery(m) { localStorage.setItem('laughhunt-mastery', JSON.stringify(m)); }
-
-// ============ LAUGH TRACKING ============
-function getLaughEmoji(count) {
-    if (count >= 30) return '🤣';
-    if (count >= 15) return '😂';
-    if (count >= 5) return '😄';
-    return '😊';
-}
+function getLaughEmoji(count) { if (count >= 30) return '🤣'; if (count >= 15) return '😂'; if (count >= 5) return '😄'; return '😊'; }
 
 function addLaughs(count) {
-    var oldEmoji = getLaughEmoji(gameLaughs);
-    gameLaughs += count;
-    var newEmoji = getLaughEmoji(gameLaughs);
-    
+    var oldEmoji = getLaughEmoji(gameLaughs); gameLaughs += count; var newEmoji = getLaughEmoji(gameLaughs);
     document.getElementById('laughValue').textContent = gameLaughs;
-    
-    var icon = document.getElementById('laughIcon');
-    icon.classList.remove('bounce', 'evolve');
-    void icon.offsetWidth;
-    
-    if (newEmoji !== oldEmoji) {
-        icon.textContent = newEmoji;
-        icon.classList.add('evolve');
-    } else {
-        icon.classList.add('bounce');
-    }
-    
+    var icon = document.getElementById('laughIcon'); icon.classList.remove('bounce', 'evolve'); void icon.offsetWidth;
+    if (newEmoji !== oldEmoji) { icon.textContent = newEmoji; icon.classList.add('evolve'); } else { icon.classList.add('bounce'); }
     createLaughBurst(count);
-    
-    // Save to localStorage
     var today = new Date().toISOString().split('T')[0];
     var todayData = JSON.parse(localStorage.getItem('lw-laughs-today') || '{}');
     if (todayData.date !== today) todayData = {date: today, count: 0};
-    todayData.count += count;
-    localStorage.setItem('lw-laughs-today', JSON.stringify(todayData));
-    
-    var total = parseInt(localStorage.getItem('lw-laughs-total') || '0') + count;
-    localStorage.setItem('lw-laughs-total', String(total));
+    todayData.count += count; localStorage.setItem('lw-laughs-today', JSON.stringify(todayData));
+    var total = parseInt(localStorage.getItem('lw-laughs-total') || '0') + count; localStorage.setItem('lw-laughs-total', String(total));
 }
 
-function createLaughBurst(count) {
-    var emojis = ['😂', '🤣', '😆', '😄', '😜'];
-    var burstCount = Math.min(count + 2, 5);
-    for (var i = 0; i < burstCount; i++) {
-        setTimeout(function(idx) {
-            return function() {
-                var burst = document.createElement('div');
-                burst.className = 'laugh-burst burst-' + (idx + 1);
-                burst.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-                burst.style.left = (40 + Math.random() * 30) + '%';
-                burst.style.top = (30 + Math.random() * 20) + '%';
-                document.body.appendChild(burst);
-                setTimeout(function() { if (burst.parentNode) burst.remove(); }, 1000);
-            };
-        }(i), i * 80);
-    }
-}
+function createLaughBurst(count) { var emojis = ['😂','🤣','😆','😄','😜']; var burstCount = Math.min(count + 2, 5); for (var i = 0; i < burstCount; i++) { setTimeout(function(idx) { return function() { var burst = document.createElement('div'); burst.className = 'laugh-burst burst-' + (idx + 1); burst.textContent = emojis[Math.floor(Math.random() * emojis.length)]; burst.style.left = (40 + Math.random() * 30) + '%'; burst.style.top = (30 + Math.random() * 20) + '%'; document.body.appendChild(burst); setTimeout(function() { if (burst.parentNode) burst.remove(); }, 1000); }; }(i), i * 80); } }
+function createLaughRain() { var emojis = ['😂','🤣','😆','😄','🥳','🎉']; for (var i = 0; i < 30; i++) { setTimeout(function() { var rain = document.createElement('div'); rain.className = 'laugh-rain'; rain.textContent = emojis[Math.floor(Math.random() * emojis.length)]; rain.style.left = Math.random() * 100 + 'vw'; rain.style.animationDuration = (1.5 + Math.random() * 1.5) + 's'; document.body.appendChild(rain); setTimeout(function() { if (rain.parentNode) rain.remove(); }, 3000); }, i * 60); } }
+function createConfetti() { var colors = ['#E91E8C','#FFD700','#00D9A5','#6B21A8']; for (var i = 0; i < 50; i++) { setTimeout(function() { var conf = document.createElement('div'); conf.className = 'confetti'; conf.style.left = Math.random() * 100 + 'vw'; conf.style.background = colors[Math.floor(Math.random() * colors.length)]; conf.style.animationDuration = (2 + Math.random() * 2) + 's'; document.body.appendChild(conf); setTimeout(function() { if (conf.parentNode) conf.remove(); }, 4000); }, i * 40); } }
 
-function createLaughRain() {
-    var emojis = ['😂', '🤣', '😆', '😄', '🥳', '🎉'];
-    for (var i = 0; i < 30; i++) {
-        setTimeout(function() {
-            var rain = document.createElement('div');
-            rain.className = 'laugh-rain';
-            rain.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-            rain.style.left = Math.random() * 100 + 'vw';
-            rain.style.animationDuration = (1.5 + Math.random() * 1.5) + 's';
-            document.body.appendChild(rain);
-            setTimeout(function() { if (rain.parentNode) rain.remove(); }, 3000);
-        }, i * 60);
-    }
-}
+function showCoach(key, duration) { var msgs = coachMessages[key]; var msg = msgs[Math.floor(Math.random() * msgs.length)]; coachText.textContent = lang === 'es' ? msg.es : msg.en; coachBubble.classList.add('visible'); setTimeout(function() { coachBubble.classList.remove('visible'); }, duration || 2000); }
+function showScreen(screen) { introScreen.classList.add('hidden'); gameScreen.classList.add('hidden'); resultScreen.classList.add('hidden'); screen.classList.remove('hidden'); }
 
-function createConfetti() {
-    var colors = ['#E91E8C', '#FFD700', '#00D9A5', '#6B21A8'];
-    for (var i = 0; i < 50; i++) {
-        setTimeout(function() {
-            var conf = document.createElement('div');
-            conf.className = 'confetti';
-            conf.style.left = Math.random() * 100 + 'vw';
-            conf.style.background = colors[Math.floor(Math.random() * colors.length)];
-            conf.style.animationDuration = (2 + Math.random() * 2) + 's';
-            document.body.appendChild(conf);
-            setTimeout(function() { if (conf.parentNode) conf.remove(); }, 4000);
-        }, i * 40);
-    }
-}
+function buildTierSelect() { var container = document.getElementById('tierSelect'); container.innerHTML = ''; var mastery = getMastery(); for (var i = 1; i <= 10; i++) { var btn = document.createElement('button'); btn.className = 'tier-btn'; btn.textContent = i; btn.dataset.tier = i; var unlocked = mastery.unlockedTiers.indexOf(i) !== -1; if (!unlocked) btn.classList.add('locked'); if (i === selectedTier + 1) btn.classList.add('selected'); if (unlocked) { btn.onclick = function() { selectedTier = parseInt(this.dataset.tier) - 1; buildTierSelect(); }; } container.appendChild(btn); } document.getElementById('tierBadge').textContent = 'TIER ' + (selectedTier + 1); }
 
-// ============ COACH ============
-function showCoach(key, duration) {
-    var msgs = coachMessages[key];
-    var msg = msgs[Math.floor(Math.random() * msgs.length)];
-    coachText.textContent = lang === 'es' ? msg.es : msg.en;
-    coachBubble.classList.add('visible');
-    setTimeout(function() { coachBubble.classList.remove('visible'); }, duration || 2000);
-}
+function getGridSize(tier) { if (tier < 3) return 6; if (tier < 6) return 8; return 10; }
+function getCategoryForTier(tier) { var pool; if (tier < 3) pool = categories.slice(0, 5); else if (tier < 6) pool = categories.slice(5, 9); else pool = categories.slice(9); return pool[Math.floor(Math.random() * pool.length)]; }
 
-// ============ SCREENS ============
-function showScreen(screen) {
-    introScreen.classList.add('hidden');
-    gameScreen.classList.add('hidden');
-    resultScreen.classList.add('hidden');
-    screen.classList.remove('hidden');
-}
+function generateGrid() { currentCategory = getCategoryForTier(selectedTier); gridSize = getGridSize(selectedTier); grid = []; for (var i = 0; i < gridSize; i++) { grid[i] = []; for (var j = 0; j < gridSize; j++) { grid[i][j] = ''; } } wordPositions = []; currentCategory.words.slice().forEach(function(word) { placeWord(word); }); var letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; for (var i = 0; i < gridSize; i++) { for (var j = 0; j < gridSize; j++) { if (grid[i][j] === '') { grid[i][j] = letters[Math.floor(Math.random() * letters.length)]; } } } }
 
-// ============ TIER SELECT ============
-function buildTierSelect() {
-    var container = document.getElementById('tierSelect');
-    container.innerHTML = '';
-    var mastery = getMastery();
-    
-    for (var i = 1; i <= 10; i++) {
-        var btn = document.createElement('button');
-        btn.className = 'tier-btn';
-        btn.textContent = i;
-        btn.dataset.tier = i;
-        
-        var unlocked = mastery.unlockedTiers.indexOf(i) !== -1;
-        if (!unlocked) btn.classList.add('locked');
-        if (i === selectedTier + 1) btn.classList.add('selected');
-        
-        if (unlocked) {
-            btn.onclick = function() {
-                selectedTier = parseInt(this.dataset.tier) - 1;
-                buildTierSelect();
-            };
-        }
-        container.appendChild(btn);
-    }
-    
-    document.getElementById('tierBadge').textContent = 'TIER ' + (selectedTier + 1);
-}
+function placeWord(word) { var directions = [{dr:0,dc:1},{dr:1,dc:0},{dr:1,dc:1},{dr:1,dc:-1}]; var attempts = 0; while (attempts < 100) { var dir = directions[Math.floor(Math.random() * directions.length)]; var row = Math.floor(Math.random() * gridSize); var col = Math.floor(Math.random() * gridSize); if (canPlaceWord(word, row, col, dir.dr, dir.dc)) { var positions = []; for (var i = 0; i < word.length; i++) { var r = row + i * dir.dr; var c = col + i * dir.dc; grid[r][c] = word[i]; positions.push({row: r, col: c}); } wordPositions.push({word: word, positions: positions}); return true; } attempts++; } return false; }
+function canPlaceWord(word, row, col, dr, dc) { for (var i = 0; i < word.length; i++) { var r = row + i * dr; var c = col + i * dc; if (r < 0 || r >= gridSize || c < 0 || c >= gridSize) return false; if (grid[r][c] !== '' && grid[r][c] !== word[i]) return false; } return true; }
 
-// ============ GRID GENERATION ============
-function getGridSize(tier) {
-    if (tier < 3) return 6;
-    if (tier < 6) return 8;
-    return 10;
-}
+function renderGame() { document.getElementById('categoryText').textContent = lang === 'es' ? currentCategory.es : currentCategory.en; var wordListEl = document.getElementById('wordList'); wordListEl.innerHTML = ''; currentCategory.words.forEach(function(word) { var chip = document.createElement('span'); chip.className = 'word-chip'; chip.textContent = word; chip.id = 'chip-' + word; wordListEl.appendChild(chip); }); var gridEl = document.getElementById('wordGrid'); gridEl.innerHTML = ''; gridEl.style.gridTemplateColumns = 'repeat(' + gridSize + ', 1fr)'; for (var i = 0; i < gridSize; i++) { for (var j = 0; j < gridSize; j++) { var cell = document.createElement('div'); cell.className = 'grid-cell'; cell.textContent = grid[i][j]; cell.dataset.row = i; cell.dataset.col = j; gridEl.appendChild(cell); } } document.getElementById('foundCount').textContent = '0/' + currentCategory.words.length; setupGridEvents(); }
 
-function getCategoryForTier(tier) {
-    var pool;
-    if (tier < 3) pool = categories.slice(0, 5);
-    else if (tier < 6) pool = categories.slice(5, 9);
-    else pool = categories.slice(9);
-    return pool[Math.floor(Math.random() * pool.length)];
-}
+function setupGridEvents() { var gridEl = document.getElementById('wordGrid'); function tapCell(cell) { if (cell.classList.contains('found')) return; var row = parseInt(cell.dataset.row); var col = parseInt(cell.dataset.col); var idx = -1; for (var i = 0; i < selectedCells.length; i++) { if (selectedCells[i].row === row && selectedCells[i].col === col) { idx = i; break; } } if (idx !== -1) { if (idx === selectedCells.length - 1) { cell.classList.remove('selecting'); selectedCells.pop(); } return; } if (selectedCells.length === 0) { selectedCells.push({row: row, col: col, cell: cell}); cell.classList.add('selecting'); return; } var last = selectedCells[selectedCells.length - 1]; var dRow = row - last.row; var dCol = col - last.col; if (Math.abs(dRow) > 1 || Math.abs(dCol) > 1) { cell.classList.add('wrong'); setTimeout(function() { cell.classList.remove('wrong'); }, 200); return; } if (selectedCells.length > 1) { var first = selectedCells[0]; var second = selectedCells[1]; var origDRow = Math.sign(second.row - first.row); var origDCol = Math.sign(second.col - first.col); var newDRow = Math.sign(dRow); var newDCol = Math.sign(dCol); if (newDRow !== origDRow || newDCol !== origDCol) { cell.classList.add('wrong'); setTimeout(function() { cell.classList.remove('wrong'); }, 200); return; } } selectedCells.push({row: row, col: col, cell: cell}); cell.classList.add('selecting'); var word = selectedCells.map(function(s) { return s.cell.textContent; }).join(''); if (checkWord(word)) { selectedCells.forEach(function(s) { s.cell.classList.remove('selecting'); s.cell.classList.add('found'); }); selectedCells = []; } } gridEl.addEventListener('click', function(e) { var cell = e.target; if (cell.classList.contains('grid-cell')) { tapCell(cell); } }); var lastTap = 0; gridEl.addEventListener('touchend', function(e) { var now = Date.now(); if (now - lastTap < 300) { selectedCells.forEach(function(s) { s.cell.classList.remove('selecting'); }); selectedCells = []; } lastTap = now; }); }
 
-function generateGrid() {
-    currentCategory = getCategoryForTier(selectedTier);
-    gridSize = getGridSize(selectedTier);
-    
-    // Initialize empty grid
-    grid = [];
-    for (var i = 0; i < gridSize; i++) {
-        grid[i] = [];
-        for (var j = 0; j < gridSize; j++) {
-            grid[i][j] = '';
-        }
-    }
-    
-    wordPositions = [];
-    var words = currentCategory.words.slice();
-    
-    // Place words
-    words.forEach(function(word) {
-        placeWord(word);
-    });
-    
-    // Fill empty cells with random letters
-    var letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    for (var i = 0; i < gridSize; i++) {
-        for (var j = 0; j < gridSize; j++) {
-            if (grid[i][j] === '') {
-                grid[i][j] = letters[Math.floor(Math.random() * letters.length)];
-            }
-        }
-    }
-}
+function checkWord(word) { var reversed = word.split('').reverse().join(''); for (var i = 0; i < wordPositions.length; i++) { var wp = wordPositions[i]; if ((wp.word === word || wp.word === reversed) && foundWords.indexOf(wp.word) === -1) { foundWords.push(wp.word); var chip = document.getElementById('chip-' + wp.word); if (chip) chip.classList.add('found'); document.getElementById('foundCount').textContent = foundWords.length + '/' + currentCategory.words.length; addLaughs(2); showCoach('found', 1500); if (foundWords.length === currentCategory.words.length) { setTimeout(puzzleComplete, 500); } return true; } } return false; }
 
-function placeWord(word) {
-    var directions = [
-        {dr: 0, dc: 1},  // horizontal
-        {dr: 1, dc: 0},  // vertical
-        {dr: 1, dc: 1},  // diagonal down-right
-        {dr: 1, dc: -1}  // diagonal down-left
-    ];
-    
-    var attempts = 0;
-    while (attempts < 100) {
-        var dir = directions[Math.floor(Math.random() * directions.length)];
-        var row = Math.floor(Math.random() * gridSize);
-        var col = Math.floor(Math.random() * gridSize);
-        
-        if (canPlaceWord(word, row, col, dir.dr, dir.dc)) {
-            var positions = [];
-            for (var i = 0; i < word.length; i++) {
-                var r = row + i * dir.dr;
-                var c = col + i * dir.dc;
-                grid[r][c] = word[i];
-                positions.push({row: r, col: c});
-            }
-            wordPositions.push({word: word, positions: positions});
-            return true;
-        }
-        attempts++;
-    }
-    return false;
-}
-
-function canPlaceWord(word, row, col, dr, dc) {
-    for (var i = 0; i < word.length; i++) {
-        var r = row + i * dr;
-        var c = col + i * dc;
-        
-        if (r < 0 || r >= gridSize || c < 0 || c >= gridSize) return false;
-        if (grid[r][c] !== '' && grid[r][c] !== word[i]) return false;
-    }
-    return true;
-}
-
-// ============ RENDER ============
-function renderGame() {
-    // Category
-    document.getElementById('categoryText').textContent = lang === 'es' ? currentCategory.es : currentCategory.en;
-    
-    // Word list
-    var wordListEl = document.getElementById('wordList');
-    wordListEl.innerHTML = '';
-    currentCategory.words.forEach(function(word) {
-        var chip = document.createElement('span');
-        chip.className = 'word-chip';
-        chip.textContent = word;
-        chip.id = 'chip-' + word;
-        wordListEl.appendChild(chip);
-    });
-    
-    // Grid
-    var gridEl = document.getElementById('wordGrid');
-    gridEl.innerHTML = '';
-    gridEl.style.gridTemplateColumns = 'repeat(' + gridSize + ', 1fr)';
-    
-    for (var i = 0; i < gridSize; i++) {
-        for (var j = 0; j < gridSize; j++) {
-            var cell = document.createElement('div');
-            cell.className = 'grid-cell';
-            cell.textContent = grid[i][j];
-            cell.dataset.row = i;
-            cell.dataset.col = j;
-            gridEl.appendChild(cell);
-        }
-    }
-    
-    // Stats
-    document.getElementById('foundCount').textContent = '0/' + currentCategory.words.length;
-    
-    // Setup touch/mouse events
-    setupGridEvents();
-}
-
-function setupGridEvents() {
-    var gridEl = document.getElementById('wordGrid');
-    
-    function tapCell(cell) {
-        if (cell.classList.contains('found')) return;
-        
-        var row = parseInt(cell.dataset.row);
-        var col = parseInt(cell.dataset.col);
-        
-        // Check if already selected - if so, deselect it (if it's the last one)
-        var idx = -1;
-        for (var i = 0; i < selectedCells.length; i++) {
-            if (selectedCells[i].row === row && selectedCells[i].col === col) {
-                idx = i;
-                break;
-            }
-        }
-        
-        if (idx !== -1) {
-            // Deselect: only allow removing the last selected cell
-            if (idx === selectedCells.length - 1) {
-                cell.classList.remove('selecting');
-                selectedCells.pop();
-            }
-            return;
-        }
-        
-        // First cell - always allow
-        if (selectedCells.length === 0) {
-            selectedCells.push({row: row, col: col, cell: cell});
-            cell.classList.add('selecting');
-            return;
-        }
-        
-        // Must be adjacent to last selected cell
-        var last = selectedCells[selectedCells.length - 1];
-        var dRow = row - last.row;
-        var dCol = col - last.col;
-        
-        if (Math.abs(dRow) > 1 || Math.abs(dCol) > 1) {
-            // Not adjacent - flash wrong
-            cell.classList.add('wrong');
-            setTimeout(function() { cell.classList.remove('wrong'); }, 200);
-            return;
-        }
-        
-        // Check direction consistency (must stay in straight line)
-        if (selectedCells.length > 1) {
-            var first = selectedCells[0];
-            var second = selectedCells[1];
-            var origDRow = Math.sign(second.row - first.row);
-            var origDCol = Math.sign(second.col - first.col);
-            var newDRow = Math.sign(dRow);
-            var newDCol = Math.sign(dCol);
-            
-            if (newDRow !== origDRow || newDCol !== origDCol) {
-                // Wrong direction - flash wrong
-                cell.classList.add('wrong');
-                setTimeout(function() { cell.classList.remove('wrong'); }, 200);
-                return;
-            }
-        }
-        
-        // Valid selection
-        selectedCells.push({row: row, col: col, cell: cell});
-        cell.classList.add('selecting');
-        
-        // Check if this forms a valid word
-        var word = selectedCells.map(function(s) { return s.cell.textContent; }).join('');
-        if (checkWord(word)) {
-            // Found! Mark as found
-            selectedCells.forEach(function(s) {
-                s.cell.classList.remove('selecting');
-                s.cell.classList.add('found');
-            });
-            selectedCells = [];
-        }
-    }
-    
-    function clearSelection() {
-        selectedCells.forEach(function(s) {
-            s.cell.classList.remove('selecting');
-        });
-        selectedCells = [];
-    }
-    
-    // Click/tap events on cells
-    gridEl.addEventListener('click', function(e) {
-        var cell = e.target;
-        if (cell.classList.contains('grid-cell')) {
-            tapCell(cell);
-        }
-    });
-    
-    // Double-tap to clear selection
-    var lastTap = 0;
-    gridEl.addEventListener('touchend', function(e) {
-        var now = Date.now();
-        if (now - lastTap < 300) {
-            clearSelection();
-        }
-        lastTap = now;
-    });
-}
-
-function checkWord(word) {
-    var reversed = word.split('').reverse().join('');
-    
-    for (var i = 0; i < wordPositions.length; i++) {
-        var wp = wordPositions[i];
-        if ((wp.word === word || wp.word === reversed) && foundWords.indexOf(wp.word) === -1) {
-            foundWords.push(wp.word);
-            
-            // Mark chip
-            var chip = document.getElementById('chip-' + wp.word);
-            if (chip) chip.classList.add('found');
-            
-            // Update count
-            document.getElementById('foundCount').textContent = foundWords.length + '/' + currentCategory.words.length;
-            
-            // Celebrate
-            addLaughs(2);
-            showCoach('found', 1500);
-            
-            // Check if complete
-            if (foundWords.length === currentCategory.words.length) {
-                setTimeout(puzzleComplete, 500);
-            }
-            
-            return true;
-        }
-    }
-    return false;
-}
-
-// ============ GAME FLOW ============
-function startGame() {
-    foundWords = [];
-    gameLaughs = 0;
-    document.getElementById('laughIcon').textContent = '😊';
-    document.getElementById('laughValue').textContent = '0';
-    
-    generateGrid();
-    renderGame();
-    showScreen(gameScreen);
-    
-    // Start timer
-    startTime = Date.now();
-    timerInterval = setInterval(updateTimer, 1000);
-    
-    showCoach('category', 2500);
-    addLaughs(1);
-}
-
-function updateTimer() {
-    var elapsed = Math.floor((Date.now() - startTime) / 1000);
-    var mins = Math.floor(elapsed / 60);
-    var secs = elapsed % 60;
-    document.getElementById('timeDisplay').textContent = mins + ':' + (secs < 10 ? '0' : '') + secs;
-}
+function startGame() { foundWords = []; gameLaughs = 0; document.getElementById('laughIcon').textContent = '😊'; document.getElementById('laughValue').textContent = '0'; generateGrid(); renderGame(); showScreen(gameScreen); startTime = Date.now(); timerInterval = setInterval(updateTimer, 1000); showCoach('category', 2500); addLaughs(1); }
+function updateTimer() { var elapsed = Math.floor((Date.now() - startTime) / 1000); var mins = Math.floor(elapsed / 60); var secs = elapsed % 60; document.getElementById('timeDisplay').textContent = mins + ':' + (secs < 10 ? '0' : '') + secs; }
 
 function puzzleComplete() {
     clearInterval(timerInterval);
+    var elapsed = Math.floor((Date.now() - startTime) / 1000); var mins = Math.floor(elapsed / 60); var secs = elapsed % 60;
+    addLaughs(5); createConfetti(); createLaughRain(); showCoach('complete', 3000);
     
-    var elapsed = Math.floor((Date.now() - startTime) / 1000);
-    var mins = Math.floor(elapsed / 60);
-    var secs = elapsed % 60;
+    // *** SYNC TO SERVER ***
+    syncToServer(selectedTier + 1, gameLaughs);
     
-    addLaughs(5);
-    createConfetti();
-    createLaughRain();
-    showCoach('complete', 3000);
-    
-    // Update mastery
-    var mastery = getMastery();
-    if (selectedTier + 2 <= 10 && mastery.unlockedTiers.indexOf(selectedTier + 2) === -1) {
-        mastery.unlockedTiers.push(selectedTier + 2);
-        mastery.currentTier = selectedTier + 2;
-        saveMastery(mastery);
-    }
-    
-    // Show result
-    setTimeout(function() {
-        document.getElementById('finalTime').textContent = mins + ':' + (secs < 10 ? '0' : '') + secs;
-        document.getElementById('finalLaughs').textContent = gameLaughs;
-        document.getElementById('resultTitle').innerHTML = lang === 'es' ? '¡COMPLETADO!' : 'COMPLETE!';
-        showScreen(resultScreen);
-    }, 1000);
+    var mastery = getMastery(); if (selectedTier + 2 <= 10 && mastery.unlockedTiers.indexOf(selectedTier + 2) === -1) { mastery.unlockedTiers.push(selectedTier + 2); mastery.currentTier = selectedTier + 2; saveMastery(mastery); }
+    setTimeout(function() { document.getElementById('finalTime').textContent = mins + ':' + (secs < 10 ? '0' : '') + secs; document.getElementById('finalLaughs').textContent = gameLaughs; document.getElementById('resultTitle').innerHTML = lang === 'es' ? '¡COMPLETADO!' : 'COMPLETE!'; showScreen(resultScreen); }, 1000);
 }
 
-function nextPuzzle() {
-    startGame();
-}
-
-function goHome() {
-    clearInterval(timerInterval);
-    buildTierSelect();
-    showScreen(introScreen);
-}
-
-// ============ EVENT LISTENERS ============
 document.getElementById('startBtn').onclick = startGame;
-document.getElementById('nextBtn').onclick = nextPuzzle;
-document.getElementById('homeBtn').onclick = goHome;
-document.getElementById('clearBtn').onclick = function() {
-    selectedCells.forEach(function(s) {
-        s.cell.classList.remove('selecting');
-    });
-    selectedCells = [];
-};
-document.getElementById('backBtn').onclick = function() {
-    if (confirm(lang === 'es' ? '¿Salir?' : 'Exit?')) {
-        clearInterval(timerInterval);
-        window.location.href = 'laugh-hub.html';
-    }
-};
+document.getElementById('nextBtn').onclick = startGame;
+document.getElementById('homeBtn').onclick = function() { clearInterval(timerInterval); buildTierSelect(); showScreen(introScreen); };
+document.getElementById('clearBtn').onclick = function() { selectedCells.forEach(function(s) { s.cell.classList.remove('selecting'); }); selectedCells = []; };
+document.getElementById('backBtn').onclick = function() { if (confirm(lang === 'es' ? '¿Salir?' : 'Exit?')) { clearInterval(timerInterval); window.location.href = 'laugh-hub.html'; } };
 
-// Init
 buildTierSelect();
-
 })();
 </script>
 </body>
