@@ -3,490 +3,398 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Laughletico™ | Exercise Your Memory. Exercise Your Smile.</title>
+<title>Laughletico™ | Laughter Workouts</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--orange:#FF6B00;--teal:#00D9A5;--gold:#FFD700;--purple:#9B59B6;--pink:#FF69B4;--dark:#0a0a0f;--darker:#050508;--card:#111118;--text:#FFFFFF;--muted:#8892a0;--success:#00D9A5}
+:root{--orange:#FF6B00;--teal:#00D9A5;--gold:#FFD700;--purple:#9B59B6;--pink:#FF69B4;--dark:#0a0a0f;--darker:#050508;--card:#111118;--text:#FFFFFF;--muted:#8892a0;--success:#00D9A5;--laugh1:#E74C3C;--laugh2:#F39C12;--laugh3:#27AE60;--laugh4:#3498DB;--laugh5:#E91E8C}
 *{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{font-family:'Outfit',sans-serif;background:var(--dark);color:var(--text);min-height:100vh;overflow-x:hidden}
+html{height:100%}
+body{font-family:'Outfit',sans-serif;background:var(--dark);color:var(--text);min-height:100%;padding-bottom:100px}
 body.es .lang-en{display:none!important}
 body.en .lang-es{display:none!important}
 
-/* Header */
-.header{padding:15px 20px;background:linear-gradient(135deg,rgba(155,89,182,0.15),rgba(255,105,180,0.1));border-bottom:2px solid rgba(155,89,182,0.3);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;backdrop-filter:blur(10px)}
-.header-left{display:flex;align-items:center;gap:12px}
-.logo{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:2px}
-.logo .laugh{color:var(--gold)}
-.logo .letico{color:var(--text)}
+.header{padding:20px;background:linear-gradient(135deg,rgba(255,107,0,0.15),rgba(233,30,140,0.1));border-bottom:2px solid rgba(255,107,0,0.2);display:flex;align-items:center;justify-content:space-between}
+.header-left{display:flex;align-items:center;gap:15px}
+.logo-img{width:60px;height:60px;border-radius:50%;object-fit:cover;border:3px solid var(--orange)}
+.logo-text{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:3px}
+.logo-text .laugh{color:var(--orange)}
+.logo-text .letico{color:var(--pink)}
+.tagline{font-size:0.7rem;color:var(--muted);letter-spacing:1px}
 .lang-toggle{display:flex;gap:5px}
-.lang-btn{padding:8px 14px;border:2px solid var(--purple);background:transparent;color:var(--purple);border-radius:20px;font-weight:700;font-size:0.75rem;cursor:pointer;transition:all 0.3s}
-.lang-btn.active{background:var(--purple);color:var(--text)}
-.lang-btn:hover{transform:scale(1.05)}
+.lang-btn{padding:8px 14px;border:2px solid var(--orange);background:transparent;color:var(--orange);border-radius:20px;font-weight:700;font-size:0.75rem;cursor:pointer;transition:all 0.3s}
+.lang-btn.active{background:var(--orange);color:var(--text)}
 
-/* Hero Section */
-.hero{text-align:center;padding:40px 20px 30px;background:radial-gradient(ellipse at top,rgba(155,89,182,0.2) 0%,transparent 70%)}
-.hero-coach{margin-bottom:20px}
-.hero-coach-img{width:120px;height:120px;border-radius:50%;object-fit:cover;border:4px solid var(--purple);box-shadow:0 0 40px rgba(155,89,182,0.5);animation:float 3s ease-in-out infinite}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-.hero-title{font-family:'Bebas Neue',sans-serif;font-size:2.8rem;letter-spacing:4px;margin-bottom:5px;text-shadow:0 0 30px rgba(155,89,182,0.5);line-height:1.1}
-.hero-title .laugh{color:var(--gold)}
-.hero-title .letico{color:var(--text)}
-.hero-tm{font-size:1rem;vertical-align:super;color:var(--gold)}
-.hero-tagline{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:3px;color:var(--gold);margin-bottom:15px}
-.hero-desc{color:var(--muted);max-width:400px;margin:0 auto;line-height:1.6}
-.hero-desc strong{color:var(--text)}
-
-/* Product Badge */
-.product-badge{display:inline-block;background:linear-gradient(135deg,var(--purple),var(--pink));padding:8px 20px;border-radius:30px;margin:20px 0;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:3px}
-.product-badge .laugha-name{color:#FFD700}
-
-/* Stats Bar */
-.stats-bar{display:flex;justify-content:center;gap:30px;padding:20px;margin:10px auto;max-width:500px}
-.stat{text-align:center}
-.stat-value{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--pink)}
-.stat-label{font-size:0.7rem;color:var(--muted);letter-spacing:1px}
-
-/* Joy Dashboard */
-.joy-dashboard{background:linear-gradient(135deg,rgba(255,215,0,0.1),rgba(255,105,180,0.1));border:2px solid rgba(255,215,0,0.3);border-radius:25px;padding:25px 20px;margin:20px auto;max-width:500px;text-align:center}
-.joy-title{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:3px;margin-bottom:20px;color:var(--gold)}
-.joy-title .emoji{font-size:1.5rem}
+.joy-dashboard{background:linear-gradient(135deg,var(--card),rgba(255,107,0,0.1));border:2px solid var(--orange);border-radius:25px;margin:20px;padding:25px;text-align:center}
+.joy-title{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:3px;color:var(--gold);margin-bottom:20px}
 .joy-stats{display:flex;justify-content:space-around;gap:15px}
-.joy-stat{flex:1;background:var(--card);border-radius:15px;padding:15px 10px;position:relative;overflow:hidden}
-.joy-stat::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--pink))}
-.joy-stat-value{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;color:var(--gold);display:block}
-.joy-stat-label{font-size:0.65rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
-.joy-stat-emoji{font-size:1.5rem;margin-bottom:5px;display:block}
-.joy-message{margin-top:20px;padding:15px;background:var(--card);border-radius:15px;border-left:4px solid var(--pink)}
-.joy-message-text{font-size:0.9rem;color:var(--muted);font-style:italic}
-.joy-message-text strong{color:var(--pink)}
+.joy-stat{flex:1}
+.joy-number{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--orange)}
+.joy-label{font-size:0.7rem;color:var(--muted);letter-spacing:1px}
+.joy-emoji{font-size:1.5rem;margin-bottom:5px;display:block}
 
-/* Circuits Grid */
-.circuits-section{padding:20px}
-.section-title{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:3px;text-align:center;margin-bottom:25px;color:var(--text)}
-.section-title span{color:var(--gold)}
-.circuits-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px;max-width:500px;margin:0 auto}
-.circuit-card{background:var(--card);border:3px solid rgba(255,255,255,0.1);border-radius:25px;padding:25px 15px;text-align:center;cursor:pointer;transition:all 0.3s;position:relative;overflow:hidden;text-decoration:none;color:var(--text)}
-.circuit-card::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,rgba(155,89,182,0.1),rgba(255,105,180,0.1));opacity:0;transition:opacity 0.3s}
-.circuit-card:hover{transform:translateY(-5px);border-color:var(--purple);box-shadow:0 15px 40px rgba(155,89,182,0.3)}
-.circuit-card:hover::before{opacity:1}
-.circuit-card:active{transform:scale(0.98)}
-.circuit-num{font-family:'Bebas Neue',sans-serif;font-size:0.8rem;letter-spacing:2px;color:var(--gold);margin-bottom:5px}
-.circuit-emoji{font-size:3.5rem;margin-bottom:10px;display:block;position:relative;z-index:1}
-.circuit-name{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:2px;margin-bottom:5px;position:relative;z-index:1}
-.circuit-desc{font-size:0.75rem;color:var(--muted);position:relative;z-index:1}
-.circuit-card.card-1{border-color:rgba(231,76,60,0.3)}
-.circuit-card.card-1 .circuit-name{color:#E74C3C}
-.circuit-card.card-2{border-color:rgba(243,156,18,0.3)}
-.circuit-card.card-2 .circuit-name{color:#F39C12}
-.circuit-card.card-3{border-color:rgba(46,204,113,0.3)}
-.circuit-card.card-3 .circuit-name{color:#2ECC71}
-.circuit-card.card-4{border-color:rgba(52,152,219,0.3)}
-.circuit-card.card-4 .circuit-name{color:#3498DB}
+.section-title{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:3px;color:var(--text);margin:30px 20px 15px;display:flex;align-items:center;gap:10px}
+.section-title .emoji{font-size:1.3rem}
 
-/* Coach Section */
-.coach-section{background:linear-gradient(135deg,rgba(155,89,182,0.1),rgba(255,105,180,0.05));border-top:2px solid rgba(155,89,182,0.2);border-bottom:2px solid rgba(155,89,182,0.2);padding:30px 20px;margin:30px 0;text-align:center}
-.coach-card{display:flex;align-items:center;gap:20px;max-width:400px;margin:0 auto;text-align:left}
-.coach-avatar{width:80px;height:80px;border-radius:50%;overflow:hidden;flex-shrink:0;border:3px solid var(--purple);box-shadow:0 0 20px rgba(155,89,182,0.4)}
-.coach-avatar img{width:100%;height:100%;object-fit:cover}
-.coach-info h3{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:2px;margin-bottom:5px}
-.coach-info h3 span{color:var(--pink)}
-.coach-info p{font-size:0.85rem;color:var(--muted);line-height:1.5}
+.games-grid{display:flex;flex-direction:column;gap:15px;padding:0 20px}
 
-/* Science Section */
-.science-section{padding:30px 20px;text-align:center}
-.science-title{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:2px;margin-bottom:20px;color:var(--gold)}
-.science-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;max-width:400px;margin:0 auto}
-.science-item{background:var(--card);border-radius:15px;padding:20px 10px}
-.science-icon{font-size:2rem;margin-bottom:8px}
-.science-text{font-size:0.7rem;color:var(--muted);line-height:1.4}
-.science-text strong{color:var(--text);display:block;margin-bottom:3px}
+.game-card{background:var(--card);border-radius:20px;padding:20px;display:flex;align-items:center;gap:15px;cursor:pointer;transition:all 0.3s;border:3px solid transparent;position:relative;overflow:hidden}
+.game-card:hover{transform:translateY(-3px)}
+.game-card:active{transform:scale(0.98)}
 
-/* CTA Section */
-.cta-section{text-align:center;padding:30px 20px}
-.cta-text{color:var(--muted);margin-bottom:15px;font-size:0.9rem}
-.cta-btn{display:inline-block;padding:16px 40px;font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:3px;background:linear-gradient(135deg,var(--purple),var(--pink));color:var(--text);border:none;border-radius:50px;cursor:pointer;text-decoration:none;box-shadow:0 8px 30px rgba(155,89,182,0.4);transition:all 0.3s}
-.cta-btn:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(155,89,182,0.5)}
+.game-card.laugh1{border-color:rgba(231,76,60,0.3)}
+.game-card.laugh1:hover{border-color:var(--laugh1);box-shadow:0 8px 30px rgba(231,76,60,0.3)}
+.game-card.laugh2{border-color:rgba(243,156,18,0.3)}
+.game-card.laugh2:hover{border-color:var(--laugh2);box-shadow:0 8px 30px rgba(243,156,18,0.3)}
+.game-card.laugh3{border-color:rgba(39,174,96,0.3)}
+.game-card.laugh3:hover{border-color:var(--laugh3);box-shadow:0 8px 30px rgba(39,174,96,0.3)}
+.game-card.laugh4{border-color:rgba(52,152,219,0.3)}
+.game-card.laugh4:hover{border-color:var(--laugh4);box-shadow:0 8px 30px rgba(52,152,219,0.3)}
+.game-card.laugh5{border-color:rgba(233,30,140,0.3)}
+.game-card.laugh5:hover{border-color:var(--laugh5);box-shadow:0 8px 30px rgba(233,30,140,0.3)}
 
-/* Footer */
-.footer{padding:30px 20px;text-align:center;border-top:2px solid rgba(155,89,182,0.2)}
-.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:2px;margin-bottom:10px}
-.footer-logo .laugh{color:var(--gold)}
-.footer-logo .letico{color:var(--text)}
-.footer-tagline{font-size:0.8rem;color:var(--muted);margin-bottom:15px}
-.footer-copy{font-size:0.7rem;color:rgba(255,255,255,0.3)}
-.footer-copy a{color:var(--gold);text-decoration:none}
+.game-icon{width:60px;height:60px;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:2rem;flex-shrink:0}
+.laugh1 .game-icon{background:linear-gradient(135deg,var(--laugh1),#c0392b)}
+.laugh2 .game-icon{background:linear-gradient(135deg,var(--laugh2),#d68910)}
+.laugh3 .game-icon{background:linear-gradient(135deg,var(--laugh3),#1e8449)}
+.laugh4 .game-icon{background:linear-gradient(135deg,var(--laugh4),#2471a3)}
+.laugh5 .game-icon{background:linear-gradient(135deg,var(--laugh5),#c71585)}
 
-/* Animations */
-@keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-.circuit-card{animation:fadeInUp 0.5s ease forwards}
-.circuit-card:nth-child(1){animation-delay:0.1s}
-.circuit-card:nth-child(2){animation-delay:0.2s}
-.circuit-card:nth-child(3){animation-delay:0.3s}
-.circuit-card:nth-child(4){animation-delay:0.4s}
-@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
-.joy-stat-value{animation:pulse 2s ease-in-out infinite}
+.game-info{flex:1}
+.game-number{font-family:'Bebas Neue',sans-serif;font-size:0.8rem;letter-spacing:2px;color:var(--muted)}
+.game-name{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:2px;margin:3px 0}
+.laugh1 .game-name{color:var(--laugh1)}
+.laugh2 .game-name{color:var(--laugh2)}
+.laugh3 .game-name{color:var(--laugh3)}
+.laugh4 .game-name{color:var(--laugh4)}
+.laugh5 .game-name{color:var(--laugh5)}
+.game-desc{font-size:0.75rem;color:var(--muted)}
 
-/* Responsive */
-@media(max-width:400px){
-.hero-title{font-size:2.2rem}
-.circuits-grid{gap:12px}
-.circuit-emoji{font-size:2.8rem}
-.circuit-name{font-size:1.2rem}
-.stats-bar{gap:20px}
-.stat-value{font-size:1.5rem}
-.logo{font-size:1.2rem}
-.joy-stats{flex-wrap:wrap}
-.joy-stat{min-width:80px}
-.joy-stat-value{font-size:1.8rem}
+.game-progress{text-align:right;min-width:80px}
+.game-tier{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:var(--gold)}
+.game-stars{font-size:1rem;margin-top:3px}
+.game-stars .star{opacity:0.3}
+.game-stars .star.earned{opacity:1}
+
+.tier-dots{display:flex;gap:3px;margin-top:8px;justify-content:flex-end}
+.tier-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.1)}
+.tier-dot.unlocked{background:var(--success)}
+.tier-dot.current{background:var(--gold);box-shadow:0 0 8px var(--gold)}
+
+.play-arrow{font-size:1.5rem;color:var(--muted);margin-left:10px}
+
+.coach-section{background:var(--card);border:2px solid var(--purple);border-radius:25px;margin:30px 20px;padding:20px;display:flex;align-items:center;gap:15px}
+.coach-avatar{width:70px;height:70px;border-radius:50%;object-fit:cover;border:3px solid var(--purple)}
+.coach-info{flex:1}
+.coach-name{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:2px;color:var(--purple)}
+.coach-message{font-size:0.85rem;color:var(--muted);margin-top:5px;line-height:1.4}
+
+.pricing-banner{background:linear-gradient(135deg,var(--orange),var(--pink));border-radius:20px;margin:20px;padding:20px;text-align:center}
+.pricing-title{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:3px;margin-bottom:5px}
+.pricing-subtitle{font-size:0.9rem;opacity:0.9}
+.pricing-price{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;margin:15px 0}
+.pricing-detail{font-size:0.8rem;opacity:0.8}
+.pricing-btn{display:inline-block;margin-top:15px;padding:12px 30px;background:var(--text);color:var(--dark);font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;border-radius:30px;text-decoration:none;transition:all 0.3s}
+.pricing-btn:hover{transform:scale(1.05)}
+
+.footer{text-align:center;padding:30px 20px;color:var(--muted);font-size:0.75rem}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:2px;margin-bottom:10px}
+.footer-logo .laugh{color:var(--orange)}
+.footer-logo .letico{color:var(--pink)}
+
+@media(min-width:600px){
+    .games-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+    .joy-stats{max-width:400px;margin:0 auto}
 }
 </style>
 </head>
 <body class="en">
 
-<header class="header">
-<div class="header-left">
-<div class="logo"><span class="laugh">LAUGH</span><span class="letico">LETICO</span>™</div>
-</div>
-<div class="lang-toggle">
-<button class="lang-btn active" data-lang="en">EN</button>
-<button class="lang-btn" data-lang="es">ES</button>
-</div>
-</header>
-
-<section class="hero">
-<div class="hero-coach">
-<img src="go_chat.png" alt="Coach GoTrotter AI" class="hero-coach-img">
-</div>
-<h1 class="hero-title">
-<span class="laugh">LAUGH</span><span class="letico">LETICO</span><span class="hero-tm">™</span>
-</h1>
-<p class="hero-tagline">
-<span class="lang-en">EXERCISE YOUR MEMORY. EXERCISE YOUR SMILE.</span>
-<span class="lang-es">EJERCITA TU MEMORIA. EJERCITA TU SONRISA.</span>
-</p>
-<div class="product-badge">
-<span class="lang-en">POWERED BY</span>
-<span class="lang-es">IMPULSADO POR</span>
-<span class="laugha-name"> LAUGHTER</span> 😂
-</div>
-<p class="hero-desc">
-<span class="lang-en"><strong>The ONLY laughter-powered memory fitness!</strong><br>4 laughter circuits for your brain.</span>
-<span class="lang-es"><strong>¡El ÚNICO fitness mental impulsado por risa!</strong><br>4 circuitos de risa para tu cerebro.</span>
-</p>
-</section>
-
-<!-- JOY DASHBOARD -->
-<section class="joy-dashboard">
-<h2 class="joy-title">
-<span class="emoji">😂</span>
-<span class="lang-en"> YOUR JOY DASHBOARD </span>
-<span class="lang-es"> TU PANEL DE ALEGRÍA </span>
-<span class="emoji">😂</span>
-</h2>
-<div class="joy-stats">
-<div class="joy-stat">
-<span class="joy-stat-emoji">☀️</span>
-<span class="joy-stat-value" id="joyToday">0</span>
-<span class="joy-stat-label">
-<span class="lang-en">TODAY</span>
-<span class="lang-es">HOY</span>
-</span>
-</div>
-<div class="joy-stat">
-<span class="joy-stat-emoji">📅</span>
-<span class="joy-stat-value" id="joyWeek">0</span>
-<span class="joy-stat-label">
-<span class="lang-en">THIS WEEK</span>
-<span class="lang-es">ESTA SEMANA</span>
-</span>
-</div>
-<div class="joy-stat">
-<span class="joy-stat-emoji">🏆</span>
-<span class="joy-stat-value" id="joyTotal">0</span>
-<span class="joy-stat-label">
-<span class="lang-en">ALL TIME</span>
-<span class="lang-es">TOTAL</span>
-</span>
-</div>
-</div>
-<div class="joy-message">
-<p class="joy-message-text" id="joyMessage">
-<span class="lang-en"><strong>Start a circuit</strong> to earn your first laugh moments! 😂</span>
-<span class="lang-es"><strong>¡Comienza un circuito</strong> para ganar tus primeros momentos de risa! 😂</span>
-</p>
-</div>
-</section>
-
-<div class="stats-bar">
-<div class="stat">
-<div class="stat-value">4</div>
-<div class="stat-label">
-<span class="lang-en">CIRCUITS</span>
-<span class="lang-es">CIRCUITOS</span>
-</div>
-</div>
-<div class="stat">
-<div class="stat-value">10</div>
-<div class="stat-label">
-<span class="lang-en">TIERS EACH</span>
-<span class="lang-es">NIVELES</span>
-</div>
-</div>
-<div class="stat">
-<div class="stat-value">∞</div>
-<div class="stat-label">
-<span class="lang-en">LAUGHS</span>
-<span class="lang-es">RISAS</span>
-</div>
-</div>
+<div class="header">
+    <div class="header-left">
+        <img src="go_chat.png" alt="Laughletico" class="logo-img">
+        <div>
+            <div class="logo-text"><span class="laugh">LAUGH</span><span class="letico">LETICO</span></div>
+            <div class="tagline">
+                <span class="lang-en">LAUGHTER WORKOUTS™</span>
+                <span class="lang-es">ENTRENAMIENTOS DE RISA™</span>
+            </div>
+        </div>
+    </div>
+    <div class="lang-toggle">
+        <button class="lang-btn active" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="es">ES</button>
+    </div>
 </div>
 
-<section class="circuits-section">
-<h2 class="section-title">
-<span class="lang-en">CHOOSE YOUR <span>LAUGHTER</span> CIRCUIT</span>
-<span class="lang-es">ELIGE TU CIRCUITO DE <span>RISA</span></span>
-</h2>
-<div class="circuits-grid">
-<a href="laugh1.html" class="circuit-card card-1">
-<div class="circuit-num">LAUGH 1</div>
-<span class="circuit-emoji">🎭</span>
-<div class="circuit-name">
-<span class="lang-en">SILLY SCENES</span>
-<span class="lang-es">ESCENAS LOCAS</span>
+<div class="joy-dashboard">
+    <div class="joy-title">
+        <span class="lang-en">😂 JOY DASHBOARD</span>
+        <span class="lang-es">😂 PANEL DE ALEGRÍA</span>
+    </div>
+    <div class="joy-stats">
+        <div class="joy-stat">
+            <span class="joy-emoji">📅</span>
+            <div class="joy-number" id="todayLaughs">0</div>
+            <div class="joy-label">
+                <span class="lang-en">TODAY</span>
+                <span class="lang-es">HOY</span>
+            </div>
+        </div>
+        <div class="joy-stat">
+            <span class="joy-emoji">📆</span>
+            <div class="joy-number" id="weekLaughs">0</div>
+            <div class="joy-label">
+                <span class="lang-en">THIS WEEK</span>
+                <span class="lang-es">ESTA SEMANA</span>
+            </div>
+        </div>
+        <div class="joy-stat">
+            <span class="joy-emoji">🏆</span>
+            <div class="joy-number" id="totalLaughs">0</div>
+            <div class="joy-label">
+                <span class="lang-en">ALL TIME</span>
+                <span class="lang-es">TOTAL</span>
+            </div>
+        </div>
+    </div>
 </div>
-<div class="circuit-desc">
-<span class="lang-en">Memory & Laughter</span>
-<span class="lang-es">Memoria y Risa</span>
-</div>
-</a>
-<a href="laugh2.html" class="circuit-card card-2">
-<div class="circuit-num">LAUGH 2</div>
-<span class="circuit-emoji">🔊</span>
-<div class="circuit-name">
-<span class="lang-en">GOOFY SOUNDS</span>
-<span class="lang-es">SONIDOS TONTOS</span>
-</div>
-<div class="circuit-desc">
-<span class="lang-en">Speed & Recall</span>
-<span class="lang-es">Velocidad y Memoria</span>
-</div>
-</a>
-<a href="laugh3.html" class="circuit-card card-3">
-<div class="circuit-num">LAUGH 3</div>
-<span class="circuit-emoji">🚶</span>
-<div class="circuit-name">
-<span class="lang-en">WACKY WALKS</span>
-<span class="lang-es">PASOS LOCOS</span>
-</div>
-<div class="circuit-desc">
-<span class="lang-en">Sequence & Memory</span>
-<span class="lang-es">Secuencia y Memoria</span>
-</div>
-</a>
-<a href="laugh4.html" class="circuit-card card-4">
-<div class="circuit-num">LAUGH 4</div>
-<span class="circuit-emoji">🎪</span>
-<div class="circuit-name">
-<span class="lang-en">ABSURD PAIRS</span>
-<span class="lang-es">PAREJAS ABSURDAS</span>
-</div>
-<div class="circuit-desc">
-<span class="lang-en">Joy & Recognition</span>
-<span class="lang-es">Alegría y Reconocimiento</span>
-</div>
-</a>
-</div>
-</section>
 
-<section class="coach-section">
-<div class="coach-card">
-<div class="coach-avatar">
-<img src="go_chat.png" alt="Coach GoTrotter AI">
+<div class="section-title">
+    <span class="emoji">🏀</span>
+    <span class="lang-en">THE STARTING 5</span>
+    <span class="lang-es">LOS 5 TITULARES</span>
 </div>
-<div class="coach-info">
-<h3>
-<span class="lang-en">MEET <span>COACH GOTROTTER AI</span></span>
-<span class="lang-es">CONOCE A <span>COACH GOTROTTER AI</span></span>
-</h3>
-<p>
-<span class="lang-en">Your 24/7 laughter coach! I'll guide you through every circuit with encouragement, celebration, and plenty of laughs! 🏀😂</span>
-<span class="lang-es">¡Tu coach de risa 24/7! Te guiaré en cada circuito con ánimo, celebración y muchas risas! 🏀😂</span>
-</p>
-</div>
-</div>
-</section>
 
-<section class="science-section">
-<h2 class="science-title">
-<span class="lang-en">😂 THE SCIENCE OF LAUGHTER</span>
-<span class="lang-es">😂 LA CIENCIA DE LA RISA</span>
-</h2>
-<div class="science-grid">
-<div class="science-item">
-<div class="science-icon">🧠</div>
-<div class="science-text">
-<strong>
-<span class="lang-en">MEMORY</span>
-<span class="lang-es">MEMORIA</span>
-</strong>
-<span class="lang-en">Laughter enhances memory retention</span>
-<span class="lang-es">La risa mejora la retención</span>
-</div>
-</div>
-<div class="science-item">
-<div class="science-icon">💊</div>
-<div class="science-text">
-<strong>
-<span class="lang-en">CORTISOL</span>
-<span class="lang-es">CORTISOL</span>
-</strong>
-<span class="lang-en">Reduces stress hormones</span>
-<span class="lang-es">Reduce hormonas de estrés</span>
-</div>
-</div>
-<div class="science-item">
-<div class="science-icon">❤️</div>
-<div class="science-text">
-<strong>
-<span class="lang-en">ENDORPHINS</span>
-<span class="lang-es">ENDORFINAS</span>
-</strong>
-<span class="lang-en">Natural feel-good chemicals</span>
-<span class="lang-es">Químicos naturales de bienestar</span>
-</div>
-</div>
-</div>
-</section>
+<div class="games-grid">
+    <div class="game-card laugh1" onclick="location.href='laugh1.html'">
+        <div class="game-icon">🎭</div>
+        <div class="game-info">
+            <div class="game-number">LAUGH 1</div>
+            <div class="game-name">
+                <span class="lang-en">SILLY SCENES</span>
+                <span class="lang-es">ESCENAS LOCAS</span>
+            </div>
+            <div class="game-desc">
+                <span class="lang-en">Visual Memory</span>
+                <span class="lang-es">Memoria Visual</span>
+            </div>
+        </div>
+        <div class="game-progress">
+            <div class="game-tier" id="tier1">TIER 1</div>
+            <div class="game-stars"><span class="star" id="star1-1">⭐</span><span class="star" id="star1-2">⭐</span></div>
+            <div class="tier-dots" id="dots1"></div>
+        </div>
+        <div class="play-arrow">›</div>
+    </div>
 
-<section class="cta-section">
-<p class="cta-text">
-<span class="lang-en">Ready to laugh your way to a sharper mind?</span>
-<span class="lang-es">¿Listo para reír hacia una mente más aguda?</span>
-</p>
-<a href="#" class="cta-btn" onclick="document.querySelector('.circuits-section').scrollIntoView({behavior:'smooth'});return false;">
-<span class="lang-en">START LAUGHING! 😂</span>
-<span class="lang-es">¡A REÍR! 😂</span>
-</a>
-</section>
+    <div class="game-card laugh2" onclick="location.href='laugh2.html'">
+        <div class="game-icon">🔊</div>
+        <div class="game-info">
+            <div class="game-number">LAUGH 2</div>
+            <div class="game-name">
+                <span class="lang-en">GOOFY SOUNDS</span>
+                <span class="lang-es">SONIDOS LOCOS</span>
+            </div>
+            <div class="game-desc">
+                <span class="lang-en">Audio + Speed</span>
+                <span class="lang-es">Audio + Velocidad</span>
+            </div>
+        </div>
+        <div class="game-progress">
+            <div class="game-tier" id="tier2">TIER 1</div>
+            <div class="game-stars"><span class="star" id="star2-1">⭐</span><span class="star" id="star2-2">⭐</span></div>
+            <div class="tier-dots" id="dots2"></div>
+        </div>
+        <div class="play-arrow">›</div>
+    </div>
 
-<footer class="footer">
-<div class="footer-logo"><span class="laugh">LAUGH</span><span class="letico">LETICO</span>™</div>
-<div class="footer-tagline">
-<span class="lang-en">Exercise your memory. Exercise your smile.</span>
-<span class="lang-es">Ejercita tu memoria. Ejercita tu sonrisa.</span>
+    <div class="game-card laugh3" onclick="location.href='laugh3.html'">
+        <div class="game-icon">🚶</div>
+        <div class="game-info">
+            <div class="game-number">LAUGH 3</div>
+            <div class="game-name">
+                <span class="lang-en">WACKY WALKS</span>
+                <span class="lang-es">CAMINATAS LOCAS</span>
+            </div>
+            <div class="game-desc">
+                <span class="lang-en">Sequence Memory</span>
+                <span class="lang-es">Memoria Secuencial</span>
+            </div>
+        </div>
+        <div class="game-progress">
+            <div class="game-tier" id="tier3">TIER 1</div>
+            <div class="game-stars"><span class="star" id="star3-1">⭐</span><span class="star" id="star3-2">⭐</span></div>
+            <div class="tier-dots" id="dots3"></div>
+        </div>
+        <div class="play-arrow">›</div>
+    </div>
+
+    <div class="game-card laugh4" onclick="location.href='laugh4.html'">
+        <div class="game-icon">🎪</div>
+        <div class="game-info">
+            <div class="game-number">LAUGH 4</div>
+            <div class="game-name">
+                <span class="lang-en">ABSURD PAIRS</span>
+                <span class="lang-es">PAREJAS ABSURDAS</span>
+            </div>
+            <div class="game-desc">
+                <span class="lang-en">Association Memory</span>
+                <span class="lang-es">Memoria Asociativa</span>
+            </div>
+        </div>
+        <div class="game-progress">
+            <div class="game-tier" id="tier4">TIER 1</div>
+            <div class="game-stars"><span class="star" id="star4-1">⭐</span><span class="star" id="star4-2">⭐</span></div>
+            <div class="tier-dots" id="dots4"></div>
+        </div>
+        <div class="play-arrow">›</div>
+    </div>
+
+    <div class="game-card laugh5" onclick="location.href='laugh5.html'">
+        <div class="game-icon">😜</div>
+        <div class="game-info">
+            <div class="game-number">LAUGH 5</div>
+            <div class="game-name">
+                <span class="lang-en">GOOFY FACES</span>
+                <span class="lang-es">CARAS CHISTOSAS</span>
+            </div>
+            <div class="game-desc">
+                <span class="lang-en">Expression Memory</span>
+                <span class="lang-es">Memoria de Expresiones</span>
+            </div>
+        </div>
+        <div class="game-progress">
+            <div class="game-tier" id="tier5">TIER 1</div>
+            <div class="game-stars"><span class="star" id="star5-1">⭐</span><span class="star" id="star5-2">⭐</span></div>
+            <div class="tier-dots" id="dots5"></div>
+        </div>
+        <div class="play-arrow">›</div>
+    </div>
 </div>
-<div class="footer-copy">© 2026 Laughletico™ | <span class="lang-en">Powered by</span><span class="lang-es">Impulsado por</span> <a href="https://gostar.digital">GoStar Digital</a> 🌴</div>
-</footer>
+
+<div class="coach-section">
+    <img src="go_chat.png" alt="Coach GoTrotter AI" class="coach-avatar">
+    <div class="coach-info">
+        <div class="coach-name">COACH GOTROTTER AI 🏀</div>
+        <div class="coach-message">
+            <span class="lang-en">"Every laugh is a victory! Keep playing, keep laughing, keep growing. You're doing amazing!"</span>
+            <span class="lang-es">"¡Cada risa es una victoria! Sigue jugando, sigue riendo, sigue creciendo. ¡Lo estás haciendo increíble!"</span>
+        </div>
+    </div>
+</div>
+
+<div class="pricing-banner">
+    <div class="pricing-title">
+        <span class="lang-en">5 LAUGHTER WORKOUTS</span>
+        <span class="lang-es">5 ENTRENAMIENTOS DE RISA</span>
+    </div>
+    <div class="pricing-subtitle">
+        <span class="lang-en">Just $1 per game!</span>
+        <span class="lang-es">¡Solo $1 por juego!</span>
+    </div>
+    <div class="pricing-price">$5<span style="font-size:1rem;opacity:0.8">/mo</span></div>
+    <div class="pricing-detail">
+        <span class="lang-en">7-day free trial • Cancel anytime</span>
+        <span class="lang-es">7 días gratis • Cancela cuando quieras</span>
+    </div>
+    <a href="#" class="pricing-btn">
+        <span class="lang-en">START FREE TRIAL</span>
+        <span class="lang-es">PRUEBA GRATIS</span>
+    </a>
+</div>
+
+<div class="footer">
+    <div class="footer-logo"><span class="laugh">LAUGH</span><span class="letico">LETICO</span>™</div>
+    <div>
+        <span class="lang-en">Laughter + Memory = Brain Power! 🧠😂</span>
+        <span class="lang-es">¡Risa + Memoria = Poder Mental! 🧠😂</span>
+    </div>
+</div>
 
 <script>
 (function(){
-// ============ LANGUAGE TOGGLE ============
-var lang = localStorage.getItem('lw-lang') || 'en';
-
-function setLang(l) {
-    lang = l;
-    localStorage.setItem('lw-lang', l);
-    document.body.className = l;
-    document.querySelectorAll('.lang-btn').forEach(function(b) {
-        b.classList.toggle('active', b.dataset.lang === l);
-    });
-}
-
-// Initialize language on page load
-setLang(lang);
-
-// Language button click handlers
-document.querySelectorAll('.lang-btn').forEach(function(b) {
-    b.addEventListener('click', function(e) {
-        e.preventDefault();
-        setLang(this.dataset.lang);
-    });
-});
-
-// ============ JOY DASHBOARD ============
-
-// Get today's date string
-function getDateString(date) {
-    return date.toISOString().split('T')[0];
-}
-
-// Get week start (Monday)
-function getWeekStart(date) {
-    var d = new Date(date);
-    var day = d.getDay();
-    var diff = d.getDate() - day + (day === 0 ? -6 : 1);
-    d.setDate(diff);
-    return getDateString(d);
-}
-
-// Load joy data from localStorage
-function loadJoyData() {
-    var today = getDateString(new Date());
-    var weekStart = getWeekStart(new Date());
-    
-    // Today's laughs
-    var todayData = JSON.parse(localStorage.getItem('lw-laughs-today') || '{}');
-    var todayCount = (todayData.date === today) ? todayData.count : 0;
-    
-    // Week's laughs
-    var weekData = JSON.parse(localStorage.getItem('lw-laughs-week') || '{}');
-    var weekCount = (weekData.weekStart === weekStart) ? weekData.count : 0;
-    
-    // Total laughs
-    var totalCount = parseInt(localStorage.getItem('lw-laughs-total') || '0');
-    
-    return { today: todayCount, week: weekCount, total: totalCount };
-}
-
-// Update joy display numbers
-function updateJoyDisplay() {
-    var data = loadJoyData();
-    
-    document.getElementById('joyToday').textContent = data.today;
-    document.getElementById('joyWeek').textContent = data.week;
-    document.getElementById('joyTotal').textContent = data.total;
-    
-    updateJoyMessage(data);
-}
-
-// Update joy message based on activity level
-function updateJoyMessage(data) {
-    if (!data) data = loadJoyData();
-    var msgEl = document.getElementById('joyMessage');
-    
-    var msgEn, msgEs;
-    
-    if (data.total === 0) {
-        msgEn = "<strong>Start a circuit</strong> to earn your first laugh moments! 😂";
-        msgEs = "<strong>¡Comienza un circuito</strong> para ganar tus primeros momentos de risa! 😂";
-    } else if (data.today === 0 && data.total > 0) {
-        msgEn = "<strong>Welcome back!</strong> Ready for more laugh moments? 😄";
-        msgEs = "<strong>¡Bienvenido de vuelta!</strong> ¿Listo para más momentos de risa? 😄";
-    } else if (data.today < 20) {
-        msgEn = "<strong>You're laughing!</strong> Keep it up — every giggle counts! 🎉";
-        msgEs = "<strong>¡Estás riendo!</strong> ¡Sigue así — cada risa cuenta! 🎉";
-    } else if (data.today < 50) {
-        msgEn = "<strong>Nice streak!</strong> Your brain is loving this! 🧠😂";
-        msgEs = "<strong>¡Buena racha!</strong> ¡A tu cerebro le encanta! 🧠😂";
-    } else if (data.today < 100) {
-        msgEn = "<strong>You're on FIRE!</strong> Laughter champion in the making! 🔥🏆";
-        msgEs = "<strong>¡Estás en FUEGO!</strong> ¡Campeón de la risa en formación! 🔥🏆";
-    } else {
-        msgEn = "<strong>LEGENDARY!</strong> You're a certified Joy Master! 🌟👑";
-        msgEs = "<strong>¡LEGENDARIO!</strong> ¡Eres un Maestro de la Alegría certificado! 🌟👑";
+    // Language
+    var lang = localStorage.getItem('lw-lang') || 'en';
+    function setLang(l) {
+        lang = l;
+        localStorage.setItem('lw-lang', l);
+        document.body.className = l;
+        document.querySelectorAll('.lang-btn').forEach(function(b) {
+            b.classList.toggle('active', b.dataset.lang === l);
+        });
     }
-    
-    msgEl.innerHTML = '<span class="lang-en">' + msgEn + '</span><span class="lang-es">' + msgEs + '</span>';
-}
+    setLang(lang);
+    document.querySelectorAll('.lang-btn').forEach(function(b) {
+        b.addEventListener('click', function(e) {
+            e.preventDefault();
+            setLang(this.dataset.lang);
+        });
+    });
 
-// Initialize joy dashboard
-updateJoyDisplay();
+    // Load Joy Dashboard stats
+    function getDateString(date) {
+        return date.toISOString().split('T')[0];
+    }
 
-// Refresh every 3 seconds (in case returning from game)
-setInterval(updateJoyDisplay, 3000);
+    function getWeekStart(date) {
+        var d = new Date(date);
+        var day = d.getDay();
+        var diff = d.getDate() - day + (day === 0 ? -6 : 1);
+        d.setDate(diff);
+        return getDateString(d);
+    }
 
+    function loadJoyStats() {
+        var today = getDateString(new Date());
+        var weekStart = getWeekStart(new Date());
+
+        // Today's laughs
+        var todayData = JSON.parse(localStorage.getItem('lw-laughs-today') || '{}');
+        var todayCount = (todayData.date === today) ? todayData.count : 0;
+        document.getElementById('todayLaughs').textContent = todayCount;
+
+        // This week's laughs
+        var weekData = JSON.parse(localStorage.getItem('lw-laughs-week') || '{}');
+        var weekCount = (weekData.weekStart === weekStart) ? weekData.count : 0;
+        document.getElementById('weekLaughs').textContent = weekCount;
+
+        // All-time laughs
+        var totalCount = parseInt(localStorage.getItem('lw-laughs-total') || '0');
+        document.getElementById('totalLaughs').textContent = totalCount;
+    }
+
+    // Load mastery progress for each game
+    function loadMasteryProgress() {
+        for (var i = 1; i <= 5; i++) {
+            var key = 'laugh' + i + '-mastery';
+            var data = JSON.parse(localStorage.getItem(key) || '{}');
+            var tier = data.currentTier || 1;
+            var stars = data.stars || 0;
+            var unlockedTiers = data.unlockedTiers || [1];
+
+            // Update tier display
+            document.getElementById('tier' + i).textContent = 'TIER ' + tier;
+
+            // Update stars
+            document.getElementById('star' + i + '-1').classList.toggle('earned', stars >= 1);
+            document.getElementById('star' + i + '-2').classList.toggle('earned', stars >= 2);
+
+            // Build tier dots
+            var dotsHtml = '';
+            for (var t = 1; t <= 10; t++) {
+                var cls = 'tier-dot';
+                if (unlockedTiers.indexOf(t) !== -1) cls += ' unlocked';
+                if (t === tier) cls += ' current';
+                dotsHtml += '<div class="' + cls + '"></div>';
+            }
+            document.getElementById('dots' + i).innerHTML = dotsHtml;
+        }
+    }
+
+    // Initialize
+    loadJoyStats();
+    loadMasteryProgress();
 })();
 </script>
 </body>
