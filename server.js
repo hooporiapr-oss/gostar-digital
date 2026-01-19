@@ -104,6 +104,7 @@ function logActivity(type, username, facility, details, extra) {
         if (extra.email) activity.email = extra.email;
         if (extra.tier) activity.tier = extra.tier;
         if (extra.round) activity.round = extra.round;
+        if (extra.quantity) activity.quantity = extra.quantity;
     }
     activities.unshift(activity);
     if (activities.length > 500) activities = activities.slice(0, 500);
@@ -151,32 +152,60 @@ function handleCheckoutComplete(session) {
     var email = session.customer_email || session.customer_details?.email;
     var customerId = session.customer;
     var subscriptionId = session.subscription;
+    var quantity = session.metadata?.quantity || 1;
+    
     var subIndex = -1;
     for (var i = 0; i < subscribers.length; i++) {
         if (subscribers[i].email === email) { subIndex = i; break; }
     }
     var planType = session.metadata?.plan_type || 'individual_monthly';
+    
     if (subIndex === -1) {
+        // Create subscriber with multiple PINs if quantity > 1
+        var pins = [];
+        for (var p = 0; p < quantity; p++) {
+            pins.push(generateUserPin());
+        }
+        
         var newSub = {
-            email: email, pin: generateUserPin(), stripe_customer_id: customerId,
-            stripe_subscription_id: subscriptionId, plan_type: planType, status: 'trialing',
-            created_at: new Date().toISOString(), current_period_end: null,
-            totalLaughs: 0, streak: 0, lastActive: null,
+            email: email, 
+            pin: pins[0], // Primary PIN
+            additional_pins: pins.slice(1), // Extra PINs if bought multiple
+            quantity: parseInt(quantity),
+            stripe_customer_id: customerId,
+            stripe_subscription_id: subscriptionId, 
+            plan_type: planType, 
+            status: 'active', // No trial - active immediately
+            created_at: new Date().toISOString(), 
+            current_period_end: null,
+            totalLaughs: 0, 
+            streak: 0, 
+            lastActive: null,
             games: { laughtrail: { sessions: 0, bestRound: 0, laughs: 0 }, laughhunt: { sessions: 0, bestTier: 0, laughs: 0 } }
         };
         subscribers.push(newSub);
-        logActivity('subscription_created', email, null, 'New ' + planType + ' subscription', { email: email });
-        console.log('New subscriber created:', email, 'PIN:', newSub.pin);
+        logActivity('subscription_created', email, null, 'New ' + planType + ' x' + quantity + ' ($' + (quantity * 5) + ')', { email: email, quantity: quantity });
+        console.log('New subscriber created:', email, 'PIN:', newSub.pin, quantity > 1 ? '+ ' + (quantity - 1) + ' additional PINs' : '');
     } else {
+        // Existing subscriber - add more PINs
+        var existingQty = subscribers[subIndex].quantity || 1;
+        var newQty = existingQty + parseInt(quantity);
+        
+        if (!subscribers[subIndex].additional_pins) subscribers[subIndex].additional_pins = [];
+        for (var p = 0; p < quantity; p++) {
+            subscribers[subIndex].additional_pins.push(generateUserPin());
+        }
+        
+        subscribers[subIndex].quantity = newQty;
         subscribers[subIndex].stripe_customer_id = customerId;
         subscribers[subIndex].stripe_subscription_id = subscriptionId;
         subscribers[subIndex].plan_type = planType;
-        subscribers[subIndex].status = 'trialing';
+        subscribers[subIndex].status = 'active';
         if (!subscribers[subIndex].games) {
             subscribers[subIndex].games = { laughtrail: { sessions: 0, bestRound: 0, laughs: 0 }, laughhunt: { sessions: 0, bestTier: 0, laughs: 0 } };
         }
         if (typeof subscribers[subIndex].totalLaughs === 'undefined') subscribers[subIndex].totalLaughs = 0;
-        logActivity('subscription_updated', email, null, 'Updated to ' + planType, { email: email });
+        logActivity('subscription_updated', email, null, 'Added ' + quantity + ' users (total: ' + newQty + ')', { email: email, quantity: newQty });
     }
     writeJSON(SUBSCRIBERS_FILE, subscribers);
 }
@@ -225,12 +254,25 @@ app.post('/api/stripe/checkout', function(req, res) {
     var priceId = STRIPE_PRICES[planType];
     if (!priceId) return res.status(400).json({ error: 'Invalid plan type: ' + planType });
     var baseUrl = process.env.SITE_URL || process.env.BASE_URL || 'https://gotrotter.ai';
+    
     stripe.checkout.sessions.create({
-        mode: 'subscription', payment_method_types: ['card'],
-        line_items: [{ price: priceId, quantity: 1 }],
+        mode: 'subscription', 
+        payment_method_types: ['card'],
+        line_items: [{ 
+            price: priceId, 
+            quantity: 1,
+            adjustable_quantity: {
+                enabled: true,
+                minimum: 1,
+                maximum: 100
+            }
+        }],
+        allow_promotion_codes: true, // Enable Stripe promo codes
         success_url: baseUrl + '/?success=true&session_id={CHECKOUT_SESSION_ID}',
         cancel_url: baseUrl + '/?canceled=true',
-        subscription_data: { trial_period_days: 7, metadata: { plan_type: planType } },
+        subscription_data: { 
+            metadata: { plan_type: planType } 
+        },
         metadata: { plan_type: planType }
     }).then(function(session) { res.json({ url: session.url, sessionId: session.id }); })
     .catch(function(err) { res.status(500).json({ error: err.message }); });
@@ -245,20 +287,34 @@ app.get('/api/stripe/status/:email', function(req, res) {
     }
     if (!subscriber) return res.json({ subscribed: false, status: null });
     var isActive = subscriber.status === 'active' || subscriber.status === 'trialing';
-    res.json({ subscribed: isActive, status: subscriber.status, plan_type: subscriber.plan_type, pin: isActive ? subscriber.pin : null });
+    res.json({ 
+        subscribed: isActive, 
+        status: subscriber.status, 
+        plan_type: subscriber.plan_type, 
+        pin: isActive ? subscriber.pin : null,
+        quantity: subscriber.quantity || 1,
+        additional_pins: isActive ? (subscriber.additional_pins || []) : []
+    });
 });
 
-// Check status by PIN - UPDATED to include facility trial PINs
+// Check status by PIN - UPDATED to include facility trial PINs and additional_pins
 app.get('/api/stripe/status-pin/:pin', function(req, res) {
     var pin = req.params.pin;
     var subscribers = readJSON(SUBSCRIBERS_FILE);
     
-    // Check regular subscribers
+    // Check regular subscribers (primary PIN and additional PINs)
     for (var i = 0; i < subscribers.length; i++) {
+        // Check primary PIN
         if (subscribers[i].pin === pin) {
             var isActive = subscribers[i].status === 'active' || subscribers[i].status === 'trialing';
             return res.json({ subscribed: isActive, status: subscribers[i].status, plan_type: subscribers[i].plan_type, email: subscribers[i].email });
         }
+        // Check additional PINs
+        if (subscribers[i].additional_pins && subscribers[i].additional_pins.indexOf(pin) !== -1) {
+            var isActive = subscribers[i].status === 'active' || subscribers[i].status === 'trialing';
+            return res.json({ subscribed: isActive, status: subscribers[i].status, plan_type: subscribers[i].plan_type, email: subscribers[i].email });
+        }
+        // Check family members (legacy)
         if (subscribers[i].family_members) {
             for (var j = 0; j < subscribers[i].family_members.length; j++) {
                 if (subscribers[i].family_members[j].pin === pin) {
@@ -291,10 +347,17 @@ app.get('/api/stripe/status-pin/:pin', function(req, res) {
 
 app.get('/api/stripe/session/:sessionId', function(req, res) {
     if (!stripe) return res.status(500).json({ error: 'Stripe not configured' });
-    stripe.checkout.sessions.retrieve(req.params.sessionId)
+    stripe.checkout.sessions.retrieve(req.params.sessionId, { expand: ['line_items'] })
         .then(function(session) {
             var email = (session.customer_details?.email || session.customer_email || '').toLowerCase();
             if (!email) return res.json({ success: false, error: 'No email found' });
+            
+            // Get quantity from line items
+            var quantity = 1;
+            if (session.line_items && session.line_items.data && session.line_items.data[0]) {
+                quantity = session.line_items.data[0].quantity || 1;
+            }
+            
             var subscribers = readJSON(SUBSCRIBERS_FILE);
             var subscriber = null;
             for (var i = 0; i < subscribers.length; i++) {
@@ -302,7 +365,15 @@ app.get('/api/stripe/session/:sessionId', function(req, res) {
             }
             if (!subscriber) return res.json({ success: false, error: 'Subscriber not found', email: email });
             var isActive = subscriber.status === 'active' || subscriber.status === 'trialing';
-            res.json({ success: true, email: email, subscribed: isActive, status: subscriber.status, pin: isActive ? subscriber.pin : null });
+            res.json({ 
+                success: true, 
+                email: email, 
+                subscribed: isActive, 
+                status: subscriber.status, 
+                pin: isActive ? subscriber.pin : null,
+                quantity: subscriber.quantity || 1,
+                additional_pins: isActive ? (subscriber.additional_pins || []) : []
+            });
         })
         .catch(function(err) { res.status(500).json({ success: false, error: err.message }); });
 });
@@ -323,7 +394,7 @@ app.post('/api/stripe/portal', function(req, res) {
         .catch(function(err) { res.status(500).json({ error: err.message }); });
 });
 
-// Login - UPDATED to include facility trial PINs
+// Login - UPDATED to include facility trial PINs and additional_pins
 app.post('/api/subscriber/login', function(req, res) {
     var pin = req.body.pin;
     if (!pin) return res.status(400).json({ error: 'PIN is required' });
@@ -331,12 +402,21 @@ app.post('/api/subscriber/login', function(req, res) {
     // Check regular subscribers
     var subscribers = readJSON(SUBSCRIBERS_FILE);
     for (var i = 0; i < subscribers.length; i++) {
+        // Check primary PIN
         if (subscribers[i].pin === pin) {
             var isActive = subscribers[i].status === 'active' || subscribers[i].status === 'trialing';
             if (!isActive) return res.status(401).json({ error: 'Subscription not active' });
             logActivity('subscriber_login', subscribers[i].email, null, 'Subscriber logged in');
             return res.json({ success: true, email: subscribers[i].email, pin: pin, plan: subscribers[i].plan_type, status: subscribers[i].status });
         }
+        // Check additional PINs
+        if (subscribers[i].additional_pins && subscribers[i].additional_pins.indexOf(pin) !== -1) {
+            var isActive = subscribers[i].status === 'active' || subscribers[i].status === 'trialing';
+            if (!isActive) return res.status(401).json({ error: 'Subscription not active' });
+            logActivity('subscriber_login', subscribers[i].email + ' (user PIN)', null, 'Additional user logged in');
+            return res.json({ success: true, email: subscribers[i].email, pin: pin, plan: subscribers[i].plan_type, status: subscribers[i].status, is_additional_user: true });
+        }
+        // Check family members (legacy)
         if (subscribers[i].family_members) {
             for (var j = 0; j < subscribers[i].family_members.length; j++) {
                 if (subscribers[i].family_members[j].pin === pin) {
@@ -389,7 +469,7 @@ app.post('/api/subscriber/login', function(req, res) {
     return res.status(401).json({ error: 'Invalid PIN' });
 });
 
-// Family member routes
+// Family member routes (legacy - keeping for backwards compatibility)
 app.post('/api/subscriber/family/add', function(req, res) {
     var ownerPin = req.body.owner_pin;
     var memberName = req.body.name;
@@ -593,9 +673,18 @@ app.get('/api/admin/subscribers', adminTokenAuth, function(req, res) {
     var result = subscribers.map(function(sub) {
         var games = sub.games || { laughtrail: { sessions: 0, bestRound: 0, laughs: 0 }, laughhunt: { sessions: 0, bestTier: 0, laughs: 0 } };
         return {
-            email: sub.email, pin: sub.pin, plan_type: sub.plan_type, status: sub.status,
-            created_at: sub.created_at, totalLaughs: sub.totalLaughs || 0, streak: sub.streak || 0,
-            lastActive: sub.lastActive, games: games, family_members: sub.family_members || []
+            email: sub.email, 
+            pin: sub.pin, 
+            plan_type: sub.plan_type, 
+            status: sub.status,
+            quantity: sub.quantity || 1,
+            additional_pins: sub.additional_pins || [],
+            created_at: sub.created_at, 
+            totalLaughs: sub.totalLaughs || 0, 
+            streak: sub.streak || 0,
+            lastActive: sub.lastActive, 
+            games: games, 
+            family_members: sub.family_members || []
         };
     });
     res.json({ success: true, subscribers: result });
@@ -618,6 +707,7 @@ app.put('/api/admin/subscriber/:pin', adminTokenAuth, function(req, res) {
             if (req.body.email) subscribers[i].email = req.body.email;
             if (req.body.status) subscribers[i].status = req.body.status;
             if (req.body.plan_type) subscribers[i].plan_type = req.body.plan_type;
+            if (req.body.quantity) subscribers[i].quantity = parseInt(req.body.quantity);
             writeJSON(SUBSCRIBERS_FILE, subscribers);
             return res.json({ success: true });
         }
@@ -682,15 +772,15 @@ app.get('/admin', adminAuth, function(req, res) { res.sendFile(path.join(__dirna
 app.get('/play', function(req, res) { res.sendFile(path.join(__dirname, 'index.html')); });
 app.get('/health', function(req, res) { res.json({ status: 'healthy', timestamp: new Date().toISOString() }); });
 
-// Play login - UPDATED for facility trials
+// Play login - UPDATED for facility trials and additional PINs
 app.post('/api/play/login', function(req, res) {
     var pin = req.body.pin;
     if (!pin) return res.status(400).json({ error: 'PIN required' });
     
-    // Check subscribers
+    // Check subscribers (primary and additional PINs)
     var subscribers = readJSON(SUBSCRIBERS_FILE);
     for (var i = 0; i < subscribers.length; i++) {
-        if (subscribers[i].pin === pin) {
+        if (subscribers[i].pin === pin || (subscribers[i].additional_pins && subscribers[i].additional_pins.indexOf(pin) !== -1)) {
             var isActive = subscribers[i].status === 'active' || subscribers[i].status === 'trialing';
             if (!isActive) return res.status(401).json({ error: 'Subscription not active' });
             return res.json({ success: true, username: subscribers[i].email.split('@')[0], pin: pin, userType: 'subscriber' });
@@ -711,7 +801,7 @@ app.post('/api/play/login', function(req, res) {
     return res.status(401).json({ error: 'Invalid PIN' });
 });
 
-// Game session - UPDATED for facility trials
+// Game session - UPDATED for facility trials and additional PINs
 app.post('/api/game/session', function(req, res) {
     var pin = req.body.pin;
     var game = req.body.game;
@@ -723,7 +813,7 @@ app.post('/api/game/session', function(req, res) {
     
     var subscribers = readJSON(SUBSCRIBERS_FILE);
     for (var i = 0; i < subscribers.length; i++) {
-        if (subscribers[i].pin === pin) {
+        if (subscribers[i].pin === pin || (subscribers[i].additional_pins && subscribers[i].additional_pins.indexOf(pin) !== -1)) {
             var sub = subscribers[i];
             if (!sub.games) sub.games = { laughtrail: { sessions: 0, bestRound: 0, laughs: 0 }, laughhunt: { sessions: 0, bestTier: 0, laughs: 0 } };
             if (!sub.games[game]) sub.games[game] = { sessions: 0, bestRound: 0, bestTier: 0, laughs: 0 };
@@ -776,7 +866,7 @@ app.post('/api/game/session', function(req, res) {
 app.get('/api/game/stats/pin/:pin', function(req, res) {
     var subscribers = readJSON(SUBSCRIBERS_FILE);
     for (var i = 0; i < subscribers.length; i++) {
-        if (subscribers[i].pin === req.params.pin) {
+        if (subscribers[i].pin === req.params.pin || (subscribers[i].additional_pins && subscribers[i].additional_pins.indexOf(req.params.pin) !== -1)) {
             var sub = subscribers[i];
             var games = sub.games || { laughtrail: { sessions: 0, bestRound: 0, laughs: 0 }, laughhunt: { sessions: 0, bestTier: 0, laughs: 0 } };
             return res.json({ success: true, username: sub.email.split('@')[0], stats: { games: games, totalLaughs: sub.totalLaughs || 0, streak: sub.streak || 0 } });
