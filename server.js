@@ -103,17 +103,28 @@ function writeJSON(file, data) {
     fs.writeFileSync(file, JSON.stringify(data, null, 2));
 }
 
-// Activity logging
-function logActivity(type, username, facility, details) {
+// Activity logging - UPDATED for LaughCourt
+function logActivity(type, username, facility, details, extra) {
     var activities = readJSON(ACTIVITY_FILE);
-    activities.unshift({
+    var activity = {
         id: 'act_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
         timestamp: new Date().toISOString(),
         type: type,
         username: username || null,
         facility: facility || null,
         details: details || null
-    });
+    };
+    
+    // Add extra fields (game, laughs, etc.)
+    if (extra) {
+        if (extra.game) activity.game = extra.game;
+        if (extra.laughs) activity.laughs = extra.laughs;
+        if (extra.email) activity.email = extra.email;
+        if (extra.tier) activity.tier = extra.tier;
+        if (extra.round) activity.round = extra.round;
+    }
+    
+    activities.unshift(activity);
     if (activities.length > 500) {
         activities = activities.slice(0, 500);
     }
@@ -203,18 +214,35 @@ function handleCheckoutComplete(session) {
             plan_type: planType,
             status: 'trialing',
             created_at: new Date().toISOString(),
-            current_period_end: null
+            current_period_end: null,
+            // LaughCourt fields
+            totalLaughs: 0,
+            streak: 0,
+            lastActive: null,
+            games: {
+                laughtrail: { sessions: 0, bestRound: 0, laughs: 0 },
+                laughhunt: { sessions: 0, bestTier: 0, laughs: 0 }
+            }
         };
         subscribers.push(newSub);
-        logActivity('subscription_created', email, null, 'New ' + planType + ' subscription');
+        logActivity('subscription_created', email, null, 'New ' + planType + ' subscription', { email: email });
         console.log('New subscriber created:', email, 'PIN:', newSub.pin);
     } else {
         subscribers[subIndex].stripe_customer_id = customerId;
         subscribers[subIndex].stripe_subscription_id = subscriptionId;
         subscribers[subIndex].plan_type = planType;
-        subscribers[subIndex].user_limit = userLimit;
         subscribers[subIndex].status = 'trialing';
-        logActivity('subscription_updated', email, null, 'Updated to ' + planType);
+        // Ensure LaughCourt fields exist
+        if (!subscribers[subIndex].games) {
+            subscribers[subIndex].games = {
+                laughtrail: { sessions: 0, bestRound: 0, laughs: 0 },
+                laughhunt: { sessions: 0, bestTier: 0, laughs: 0 }
+            };
+        }
+        if (typeof subscribers[subIndex].totalLaughs === 'undefined') {
+            subscribers[subIndex].totalLaughs = 0;
+        }
+        logActivity('subscription_updated', email, null, 'Updated to ' + planType, { email: email });
         console.log('Subscriber updated:', email);
     }
     
@@ -698,11 +726,19 @@ function adminTokenAuth(req, res, next) {
     res.status(401).json({ success: false, message: 'Invalid or expired token' });
 }
 
-// Get all subscribers (admin)
+// ============ LAUGHCOURT ADMIN SUBSCRIBERS - UPDATED ============
+
+// Get all subscribers (admin) - UPDATED for LaughCourt dashboard format
 app.get('/api/admin/subscribers', adminTokenAuth, function(req, res) {
     try {
         var subscribers = readJSON(SUBSCRIBERS_FILE);
         var result = subscribers.map(function(sub) {
+            // Ensure games structure exists
+            var games = sub.games || {
+                laughtrail: { sessions: 0, bestRound: 0, laughs: 0 },
+                laughhunt: { sessions: 0, bestTier: 0, laughs: 0 }
+            };
+            
             return {
                 email: sub.email,
                 pin: sub.pin,
@@ -711,10 +747,11 @@ app.get('/api/admin/subscribers', adminTokenAuth, function(req, res) {
                 created_at: sub.created_at,
                 current_period_end: sub.current_period_end,
                 family_members_count: sub.family_members ? sub.family_members.length : 0,
-                sessions: sub.sessions || {},
-                best: sub.best || {},
+                // LaughCourt specific fields
+                totalLaughs: sub.totalLaughs || 0,
                 streak: sub.streak || 0,
                 lastActive: sub.lastActive || null,
+                games: games,
                 family_members: sub.family_members || []
             };
         });
@@ -725,7 +762,7 @@ app.get('/api/admin/subscribers', adminTokenAuth, function(req, res) {
     }
 });
 
-// Get single subscriber details (admin)
+// Get single subscriber details (admin) - UPDATED for LaughCourt
 app.get('/api/admin/subscriber/:pin', adminTokenAuth, function(req, res) {
     try {
         var pin = req.params.pin;
@@ -755,19 +792,13 @@ app.get('/api/admin/subscriber/:pin', adminTokenAuth, function(req, res) {
             return res.status(404).json({ success: false, error: 'Subscriber not found' });
         }
         
-        // Calculate total sessions
-        var sessions = subscriber.sessions || {};
-        var totalSessions = Object.values(sessions).reduce(function(sum, val) { return sum + val; }, 0);
+        // Get games data
+        var games = subscriber.games || {
+            laughtrail: { sessions: 0, bestRound: 0, laughs: 0 },
+            laughhunt: { sessions: 0, bestTier: 0, laughs: 0 }
+        };
         
-        // Calculate best scores with shift levels
-        var best = subscriber.best || {};
-        var bestWithShifts = {};
-        for (var game in best) {
-            bestWithShifts[game] = {
-                score: best[game],
-                shift: getShiftFromScore(best[game])
-            };
-        }
+        var totalSessions = (games.laughtrail?.sessions || 0) + (games.laughhunt?.sessions || 0);
         
         res.json({
             success: true,
@@ -778,9 +809,9 @@ app.get('/api/admin/subscriber/:pin', adminTokenAuth, function(req, res) {
                 plan_type: isFamilyMember ? parentSubscriber.plan_type : subscriber.plan_type,
                 status: isFamilyMember ? parentSubscriber.status : subscriber.status,
                 is_family_member: isFamilyMember,
-                sessions: sessions,
+                games: games,
                 totalSessions: totalSessions,
-                best: bestWithShifts,
+                totalLaughs: subscriber.totalLaughs || 0,
                 streak: subscriber.streak || 0,
                 lastActive: subscriber.lastActive || null,
                 created_at: subscriber.added_at || subscriber.created_at
@@ -1316,69 +1347,143 @@ app.post('/api/play/login', function(req, res) {
     return res.status(401).json({ error: 'Invalid PIN' });
 });
 
-// ============ GAME SESSION TRACKING ============
+// ============ LAUGHCOURT GAME SESSION TRACKING - NEW ============
 
 app.post('/api/game/session', function(req, res) {
     var pin = req.body.pin;
     var game = req.body.game;
     var score = req.body.score;
+    var laughs = req.body.laughs || 0;  // NEW: laugh count from game
+    var round = req.body.round;          // NEW: for LAUGH TRAIL
+    var tier = req.body.tier;            // NEW: for LAUGH HUNT
     
     if (!pin) return res.status(400).json({ error: 'PIN required' });
     if (!game) return res.status(400).json({ error: 'Missing game type' });
     
-    var validGames = ['sequence', 'startrail', 'duo', 'gonogo', 'startrotters', 'trailtrotter', 'gotrotters'];
+    // UPDATED: Added laughtrail and laughhunt
+    var validGames = ['sequence', 'startrail', 'duo', 'gonogo', 'startrotters', 'trailtrotter', 'gotrotters', 'laughtrail', 'laughhunt'];
     if (validGames.indexOf(game) === -1) return res.status(400).json({ error: 'Invalid game type' });
     
     var subscribers = readJSON(SUBSCRIBERS_FILE);
     
     for (var i = 0; i < subscribers.length; i++) {
         if (subscribers[i].pin === pin) {
-            // Initialize session tracking
-            if (!subscribers[i].sessions) subscribers[i].sessions = {};
-            if (!subscribers[i].sessions[game]) subscribers[i].sessions[game] = 0;
-            subscribers[i].sessions[game]++;
-            subscribers[i].lastActive = new Date().toISOString();
+            var sub = subscribers[i];
             
-            // Track best scores
-            if (score !== undefined) {
-                if (!subscribers[i].best) subscribers[i].best = {};
-                if (!subscribers[i].best[game] || score > subscribers[i].best[game]) {
-                    subscribers[i].best[game] = score;
+            // Ensure LaughCourt structure exists
+            if (!sub.games) {
+                sub.games = {
+                    laughtrail: { sessions: 0, bestRound: 0, laughs: 0 },
+                    laughhunt: { sessions: 0, bestTier: 0, laughs: 0 }
+                };
+            }
+            if (typeof sub.totalLaughs === 'undefined') sub.totalLaughs = 0;
+            
+            // Handle LaughCourt games
+            if (game === 'laughtrail' || game === 'laughhunt') {
+                // Initialize game if missing
+                if (!sub.games[game]) {
+                    sub.games[game] = { sessions: 0, bestRound: 0, bestTier: 0, laughs: 0 };
+                }
+                
+                // Increment session
+                sub.games[game].sessions++;
+                
+                // Add laughs
+                sub.games[game].laughs += laughs;
+                sub.totalLaughs += laughs;
+                
+                // Track best round/tier
+                if (game === 'laughtrail' && round) {
+                    if (round > (sub.games[game].bestRound || 0)) {
+                        sub.games[game].bestRound = round;
+                    }
+                }
+                if (game === 'laughhunt' && tier) {
+                    if (tier > (sub.games[game].bestTier || 0)) {
+                        sub.games[game].bestTier = tier;
+                    }
+                }
+            } else {
+                // Legacy GoTrotters games - keep existing behavior
+                if (!sub.sessions) sub.sessions = {};
+                if (!sub.sessions[game]) sub.sessions[game] = 0;
+                sub.sessions[game]++;
+                
+                if (score !== undefined) {
+                    if (!sub.best) sub.best = {};
+                    if (!sub.best[game] || score > sub.best[game]) {
+                        sub.best[game] = score;
+                    }
                 }
             }
             
+            // Update last active
+            sub.lastActive = new Date().toISOString();
+            
             // Track streak
             var today = new Date().toISOString().split('T')[0];
-            if (!subscribers[i].lastStreakDate) {
-                subscribers[i].streak = 1;
-                subscribers[i].lastStreakDate = today;
-            } else if (subscribers[i].lastStreakDate !== today) {
-                var lastDate = new Date(subscribers[i].lastStreakDate);
+            if (!sub.lastStreakDate) {
+                sub.streak = 1;
+                sub.lastStreakDate = today;
+            } else if (sub.lastStreakDate !== today) {
+                var lastDate = new Date(sub.lastStreakDate);
                 var todayDate = new Date(today);
                 var diffDays = Math.floor((todayDate - lastDate) / (1000 * 60 * 60 * 24));
                 if (diffDays === 1) {
-                    subscribers[i].streak = (subscribers[i].streak || 0) + 1;
+                    sub.streak = (sub.streak || 0) + 1;
                 } else if (diffDays > 1) {
-                    subscribers[i].streak = 1;
+                    sub.streak = 1;
                 }
-                subscribers[i].lastStreakDate = today;
+                sub.lastStreakDate = today;
             }
             
             writeJSON(SUBSCRIBERS_FILE, subscribers);
             
-            var gameNames = { sequence: 'Sequence Memory', startrail: 'StarTrail', duo: 'Pattern Duo', gonogo: 'Go/No-Go' };
+            // Log activity with game-specific info
+            var gameNames = { 
+                sequence: 'Sequence Memory', 
+                startrail: 'StarTrail', 
+                duo: 'Pattern Duo', 
+                gonogo: 'Go/No-Go',
+                laughtrail: 'LAUGH TRAIL',
+                laughhunt: 'LAUGH HUNT'
+            };
             var gameName = gameNames[game] || game;
-            var scoreText = score !== undefined ? ' | Score: ' + score : '';
-            var shiftLevel = score !== undefined ? getShiftFromScore(score) : null;
-            var shiftText = shiftLevel ? ' | Shift ' + shiftLevel : '';
-            logActivity('game_session', subscribers[i].email, null, gameName + scoreText + shiftText);
+            var details = gameName;
+            if (round) details += ' | Round ' + round;
+            if (tier) details += ' | Tier ' + tier;
+            if (laughs) details += ' | 😂 +' + laughs;
             
-            return res.json({ 
-                success: true, 
-                sessions: subscribers[i].sessions[game],
-                streak: subscribers[i].streak || 1,
-                personalBest: subscribers[i].best ? subscribers[i].best[game] : score
+            logActivity('game_session', sub.email, null, details, {
+                game: game,
+                laughs: laughs,
+                round: round,
+                tier: tier,
+                email: sub.email
             });
+            
+            // Build response based on game type
+            var response = { 
+                success: true, 
+                streak: sub.streak || 1
+            };
+            
+            if (game === 'laughtrail' || game === 'laughhunt') {
+                response.sessions = sub.games[game].sessions;
+                response.totalLaughs = sub.totalLaughs;
+                response.gameLaughs = sub.games[game].laughs;
+                if (game === 'laughtrail') {
+                    response.bestRound = sub.games[game].bestRound;
+                } else {
+                    response.bestTier = sub.games[game].bestTier;
+                }
+            } else {
+                response.sessions = sub.sessions[game];
+                response.personalBest = sub.best ? sub.best[game] : score;
+            }
+            
+            return res.json(response);
         }
     }
     
@@ -1387,10 +1492,34 @@ app.post('/api/game/session', function(req, res) {
 
 app.get('/api/game/stats/pin/:pin', function(req, res) {
     var pin = req.params.pin;
+    var subscribers = readJSON(SUBSCRIBERS_FILE);
+    
+    for (var i = 0; i < subscribers.length; i++) {
+        if (subscribers[i].pin === pin) {
+            var sub = subscribers[i];
+            var games = sub.games || {
+                laughtrail: { sessions: 0, bestRound: 0, laughs: 0 },
+                laughhunt: { sessions: 0, bestTier: 0, laughs: 0 }
+            };
+            
+            return res.json({
+                success: true, 
+                username: sub.email ? sub.email.split('@')[0] : 'Player',
+                stats: {
+                    games: games,
+                    totalLaughs: sub.totalLaughs || 0,
+                    totalSessions: (games.laughtrail?.sessions || 0) + (games.laughhunt?.sessions || 0),
+                    streak: sub.streak || 0
+                }
+            });
+        }
+    }
+    
+    // Fallback to legacy users
     var users = readJSON(USERS_FILE);
     var user = null;
-    for (var i = 0; i < users.length; i++) {
-        if (users[i].pin === pin) { user = users[i]; break; }
+    for (var j = 0; j < users.length; j++) {
+        if (users[j].pin === pin) { user = users[j]; break; }
     }
     if (!user) return res.status(404).json({ error: 'User not found' });
     res.json({
@@ -1464,7 +1593,7 @@ app.post('/api/trial/register', function(req, res) {
 // ============ START SERVER ============
 
 app.listen(PORT, function() {
-    console.log('GoTrotters running on port ' + PORT);
+    console.log('LaughCourt running on port ' + PORT);
     console.log('Admin Dashboard: /admin-dashboard');
     console.log('Legacy Admin: /admin');
     console.log('Stripe configured:', !!stripe);
