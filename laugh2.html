@@ -42,17 +42,24 @@ body.en .lang-es{display:none!important}
 .start-btn{padding:18px 50px;font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:4px;background:linear-gradient(135deg,var(--purple),var(--pink));color:var(--text);border:none;border-radius:50px;cursor:pointer;box-shadow:0 8px 30px rgba(155,89,182,0.5)}
 .learn-screen{text-align:center;width:100%}
 .phase-label{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:3px;color:var(--gold);margin-bottom:15px}
-.sound-card{background:var(--card);border:3px solid var(--purple);border-radius:25px;padding:30px;margin:20px auto;max-width:300px}
+.sound-card{background:var(--card);border:3px solid var(--purple);border-radius:25px;padding:30px;margin:20px auto;max-width:300px;cursor:pointer;transition:transform 0.2s, box-shadow 0.2s;position:relative}
+.sound-card:hover{transform:scale(1.02);box-shadow:0 0 30px rgba(155,89,182,0.4)}
+.sound-card:active{transform:scale(0.98)}
+.sound-card-hint{font-size:0.75rem;color:var(--muted);margin-top:10px;opacity:0.7}
 .sound-text{font-family:'Bebas Neue',sans-serif;font-size:3rem;color:var(--gold);margin-bottom:20px;animation:pulse 0.5s ease}
 @keyframes pulse{0%{transform:scale(0.8)}50%{transform:scale(1.1)}100%{transform:scale(1)}}
 .sound-emoji{font-size:5rem;margin-bottom:10px}
 .sound-label{font-size:1.1rem;color:var(--muted)}
+.speaker-icon{font-size:2rem;position:absolute;top:10px;right:15px;animation:speakerPulse 1s infinite}
+@keyframes speakerPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(1.1)}}
 .timer-bar{width:80%;max-width:300px;height:8px;background:rgba(255,255,255,0.1);border-radius:10px;margin:25px auto;overflow:hidden}
 .timer-fill{height:100%;background:linear-gradient(90deg,var(--purple),var(--pink));border-radius:10px;transition:width 0.1s linear}
 .counter{color:var(--muted);font-size:0.9rem;margin-top:10px}
 .recall-screen{text-align:center;width:100%}
-.recall-sound{font-family:'Bebas Neue',sans-serif;font-size:3.5rem;color:var(--gold);margin-bottom:10px;animation:shake 0.3s ease infinite}
+.recall-sound{font-family:'Bebas Neue',sans-serif;font-size:3.5rem;color:var(--gold);margin-bottom:10px;animation:shake 0.3s ease infinite;cursor:pointer}
+.recall-sound:hover{text-shadow:0 0 20px var(--gold)}
 @keyframes shake{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
+.recall-hint{font-size:0.75rem;color:var(--muted);margin-bottom:10px}
 .recall-question{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:2px;margin-bottom:15px}
 .recall-timer{width:100%;max-width:350px;height:10px;background:rgba(255,255,255,0.1);border-radius:10px;margin:15px auto;overflow:hidden}
 .recall-timer-fill{height:100%;background:var(--success);border-radius:10px;transition:width 0.05s linear}
@@ -121,8 +128,8 @@ body.en .lang-es{display:none!important}
 <span class="lang-es">VELOCIDAD Y MEMORIA</span>
 </div>
 <div class="intro-desc">
-<span class="lang-en">Learn <strong>silly sounds</strong> and what makes them!<br><br>Then match them FAST! ⚡<br><br>Speed = Bonus Points! 🏆</span>
-<span class="lang-es">Aprende <strong>sonidos tontos</strong> y qué los hace!<br><br>¡Luego empárejalos RÁPIDO! ⚡<br><br>¡Velocidad = Puntos Extra! 🏆</span>
+<span class="lang-en">Listen to <strong>silly sounds</strong> and remember what makes them!<br><br>Then match them FAST! ⚡<br><br>Speed = Bonus Points! 🏆</span>
+<span class="lang-es">Escucha <strong>sonidos tontos</strong> y recuerda qué los hace!<br><br>¡Luego empárejalos RÁPIDO! ⚡<br><br>¡Velocidad = Puntos Extra! 🏆</span>
 </div>
 <button class="start-btn" id="startBtn">
 <span class="lang-en">LET'S HEAR IT! 🔊</span>
@@ -136,20 +143,29 @@ body.en .lang-es{display:none!important}
 
 <div class="learn-screen hidden" id="learnScreen">
 <div class="phase-label">
-<span class="lang-en">🔊 LEARN THIS SOUND!</span>
-<span class="lang-es">🔊 ¡APRENDE ESTE SONIDO!</span>
+<span class="lang-en">🔊 LISTEN & LEARN!</span>
+<span class="lang-es">🔊 ¡ESCUCHA Y APRENDE!</span>
 </div>
-<div class="sound-card">
+<div class="sound-card" id="soundCard">
+<span class="speaker-icon">🔊</span>
 <div class="sound-text" id="learnSound">BOING!</div>
 <div class="sound-emoji" id="learnEmoji">🦘</div>
 <div class="sound-label" id="learnLabel">Kangaroo</div>
+<div class="sound-card-hint">
+<span class="lang-en">👆 Tap to hear again</span>
+<span class="lang-es">👆 Toca para escuchar</span>
+</div>
 </div>
 <div class="timer-bar"><div class="timer-fill" id="timerFill"></div></div>
 <div class="counter" id="pairCounter">Sound 1 of 3</div>
 </div>
 
 <div class="recall-screen hidden" id="recallScreen">
-<div class="recall-sound" id="recallSound">BOING!</div>
+<div class="recall-sound" id="recallSound">🔊 BOING!</div>
+<div class="recall-hint">
+<span class="lang-en">👆 Tap sound to hear again</span>
+<span class="lang-es">👆 Toca para escuchar</span>
+</div>
 <div class="recall-question">
 <span class="lang-en">🤔 WHAT MAKES THIS SOUND?</span>
 <span class="lang-es">🤔 ¿QUÉ HACE ESTE SONIDO?</span>
@@ -211,6 +227,673 @@ document.querySelectorAll('.lang-btn').forEach(function(b){
         setLang(this.dataset.lang);
     });
 });
+
+// ============ AUDIO CONTEXT & SOUND SYNTHESIS ============
+var audioCtx = null;
+
+function initAudio() {
+    if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+    }
+}
+
+// Create noise buffer for various effects
+function createNoiseBuffer(duration) {
+    var bufferSize = audioCtx.sampleRate * duration;
+    var buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+    var data = buffer.getChannelData(0);
+    for (var i = 0; i < bufferSize; i++) {
+        data[i] = Math.random() * 2 - 1;
+    }
+    return buffer;
+}
+
+// Sound synthesis functions for each sound type
+var soundFunctions = {
+    'BOING!': function() {
+        // Bouncy spring sound
+        var osc = audioCtx.createOscillator();
+        var gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.1);
+        osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.3);
+        gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.4);
+    },
+    
+    'OINK!': function() {
+        // Pig oink - nasal oscillation
+        var osc = audioCtx.createOscillator();
+        var osc2 = audioCtx.createOscillator();
+        var gain = audioCtx.createGain();
+        osc.connect(gain);
+        osc2.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.type = 'sawtooth';
+        osc2.type = 'square';
+        osc.frequency.setValueAtTime(200, audioCtx.currentTime);
+        osc.frequency.linearRampToValueAtTime(350, audioCtx.currentTime + 0.15);
+        osc.frequency.linearRampToValueAtTime(150, audioCtx.currentTime + 0.3);
+        osc2.frequency.setValueAtTime(205, audioCtx.currentTime);
+        osc2.frequency.linearRampToValueAtTime(360, audioCtx.currentTime + 0.15);
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.35);
+        osc.start();
+        osc2.start();
+        osc.stop(audioCtx.currentTime + 0.35);
+        osc2.stop(audioCtx.currentTime + 0.35);
+    },
+    
+    'QUACK!': function() {
+        // Duck quack
+        var osc = audioCtx.createOscillator();
+        var gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+        osc.frequency.linearRampToValueAtTime(500, audioCtx.currentTime + 0.05);
+        osc.frequency.linearRampToValueAtTime(250, audioCtx.currentTime + 0.2);
+        gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.05);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.25);
+    },
+    
+    'MOO!': function() {
+        // Cow moo - low droning
+        var osc = audioCtx.createOscillator();
+        var osc2 = audioCtx.createOscillator();
+        var gain = audioCtx.createGain();
+        osc.connect(gain);
+        osc2.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.type = 'sawtooth';
+        osc2.type = 'sine';
+        osc.frequency.setValueAtTime(120, audioCtx.currentTime);
+        osc.frequency.linearRampToValueAtTime(150, audioCtx.currentTime + 0.3);
+        osc.frequency.linearRampToValueAtTime(100, audioCtx.currentTime + 0.6);
+        osc2.frequency.setValueAtTime(125, audioCtx.currentTime);
+        osc2.frequency.linearRampToValueAtTime(155, audioCtx.currentTime + 0.3);
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.4, audioCtx.currentTime + 0.2);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.7);
+        osc.start();
+        osc2.start();
+        osc.stop(audioCtx.currentTime + 0.7);
+        osc2.stop(audioCtx.currentTime + 0.7);
+    },
+    
+    'RIBBIT!': function() {
+        // Frog ribbit
+        var osc = audioCtx.createOscillator();
+        var gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.type = 'square';
+        // Two quick croaks
+        osc.frequency.setValueAtTime(200, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(80, audioCtx.currentTime + 0.1);
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.15);
+        // Second croak
+        setTimeout(function() {
+            var osc2 = audioCtx.createOscillator();
+            var gain2 = audioCtx.createGain();
+            osc2.connect(gain2);
+            gain2.connect(audioCtx.destination);
+            osc2.type = 'square';
+            osc2.frequency.setValueAtTime(180, audioCtx.currentTime);
+            osc2.frequency.exponentialRampToValueAtTime(70, audioCtx.currentTime + 0.15);
+            gain2.gain.setValueAtTime(0.35, audioCtx.currentTime);
+            gain2.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+            osc2.start();
+            osc2.stop(audioCtx.currentTime + 0.2);
+        }, 180);
+    },
+    
+    'ROAR!': function() {
+        // Lion roar - low rumble
+        var noise = audioCtx.createBufferSource();
+        noise.buffer = createNoiseBuffer(0.8);
+        var filter = audioCtx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(300, audioCtx.currentTime);
+        filter.frequency.linearRampToValueAtTime(150, audioCtx.currentTime + 0.5);
+        var gain = audioCtx.createGain();
+        noise.connect(filter);
+        filter.connect(gain);
+        gain.connect(audioCtx.destination);
+        gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.8, audioCtx.currentTime + 0.2);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.8);
+        noise.start();
+        noise.stop(audioCtx.currentTime + 0.8);
+    },
+    
+    'BUZZ!': function() {
+        // Bee buzzing
+        var osc = audioCtx.createOscillator();
+        var osc2 = audioCtx.createOscillator();
+        var gain = audioCtx.createGain();
+        osc.connect(gain);
+        osc2.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.type = 'sawtooth';
+        osc2.type = 'sawtooth';
+        osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+        osc2.frequency.setValueAtTime(152, audioCtx.currentTime);
+        // Wobble
+        for (var i = 0; i < 8; i++) {
+            osc.frequency.setValueAtTime(150 + (i % 2) * 20, audioCtx.currentTime + i * 0.05);
+        }
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+        osc.start();
+        osc2.start();
+        osc.stop(audioCtx.currentTime + 0.4);
+        osc2.stop(audioCtx.currentTime + 0.4);
+    },
+    
+    'SPLAT!': function() {
+        // Splat - noise burst
+        var noise = audioCtx.createBufferSource();
+        noise.buffer = createNoiseBuffer(0.3);
+        var filter = audioCtx.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(1000, audioCtx.currentTime);
+        filter.frequency.exponentialRampToValueAtTime(200, audioCtx.currentTime + 0.2);
+        filter.Q.value = 2;
+        var gain = audioCtx.createGain();
+        noise.connect(filter);
+        filter.connect(gain);
+        gain.connect(audioCtx.destination);
+        gain.gain.setValueAtTime(0.6, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+        noise.start();
+        noise.stop(audioCtx.currentTime + 0.3);
+    },
+    
+    'HONK!': function() {
+        // Clown honk - two tones
+        var osc = audioCtx.createOscillator();
+        var gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+        osc.frequency.setValueAtTime(300, audioCtx.currentTime + 0.15);
+        gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.3);
+    },
+    
+    'BOOM!': function() {
+        // Explosion
+        var osc = audioCtx.createOscillator();
+        var noise = audioCtx.createBufferSource();
+        noise.buffer = createNoiseBuffer(0.5);
+        var gain = audioCtx.createGain();
+        var gain2 = audioCtx.createGain();
+        osc.connect(gain);
+        noise.connect(gain2);
+        gain.connect(audioCtx.destination);
+        gain2.connect(audioCtx.destination);
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(30, audioCtx.currentTime + 0.5);
+        gain.gain.setValueAtTime(0.6, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+        gain2.gain.setValueAtTime(0.4, audioCtx.currentTime);
+        gain2.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+        osc.start();
+        noise.start();
+        osc.stop(audioCtx.currentTime + 0.5);
+        noise.stop(audioCtx.currentTime + 0.5);
+    },
+    
+    'DING!': function() {
+        // Bell ding
+        var osc = audioCtx.createOscillator();
+        var osc2 = audioCtx.createOscillator();
+        var gain = audioCtx.createGain();
+        osc.connect(gain);
+        osc2.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.type = 'sine';
+        osc2.type = 'sine';
+        osc.frequency.value = 800;
+        osc2.frequency.value = 1200;
+        gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.8);
+        osc.start();
+        osc2.start();
+        osc.stop(audioCtx.currentTime + 0.8);
+        osc2.stop(audioCtx.currentTime + 0.8);
+    },
+    
+    'WHOOSH!': function() {
+        // Rocket whoosh
+        var noise = audioCtx.createBufferSource();
+        noise.buffer = createNoiseBuffer(0.6);
+        var filter = audioCtx.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(200, audioCtx.currentTime);
+        filter.frequency.exponentialRampToValueAtTime(2000, audioCtx.currentTime + 0.3);
+        filter.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.6);
+        filter.Q.value = 5;
+        var gain = audioCtx.createGain();
+        noise.connect(filter);
+        filter.connect(gain);
+        gain.connect(audioCtx.destination);
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.5, audioCtx.currentTime + 0.3);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.6);
+        noise.start();
+        noise.stop(audioCtx.currentTime + 0.6);
+    },
+    
+    'POP!': function() {
+        // Balloon pop
+        var osc = audioCtx.createOscillator();
+        var noise = audioCtx.createBufferSource();
+        noise.buffer = createNoiseBuffer(0.1);
+        var gain = audioCtx.createGain();
+        var gain2 = audioCtx.createGain();
+        osc.connect(gain);
+        noise.connect(gain2);
+        gain.connect(audioCtx.destination);
+        gain2.connect(audioCtx.destination);
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.1);
+        gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+        gain2.gain.setValueAtTime(0.6, audioCtx.currentTime);
+        gain2.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+        osc.start();
+        noise.start();
+        osc.stop(audioCtx.currentTime + 0.1);
+        noise.stop(audioCtx.currentTime + 0.1);
+    },
+    
+    'CRUNCH!': function() {
+        // Crunchy sound
+        var noise = audioCtx.createBufferSource();
+        noise.buffer = createNoiseBuffer(0.25);
+        var filter = audioCtx.createBiquadFilter();
+        filter.type = 'highpass';
+        filter.frequency.value = 1000;
+        var gain = audioCtx.createGain();
+        noise.connect(filter);
+        filter.connect(gain);
+        gain.connect(audioCtx.destination);
+        // Create crunchy bursts
+        gain.gain.setValueAtTime(0, audioCtx.currentTime);
+        for (var i = 0; i < 5; i++) {
+            gain.gain.setValueAtTime(0.5, audioCtx.currentTime + i * 0.05);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime + i * 0.05 + 0.02);
+        }
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
+        noise.start();
+        noise.stop(audioCtx.currentTime + 0.25);
+    },
+    
+    'SIZZLE!': function() {
+        // Bacon sizzle
+        var noise = audioCtx.createBufferSource();
+        noise.buffer = createNoiseBuffer(0.5);
+        var filter = audioCtx.createBiquadFilter();
+        filter.type = 'highpass';
+        filter.frequency.value = 3000;
+        var gain = audioCtx.createGain();
+        noise.connect(filter);
+        filter.connect(gain);
+        gain.connect(audioCtx.destination);
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        // Sizzle fluctuation
+        for (var i = 0; i < 10; i++) {
+            gain.gain.setValueAtTime(0.2 + Math.random() * 0.2, audioCtx.currentTime + i * 0.05);
+        }
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+        noise.start();
+        noise.stop(audioCtx.currentTime + 0.5);
+    },
+    
+    'ACHOO!': function() {
+        // Sneeze
+        var noise = audioCtx.createBufferSource();
+        noise.buffer = createNoiseBuffer(0.4);
+        var filter = audioCtx.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(500, audioCtx.currentTime);
+        filter.frequency.exponentialRampToValueAtTime(2000, audioCtx.currentTime + 0.1);
+        filter.frequency.exponentialRampToValueAtTime(300, audioCtx.currentTime + 0.4);
+        var gain = audioCtx.createGain();
+        noise.connect(filter);
+        filter.connect(gain);
+        gain.connect(audioCtx.destination);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.7, audioCtx.currentTime + 0.1);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+        noise.start();
+        noise.stop(audioCtx.currentTime + 0.4);
+    },
+    
+    'SLURP!': function() {
+        // Slurping noodles
+        var osc = audioCtx.createOscillator();
+        var gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.type = 'sawtooth';
+        // Slurp up and down
+        osc.frequency.setValueAtTime(200, audioCtx.currentTime);
+        osc.frequency.linearRampToValueAtTime(800, audioCtx.currentTime + 0.2);
+        osc.frequency.linearRampToValueAtTime(150, audioCtx.currentTime + 0.4);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.4);
+    },
+    
+    'CHOMP!': function() {
+        // Chomping burger
+        var noise = audioCtx.createBufferSource();
+        noise.buffer = createNoiseBuffer(0.2);
+        var filter = audioCtx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(2000, audioCtx.currentTime);
+        filter.frequency.exponentialRampToValueAtTime(200, audioCtx.currentTime + 0.15);
+        var gain = audioCtx.createGain();
+        noise.connect(filter);
+        filter.connect(gain);
+        gain.connect(audioCtx.destination);
+        gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+        noise.start();
+        noise.stop(audioCtx.currentTime + 0.2);
+    },
+    
+    'BONK!': function() {
+        // Hammer bonk
+        var osc = audioCtx.createOscillator();
+        var gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.15);
+        gain.gain.setValueAtTime(0.6, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.2);
+    },
+    
+    'TOOT!': function() {
+        // Trumpet toot
+        var osc = audioCtx.createOscillator();
+        var osc2 = audioCtx.createOscillator();
+        var gain = audioCtx.createGain();
+        osc.connect(gain);
+        osc2.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.type = 'sawtooth';
+        osc2.type = 'square';
+        osc.frequency.setValueAtTime(350, audioCtx.currentTime);
+        osc.frequency.setValueAtTime(440, audioCtx.currentTime + 0.1);
+        osc2.frequency.setValueAtTime(352, audioCtx.currentTime);
+        osc2.frequency.setValueAtTime(442, audioCtx.currentTime + 0.1);
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+        osc.start();
+        osc2.start();
+        osc.stop(audioCtx.currentTime + 0.4);
+        osc2.stop(audioCtx.currentTime + 0.4);
+    },
+    
+    'VROOM!': function() {
+        // Race car
+        var osc = audioCtx.createOscillator();
+        var osc2 = audioCtx.createOscillator();
+        var gain = audioCtx.createGain();
+        osc.connect(gain);
+        osc2.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.type = 'sawtooth';
+        osc2.type = 'sawtooth';
+        osc.frequency.setValueAtTime(80, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(200, audioCtx.currentTime + 0.3);
+        osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.5);
+        osc2.frequency.setValueAtTime(82, audioCtx.currentTime);
+        osc2.frequency.exponentialRampToValueAtTime(202, audioCtx.currentTime + 0.3);
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+        osc.start();
+        osc2.start();
+        osc.stop(audioCtx.currentTime + 0.5);
+        osc2.stop(audioCtx.currentTime + 0.5);
+    },
+    
+    'BEEP!': function() {
+        // Robot beep
+        var osc = audioCtx.createOscillator();
+        var gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+        osc.frequency.setValueAtTime(660, audioCtx.currentTime + 0.1);
+        osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.2);
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.3);
+    },
+    
+    'KABOOM!': function() {
+        // Fireworks
+        soundFunctions['BOOM!']();
+        setTimeout(function() {
+            var noise = audioCtx.createBufferSource();
+            noise.buffer = createNoiseBuffer(0.3);
+            var filter = audioCtx.createBiquadFilter();
+            filter.type = 'highpass';
+            filter.frequency.value = 2000;
+            var gain = audioCtx.createGain();
+            noise.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioCtx.destination);
+            gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+            noise.start();
+            noise.stop(audioCtx.currentTime + 0.3);
+        }, 200);
+    },
+    
+    'SPLASH!': function() {
+        // Water splash
+        var noise = audioCtx.createBufferSource();
+        noise.buffer = createNoiseBuffer(0.5);
+        var filter = audioCtx.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(1500, audioCtx.currentTime);
+        filter.frequency.exponentialRampToValueAtTime(300, audioCtx.currentTime + 0.5);
+        filter.Q.value = 3;
+        var gain = audioCtx.createGain();
+        noise.connect(filter);
+        filter.connect(gain);
+        gain.connect(audioCtx.destination);
+        gain.gain.setValueAtTime(0.6, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+        noise.start();
+        noise.stop(audioCtx.currentTime + 0.5);
+    },
+    
+    'SNAP!': function() {
+        // Crab snap
+        var osc = audioCtx.createOscillator();
+        var gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(200, audioCtx.currentTime + 0.05);
+        gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.08);
+    },
+    
+    'ZZZZZ!': function() {
+        // Snoring
+        var osc = audioCtx.createOscillator();
+        var gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.type = 'sawtooth';
+        // Snore in and out
+        osc.frequency.setValueAtTime(80, audioCtx.currentTime);
+        osc.frequency.linearRampToValueAtTime(150, audioCtx.currentTime + 0.3);
+        osc.frequency.linearRampToValueAtTime(60, audioCtx.currentTime + 0.6);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.3);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.6);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.6);
+    },
+    
+    'POOF!': function() {
+        // Magic poof
+        var noise = audioCtx.createBufferSource();
+        noise.buffer = createNoiseBuffer(0.3);
+        var filter = audioCtx.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(500, audioCtx.currentTime);
+        filter.frequency.exponentialRampToValueAtTime(2000, audioCtx.currentTime + 0.1);
+        filter.frequency.exponentialRampToValueAtTime(200, audioCtx.currentTime + 0.3);
+        var gain = audioCtx.createGain();
+        noise.connect(filter);
+        filter.connect(gain);
+        gain.connect(audioCtx.destination);
+        gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+        noise.start();
+        noise.stop(audioCtx.currentTime + 0.3);
+        // Add sparkle
+        var osc = audioCtx.createOscillator();
+        var g2 = audioCtx.createGain();
+        osc.connect(g2);
+        g2.connect(audioCtx.destination);
+        osc.type = 'sine';
+        osc.frequency.value = 2000;
+        g2.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        g2.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.2);
+    },
+    
+    'CLICK!': function() {
+        // Camera click
+        var osc = audioCtx.createOscillator();
+        var gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.type = 'square';
+        osc.frequency.value = 1000;
+        gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.05);
+        // Second click
+        setTimeout(function() {
+            var osc2 = audioCtx.createOscillator();
+            var g2 = audioCtx.createGain();
+            osc2.connect(g2);
+            g2.connect(audioCtx.destination);
+            osc2.type = 'square';
+            osc2.frequency.value = 800;
+            g2.gain.setValueAtTime(0.4, audioCtx.currentTime);
+            g2.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.03);
+            osc2.start();
+            osc2.stop(audioCtx.currentTime + 0.03);
+        }, 80);
+    },
+    
+    'BLING!': function() {
+        // Diamond sparkle
+        var osc = audioCtx.createOscillator();
+        var osc2 = audioCtx.createOscillator();
+        var gain = audioCtx.createGain();
+        osc.connect(gain);
+        osc2.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.type = 'sine';
+        osc2.type = 'sine';
+        osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
+        osc.frequency.setValueAtTime(1600, audioCtx.currentTime + 0.1);
+        osc.frequency.setValueAtTime(2000, audioCtx.currentTime + 0.2);
+        osc2.frequency.setValueAtTime(1800, audioCtx.currentTime);
+        osc2.frequency.setValueAtTime(2200, audioCtx.currentTime + 0.1);
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+        osc.start();
+        osc2.start();
+        osc.stop(audioCtx.currentTime + 0.5);
+        osc2.stop(audioCtx.currentTime + 0.5);
+    },
+    
+    'CRASH!': function() {
+        // Vase crash
+        var noise = audioCtx.createBufferSource();
+        noise.buffer = createNoiseBuffer(0.4);
+        var filter = audioCtx.createBiquadFilter();
+        filter.type = 'highpass';
+        filter.frequency.value = 2000;
+        var gain = audioCtx.createGain();
+        noise.connect(filter);
+        filter.connect(gain);
+        gain.connect(audioCtx.destination);
+        gain.gain.setValueAtTime(0.7, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+        noise.start();
+        noise.stop(audioCtx.currentTime + 0.4);
+        // Add tinkling
+        for (var i = 0; i < 5; i++) {
+            setTimeout(function() {
+                var osc = audioCtx.createOscillator();
+                var g = audioCtx.createGain();
+                osc.connect(g);
+                g.connect(audioCtx.destination);
+                osc.type = 'sine';
+                osc.frequency.value = 2000 + Math.random() * 2000;
+                g.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                g.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.1);
+            }, i * 50);
+        }
+    }
+};
+
+function playSound(soundName) {
+    initAudio();
+    if (soundFunctions[soundName]) {
+        soundFunctions[soundName]();
+    }
+}
 
 // ============ LAUGH TRACKING SYSTEM ============
 var circuitLaughs = 0;
@@ -345,18 +1028,20 @@ var coachMsgs = {
 var tier=1,score=0,speedBonuses=0,correctCount=0,round=0;
 var soundsToLearn=[],currentIdx=0,recallIdx=0;
 var learnTimer=null,recallTimer=null,recallStart=0;
+var currentLearnPair = null;
+var currentRecallPair = null;
 
 var tierSettings=[
-    {sounds:2,learnTime:3000,recallTime:4000},
-    {sounds:2,learnTime:2800,recallTime:3500},
+    {sounds:2,learnTime:3500,recallTime:4500},
+    {sounds:2,learnTime:3200,recallTime:4000},
+    {sounds:3,learnTime:3000,recallTime:3700},
+    {sounds:3,learnTime:2800,recallTime:3500},
     {sounds:3,learnTime:2600,recallTime:3200},
-    {sounds:3,learnTime:2400,recallTime:3000},
-    {sounds:3,learnTime:2200,recallTime:2800},
-    {sounds:4,learnTime:2200,recallTime:2600},
-    {sounds:4,learnTime:2000,recallTime:2400},
-    {sounds:4,learnTime:2000,recallTime:2200},
-    {sounds:5,learnTime:1800,recallTime:2000},
-    {sounds:5,learnTime:1600,recallTime:1800}
+    {sounds:4,learnTime:2600,recallTime:3000},
+    {sounds:4,learnTime:2400,recallTime:2800},
+    {sounds:4,learnTime:2400,recallTime:2600},
+    {sounds:5,learnTime:2200,recallTime:2400},
+    {sounds:5,learnTime:2000,recallTime:2200}
 ];
 
 var introScreen=document.getElementById('introScreen');
@@ -367,6 +1052,8 @@ var scoreDisplay=document.getElementById('scoreDisplay');
 var laughCounter=document.getElementById('laughCounter');
 var coachBubble=document.getElementById('coachBubble');
 var coachText=document.getElementById('coachText');
+var soundCard=document.getElementById('soundCard');
+var recallSoundEl=document.getElementById('recallSound');
 
 function shuffle(a){
     var arr=a.slice();
@@ -422,7 +1109,22 @@ function confetti(){
     }
 }
 
+// Sound card tap to replay
+soundCard.addEventListener('click', function() {
+    if (currentLearnPair) {
+        playSound(currentLearnPair.sound);
+    }
+});
+
+// Recall sound tap to replay
+recallSoundEl.addEventListener('click', function() {
+    if (currentRecallPair) {
+        playSound(currentRecallPair.sound);
+    }
+});
+
 function startGame(){
+    initAudio();
     tier=1;score=0;speedBonuses=0;correctCount=0;round=0;
     circuitLaughs=0;
     updateScore();updateTier();updateLaughDisplay();
@@ -449,6 +1151,7 @@ function showNextLearn(){
     }
     var s=tierSettings[tier-1];
     var pair=soundsToLearn[currentIdx];
+    currentLearnPair = pair;
     
     // +1 laugh for seeing silly sound
     addLaughs(1);
@@ -457,6 +1160,11 @@ function showNextLearn(){
     document.getElementById('learnEmoji').textContent=pair.emoji;
     document.getElementById('learnLabel').textContent=lang==='es'?pair.es:pair.en;
     document.getElementById('pairCounter').textContent=(lang==='es'?'Sonido ':'Sound ')+(currentIdx+1)+' / '+soundsToLearn.length;
+    
+    // Play the sound!
+    setTimeout(function() {
+        playSound(pair.sound);
+    }, 300);
     
     var msg=coachMsgs.learn[Math.floor(Math.random()*coachMsgs.learn.length)];
     showCoach(lang==='es'?msg.es:msg.en,s.learnTime-500);
@@ -492,7 +1200,13 @@ function showNextRecall(){
     showScreen(recallScreen);
     var s=tierSettings[tier-1];
     var correct=soundsToLearn[recallIdx];
-    document.getElementById('recallSound').textContent=correct.sound;
+    currentRecallPair = correct;
+    document.getElementById('recallSound').textContent='🔊 ' + correct.sound;
+    
+    // Play the sound!
+    setTimeout(function() {
+        playSound(correct.sound);
+    }, 200);
     
     var grid=document.getElementById('answersGrid');
     grid.innerHTML='';
@@ -615,7 +1329,10 @@ function endGame(){
     showCoach(lang==='es'?m.es:m.en,3000);
 }
 
-document.getElementById('startBtn').onclick=startGame;
+document.getElementById('startBtn').onclick=function() {
+    initAudio();
+    startGame();
+};
 document.getElementById('retryBtn').onclick=startGame;
 document.getElementById('homeBtn').onclick=function(){
     window.location.href='laugh-hub.html';
