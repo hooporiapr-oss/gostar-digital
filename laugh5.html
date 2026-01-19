@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>LAUGH 5: Goofy Faces | Laughletico™</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--orange:#FF6B00;--teal:#00D9A5;--gold:#FFD700;--purple:#9B59B6;--pink:#FF69B4;--dark:#0a0a0f;--card:#111118;--text:#FFFFFF;--muted:#8892a0;--success:#00D9A5;--danger:#FF4757;--laugh5:#E91E63}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Outfit',sans-serif;background:var(--dark);color:var(--text)}
+body.es .lang-en{display:none!important}
+body.en .lang-es{display:none!important}
+.game-header{padding:15px 20px;background:linear-gradient(135deg,rgba(233,30,99,0.2),rgba(255,105,180,0.1));border-bottom:2px solid rgba(233,30,99,0.3);display:flex;align-items:center;justify-content:space-between}
+.header-left{display:flex;align-items:center;gap:12px}
+.coach-header-avatar{width:40px;height:40px;border-radius:50%;overflow:hidden}
+.coach-header-img{width:100%;height:100%;object-fit:cover}
+.coach-label{font-size:0.65rem;color:var(--muted);letter-spacing:1px}
+.back-btn{width:40px;height:40px;background:rgba(255,255,255,0.1);border:none;border-radius:50%;color:var(--text);font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.game-title{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:2px}
+.game-title .laugh-title{color:var(--laugh5)}
+.game-title .num{color:var(--gold)}
+.tier-badge{background:linear-gradient(135deg,var(--laugh5),var(--pink));padding:6px 14px;border-radius:20px;font-weight:700;font-size:0.8rem}
+.lang-toggle{display:flex;gap:5px}
+.lang-btn{padding:6px 12px;border:2px solid var(--laugh5);background:transparent;color:var(--laugh5);border-radius:15px;font-weight:700;font-size:0.7rem;cursor:pointer}
+.lang-btn.active{background:var(--laugh5);color:var(--text)}
+.game-container{height:calc(100vh - 80px);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;position:relative}
+.intro-screen{text-align:center;max-width:400px}
+.intro-coach{margin-bottom:15px}
+.intro-coach-img{width:100px;height:100px;border-radius:50%;object-fit:cover;border:4px solid var(--laugh5);animation:wiggle 1s infinite}
+@keyframes wiggle{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(5deg)}}
+.intro-title{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;letter-spacing:4px;margin-bottom:5px}
+.intro-title .laugh-title{color:var(--laugh5)}
+.intro-title .num{color:var(--gold)}
+.intro-circuit{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:3px;margin-bottom:10px}
+.intro-subtitle{color:var(--gold);font-family:'Bebas Neue',sans-serif;letter-spacing:2px;margin-bottom:20px}
+.intro-desc{color:var(--muted);line-height:1.6;margin-bottom:30px}
+.intro-desc strong{color:var(--text)}
+.intro-coach-name{margin-top:20px;color:var(--muted);font-size:0.9rem}
+.start-btn{padding:18px 50px;font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:4px;background:linear-gradient(135deg,var(--laugh5),var(--pink));color:var(--text);border:none;border-radius:50px;cursor:pointer;box-shadow:0 8px 30px rgba(233,30,99,0.5)}
+.learn-screen{text-align:center;width:100%}
+.phase-label{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:3px;color:var(--gold);margin-bottom:15px}
+.face-card{background:var(--card);border:3px solid var(--laugh5);border-radius:25px;padding:30px;margin:20px auto;max-width:300px;transition:transform 0.2s, box-shadow 0.2s;position:relative}
+.face-card:hover{box-shadow:0 0 30px rgba(233,30,99,0.4)}
+.face-emoji{font-size:8rem;margin-bottom:15px;display:block;animation:faceAppear 0.5s ease}
+@keyframes faceAppear{0%{transform:scale(0) rotate(-180deg)}50%{transform:scale(1.2) rotate(10deg)}100%{transform:scale(1) rotate(0)}}
+.face-label{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:2px;color:var(--gold)}
+.face-hint{font-size:0.8rem;color:var(--muted);margin-top:15px}
+.timer-bar{width:80%;max-width:300px;height:8px;background:rgba(255,255,255,0.1);border-radius:10px;margin:25px auto;overflow:hidden}
+.timer-fill{height:100%;background:linear-gradient(90deg,var(--laugh5),var(--pink));border-radius:10px;transition:width 0.1s linear}
+.counter{color:var(--muted);font-size:0.9rem;margin-top:10px}
+.recall-screen{text-align:center;width:100%}
+.recall-face{font-size:7rem;margin-bottom:10px;animation:bounce 0.5s ease infinite alternate}
+@keyframes bounce{0%{transform:translateY(0)}100%{transform:translateY(-10px)}}
+.recall-question{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:2px;margin-bottom:15px}
+.recall-timer{width:100%;max-width:350px;height:10px;background:rgba(255,255,255,0.1);border-radius:10px;margin:15px auto;overflow:hidden}
+.recall-timer-fill{height:100%;background:var(--success);border-radius:10px;transition:width 0.05s linear}
+.recall-timer-fill.danger{background:var(--danger)}
+.answers-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;max-width:320px;margin:0 auto}
+.answer-btn{background:var(--card);border:3px solid rgba(255,255,255,0.1);border-radius:20px;padding:18px 15px;cursor:pointer;transition:all 0.15s;text-align:center}
+.answer-btn:active{transform:scale(0.95)}
+.answer-btn .label{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:1px;color:var(--text)}
+.answer-btn.correct{border-color:var(--success);background:rgba(0,217,165,0.2)}
+.answer-btn.wrong{border-color:var(--danger);background:rgba(255,71,87,0.2)}
+.speed-bonus{position:fixed;top:40%;left:50%;transform:translateX(-50%);font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--gold);animation:floatUp 1s forwards;z-index:100}
+@keyframes floatUp{0%{opacity:1;transform:translateX(-50%) translateY(0)}100%{opacity:0;transform:translateX(-50%) translateY(-50px)}}
+.score-display{position:absolute;top:100px;right:20px;text-align:right}
+.score-label{font-size:0.7rem;color:var(--muted)}
+.score-value{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--laugh5)}
+.laugh-counter{position:absolute;top:100px;left:20px;text-align:left}
+.laugh-counter-label{font-size:0.7rem;color:var(--muted);letter-spacing:1px}
+.laugh-counter-value{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--gold)}
+.gameover-screen{text-align:center;max-width:400px}
+.gameover-emoji{font-size:5rem;margin-bottom:20px;animation:spin 2s ease-in-out infinite}
+@keyframes spin{0%,100%{transform:rotate(-10deg)}50%{transform:rotate(10deg)}}
+.gameover-title{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;letter-spacing:3px;margin-bottom:10px}
+.gameover-score{font-family:'Bebas Neue',sans-serif;font-size:4rem;color:var(--laugh5);margin:20px 0}
+.gameover-stats{color:var(--gold);margin-bottom:30px;font-size:1.2rem}
+.retry-btn{padding:16px 40px;font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:3px;background:linear-gradient(135deg,var(--laugh5),var(--pink));color:var(--text);border:none;border-radius:50px;cursor:pointer;margin-bottom:15px;display:block;width:100%}
+.home-btn{padding:14px 30px;font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;background:transparent;color:var(--muted);border:2px solid var(--muted);border-radius:50px;cursor:pointer;display:block;width:100%}
+.coach-bubble{position:fixed;bottom:20px;left:20px;right:20px;background:var(--card);border:2px solid var(--laugh5);border-radius:20px;padding:15px;display:flex;align-items:center;gap:15px;z-index:50}
+.coach-avatar{width:50px;height:50px;border-radius:50%;overflow:hidden}
+.coach-avatar img{width:100%;height:100%;object-fit:cover}
+.coach-text{font-size:0.95rem;line-height:1.4}
+.confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1000}
+.confetti{position:absolute;width:10px;height:10px;top:-10px;animation:fall 3s linear forwards}
+@keyframes fall{to{transform:translateY(100vh) rotate(720deg);opacity:0}}
+.laugh-pop{position:fixed;pointer-events:none;font-size:2rem;animation:laughFloat 1s ease-out forwards;z-index:999}
+@keyframes laughFloat{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-50px) scale(1.5)}}
+.hidden{display:none!important}
+.mimic-prompt{background:rgba(233,30,99,0.2);border:2px dashed var(--laugh5);border-radius:15px;padding:12px;margin-top:15px;font-size:0.85rem;color:var(--laugh5)}
+</style>
+</head>
+<body class="en">
+<div class="confetti-container" id="confettiContainer"></div>
+
+<div class="game-header">
+<div class="header-left">
+<button class="back-btn" id="backBtn">←</button>
+<div class="coach-header-avatar"><img src="go_chat.png" alt="Coach" class="coach-header-img"></div>
+<div>
+<div class="game-title"><span class="laugh-title">LAUGH</span> <span class="num">5</span></div>
+<div class="coach-label">w/ Coach GoTrotter AI</div>
+</div>
+<div class="tier-badge" id="tierBadge">TIER 1</div>
+</div>
+<div class="lang-toggle">
+<button class="lang-btn active" data-lang="en">EN</button>
+<button class="lang-btn" data-lang="es">ES</button>
+</div>
+</div>
+
+<div class="game-container">
+
+<div class="intro-screen" id="introScreen">
+<div class="intro-coach"><img src="go_chat.png" alt="Coach" class="intro-coach-img"></div>
+<div class="intro-title"><span class="laugh-title">LAUGH</span> <span class="num">5</span></div>
+<div class="intro-circuit">GOOFY FACES 😜</div>
+<div class="intro-subtitle">
+<span class="lang-en">EXPRESSIONS & EMOTIONS</span>
+<span class="lang-es">EXPRESIONES Y EMOCIONES</span>
+</div>
+<div class="intro-desc">
+<span class="lang-en">See <strong>silly faces</strong> and remember their emotions!<br><br>Match them FAST! ⚡<br><br>Try making the face yourself! 🤪</span>
+<span class="lang-es">¡Ve <strong>caras graciosas</strong> y recuerda sus emociones!<br><br>¡Empárejalas RÁPIDO! ⚡<br><br>¡Intenta hacer la cara tú mismo! 🤪</span>
+</div>
+<button class="start-btn" id="startBtn">
+<span class="lang-en">LET'S MAKE FACES! 😜</span>
+<span class="lang-es">¡A HACER CARAS! 😜</span>
+</button>
+<div class="intro-coach-name">
+<span class="lang-en">with Coach GoTrotter AI 🏀</span>
+<span class="lang-es">con Coach GoTrotter AI 🏀</span>
+</div>
+</div>
+
+<div class="learn-screen hidden" id="learnScreen">
+<div class="phase-label">
+<span class="lang-en">😜 LEARN THE FACE!</span>
+<span class="lang-es">😜 ¡APRENDE LA CARA!</span>
+</div>
+<div class="face-card" id="faceCard">
+<span class="face-emoji" id="learnEmoji">🤪</span>
+<div class="face-label" id="learnLabel">CRAZY</div>
+<div class="mimic-prompt">
+<span class="lang-en">🪞 Try making this face!</span>
+<span class="lang-es">🪞 ¡Intenta hacer esta cara!</span>
+</div>
+</div>
+<div class="timer-bar"><div class="timer-fill" id="timerFill"></div></div>
+<div class="counter" id="pairCounter">Face 1 of 3</div>
+</div>
+
+<div class="recall-screen hidden" id="recallScreen">
+<div class="recall-face" id="recallFace">🤪</div>
+<div class="recall-question">
+<span class="lang-en">🤔 WHAT EMOTION IS THIS?</span>
+<span class="lang-es">🤔 ¿QUÉ EMOCIÓN ES ESTA?</span>
+</div>
+<div class="recall-timer"><div class="recall-timer-fill" id="recallTimerFill"></div></div>
+<div class="answers-grid" id="answersGrid"></div>
+</div>
+
+<div class="gameover-screen hidden" id="gameoverScreen">
+<div class="gameover-emoji" id="gameoverEmoji">🤪</div>
+<div class="gameover-title">
+<span class="lang-en">CIRCUIT COMPLETE!</span>
+<span class="lang-es">¡CIRCUITO COMPLETO!</span>
+</div>
+<div class="gameover-score" id="finalScore">0</div>
+<div class="gameover-stats" id="gameStats">😂 Laugh Moments: 0</div>
+<button class="retry-btn" id="retryBtn">
+<span class="lang-en">PLAY AGAIN 😜</span>
+<span class="lang-es">JUGAR DE NUEVO 😜</span>
+</button>
+<button class="home-btn" id="homeBtn">
+<span class="lang-en">← BACK</span>
+<span class="lang-es">← VOLVER</span>
+</button>
+</div>
+
+<div class="score-display hidden" id="scoreDisplay">
+<div class="score-label">SCORE</div>
+<div class="score-value" id="currentScore">0</div>
+</div>
+
+<div class="laugh-counter hidden" id="laughCounter">
+<div class="laugh-counter-label">😂 LAUGHS</div>
+<div class="laugh-counter-value" id="laughCounterValue">0</div>
+</div>
+
+</div>
+
+<div class="coach-bubble hidden" id="coachBubble">
+<div class="coach-avatar"><img src="go_chat.png" alt="Coach"></div>
+<div class="coach-text" id="coachText">Great!</div>
+</div>
+
+<script>
+(function(){
+var lang = localStorage.getItem('lw-lang') || 'en';
+function setLang(l){
+    lang = l;
+    localStorage.setItem('lw-lang', l);
+    document.body.className = l;
+    document.querySelectorAll('.lang-btn').forEach(function(b){
+        b.classList.toggle('active', b.dataset.lang === l);
+    });
+}
+setLang(lang);
+document.querySelectorAll('.lang-btn').forEach(function(b){
+    b.addEventListener('click', function(e){
+        e.preventDefault();
+        setLang(this.dataset.lang);
+    });
+});
+
+// ============ LAUGH TRACKING SYSTEM ============
+var circuitLaughs = 0;
+
+function getDateString(date) {
+    return date.toISOString().split('T')[0];
+}
+
+function getWeekStart(date) {
+    var d = new Date(date);
+    var day = d.getDay();
+    var diff = d.getDate() - day + (day === 0 ? -6 : 1);
+    d.setDate(diff);
+    return getDateString(d);
+}
+
+function addLaughs(count) {
+    circuitLaughs += count;
+    updateLaughDisplay();
+    
+    var today = getDateString(new Date());
+    var weekStart = getWeekStart(new Date());
+    
+    var todayData = JSON.parse(localStorage.getItem('lw-laughs-today') || '{}');
+    if (todayData.date !== today) {
+        todayData = { date: today, count: 0 };
+    }
+    todayData.count += count;
+    localStorage.setItem('lw-laughs-today', JSON.stringify(todayData));
+    
+    var weekData = JSON.parse(localStorage.getItem('lw-laughs-week') || '{}');
+    if (weekData.weekStart !== weekStart) {
+        weekData = { weekStart: weekStart, count: 0 };
+    }
+    weekData.count += count;
+    localStorage.setItem('lw-laughs-week', JSON.stringify(weekData));
+    
+    var total = parseInt(localStorage.getItem('lw-laughs-total') || '0');
+    total += count;
+    localStorage.setItem('lw-laughs-total', total.toString());
+    
+    showLaughPop(count);
+}
+
+function updateLaughDisplay() {
+    document.getElementById('laughCounterValue').textContent = circuitLaughs;
+}
+
+function showLaughPop(count) {
+    for (var i = 0; i < Math.min(count, 3); i++) {
+        setTimeout(function() {
+            var pop = document.createElement('div');
+            pop.className = 'laugh-pop';
+            pop.textContent = '😂';
+            pop.style.left = (20 + Math.random() * 60) + '%';
+            pop.style.top = (30 + Math.random() * 40) + '%';
+            document.body.appendChild(pop);
+            setTimeout(function() {
+                if (pop.parentNode) pop.parentNode.removeChild(pop);
+            }, 1000);
+        }, i * 150);
+    }
+}
+
+// ============ GOOFY FACES DATABASE ============
+var facePairs = [
+    {emoji:'🤪',en:'Crazy',es:'Loco'},
+    {emoji:'😜',en:'Silly Wink',es:'Guiño Tonto'},
+    {emoji:'🥴',en:'Woozy',es:'Mareado'},
+    {emoji:'😱',en:'Screaming',es:'Gritando'},
+    {emoji:'🤯',en:'Mind Blown',es:'Alucinado'},
+    {emoji:'🥳',en:'Party Time',es:'Fiesta'},
+    {emoji:'😵‍💫',en:'Dizzy',es:'Aturdido'},
+    {emoji:'🤢',en:'Sick',es:'Enfermo'},
+    {emoji:'🥶',en:'Freezing',es:'Congelado'},
+    {emoji:'🥵',en:'Overheated',es:'Acalorado'},
+    {emoji:'😤',en:'Huffing',es:'Bufando'},
+    {emoji:'🤭',en:'Giggling',es:'Risita'},
+    {emoji:'🙄',en:'Eye Roll',es:'Ojos Arriba'},
+    {emoji:'😏',en:'Smirking',es:'Sonrisa Pícara'},
+    {emoji:'🤨',en:'Suspicious',es:'Sospechoso'},
+    {emoji:'😬',en:'Awkward',es:'Incómodo'},
+    {emoji:'🫣',en:'Peeking',es:'Espiando'},
+    {emoji:'🫢',en:'Oops!',es:'¡Ups!'},
+    {emoji:'😮',en:'Surprised',es:'Sorprendido'},
+    {emoji:'🤐',en:'Zipped',es:'Callado'},
+    {emoji:'🤥',en:'Lying',es:'Mintiendo'},
+    {emoji:'😈',en:'Mischievous',es:'Travieso'},
+    {emoji:'🤓',en:'Nerdy',es:'Nerd'},
+    {emoji:'🥸',en:'Disguised',es:'Disfrazado'},
+    {emoji:'🤡',en:'Clowning',es:'Payaseando'},
+    {emoji:'😇',en:'Angelic',es:'Angelical'},
+    {emoji:'😎',en:'Cool',es:'Genial'},
+    {emoji:'🤑',en:'Money Face',es:'Cara de Dinero'},
+    {emoji:'🫠',en:'Melting',es:'Derritiéndose'},
+    {emoji:'😋',en:'Yummy',es:'Delicioso'}
+];
+
+var coachMsgs = {
+    start:{en:"Look at those goofy faces! 😜 Try making them yourself!",es:"¡Mira esas caras graciosas! 😜 ¡Intenta hacerlas tú!"},
+    learn:[
+        {en:"Haha! What a face! 🤪",es:"¡Jaja! ¡Qué cara! 🤪"},
+        {en:"Can you make this face? 😜",es:"¿Puedes hacer esta cara? 😜"},
+        {en:"Remember this silly expression! 🧠",es:"¡Recuerda esta expresión tonta! 🧠"},
+        {en:"Look at that goofy face! 😂",es:"¡Mira esa cara graciosa! 😂"}
+    ],
+    recall:[
+        {en:"Quick! What emotion is that? ⚡",es:"¡Rápido! ¿Qué emoción es? ⚡"},
+        {en:"Name that face! 🏃",es:"¡Nombra esa cara! 🏃"}
+    ],
+    correct:[
+        {en:"YES! You know your faces! 😜",es:"¡SÍ! ¡Conoces las caras! 😜"},
+        {en:"Nailed it! 🎯",es:"¡Clavado! 🎯"},
+        {en:"Face master! 🏆",es:"¡Maestro de caras! 🏆"}
+    ],
+    speed:[
+        {en:"SPEED BONUS! +5! 🔥",es:"¡BONO VELOCIDAD! +5! 🔥"},
+        {en:"LIGHTNING FAST! ⚡",es:"¡VELOZ! ⚡"}
+    ],
+    wrong:[
+        {en:"Tricky face! 😅",es:"¡Cara difícil! 😅"},
+        {en:"Keep trying! 😜",es:"¡Sigue intentando! 😜"}
+    ],
+    timeout:{en:"Too slow! ⏰",es:"¡Muy lento! ⏰"},
+    tierUp:{en:"TIER UP! More goofy faces! 😜⚡",es:"¡SUBISTE! ¡Más caras locas! 😜⚡"},
+    gameOver:{en:"Face master champion! 😜🏆",es:"¡Campeón maestro de caras! 😜🏆"}
+};
+
+var tier=1,score=0,speedBonuses=0,correctCount=0,round=0;
+var facesToLearn=[],currentIdx=0,recallIdx=0;
+var learnTimer=null,recallTimer=null,recallStart=0;
+
+var tierSettings=[
+    {faces:2,learnTime:3500,recallTime:4500},
+    {faces:2,learnTime:3200,recallTime:4000},
+    {faces:3,learnTime:3000,recallTime:3700},
+    {faces:3,learnTime:2800,recallTime:3500},
+    {faces:3,learnTime:2600,recallTime:3200},
+    {faces:4,learnTime:2600,recallTime:3000},
+    {faces:4,learnTime:2400,recallTime:2800},
+    {faces:4,learnTime:2400,recallTime:2600},
+    {faces:5,learnTime:2200,recallTime:2400},
+    {faces:5,learnTime:2000,recallTime:2200}
+];
+
+var introScreen=document.getElementById('introScreen');
+var learnScreen=document.getElementById('learnScreen');
+var recallScreen=document.getElementById('recallScreen');
+var gameoverScreen=document.getElementById('gameoverScreen');
+var scoreDisplay=document.getElementById('scoreDisplay');
+var laughCounter=document.getElementById('laughCounter');
+var coachBubble=document.getElementById('coachBubble');
+var coachText=document.getElementById('coachText');
+
+function shuffle(a){
+    var arr=a.slice();
+    for(var i=arr.length-1;i>0;i--){
+        var j=Math.floor(Math.random()*(i+1));
+        var t=arr[i];arr[i]=arr[j];arr[j]=t;
+    }
+    return arr;
+}
+
+function showScreen(s){
+    introScreen.classList.add('hidden');
+    learnScreen.classList.add('hidden');
+    recallScreen.classList.add('hidden');
+    gameoverScreen.classList.add('hidden');
+    s.classList.remove('hidden');
+}
+
+function updateScore(){
+    document.getElementById('currentScore').textContent=score;
+}
+
+function updateTier(){
+    document.getElementById('tierBadge').textContent='TIER '+tier;
+}
+
+function showCoach(msg,dur){
+    coachText.textContent=msg;
+    coachBubble.classList.remove('hidden');
+    setTimeout(function(){coachBubble.classList.add('hidden');},dur||2500);
+}
+
+function showSpeedBonus(){
+    var b=document.createElement('div');
+    b.className='speed-bonus';
+    b.textContent='+5 SPEED!';
+    document.body.appendChild(b);
+    setTimeout(function(){if(b.parentNode)b.remove();},1000);
+}
+
+function confetti(){
+    var c=document.getElementById('confettiContainer');
+    for(var i=0;i<40;i++){
+        setTimeout(function(){
+            var p=document.createElement('div');
+            p.className='confetti';
+            p.style.left=Math.random()*100+'vw';
+            p.style.background=['#E91E63','#FF69B4','#FFD700','#00D9A5'][Math.floor(Math.random()*4)];
+            p.style.animationDuration=(2+Math.random()*2)+'s';
+            c.appendChild(p);
+            setTimeout(function(){if(p.parentNode)p.remove();},4000);
+        },i*40);
+    }
+}
+
+function startGame(){
+    tier=1;score=0;speedBonuses=0;correctCount=0;round=0;
+    circuitLaughs=0;
+    updateScore();updateTier();updateLaughDisplay();
+    scoreDisplay.classList.remove('hidden');
+    laughCounter.classList.remove('hidden');
+    var m=coachMsgs.start;
+    showCoach(lang==='es'?m.es:m.en,2500);
+    setTimeout(startRound,2000);
+}
+
+function startRound(){
+    round++;
+    currentIdx=0;
+    var s=tierSettings[tier-1];
+    facesToLearn=shuffle(facePairs).slice(0,s.faces);
+    showScreen(learnScreen);
+    showNextLearn();
+}
+
+function showNextLearn(){
+    if(currentIdx>=facesToLearn.length){
+        setTimeout(startRecall,500);
+        return;
+    }
+    var s=tierSettings[tier-1];
+    var face=facesToLearn[currentIdx];
+    
+    // +1 laugh for seeing goofy face
+    addLaughs(1);
+    
+    document.getElementById('learnEmoji').textContent=face.emoji;
+    document.getElementById('learnLabel').textContent=lang==='es'?face.es:face.en;
+    document.getElementById('pairCounter').textContent=(lang==='es'?'Cara ':'Face ')+(currentIdx+1)+' / '+facesToLearn.length;
+    
+    var msg=coachMsgs.learn[Math.floor(Math.random()*coachMsgs.learn.length)];
+    showCoach(lang==='es'?msg.es:msg.en,s.learnTime-500);
+    
+    var fill=document.getElementById('timerFill');
+    fill.style.width='100%';
+    var start=Date.now();
+    clearInterval(learnTimer);
+    learnTimer=setInterval(function(){
+        var pct=Math.max(0,100-((Date.now()-start)/s.learnTime*100));
+        fill.style.width=pct+'%';
+        if(pct<=0){
+            clearInterval(learnTimer);
+            currentIdx++;
+            showNextLearn();
+        }
+    },50);
+}
+
+function startRecall(){
+    recallIdx=0;
+    facesToLearn=shuffle(facesToLearn);
+    var msg=coachMsgs.recall[Math.floor(Math.random()*coachMsgs.recall.length)];
+    showCoach(lang==='es'?msg.es:msg.en,1500);
+    setTimeout(showNextRecall,1500);
+}
+
+function showNextRecall(){
+    if(recallIdx>=facesToLearn.length){
+        endRound();
+        return;
+    }
+    showScreen(recallScreen);
+    var s=tierSettings[tier-1];
+    var correct=facesToLearn[recallIdx];
+    document.getElementById('recallFace').textContent=correct.emoji;
+    
+    var grid=document.getElementById('answersGrid');
+    grid.innerHTML='';
+    var wrongs=shuffle(facePairs.filter(function(p){return p.emoji!==correct.emoji;})).slice(0,3);
+    var opts=shuffle([correct].concat(wrongs));
+    
+    opts.forEach(function(opt){
+        var btn=document.createElement('div');
+        btn.className='answer-btn';
+        btn.innerHTML='<span class="label">'+(lang==='es'?opt.es:opt.en)+'</span>';
+        btn.dataset.correct=opt.emoji===correct.emoji?'1':'0';
+        btn.onclick=function(){handleAnswer(btn,correct);};
+        grid.appendChild(btn);
+    });
+    
+    recallStart=Date.now();
+    var fill=document.getElementById('recallTimerFill');
+    fill.style.width='100%';
+    fill.classList.remove('danger');
+    clearInterval(recallTimer);
+    recallTimer=setInterval(function(){
+        var pct=Math.max(0,100-((Date.now()-recallStart)/s.recallTime*100));
+        fill.style.width=pct+'%';
+        if(pct<30)fill.classList.add('danger');
+        if(pct<=0){
+            clearInterval(recallTimer);
+            handleTimeout(correct);
+        }
+    },50);
+}
+
+function handleAnswer(btn,correct){
+    clearInterval(recallTimer);
+    document.querySelectorAll('.answer-btn').forEach(function(b){b.onclick=null;});
+    var isCorrect=btn.dataset.correct==='1';
+    var time=Date.now()-recallStart;
+    var s=tierSettings[tier-1];
+    
+    if(isCorrect){
+        btn.classList.add('correct');
+        correctCount++;
+        
+        // +1 laugh for correct answer
+        addLaughs(1);
+        
+        var pts=10;
+        if(time<s.recallTime*0.4){
+            pts+=5;
+            speedBonuses++;
+            // +2 extra laughs for speed bonus
+            addLaughs(2);
+            showSpeedBonus();
+            var m=coachMsgs.speed[Math.floor(Math.random()*coachMsgs.speed.length)];
+            showCoach(lang==='es'?m.es:m.en,1500);
+        }else{
+            var m=coachMsgs.correct[Math.floor(Math.random()*coachMsgs.correct.length)];
+            showCoach(lang==='es'?m.es:m.en,1500);
+        }
+        score+=pts;
+        updateScore();
+    }else{
+        btn.classList.add('wrong');
+        document.querySelectorAll('.answer-btn').forEach(function(b){
+            if(b.dataset.correct==='1')b.classList.add('correct');
+        });
+        var m=coachMsgs.wrong[Math.floor(Math.random()*coachMsgs.wrong.length)];
+        showCoach(lang==='es'?m.es:m.en,1500);
+    }
+    recallIdx++;
+    setTimeout(showNextRecall,1500);
+}
+
+function handleTimeout(correct){
+    document.querySelectorAll('.answer-btn').forEach(function(b){
+        b.onclick=null;
+        if(b.dataset.correct==='1')b.classList.add('correct');
+    });
+    var m=coachMsgs.timeout;
+    showCoach(lang==='es'?m.es:m.en,1500);
+    recallIdx++;
+    setTimeout(showNextRecall,1500);
+}
+
+function endRound(){
+    if(round>=5){
+        if(tier>=10){
+            endGame();
+        }else{
+            tier++;round=0;
+            updateTier();
+            confetti();
+            // +3 laughs for tier up
+            addLaughs(3);
+            var m=coachMsgs.tierUp;
+            showCoach(lang==='es'?m.es:m.en,2500);
+            setTimeout(startRound,3000);
+        }
+    }else{
+        setTimeout(startRound,1000);
+    }
+}
+
+function endGame(){
+    // +5 laughs for circuit complete
+    addLaughs(5);
+    
+    showScreen(gameoverScreen);
+    scoreDisplay.classList.add('hidden');
+    laughCounter.classList.add('hidden');
+    confetti();
+    document.getElementById('finalScore').textContent=score;
+    
+    // Randomly pick a goofy face for game over
+    var goofyFaces = ['🤪','😜','🥳','🤡','😎','🥸','😈'];
+    document.getElementById('gameoverEmoji').textContent = goofyFaces[Math.floor(Math.random()*goofyFaces.length)];
+    
+    var laughText = lang === 'es' ? 
+        '😂 Momentos de Risa: ' + circuitLaughs : 
+        '😂 Laugh Moments: ' + circuitLaughs;
+    document.getElementById('gameStats').textContent = laughText;
+    
+    var m=coachMsgs.gameOver;
+    showCoach(lang==='es'?m.es:m.en,3000);
+}
+
+document.getElementById('startBtn').onclick=startGame;
+document.getElementById('retryBtn').onclick=startGame;
+document.getElementById('homeBtn').onclick=function(){
+    window.location.href='laugh-hub.html';
+};
+document.getElementById('backBtn').onclick=function(){
+    if(confirm(lang==='es'?'¿Salir?':'Exit?')){
+        clearInterval(learnTimer);
+        clearInterval(recallTimer);
+        window.location.href='laugh-hub.html';
+    }
+};
+})();
+</script>
+</body>
+</html>
