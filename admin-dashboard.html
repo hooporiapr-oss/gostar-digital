@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Dashboard - Team GoTrotters | GoStar Digital</title>
+<title>Admin Dashboard | LaughCourt™</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -12,7 +12,8 @@
     --orange-dark: #CC5500;
     --teal: #00D9A5;
     --gold: #FFD700;
-    --purple: #9B59B6;
+    --purple: #6B21A8;
+    --pink: #E91E8C;
     --blue: #3B82F6;
     --dark: #0a0a0f;
     --darker: #050508;
@@ -23,6 +24,8 @@
     --border: rgba(255,255,255,0.08);
     --success: #00D9A5;
     --danger: #FF4757;
+    --trail: #FF6B00;
+    --hunt: #E91E8C;
     --sidebar: 260px;
 }
 
@@ -67,8 +70,8 @@ body.en .lang-es { display: none !important; }
     margin-bottom: 10px;
 }
 
-.login-logo .go { color: var(--orange); }
-.login-logo .trotters { color: var(--teal); }
+.login-logo .laugh { color: var(--gold); }
+.login-logo .court { color: var(--text); }
 
 .login-badge {
     display: inline-block;
@@ -112,15 +115,15 @@ body.en .lang-es { display: none !important; }
 
 .pin-input:focus {
     outline: none;
-    border-color: var(--orange);
-    box-shadow: 0 0 20px rgba(255,107,0,0.2);
+    border-color: var(--gold);
+    box-shadow: 0 0 20px rgba(255,215,0,0.2);
 }
 
 .login-btn {
     width: 100%;
     padding: 16px;
-    background: linear-gradient(135deg, var(--orange), var(--orange-dark));
-    color: var(--text);
+    background: linear-gradient(135deg, var(--gold), #FFA500);
+    color: var(--dark);
     border: none;
     border-radius: 12px;
     font-family: 'Bebas Neue', sans-serif;
@@ -128,11 +131,12 @@ body.en .lang-es { display: none !important; }
     letter-spacing: 2px;
     cursor: pointer;
     transition: all 0.3s;
+    font-weight: 700;
 }
 
 .login-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 5px 25px rgba(255,107,0,0.4);
+    box-shadow: 0 5px 25px rgba(255,215,0,0.4);
 }
 
 .login-error {
@@ -172,8 +176,8 @@ body.en .lang-es { display: none !important; }
     margin-bottom: 5px;
 }
 
-.sidebar-logo .go { color: var(--orange); }
-.sidebar-logo .trotters { color: var(--teal); }
+.sidebar-logo .laugh { color: var(--gold); }
+.sidebar-logo .court { color: var(--text); }
 
 .sidebar-team {
     font-size: 0.75rem;
@@ -183,8 +187,8 @@ body.en .lang-es { display: none !important; }
 
 .admin-badge {
     display: inline-block;
-    background: linear-gradient(135deg, var(--danger), #cc3344);
-    color: var(--text);
+    background: linear-gradient(135deg, var(--gold), var(--orange));
+    color: var(--dark);
     padding: 4px 12px;
     border-radius: 20px;
     font-size: 0.65rem;
@@ -225,7 +229,7 @@ body.en .lang-es { display: none !important; }
 }
 
 .nav-item:hover { background: var(--card); color: var(--text); }
-.nav-item.active { background: var(--orange); color: var(--text); }
+.nav-item.active { background: var(--gold); color: var(--dark); }
 .nav-item-icon { font-size: 1.1rem; width: 24px; text-align: center; }
 
 .sidebar-footer {
@@ -256,7 +260,7 @@ body.en .lang-es { display: none !important; }
     font-family: 'Outfit', sans-serif;
 }
 
-.lang-btn.active { background: var(--orange); color: var(--text); }
+.lang-btn.active { background: var(--gold); color: var(--dark); }
 
 .logout-btn {
     width: 100%;
@@ -281,23 +285,6 @@ body.en .lang-es { display: none !important; }
 .page-section { display: none; }
 .page-section.active { display: block; }
 
-.team-banner {
-    background: linear-gradient(135deg, rgba(255,107,0,0.15), rgba(0,217,165,0.15));
-    border: 1px solid var(--orange);
-    border-radius: 16px;
-    padding: 20px 24px;
-    margin-bottom: 30px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 15px;
-}
-
-.team-banner-text { font-size: 1rem; }
-.team-banner-text strong { color: var(--orange); font-size: 1.2rem; }
-.team-banner-badge { background: var(--teal); color: var(--dark); padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 0.85rem; }
-
 .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
 
 .stat-card {
@@ -308,7 +295,7 @@ body.en .lang-es { display: none !important; }
     transition: all 0.3s;
 }
 
-.stat-card:hover { transform: translateY(-3px); border-color: var(--orange); }
+.stat-card:hover { transform: translateY(-3px); border-color: var(--gold); }
 
 .stat-card-icon {
     width: 48px;
@@ -321,16 +308,17 @@ body.en .lang-es { display: none !important; }
     margin-bottom: 15px;
 }
 
-.stat-card-icon.orange { background: rgba(255,107,0,0.15); }
-.stat-card-icon.teal { background: rgba(0,217,165,0.15); }
 .stat-card-icon.gold { background: rgba(255,215,0,0.15); }
-.stat-card-icon.purple { background: rgba(155,89,182,0.15); }
+.stat-card-icon.teal { background: rgba(0,217,165,0.15); }
+.stat-card-icon.orange { background: rgba(255,107,0,0.15); }
+.stat-card-icon.pink { background: rgba(233,30,140,0.15); }
+.stat-card-icon.purple { background: rgba(107,33,168,0.15); }
 .stat-card-value { font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; letter-spacing: 2px; margin-bottom: 5px; }
 .stat-card-label { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
 
-.gear-cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 30px; }
+.game-cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 30px; }
 
-.gear-card {
+.game-card {
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: 16px;
@@ -338,43 +326,29 @@ body.en .lang-es { display: none !important; }
     transition: all 0.3s;
 }
 
-.gear-card:hover { transform: translateY(-3px); }
+.game-card:hover { transform: translateY(-3px); }
 
-.gear-card-header { padding: 16px 20px; display: flex; align-items: center; gap: 12px; }
-.gear-card-header.g1 { background: linear-gradient(135deg, rgba(255,107,0,0.2), transparent); border-bottom: 2px solid var(--orange); }
-.gear-card-header.g2 { background: linear-gradient(135deg, rgba(0,217,165,0.2), transparent); border-bottom: 2px solid var(--teal); }
-.gear-card-header.g3 { background: linear-gradient(135deg, rgba(255,215,0,0.2), transparent); border-bottom: 2px solid var(--gold); }
-.gear-card-icon { font-size: 1.5rem; }
-.gear-card-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 2px; flex: 1; }
-.gear-card-num { font-size: 0.7rem; color: var(--muted); }
+.game-card-header { padding: 16px 20px; display: flex; align-items: center; gap: 12px; }
+.game-card-header.trail { background: linear-gradient(135deg, rgba(255,107,0,0.2), transparent); border-bottom: 2px solid var(--trail); }
+.game-card-header.hunt { background: linear-gradient(135deg, rgba(233,30,140,0.2), transparent); border-bottom: 2px solid var(--hunt); }
+.game-card-icon { font-size: 1.5rem; }
+.game-card-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 2px; flex: 1; }
 
-.gear-card-edit {
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--muted);
-    padding: 6px 12px;
-    border-radius: 8px;
-    font-size: 0.75rem;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.gear-card-edit:hover { border-color: var(--orange); color: var(--orange); }
-.gear-card-body { padding: 20px; }
-.gear-card-stats { display: flex; gap: 20px; }
-.gear-stat { text-align: center; flex: 1; }
-.gear-stat-value { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; }
-.gear-stat-label { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; }
+.game-card-body { padding: 20px; }
+.game-card-stats { display: flex; gap: 20px; }
+.game-stat { text-align: center; flex: 1; }
+.game-stat-value { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; }
+.game-stat-label { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; }
 
 .table-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; margin-bottom: 30px; }
 .table-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
 .table-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 2px; }
 .table-actions { display: flex; gap: 10px; }
 .btn { padding: 10px 20px; border: none; border-radius: 10px; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; font-family: 'Outfit', sans-serif; }
-.btn-primary { background: var(--orange); color: var(--text); }
-.btn-primary:hover { background: var(--orange-dark); }
+.btn-primary { background: var(--gold); color: var(--dark); }
+.btn-primary:hover { background: #e6c200; }
 .btn-secondary { background: var(--card); border: 1px solid var(--border); color: var(--text); }
-.btn-secondary:hover { border-color: var(--orange); }
+.btn-secondary:hover { border-color: var(--gold); }
 .btn-danger { background: transparent; border: 1px solid var(--danger); color: var(--danger); }
 .btn-danger:hover { background: var(--danger); color: var(--text); }
 
@@ -386,21 +360,17 @@ td { font-size: 0.9rem; }
 tr:hover { background: var(--card-hover); }
 
 .badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-.badge-trial, .badge-trialing { background: rgba(155,89,182,0.15); color: var(--purple); }
+.badge-trial, .badge-trialing { background: rgba(107,33,168,0.15); color: var(--purple); }
 .badge-paid, .badge-active { background: rgba(0,217,165,0.15); color: var(--teal); }
 .badge-canceled { background: rgba(255,71,87,0.15); color: var(--danger); }
 .badge-past_due { background: rgba(255,215,0,0.15); color: var(--gold); }
 
-.shift-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 6px; font-size: 0.65rem; font-weight: 700; }
-.shift-badge.practice { background: rgba(155,89,182,0.2); color: #b57edc; }
-.shift-badge.level3 { background: rgba(255,215,0,0.2); color: var(--gold); }
-.shift-badge.level4 { background: rgba(255,107,0,0.2); color: var(--orange); }
-.shift-badge.level5 { background: rgba(0,217,165,0.2); color: var(--teal); }
-.shift-badge.level6 { background: rgba(52,152,219,0.2); color: var(--blue); }
-.shift-badge.level7 { background: rgba(155,89,182,0.2); color: var(--purple); }
-.shift-badge.level8 { background: rgba(255,215,0,0.2); color: var(--gold); }
-.shift-badge.level9 { background: rgba(255,107,0,0.2); color: var(--orange); }
-.shift-badge.master { background: linear-gradient(135deg, rgba(255,215,0,0.3), rgba(255,107,0,0.3)); color: var(--gold); }
+.tier-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 6px; font-size: 0.65rem; font-weight: 700; }
+.tier-badge.tier-1, .tier-badge.tier-2, .tier-badge.tier-3 { background: rgba(107,33,168,0.2); color: #b57edc; }
+.tier-badge.tier-4, .tier-badge.tier-5 { background: rgba(255,215,0,0.2); color: var(--gold); }
+.tier-badge.tier-6, .tier-badge.tier-7 { background: rgba(255,107,0,0.2); color: var(--orange); }
+.tier-badge.tier-8, .tier-badge.tier-9 { background: rgba(0,217,165,0.2); color: var(--teal); }
+.tier-badge.tier-10 { background: linear-gradient(135deg, rgba(255,215,0,0.3), rgba(255,107,0,0.3)); color: var(--gold); }
 
 .action-btns { display: flex; gap: 6px; }
 
@@ -419,7 +389,7 @@ tr:hover { background: var(--card-hover); }
     font-size: 0.9rem;
 }
 
-.action-btn:hover { border-color: var(--orange); color: var(--orange); }
+.action-btn:hover { border-color: var(--gold); color: var(--gold); }
 .action-btn.delete:hover { border-color: var(--danger); color: var(--danger); }
 
 .activity-list { padding: 0; }
@@ -447,21 +417,12 @@ tr:hover { background: var(--card-hover); }
     flex-shrink: 0;
 }
 
-.activity-icon.user { background: rgba(0,217,165,0.15); color: var(--teal); }
-.activity-icon.gear { background: rgba(155,89,182,0.15); color: var(--purple); }
-.activity-icon.subscription { background: rgba(255,107,0,0.15); color: var(--orange); }
-.activity-icon.game { background: rgba(59,130,246,0.15); color: var(--blue); }
-.activity-icon.facility { background: rgba(255,215,0,0.15); color: var(--gold); }
+.activity-icon.subscription { background: rgba(255,215,0,0.15); color: var(--gold); }
+.activity-icon.game { background: rgba(255,107,0,0.15); color: var(--orange); }
+.activity-icon.milestone { background: rgba(0,217,165,0.15); color: var(--teal); }
 .activity-content { flex: 1; }
 .activity-text { font-size: 0.9rem; margin-bottom: 3px; }
 .activity-time { font-size: 0.75rem; color: var(--muted); }
-.activity-actions { display: flex; gap: 6px; opacity: 0; transition: opacity 0.2s; }
-.activity-item:hover .activity-actions { opacity: 1; }
-
-.shift-dist-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-.shift-dist-table th, .shift-dist-table td { padding: 10px 12px; text-align: center; border: 1px solid var(--border); font-size: 0.8rem; }
-.shift-dist-table th { background: var(--darker); font-weight: 600; color: var(--muted); }
-.shift-dist-table td { background: var(--card); }
 
 .modal-overlay {
     position: fixed;
@@ -516,8 +477,7 @@ tr:hover { background: var(--card-hover); }
     font-family: 'Outfit', sans-serif;
 }
 
-.form-input:focus, .form-select:focus { outline: none; border-color: var(--orange); }
-.form-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+.form-input:focus, .form-select:focus { outline: none; border-color: var(--gold); }
 .modal-footer { padding: 20px 24px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 12px; }
 .confirm-dialog { text-align: center; padding: 20px 0; }
 .confirm-dialog-icon { font-size: 3rem; margin-bottom: 15px; }
@@ -551,7 +511,7 @@ tr:hover { background: var(--card-hover); }
     width: 20px;
     height: 20px;
     border: 2px solid var(--muted);
-    border-top-color: var(--orange);
+    border-top-color: var(--gold);
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
 }
@@ -582,7 +542,7 @@ tr.clickable:hover { background: var(--card-hover); }
 .subscriber-avatar {
     width: 60px;
     height: 60px;
-    background: linear-gradient(135deg, var(--orange), var(--teal));
+    background: linear-gradient(135deg, var(--gold), var(--orange));
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -612,7 +572,7 @@ tr.clickable:hover { background: var(--card-hover); }
 .subscriber-stat-value {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 1.8rem;
-    color: var(--orange);
+    color: var(--gold);
 }
 
 .subscriber-stat-label {
@@ -661,169 +621,36 @@ tr.clickable:hover { background: var(--card-hover); }
     color: var(--text);
 }
 
-.shift-badge-large {
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 0.7rem;
-    font-weight: 700;
-    text-transform: uppercase;
-}
-
-.shift-1, .shift-2 { background: rgba(155,89,182,0.2); color: #b57edc; }
-.shift-3 { background: rgba(255,215,0,0.2); color: var(--gold); }
-.shift-4 { background: rgba(255,107,0,0.2); color: var(--orange); }
-.shift-5 { background: rgba(0,217,165,0.2); color: var(--teal); }
-.shift-6 { background: rgba(59,130,246,0.2); color: var(--blue); }
-.shift-7 { background: rgba(155,89,182,0.2); color: var(--purple); }
-.shift-8 { background: rgba(255,215,0,0.2); color: var(--gold); }
-.shift-9 { background: rgba(255,107,0,0.2); color: var(--orange); }
-.shift-10 { background: linear-gradient(135deg, rgba(255,215,0,0.3), rgba(255,107,0,0.3)); color: var(--gold); }
-
-.family-members-section { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border); }
-
-.family-member-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 15px;
-    background: var(--darker);
-    border-radius: 8px;
-    margin-bottom: 8px;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-
-.family-member-row:hover { background: var(--card-hover); }
-
-.activity-filters {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-bottom: 15px;
-}
-
-.filter-btn {
-    padding: 8px 16px;
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--muted);
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-family: 'Outfit', sans-serif;
-}
-
-.filter-btn:hover { border-color: var(--orange); color: var(--orange); }
-.filter-btn.active { background: var(--orange); border-color: var(--orange); color: var(--text); }
-
-.activity-summary-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 15px;
-    margin-bottom: 20px;
-}
-
-.activity-summary-card {
-    background: var(--darker);
-    border-radius: 12px;
-    padding: 15px;
-    text-align: center;
-}
-
-.activity-summary-value {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.8rem;
-    color: var(--orange);
-}
-
-.activity-summary-label {
-    font-size: 0.7rem;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.day-group {
-    margin-bottom: 15px;
-}
-
-.day-group-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 16px;
-    background: var(--darker);
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background 0.2s;
-    margin-bottom: 8px;
-}
-
-.day-group-header:hover { background: var(--card-hover); }
-
-.day-group-title {
-    font-weight: 600;
-    font-size: 0.9rem;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.day-group-count {
-    background: var(--orange);
-    color: var(--text);
-    padding: 2px 10px;
-    border-radius: 12px;
-    font-size: 0.75rem;
-    font-weight: 700;
-}
-
-.day-group-toggle {
-    color: var(--muted);
-    transition: transform 0.2s;
-}
-
-.day-group.collapsed .day-group-toggle { transform: rotate(-90deg); }
-.day-group.collapsed .day-group-items { display: none; }
-
-.day-group-items {
-    padding-left: 10px;
-    border-left: 2px solid var(--border);
-    margin-left: 20px;
-}
-
 .aggregated-item {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 10px 15px;
-    background: var(--card);
-    border-radius: 8px;
-    margin-bottom: 6px;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border);
     transition: background 0.2s;
 }
 
+.aggregated-item:last-child { border-bottom: none; }
 .aggregated-item:hover { background: var(--card-hover); }
 
 .aggregated-icon {
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1rem;
+    font-size: 1.1rem;
     flex-shrink: 0;
 }
 
-.aggregated-icon.game { background: rgba(59,130,246,0.15); color: var(--blue); }
-.aggregated-icon.subscription { background: rgba(255,107,0,0.15); color: var(--orange); }
-.aggregated-icon.milestone { background: rgba(255,215,0,0.15); color: var(--gold); }
+.aggregated-icon.game { background: rgba(255,107,0,0.15); color: var(--orange); }
+.aggregated-icon.subscription { background: rgba(255,215,0,0.15); color: var(--gold); }
+.aggregated-icon.milestone { background: rgba(0,217,165,0.15); color: var(--teal); }
+.aggregated-icon.laugh { background: rgba(233,30,140,0.15); color: var(--pink); }
 
 .aggregated-content { flex: 1; }
-.aggregated-text { font-size: 0.85rem; }
+.aggregated-text { font-size: 0.9rem; }
 .aggregated-details { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
 
 .milestone-badge {
@@ -833,58 +660,6 @@ tr.clickable:hover { background: var(--card-hover); }
     border-radius: 12px;
     font-size: 0.7rem;
     font-weight: 700;
-}
-
-.activity-delete-btn {
-    opacity: 0;
-    background: transparent;
-    border: none;
-    color: var(--muted);
-    cursor: pointer;
-    padding: 6px 10px;
-    border-radius: 6px;
-    font-size: 0.85rem;
-    transition: all 0.2s;
-    flex-shrink: 0;
-}
-
-.aggregated-item:hover .activity-delete-btn,
-.day-group-header:hover .day-delete-btn { opacity: 1; }
-.activity-delete-btn:hover { background: rgba(255,71,87,0.15); color: var(--danger); }
-
-.day-delete-btn {
-    opacity: 0;
-    background: transparent;
-    border: none;
-    color: var(--muted);
-    cursor: pointer;
-    padding: 4px 10px;
-    border-radius: 6px;
-    font-size: 0.75rem;
-    transition: all 0.2s;
-    margin-right: 10px;
-}
-
-.day-delete-btn:hover { background: rgba(255,71,87,0.15); color: var(--danger); }
-
-.delete-activity-summary {
-    background: var(--darker);
-    border-radius: 10px;
-    padding: 15px;
-    margin: 15px 0;
-}
-
-.delete-activity-count {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 2rem;
-    color: var(--danger);
-    text-align: center;
-}
-
-.delete-activity-label {
-    text-align: center;
-    color: var(--muted);
-    font-size: 0.85rem;
 }
 
 @media (max-width: 1024px) {
@@ -900,8 +675,6 @@ tr.clickable:hover { background: var(--card-hover); }
     .sidebar { display: none; }
     .main-content { margin-left: 0; }
     .stats-grid { grid-template-columns: 1fr 1fr; }
-    .team-banner { flex-direction: column; text-align: center; }
-    .form-row { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -909,7 +682,7 @@ tr.clickable:hover { background: var(--card-hover); }
 
 <div class="login-screen" id="loginScreen">
     <div class="login-card">
-        <div class="login-logo"><span class="go">Go</span><span class="trotters">Trotters</span></div>
+        <div class="login-logo"><span class="laugh">LAUGH</span><span class="court">COURT</span></div>
         <div class="login-badge">Coach Admin Portal</div>
         <p class="login-subtitle">
             <span class="lang-en">Enter your 4-digit admin PIN</span>
@@ -935,9 +708,9 @@ tr.clickable:hover { background: var(--card-hover); }
 <div class="dashboard" id="dashboard">
     <aside class="sidebar">
         <div class="sidebar-header">
-            <div class="sidebar-logo"><span class="go">Go</span><span class="trotters">Trotters</span></div>
-            <div class="sidebar-team">Team GoTrotters</div>
-            <span class="admin-badge">Coach Admin</span>
+            <div class="sidebar-logo"><span class="laugh">LAUGH</span><span class="court">COURT</span></div>
+            <div class="sidebar-team">Coach Admin</div>
+            <span class="admin-badge">🏀 Admin</span>
         </div>
         <nav class="nav-section">
             <div class="nav-section-title">
@@ -953,11 +726,6 @@ tr.clickable:hover { background: var(--card-hover); }
                 <span class="nav-item-icon">💳</span>
                 <span class="lang-en">Subscribers</span>
                 <span class="lang-es">Suscriptores</span>
-            </button>
-            <button class="nav-item" data-page="facilities">
-                <span class="nav-item-icon">🏢</span>
-                <span class="lang-en">Facilities</span>
-                <span class="lang-es">Centros</span>
             </button>
             <button class="nav-item" data-page="activity">
                 <span class="nav-item-icon">📋</span>
@@ -981,15 +749,15 @@ tr.clickable:hover { background: var(--card-hover); }
         <!-- OVERVIEW PAGE -->
         <section class="page-section active" id="page-overview">
             <header class="page-header">
-                <h1 class="page-title">GOTROTTERS ADMIN</h1>
+                <h1 class="page-title">LAUGHCOURT ADMIN</h1>
                 <p class="page-subtitle">
-                    <span class="lang-en">Platform Overview • Subscribers & Facilities</span>
-                    <span class="lang-es">Resumen de Plataforma • Suscriptores y Centros</span>
+                    <span class="lang-en">Platform Overview • Subscribers & Games</span>
+                    <span class="lang-es">Resumen de Plataforma • Suscriptores y Juegos</span>
                 </p>
             </header>
             <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="stat-card-icon teal">💳</div>
+                    <div class="stat-card-icon gold">💳</div>
                     <div class="stat-card-value" id="totalSubscribers">0</div>
                     <div class="stat-card-label">
                         <span class="lang-en">Subscribers</span>
@@ -997,30 +765,78 @@ tr.clickable:hover { background: var(--card-hover); }
                     </div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-card-icon orange">🏢</div>
-                    <div class="stat-card-value" id="totalFacilities">0</div>
+                    <div class="stat-card-icon teal">✅</div>
+                    <div class="stat-card-value" id="activeSubscribers">0</div>
                     <div class="stat-card-label">
-                        <span class="lang-en">Facilities</span>
-                        <span class="lang-es">Centros</span>
+                        <span class="lang-en">Active</span>
+                        <span class="lang-es">Activos</span>
                     </div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-card-icon gold">👥</div>
-                    <div class="stat-card-value" id="totalUsers">0</div>
+                    <div class="stat-card-icon purple">🆓</div>
+                    <div class="stat-card-value" id="trialingSubscribers">0</div>
                     <div class="stat-card-label">
-                        <span class="lang-en">Facility Users</span>
-                        <span class="lang-es">Usuarios de Centros</span>
+                        <span class="lang-en">Trialing</span>
+                        <span class="lang-es">En Prueba</span>
                     </div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-card-icon purple">🎮</div>
-                    <div class="stat-card-value" id="totalSessions">0</div>
+                    <div class="stat-card-icon pink">😂</div>
+                    <div class="stat-card-value" id="totalLaughs">0</div>
                     <div class="stat-card-label">
-                        <span class="lang-en">Total Sessions</span>
-                        <span class="lang-es">Sesiones Totales</span>
+                        <span class="lang-en">Total Laughs</span>
+                        <span class="lang-es">Risas Totales</span>
                     </div>
                 </div>
             </div>
+            
+            <div class="game-cards-grid">
+                <div class="game-card">
+                    <div class="game-card-header trail">
+                        <div class="game-card-icon">🛤️</div>
+                        <div class="game-card-title">LAUGH TRAIL</div>
+                    </div>
+                    <div class="game-card-body">
+                        <div class="game-card-stats">
+                            <div class="game-stat">
+                                <div class="game-stat-value" id="trailSessions">0</div>
+                                <div class="game-stat-label"><span class="lang-en">Sessions</span><span class="lang-es">Sesiones</span></div>
+                            </div>
+                            <div class="game-stat">
+                                <div class="game-stat-value" id="trailBestRound">0</div>
+                                <div class="game-stat-label"><span class="lang-en">Best Round</span><span class="lang-es">Mejor Ronda</span></div>
+                            </div>
+                            <div class="game-stat">
+                                <div class="game-stat-value" id="trailLaughs">0</div>
+                                <div class="game-stat-label">😂</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="game-card">
+                    <div class="game-card-header hunt">
+                        <div class="game-card-icon">🔍</div>
+                        <div class="game-card-title">LAUGH HUNT</div>
+                    </div>
+                    <div class="game-card-body">
+                        <div class="game-card-stats">
+                            <div class="game-stat">
+                                <div class="game-stat-value" id="huntSessions">0</div>
+                                <div class="game-stat-label"><span class="lang-en">Sessions</span><span class="lang-es">Sesiones</span></div>
+                            </div>
+                            <div class="game-stat">
+                                <div class="game-stat-value" id="huntBestTier">0</div>
+                                <div class="game-stat-label"><span class="lang-en">Best Tier</span><span class="lang-es">Mejor Nivel</span></div>
+                            </div>
+                            <div class="game-stat">
+                                <div class="game-stat-value" id="huntLaughs">0</div>
+                                <div class="game-stat-label">😂</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
             <div class="table-card">
                 <div class="table-header">
                     <h3 class="table-title">
@@ -1047,7 +863,7 @@ tr.clickable:hover { background: var(--card-hover); }
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-card-icon teal">✅</div>
-                    <div class="stat-card-value" id="activeSubscribers">0</div>
+                    <div class="stat-card-value" id="activeCount">0</div>
                     <div class="stat-card-label">
                         <span class="lang-en">Active</span>
                         <span class="lang-es">Activos</span>
@@ -1055,26 +871,26 @@ tr.clickable:hover { background: var(--card-hover); }
                 </div>
                 <div class="stat-card">
                     <div class="stat-card-icon purple">🆓</div>
-                    <div class="stat-card-value" id="trialingSubscribers">0</div>
+                    <div class="stat-card-value" id="trialCount">0</div>
                     <div class="stat-card-label">
                         <span class="lang-en">Trialing</span>
                         <span class="lang-es">En Prueba</span>
                     </div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-card-icon gold">👨‍👩‍👧‍👦</div>
-                    <div class="stat-card-value" id="familyPlans">0</div>
+                    <div class="stat-card-icon orange">🔥</div>
+                    <div class="stat-card-value" id="streakLeader">0</div>
                     <div class="stat-card-label">
-                        <span class="lang-en">Family Plans</span>
-                        <span class="lang-es">Planes Familiares</span>
+                        <span class="lang-en">Best Streak</span>
+                        <span class="lang-es">Mejor Racha</span>
                     </div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-card-icon orange">👤</div>
-                    <div class="stat-card-value" id="individualPlans">0</div>
+                    <div class="stat-card-icon pink">😂</div>
+                    <div class="stat-card-value" id="laughLeader">0</div>
                     <div class="stat-card-label">
-                        <span class="lang-en">Individual Plans</span>
-                        <span class="lang-es">Planes Individuales</span>
+                        <span class="lang-en">Most Laughs</span>
+                        <span class="lang-es">Más Risas</span>
                     </div>
                 </div>
             </div>
@@ -1094,54 +910,15 @@ tr.clickable:hover { background: var(--card-hover); }
                             <tr>
                                 <th>Email</th>
                                 <th>PIN</th>
-                                <th><span class="lang-en">Plan</span><span class="lang-es">Plan</span></th>
                                 <th><span class="lang-en">Status</span><span class="lang-es">Estado</span></th>
-                                <th><span class="lang-en">Sessions</span><span class="lang-es">Sesiones</span></th>
+                                <th>😂 <span class="lang-en">Laughs</span><span class="lang-es">Risas</span></th>
+                                <th>🛤️ Trail</th>
+                                <th>🔍 Hunt</th>
                                 <th><span class="lang-en">Streak</span><span class="lang-es">Racha</span></th>
                                 <th><span class="lang-en">Last Active</span><span class="lang-es">Última Vez</span></th>
                             </tr>
                         </thead>
                         <tbody id="subscribersTable"></tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- FACILITIES PAGE -->
-        <section class="page-section" id="page-facilities">
-            <header class="page-header">
-                <h1 class="page-title">
-                    <span class="lang-en">FACILITIES</span>
-                    <span class="lang-es">CENTROS</span>
-                </h1>
-                <p class="page-subtitle">
-                    <span class="lang-en">Nursing homes & facilities</span>
-                    <span class="lang-es">Hogares de ancianos y centros</span>
-                </p>
-            </header>
-            <div class="table-card">
-                <div class="table-header">
-                    <h3 class="table-title">ALL FACILITIES</h3>
-                    <div class="table-actions">
-                        <button class="btn btn-secondary" id="refreshFacilitiesBtn">🔄 
-                            <span class="lang-en">Refresh</span>
-                            <span class="lang-es">Actualizar</span>
-                        </button>
-                    </div>
-                </div>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th><span class="lang-en">Name</span><span class="lang-es">Nombre</span></th>
-                                <th><span class="lang-en">License</span><span class="lang-es">Licencia</span></th>
-                                <th><span class="lang-en">Users</span><span class="lang-es">Usuarios</span></th>
-                                <th><span class="lang-en">Sessions</span><span class="lang-es">Sesiones</span></th>
-                                <th><span class="lang-en">Status</span><span class="lang-es">Estado</span></th>
-                                <th><span class="lang-en">Expires</span><span class="lang-es">Expira</span></th>
-                            </tr>
-                        </thead>
-                        <tbody id="facilitiesTable"></tbody>
                     </table>
                 </div>
             </div>
@@ -1155,38 +932,42 @@ tr.clickable:hover { background: var(--card-hover); }
                     <span class="lang-es">REGISTRO DE ACTIVIDAD</span>
                 </h1>
                 <p class="page-subtitle">
-                    <span class="lang-en">Platform activity summary</span>
-                    <span class="lang-es">Resumen de actividad de la plataforma</span>
+                    <span class="lang-en">Platform activity • Games & Subscriptions</span>
+                    <span class="lang-es">Actividad de la plataforma • Juegos y Suscripciones</span>
                 </p>
             </header>
             
-            <div class="activity-summary-grid">
-                <div class="activity-summary-card">
-                    <div class="activity-summary-value" id="sessionsToday">0</div>
-                    <div class="activity-summary-label">
-                        <span class="lang-en">Sessions Today</span>
-                        <span class="lang-es">Sesiones Hoy</span>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-card-icon orange">🎮</div>
+                    <div class="stat-card-value" id="gamesToday">0</div>
+                    <div class="stat-card-label">
+                        <span class="lang-en">Games Today</span>
+                        <span class="lang-es">Juegos Hoy</span>
                     </div>
                 </div>
-                <div class="activity-summary-card">
-                    <div class="activity-summary-value" id="sessionsWeek">0</div>
-                    <div class="activity-summary-label">
+                <div class="stat-card">
+                    <div class="stat-card-icon teal">📅</div>
+                    <div class="stat-card-value" id="gamesWeek">0</div>
+                    <div class="stat-card-label">
                         <span class="lang-en">This Week</span>
                         <span class="lang-es">Esta Semana</span>
                     </div>
                 </div>
-                <div class="activity-summary-card">
-                    <div class="activity-summary-value" id="newSubsWeek">0</div>
-                    <div class="activity-summary-label">
+                <div class="stat-card">
+                    <div class="stat-card-icon gold">🆕</div>
+                    <div class="stat-card-value" id="newSubsWeek">0</div>
+                    <div class="stat-card-label">
                         <span class="lang-en">New Subs</span>
                         <span class="lang-es">Nuevos Subs</span>
                     </div>
                 </div>
-                <div class="activity-summary-card">
-                    <div class="activity-summary-value" id="milestonesWeek">0</div>
-                    <div class="activity-summary-label">
-                        <span class="lang-en">Milestones</span>
-                        <span class="lang-es">Logros</span>
+                <div class="stat-card">
+                    <div class="stat-card-icon pink">😂</div>
+                    <div class="stat-card-value" id="laughsToday">0</div>
+                    <div class="stat-card-label">
+                        <span class="lang-en">Laughs Today</span>
+                        <span class="lang-es">Risas Hoy</span>
                     </div>
                 </div>
             </div>
@@ -1194,8 +975,8 @@ tr.clickable:hover { background: var(--card-hover); }
             <div class="table-card">
                 <div class="table-header">
                     <h3 class="table-title">
-                        <span class="lang-en">ACTIVITY</span>
-                        <span class="lang-es">ACTIVIDAD</span>
+                        <span class="lang-en">ALL ACTIVITY</span>
+                        <span class="lang-es">TODA LA ACTIVIDAD</span>
                     </h3>
                     <div class="table-actions">
                         <button class="btn btn-secondary" id="refreshActivityBtn">🔄 
@@ -1208,50 +989,10 @@ tr.clickable:hover { background: var(--card-hover); }
                         </button>
                     </div>
                 </div>
-                <div style="padding: 15px 20px 5px;">
-                    <div class="activity-filters">
-                        <button class="filter-btn active" data-filter="all">
-                            <span class="lang-en">All</span>
-                            <span class="lang-es">Todo</span>
-                        </button>
-                        <button class="filter-btn" data-filter="subscription">💳 
-                            <span class="lang-en">Subscriptions</span>
-                            <span class="lang-es">Suscripciones</span>
-                        </button>
-                        <button class="filter-btn" data-filter="game">🎮 
-                            <span class="lang-en">Games</span>
-                            <span class="lang-es">Juegos</span>
-                        </button>
-                        <button class="filter-btn" data-filter="milestone">🏆 
-                            <span class="lang-en">Milestones</span>
-                            <span class="lang-es">Logros</span>
-                        </button>
-                    </div>
-                </div>
                 <div class="activity-list" id="activityList"></div>
             </div>
         </section>
     </main>
-</div>
-
-<div class="modal-overlay" id="deleteModal">
-    <div class="modal">
-        <div class="modal-header">
-            <h3 class="modal-title"><span class="lang-en">CONFIRM</span><span class="lang-es">CONFIRMAR</span></h3>
-            <button class="modal-close" data-close="deleteModal">×</button>
-        </div>
-        <div class="modal-body">
-            <div class="confirm-dialog">
-                <div class="confirm-dialog-icon">⚠️</div>
-                <div class="confirm-dialog-title"><span class="lang-en">ARE YOU SURE?</span><span class="lang-es">¿ESTÁS SEGURO?</span></div>
-                <div class="confirm-dialog-text" id="deleteText"></div>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-secondary" data-close="deleteModal"><span class="lang-en">Cancel</span><span class="lang-es">Cancelar</span></button>
-            <button class="btn btn-danger" id="confirmDeleteBtn"><span class="lang-en">Delete</span><span class="lang-es">Eliminar</span></button>
-        </div>
-    </div>
 </div>
 
 <div class="modal-overlay" id="subscriberModal">
@@ -1269,40 +1010,26 @@ tr.clickable:hover { background: var(--card-hover); }
 <div class="modal-overlay" id="editSubscriberModal">
     <div class="modal">
         <div class="modal-header">
-            <h3 class="modal-title" id="editSubscriberModalTitle">EDIT SUBSCRIBER</h3>
+            <h3 class="modal-title">EDIT SUBSCRIBER</h3>
             <button class="modal-close" data-close="editSubscriberModal">×</button>
         </div>
         <div class="modal-body">
             <input type="hidden" id="editSubPin">
-            <input type="hidden" id="editSubIsFamily">
-            <div class="form-group" id="editEmailGroup">
+            <div class="form-group">
                 <label class="form-label">Email</label>
                 <input type="email" class="form-input" id="editSubEmail" placeholder="email@example.com">
-            </div>
-            <div class="form-group" id="editNameGroup" style="display:none">
-                <label class="form-label"><span class="lang-en">Name</span><span class="lang-es">Nombre</span></label>
-                <input type="text" class="form-input" id="editSubName" placeholder="Name">
             </div>
             <div class="form-group">
                 <label class="form-label">PIN</label>
                 <input type="text" class="form-input" id="editSubNewPin" maxlength="4" placeholder="4-digit PIN">
             </div>
-            <div class="form-group" id="editStatusGroup">
+            <div class="form-group">
                 <label class="form-label"><span class="lang-en">Status</span><span class="lang-es">Estado</span></label>
                 <select class="form-select" id="editSubStatus">
                     <option value="active">Active</option>
                     <option value="trialing">Trialing</option>
                     <option value="canceled">Canceled</option>
                     <option value="past_due">Past Due</option>
-                </select>
-            </div>
-            <div class="form-group" id="editPlanGroup">
-                <label class="form-label"><span class="lang-en">Plan</span><span class="lang-es">Plan</span></label>
-                <select class="form-select" id="editSubPlan">
-                    <option value="individual_monthly">Individual Monthly</option>
-                    <option value="individual_annual">Individual Annual</option>
-                    <option value="family_monthly">Family Monthly</option>
-                    <option value="family_annual">Family Annual</option>
                 </select>
             </div>
         </div>
@@ -1337,26 +1064,25 @@ tr.clickable:hover { background: var(--card-hover); }
     </div>
 </div>
 
-<div class="modal-overlay" id="deleteActivityModal">
+<div class="modal-overlay" id="clearActivityModal">
     <div class="modal">
         <div class="modal-header">
-            <h3 class="modal-title"><span class="lang-en">DELETE ACTIVITY</span><span class="lang-es">ELIMINAR ACTIVIDAD</span></h3>
-            <button class="modal-close" data-close="deleteActivityModal">×</button>
+            <h3 class="modal-title"><span class="lang-en">CLEAR ALL ACTIVITY</span><span class="lang-es">LIMPIAR ACTIVIDAD</span></h3>
+            <button class="modal-close" data-close="clearActivityModal">×</button>
         </div>
         <div class="modal-body">
             <div class="confirm-dialog">
                 <div class="confirm-dialog-icon">🗑️</div>
-                <div class="confirm-dialog-title" id="deleteActivityTitle"><span class="lang-en">DELETE ACTIVITY?</span><span class="lang-es">¿ELIMINAR ACTIVIDAD?</span></div>
-                <div class="confirm-dialog-text" id="deleteActivityText"></div>
-                <div class="delete-activity-summary" id="deleteActivitySummary" style="display:none">
-                    <div class="delete-activity-count" id="deleteActivityCount">0</div>
-                    <div class="delete-activity-label"><span class="lang-en">activities will be deleted</span><span class="lang-es">actividades serán eliminadas</span></div>
+                <div class="confirm-dialog-title"><span class="lang-en">DELETE ALL ACTIVITY?</span><span class="lang-es">¿ELIMINAR TODA LA ACTIVIDAD?</span></div>
+                <div class="confirm-dialog-text">
+                    <span class="lang-en">This will permanently delete all activity logs.</span>
+                    <span class="lang-es">Esto eliminará permanentemente todos los registros.</span>
                 </div>
             </div>
         </div>
         <div class="modal-footer">
-            <button class="btn btn-secondary" data-close="deleteActivityModal"><span class="lang-en">Cancel</span><span class="lang-es">Cancelar</span></button>
-            <button class="btn btn-danger" id="confirmDeleteActivityBtn"><span class="lang-en">Delete</span><span class="lang-es">Eliminar</span></button>
+            <button class="btn btn-secondary" data-close="clearActivityModal"><span class="lang-en">Cancel</span><span class="lang-es">Cancelar</span></button>
+            <button class="btn btn-danger" id="confirmClearActivityBtn"><span class="lang-en">Delete All</span><span class="lang-es">Eliminar Todo</span></button>
         </div>
     </div>
 </div>
@@ -1372,20 +1098,15 @@ tr.clickable:hover { background: var(--card-hover); }
 
     var authToken = null;
     var subscribers = [];
-    var facilities = [];
-    var users = [];
     var activities = [];
-    var currentLang = localStorage.getItem('gt-admin-lang') || 'en';
-    var currentActivityFilter = 'all';
-    var pendingActivityDelete = { type: null, ids: [], date: null, username: null };
+    var currentLang = localStorage.getItem('lc-admin-lang') || 'en';
 
     function init() {
         setLang(currentLang);
         setupPinInputs();
         setupEventListeners();
         
-        // Check existing session
-        var savedToken = sessionStorage.getItem('gostar-admin-token');
+        var savedToken = sessionStorage.getItem('laughcourt-admin-token');
         if (savedToken) {
             verifyToken(savedToken);
         }
@@ -1393,7 +1114,7 @@ tr.clickable:hover { background: var(--card-hover); }
 
     function setLang(lang) {
         currentLang = lang;
-        localStorage.setItem('gt-admin-lang', lang);
+        localStorage.setItem('lc-admin-lang', lang);
         document.body.className = lang;
         document.getElementById('btnEn').className = lang === 'en' ? 'lang-btn active' : 'lang-btn';
         document.getElementById('btnEs').className = lang === 'es' ? 'lang-btn active' : 'lang-btn';
@@ -1428,7 +1149,7 @@ tr.clickable:hover { background: var(--card-hover); }
         .then(function(data) {
             if (data.success && data.token) {
                 authToken = data.token;
-                sessionStorage.setItem('gostar-admin-token', authToken);
+                sessionStorage.setItem('laughcourt-admin-token', authToken);
                 showDashboard();
             } else {
                 showLoginError();
@@ -1452,11 +1173,11 @@ tr.clickable:hover { background: var(--card-hover); }
                 authToken = token;
                 showDashboard();
             } else {
-                sessionStorage.removeItem('gostar-admin-token');
+                sessionStorage.removeItem('laughcourt-admin-token');
             }
         })
         .catch(function() {
-            sessionStorage.removeItem('gostar-admin-token');
+            sessionStorage.removeItem('laughcourt-admin-token');
         });
     }
 
@@ -1474,13 +1195,8 @@ tr.clickable:hover { background: var(--card-hover); }
     }
 
     function logout() {
-        fetch('/api/admin/logout', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ token: authToken })
-        });
         authToken = null;
-        sessionStorage.removeItem('gostar-admin-token');
+        sessionStorage.removeItem('laughcourt-admin-token');
         document.getElementById('dashboard').classList.remove('visible');
         document.getElementById('loginScreen').classList.remove('hidden');
         for (var i = 1; i <= 4; i++) document.getElementById('pin' + i).value = '';
@@ -1507,22 +1223,11 @@ tr.clickable:hover { background: var(--card-hover); }
         });
 
         document.getElementById('refreshSubscribersBtn').addEventListener('click', loadSubscribers);
-        document.getElementById('refreshFacilitiesBtn').addEventListener('click', loadFacilities);
         document.getElementById('refreshActivityBtn').addEventListener('click', loadActivity);
-        document.getElementById('clearAllActivityBtn').addEventListener('click', promptClearAllActivity);
+        document.getElementById('clearAllActivityBtn').addEventListener('click', function() { openModal('clearActivityModal'); });
+        document.getElementById('confirmClearActivityBtn').addEventListener('click', clearAllActivity);
         document.getElementById('saveSubscriberBtn').addEventListener('click', saveSubscriber);
         document.getElementById('confirmDeleteSubscriberBtn').addEventListener('click', confirmDeleteSubscriber);
-        document.getElementById('confirmDeleteActivityBtn').addEventListener('click', confirmDeleteActivity);
-        
-        // Activity filters
-        document.querySelectorAll('.filter-btn').forEach(function(btn) {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
-                this.classList.add('active');
-                currentActivityFilter = this.dataset.filter;
-                renderActivity();
-            });
-        });
 
         document.querySelectorAll('.modal-overlay').forEach(function(overlay) {
             overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.classList.remove('show'); });
@@ -1554,7 +1259,6 @@ tr.clickable:hover { background: var(--card-hover); }
 
     function loadAllData() {
         loadSubscribers();
-        loadFacilities();
         loadActivity();
     }
 
@@ -1564,41 +1268,13 @@ tr.clickable:hover { background: var(--card-hover); }
                 if (data.success) {
                     subscribers = data.subscribers || [];
                     renderSubscribers();
-                    updateOverviewStats();
+                    updateStats();
                 }
             })
             .catch(function(err) {
                 console.error('Error loading subscribers:', err);
                 subscribers = [];
                 renderSubscribers();
-            });
-    }
-
-    function loadFacilities() {
-        apiGet('/api/admin/facilities')
-            .then(function(data) {
-                if (data.success) {
-                    facilities = data.facilities || [];
-                    renderFacilities();
-                    updateOverviewStats();
-                }
-            })
-            .catch(function(err) {
-                console.error('Error loading facilities:', err);
-                facilities = [];
-                renderFacilities();
-            });
-
-        apiGet('/api/admin/users')
-            .then(function(data) {
-                if (data.success) {
-                    users = data.users || [];
-                    updateOverviewStats();
-                }
-            })
-            .catch(function(err) {
-                console.error('Error loading users:', err);
-                users = [];
             });
     }
 
@@ -1609,6 +1285,7 @@ tr.clickable:hover { background: var(--card-hover); }
                     activities = data.activities || [];
                     renderActivity();
                     renderOverviewActivity();
+                    updateActivityStats();
                 }
             })
             .catch(function(err) {
@@ -1618,227 +1295,217 @@ tr.clickable:hover { background: var(--card-hover); }
             });
     }
 
-    function updateOverviewStats() {
-        document.getElementById('totalSubscribers').textContent = subscribers.length;
-        document.getElementById('totalFacilities').textContent = facilities.length;
-        document.getElementById('totalUsers').textContent = users.length;
-        
-        var totalSessions = facilities.reduce(function(sum, f) { return sum + (f.total_sessions || 0); }, 0);
-        document.getElementById('totalSessions').textContent = totalSessions;
-
-        // Subscriber stats
+    function updateStats() {
+        var total = subscribers.length;
         var active = subscribers.filter(function(s) { return s.status === 'active'; }).length;
         var trialing = subscribers.filter(function(s) { return s.status === 'trialing'; }).length;
-        var family = subscribers.filter(function(s) { return s.plan_type && s.plan_type.includes('family'); }).length;
-        var individual = subscribers.filter(function(s) { return s.plan_type && s.plan_type.includes('individual'); }).length;
+        
+        var totalLaughs = 0;
+        var trailSessions = 0;
+        var huntSessions = 0;
+        var trailLaughs = 0;
+        var huntLaughs = 0;
+        var bestStreak = 0;
+        var mostLaughs = 0;
+        var bestTrailRound = 0;
+        var bestHuntTier = 0;
+        
+        subscribers.forEach(function(s) {
+            var laughs = s.totalLaughs || 0;
+            totalLaughs += laughs;
+            if (laughs > mostLaughs) mostLaughs = laughs;
+            if ((s.streak || 0) > bestStreak) bestStreak = s.streak;
+            
+            if (s.games) {
+                if (s.games.laughtrail) {
+                    trailSessions += s.games.laughtrail.sessions || 0;
+                    trailLaughs += s.games.laughtrail.laughs || 0;
+                    if ((s.games.laughtrail.bestRound || 0) > bestTrailRound) bestTrailRound = s.games.laughtrail.bestRound;
+                }
+                if (s.games.laughhunt) {
+                    huntSessions += s.games.laughhunt.sessions || 0;
+                    huntLaughs += s.games.laughhunt.laughs || 0;
+                    if ((s.games.laughhunt.bestTier || 0) > bestHuntTier) bestHuntTier = s.games.laughhunt.bestTier;
+                }
+            }
+        });
 
+        document.getElementById('totalSubscribers').textContent = total;
         document.getElementById('activeSubscribers').textContent = active;
         document.getElementById('trialingSubscribers').textContent = trialing;
-        document.getElementById('familyPlans').textContent = family;
-        document.getElementById('individualPlans').textContent = individual;
+        document.getElementById('totalLaughs').textContent = totalLaughs;
+        
+        document.getElementById('trailSessions').textContent = trailSessions;
+        document.getElementById('trailBestRound').textContent = bestTrailRound;
+        document.getElementById('trailLaughs').textContent = trailLaughs;
+        
+        document.getElementById('huntSessions').textContent = huntSessions;
+        document.getElementById('huntBestTier').textContent = bestHuntTier;
+        document.getElementById('huntLaughs').textContent = huntLaughs;
+        
+        document.getElementById('activeCount').textContent = active;
+        document.getElementById('trialCount').textContent = trialing;
+        document.getElementById('streakLeader').textContent = bestStreak;
+        document.getElementById('laughLeader').textContent = mostLaughs;
+    }
+
+    function updateActivityStats() {
+        var now = new Date();
+        var todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+        var weekStart = todayStart - (now.getDay() * 86400000);
+        
+        var gamesToday = 0;
+        var gamesWeek = 0;
+        var newSubsWeek = 0;
+        var laughsToday = 0;
+        
+        activities.forEach(function(act) {
+            var ts = new Date(act.timestamp).getTime();
+            var isGame = act.type === 'game_session';
+            var isSub = act.type && act.type.includes('subscription_created');
+            
+            if (ts >= todayStart) {
+                if (isGame) gamesToday++;
+                if (act.laughs) laughsToday += act.laughs;
+            }
+            if (ts >= weekStart) {
+                if (isGame) gamesWeek++;
+                if (isSub) newSubsWeek++;
+            }
+        });
+        
+        document.getElementById('gamesToday').textContent = gamesToday;
+        document.getElementById('gamesWeek').textContent = gamesWeek;
+        document.getElementById('newSubsWeek').textContent = newSubsWeek;
+        document.getElementById('laughsToday').textContent = laughsToday;
+    }
+
+    function formatTimeAgo(timestamp) {
+        if (!timestamp) return '-';
+        var date = new Date(timestamp);
+        var now = new Date();
+        var diff = Math.floor((now - date) / 1000);
+        
+        if (diff < 60) return currentLang === 'es' ? 'hace ' + diff + 's' : diff + 's ago';
+        if (diff < 3600) return currentLang === 'es' ? 'hace ' + Math.floor(diff/60) + 'm' : Math.floor(diff/60) + 'm ago';
+        if (diff < 86400) return currentLang === 'es' ? 'hace ' + Math.floor(diff/3600) + 'h' : Math.floor(diff/3600) + 'h ago';
+        return currentLang === 'es' ? 'hace ' + Math.floor(diff/86400) + 'd' : Math.floor(diff/86400) + 'd ago';
     }
 
     function renderSubscribers() {
         var tbody = document.getElementById('subscribersTable');
         
         if (subscribers.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--muted)"><span class="lang-en">No subscribers yet</span><span class="lang-es">Aún no hay suscriptores</span></td></tr>';
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--muted)"><span class="lang-en">No subscribers yet</span><span class="lang-es">Aún no hay suscriptores</span></td></tr>';
             return;
         }
 
         var html = '';
         subscribers.forEach(function(sub) {
             var statusClass = 'badge-' + (sub.status || 'unknown');
-            var planDisplay = (sub.plan_type || 'unknown').replace('_', ' ');
-            var totalSessions = sub.sessions ? Object.values(sub.sessions).reduce(function(a,b){return a+b;}, 0) : 0;
+            var totalLaughs = sub.totalLaughs || 0;
+            var trailTier = sub.games && sub.games.laughtrail ? (sub.games.laughtrail.bestRound || 0) : 0;
+            var huntTier = sub.games && sub.games.laughhunt ? (sub.games.laughhunt.bestTier || 0) : 0;
             var lastActive = sub.lastActive ? formatTimeAgo(sub.lastActive) : '-';
             
             html += '<tr class="clickable" onclick="window.viewSubscriber(\'' + sub.pin + '\')">';
             html += '<td>' + (sub.email || '-') + '</td>';
-            html += '<td><strong style="color:var(--orange)">' + (sub.pin || '-') + '</strong></td>';
-            html += '<td>' + planDisplay + '</td>';
+            html += '<td><strong style="color:var(--gold)">' + (sub.pin || '-') + '</strong></td>';
             html += '<td><span class="badge ' + statusClass + '">' + (sub.status || 'unknown') + '</span></td>';
-            html += '<td>' + totalSessions + '</td>';
+            html += '<td>😂 ' + totalLaughs + '</td>';
+            html += '<td>' + (trailTier > 0 ? 'R' + trailTier : '-') + '</td>';
+            html += '<td>' + (huntTier > 0 ? 'T' + huntTier : '-') + '</td>';
             html += '<td>🔥 ' + (sub.streak || 0) + '</td>';
             html += '<td>' + lastActive + '</td>';
             html += '</tr>';
-            
-            // Also add family members as clickable rows
-            if (sub.family_members && sub.family_members.length > 0) {
-                sub.family_members.forEach(function(member) {
-                    var memberSessions = member.sessions ? Object.values(member.sessions).reduce(function(a,b){return a+b;}, 0) : 0;
-                    var memberLastActive = member.lastActive ? formatTimeAgo(member.lastActive) : '-';
-                    
-                    html += '<tr class="clickable" onclick="window.viewSubscriber(\'' + member.pin + '\')" style="background:rgba(255,107,0,0.05)">';
-                    html += '<td style="padding-left:40px">↳ ' + member.name + ' <span style="color:var(--muted);font-size:0.75rem">(family)</span></td>';
-                    html += '<td><strong style="color:var(--teal)">' + (member.pin || '-') + '</strong></td>';
-                    html += '<td>-</td>';
-                    html += '<td>-</td>';
-                    html += '<td>' + memberSessions + '</td>';
-                    html += '<td>-</td>';
-                    html += '<td>' + memberLastActive + '</td>';
-                    html += '</tr>';
-                });
-            }
         });
         
         tbody.innerHTML = html;
     }
 
     window.viewSubscriber = function(pin) {
-        openModal('subscriberModal');
-        document.getElementById('subscriberModalBody').innerHTML = '<div style="text-align:center;padding:40px"><div class="loading-spinner"></div></div>';
+        var sub = subscribers.find(function(s) { return s.pin === pin; });
+        if (!sub) return;
         
-        apiGet('/api/admin/subscriber/' + pin)
-            .then(function(data) {
-                if (data.success) {
-                    renderSubscriberDetail(data.subscriber);
-                } else {
-                    document.getElementById('subscriberModalBody').innerHTML = '<div style="text-align:center;padding:40px;color:var(--danger)">Error loading subscriber</div>';
-                }
-            })
-            .catch(function(err) {
-                console.error('Error fetching subscriber:', err);
-                document.getElementById('subscriberModalBody').innerHTML = '<div style="text-align:center;padding:40px;color:var(--danger)">Error loading subscriber</div>';
-            });
-    };
-
-    function renderSubscriberDetail(sub) {
-        var initial = sub.name ? sub.name.charAt(0).toUpperCase() : '?';
-        var gameIcons = {
-            sequence: '🧠',
-            startrail: '⚡',
-            duo: '👁️',
-            gonogo: '🎯',
-            trailtrotter: '🏃',
-            gotrotters: '🏀'
-        };
-        var gameNames = {
-            sequence: 'Sequence Memory',
-            startrail: 'StarTrail',
-            duo: 'Pattern Duo',
-            gonogo: 'Go/No-Go',
-            trailtrotter: 'TrailTrotter',
-            gotrotters: 'GoTrotters'
-        };
+        window.currentSubscriberData = sub;
+        
+        var initial = sub.email ? sub.email.charAt(0).toUpperCase() : '?';
+        var trailData = sub.games && sub.games.laughtrail ? sub.games.laughtrail : {};
+        var huntData = sub.games && sub.games.laughhunt ? sub.games.laughhunt : {};
         
         var html = '<div class="subscriber-detail-header">';
         html += '<div class="subscriber-avatar">' + initial + '</div>';
         html += '<div class="subscriber-info" style="flex:1">';
-        html += '<h4>' + (sub.name || 'Unknown') + (sub.is_family_member ? ' <span style="color:var(--teal);font-size:0.8rem">(Family Member)</span>' : '') + '</h4>';
-        html += '<p>' + (sub.email || '-') + ' • PIN: <strong style="color:var(--orange)">' + sub.pin + '</strong></p>';
+        html += '<h4>' + (sub.email || 'Unknown') + '</h4>';
+        html += '<p>PIN: <strong style="color:var(--gold)">' + sub.pin + '</strong> • ' + (sub.status || 'unknown') + '</p>';
         html += '</div>';
         html += '<div class="action-btns">';
-        html += '<button class="action-btn" onclick="window.editSubscriber(\'' + sub.pin + '\', ' + sub.is_family_member + ')" title="Edit">✏️</button>';
-        html += '<button class="action-btn delete" onclick="window.deleteSubscriber(\'' + sub.pin + '\', \'' + (sub.name || sub.email) + '\')" title="Delete">🗑️</button>';
+        html += '<button class="action-btn" onclick="window.editSubscriber(\'' + sub.pin + '\')" title="Edit">✏️</button>';
+        html += '<button class="action-btn delete" onclick="window.deleteSubscriber(\'' + sub.pin + '\', \'' + (sub.email || sub.pin) + '\')" title="Delete">🗑️</button>';
         html += '</div>';
         html += '</div>';
         
         html += '<div class="subscriber-stats-grid">';
-        html += '<div class="subscriber-stat"><div class="subscriber-stat-value">' + (sub.totalSessions || 0) + '</div><div class="subscriber-stat-label">Sessions</div></div>';
+        html += '<div class="subscriber-stat"><div class="subscriber-stat-value">😂 ' + (sub.totalLaughs || 0) + '</div><div class="subscriber-stat-label">Total Laughs</div></div>';
         html += '<div class="subscriber-stat"><div class="subscriber-stat-value">🔥 ' + (sub.streak || 0) + '</div><div class="subscriber-stat-label">Streak</div></div>';
-        html += '<div class="subscriber-stat"><div class="subscriber-stat-value">' + (sub.status || '-') + '</div><div class="subscriber-stat-label">Status</div></div>';
+        html += '<div class="subscriber-stat"><div class="subscriber-stat-value">' + ((trailData.sessions || 0) + (huntData.sessions || 0)) + '</div><div class="subscriber-stat-label">Sessions</div></div>';
         html += '</div>';
         
-        // Game scores section
         html += '<div class="game-scores-section">';
-        html += '<h5>' + (currentLang === 'es' ? 'Mejores Puntuaciones por Juego' : 'Best Scores by Game') + '</h5>';
+        html += '<h5>' + (currentLang === 'es' ? 'Progreso por Juego' : 'Game Progress') + '</h5>';
         
-        var hasBestScores = sub.best && Object.keys(sub.best).length > 0;
-        if (hasBestScores) {
-            for (var game in sub.best) {
-                var scoreData = sub.best[game];
-                var icon = gameIcons[game] || '🎮';
-                var name = gameNames[game] || game;
-                var shiftClass = 'shift-' + scoreData.shift;
-                
-                html += '<div class="game-score-row">';
-                html += '<div class="game-score-name"><span class="icon">' + icon + '</span> ' + name + '</div>';
-                html += '<div class="game-score-stats">';
-                html += '<div class="game-score-value">' + scoreData.score + '</div>';
-                html += '<span class="shift-badge-large ' + shiftClass + '">Shift ' + scoreData.shift + '</span>';
-                html += '</div>';
-                html += '</div>';
-            }
-        } else {
-            html += '<div style="text-align:center;padding:20px;color:var(--muted)">' + (currentLang === 'es' ? 'Aún no hay puntuaciones' : 'No scores yet') + '</div>';
-        }
+        html += '<div class="game-score-row">';
+        html += '<div class="game-score-name"><span class="icon">🛤️</span> LAUGH TRAIL</div>';
+        html += '<div class="game-score-stats">';
+        html += '<span style="color:var(--muted);font-size:0.8rem">' + (trailData.sessions || 0) + ' sessions</span>';
+        html += '<div class="game-score-value">R' + (trailData.bestRound || 0) + '</div>';
+        html += '</div></div>';
         
-        // Sessions breakdown
-        if (sub.sessions && Object.keys(sub.sessions).length > 0) {
-            html += '<h5 style="margin-top:20px">' + (currentLang === 'es' ? 'Sesiones por Juego' : 'Sessions by Game') + '</h5>';
-            for (var game in sub.sessions) {
-                var icon = gameIcons[game] || '🎮';
-                var name = gameNames[game] || game;
-                html += '<div class="game-score-row">';
-                html += '<div class="game-score-name"><span class="icon">' + icon + '</span> ' + name + '</div>';
-                html += '<div class="game-score-value">' + sub.sessions[game] + ' sessions</div>';
-                html += '</div>';
-            }
-        }
+        html += '<div class="game-score-row">';
+        html += '<div class="game-score-name"><span class="icon">🔍</span> LAUGH HUNT</div>';
+        html += '<div class="game-score-stats">';
+        html += '<span style="color:var(--muted);font-size:0.8rem">' + (huntData.sessions || 0) + ' sessions</span>';
+        html += '<div class="game-score-value">T' + (huntData.bestTier || 0) + '</div>';
+        html += '</div></div>';
         
         html += '</div>';
         
         document.getElementById('subscriberModalBody').innerHTML = html;
-        
-        // Store current subscriber data for edit
-        window.currentSubscriberData = sub;
-    }
+        openModal('subscriberModal');
+    };
 
     var deleteSubscriberPin = null;
 
-    window.editSubscriber = function(pin, isFamily) {
+    window.editSubscriber = function(pin) {
         closeModal('subscriberModal');
         
         var sub = window.currentSubscriberData;
         if (!sub) return;
         
         document.getElementById('editSubPin').value = pin;
-        document.getElementById('editSubIsFamily').value = isFamily ? 'true' : 'false';
+        document.getElementById('editSubEmail').value = sub.email || '';
         document.getElementById('editSubNewPin').value = pin;
-        
-        if (isFamily) {
-            document.getElementById('editEmailGroup').style.display = 'none';
-            document.getElementById('editNameGroup').style.display = 'block';
-            document.getElementById('editStatusGroup').style.display = 'none';
-            document.getElementById('editPlanGroup').style.display = 'none';
-            document.getElementById('editSubName').value = sub.name || '';
-            document.getElementById('editSubscriberModalTitle').textContent = currentLang === 'es' ? 'EDITAR MIEMBRO' : 'EDIT FAMILY MEMBER';
-        } else {
-            document.getElementById('editEmailGroup').style.display = 'block';
-            document.getElementById('editNameGroup').style.display = 'none';
-            document.getElementById('editStatusGroup').style.display = 'block';
-            document.getElementById('editPlanGroup').style.display = 'block';
-            document.getElementById('editSubEmail').value = sub.email || '';
-            document.getElementById('editSubStatus').value = sub.status || 'active';
-            document.getElementById('editSubPlan').value = sub.plan_type || 'individual_monthly';
-            document.getElementById('editSubscriberModalTitle').textContent = currentLang === 'es' ? 'EDITAR SUSCRIPTOR' : 'EDIT SUBSCRIBER';
-        }
+        document.getElementById('editSubStatus').value = sub.status || 'active';
         
         openModal('editSubscriberModal');
     };
 
     window.deleteSubscriber = function(pin, name) {
         deleteSubscriberPin = pin;
-        document.getElementById('deleteSubscriberText').innerHTML = (currentLang === 'es' ? 'Eliminar ' : 'Delete ') + '<strong style="color:var(--orange)">' + name + '</strong>?';
+        document.getElementById('deleteSubscriberText').innerHTML = (currentLang === 'es' ? 'Eliminar ' : 'Delete ') + '<strong style="color:var(--gold)">' + name + '</strong>?';
         closeModal('subscriberModal');
         openModal('deleteSubscriberModal');
     };
 
     function saveSubscriber() {
         var pin = document.getElementById('editSubPin').value;
-        var isFamily = document.getElementById('editSubIsFamily').value === 'true';
         var newPin = document.getElementById('editSubNewPin').value;
         
-        var body = { pin: newPin };
-        
-        if (isFamily) {
-            body.name = document.getElementById('editSubName').value;
-        } else {
-            body.email = document.getElementById('editSubEmail').value;
-            body.status = document.getElementById('editSubStatus').value;
-            body.plan_type = document.getElementById('editSubPlan').value;
-        }
+        var body = {
+            email: document.getElementById('editSubEmail').value,
+            pin: newPin,
+            status: document.getElementById('editSubStatus').value
+        };
         
         fetch('/api/admin/subscriber/' + pin, {
             method: 'PUT',
@@ -1889,432 +1556,43 @@ tr.clickable:hover { background: var(--card-hover); }
         deleteSubscriberPin = null;
     }
 
-    function renderFacilities() {
-        var tbody = document.getElementById('facilitiesTable');
-        
-        if (facilities.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--muted)"><span class="lang-en">No facilities yet</span><span class="lang-es">Aún no hay centros</span></td></tr>';
-            return;
-        }
-
-        var html = '';
-        facilities.forEach(function(fac) {
-            var statusClass = fac.status === 'active' ? 'badge-active' : (fac.status === 'expired' ? 'badge-canceled' : 'badge-trialing');
-            var expiresDate = fac.expires_at ? new Date(fac.expires_at).toLocaleDateString() : '-';
-            
-            html += '<tr>';
-            html += '<td><strong>' + (fac.name || '-') + '</strong></td>';
-            html += '<td><code style="background:var(--darker);padding:4px 8px;border-radius:4px">' + (fac.license_key || '-') + '</code></td>';
-            html += '<td>' + (fac.user_count || 0) + ' / ' + (fac.user_limit || 0) + '</td>';
-            html += '<td>' + (fac.total_sessions || 0) + '</td>';
-            html += '<td><span class="badge ' + statusClass + '">' + (fac.status || 'unknown') + '</span></td>';
-            html += '<td>' + expiresDate + '</td>';
-            html += '</tr>';
-        });
-        
-        tbody.innerHTML = html;
-    }
-
-    function getActivityIcon(type) {
-        var icons = {
-            'subscription_created': { icon: '💳', class: 'subscription' },
-            'subscription_updated': { icon: '💳', class: 'subscription' },
-            'subscription_canceled': { icon: '❌', class: 'subscription' },
-            'subscriber_login': { icon: '🔑', class: 'subscription' },
-            'user_register': { icon: '👤', class: 'user' },
-            'user_login': { icon: '🔑', class: 'user' },
-            'game_session': { icon: '🎮', class: 'game' },
-            'facility_login': { icon: '🏢', class: 'facility' },
-            'family_member_added': { icon: '👨‍👩‍👧', class: 'subscription' },
-            'family_member_removed': { icon: '👤', class: 'subscription' }
-        };
-        return icons[type] || { icon: '📋', class: 'gear' };
-    }
-
-    function formatTimeAgo(timestamp) {
-        if (!timestamp) return '-';
-        var date = new Date(timestamp);
-        var now = new Date();
-        var diff = Math.floor((now - date) / 1000);
-        
-        if (diff < 60) return currentLang === 'es' ? 'hace ' + diff + 's' : diff + 's ago';
-        if (diff < 3600) return currentLang === 'es' ? 'hace ' + Math.floor(diff/60) + 'm' : Math.floor(diff/60) + 'm ago';
-        if (diff < 86400) return currentLang === 'es' ? 'hace ' + Math.floor(diff/3600) + 'h' : Math.floor(diff/3600) + 'h ago';
-        return currentLang === 'es' ? 'hace ' + Math.floor(diff/86400) + 'd' : Math.floor(diff/86400) + 'd ago';
-    }
-
-    function getActivityCategory(type) {
-        if (type && type.includes('subscription') || type && type.includes('subscriber')) return 'subscription';
-        if (type === 'game_session') return 'game';
-        if (type && (type.includes('milestone') || type.includes('shift') || type.includes('master'))) return 'milestone';
-        return 'other';
-    }
-
-    function isMilestone(details) {
-        if (!details) return false;
-        var lower = details.toLowerCase();
-        return lower.includes('shift 5') || lower.includes('shift 7') || lower.includes('shift 10') || 
-               lower.includes('master') || lower.includes('streak');
-    }
-
-    function getDateKey(timestamp) {
-        if (!timestamp) return 'unknown';
-        var date = new Date(timestamp);
-        return date.toISOString().split('T')[0];
-    }
-
-    function formatDateLabel(dateKey) {
-        var today = new Date().toISOString().split('T')[0];
-        var yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
-        
-        if (dateKey === today) return currentLang === 'es' ? 'Hoy' : 'Today';
-        if (dateKey === yesterday) return currentLang === 'es' ? 'Ayer' : 'Yesterday';
-        
-        var date = new Date(dateKey + 'T00:00:00');
-        var options = { weekday: 'short', month: 'short', day: 'numeric' };
-        return date.toLocaleDateString(currentLang === 'es' ? 'es-ES' : 'en-US', options);
-    }
-
-    function calculateActivityStats() {
-        var now = new Date();
-        var todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-        var weekStart = todayStart - (now.getDay() * 86400000);
-        
-        var sessionsToday = 0;
-        var sessionsWeek = 0;
-        var newSubsWeek = 0;
-        var milestonesWeek = 0;
-        
-        activities.forEach(function(act) {
-            var ts = new Date(act.timestamp).getTime();
-            var isGame = act.type === 'game_session';
-            var isSub = act.type && act.type.includes('subscription_created');
-            var isMile = isMilestone(act.details);
-            
-            if (ts >= todayStart && isGame) sessionsToday++;
-            if (ts >= weekStart) {
-                if (isGame) sessionsWeek++;
-                if (isSub) newSubsWeek++;
-                if (isMile) milestonesWeek++;
-            }
-        });
-        
-        document.getElementById('sessionsToday').textContent = sessionsToday;
-        document.getElementById('sessionsWeek').textContent = sessionsWeek;
-        document.getElementById('newSubsWeek').textContent = newSubsWeek;
-        document.getElementById('milestonesWeek').textContent = milestonesWeek;
-    }
-
-    function aggregateActivities(activityList) {
-        var grouped = {};
-        
-        activityList.forEach(function(act) {
-            var dateKey = getDateKey(act.timestamp);
-            if (!grouped[dateKey]) grouped[dateKey] = [];
-            grouped[dateKey].push(act);
-        });
-        
-        // Aggregate game sessions per user per day
-        var result = {};
-        for (var dateKey in grouped) {
-            var dayActivities = grouped[dateKey];
-            var userGames = {};
-            var otherActivities = [];
-            var allIds = [];
-            var allIndices = [];
-            
-            dayActivities.forEach(function(act) {
-                if (act.id) allIds.push(act.id);
-                if (act._originalIndex !== undefined) allIndices.push(act._originalIndex);
-                
-                if (act.type === 'game_session' && act.username) {
-                    if (!userGames[act.username]) {
-                        userGames[act.username] = { count: 0, games: [], ids: [], indices: [], details: act.details, timestamp: act.timestamp };
-                    }
-                    userGames[act.username].count++;
-                    if (act.id) userGames[act.username].ids.push(act.id);
-                    if (act._originalIndex !== undefined) userGames[act.username].indices.push(act._originalIndex);
-                    if (act.details) {
-                        var gameName = act.details.split('|')[0].trim();
-                        if (userGames[act.username].games.indexOf(gameName) === -1) {
-                            userGames[act.username].games.push(gameName);
-                        }
-                    }
-                } else {
-                    otherActivities.push(act);
-                }
-            });
-            
-            result[dateKey] = { aggregated: userGames, other: otherActivities, allIds: allIds, allIndices: allIndices };
-        }
-        
-        return result;
-    }
-
     function renderActivity() {
         var container = document.getElementById('activityList');
-        
-        calculateActivityStats();
         
         if (activities.length === 0) {
             container.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📋</div><div class="empty-state-text"><span class="lang-en">No activity yet</span><span class="lang-es">Aún no hay actividad</span></div></div>';
             return;
         }
 
-        // Filter activities but keep original index
-        var filtered = [];
-        activities.forEach(function(act, idx) {
-            var include = false;
-            if (currentActivityFilter === 'all') {
-                include = true;
-            } else {
-                var category = getActivityCategory(act.type);
-                if (currentActivityFilter === 'milestone') {
-                    include = category === 'milestone' || isMilestone(act.details);
-                } else {
-                    include = category === currentActivityFilter;
-                }
-            }
-            if (include) {
-                var actWithIndex = {};
-                for (var key in act) { actWithIndex[key] = act[key]; }
-                actWithIndex._originalIndex = idx;
-                filtered.push(actWithIndex);
-            }
-        });
-
-        if (filtered.length === 0) {
-            container.innerHTML = '<div class="empty-state" style="padding:30px"><div class="empty-state-text"><span class="lang-en">No matching activity</span><span class="lang-es">Sin actividad coincidente</span></div></div>';
-            return;
-        }
-
-        var aggregated = aggregateActivities(filtered);
-        var dateKeys = Object.keys(aggregated).sort().reverse();
-        
-        var html = '<div style="padding: 0 20px 20px;">';
-        
-        dateKeys.slice(0, 14).forEach(function(dateKey, dayIndex) {
-            var dayData = aggregated[dateKey];
-            var totalItems = Object.keys(dayData.aggregated).length + dayData.other.length;
-            var totalCount = dayData.allIds.length;
-            var isCollapsed = dayIndex > 1 ? ' collapsed' : '';
-            var idsJson = JSON.stringify(dayData.allIds);
+        var html = '';
+        activities.slice(0, 50).forEach(function(act) {
+            var iconClass = 'game';
+            var icon = '🎮';
             
-            html += '<div class="day-group' + isCollapsed + '" data-date="' + dateKey + '">';
-            html += '<div class="day-group-header">';
-            html += '<div class="day-group-title" onclick="window.toggleDayGroup(this.parentElement)">';
-            html += '<span>' + formatDateLabel(dateKey) + '</span>';
-            html += '<span class="day-group-count">' + totalItems + '</span>';
+            if (act.type && act.type.includes('subscription')) {
+                iconClass = 'subscription';
+                icon = '💳';
+            } else if (act.game === 'laughtrail') {
+                icon = '🛤️';
+            } else if (act.game === 'laughhunt') {
+                icon = '🔍';
+            }
+            
+            var description = act.details || act.type || 'Activity';
+            
+            html += '<div class="aggregated-item">';
+            html += '<div class="aggregated-icon ' + iconClass + '">' + icon + '</div>';
+            html += '<div class="aggregated-content">';
+            html += '<div class="aggregated-text">';
+            if (act.username || act.email) html += '<strong>' + (act.username || act.email) + '</strong> - ';
+            html += description;
+            if (act.laughs) html += ' <span style="color:var(--pink)">😂 +' + act.laughs + '</span>';
             html += '</div>';
-            html += '<button class="day-delete-btn" onclick="event.stopPropagation(); window.promptDeleteDay(\'' + dateKey + '\', ' + totalCount + ')" title="' + (currentLang === 'es' ? 'Eliminar día' : 'Delete day') + '">🗑️ ' + (currentLang === 'es' ? 'Día' : 'Day') + '</button>';
-            html += '<span class="day-group-toggle" onclick="window.toggleDayGroup(this.parentElement)">▼</span>';
-            html += '</div>';
-            
-            html += '<div class="day-group-items">';
-            
-            // Render aggregated game sessions
-            for (var username in dayData.aggregated) {
-                var userData = dayData.aggregated[username];
-                var gamesPlayed = userData.games.join(', ') || 'Games';
-                var userIdsJson = JSON.stringify(userData.ids);
-                
-                html += '<div class="aggregated-item">';
-                html += '<div class="aggregated-icon game">🎮</div>';
-                html += '<div class="aggregated-content">';
-                html += '<div class="aggregated-text"><strong>' + username + '</strong> ' + (currentLang === 'es' ? 'jugó' : 'played') + ' <strong>' + userData.count + '</strong> ' + (userData.count === 1 ? (currentLang === 'es' ? 'sesión' : 'session') : (currentLang === 'es' ? 'sesiones' : 'sessions')) + '</div>';
-                html += '<div class="aggregated-details">' + gamesPlayed + '</div>';
-                html += '</div>';
-                html += '<button class="activity-delete-btn" onclick="window.promptDeleteUserSessions(\'' + dateKey + '\', \'' + username + '\', ' + userData.count + ')" title="' + (currentLang === 'es' ? 'Eliminar' : 'Delete') + '">🗑️</button>';
-                html += '</div>';
-            }
-            
-            // Render other activities (subscriptions, milestones, etc.)
-            dayData.other.forEach(function(act) {
-                var iconInfo = getActivityIcon(act.type);
-                var description = act.details || act.type || 'Activity';
-                var hasMilestone = isMilestone(description);
-                var iconClass = hasMilestone ? 'milestone' : (act.type && act.type.includes('subscription') ? 'subscription' : 'game');
-                var actId = act.id || '';
-                var actIndex = act._originalIndex;
-                
-                html += '<div class="aggregated-item">';
-                html += '<div class="aggregated-icon ' + iconClass + '">' + iconInfo.icon + '</div>';
-                html += '<div class="aggregated-content">';
-                html += '<div class="aggregated-text">';
-                if (act.username) html += '<strong>' + act.username + '</strong> - ';
-                html += description;
-                if (hasMilestone) html += ' <span class="milestone-badge">🏆</span>';
-                html += '</div>';
-                if (act.facility) html += '<div class="aggregated-details">' + act.facility + '</div>';
-                html += '</div>';
-                // Always show delete button - use ID if available, otherwise use index
-                html += '<button class="activity-delete-btn" onclick="window.promptDeleteSingle(\'' + actId + '\', \'' + (act.username || '') + '\', ' + actIndex + ')" title="' + (currentLang === 'es' ? 'Eliminar' : 'Delete') + '">🗑️</button>';
-                html += '</div>';
-            });
-            
+            html += '<div class="aggregated-details">' + formatTimeAgo(act.timestamp) + '</div>';
             html += '</div></div>';
         });
         
-        html += '</div>';
         container.innerHTML = html;
-    }
-
-    window.toggleDayGroup = function(header) {
-        var group = header.parentElement;
-        group.classList.toggle('collapsed');
-    };
-
-    // Delete activity prompts
-    window.promptDeleteDay = function(dateKey, count) {
-        pendingActivityDelete = { type: 'day', ids: [], date: dateKey, username: null };
-        document.getElementById('deleteActivityTitle').innerHTML = currentLang === 'es' ? '¿ELIMINAR DÍA COMPLETO?' : 'DELETE ENTIRE DAY?';
-        document.getElementById('deleteActivityText').innerHTML = currentLang === 'es' 
-            ? 'Esto eliminará <strong>todas las actividades</strong> del ' + formatDateLabel(dateKey) + '.'
-            : 'This will delete <strong>all activities</strong> from ' + formatDateLabel(dateKey) + '.';
-        document.getElementById('deleteActivitySummary').style.display = 'block';
-        document.getElementById('deleteActivityCount').textContent = count;
-        openModal('deleteActivityModal');
-    };
-
-    window.promptDeleteUserSessions = function(dateKey, username, count) {
-        pendingActivityDelete = { type: 'user_day', ids: [], date: dateKey, username: username };
-        document.getElementById('deleteActivityTitle').innerHTML = currentLang === 'es' ? '¿ELIMINAR SESIONES?' : 'DELETE SESSIONS?';
-        document.getElementById('deleteActivityText').innerHTML = currentLang === 'es' 
-            ? 'Esto eliminará todas las sesiones de <strong>' + username + '</strong> del ' + formatDateLabel(dateKey) + '.'
-            : 'This will delete all sessions for <strong>' + username + '</strong> from ' + formatDateLabel(dateKey) + '.';
-        document.getElementById('deleteActivitySummary').style.display = 'block';
-        document.getElementById('deleteActivityCount').textContent = count;
-        openModal('deleteActivityModal');
-    };
-
-    window.promptDeleteSingle = function(actId, username, actIndex) {
-        pendingActivityDelete = { type: 'single', ids: actId ? [actId] : [], date: null, username: username, index: actIndex };
-        document.getElementById('deleteActivityTitle').innerHTML = currentLang === 'es' ? '¿ELIMINAR ACTIVIDAD?' : 'DELETE ACTIVITY?';
-        document.getElementById('deleteActivityText').innerHTML = currentLang === 'es' 
-            ? 'Esto eliminará esta actividad' + (username ? ' de <strong>' + username + '</strong>' : '') + '.'
-            : 'This will delete this activity' + (username ? ' for <strong>' + username + '</strong>' : '') + '.';
-        document.getElementById('deleteActivitySummary').style.display = 'none';
-        openModal('deleteActivityModal');
-    };
-
-    function promptClearAllActivity() {
-        pendingActivityDelete = { type: 'all', ids: [], date: null, username: null };
-        document.getElementById('deleteActivityTitle').innerHTML = currentLang === 'es' ? '¿LIMPIAR TODA LA ACTIVIDAD?' : 'CLEAR ALL ACTIVITY?';
-        document.getElementById('deleteActivityText').innerHTML = currentLang === 'es' 
-            ? 'Esto eliminará <strong>TODA</strong> la actividad registrada. Esta acción no se puede deshacer.'
-            : 'This will delete <strong>ALL</strong> recorded activity. This cannot be undone.';
-        document.getElementById('deleteActivitySummary').style.display = 'block';
-        document.getElementById('deleteActivityCount').textContent = activities.length;
-        openModal('deleteActivityModal');
-    }
-
-    function confirmDeleteActivity() {
-        var deleteInfo = pendingActivityDelete;
-        closeModal('deleteActivityModal');
-        
-        if (deleteInfo.type === 'all') {
-            deleteAllActivity();
-        } else if (deleteInfo.type === 'single') {
-            if (deleteInfo.ids.length > 0 && deleteInfo.ids[0]) {
-                deleteActivityById(deleteInfo.ids[0]);
-            } else if (deleteInfo.index !== undefined) {
-                deleteActivityByIndex(deleteInfo.index);
-            }
-        } else if (deleteInfo.type === 'day' && deleteInfo.date) {
-            deleteActivitiesByDate(deleteInfo.date);
-        } else if (deleteInfo.type === 'user_day' && deleteInfo.date && deleteInfo.username) {
-            deleteActivitiesByUserDate(deleteInfo.username, deleteInfo.date);
-        }
-    }
-
-    function deleteAllActivity() {
-        fetch('/api/admin/activity/all', {
-            method: 'DELETE',
-            headers: { 'Authorization': 'Bearer ' + authToken }
-        })
-        .then(function(res) {
-            if (res.ok) {
-                showToast(currentLang === 'es' ? 'Toda la actividad eliminada' : 'All activity deleted');
-                loadActivity();
-            } else {
-                throw new Error('Delete failed');
-            }
-        })
-        .catch(function(err) {
-            showToast(currentLang === 'es' ? 'Error al eliminar' : 'Delete failed', true);
-        });
-    }
-
-    function deleteActivityById(actId) {
-        fetch('/api/admin/activity/' + actId, {
-            method: 'DELETE',
-            headers: { 'Authorization': 'Bearer ' + authToken }
-        })
-        .then(function(res) {
-            if (res.ok) {
-                showToast(currentLang === 'es' ? 'Actividad eliminada' : 'Activity deleted');
-                loadActivity();
-            } else {
-                throw new Error('Delete failed');
-            }
-        })
-        .catch(function(err) {
-            showToast(currentLang === 'es' ? 'Error al eliminar' : 'Delete failed', true);
-        });
-    }
-
-    function deleteActivityByIndex(index) {
-        fetch('/api/admin/activity/by-index/' + index, {
-            method: 'DELETE',
-            headers: { 'Authorization': 'Bearer ' + authToken }
-        })
-        .then(function(res) {
-            if (res.ok) {
-                showToast(currentLang === 'es' ? 'Actividad eliminada' : 'Activity deleted');
-                loadActivity();
-            } else {
-                throw new Error('Delete failed');
-            }
-        })
-        .catch(function(err) {
-            showToast(currentLang === 'es' ? 'Error al eliminar' : 'Delete failed', true);
-        });
-    }
-
-    function deleteActivitiesByDate(dateKey) {
-        fetch('/api/admin/activity/by-date/' + dateKey, {
-            method: 'DELETE',
-            headers: { 'Authorization': 'Bearer ' + authToken }
-        })
-        .then(function(res) {
-            if (res.ok) {
-                showToast(currentLang === 'es' ? 'Actividades eliminadas' : 'Activities deleted');
-                loadActivity();
-            } else {
-                throw new Error('Delete failed');
-            }
-        })
-        .catch(function(err) {
-            showToast(currentLang === 'es' ? 'Error al eliminar' : 'Delete failed', true);
-        });
-    }
-
-    function deleteActivitiesByUserDate(username, dateKey) {
-        fetch('/api/admin/activity/by-user-date/' + encodeURIComponent(username) + '/' + dateKey, {
-            method: 'DELETE',
-            headers: { 'Authorization': 'Bearer ' + authToken }
-        })
-        .then(function(res) {
-            if (res.ok) {
-                showToast(currentLang === 'es' ? 'Sesiones eliminadas' : 'Sessions deleted');
-                loadActivity();
-            } else {
-                throw new Error('Delete failed');
-            }
-        })
-        .catch(function(err) {
-            showToast(currentLang === 'es' ? 'Error al eliminar' : 'Delete failed', true);
-        });
     }
 
     function renderOverviewActivity() {
@@ -2325,65 +1603,54 @@ tr.clickable:hover { background: var(--card-hover); }
             return;
         }
 
-        // Show summary view for overview - just key events
-        var keyEvents = activities.filter(function(act) {
-            var isSub = act.type && act.type.includes('subscription');
-            var isMile = isMilestone(act.details);
-            return isSub || isMile;
-        }).slice(0, 5);
-
-        // If no key events, show aggregated today
-        if (keyEvents.length === 0) {
-            var today = new Date().toISOString().split('T')[0];
-            var todayGames = {};
+        var html = '';
+        activities.slice(0, 5).forEach(function(act) {
+            var iconClass = 'game';
+            var icon = '🎮';
             
-            activities.forEach(function(act) {
-                if (getDateKey(act.timestamp) === today && act.type === 'game_session' && act.username) {
-                    if (!todayGames[act.username]) todayGames[act.username] = 0;
-                    todayGames[act.username]++;
-                }
-            });
-            
-            var html = '<div style="padding: 15px 20px;">';
-            var userCount = Object.keys(todayGames).length;
-            
-            if (userCount === 0) {
-                html += '<div class="aggregated-item"><div class="aggregated-icon game">📋</div><div class="aggregated-content"><div class="aggregated-text" style="color:var(--muted)">' + (currentLang === 'es' ? 'Sin actividad hoy' : 'No activity today') + '</div></div></div>';
-            } else {
-                for (var user in todayGames) {
-                    html += '<div class="aggregated-item">';
-                    html += '<div class="aggregated-icon game">🎮</div>';
-                    html += '<div class="aggregated-content">';
-                    html += '<div class="aggregated-text"><strong>' + user + '</strong> ' + (currentLang === 'es' ? 'jugó' : 'played') + ' <strong>' + todayGames[user] + '</strong> ' + (todayGames[user] === 1 ? (currentLang === 'es' ? 'sesión hoy' : 'session today') : (currentLang === 'es' ? 'sesiones hoy' : 'sessions today')) + '</div>';
-                    html += '</div></div>';
-                }
+            if (act.type && act.type.includes('subscription')) {
+                iconClass = 'subscription';
+                icon = '💳';
+            } else if (act.game === 'laughtrail') {
+                icon = '🛤️';
+            } else if (act.game === 'laughhunt') {
+                icon = '🔍';
             }
-            html += '</div>';
-            container.innerHTML = html;
-            return;
-        }
-
-        var html = '<div style="padding: 15px 20px;">';
-        keyEvents.forEach(function(act) {
-            var iconInfo = getActivityIcon(act.type);
+            
             var description = act.details || act.type || 'Activity';
-            var hasMilestone = isMilestone(description);
-            var iconClass = hasMilestone ? 'milestone' : 'subscription';
             
             html += '<div class="aggregated-item">';
-            html += '<div class="aggregated-icon ' + iconClass + '">' + iconInfo.icon + '</div>';
+            html += '<div class="aggregated-icon ' + iconClass + '">' + icon + '</div>';
             html += '<div class="aggregated-content">';
             html += '<div class="aggregated-text">';
-            if (act.username) html += '<strong>' + act.username + '</strong> - ';
+            if (act.username || act.email) html += '<strong>' + (act.username || act.email) + '</strong> - ';
             html += description;
-            if (hasMilestone) html += ' <span class="milestone-badge">🏆</span>';
+            if (act.laughs) html += ' <span style="color:var(--pink)">😂 +' + act.laughs + '</span>';
             html += '</div>';
             html += '<div class="aggregated-details">' + formatTimeAgo(act.timestamp) + '</div>';
             html += '</div></div>';
         });
-        html += '</div>';
         
         container.innerHTML = html;
+    }
+
+    function clearAllActivity() {
+        fetch('/api/admin/activity/all', {
+            method: 'DELETE',
+            headers: { 'Authorization': 'Bearer ' + authToken }
+        })
+        .then(function(res) {
+            if (res.ok) {
+                closeModal('clearActivityModal');
+                showToast(currentLang === 'es' ? 'Actividad eliminada' : 'Activity cleared');
+                loadActivity();
+            } else {
+                throw new Error('Delete failed');
+            }
+        })
+        .catch(function(err) {
+            showToast(currentLang === 'es' ? 'Error' : 'Error', true);
+        });
     }
 
     init();
