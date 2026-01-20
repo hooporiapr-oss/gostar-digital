@@ -2,238 +2,314 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>THE DRILL | LaughCourt™</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
-    --orange: #FF6B00;
+    --purple: #9D4EDD;
+    --purple-dark: #7B2CBF;
+    --pink: #FF1493;
+    --pink-light: #FF69B4;
     --gold: #FFD700;
     --teal: #00D9A5;
-    --pink: #FF1493;
-    --purple: #9D4EDD;
+    --orange: #FF6B00;
     --cyan: #00CED1;
     --dark: #0a0a0f;
     --darker: #050508;
     --card: #111118;
     --text: #FFFFFF;
     --muted: #8892a0;
+    --border: rgba(255,255,255,0.08);
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+    height: 100%;
+    overflow: hidden;
+}
 body {
     font-family: 'Outfit', sans-serif;
     background: var(--dark);
     color: var(--text);
-    min-height: 100vh;
-    overflow-x: hidden;
+    height: 100vh;
+    height: 100dvh;
 }
+body.en .lang-es { display: none !important; }
+body.es .lang-en { display: none !important; }
+
+/* Main Container - NO SCROLL */
 .game-container {
-    max-width: 500px;
+    max-width: 420px;
     margin: 0 auto;
-    padding: 15px;
-    min-height: 100vh;
+    padding: 8px 12px;
+    height: 100vh;
+    height: 100dvh;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 }
 
-/* Header */
+/* Language Toggle */
+.lang-toggle {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    display: flex;
+    gap: 4px;
+    z-index: 10;
+}
+.lang-btn {
+    padding: 4px 8px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--muted);
+    border-radius: 4px;
+    font-size: 0.6rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.lang-btn.active {
+    background: var(--purple);
+    color: var(--text);
+    border-color: var(--purple);
+}
+
+/* Back Button */
+.back-btn {
+    position: absolute;
+    top: 8px;
+    left: 12px;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.7rem;
+    z-index: 10;
+}
+.back-btn:hover { color: var(--text); }
+
+/* Header - Compact */
 .header {
     text-align: center;
-    padding: 10px 0 15px;
+    padding: 6px 0;
+    flex-shrink: 0;
 }
 .logo {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.4rem;
-    letter-spacing: 3px;
-    margin-bottom: 5px;
+    font-size: 1rem;
+    letter-spacing: 2px;
 }
 .logo .laugh { color: var(--gold); }
 .court-name {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 2.2rem;
-    letter-spacing: 4px;
+    font-size: 1.4rem;
+    letter-spacing: 3px;
     background: linear-gradient(135deg, var(--purple), var(--pink));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
 }
-.court-subtitle {
-    font-size: 0.75rem;
+.powered-by {
+    font-size: 0.55rem;
     color: var(--muted);
-    letter-spacing: 2px;
+    letter-spacing: 1px;
     text-transform: uppercase;
+    margin-top: 2px;
 }
+.powered-by .ritnome { color: var(--gold); font-weight: 700; }
 
-/* Stats Bar */
+/* Stats Bar - Compact */
 .stats-bar {
     display: flex;
     justify-content: center;
-    gap: 20px;
-    padding: 12px;
+    gap: 15px;
+    padding: 6px 10px;
     background: var(--card);
-    border-radius: 12px;
-    margin-bottom: 15px;
+    border-radius: 8px;
+    margin: 4px 0;
+    flex-shrink: 0;
 }
-.stat {
-    text-align: center;
-}
+.stat { text-align: center; }
 .stat-value {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.5rem;
+    font-size: 1.1rem;
     color: var(--gold);
 }
 .stat-label {
-    font-size: 0.65rem;
+    font-size: 0.5rem;
     color: var(--muted);
     text-transform: uppercase;
     letter-spacing: 1px;
 }
 
-/* Sequence Display */
-.sequence-display {
+/* Message Display */
+.message-display {
     background: linear-gradient(135deg, var(--card), var(--darker));
     border: 2px solid var(--purple);
-    border-radius: 16px;
-    padding: 20px;
-    margin-bottom: 15px;
-    min-height: 80px;
+    border-radius: 10px;
+    padding: 8px 12px;
+    margin: 4px 0;
+    min-height: 50px;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    flex-wrap: wrap;
-    gap: 10px;
+    flex-shrink: 0;
     position: relative;
     overflow: hidden;
 }
-.sequence-display::before {
+.message-display::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    inset: 0;
     background: radial-gradient(circle at center, rgba(157,78,221,0.1), transparent);
     pointer-events: none;
 }
 .sequence-number {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 2.5rem;
+    font-size: 2rem;
     color: var(--gold);
     text-shadow: 0 0 20px rgba(255,215,0,0.5);
     animation: numberPop 0.3s ease-out;
-    min-width: 50px;
-    text-align: center;
 }
 @keyframes numberPop {
     0% { transform: scale(0); opacity: 0; }
     50% { transform: scale(1.3); }
     100% { transform: scale(1); opacity: 1; }
 }
-.sequence-prompt {
-    font-size: 0.9rem;
+.message-text {
+    font-size: 0.75rem;
     color: var(--muted);
     text-align: center;
 }
-.sequence-prompt.forward { color: var(--teal); }
-.sequence-prompt.backward { color: var(--pink); }
+.message-text.forward { color: var(--teal); }
+.message-text.backward { color: var(--pink); }
 
-/* Mode & Speed Selection */
+/* Mode Selector - Compact */
 .mode-selector {
     display: flex;
-    gap: 10px;
-    margin-bottom: 10px;
+    gap: 6px;
+    margin: 4px 0;
+    flex-shrink: 0;
 }
 .mode-btn {
     flex: 1;
-    padding: 10px;
+    padding: 6px;
     border: 2px solid var(--card);
     background: var(--card);
-    border-radius: 10px;
+    border-radius: 8px;
     color: var(--muted);
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1rem;
-    letter-spacing: 2px;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all 0.2s;
 }
 .mode-btn.active {
     border-color: var(--purple);
     color: var(--text);
     background: linear-gradient(135deg, rgba(157,78,221,0.2), transparent);
 }
-.mode-btn:hover { border-color: var(--purple); }
 
-.speed-selector {
+/* Ritnome™ Tempo Selector - Inline */
+.tempo-section {
     display: flex;
+    align-items: center;
     gap: 8px;
-    margin-bottom: 15px;
+    margin: 4px 0;
+    flex-shrink: 0;
 }
-.speed-btn {
+.tempo-label {
+    font-size: 0.55rem;
+    color: var(--muted);
+    white-space: nowrap;
+}
+.tempo-label .ritnome { color: var(--gold); font-weight: 700; }
+.tempo-buttons {
+    display: flex;
+    gap: 4px;
     flex: 1;
-    padding: 8px;
+}
+.tempo-btn {
+    flex: 1;
+    padding: 6px 4px;
     border: 1px solid var(--card);
     background: var(--card);
-    border-radius: 8px;
+    border-radius: 6px;
     color: var(--muted);
-    font-size: 0.75rem;
+    font-size: 0.6rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
 }
-.speed-btn.active {
+.tempo-btn .icon { font-size: 0.8rem; }
+.tempo-btn .bpm { font-family: 'Bebas Neue', sans-serif; font-size: 0.9rem; }
+.tempo-btn.active {
     border-color: var(--gold);
     color: var(--gold);
+    background: rgba(255,215,0,0.1);
 }
-.speed-btn:hover { border-color: var(--gold); }
 
-/* 5x5 Court Grid */
+/* Court Grid - VISIBLE CELLS */
 .court-grid {
+    flex: 1;
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 8px;
-    padding: 15px;
+    gap: 4px;
+    padding: 8px;
     background: linear-gradient(145deg, var(--card), var(--darker));
-    border-radius: 16px;
+    border-radius: 12px;
     border: 2px solid rgba(157,78,221,0.3);
-    margin-bottom: 15px;
+    min-height: 0;
+    aspect-ratio: 1;
+    margin: 4px 0;
 }
 .grid-cell {
-    aspect-ratio: 1;
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.4rem;
-    border-radius: 10px;
+    font-size: 1.1rem;
+    border-radius: 6px;
     cursor: pointer;
     transition: all 0.15s;
     position: relative;
-    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.15);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1);
 }
-.grid-cell::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    opacity: 0;
-    transition: opacity 0.3s;
+
+/* Colorful grid rows */
+.grid-cell:nth-child(-n+5) { 
+    background: linear-gradient(135deg, #FF6B00, #FF8C42); 
+    color: var(--dark); 
 }
-/* Colorful grid - each row has different color theme */
-.grid-cell:nth-child(-n+5) { background: linear-gradient(135deg, #FF6B00, #FF8C42); color: var(--dark); }
-.grid-cell:nth-child(n+6):nth-child(-n+10) { background: linear-gradient(135deg, #FFD700, #FFA500); color: var(--dark); }
-.grid-cell:nth-child(n+11):nth-child(-n+15) { background: linear-gradient(135deg, #00D9A5, #00CED1); color: var(--dark); }
-.grid-cell:nth-child(n+16):nth-child(-n+20) { background: linear-gradient(135deg, #9D4EDD, #7B2CBF); color: var(--text); }
-.grid-cell:nth-child(n+21) { background: linear-gradient(135deg, #FF1493, #FF69B4); color: var(--dark); }
+.grid-cell:nth-child(n+6):nth-child(-n+10) { 
+    background: linear-gradient(135deg, #FFD700, #FFA500); 
+    color: var(--dark); 
+}
+.grid-cell:nth-child(n+11):nth-child(-n+15) { 
+    background: linear-gradient(135deg, #00D9A5, #00CED1); 
+    color: var(--dark); 
+}
+.grid-cell:nth-child(n+16):nth-child(-n+20) { 
+    background: linear-gradient(135deg, #9D4EDD, #7B2CBF); 
+    color: var(--text); 
+}
+.grid-cell:nth-child(n+21) { 
+    background: linear-gradient(135deg, #FF1493, #FF69B4); 
+    color: var(--dark); 
+}
 
 .grid-cell:hover { transform: scale(1.05); }
 .grid-cell:active { transform: scale(0.95); }
 .grid-cell.disabled { opacity: 0.5; pointer-events: none; }
 .grid-cell.correct {
     animation: correctPulse 0.4s ease-out;
-    box-shadow: 0 0 20px var(--teal);
+    box-shadow: 0 0 20px var(--teal), 0 0 40px var(--teal);
 }
 .grid-cell.wrong {
     animation: wrongShake 0.4s ease-out;
@@ -241,7 +317,8 @@ body {
 }
 .grid-cell.hint {
     animation: hintGlow 0.6s ease-in-out;
-    box-shadow: 0 0 30px var(--gold);
+    box-shadow: 0 0 30px var(--gold), 0 0 50px var(--gold);
+    transform: scale(1.1);
 }
 @keyframes correctPulse {
     0%, 100% { transform: scale(1); }
@@ -249,62 +326,61 @@ body {
 }
 @keyframes wrongShake {
     0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-5px); }
-    75% { transform: translateX(5px); }
+    25% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
 }
 @keyframes hintGlow {
-    0%, 100% { box-shadow: 0 0 10px var(--gold); }
+    0%, 100% { box-shadow: 0 0 15px var(--gold); }
     50% { box-shadow: 0 0 40px var(--gold), 0 0 60px var(--gold); }
 }
 
-/* Progress & Tier */
+/* Progress Bar */
 .progress-section {
     display: flex;
     align-items: center;
-    gap: 15px;
-    margin-bottom: 15px;
+    gap: 10px;
+    margin: 4px 0;
+    flex-shrink: 0;
 }
 .tier-badge {
     background: linear-gradient(135deg, var(--purple), var(--pink));
-    padding: 8px 15px;
-    border-radius: 20px;
+    padding: 4px 10px;
+    border-radius: 12px;
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1rem;
-    letter-spacing: 2px;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
     white-space: nowrap;
 }
 .progress-bar {
     flex: 1;
-    height: 12px;
+    height: 8px;
     background: var(--card);
-    border-radius: 6px;
+    border-radius: 4px;
     overflow: hidden;
 }
 .progress-fill {
     height: 100%;
     background: linear-gradient(90deg, var(--purple), var(--pink));
-    border-radius: 6px;
+    border-radius: 4px;
     transition: width 0.3s ease-out;
 }
 
 /* Action Button */
 .action-btn {
     width: 100%;
-    padding: 18px;
+    padding: 12px;
     border: none;
-    border-radius: 14px;
+    border-radius: 10px;
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.3rem;
-    letter-spacing: 3px;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
     cursor: pointer;
     transition: all 0.3s;
-    margin-bottom: 10px;
-}
-.action-btn.start {
     background: linear-gradient(135deg, var(--purple), var(--pink));
     color: var(--text);
+    flex-shrink: 0;
 }
-.action-btn.start:hover {
+.action-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 5px 25px rgba(157,78,221,0.5);
 }
@@ -314,34 +390,11 @@ body {
     transform: none;
 }
 
-/* Laugh Meter */
-.laugh-meter {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    padding: 10px;
-    background: var(--card);
-    border-radius: 10px;
-}
-.laugh-meter-label {
-    font-size: 0.8rem;
-    color: var(--muted);
-}
-.laugh-meter-value {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.3rem;
-    color: var(--pink);
-}
-
 /* Feedback Overlay */
 .feedback-overlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0,0,0,0.85);
+    inset: 0;
+    background: rgba(0,0,0,0.9);
     display: none;
     align-items: center;
     justify-content: center;
@@ -350,59 +403,64 @@ body {
 .feedback-overlay.show { display: flex; }
 .feedback-card {
     background: var(--card);
-    border-radius: 24px;
-    padding: 40px;
+    border-radius: 20px;
+    padding: 30px;
     text-align: center;
-    max-width: 350px;
+    max-width: 320px;
     width: 90%;
     animation: slideUp 0.3s ease-out;
+    border: 2px solid var(--purple);
 }
 @keyframes slideUp {
     from { transform: translateY(50px); opacity: 0; }
     to { transform: translateY(0); opacity: 1; }
 }
-.feedback-emoji {
-    font-size: 4rem;
-    margin-bottom: 15px;
-}
+.feedback-emoji { font-size: 3rem; margin-bottom: 10px; }
 .feedback-title {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 2rem;
-    letter-spacing: 3px;
-    margin-bottom: 10px;
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
 }
 .feedback-title.success { color: var(--teal); }
 .feedback-title.fail { color: var(--pink); }
 .feedback-message {
     color: var(--muted);
-    margin-bottom: 25px;
-    line-height: 1.5;
+    margin-bottom: 20px;
+    font-size: 0.85rem;
 }
+.feedback-ritnome {
+    font-size: 0.6rem;
+    color: var(--muted);
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+}
+.feedback-ritnome .ritnome { color: var(--gold); }
 .feedback-stats {
     display: flex;
     justify-content: center;
-    gap: 30px;
-    margin-bottom: 25px;
+    gap: 25px;
+    margin-bottom: 20px;
 }
 .feedback-stat-value {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 2rem;
+    font-size: 1.8rem;
     color: var(--gold);
 }
 .feedback-stat-label {
-    font-size: 0.7rem;
+    font-size: 0.6rem;
     color: var(--muted);
     text-transform: uppercase;
 }
 .feedback-btn {
-    padding: 14px 40px;
+    padding: 12px 30px;
     border: none;
-    border-radius: 12px;
+    border-radius: 10px;
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.1rem;
+    font-size: 1rem;
     letter-spacing: 2px;
     cursor: pointer;
-    margin: 5px;
+    margin: 4px;
 }
 .feedback-btn.primary {
     background: linear-gradient(135deg, var(--purple), var(--pink));
@@ -414,17 +472,17 @@ body {
     border: 1px solid var(--muted);
 }
 
-/* Coach Message */
+/* Coach Message Toast */
 .coach-message {
     position: fixed;
-    bottom: 20px;
+    bottom: 80px;
     left: 50%;
     transform: translateX(-50%) translateY(100px);
     background: linear-gradient(135deg, var(--purple), var(--pink));
-    padding: 12px 25px;
-    border-radius: 30px;
+    padding: 10px 20px;
+    border-radius: 20px;
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     opacity: 0;
     transition: all 0.4s ease-out;
     z-index: 50;
@@ -434,20 +492,48 @@ body {
     transform: translateX(-50%) translateY(0);
     opacity: 1;
 }
+
+/* Desktop */
+@media (min-width: 700px) {
+    .game-container {
+        max-width: 480px;
+        padding: 15px 20px;
+    }
+    .header { padding: 10px 0; }
+    .logo { font-size: 1.2rem; }
+    .court-name { font-size: 1.8rem; }
+    .stats-bar { padding: 10px 15px; gap: 25px; }
+    .stat-value { font-size: 1.4rem; }
+    .court-grid { gap: 6px; padding: 12px; }
+    .grid-cell { font-size: 1.4rem; border-radius: 8px; }
+    .action-btn { padding: 16px; font-size: 1.3rem; }
+}
 </style>
 </head>
-<body>
+<body class="en">
+
+<!-- Language Toggle -->
+<div class="lang-toggle">
+    <button class="lang-btn active" id="btnEn">EN</button>
+    <button class="lang-btn" id="btnEs">ES</button>
+</div>
+
+<!-- Back Button -->
+<a href="laugh-hub.html" class="back-btn">← <span class="lang-en">Back</span><span class="lang-es">Volver</span></a>
+
 <div class="game-container">
+    <!-- Header -->
     <header class="header">
-        <div class="logo"><span class="laugh">LAUGH</span>COURT</div>
-        <h1 class="court-name">🏀 THE DRILL</h1>
-        <p class="court-subtitle">Number Sequence Memory</p>
+        <div class="logo"><span class="laugh">LAUGH</span>COURT<sup style="font-size:0.5em">™</sup></div>
+        <div class="court-name">🏀 THE DRILL</div>
+        <div class="powered-by">Powered by <span class="ritnome">Ritnome™</span></div>
     </header>
 
+    <!-- Stats Bar -->
     <div class="stats-bar">
         <div class="stat">
             <div class="stat-value" id="currentTier">1</div>
-            <div class="stat-label">Tier</div>
+            <div class="stat-label"><span class="lang-en">Tier</span><span class="lang-es">Nivel</span></div>
         </div>
         <div class="stat">
             <div class="stat-value" id="bestTier">0</div>
@@ -463,62 +549,155 @@ body {
         </div>
     </div>
 
-    <div class="sequence-display" id="sequenceDisplay">
-        <span class="sequence-prompt">Select mode & speed, then START DRILL!</span>
+    <!-- Message Display -->
+    <div class="message-display" id="messageDisplay">
+        <span class="message-text" id="messageText">
+            <span class="lang-en">Select mode & tempo, then START!</span>
+            <span class="lang-es">Selecciona modo y tempo, luego ¡EMPIEZA!</span>
+        </span>
     </div>
 
+    <!-- Mode Selector -->
     <div class="mode-selector">
-        <button class="mode-btn active" id="forwardBtn" data-mode="forward">➡️ FORWARD</button>
-        <button class="mode-btn" id="backwardBtn" data-mode="backward">⬅️ BACKWARD</button>
+        <button class="mode-btn active" id="forwardBtn" data-mode="forward">
+            ➡️ <span class="lang-en">FORWARD</span><span class="lang-es">ADELANTE</span>
+        </button>
+        <button class="mode-btn" id="backwardBtn" data-mode="backward">
+            ⬅️ <span class="lang-en">BACKWARD</span><span class="lang-es">ATRÁS</span>
+        </button>
     </div>
 
-    <div class="speed-selector">
-        <button class="speed-btn" id="slowBtn" data-speed="slow">🐢 SLOW</button>
-        <button class="speed-btn active" id="mediumBtn" data-speed="medium">🏃 MEDIUM</button>
-        <button class="speed-btn" id="fastBtn" data-speed="fast">⚡ FAST</button>
+    <!-- Ritnome™ Tempo Selector -->
+    <div class="tempo-section">
+        <div class="tempo-label">🎵 <span class="ritnome">Ritnome™</span></div>
+        <div class="tempo-buttons">
+            <button class="tempo-btn" data-bpm="60">
+                <span class="icon">🐢</span>
+                <span class="bpm">60</span>
+                <span>BPM</span>
+            </button>
+            <button class="tempo-btn active" data-bpm="90">
+                <span class="icon">🏃</span>
+                <span class="bpm">90</span>
+                <span>BPM</span>
+            </button>
+            <button class="tempo-btn" data-bpm="120">
+                <span class="icon">⚡</span>
+                <span class="bpm">120</span>
+                <span>BPM</span>
+            </button>
+        </div>
     </div>
 
+    <!-- Court Grid -->
     <div class="court-grid" id="courtGrid"></div>
 
+    <!-- Progress Bar -->
     <div class="progress-section">
-        <div class="tier-badge">TIER <span id="tierDisplay">1</span></div>
+        <div class="tier-badge">
+            <span class="lang-en">TIER</span><span class="lang-es">NIVEL</span> 
+            <span id="tierDisplay">1</span>
+        </div>
         <div class="progress-bar">
             <div class="progress-fill" id="progressFill" style="width: 0%"></div>
         </div>
     </div>
 
-    <button class="action-btn start" id="actionBtn">START DRILL 🏀</button>
-
-    <div class="laugh-meter">
-        <span class="laugh-meter-label">Laugh Meter:</span>
-        <span class="laugh-meter-value" id="laughMeter">😊</span>
-    </div>
+    <!-- Action Button -->
+    <button class="action-btn" id="actionBtn">
+        <span class="lang-en">START DRILL 🏀</span>
+        <span class="lang-es">INICIAR EJERCICIO 🏀</span>
+    </button>
 </div>
 
+<!-- Feedback Overlay -->
 <div class="feedback-overlay" id="feedbackOverlay">
     <div class="feedback-card">
         <div class="feedback-emoji" id="feedbackEmoji">🎉</div>
         <h2 class="feedback-title" id="feedbackTitle">GREAT JOB!</h2>
         <p class="feedback-message" id="feedbackMessage">You completed the drill!</p>
+        <div class="feedback-ritnome"><span class="ritnome">Ritnome™</span> Training</div>
         <div class="feedback-stats">
             <div class="feedback-stat">
                 <div class="feedback-stat-value" id="feedbackTier">1</div>
-                <div class="feedback-stat-label">Tier</div>
+                <div class="feedback-stat-label"><span class="lang-en">Tier</span><span class="lang-es">Nivel</span></div>
             </div>
             <div class="feedback-stat">
                 <div class="feedback-stat-value" id="feedbackLaughs">0</div>
                 <div class="feedback-stat-label">😂 Earned</div>
             </div>
         </div>
-        <button class="feedback-btn primary" id="continueBtn">CONTINUE 🏀</button>
-        <button class="feedback-btn secondary" id="restartBtn">RESTART</button>
+        <button class="feedback-btn primary" id="continueBtn">
+            <span class="lang-en">CONTINUE 🏀</span>
+            <span class="lang-es">CONTINUAR 🏀</span>
+        </button>
+        <button class="feedback-btn secondary" id="restartBtn">
+            <span class="lang-en">RESTART</span>
+            <span class="lang-es">REINICIAR</span>
+        </button>
     </div>
 </div>
 
+<!-- Coach Message Toast -->
 <div class="coach-message" id="coachMessage"></div>
 
 <script>
 (function() {
+    // Translations
+    const translations = {
+        en: {
+            startDrill: 'START DRILL 🏀',
+            watchSequence: 'WATCH... 👀',
+            tapForward: '➡️ Tap in FORWARD order!',
+            tapBackward: '⬅️ Tap in BACKWARD order!',
+            watchForward: 'Watch the sequence... ➡️ FORWARD',
+            watchBackward: 'Watch the sequence... ⬅️ BACKWARD',
+            selectStart: 'Select mode & tempo, then START!',
+            readyTier: 'Ready for Tier',
+            backTier1: 'Back to Tier 1 - Let\'s go!',
+            tierUp: 'TIER UP!',
+            movingTo: 'Amazing! Moving to Tier',
+            drilledIt: 'DRILLED IT!',
+            circuitsTo: 'circuits to next tier!',
+            almost: 'ALMOST!',
+            shakeOff: 'Shake it off and try again!',
+            nextDrill: 'NEXT DRILL 🏀',
+            tryAgain: 'TRY AGAIN 🏀',
+            thatWas: 'That was'
+        },
+        es: {
+            startDrill: 'INICIAR EJERCICIO 🏀',
+            watchSequence: 'MIRA... 👀',
+            tapForward: '➡️ ¡Toca en orden ADELANTE!',
+            tapBackward: '⬅️ ¡Toca en orden ATRÁS!',
+            watchForward: 'Mira la secuencia... ➡️ ADELANTE',
+            watchBackward: 'Mira la secuencia... ⬅️ ATRÁS',
+            selectStart: 'Selecciona modo y tempo, luego ¡EMPIEZA!',
+            readyTier: 'Listo para Nivel',
+            backTier1: '¡Volvemos al Nivel 1!',
+            tierUp: '¡SUBISTE DE NIVEL!',
+            movingTo: '¡Increíble! Pasando al Nivel',
+            drilledIt: '¡PERFECTO!',
+            circuitsTo: 'circuitos para el siguiente nivel!',
+            almost: '¡CASI!',
+            shakeOff: '¡Sacúdelo e intenta de nuevo!',
+            nextDrill: 'SIGUIENTE 🏀',
+            tryAgain: 'INTENTAR DE NUEVO 🏀',
+            thatWas: 'Era el'
+        }
+    };
+
+    let currentLang = 'en';
+    const t = (key) => translations[currentLang][key] || key;
+
+    function setLang(lang) {
+        currentLang = lang;
+        document.body.className = lang;
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.id === 'btn' + lang.charAt(0).toUpperCase() + lang.slice(1));
+        });
+    }
+
     // Game State
     const state = {
         tier: 1,
@@ -527,7 +706,7 @@ body {
         sessionLaughs: 0,
         streak: 0,
         mode: 'forward',
-        speed: 'medium',
+        bpm: 90,
         sequence: [],
         userSequence: [],
         isPlaying: false,
@@ -535,19 +714,16 @@ body {
         circuitsCompleted: 0
     };
 
-    // Speed configs (ms per number)
-    const speeds = {
-        slow: 1200,
-        medium: 800,
-        fast: 500
-    };
+    // BPM to milliseconds (tempo-based timing)
+    const getBpmDelay = (bpm) => Math.round(60000 / bpm);
 
     // Tier = numbers to remember (tier 1 = 2 numbers, tier 10 = 11 numbers)
     const getSequenceLength = (tier) => tier + 1;
 
     // DOM Elements
     const courtGrid = document.getElementById('courtGrid');
-    const sequenceDisplay = document.getElementById('sequenceDisplay');
+    const messageDisplay = document.getElementById('messageDisplay');
+    const messageText = document.getElementById('messageText');
     const actionBtn = document.getElementById('actionBtn');
     const feedbackOverlay = document.getElementById('feedbackOverlay');
     const coachMessage = document.getElementById('coachMessage');
@@ -582,32 +758,32 @@ body {
         actionBtn.disabled = true;
         disableGrid();
 
-        const modeText = state.mode === 'forward' ? '➡️ FORWARD' : '⬅️ BACKWARD';
-        sequenceDisplay.innerHTML = `<span class="sequence-prompt ${state.mode}">Watch the sequence... ${modeText}</span>`;
+        const watchText = state.mode === 'forward' ? t('watchForward') : t('watchBackward');
+        messageDisplay.innerHTML = `<span class="message-text ${state.mode}">${watchText}</span>`;
         
         await sleep(800);
+
+        const delay = getBpmDelay(state.bpm);
 
         for (let i = 0; i < state.sequence.length; i++) {
             const num = state.sequence[i];
             
             // Show number in display
-            sequenceDisplay.innerHTML = `<span class="sequence-number">${num}</span>`;
+            messageDisplay.innerHTML = `<span class="sequence-number">${num}</span>`;
             
             // Highlight cell
             const cell = courtGrid.querySelector(`[data-number="${num}"]`);
             cell.classList.add('hint');
             
-            await sleep(speeds[state.speed]);
+            await sleep(delay);
             
             cell.classList.remove('hint');
             await sleep(200);
         }
 
         // Ready to input
-        const promptText = state.mode === 'forward' 
-            ? '➡️ Tap in FORWARD order!' 
-            : '⬅️ Tap in BACKWARD order!';
-        sequenceDisplay.innerHTML = `<span class="sequence-prompt ${state.mode}">${promptText}</span>`;
+        const promptText = state.mode === 'forward' ? t('tapForward') : t('tapBackward');
+        messageDisplay.innerHTML = `<span class="message-text ${state.mode}">${promptText}</span>`;
         
         state.isShowingSequence = false;
         enableGrid();
@@ -657,12 +833,12 @@ body {
         let html = '';
         for (let i = 0; i < expectedSequence.length; i++) {
             if (i < state.userSequence.length) {
-                html += `<span class="sequence-number" style="color: var(--teal); font-size: 1.8rem;">${state.userSequence[i]}</span>`;
+                html += `<span class="sequence-number" style="color: var(--teal); font-size: 1.5rem;">${state.userSequence[i]}</span>`;
             } else {
-                html += `<span class="sequence-number" style="color: var(--muted); font-size: 1.5rem;">?</span>`;
+                html += `<span class="sequence-number" style="color: var(--muted); font-size: 1.2rem;">?</span>`;
             }
         }
-        sequenceDisplay.innerHTML = html;
+        messageDisplay.innerHTML = html;
     }
 
     // Handle success
@@ -670,11 +846,11 @@ body {
         state.isPlaying = false;
         disableGrid();
         
-        // Calculate laughs
+        // Calculate laughs with BPM bonus
         const baseLaughs = state.tier;
-        const speedBonus = state.speed === 'fast' ? 2 : state.speed === 'medium' ? 1 : 0;
+        const bpmBonus = state.bpm === 120 ? 2 : state.bpm === 90 ? 1 : 0;
         const modeBonus = state.mode === 'backward' ? state.tier : 0;
-        const laughsEarned = baseLaughs + speedBonus + modeBonus;
+        const laughsEarned = baseLaughs + bpmBonus + modeBonus;
         
         state.sessionLaughs += laughsEarned;
         state.totalLaughs += laughsEarned;
@@ -724,7 +900,7 @@ body {
         cell.classList.add('hint');
         setTimeout(() => cell.classList.remove('hint'), 1000);
         
-        showCoachMessage(`That was ${expected}! Keep practicing! 💪`);
+        showCoachMessage(`${t('thatWas')} ${expected}! 💪`);
         
         updateStats();
         
@@ -735,7 +911,6 @@ body {
 
     // Show feedback overlay
     function showFeedback(success, laughs, tierUp) {
-        const overlay = document.getElementById('feedbackOverlay');
         const emoji = document.getElementById('feedbackEmoji');
         const title = document.getElementById('feedbackTitle');
         const message = document.getElementById('feedbackMessage');
@@ -746,29 +921,29 @@ body {
         if (success) {
             if (tierUp) {
                 emoji.textContent = '🚀';
-                title.textContent = 'TIER UP!';
+                title.textContent = t('tierUp');
                 title.className = 'feedback-title success';
-                message.textContent = `Amazing! Moving to Tier ${state.tier + 1}!`;
+                message.textContent = `${t('movingTo')} ${state.tier + 1}!`;
                 state.tier++;
             } else {
                 emoji.textContent = '😂';
-                title.textContent = 'DRILLED IT!';
+                title.textContent = t('drilledIt');
                 title.className = 'feedback-title success';
-                message.textContent = `${state.circuitsCompleted % 3}/3 circuits to next tier!`;
+                message.textContent = `${state.circuitsCompleted % 3}/3 ${t('circuitsTo')}`;
             }
-            continueBtn.textContent = 'NEXT DRILL 🏀';
+            continueBtn.innerHTML = `<span class="lang-en">${translations.en.nextDrill}</span><span class="lang-es">${translations.es.nextDrill}</span>`;
         } else {
             emoji.textContent = '😅';
-            title.textContent = 'ALMOST!';
+            title.textContent = t('almost');
             title.className = 'feedback-title fail';
-            message.textContent = 'Shake it off and try again!';
-            continueBtn.textContent = 'TRY AGAIN 🏀';
+            message.textContent = t('shakeOff');
+            continueBtn.innerHTML = `<span class="lang-en">${translations.en.tryAgain}</span><span class="lang-es">${translations.es.tryAgain}</span>`;
         }
         
         tierStat.textContent = state.tier;
         laughsStat.textContent = laughs;
         
-        overlay.classList.add('show');
+        feedbackOverlay.classList.add('show');
         updateStats();
     }
 
@@ -779,7 +954,7 @@ body {
         state.isPlaying = true;
         state.sessionLaughs = 0;
         
-        actionBtn.textContent = 'WATCH... 👀';
+        actionBtn.innerHTML = `<span class="lang-en">${translations.en.watchSequence}</span><span class="lang-es">${translations.es.watchSequence}</span>`;
         actionBtn.disabled = true;
         
         showSequence();
@@ -804,13 +979,6 @@ body {
         document.getElementById('totalLaughs').textContent = state.totalLaughs;
         document.getElementById('streak').textContent = state.streak;
         document.getElementById('tierDisplay').textContent = state.tier;
-        
-        // Update laugh meter
-        const laughMeter = document.getElementById('laughMeter');
-        if (state.streak >= 5) laughMeter.textContent = '🤣🤣🤣';
-        else if (state.streak >= 3) laughMeter.textContent = '😂😂';
-        else if (state.streak >= 1) laughMeter.textContent = '😄';
-        else laughMeter.textContent = '😊';
     }
 
     function showCoachMessage(msg) {
@@ -839,20 +1007,20 @@ body {
         });
     });
 
-    document.querySelectorAll('.speed-btn').forEach(btn => {
+    document.querySelectorAll('.tempo-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             if (state.isPlaying) return;
-            document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tempo-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            state.speed = btn.dataset.speed;
+            state.bpm = parseInt(btn.dataset.bpm);
         });
     });
 
     document.getElementById('continueBtn').addEventListener('click', () => {
         feedbackOverlay.classList.remove('show');
-        actionBtn.textContent = 'START DRILL 🏀';
+        actionBtn.innerHTML = `<span class="lang-en">${translations.en.startDrill}</span><span class="lang-es">${translations.es.startDrill}</span>`;
         actionBtn.disabled = false;
-        sequenceDisplay.innerHTML = `<span class="sequence-prompt">Ready for Tier ${state.tier}!</span>`;
+        messageDisplay.innerHTML = `<span class="message-text">${t('readyTier')} ${state.tier}!</span>`;
     });
 
     document.getElementById('restartBtn').addEventListener('click', () => {
@@ -861,14 +1029,18 @@ body {
         state.circuitsCompleted = 0;
         state.streak = 0;
         document.getElementById('progressFill').style.width = '0%';
-        actionBtn.textContent = 'START DRILL 🏀';
+        actionBtn.innerHTML = `<span class="lang-en">${translations.en.startDrill}</span><span class="lang-es">${translations.es.startDrill}</span>`;
         actionBtn.disabled = false;
-        sequenceDisplay.innerHTML = `<span class="sequence-prompt">Back to Tier 1 - Let's go!</span>`;
+        messageDisplay.innerHTML = `<span class="message-text">${t('backTier1')}</span>`;
         updateStats();
     });
 
+    document.getElementById('btnEn').addEventListener('click', () => setLang('en'));
+    document.getElementById('btnEs').addEventListener('click', () => setLang('es'));
+
     // Initialize
     initGrid();
+    setLang(currentLang);
     updateStats();
 })();
 </script>
