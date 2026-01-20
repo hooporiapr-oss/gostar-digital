@@ -278,10 +278,8 @@ function loadActivity() { api('/api/admin/activity').then(function(d) { activiti
 function loadTrials() { api('/api/admin/trial-pins').then(function(d) { trials = d.success ? d.trials || [] : []; renderTrials(); updateTrialStats(); }).catch(function() { trials = []; renderTrials(); }); }
 function updateStats() {
 var total = subscribers.length, active = 0, totalUsers = 0, totalLaughs = 0;
-var recallSessions = 0, matchSessions = 0;
-var recallLaughs = 0, matchLaughs = 0;
-var bestStreak = 0, mostLaughs = 0;
-var bestRecallTier = 0, bestMatchTier = 0;
+var recallSessions = 0, matchSessions = 0, recallLaughs = 0, matchLaughs = 0;
+var bestStreak = 0, mostLaughs = 0, bestRecallTier = 0, bestMatchTier = 0;
 subscribers.forEach(function(s) {
 var qty = s.quantity || 1;
 if (s.status === 'active') { active++; totalUsers += qty; }
@@ -289,30 +287,12 @@ totalLaughs += s.totalLaughs || 0;
 if ((s.totalLaughs || 0) > mostLaughs) mostLaughs = s.totalLaughs;
 if ((s.streak || 0) > bestStreak) bestStreak = s.streak;
 if (s.courts) {
-if (s.courts.therecall) {
-recallSessions += s.courts.therecall.sessions || 0;
-recallLaughs += s.courts.therecall.laughs || 0;
-if ((s.courts.therecall.bestTier || 0) > bestRecallTier) bestRecallTier = s.courts.therecall.bestTier;
+if (s.courts.therecall) { recallSessions += s.courts.therecall.sessions || 0; recallLaughs += s.courts.therecall.laughs || 0; if ((s.courts.therecall.bestTier || 0) > bestRecallTier) bestRecallTier = s.courts.therecall.bestTier; }
+if (s.courts.thematch) { matchSessions += s.courts.thematch.sessions || 0; matchLaughs += s.courts.thematch.laughs || 0; if ((s.courts.thematch.bestTier || 0) > bestMatchTier) bestMatchTier = s.courts.thematch.bestTier; }
 }
-if (s.courts.thematch) {
-matchSessions += s.courts.thematch.sessions || 0;
-matchLaughs += s.courts.thematch.laughs || 0;
-if ((s.courts.thematch.bestTier || 0) > bestMatchTier) bestMatchTier = s.courts.thematch.bestTier;
-}
-}
-// Fallback for old games structure
 if (s.games) {
-if (s.games.laughtrail || s.games.therecall) {
-var g = s.games.therecall || s.games.laughtrail;
-recallSessions += g.sessions || 0;
-recallLaughs += g.laughs || 0;
-if ((g.bestTier || g.bestRound || 0) > bestRecallTier) bestRecallTier = g.bestTier || g.bestRound || 0;
-}
-if (s.games.thematch) {
-matchSessions += s.games.thematch.sessions || 0;
-matchLaughs += s.games.thematch.laughs || 0;
-if ((s.games.thematch.bestTier || 0) > bestMatchTier) bestMatchTier = s.games.thematch.bestTier;
-}
+if (s.games.laughtrail || s.games.therecall) { var g = s.games.therecall || s.games.laughtrail; recallSessions += g.sessions || 0; recallLaughs += g.laughs || 0; if ((g.bestTier || g.bestRound || 0) > bestRecallTier) bestRecallTier = g.bestTier || g.bestRound || 0; }
+if (s.games.thematch) { matchSessions += s.games.thematch.sessions || 0; matchLaughs += s.games.thematch.laughs || 0; if ((s.games.thematch.bestTier || 0) > bestMatchTier) bestMatchTier = s.games.thematch.bestTier; }
 }
 });
 document.getElementById('totalSubscribers').textContent = total;
@@ -335,14 +315,8 @@ var now = new Date(), todayStart = new Date(now.getFullYear(), now.getMonth(), n
 var courtsToday = 0, courtsWeek = 0, newSubsWeek = 0, laughsToday = 0;
 activities.forEach(function(a) {
 var ts = new Date(a.timestamp).getTime();
-if (ts >= todayStart) {
-if (a.type === 'court_session' || a.type === 'game_session') courtsToday++;
-laughsToday += a.laughs || 0;
-}
-if (ts >= weekStart) {
-if (a.type === 'court_session' || a.type === 'game_session') courtsWeek++;
-if (a.type && a.type.includes('subscription_created')) newSubsWeek++;
-}
+if (ts >= todayStart) { if (a.type === 'court_session' || a.type === 'game_session') courtsToday++; laughsToday += a.laughs || 0; }
+if (ts >= weekStart) { if (a.type === 'court_session' || a.type === 'game_session') courtsWeek++; if (a.type && a.type.includes('subscription_created')) newSubsWeek++; }
 });
 document.getElementById('courtsToday').textContent = courtsToday;
 document.getElementById('courtsWeek').textContent = courtsWeek;
@@ -357,20 +331,8 @@ if (!subscribers.length) { tb.innerHTML = '<tr><td colspan="9" style="text-align
 var html = '';
 subscribers.forEach(function(s) {
 var recall = 0, match = 0;
-if (s.courts) {
-recall = s.courts.therecall ? s.courts.therecall.bestTier || 0 : 0;
-match = s.courts.thematch ? s.courts.thematch.bestTier || 0 : 0;
-}
-// Fallback for old games structure
-if (s.games) {
-if (!recall && (s.games.therecall || s.games.laughtrail)) {
-var g = s.games.therecall || s.games.laughtrail;
-recall = g.bestTier || g.bestRound || 0;
-}
-if (!match && s.games.thematch) {
-match = s.games.thematch.bestTier || 0;
-}
-}
+if (s.courts) { recall = s.courts.therecall ? s.courts.therecall.bestTier || 0 : 0; match = s.courts.thematch ? s.courts.thematch.bestTier || 0 : 0; }
+if (s.games) { if (!recall && (s.games.therecall || s.games.laughtrail)) { var g = s.games.therecall || s.games.laughtrail; recall = g.bestTier || g.bestRound || 0; } if (!match && s.games.thematch) { match = s.games.thematch.bestTier || 0; } }
 var qty = s.quantity || 1;
 var qtyBadge = qty > 1 ? '<span class="qty-badge">x' + qty + '</span>' : '';
 html += '<tr class="clickable" onclick="viewSub(\'' + s.pin + '\')"><td>' + (s.email || '-') + '</td><td><strong style="color:var(--gold)">' + s.pin + '</strong></td><td>' + qty + qtyBadge + '</td><td><span class="badge badge-' + s.status + '">' + s.status + '</span></td><td>' + (s.totalLaughs || 0) + '</td><td>T' + recall + '</td><td>T' + match + '</td><td>🔥' + (s.streak || 0) + '</td><td><div class="action-btns"><button class="action-btn" onclick="event.stopPropagation();editSub(\'' + s.pin + '\')">✏️</button><button class="action-btn delete" onclick="event.stopPropagation();delSub(\'' + s.pin + '\',\'' + s.email + '\')">🗑️</button></div></td></tr>';
@@ -409,17 +371,9 @@ c.innerHTML = html;
 window.viewSub = function(pin) {
 var s = subscribers.find(function(x) { return x.pin === pin; });
 if (!s) return;
-window.currentSub = s;
 var recall = {}, match = {};
-if (s.courts) {
-recall = s.courts.therecall || {};
-match = s.courts.thematch || {};
-}
-// Fallback for old games structure
-if (s.games) {
-if (!recall.sessions && (s.games.therecall || s.games.laughtrail)) recall = s.games.therecall || s.games.laughtrail;
-if (!match.sessions && s.games.thematch) match = s.games.thematch;
-}
+if (s.courts) { recall = s.courts.therecall || {}; match = s.courts.thematch || {}; }
+if (s.games) { if (!recall.sessions && (s.games.therecall || s.games.laughtrail)) recall = s.games.therecall || s.games.laughtrail; if (!match.sessions && s.games.thematch) match = s.games.thematch; }
 var qty = s.quantity || 1;
 var totalSessions = (recall.sessions||0) + (match.sessions||0);
 var html = '<div class="subscriber-detail-header"><div class="subscriber-avatar">' + (s.email ? s.email.charAt(0).toUpperCase() : '?') + '</div><div class="subscriber-info" style="flex:1"><h4>' + s.email + '</h4><p>PIN: <strong style="color:var(--gold)">' + s.pin + '</strong>' + (qty > 1 ? ' <span class="qty-badge">x' + qty + ' users</span>' : '') + '</p></div></div>';
