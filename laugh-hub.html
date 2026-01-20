@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LaughCourt™ | Select Your Court</title>
+    <title>LaughCourt™ | Select Your Workout</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -14,6 +14,8 @@
             --purple: #9D4EDD;
             --pink: #FF1493;
             --cyan: #00CED1;
+            --green: #00E676;
+            --lime: #C6FF00;
             --dark: #0a0a0f;
             --darker: #050508;
             --card: #111118;
@@ -38,7 +40,7 @@
 
         .header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
         .logo {
             font-family: 'Bebas Neue', sans-serif;
@@ -49,31 +51,33 @@
         .logo .laugh { color: var(--gold); }
         .logo .court { color: var(--text); }
         .tagline {
-            font-size: 0.9rem;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 3px;
             color: var(--muted);
             margin-bottom: 15px;
         }
         .select-title {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             letter-spacing: 3px;
             color: var(--teal);
         }
 
         .courts-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(2, 1fr);
             gap: 15px;
-            max-width: 700px;
+            max-width: 500px;
             width: 100%;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
 
         .court-card {
             background: var(--card);
             border: 2px solid var(--border);
             border-radius: 20px;
-            padding: 25px 15px;
+            padding: 20px 15px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s;
@@ -125,25 +129,37 @@
             background: linear-gradient(135deg, var(--purple), var(--pink));
         }
 
+        /* THE REFLEX - Green/Lime */
+        .court-card.reflex {
+            border-color: rgba(0,230,118,0.3);
+        }
+        .court-card.reflex:hover {
+            border-color: var(--green);
+            box-shadow: 0 10px 40px rgba(0,230,118,0.3);
+        }
+        .court-card.reflex .court-icon {
+            background: linear-gradient(135deg, var(--green), var(--lime));
+        }
+
         .court-icon {
-            width: 60px;
-            height: 60px;
+            width: 55px;
+            height: 55px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8rem;
-            margin: 0 auto 12px;
+            font-size: 1.6rem;
+            margin: 0 auto 10px;
             color: var(--dark);
         }
         .court-name {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             letter-spacing: 2px;
-            margin-bottom: 6px;
+            margin-bottom: 5px;
         }
         .court-desc {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: var(--muted);
             line-height: 1.4;
         }
@@ -152,9 +168,9 @@
             background: var(--card);
             border: 1px solid var(--border);
             border-radius: 16px;
-            padding: 20px 30px;
+            padding: 15px 25px;
             display: flex;
-            gap: 30px;
+            gap: 25px;
             justify-content: center;
             flex-wrap: wrap;
             margin-bottom: 20px;
@@ -162,11 +178,11 @@
         .stat { text-align: center; }
         .stat-value {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             color: var(--gold);
         }
         .stat-label {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: var(--muted);
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -213,17 +229,17 @@
             color: var(--dark);
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 500px) {
             .courts-grid {
                 grid-template-columns: 1fr;
-                max-width: 320px;
+                max-width: 280px;
             }
-            .court-card { padding: 25px 15px; }
-            .court-icon { width: 70px; height: 70px; font-size: 2rem; }
-            .court-name { font-size: 1.5rem; }
-            .court-desc { font-size: 0.85rem; }
+            .court-card { padding: 20px 15px; }
+            .court-icon { width: 60px; height: 60px; font-size: 1.8rem; }
+            .court-name { font-size: 1.4rem; }
+            .court-desc { font-size: 0.8rem; }
             .logo { font-size: 2rem; }
-            .select-title { font-size: 1.5rem; }
+            .select-title { font-size: 1.3rem; }
         }
     </style>
 </head>
@@ -237,12 +253,12 @@
     <header class="header">
         <div class="logo"><span class="laugh">LAUGH</span><span class="court">COURT</span></div>
         <p class="tagline">
-            <span class="lang-en">Memory Fitness Platform</span>
-            <span class="lang-es">Plataforma de Fitness Mental</span>
+            <span class="lang-en">PLAY. LAUGH. REMEMBER.</span>
+            <span class="lang-es">JUEGA. RÍE. RECUERDA.</span>
         </p>
         <h1 class="select-title">
-            <span class="lang-en">🏀 SELECT YOUR COURT</span>
-            <span class="lang-es">🏀 SELECCIONA TU CANCHA</span>
+            <span class="lang-en">💪 SELECT YOUR WORKOUT</span>
+            <span class="lang-es">💪 SELECCIONA TU ENTRENAMIENTO</span>
         </h1>
     </header>
 
@@ -269,6 +285,14 @@
             <div class="court-desc">
                 <span class="lang-en">Digit Span Memory</span>
                 <span class="lang-es">Memoria Numérica</span>
+            </div>
+        </a>
+        <a href="the-reflex.html" class="court-card reflex">
+            <div class="court-icon">⚡</div>
+            <div class="court-name">THE REFLEX</div>
+            <div class="court-desc">
+                <span class="lang-en">Reaction Time</span>
+                <span class="lang-es">Tiempo de Reacción</span>
             </div>
         </a>
     </div>
@@ -307,7 +331,8 @@
                 var recallLaughs = parseInt(localStorage.getItem('lc-recall-laughs') || '0');
                 var matchLaughs = parseInt(localStorage.getItem('lc-match-laughs') || '0');
                 var drillLaughs = parseInt(localStorage.getItem('lc-drill-laughs') || '0');
-                var totalLaughs = recallLaughs + matchLaughs + drillLaughs;
+                var reflexLaughs = parseInt(localStorage.getItem('lc-reflex-laughs') || '0');
+                var totalLaughs = recallLaughs + matchLaughs + drillLaughs + reflexLaughs;
 
                 // Get streak (could be from any court or overall)
                 var streak = parseInt(localStorage.getItem('lc-streak') || '0');
@@ -316,7 +341,8 @@
                 var recallTier = parseInt(localStorage.getItem('lc-recall-best') || '0');
                 var matchTier = parseInt(localStorage.getItem('lc-match-best') || '0');
                 var drillTier = parseInt(localStorage.getItem('lc-drill-best') || '0');
-                var bestTier = Math.max(recallTier, matchTier, drillTier);
+                var reflexTier = parseInt(localStorage.getItem('lc-reflex-best') || '0');
+                var bestTier = Math.max(recallTier, matchTier, drillTier, reflexTier);
 
                 document.getElementById('totalLaughs').textContent = totalLaughs;
                 document.getElementById('currentStreak').textContent = streak;
