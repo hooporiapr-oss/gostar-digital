@@ -11,7 +11,8 @@
             --orange: #FF6B00;
             --teal: #00D9A5;
             --gold: #FFD700;
-            --purple: #6B21A8;
+            --purple: #9D4EDD;
+            --pink: #FF1493;
             --cyan: #00CED1;
             --dark: #0a0a0f;
             --darker: #050508;
@@ -61,9 +62,9 @@
 
         .courts-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            max-width: 600px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            max-width: 700px;
             width: 100%;
             margin-bottom: 30px;
         }
@@ -72,7 +73,7 @@
             background: var(--card);
             border: 2px solid var(--border);
             border-radius: 20px;
-            padding: 30px 20px;
+            padding: 25px 15px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s;
@@ -88,6 +89,7 @@
             transform: scale(0.98);
         }
 
+        /* THE RECALL - Orange */
         .court-card.recall {
             border-color: rgba(255,107,0,0.3);
         }
@@ -99,6 +101,7 @@
             background: linear-gradient(135deg, var(--orange), #FF8C00);
         }
 
+        /* THE MATCH - Cyan */
         .court-card.match {
             border-color: rgba(0,206,209,0.3);
         }
@@ -110,25 +113,37 @@
             background: linear-gradient(135deg, var(--cyan), #00B4D8);
         }
 
+        /* THE DRILL - Purple/Pink */
+        .court-card.drill {
+            border-color: rgba(157,78,221,0.3);
+        }
+        .court-card.drill:hover {
+            border-color: var(--purple);
+            box-shadow: 0 10px 40px rgba(157,78,221,0.3);
+        }
+        .court-card.drill .court-icon {
+            background: linear-gradient(135deg, var(--purple), var(--pink));
+        }
+
         .court-icon {
-            width: 70px;
-            height: 70px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2rem;
-            margin: 0 auto 15px;
+            font-size: 1.8rem;
+            margin: 0 auto 12px;
             color: var(--dark);
         }
         .court-name {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             letter-spacing: 2px;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
         .court-desc {
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             color: var(--muted);
             line-height: 1.4;
         }
@@ -198,12 +213,15 @@
             color: var(--dark);
         }
 
-        @media (max-width: 500px) {
+        @media (max-width: 600px) {
             .courts-grid {
                 grid-template-columns: 1fr;
                 max-width: 320px;
             }
             .court-card { padding: 25px 15px; }
+            .court-icon { width: 70px; height: 70px; font-size: 2rem; }
+            .court-name { font-size: 1.5rem; }
+            .court-desc { font-size: 0.85rem; }
             .logo { font-size: 2rem; }
             .select-title { font-size: 1.5rem; }
         }
@@ -229,20 +247,28 @@
     </header>
 
     <div class="courts-grid">
-        <a href="laugh-trail.html" class="court-card recall">
+        <a href="the-recall.html" class="court-card recall">
             <div class="court-icon">🧠</div>
             <div class="court-name">THE RECALL</div>
             <div class="court-desc">
-                <span class="lang-en">Sequence Memory Training</span>
-                <span class="lang-es">Entrenamiento de Secuencias</span>
+                <span class="lang-en">Sequence Memory</span>
+                <span class="lang-es">Memoria de Secuencia</span>
             </div>
         </a>
         <a href="the-match.html" class="court-card match">
             <div class="court-icon">🎯</div>
             <div class="court-name">THE MATCH</div>
             <div class="court-desc">
-                <span class="lang-en">Spatial Memory Training</span>
-                <span class="lang-es">Entrenamiento de Memoria Espacial</span>
+                <span class="lang-en">Spatial Memory</span>
+                <span class="lang-es">Memoria Espacial</span>
+            </div>
+        </a>
+        <a href="the-drill.html" class="court-card drill">
+            <div class="court-icon">🏀</div>
+            <div class="court-name">THE DRILL</div>
+            <div class="court-desc">
+                <span class="lang-en">Digit Span Memory</span>
+                <span class="lang-es">Memoria Numérica</span>
             </div>
         </a>
     </div>
@@ -277,11 +303,20 @@
             }
 
             function loadStats() {
-                var totalLaughs = parseInt(localStorage.getItem('lc-laughs-total') || '0');
+                // Aggregate laughs from all courts
+                var recallLaughs = parseInt(localStorage.getItem('lc-recall-laughs') || '0');
+                var matchLaughs = parseInt(localStorage.getItem('lc-match-laughs') || '0');
+                var drillLaughs = parseInt(localStorage.getItem('lc-drill-laughs') || '0');
+                var totalLaughs = recallLaughs + matchLaughs + drillLaughs;
+
+                // Get streak (could be from any court or overall)
                 var streak = parseInt(localStorage.getItem('lc-streak') || '0');
-                var recallTier = parseInt(localStorage.getItem('lc-recall-best-tier') || '0');
-                var matchTier = parseInt(localStorage.getItem('lc-match-best-tier') || '0');
-                var bestTier = Math.max(recallTier, matchTier);
+
+                // Get best tier across all courts
+                var recallTier = parseInt(localStorage.getItem('lc-recall-best') || '0');
+                var matchTier = parseInt(localStorage.getItem('lc-match-best') || '0');
+                var drillTier = parseInt(localStorage.getItem('lc-drill-best') || '0');
+                var bestTier = Math.max(recallTier, matchTier, drillTier);
 
                 document.getElementById('totalLaughs').textContent = totalLaughs;
                 document.getElementById('currentStreak').textContent = streak;
