@@ -14,11 +14,13 @@
     --pink: #FF1493;
     --purple: #9D4EDD;
     --cyan: #00CED1;
+    --red: #FF1744;
     --dark: #0a0a0f;
     --darker: #050508;
     --card: #111118;
     --text: #FFFFFF;
     --muted: #8892a0;
+    --border: rgba(255,255,255,0.08);
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
@@ -63,6 +65,17 @@ body {
     color: var(--muted);
     letter-spacing: 2px;
     text-transform: uppercase;
+}
+.powered-by {
+    margin-top: 8px;
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+.powered-by .ritnome {
+    color: var(--gold);
+    font-weight: 700;
 }
 
 /* Stats Bar */
@@ -136,31 +149,63 @@ body {
     100% { transform: scale(1); opacity: 1; }
 }
 
-/* Speed Selection */
+/* Ritnome™ BPM Speed Selection */
+.ritnome-tempo {
+    margin-bottom: 15px;
+}
+.tempo-label {
+    text-align: center;
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+.tempo-label .ritnome-mark {
+    color: var(--gold);
+    font-weight: 700;
+}
 .speed-selector {
     display: flex;
     gap: 8px;
-    margin-bottom: 15px;
 }
 .speed-btn {
     flex: 1;
-    padding: 10px;
-    border: 2px solid var(--card);
+    padding: 12px 8px;
+    border: 2px solid var(--border);
     background: var(--card);
-    border-radius: 10px;
+    border-radius: 12px;
     color: var(--muted);
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.9rem;
+    font-size: 1.1rem;
     letter-spacing: 1px;
     cursor: pointer;
     transition: all 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+.speed-btn .bpm {
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+.speed-btn .bpm-label {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.55rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.7;
 }
 .speed-btn.active {
     border-color: var(--orange);
     color: var(--orange);
-    background: rgba(255,107,0,0.1);
+    background: rgba(255,107,0,0.15);
 }
-.speed-btn:hover { border-color: var(--orange); }
+.speed-btn:hover:not(.active) { 
+    border-color: var(--orange); 
+    color: var(--text);
+}
 
 /* 5x5 Court Grid */
 .court-grid {
@@ -459,6 +504,47 @@ body {
     z-index: 100;
 }
 .back-btn:hover { color: var(--text); }
+
+/* Ritnome™ Footer */
+.ritnome-footer {
+    margin-top: auto;
+    padding: 25px 20px;
+    text-align: center;
+    border-top: 1px solid var(--border);
+}
+.footer-brand { margin-bottom: 10px; }
+.ritnome-tm {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 4px;
+    background: linear-gradient(135deg, var(--red), var(--gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: block;
+}
+.footer-tagline {
+    font-size: 0.6rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: block;
+    margin-top: 3px;
+}
+.footer-company {
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin: 8px 0;
+}
+.footer-company a {
+    color: var(--gold);
+    text-decoration: none;
+}
+.footer-copyright {
+    font-size: 0.55rem;
+    color: var(--muted);
+    opacity: 0.6;
+}
 </style>
 </head>
 <body>
@@ -467,13 +553,14 @@ body {
     <button class="lang-btn" id="btnEs">ES</button>
 </div>
 
-<a href="/laugh-hub.html" class="back-btn">← Back</a>
+<a href="laugh-hub.html" class="back-btn">← Back</a>
 
 <div class="game-container">
     <header class="header">
         <div class="logo"><span class="laugh">LAUGH</span>COURT</div>
         <h1 class="court-name">🧠 THE RECALL</h1>
         <p class="court-subtitle" id="subtitleText">Sequence Memory Training</p>
+        <div class="powered-by">Powered by <span class="ritnome">Ritnome™</span></div>
     </header>
 
     <div class="stats-bar">
@@ -496,13 +583,28 @@ body {
     </div>
 
     <div class="message-display" id="messageDisplay">
-        <span class="message-text" id="messageText">Select speed & START!</span>
+        <span class="message-text" id="messageText">Select tempo & START!</span>
     </div>
 
-    <div class="speed-selector">
-        <button class="speed-btn" id="slowBtn" data-speed="slow">🐢 SLOW</button>
-        <button class="speed-btn active" id="mediumBtn" data-speed="medium">🏃 MEDIUM</button>
-        <button class="speed-btn" id="fastBtn" data-speed="fast">⚡ FAST</button>
+    <div class="ritnome-tempo">
+        <div class="tempo-label">🎵 <span class="ritnome-mark">Ritnome™</span> Tempo</div>
+        <div class="speed-selector">
+            <button class="speed-btn" id="slowBtn" data-speed="slow" data-bpm="60">
+                <span>🐢</span>
+                <span class="bpm">60</span>
+                <span class="bpm-label">BPM</span>
+            </button>
+            <button class="speed-btn active" id="mediumBtn" data-speed="medium" data-bpm="90">
+                <span>🏃</span>
+                <span class="bpm">90</span>
+                <span class="bpm-label">BPM</span>
+            </button>
+            <button class="speed-btn" id="fastBtn" data-speed="fast" data-bpm="120">
+                <span>⚡</span>
+                <span class="bpm">120</span>
+                <span class="bpm-label">BPM</span>
+            </button>
+        </div>
     </div>
 
     <div class="court-grid" id="courtGrid"></div>
@@ -520,6 +622,15 @@ body {
         <span class="laugh-meter-label">Laugh Meter:</span>
         <span class="laugh-meter-value" id="laughMeter">😊</span>
     </div>
+
+    <footer class="ritnome-footer">
+        <div class="footer-brand">
+            <span class="ritnome-tm">Ritnome™</span>
+            <span class="footer-tagline">Rhythm-Based Cognitive Training</span>
+        </div>
+        <div class="footer-company">by <a href="https://gostar.digital">GoStar Digital LLC</a> 🇵🇷</div>
+        <div class="footer-copyright">© 2025 GoStar Digital LLC. All rights reserved.</div>
+    </footer>
 </div>
 
 <div class="feedback-overlay" id="feedbackOverlay">
@@ -537,6 +648,7 @@ body {
                 <div class="feedback-stat-label">😂 Earned</div>
             </div>
         </div>
+        <div class="feedback-ritnome">Ritnome™ Training</div>
         <button class="feedback-btn primary" id="continueBtn">CONTINUE 🧠</button>
         <button class="feedback-btn secondary" id="restartBtn">RESTART</button>
     </div>
@@ -557,6 +669,7 @@ body {
         sessionLaughs: 0,
         streak: 0,
         speed: 'medium',
+        bpm: 90,
         sequence: [],
         userSequence: [],
         isPlaying: false,
@@ -564,11 +677,12 @@ body {
         circuitsCompleted: 0
     };
 
-    // Speed configs (ms per flash)
+    // Ritnome™ BPM-based speed configs
+    // 60 BPM = 1000ms per beat, 90 BPM = 667ms, 120 BPM = 500ms
     var speeds = {
-        slow: { flash: 800, pause: 400 },
-        medium: { flash: 500, pause: 300 },
-        fast: { flash: 300, pause: 200 }
+        slow: { bpm: 60, flash: 800, pause: 400 },
+        medium: { bpm: 90, flash: 500, pause: 300 },
+        fast: { bpm: 120, flash: 350, pause: 200 }
     };
 
     // Tier = sequence length (tier 1 = 2 items, tier 10 = 11 items)
@@ -586,7 +700,7 @@ body {
     var texts = {
         en: {
             subtitle: 'Sequence Memory Training',
-            selectStart: 'Select speed & START!',
+            selectStart: 'Select tempo & START!',
             watch: 'WATCH THE SEQUENCE...',
             yourTurn: 'YOUR TURN! Tap in order',
             perfect: 'PERFECT!',
@@ -602,7 +716,7 @@ body {
         },
         es: {
             subtitle: 'Entrenamiento de Secuencia',
-            selectStart: '¡Selecciona velocidad e INICIA!',
+            selectStart: '¡Selecciona tempo e INICIA!',
             watch: 'OBSERVA LA SECUENCIA...',
             yourTurn: '¡TU TURNO! Toca en orden',
             perfect: '¡PERFECTO!',
@@ -733,10 +847,10 @@ body {
         state.isPlaying = false;
         disableGrid(true);
         
-        // Calculate laughs
+        // Calculate laughs (bonus for faster BPM)
         var baseLaughs = state.tier;
-        var speedBonus = state.speed === 'fast' ? 2 : state.speed === 'medium' ? 1 : 0;
-        var laughsEarned = baseLaughs + speedBonus;
+        var bpmBonus = state.bpm === 120 ? 2 : state.bpm === 90 ? 1 : 0;
+        var laughsEarned = baseLaughs + bpmBonus;
         
         state.sessionLaughs += laughsEarned;
         state.totalLaughs += laughsEarned;
@@ -757,7 +871,8 @@ body {
             "MEMORY MASTER! 💪",
             "SEQUENCE LOCKED! 🔥",
             "BRAIN GAINS! 😂",
-            "COACH IS PROUD! 🏆"
+            "COACH IS PROUD! 🏆",
+            "RITNOME RHYTHM! 🎵"
         ];
         showCoachMessage(messages[Math.floor(Math.random() * messages.length)]);
         
@@ -949,6 +1064,7 @@ body {
             document.querySelectorAll('.speed-btn').forEach(function(b) { b.classList.remove('active'); });
             btn.classList.add('active');
             state.speed = btn.dataset.speed;
+            state.bpm = parseInt(btn.dataset.bpm);
         });
     });
 
