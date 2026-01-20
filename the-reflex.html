@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>LaughCourt™ | THE REFLEX</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+    --green: #00E676;
+    --green-dark: #00C853;
+    --lime: #C6FF00;
+    --gold: #FFD700;
+    --dark: #0a0a0f;
+    --darker: #050508;
+    --card: #111118;
+    --text: #FFFFFF;
+    --muted: #8892a0;
+    --danger: #FF4757;
+    --border: rgba(255,255,255,0.08);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--dark);
+    color: var(--text);
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+    overflow-x: hidden;
+}
+body.es .lang-en { display: none !important; }
+body.en .lang-es { display: none !important; }
+
+/* Header */
+.header {
+    text-align: center;
+    margin-bottom: 10px;
+    width: 100%;
+}
+.logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 3px;
+}
+.logo .laugh { color: var(--gold); }
+.logo .court { color: var(--text); }
+.court-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 4px;
+    color: var(--green);
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+/* Nav */
+.nav-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 15px;
+}
+.back-btn {
+    background: none;
+    border: 2px solid var(--gold);
+    color: var(--gold);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+}
+.back-btn:hover { background: var(--gold); color: var(--dark); }
+.lang-toggle { display: flex; gap: 5px; }
+.lang-btn {
+    padding: 6px 12px;
+    border: 2px solid var(--green);
+    background: transparent;
+    color: var(--green);
+    border-radius: 15px;
+    font-weight: 700;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.lang-btn.active { background: var(--green); color: var(--dark); }
+
+/* Speed Selection */
+.speed-select {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+.speed-btn {
+    padding: 10px 20px;
+    border: 2px solid var(--border);
+    background: var(--card);
+    color: var(--muted);
+    border-radius: 25px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.speed-btn.active {
+    border-color: var(--green);
+    color: var(--green);
+    background: rgba(0, 230, 118, 0.1);
+}
+.speed-btn:hover:not(.active) { border-color: var(--muted); }
+
+/* Stats Bar */
+.stats-bar {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+.stat {
+    text-align: center;
+}
+.stat-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    color: var(--green);
+    line-height: 1;
+}
+.stat-value.laughs { color: var(--gold); }
+.stat-label {
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* Progress Bar */
+.progress-container {
+    width: 100%;
+    max-width: 350px;
+    height: 8px;
+    background: var(--card);
+    border-radius: 4px;
+    margin-bottom: 15px;
+    overflow: hidden;
+}
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--green), var(--lime));
+    border-radius: 4px;
+    transition: width 0.3s ease;
+    width: 0%;
+}
+
+/* Grid */
+.grid-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 15px;
+}
+.grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    padding: 15px;
+    background: var(--card);
+    border-radius: 20px;
+    border: 2px solid var(--border);
+}
+.cell {
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(145deg, #1a1a24, #12121a);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    position: relative;
+    overflow: hidden;
+}
+.cell::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(135deg, var(--green), var(--lime));
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    border-radius: 10px;
+}
+.cell.lit::before {
+    opacity: 1;
+    animation: pulse 0.5s ease-in-out infinite;
+}
+.cell.hit {
+    animation: hitFlash 0.3s ease;
+}
+.cell.hit::before {
+    opacity: 1;
+    background: linear-gradient(135deg, var(--gold), #FFA500);
+}
+.cell.miss {
+    animation: missShake 0.4s ease;
+}
+.cell.miss::before {
+    opacity: 1;
+    background: linear-gradient(135deg, var(--danger), #FF6B6B);
+}
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(0.95); }
+}
+@keyframes hitFlash {
+    0% { transform: scale(1); }
+    50% { transform: scale(0.9); }
+    100% { transform: scale(1); }
+}
+@keyframes missShake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+/* Timer Ring */
+.timer-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    display: none;
+}
+.cell.lit .timer-container { display: block; }
+.timer-ring {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 3px solid rgba(255,255,255,0.3);
+    border-top-color: var(--gold);
+    animation: timerSpin linear forwards;
+}
+@keyframes timerSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Coach Message */
+.message-container {
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+    width: 100%;
+    max-width: 350px;
+}
+.message-box {
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    padding: 12px 20px;
+    text-align: center;
+    width: 100%;
+}
+.message-text {
+    font-size: 0.95rem;
+    color: var(--muted);
+    line-height: 1.4;
+}
+.message-text.success { color: var(--green); }
+.message-text.fail { color: var(--danger); }
+.message-text.celebrate { color: var(--gold); }
+
+/* Action Button */
+.action-btn {
+    padding: 16px 50px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 3px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s;
+    background: linear-gradient(135deg, var(--green), var(--green-dark));
+    color: var(--dark);
+    box-shadow: 0 5px 25px rgba(0, 230, 118, 0.4);
+}
+.action-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0, 230, 118, 0.5);
+}
+.action-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Reaction Time Display */
+.reaction-display {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    color: var(--lime);
+    margin-top: 10px;
+    letter-spacing: 2px;
+}
+
+/* Tier Up Overlay */
+.tier-up-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.9);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+.tier-up-overlay.show { display: flex; }
+.tier-up-content {
+    text-align: center;
+    animation: tierUpBounce 0.5s ease;
+}
+@keyframes tierUpBounce {
+    0% { transform: scale(0.5); opacity: 0; }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
+}
+.tier-up-emoji { font-size: 4rem; margin-bottom: 15px; }
+.tier-up-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    letter-spacing: 4px;
+    color: var(--green);
+    margin-bottom: 10px;
+}
+.tier-up-sub {
+    font-size: 1.1rem;
+    color: var(--gold);
+    margin-bottom: 25px;
+}
+.tier-up-btn {
+    padding: 14px 40px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+    background: linear-gradient(135deg, var(--gold), #FFA500);
+    color: var(--dark);
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.tier-up-btn:hover { transform: scale(1.05); }
+
+/* Feedback Overlay */
+.feedback-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.9);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 20px;
+}
+.feedback-overlay.show { display: flex; }
+.feedback-content {
+    text-align: center;
+    animation: fadeIn 0.3s ease;
+    max-width: 320px;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.feedback-emoji { font-size: 4rem; margin-bottom: 15px; }
+.feedback-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 3px;
+    margin-bottom: 10px;
+}
+.feedback-title.success { color: var(--green); }
+.feedback-title.fail { color: var(--danger); }
+.feedback-laughs {
+    font-size: 1.5rem;
+    color: var(--gold);
+    margin-bottom: 10px;
+}
+.feedback-stats {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+.feedback-btns {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.feedback-btn {
+    padding: 12px 25px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.feedback-btn.primary {
+    background: linear-gradient(135deg, var(--green), var(--green-dark));
+    color: var(--dark);
+}
+.feedback-btn.secondary {
+    background: var(--card);
+    color: var(--gold);
+    border: 2px solid var(--gold);
+}
+.feedback-btn:hover { transform: scale(1.05); }
+
+/* Responsive */
+@media (max-width: 380px) {
+    .cell { width: 50px; height: 50px; }
+    .grid { gap: 6px; padding: 12px; }
+}
+@media (min-width: 500px) {
+    .cell { width: 65px; height: 65px; }
+    .grid { gap: 10px; padding: 20px; }
+}
+</style>
+</head>
+<body class="en">
+
+<!-- Header -->
+<header class="header">
+    <div class="logo"><span class="laugh">LAUGH</span><span class="court">COURT</span><sup style="font-size:0.5em">™</sup></div>
+    <div class="court-title">⚡ THE REFLEX ⚡</div>
+</header>
+
+<!-- Nav Row -->
+<div class="nav-row">
+    <a href="laugh-hub.html" class="back-btn">
+        <span class="lang-en">← COURTS</span>
+        <span class="lang-es">← CANCHAS</span>
+    </a>
+    <div class="lang-toggle">
+        <button class="lang-btn active" id="btnEn">EN</button>
+        <button class="lang-btn" id="btnEs">ES</button>
+    </div>
+</div>
+
+<!-- Speed Selection -->
+<div class="speed-select">
+    <button class="speed-btn" data-speed="slow">🐢</button>
+    <button class="speed-btn active" data-speed="medium">🏃</button>
+    <button class="speed-btn" data-speed="fast">⚡</button>
+</div>
+
+<!-- Stats Bar -->
+<div class="stats-bar">
+    <div class="stat">
+        <div class="stat-value" id="tierDisplay">1</div>
+        <div class="stat-label">TIER</div>
+    </div>
+    <div class="stat">
+        <div class="stat-value laughs" id="laughsDisplay">0</div>
+        <div class="stat-label">😂 LAUGHS</div>
+    </div>
+    <div class="stat">
+        <div class="stat-value" id="streakDisplay">0</div>
+        <div class="stat-label">🔥 STREAK</div>
+    </div>
+    <div class="stat">
+        <div class="stat-value" id="avgTimeDisplay">---</div>
+        <div class="stat-label">⚡ AVG MS</div>
+    </div>
+</div>
+
+<!-- Progress Bar -->
+<div class="progress-container">
+    <div class="progress-fill" id="progressFill"></div>
+</div>
+
+<!-- Grid -->
+<div class="grid-container">
+    <div class="grid" id="grid"></div>
+</div>
+
+<!-- Reaction Display -->
+<div class="reaction-display" id="reactionDisplay"></div>
+
+<!-- Coach Message -->
+<div class="message-container">
+    <div class="message-box">
+        <p class="message-text" id="messageText">
+            <span class="lang-en">React FAST! Tap the green squares before they vanish! ⚡</span>
+            <span class="lang-es">¡Reacciona RÁPIDO! ¡Toca los cuadros verdes antes de que desaparezcan! ⚡</span>
+        </p>
+    </div>
+</div>
+
+<!-- Action Button -->
+<button class="action-btn" id="actionBtn">
+    <span class="lang-en">START REFLEX</span>
+    <span class="lang-es">INICIAR REFLEJOS</span>
+</button>
+
+<!-- Tier Up Overlay -->
+<div class="tier-up-overlay" id="tierUpOverlay">
+    <div class="tier-up-content">
+        <div class="tier-up-emoji">⚡🏆⚡</div>
+        <div class="tier-up-text">
+            <span class="lang-en">TIER UP!</span>
+            <span class="lang-es">¡SUBISTE DE NIVEL!</span>
+        </div>
+        <div class="tier-up-sub" id="tierUpSub"></div>
+        <button class="tier-up-btn" id="tierUpBtn">
+            <span class="lang-en">KEEP GOING!</span>
+            <span class="lang-es">¡CONTINUAR!</span>
+        </button>
+    </div>
+</div>
+
+<!-- Feedback Overlay -->
+<div class="feedback-overlay" id="feedbackOverlay">
+    <div class="feedback-content">
+        <div class="feedback-emoji" id="feedbackEmoji">😂</div>
+        <div class="feedback-title" id="feedbackTitle">NICE!</div>
+        <div class="feedback-laughs" id="feedbackLaughs">+5 😂</div>
+        <div class="feedback-stats" id="feedbackStats"></div>
+        <div class="feedback-btns">
+            <button class="feedback-btn primary" id="continueBtn">
+                <span class="lang-en">NEXT ROUND</span>
+                <span class="lang-es">SIGUIENTE</span>
+            </button>
+            <button class="feedback-btn secondary" id="restartBtn">
+                <span class="lang-en">RESTART</span>
+                <span class="lang-es">REINICIAR</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+(function(){
+    // Language
+    var currentLang = localStorage.getItem('lc-lang') || 'en';
+    function setLang(l) {
+        currentLang = l;
+        localStorage.setItem('lc-lang', l);
+        document.body.className = l;
+        document.getElementById('btnEn').classList.toggle('active', l === 'en');
+        document.getElementById('btnEs').classList.toggle('active', l === 'es');
+    }
+    
+    function t(key) {
+        var strings = {
+            startReflex: { en: 'START REFLEX', es: 'INICIAR REFLEJOS' },
+            ready: { en: 'GET READY...', es: 'PREPÁRATE...' },
+            go: { en: 'GO! TAP THE GREEN!', es: '¡YA! ¡TOCA EL VERDE!' },
+            hit: { en: 'NICE! Keep going!', es: '¡BIEN! ¡Sigue así!' },
+            miss: { en: 'Too slow! Try again!', es: '¡Muy lento! ¡Intenta de nuevo!' },
+            wrongCell: { en: 'Wrong cell! Focus!', es: '¡Celda incorrecta! ¡Enfócate!' },
+            complete: { en: 'ROUND COMPLETE!', es: '¡RONDA COMPLETA!' },
+            failed: { en: 'ROUND FAILED', es: 'RONDA FALLIDA' },
+            tierUp: { en: 'TIER UP!', es: '¡SUBISTE DE NIVEL!' },
+            avgReaction: { en: 'Avg Reaction', es: 'Reacción Promedio' },
+            perfectRound: { en: 'PERFECT ROUND! 🎯', es: '¡RONDA PERFECTA! 🎯' },
+            lightningFast: { en: 'LIGHTNING FAST! ⚡', es: '¡VELOZ COMO RAYO! ⚡' },
+            goodReflexes: { en: 'Good reflexes! 💪', es: '¡Buenos reflejos! 💪' },
+            keepPracticing: { en: 'Keep practicing! 🏀', es: '¡Sigue practicando! 🏀' },
+            circuit: { en: 'Circuit', es: 'Circuito' }
+        };
+        return strings[key] ? strings[key][currentLang] : key;
+    }
+    
+    // State
+    var state = {
+        tier: 1,
+        laughs: 0,
+        streak: 0,
+        circuitsCompleted: 0,
+        speed: 'medium',
+        playing: false,
+        currentIndex: 0,
+        targetCell: null,
+        reactionTimes: [],
+        roundStartTime: 0,
+        cellTimeout: null
+    };
+    
+    // Speed settings (time cell stays lit in ms)
+    var speedSettings = {
+        slow: 1500,
+        medium: 1000,
+        fast: 600
+    };
+    
+    // Elements
+    var grid = document.getElementById('grid');
+    var actionBtn = document.getElementById('actionBtn');
+    var messageText = document.getElementById('messageText');
+    var progressFill = document.getElementById('progressFill');
+    var tierUpOverlay = document.getElementById('tierUpOverlay');
+    var feedbackOverlay = document.getElementById('feedbackOverlay');
+    var reactionDisplay = document.getElementById('reactionDisplay');
+    
+    // Grid colors for variety
+    var cellColors = [
+        'linear-gradient(135deg, #00E676, #00C853)',
+        'linear-gradient(135deg, #00E676, #69F0AE)',
+        'linear-gradient(135deg, #76FF03, #C6FF00)',
+        'linear-gradient(135deg, #00E676, #1DE9B6)',
+        'linear-gradient(135deg, #69F0AE, #00E676)'
+    ];
+    
+    // Get targets for current tier (tier 1 = 5, tier 2 = 6, etc.)
+    function getTargetCount() {
+        return 4 + state.tier; // Tier 1 = 5, Tier 10 = 14
+    }
+    
+    // Build grid
+    function initGrid() {
+        grid.innerHTML = '';
+        for (var i = 0; i < 25; i++) {
+            var cell = document.createElement('div');
+            cell.className = 'cell';
+            cell.dataset.index = i;
+            
+            var timerContainer = document.createElement('div');
+            timerContainer.className = 'timer-container';
+            var timerRing = document.createElement('div');
+            timerRing.className = 'timer-ring';
+            timerContainer.appendChild(timerRing);
+            cell.appendChild(timerContainer);
+            
+            cell.addEventListener('click', handleCellClick);
+            grid.appendChild(cell);
+        }
+    }
+    
+    // Update stats display
+    function updateStats() {
+        document.getElementById('tierDisplay').textContent = state.tier;
+        document.getElementById('laughsDisplay').textContent = state.laughs;
+        document.getElementById('streakDisplay').textContent = state.streak;
+        
+        if (state.reactionTimes.length > 0) {
+            var avg = Math.round(state.reactionTimes.reduce(function(a,b) { return a+b; }, 0) / state.reactionTimes.length);
+            document.getElementById('avgTimeDisplay').textContent = avg;
+        }
+    }
+    
+    // Light up random cell
+    function lightCell() {
+        // Clear any previously lit cell
+        var cells = document.querySelectorAll('.cell');
+        cells.forEach(function(c) { c.classList.remove('lit', 'hit', 'miss'); });
+        
+        // Pick random cell
+        var randomIndex = Math.floor(Math.random() * 25);
+        state.targetCell = randomIndex;
+        state.roundStartTime = Date.now();
+        
+        var cell = cells[randomIndex];
+        cell.classList.add('lit');
+        
+        // Set random color variation
+        var colorIndex = Math.floor(Math.random() * cellColors.length);
+        cell.style.setProperty('--cell-gradient', cellColors[colorIndex]);
+        
+        // Set timer animation duration based on speed
+        var duration = speedSettings[state.speed];
+        var timerRing = cell.querySelector('.timer-ring');
+        timerRing.style.animationDuration = duration + 'ms';
+        
+        // Start timeout for miss
+        state.cellTimeout = setTimeout(function() {
+            if (state.playing && cell.classList.contains('lit')) {
+                handleMiss(cell);
+            }
+        }, duration);
+    }
+    
+    // Handle cell click
+    function handleCellClick(e) {
+        if (!state.playing) return;
+        
+        var cell = e.currentTarget;
+        var clickedIndex = parseInt(cell.dataset.index);
+        
+        if (clickedIndex === state.targetCell && cell.classList.contains('lit')) {
+            // HIT!
+            clearTimeout(state.cellTimeout);
+            var reactionTime = Date.now() - state.roundStartTime;
+            state.reactionTimes.push(reactionTime);
+            
+            cell.classList.remove('lit');
+            cell.classList.add('hit');
+            
+            // Show reaction time
+            reactionDisplay.textContent = reactionTime + 'ms';
+            reactionDisplay.style.color = reactionTime < 300 ? '#C6FF00' : reactionTime < 500 ? '#00E676' : '#FFD700';
+            
+            // Calculate laughs
+            var laughsEarned = state.tier;
+            if (state.speed === 'fast') laughsEarned += 2;
+            else if (state.speed === 'medium') laughsEarned += 1;
+            if (reactionTime < 300) laughsEarned += 2; // Quick reaction bonus
+            
+            state.laughs += laughsEarned;
+            state.currentIndex++;
+            
+            // Update progress
+            var progress = (state.currentIndex / getTargetCount()) * 100;
+            progressFill.style.width = progress + '%';
+            
+            updateStats();
+            
+            // Check if round complete
+            if (state.currentIndex >= getTargetCount()) {
+                setTimeout(function() { roundComplete(true); }, 300);
+            } else {
+                // Next cell after short delay
+                setTimeout(function() {
+                    if (state.playing) lightCell();
+                }, 400);
+            }
+        } else if (cell.classList.contains('lit')) {
+            // Wrong cell while another is lit - do nothing (shouldn't happen)
+        } else if (state.targetCell !== null) {
+            // Clicked wrong cell
+            messageText.textContent = t('wrongCell');
+            messageText.className = 'message-text fail';
+        }
+    }
+    
+    // Handle miss (timeout)
+    function handleMiss(cell) {
+        cell.classList.remove('lit');
+        cell.classList.add('miss');
+        
+        state.playing = false;
+        state.streak = 0;
+        
+        messageText.textContent = t('miss');
+        messageText.className = 'message-text fail';
+        
+        setTimeout(function() { roundComplete(false); }, 500);
+    }
+    
+    // Round complete
+    function roundComplete(success) {
+        state.playing = false;
+        clearTimeout(state.cellTimeout);
+        
+        var cells = document.querySelectorAll('.cell');
+        cells.forEach(function(c) { c.classList.remove('lit', 'hit', 'miss'); });
+        
+        if (success) {
+            state.streak++;
+            state.circuitsCompleted++;
+            
+            // Calculate average reaction time
+            var avgTime = Math.round(state.reactionTimes.reduce(function(a,b) { return a+b; }, 0) / state.reactionTimes.length);
+            
+            // Bonus laughs for fast average
+            var bonusLaughs = 0;
+            if (avgTime < 350) bonusLaughs = state.tier * 2;
+            else if (avgTime < 500) bonusLaughs = state.tier;
+            state.laughs += bonusLaughs;
+            
+            // Show feedback
+            var emoji = avgTime < 350 ? '⚡' : avgTime < 500 ? '🎯' : '💪';
+            var title = avgTime < 350 ? t('lightningFast') : avgTime < 500 ? t('perfectRound') : t('goodReflexes');
+            
+            document.getElementById('feedbackEmoji').textContent = emoji;
+            document.getElementById('feedbackTitle').textContent = title;
+            document.getElementById('feedbackTitle').className = 'feedback-title success';
+            document.getElementById('feedbackLaughs').textContent = '+' + (state.tier + bonusLaughs) + ' 😂';
+            document.getElementById('feedbackStats').innerHTML = 
+                t('avgReaction') + ': <strong>' + avgTime + 'ms</strong><br>' +
+                t('circuit') + ': ' + state.circuitsCompleted + '/3';
+            
+            feedbackOverlay.classList.add('show');
+            
+            // Check for tier up
+            if (state.circuitsCompleted >= 3 && state.tier < 10) {
+                feedbackOverlay.classList.remove('show');
+                showTierUp();
+            }
+        } else {
+            document.getElementById('feedbackEmoji').textContent = '😅';
+            document.getElementById('feedbackTitle').textContent = t('failed');
+            document.getElementById('feedbackTitle').className = 'feedback-title fail';
+            document.getElementById('feedbackLaughs').textContent = t('keepPracticing');
+            document.getElementById('feedbackStats').innerHTML = 
+                (currentLang === 'es' ? 'Capturados: ' : 'Caught: ') + state.currentIndex + '/' + getTargetCount();
+            
+            feedbackOverlay.classList.add('show');
+        }
+        
+        updateStats();
+    }
+    
+    // Show tier up
+    function showTierUp() {
+        state.tier++;
+        state.circuitsCompleted = 0;
+        
+        document.getElementById('tierUpSub').innerHTML = 
+            (currentLang === 'es' ? '¡Ahora TIER ' : 'Now TIER ') + state.tier + '!<br>' +
+            (currentLang === 'es' ? 'Atrapa ' : 'Catch ') + getTargetCount() + (currentLang === 'es' ? ' cuadros!' : ' squares!');
+        
+        tierUpOverlay.classList.add('show');
+        updateStats();
+    }
+    
+    // Start game
+    function startGame() {
+        state.playing = true;
+        state.currentIndex = 0;
+        state.targetCell = null;
+        state.reactionTimes = [];
+        reactionDisplay.textContent = '';
+        
+        progressFill.style.width = '0%';
+        
+        var cells = document.querySelectorAll('.cell');
+        cells.forEach(function(c) { c.classList.remove('lit', 'hit', 'miss'); });
+        
+        actionBtn.disabled = true;
+        messageText.textContent = t('ready');
+        messageText.className = 'message-text';
+        
+        setTimeout(function() {
+            messageText.textContent = t('go');
+            messageText.className = 'message-text success';
+            lightCell();
+        }, 1000);
+    }
+    
+    // Event Listeners
+    actionBtn.addEventListener('click', startGame);
+    
+    document.querySelectorAll('.speed-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            if (state.playing) return;
+            document.querySelectorAll('.speed-btn').forEach(function(b) { b.classList.remove('active'); });
+            this.classList.add('active');
+            state.speed = this.dataset.speed;
+        });
+    });
+    
+    document.getElementById('continueBtn').addEventListener('click', function() {
+        feedbackOverlay.classList.remove('show');
+        actionBtn.disabled = false;
+        actionBtn.innerHTML = '<span class="lang-en">NEXT ROUND</span><span class="lang-es">SIGUIENTE RONDA</span>';
+        setLang(currentLang);
+    });
+    
+    document.getElementById('restartBtn').addEventListener('click', function() {
+        feedbackOverlay.classList.remove('show');
+        state.tier = 1;
+        state.circuitsCompleted = 0;
+        state.streak = 0;
+        state.reactionTimes = [];
+        reactionDisplay.textContent = '';
+        document.getElementById('avgTimeDisplay').textContent = '---';
+        progressFill.style.width = '0%';
+        actionBtn.disabled = false;
+        actionBtn.innerHTML = '<span class="lang-en">START REFLEX</span><span class="lang-es">INICIAR REFLEJOS</span>';
+        messageText.innerHTML = '<span class="lang-en">React FAST! Tap the green squares before they vanish! ⚡</span><span class="lang-es">¡Reacciona RÁPIDO! ¡Toca los cuadros verdes antes de que desaparezcan! ⚡</span>';
+        messageText.className = 'message-text';
+        setLang(currentLang);
+        updateStats();
+    });
+    
+    document.getElementById('tierUpBtn').addEventListener('click', function() {
+        tierUpOverlay.classList.remove('show');
+        actionBtn.disabled = false;
+        actionBtn.innerHTML = '<span class="lang-en">START TIER ' + state.tier + '</span><span class="lang-es">INICIAR TIER ' + state.tier + '</span>';
+        setLang(currentLang);
+    });
+    
+    document.getElementById('btnEn').addEventListener('click', function() { setLang('en'); });
+    document.getElementById('btnEs').addEventListener('click', function() { setLang('es'); });
+    
+    // Initialize
+    initGrid();
+    setLang(currentLang);
+    updateStats();
+})();
+</script>
+</body>
+</html>
