@@ -39,6 +39,78 @@
         body.es .lang-en { display: none !important; }
         body.en .lang-es { display: none !important; }
 
+        /* Trial Banner */
+        .trial-banner {
+            display: none;
+            width: 100%;
+            max-width: 520px;
+            background: linear-gradient(135deg, rgba(255,215,0,0.15), rgba(255,107,0,0.15));
+            border: 2px solid var(--gold);
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .trial-banner.show { display: block; }
+        .trial-banner-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            color: var(--gold);
+            margin-bottom: 5px;
+        }
+        .trial-banner-text {
+            font-size: 0.8rem;
+            color: var(--muted);
+            margin-bottom: 8px;
+        }
+        .trial-banner-text strong { color: var(--text); }
+        .trial-banner-btn {
+            display: inline-block;
+            padding: 8px 20px;
+            background: linear-gradient(135deg, var(--gold), #FFA500);
+            color: var(--dark);
+            border: none;
+            border-radius: 20px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .trial-banner-btn:hover { transform: scale(1.05); }
+
+        /* BPM Access Badge */
+        .bpm-access-badge {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 6px 14px;
+            margin-bottom: 15px;
+            font-size: 0.75rem;
+        }
+        .bpm-access-badge.show { display: inline-flex; }
+        .bpm-access-badge .bpm-chip {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            letter-spacing: 1px;
+        }
+        .bpm-chip.unlocked {
+            background: rgba(0,217,165,0.2);
+            color: var(--teal);
+        }
+        .bpm-chip.locked {
+            background: rgba(255,255,255,0.1);
+            color: var(--muted);
+            text-decoration: line-through;
+        }
+
         .header {
             text-align: center;
             margin-bottom: 20px;
@@ -335,6 +407,22 @@
         <button class="lang-btn" id="btnEs">ES</button>
     </div>
 
+    <!-- Trial Banner (hidden by default) -->
+    <div class="trial-banner" id="trialBanner">
+        <div class="trial-banner-title">
+            <span class="lang-en">🎵 FACILITY TRIAL</span>
+            <span class="lang-es">🎵 PRUEBA DE FACILIDAD</span>
+        </div>
+        <div class="trial-banner-text">
+            <span class="lang-en"><strong id="trialDaysLeft">7</strong> days left • Training at <strong>60 BPM</strong> only</span>
+            <span class="lang-es"><strong id="trialDaysLeftEs">7</strong> días restantes • Entrenando solo a <strong>60 BPM</strong></span>
+        </div>
+        <a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="trial-banner-btn">
+            <span class="lang-en">UNLOCK ALL TEMPOS — $5/mo</span>
+            <span class="lang-es">DESBLOQUEAR TODOS — $5/mes</span>
+        </a>
+    </div>
+
     <header class="header">
         <div class="logo"><span class="laugh">LAUGH</span><span class="court">COURT</span><sup style="font-size:0.4em">™</sup></div>
         <div class="powered-by">Powered by <span class="ritnome">Ritnome™</span></div>
@@ -344,8 +432,16 @@
         </h1>
     </header>
 
-    <!-- Ritnome™ BPM Badge -->
-    <div class="bpm-badge">
+    <!-- BPM Access Badge -->
+    <div class="bpm-access-badge" id="bpmAccessBadge">
+        <span style="font-size:0.65rem;color:var(--muted);">🎵 Ritnome™:</span>
+        <span class="bpm-chip unlocked" id="bpm60">60</span>
+        <span class="bpm-chip" id="bpm90">90</span>
+        <span class="bpm-chip" id="bpm120">120</span>
+    </div>
+
+    <!-- Ritnome™ BPM Badge (for paid users) -->
+    <div class="bpm-badge" id="paidBpmBadge" style="display:none;">
         <span class="bpm-badge-label">🎵 <span class="ritnome">Ritnome™</span> Tempo</span>
         <div class="bpm-options">
             <span class="bpm-chip">60</span>
@@ -412,7 +508,7 @@
         </div>
     </div>
 
-    <a href="index.html" class="logout-link">🚪 <span class="lang-en">Exit</span><span class="lang-es">Salir</span></a>
+    <a href="index.html" class="logout-link" id="logoutLink">🚪 <span class="lang-en">Exit</span><span class="lang-es">Salir</span></a>
 
     <footer class="ritnome-footer">
         <div class="footer-brand">
@@ -482,15 +578,80 @@
                         window.location.href = 'index.html';
                         return false;
                     }
+                    return u.pin;
                 } catch(e) {
                     window.location.href = 'index.html';
                     return false;
                 }
-                return true;
             }
 
+            // Check BPM access from server
+            function checkBpmAccess(pin) {
+                fetch('/api/user/bpm-access/' + pin)
+                    .then(function(r) { return r.json(); })
+                    .then(function(data) {
+                        // Store in localStorage for workouts to read
+                        localStorage.setItem('lc-bpm-access', JSON.stringify(data));
+                        
+                        // Update UI based on access
+                        updateBpmUI(data);
+                    })
+                    .catch(function(err) {
+                        console.log('BPM access check failed:', err);
+                        // Default to trial mode if check fails
+                        var defaultAccess = { allBPM: false, userType: 'guest' };
+                        localStorage.setItem('lc-bpm-access', JSON.stringify(defaultAccess));
+                        updateBpmUI(defaultAccess);
+                    });
+            }
+
+            // Update UI based on BPM access
+            function updateBpmUI(data) {
+                var trialBanner = document.getElementById('trialBanner');
+                var bpmAccessBadge = document.getElementById('bpmAccessBadge');
+                var paidBpmBadge = document.getElementById('paidBpmBadge');
+                var bpm60 = document.getElementById('bpm60');
+                var bpm90 = document.getElementById('bpm90');
+                var bpm120 = document.getElementById('bpm120');
+
+                if (data.allBPM) {
+                    // PAID USER - Full access
+                    trialBanner.classList.remove('show');
+                    bpmAccessBadge.style.display = 'none';
+                    paidBpmBadge.style.display = 'inline-flex';
+                } else {
+                    // TRIAL or GUEST - Limited to 60 BPM
+                    paidBpmBadge.style.display = 'none';
+                    bpmAccessBadge.classList.add('show');
+                    
+                    // Style BPM chips
+                    bpm60.className = 'bpm-chip unlocked';
+                    bpm90.className = 'bpm-chip locked';
+                    bpm120.className = 'bpm-chip locked';
+                    
+                    // Show trial banner for facility_trial users
+                    if (data.userType === 'facility_trial') {
+                        trialBanner.classList.add('show');
+                        if (data.daysLeft !== undefined) {
+                            document.getElementById('trialDaysLeft').textContent = data.daysLeft;
+                            document.getElementById('trialDaysLeftEs').textContent = data.daysLeft;
+                        }
+                    }
+                }
+            }
+
+            // Logout handler - clear stored data
+            document.getElementById('logoutLink').addEventListener('click', function(e) {
+                // Clear BPM access on logout
+                localStorage.removeItem('lc-bpm-access');
+            });
+
             // Run auth check
-            if (!checkAuth()) return;
+            var pin = checkAuth();
+            if (!pin) return;
+
+            // Check BPM access
+            checkBpmAccess(pin);
 
             document.getElementById('btnEn').addEventListener('click', function() { setLang('en'); });
             document.getElementById('btnEs').addEventListener('click', function() { setLang('es'); });
