@@ -3,16 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>LaughCourt™ | THE REFLEX</title>
-<link rel="icon" type="image/png" href="favicon.png">
+<title>THE REFLEX | LaughCourt™</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
     --green: #00E676;
     --green-dark: #00C853;
     --lime: #C6FF00;
     --gold: #FFD700;
+    --teal: #00D9A5;
     --dark: #0a0a0f;
     --darker: #050508;
     --card: #111118;
@@ -22,224 +22,260 @@
     --border: rgba(255,255,255,0.08);
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+    height: 100%;
+    overflow: hidden;
+}
 body {
     font-family: 'Outfit', sans-serif;
     background: var(--dark);
     color: var(--text);
-    min-height: 100vh;
-    min-height: -webkit-fill-available;
+    height: 100vh;
+    height: 100dvh;
+}
+body.en .lang-es { display: none !important; }
+body.es .lang-en { display: none !important; }
+
+/* Main Container - NO SCROLL */
+.game-container {
+    max-width: 420px;
+    margin: 0 auto;
+    padding: 8px 12px;
+    height: 100vh;
+    height: 100dvh;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    padding: 15px;
-    overflow-x: hidden;
+    overflow: hidden;
 }
-body.es .lang-en { display: none !important; }
-body.en .lang-es { display: none !important; }
 
-/* Header */
+/* Language Toggle */
+.lang-toggle {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    display: flex;
+    gap: 4px;
+    z-index: 10;
+}
+.lang-btn {
+    padding: 4px 8px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--muted);
+    border-radius: 4px;
+    font-size: 0.6rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.lang-btn.active {
+    background: var(--green);
+    color: var(--dark);
+    border-color: var(--green);
+}
+
+/* Back Button */
+.back-btn {
+    position: absolute;
+    top: 8px;
+    left: 12px;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.7rem;
+    z-index: 10;
+}
+.back-btn:hover { color: var(--text); }
+
+/* Header - Compact */
 .header {
     text-align: center;
-    margin-bottom: 10px;
-    width: 100%;
+    padding: 6px 0;
+    flex-shrink: 0;
 }
 .logo {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.8rem;
-    letter-spacing: 3px;
+    font-size: 1rem;
+    letter-spacing: 2px;
 }
 .logo .laugh { color: var(--gold); }
-.logo .court { color: var(--text); }
-.court-title {
+.court-name {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 1.4rem;
-    letter-spacing: 4px;
-    color: var(--green);
-    margin-top: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
+    letter-spacing: 3px;
+    background: linear-gradient(135deg, var(--green), var(--lime));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
-
-/* Nav */
-.nav-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    max-width: 400px;
-    margin-bottom: 15px;
-}
-.back-btn {
-    background: none;
-    border: 2px solid var(--gold);
-    color: var(--gold);
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.9rem;
-    letter-spacing: 1px;
-    cursor: pointer;
-    transition: all 0.3s;
-    text-decoration: none;
-}
-.back-btn:hover { background: var(--gold); color: var(--dark); }
-.lang-toggle { display: flex; gap: 5px; }
-.lang-btn {
-    padding: 6px 12px;
-    border: 2px solid var(--green);
-    background: transparent;
-    color: var(--green);
-    border-radius: 15px;
-    font-weight: 700;
-    font-size: 0.75rem;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-.lang-btn.active { background: var(--green); color: var(--dark); }
-
-/* Speed Selection */
-.speed-section {
-    text-align: center;
-    margin-bottom: 15px;
-}
-.speed-label {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.9rem;
-    letter-spacing: 2px;
-    color: var(--muted);
-    margin-bottom: 10px;
-}
-.speed-select {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-}
-.speed-btn {
-    padding: 12px 18px;
-    border: 2px solid var(--border);
-    background: var(--card);
-    color: var(--muted);
-    border-radius: 12px;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.85rem;
-    letter-spacing: 1px;
-    cursor: pointer;
-    transition: all 0.3s;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-    min-width: 80px;
-}
-.speed-btn.active {
-    border-color: var(--green);
-    color: var(--green);
-    background: rgba(0, 230, 118, 0.1);
-}
-.speed-btn:hover:not(.active) { border-color: var(--muted); }
-
-/* Stats Bar */
-.stats-bar {
-    display: flex;
-    justify-content: center;
-    gap: 25px;
-    margin-bottom: 15px;
-    flex-wrap: wrap;
-}
-.stat {
-    text-align: center;
-}
-.stat-value {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.8rem;
-    color: var(--green);
-    line-height: 1;
-}
-.stat-value.laughs { color: var(--gold); }
-.stat-label {
-    font-size: 0.7rem;
+.powered-by {
+    font-size: 0.55rem;
     color: var(--muted);
     letter-spacing: 1px;
     text-transform: uppercase;
+    margin-top: 2px;
 }
+.powered-by .ritnome { color: var(--gold); font-weight: 700; }
 
-/* Progress Bar */
-.progress-container {
-    width: 100%;
-    max-width: 350px;
-    height: 8px;
+/* Stats Bar - Compact */
+.stats-bar {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    padding: 6px 10px;
     background: var(--card);
-    border-radius: 4px;
-    margin-bottom: 15px;
-    overflow: hidden;
+    border-radius: 8px;
+    margin: 4px 0;
+    flex-shrink: 0;
 }
-.progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--green), var(--lime));
-    border-radius: 4px;
-    transition: width 0.3s ease;
-    width: 0%;
+.stat { text-align: center; }
+.stat-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    color: var(--gold);
+}
+.stat-value.green { color: var(--green); }
+.stat-label {
+    font-size: 0.5rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
-/* Grid */
-.grid-container {
+/* Message Display */
+.message-display {
+    background: linear-gradient(135deg, var(--card), var(--darker));
+    border: 2px solid var(--green);
+    border-radius: 10px;
+    padding: 8px 12px;
+    margin: 4px 0;
+    min-height: 50px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 15px;
-}
-.grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 8px;
-    padding: 15px;
-    background: var(--card);
-    border-radius: 20px;
-    border: 2px solid var(--border);
-}
-.cell {
-    width: 56px;
-    height: 56px;
-    background: linear-gradient(145deg, #1a1a24, #12121a);
-    border: 2px solid var(--border);
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.15s ease;
+    justify-content: center;
+    flex-shrink: 0;
     position: relative;
     overflow: hidden;
 }
-.cell::before {
+.message-display::before {
     content: '';
     position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: linear-gradient(135deg, var(--green), var(--lime));
-    opacity: 0;
-    transition: opacity 0.15s ease;
-    border-radius: 10px;
+    inset: 0;
+    background: radial-gradient(circle at center, rgba(0,230,118,0.1), transparent);
+    pointer-events: none;
 }
-.cell.lit::before {
-    opacity: 1;
+.message-text {
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-align: center;
+}
+.message-text.success { color: var(--green); }
+.message-text.fail { color: var(--danger); }
+.reaction-time {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    color: var(--lime);
+    text-shadow: 0 0 20px rgba(198,255,0,0.5);
+}
+
+/* Ritnome™ Tempo Selector - Inline */
+.tempo-section {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 4px 0;
+    flex-shrink: 0;
+}
+.tempo-label {
+    font-size: 0.55rem;
+    color: var(--muted);
+    white-space: nowrap;
+}
+.tempo-label .ritnome { color: var(--gold); font-weight: 700; }
+.tempo-buttons {
+    display: flex;
+    gap: 4px;
+    flex: 1;
+}
+.tempo-btn {
+    flex: 1;
+    padding: 6px 4px;
+    border: 1px solid var(--card);
+    background: var(--card);
+    border-radius: 6px;
+    color: var(--muted);
+    font-size: 0.6rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+}
+.tempo-btn .icon { font-size: 0.8rem; }
+.tempo-btn .bpm { font-family: 'Bebas Neue', sans-serif; font-size: 0.9rem; }
+.tempo-btn.active {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: rgba(255,215,0,0.1);
+}
+
+/* Court Grid - VISIBLE CELLS */
+.court-grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 4px;
+    padding: 8px;
+    background: linear-gradient(145deg, var(--card), var(--darker));
+    border-radius: 12px;
+    border: 2px solid rgba(0,230,118,0.3);
+    min-height: 0;
+    aspect-ratio: 1;
+    margin: 4px 0;
+}
+.grid-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(145deg, #1a1a24, #12121a);
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05);
+}
+.grid-cell::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.15s;
+    border-radius: 5px;
+}
+.grid-cell.lit {
     animation: pulse 0.5s ease-in-out infinite;
 }
-.cell.hit {
-    animation: hitFlash 0.3s ease;
+.grid-cell.lit::before {
+    opacity: 1;
+    background: linear-gradient(135deg, var(--green), var(--lime));
 }
-.cell.hit::before {
+.grid-cell.hit::before {
     opacity: 1;
     background: linear-gradient(135deg, var(--gold), #FFA500);
+    animation: hitFlash 0.3s ease;
 }
-.cell.miss {
-    animation: missShake 0.4s ease;
-}
-.cell.miss::before {
+.grid-cell.miss::before {
     opacity: 1;
     background: linear-gradient(135deg, var(--danger), #FF6B6B);
+    animation: missShake 0.4s ease;
 }
 @keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(0.95); }
+    0%, 100% { transform: scale(1); box-shadow: 0 0 15px var(--green); }
+    50% { transform: scale(0.95); box-shadow: 0 0 30px var(--green); }
 }
 @keyframes hitFlash {
     0% { transform: scale(1); }
@@ -248,21 +284,18 @@ body.en .lang-es { display: none !important; }
 }
 @keyframes missShake {
     0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-5px); }
-    75% { transform: translateX(5px); }
+    25% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
 }
 
-/* Timer Ring */
+/* Timer Ring inside cell */
 .timer-container {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     display: none;
 }
-.cell.lit .timer-container { display: block; }
+.grid-cell.lit .timer-container { display: block; }
 .timer-ring {
     width: 100%;
     height: 100%;
@@ -276,69 +309,139 @@ body.en .lang-es { display: none !important; }
     to { transform: rotate(360deg); }
 }
 
-/* Coach Message */
-.message-container {
-    min-height: 60px;
+/* Progress Bar */
+.progress-section {
     display: flex;
     align-items: center;
-    justify-content: center;
-    margin-bottom: 15px;
-    width: 100%;
-    max-width: 350px;
+    gap: 10px;
+    margin: 4px 0;
+    flex-shrink: 0;
 }
-.message-box {
+.tier-badge {
+    background: linear-gradient(135deg, var(--green), var(--lime));
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    color: var(--dark);
+}
+.progress-bar {
+    flex: 1;
+    height: 8px;
     background: var(--card);
-    border: 2px solid var(--border);
-    border-radius: 16px;
-    padding: 12px 20px;
-    text-align: center;
-    width: 100%;
+    border-radius: 4px;
+    overflow: hidden;
 }
-.message-text {
-    font-size: 0.95rem;
-    color: var(--muted);
-    line-height: 1.4;
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--green), var(--lime));
+    border-radius: 4px;
+    transition: width 0.3s ease-out;
 }
-.message-text.success { color: var(--green); }
-.message-text.fail { color: var(--danger); }
-.message-text.celebrate { color: var(--gold); }
 
 /* Action Button */
 .action-btn {
-    padding: 16px 50px;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.4rem;
-    letter-spacing: 3px;
+    width: 100%;
+    padding: 12px;
     border: none;
-    border-radius: 30px;
+    border-radius: 10px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
     cursor: pointer;
     transition: all 0.3s;
     background: linear-gradient(135deg, var(--green), var(--green-dark));
     color: var(--dark);
-    box-shadow: 0 5px 25px rgba(0, 230, 118, 0.4);
+    flex-shrink: 0;
 }
-.action-btn:hover:not(:disabled) {
+.action-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(0, 230, 118, 0.5);
+    box-shadow: 0 5px 25px rgba(0,230,118,0.5);
 }
 .action-btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+    transform: none;
 }
 
-/* Reaction Time Display */
-.reaction-display {
+/* Feedback Overlay */
+.feedback-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.9);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+.feedback-overlay.show { display: flex; }
+.feedback-card {
+    background: var(--card);
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+    max-width: 320px;
+    width: 90%;
+    animation: slideUp 0.3s ease-out;
+    border: 2px solid var(--green);
+}
+@keyframes slideUp {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+.feedback-emoji { font-size: 3rem; margin-bottom: 10px; }
+.feedback-title {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.2rem;
-    color: var(--lime);
-    margin-top: 10px;
+    font-size: 1.8rem;
     letter-spacing: 2px;
+    margin-bottom: 8px;
+}
+.feedback-title.success { color: var(--green); }
+.feedback-title.fail { color: var(--danger); }
+.feedback-laughs {
+    font-size: 1.3rem;
+    color: var(--gold);
+    margin-bottom: 8px;
+}
+.feedback-ritnome {
+    font-size: 0.6rem;
+    color: var(--muted);
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+}
+.feedback-ritnome .ritnome { color: var(--gold); }
+.feedback-stats {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+.feedback-btn {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    margin: 4px;
+}
+.feedback-btn.primary {
+    background: linear-gradient(135deg, var(--green), var(--green-dark));
+    color: var(--dark);
+}
+.feedback-btn.secondary {
+    background: var(--darker);
+    color: var(--muted);
+    border: 1px solid var(--muted);
 }
 
 /* Tier Up Overlay */
 .tier-up-overlay {
     position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
+    inset: 0;
     background: rgba(0,0,0,0.9);
     display: none;
     align-items: center;
@@ -355,205 +458,185 @@ body.en .lang-es { display: none !important; }
     50% { transform: scale(1.1); }
     100% { transform: scale(1); opacity: 1; }
 }
-.tier-up-emoji { font-size: 4rem; margin-bottom: 15px; }
+.tier-up-emoji { font-size: 3rem; margin-bottom: 10px; }
 .tier-up-text {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 2.5rem;
-    letter-spacing: 4px;
+    font-size: 2rem;
+    letter-spacing: 3px;
     color: var(--green);
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
 .tier-up-sub {
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: var(--gold);
-    margin-bottom: 25px;
+    margin-bottom: 20px;
 }
+.tier-up-ritnome {
+    font-size: 0.6rem;
+    color: var(--muted);
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+}
+.tier-up-ritnome .ritnome { color: var(--gold); }
 .tier-up-btn {
-    padding: 14px 40px;
+    padding: 12px 30px;
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     letter-spacing: 2px;
     background: linear-gradient(135deg, var(--gold), #FFA500);
     color: var(--dark);
     border: none;
-    border-radius: 25px;
+    border-radius: 10px;
     cursor: pointer;
-    transition: all 0.3s;
 }
-.tier-up-btn:hover { transform: scale(1.05); }
 
-/* Feedback Overlay */
-.feedback-overlay {
+/* Coach Message Toast */
+.coach-message {
     position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.9);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 100;
-    padding: 20px;
-}
-.feedback-overlay.show { display: flex; }
-.feedback-content {
-    text-align: center;
-    animation: fadeIn 0.3s ease;
-    max-width: 320px;
-}
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-.feedback-emoji { font-size: 4rem; margin-bottom: 15px; }
-.feedback-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 2rem;
-    letter-spacing: 3px;
-    margin-bottom: 10px;
-}
-.feedback-title.success { color: var(--green); }
-.feedback-title.fail { color: var(--danger); }
-.feedback-laughs {
-    font-size: 1.5rem;
-    color: var(--gold);
-    margin-bottom: 10px;
-}
-.feedback-stats {
-    font-size: 0.9rem;
-    color: var(--muted);
-    margin-bottom: 20px;
-    line-height: 1.6;
-}
-.feedback-btns {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-.feedback-btn {
-    padding: 12px 25px;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1rem;
-    letter-spacing: 2px;
-    border: none;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: linear-gradient(135deg, var(--green), var(--lime));
+    padding: 10px 20px;
     border-radius: 20px;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-.feedback-btn.primary {
-    background: linear-gradient(135deg, var(--green), var(--green-dark));
+    font-weight: 600;
+    font-size: 0.8rem;
     color: var(--dark);
+    opacity: 0;
+    transition: all 0.4s ease-out;
+    z-index: 50;
+    white-space: nowrap;
 }
-.feedback-btn.secondary {
-    background: var(--card);
-    color: var(--gold);
-    border: 2px solid var(--gold);
+.coach-message.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
 }
-.feedback-btn:hover { transform: scale(1.05); }
 
-/* Responsive */
-@media (max-width: 380px) {
-    .cell { width: 50px; height: 50px; }
-    .grid { gap: 6px; padding: 12px; }
-}
-@media (min-width: 500px) {
-    .cell { width: 65px; height: 65px; }
-    .grid { gap: 10px; padding: 20px; }
+/* Desktop */
+@media (min-width: 700px) {
+    .game-container {
+        max-width: 480px;
+        padding: 15px 20px;
+    }
+    .header { padding: 10px 0; }
+    .logo { font-size: 1.2rem; }
+    .court-name { font-size: 1.8rem; }
+    .stats-bar { padding: 10px 15px; gap: 25px; }
+    .stat-value { font-size: 1.4rem; }
+    .court-grid { gap: 6px; padding: 12px; }
+    .grid-cell { border-radius: 8px; }
+    .action-btn { padding: 16px; font-size: 1.3rem; }
 }
 </style>
 </head>
 <body class="en">
 
-<!-- Header -->
-<header class="header">
-    <div class="logo"><span class="laugh">LAUGH</span><span class="court">COURT</span><sup style="font-size:0.5em">™</sup></div>
-    <div class="court-title">⚡ THE REFLEX ⚡</div>
-</header>
-
-<!-- Nav Row -->
-<div class="nav-row">
-    <a href="laugh-hub.html" class="back-btn">
-        <span class="lang-en">← COURTS</span>
-        <span class="lang-es">← CANCHAS</span>
-    </a>
-    <div class="lang-toggle">
-        <button class="lang-btn active" id="btnEn">EN</button>
-        <button class="lang-btn" id="btnEs">ES</button>
-    </div>
+<!-- Language Toggle -->
+<div class="lang-toggle">
+    <button class="lang-btn active" id="btnEn">EN</button>
+    <button class="lang-btn" id="btnEs">ES</button>
 </div>
 
-<!-- Speed Selection -->
-<div class="speed-section">
-    <div class="speed-label">
-        <span class="lang-en">SELECT SPEED</span>
-        <span class="lang-es">SELECCIONA VELOCIDAD</span>
+<!-- Back Button -->
+<a href="laugh-hub.html" class="back-btn">← <span class="lang-en">Back</span><span class="lang-es">Volver</span></a>
+
+<div class="game-container">
+    <!-- Header -->
+    <header class="header">
+        <div class="logo"><span class="laugh">LAUGH</span>COURT<sup style="font-size:0.5em">™</sup></div>
+        <div class="court-name">⚡ THE REFLEX</div>
+        <div class="powered-by">Powered by <span class="ritnome">Ritnome™</span></div>
+    </header>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+        <div class="stat">
+            <div class="stat-value green" id="currentTier">1</div>
+            <div class="stat-label"><span class="lang-en">Tier</span><span class="lang-es">Nivel</span></div>
+        </div>
+        <div class="stat">
+            <div class="stat-value" id="totalLaughs">0</div>
+            <div class="stat-label">😂</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value" id="streak">0</div>
+            <div class="stat-label">🔥</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value green" id="avgTime">---</div>
+            <div class="stat-label">⚡ MS</div>
+        </div>
     </div>
-    <div class="speed-select">
-        <button class="speed-btn" data-speed="slow">
-            🐢
-            <span class="lang-en">SLOW</span>
-            <span class="lang-es">LENTO</span>
+
+    <!-- Message Display -->
+    <div class="message-display" id="messageDisplay">
+        <span class="message-text" id="messageText">
+            <span class="lang-en">⚡ React FAST! Tap the green squares before they vanish!</span>
+            <span class="lang-es">⚡ ¡Reacciona RÁPIDO! ¡Toca los cuadros verdes!</span>
+        </span>
+    </div>
+
+    <!-- Ritnome™ Tempo Selector -->
+    <div class="tempo-section">
+        <div class="tempo-label">🎵 <span class="ritnome">Ritnome™</span></div>
+        <div class="tempo-buttons">
+            <button class="tempo-btn" data-bpm="60">
+                <span class="icon">🐢</span>
+                <span class="bpm">60</span>
+                <span>BPM</span>
+            </button>
+            <button class="tempo-btn active" data-bpm="90">
+                <span class="icon">🏃</span>
+                <span class="bpm">90</span>
+                <span>BPM</span>
+            </button>
+            <button class="tempo-btn" data-bpm="120">
+                <span class="icon">⚡</span>
+                <span class="bpm">120</span>
+                <span>BPM</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Court Grid -->
+    <div class="court-grid" id="courtGrid"></div>
+
+    <!-- Progress Bar -->
+    <div class="progress-section">
+        <div class="tier-badge">
+            <span class="lang-en">TIER</span><span class="lang-es">NIVEL</span> 
+            <span id="tierDisplay">1</span>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+        </div>
+    </div>
+
+    <!-- Action Button -->
+    <button class="action-btn" id="actionBtn">
+        <span class="lang-en">START REFLEX ⚡</span>
+        <span class="lang-es">INICIAR REFLEJOS ⚡</span>
+    </button>
+</div>
+
+<!-- Feedback Overlay -->
+<div class="feedback-overlay" id="feedbackOverlay">
+    <div class="feedback-card">
+        <div class="feedback-emoji" id="feedbackEmoji">⚡</div>
+        <h2 class="feedback-title" id="feedbackTitle">LIGHTNING FAST!</h2>
+        <div class="feedback-laughs" id="feedbackLaughs">+5 😂</div>
+        <div class="feedback-ritnome"><span class="ritnome">Ritnome™</span> Training</div>
+        <div class="feedback-stats" id="feedbackStats"></div>
+        <button class="feedback-btn primary" id="continueBtn">
+            <span class="lang-en">NEXT ROUND ⚡</span>
+            <span class="lang-es">SIGUIENTE ⚡</span>
         </button>
-        <button class="speed-btn active" data-speed="medium">
-            🏃
-            <span class="lang-en">MEDIUM</span>
-            <span class="lang-es">MEDIO</span>
-        </button>
-        <button class="speed-btn" data-speed="fast">
-            ⚡
-            <span class="lang-en">FAST</span>
-            <span class="lang-es">RÁPIDO</span>
+        <button class="feedback-btn secondary" id="restartBtn">
+            <span class="lang-en">RESTART</span>
+            <span class="lang-es">REINICIAR</span>
         </button>
     </div>
 </div>
-
-<!-- Stats Bar -->
-<div class="stats-bar">
-    <div class="stat">
-        <div class="stat-value" id="tierDisplay">1</div>
-        <div class="stat-label">TIER</div>
-    </div>
-    <div class="stat">
-        <div class="stat-value laughs" id="laughsDisplay">0</div>
-        <div class="stat-label">😂 LAUGHS</div>
-    </div>
-    <div class="stat">
-        <div class="stat-value" id="streakDisplay">0</div>
-        <div class="stat-label">🔥 STREAK</div>
-    </div>
-    <div class="stat">
-        <div class="stat-value" id="avgTimeDisplay">---</div>
-        <div class="stat-label">⚡ AVG MS</div>
-    </div>
-</div>
-
-<!-- Progress Bar -->
-<div class="progress-container">
-    <div class="progress-fill" id="progressFill"></div>
-</div>
-
-<!-- Grid -->
-<div class="grid-container">
-    <div class="grid" id="grid"></div>
-</div>
-
-<!-- Reaction Display -->
-<div class="reaction-display" id="reactionDisplay"></div>
-
-<!-- Coach Message -->
-<div class="message-container">
-    <div class="message-box">
-        <p class="message-text" id="messageText">
-            <span class="lang-en">React FAST! Tap the green squares before they vanish! ⚡</span>
-            <span class="lang-es">¡Reacciona RÁPIDO! ¡Toca los cuadros verdes antes de que desaparezcan! ⚡</span>
-        </p>
-    </div>
-</div>
-
-<!-- Action Button -->
-<button class="action-btn" id="actionBtn">
-    <span class="lang-en">START REFLEX</span>
-    <span class="lang-es">INICIAR REFLEJOS</span>
-</button>
 
 <!-- Tier Up Overlay -->
 <div class="tier-up-overlay" id="tierUpOverlay">
@@ -564,6 +647,7 @@ body.en .lang-es { display: none !important; }
             <span class="lang-es">¡SUBISTE DE NIVEL!</span>
         </div>
         <div class="tier-up-sub" id="tierUpSub"></div>
+        <div class="tier-up-ritnome"><span class="ritnome">Ritnome™</span> Training</div>
         <button class="tier-up-btn" id="tierUpBtn">
             <span class="lang-en">KEEP GOING!</span>
             <span class="lang-es">¡CONTINUAR!</span>
@@ -571,66 +655,77 @@ body.en .lang-es { display: none !important; }
     </div>
 </div>
 
-<!-- Feedback Overlay -->
-<div class="feedback-overlay" id="feedbackOverlay">
-    <div class="feedback-content">
-        <div class="feedback-emoji" id="feedbackEmoji">😂</div>
-        <div class="feedback-title" id="feedbackTitle">NICE!</div>
-        <div class="feedback-laughs" id="feedbackLaughs">+5 😂</div>
-        <div class="feedback-stats" id="feedbackStats"></div>
-        <div class="feedback-btns">
-            <button class="feedback-btn primary" id="continueBtn">
-                <span class="lang-en">NEXT ROUND</span>
-                <span class="lang-es">SIGUIENTE</span>
-            </button>
-            <button class="feedback-btn secondary" id="restartBtn">
-                <span class="lang-en">RESTART</span>
-                <span class="lang-es">REINICIAR</span>
-            </button>
-        </div>
-    </div>
-</div>
+<!-- Coach Message Toast -->
+<div class="coach-message" id="coachMessage"></div>
 
 <script>
-(function(){
-    // Language
-    var currentLang = localStorage.getItem('lc-lang') || 'en';
-    function setLang(l) {
-        currentLang = l;
-        localStorage.setItem('lc-lang', l);
-        document.body.className = l;
-        document.getElementById('btnEn').classList.toggle('active', l === 'en');
-        document.getElementById('btnEs').classList.toggle('active', l === 'es');
+(function() {
+    // Translations
+    const translations = {
+        en: {
+            startReflex: 'START REFLEX ⚡',
+            nextRound: 'NEXT ROUND ⚡',
+            ready: 'GET READY...',
+            go: 'GO! TAP THE GREEN! ⚡',
+            hit: 'NICE! Keep going!',
+            miss: 'Too slow! Try again!',
+            wrongCell: 'Wrong cell! Focus!',
+            lightningFast: 'LIGHTNING FAST! ⚡',
+            perfectRound: 'PERFECT ROUND! 🎯',
+            goodReflexes: 'Good reflexes! 💪',
+            keepPracticing: 'Keep practicing! 🏀',
+            failed: 'ROUND FAILED',
+            avgReaction: 'Avg Reaction',
+            circuit: 'Circuit',
+            caught: 'Caught',
+            tierUp: 'TIER UP!',
+            nowTier: 'Now TIER',
+            catch: 'Catch',
+            squares: 'squares!',
+            startTier: 'START TIER'
+        },
+        es: {
+            startReflex: 'INICIAR REFLEJOS ⚡',
+            nextRound: 'SIGUIENTE ⚡',
+            ready: 'PREPÁRATE...',
+            go: '¡YA! ¡TOCA EL VERDE! ⚡',
+            hit: '¡BIEN! ¡Sigue así!',
+            miss: '¡Muy lento! ¡Intenta de nuevo!',
+            wrongCell: '¡Celda incorrecta! ¡Enfócate!',
+            lightningFast: '¡VELOZ COMO RAYO! ⚡',
+            perfectRound: '¡RONDA PERFECTA! 🎯',
+            goodReflexes: '¡Buenos reflejos! 💪',
+            keepPracticing: '¡Sigue practicando! 🏀',
+            failed: 'RONDA FALLIDA',
+            avgReaction: 'Reacción Promedio',
+            circuit: 'Circuito',
+            caught: 'Capturados',
+            tierUp: '¡SUBISTE DE NIVEL!',
+            nowTier: 'Ahora NIVEL',
+            catch: 'Atrapa',
+            squares: 'cuadros!',
+            startTier: 'INICIAR NIVEL'
+        }
+    };
+
+    let currentLang = 'en';
+    const t = (key) => translations[currentLang][key] || key;
+
+    function setLang(lang) {
+        currentLang = lang;
+        document.body.className = lang;
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.id === 'btn' + lang.charAt(0).toUpperCase() + lang.slice(1));
+        });
     }
-    
-    function t(key) {
-        var strings = {
-            startReflex: { en: 'START REFLEX', es: 'INICIAR REFLEJOS' },
-            ready: { en: 'GET READY...', es: 'PREPÁRATE...' },
-            go: { en: 'GO! TAP THE GREEN!', es: '¡YA! ¡TOCA EL VERDE!' },
-            hit: { en: 'NICE! Keep going!', es: '¡BIEN! ¡Sigue así!' },
-            miss: { en: 'Too slow! Try again!', es: '¡Muy lento! ¡Intenta de nuevo!' },
-            wrongCell: { en: 'Wrong cell! Focus!', es: '¡Celda incorrecta! ¡Enfócate!' },
-            complete: { en: 'ROUND COMPLETE!', es: '¡RONDA COMPLETA!' },
-            failed: { en: 'ROUND FAILED', es: 'RONDA FALLIDA' },
-            tierUp: { en: 'TIER UP!', es: '¡SUBISTE DE NIVEL!' },
-            avgReaction: { en: 'Avg Reaction', es: 'Reacción Promedio' },
-            perfectRound: { en: 'PERFECT ROUND! 🎯', es: '¡RONDA PERFECTA! 🎯' },
-            lightningFast: { en: 'LIGHTNING FAST! ⚡', es: '¡VELOZ COMO RAYO! ⚡' },
-            goodReflexes: { en: 'Good reflexes! 💪', es: '¡Buenos reflejos! 💪' },
-            keepPracticing: { en: 'Keep practicing! 🏀', es: '¡Sigue practicando! 🏀' },
-            circuit: { en: 'Circuit', es: 'Circuito' }
-        };
-        return strings[key] ? strings[key][currentLang] : key;
-    }
-    
-    // State
-    var state = {
+
+    // Game State
+    const state = {
         tier: 1,
-        laughs: 0,
+        totalLaughs: 0,
         streak: 0,
         circuitsCompleted: 0,
-        speed: 'medium',
+        bpm: 90,
         playing: false,
         currentIndex: 0,
         targetCell: null,
@@ -638,192 +733,156 @@ body.en .lang-es { display: none !important; }
         roundStartTime: 0,
         cellTimeout: null
     };
-    
-    // Speed settings (time cell stays lit in ms)
-    var speedSettings = {
-        slow: 1500,
-        medium: 1000,
-        fast: 600
+
+    // BPM to cell lit duration (faster BPM = less time)
+    const getBpmDuration = (bpm) => {
+        if (bpm === 60) return 1500;  // Slow
+        if (bpm === 90) return 1000;  // Medium
+        return 600;                    // Fast (120)
     };
-    
-    // Elements
-    var grid = document.getElementById('grid');
-    var actionBtn = document.getElementById('actionBtn');
-    var messageText = document.getElementById('messageText');
-    var progressFill = document.getElementById('progressFill');
-    var tierUpOverlay = document.getElementById('tierUpOverlay');
-    var feedbackOverlay = document.getElementById('feedbackOverlay');
-    var reactionDisplay = document.getElementById('reactionDisplay');
-    
-    // Grid colors for variety
-    var cellColors = [
-        'linear-gradient(135deg, #00E676, #00C853)',
-        'linear-gradient(135deg, #00E676, #69F0AE)',
-        'linear-gradient(135deg, #76FF03, #C6FF00)',
-        'linear-gradient(135deg, #00E676, #1DE9B6)',
-        'linear-gradient(135deg, #69F0AE, #00E676)'
-    ];
-    
+
     // Get targets for current tier (tier 1 = 5, tier 2 = 6, etc.)
-    function getTargetCount() {
-        return 4 + state.tier; // Tier 1 = 5, Tier 10 = 14
-    }
-    
-    // Build grid
+    const getTargetCount = () => 4 + state.tier;
+
+    // DOM Elements
+    const courtGrid = document.getElementById('courtGrid');
+    const messageDisplay = document.getElementById('messageDisplay');
+    const messageText = document.getElementById('messageText');
+    const actionBtn = document.getElementById('actionBtn');
+    const feedbackOverlay = document.getElementById('feedbackOverlay');
+    const tierUpOverlay = document.getElementById('tierUpOverlay');
+    const coachMessage = document.getElementById('coachMessage');
+
+    // Initialize grid
     function initGrid() {
-        grid.innerHTML = '';
-        for (var i = 0; i < 25; i++) {
-            var cell = document.createElement('div');
-            cell.className = 'cell';
+        courtGrid.innerHTML = '';
+        for (let i = 0; i < 25; i++) {
+            const cell = document.createElement('div');
+            cell.className = 'grid-cell';
             cell.dataset.index = i;
             
-            var timerContainer = document.createElement('div');
+            const timerContainer = document.createElement('div');
             timerContainer.className = 'timer-container';
-            var timerRing = document.createElement('div');
+            const timerRing = document.createElement('div');
             timerRing.className = 'timer-ring';
             timerContainer.appendChild(timerRing);
             cell.appendChild(timerContainer);
             
-            cell.addEventListener('click', handleCellClick);
-            grid.appendChild(cell);
+            cell.addEventListener('click', () => handleCellClick(i, cell));
+            courtGrid.appendChild(cell);
         }
     }
-    
-    // Update stats display
-    function updateStats() {
-        document.getElementById('tierDisplay').textContent = state.tier;
-        document.getElementById('laughsDisplay').textContent = state.laughs;
-        document.getElementById('streakDisplay').textContent = state.streak;
-        
-        if (state.reactionTimes.length > 0) {
-            var avg = Math.round(state.reactionTimes.reduce(function(a,b) { return a+b; }, 0) / state.reactionTimes.length);
-            document.getElementById('avgTimeDisplay').textContent = avg;
-        }
-    }
-    
+
     // Light up random cell
     function lightCell() {
         // Clear any previously lit cell
-        var cells = document.querySelectorAll('.cell');
-        cells.forEach(function(c) { c.classList.remove('lit', 'hit', 'miss'); });
-        
+        const cells = document.querySelectorAll('.grid-cell');
+        cells.forEach(c => c.classList.remove('lit', 'hit', 'miss'));
+
         // Pick random cell
-        var randomIndex = Math.floor(Math.random() * 25);
+        const randomIndex = Math.floor(Math.random() * 25);
         state.targetCell = randomIndex;
         state.roundStartTime = Date.now();
-        
-        var cell = cells[randomIndex];
+
+        const cell = cells[randomIndex];
         cell.classList.add('lit');
-        
-        // Set random color variation
-        var colorIndex = Math.floor(Math.random() * cellColors.length);
-        cell.style.setProperty('--cell-gradient', cellColors[colorIndex]);
-        
-        // Set timer animation duration based on speed
-        var duration = speedSettings[state.speed];
-        var timerRing = cell.querySelector('.timer-ring');
+
+        // Set timer animation duration based on BPM
+        const duration = getBpmDuration(state.bpm);
+        const timerRing = cell.querySelector('.timer-ring');
         timerRing.style.animationDuration = duration + 'ms';
-        
+
         // Start timeout for miss
-        state.cellTimeout = setTimeout(function() {
+        state.cellTimeout = setTimeout(() => {
             if (state.playing && cell.classList.contains('lit')) {
                 handleMiss(cell);
             }
         }, duration);
     }
-    
+
     // Handle cell click
-    function handleCellClick(e) {
+    function handleCellClick(index, cell) {
         if (!state.playing) return;
-        
-        var cell = e.currentTarget;
-        var clickedIndex = parseInt(cell.dataset.index);
-        
-        if (clickedIndex === state.targetCell && cell.classList.contains('lit')) {
+
+        if (index === state.targetCell && cell.classList.contains('lit')) {
             // HIT!
             clearTimeout(state.cellTimeout);
-            var reactionTime = Date.now() - state.roundStartTime;
+            const reactionTime = Date.now() - state.roundStartTime;
             state.reactionTimes.push(reactionTime);
-            
+
             cell.classList.remove('lit');
             cell.classList.add('hit');
-            
-            // Show reaction time
-            reactionDisplay.textContent = reactionTime + 'ms';
-            reactionDisplay.style.color = reactionTime < 300 ? '#C6FF00' : reactionTime < 500 ? '#00E676' : '#FFD700';
-            
-            // Calculate laughs
-            var laughsEarned = state.tier;
-            if (state.speed === 'fast') laughsEarned += 2;
-            else if (state.speed === 'medium') laughsEarned += 1;
+
+            // Show reaction time in message display
+            messageDisplay.innerHTML = `<span class="reaction-time">${reactionTime}ms</span>`;
+
+            // Calculate laughs with BPM bonus
+            let laughsEarned = state.tier;
+            if (state.bpm === 120) laughsEarned += 2;
+            else if (state.bpm === 90) laughsEarned += 1;
             if (reactionTime < 300) laughsEarned += 2; // Quick reaction bonus
-            
-            state.laughs += laughsEarned;
+
+            state.totalLaughs += laughsEarned;
             state.currentIndex++;
-            
+
             // Update progress
-            var progress = (state.currentIndex / getTargetCount()) * 100;
-            progressFill.style.width = progress + '%';
-            
+            const progress = (state.currentIndex / getTargetCount()) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+
             updateStats();
-            
+
             // Check if round complete
             if (state.currentIndex >= getTargetCount()) {
-                setTimeout(function() { roundComplete(true); }, 300);
+                setTimeout(() => roundComplete(true), 300);
             } else {
-                // Next cell after short delay
-                setTimeout(function() {
+                setTimeout(() => {
                     if (state.playing) lightCell();
                 }, 400);
             }
-        } else if (cell.classList.contains('lit')) {
-            // Wrong cell while another is lit - do nothing (shouldn't happen)
-        } else if (state.targetCell !== null) {
-            // Clicked wrong cell
-            messageText.textContent = t('wrongCell');
-            messageText.className = 'message-text fail';
+        } else if (!cell.classList.contains('lit') && state.targetCell !== null) {
+            // Wrong cell
+            showCoachMessage(t('wrongCell'));
         }
     }
-    
+
     // Handle miss (timeout)
     function handleMiss(cell) {
         cell.classList.remove('lit');
         cell.classList.add('miss');
-        
+
         state.playing = false;
         state.streak = 0;
-        
-        messageText.textContent = t('miss');
-        messageText.className = 'message-text fail';
-        
-        setTimeout(function() { roundComplete(false); }, 500);
+
+        messageDisplay.innerHTML = `<span class="message-text fail">${t('miss')}</span>`;
+
+        setTimeout(() => roundComplete(false), 500);
     }
-    
+
     // Round complete
     function roundComplete(success) {
         state.playing = false;
         clearTimeout(state.cellTimeout);
-        
-        var cells = document.querySelectorAll('.cell');
-        cells.forEach(function(c) { c.classList.remove('lit', 'hit', 'miss'); });
-        
+
+        const cells = document.querySelectorAll('.grid-cell');
+        cells.forEach(c => c.classList.remove('lit', 'hit', 'miss'));
+
         if (success) {
             state.streak++;
             state.circuitsCompleted++;
-            
+
             // Calculate average reaction time
-            var avgTime = Math.round(state.reactionTimes.reduce(function(a,b) { return a+b; }, 0) / state.reactionTimes.length);
-            
+            const avgTime = Math.round(state.reactionTimes.reduce((a, b) => a + b, 0) / state.reactionTimes.length);
+
             // Bonus laughs for fast average
-            var bonusLaughs = 0;
+            let bonusLaughs = 0;
             if (avgTime < 350) bonusLaughs = state.tier * 2;
             else if (avgTime < 500) bonusLaughs = state.tier;
-            state.laughs += bonusLaughs;
-            
+            state.totalLaughs += bonusLaughs;
+
             // Show feedback
-            var emoji = avgTime < 350 ? '⚡' : avgTime < 500 ? '🎯' : '💪';
-            var title = avgTime < 350 ? t('lightningFast') : avgTime < 500 ? t('perfectRound') : t('goodReflexes');
-            
+            const emoji = avgTime < 350 ? '⚡' : avgTime < 500 ? '🎯' : '💪';
+            const title = avgTime < 350 ? t('lightningFast') : avgTime < 500 ? t('perfectRound') : t('goodReflexes');
+
             document.getElementById('feedbackEmoji').textContent = emoji;
             document.getElementById('feedbackTitle').textContent = title;
             document.getElementById('feedbackTitle').className = 'feedback-title success';
@@ -831,13 +890,12 @@ body.en .lang-es { display: none !important; }
             document.getElementById('feedbackStats').innerHTML = 
                 t('avgReaction') + ': <strong>' + avgTime + 'ms</strong><br>' +
                 t('circuit') + ': ' + state.circuitsCompleted + '/3';
-            
-            feedbackOverlay.classList.add('show');
-            
+
             // Check for tier up
             if (state.circuitsCompleted >= 3 && state.tier < 10) {
-                feedbackOverlay.classList.remove('show');
                 showTierUp();
+            } else {
+                feedbackOverlay.classList.add('show');
             }
         } else {
             document.getElementById('feedbackEmoji').textContent = '😅';
@@ -845,97 +903,112 @@ body.en .lang-es { display: none !important; }
             document.getElementById('feedbackTitle').className = 'feedback-title fail';
             document.getElementById('feedbackLaughs').textContent = t('keepPracticing');
             document.getElementById('feedbackStats').innerHTML = 
-                (currentLang === 'es' ? 'Capturados: ' : 'Caught: ') + state.currentIndex + '/' + getTargetCount();
-            
+                t('caught') + ': ' + state.currentIndex + '/' + getTargetCount();
+
             feedbackOverlay.classList.add('show');
         }
-        
+
         updateStats();
     }
-    
+
     // Show tier up
     function showTierUp() {
         state.tier++;
         state.circuitsCompleted = 0;
-        
+
         document.getElementById('tierUpSub').innerHTML = 
-            (currentLang === 'es' ? '¡Ahora TIER ' : 'Now TIER ') + state.tier + '!<br>' +
-            (currentLang === 'es' ? 'Atrapa ' : 'Catch ') + getTargetCount() + (currentLang === 'es' ? ' cuadros!' : ' squares!');
-        
+            t('nowTier') + ' ' + state.tier + '!<br>' +
+            t('catch') + ' ' + getTargetCount() + ' ' + t('squares');
+
         tierUpOverlay.classList.add('show');
         updateStats();
     }
-    
+
     // Start game
     function startGame() {
         state.playing = true;
         state.currentIndex = 0;
         state.targetCell = null;
         state.reactionTimes = [];
-        reactionDisplay.textContent = '';
-        
-        progressFill.style.width = '0%';
-        
-        var cells = document.querySelectorAll('.cell');
-        cells.forEach(function(c) { c.classList.remove('lit', 'hit', 'miss'); });
-        
+
+        document.getElementById('progressFill').style.width = '0%';
+
+        const cells = document.querySelectorAll('.grid-cell');
+        cells.forEach(c => c.classList.remove('lit', 'hit', 'miss'));
+
         actionBtn.disabled = true;
-        messageText.textContent = t('ready');
-        messageText.className = 'message-text';
-        
-        setTimeout(function() {
-            messageText.textContent = t('go');
-            messageText.className = 'message-text success';
+        messageDisplay.innerHTML = `<span class="message-text">${t('ready')}</span>`;
+
+        setTimeout(() => {
+            messageDisplay.innerHTML = `<span class="message-text success">${t('go')}</span>`;
             lightCell();
         }, 1000);
     }
-    
+
+    // Update stats
+    function updateStats() {
+        document.getElementById('currentTier').textContent = state.tier;
+        document.getElementById('totalLaughs').textContent = state.totalLaughs;
+        document.getElementById('streak').textContent = state.streak;
+        document.getElementById('tierDisplay').textContent = state.tier;
+
+        if (state.reactionTimes.length > 0) {
+            const avg = Math.round(state.reactionTimes.reduce((a, b) => a + b, 0) / state.reactionTimes.length);
+            document.getElementById('avgTime').textContent = avg;
+        }
+    }
+
+    function showCoachMessage(msg) {
+        coachMessage.textContent = msg;
+        coachMessage.classList.add('show');
+        setTimeout(() => coachMessage.classList.remove('show'), 2500);
+    }
+
     // Event Listeners
     actionBtn.addEventListener('click', startGame);
-    
-    document.querySelectorAll('.speed-btn').forEach(function(btn) {
-        btn.addEventListener('click', function() {
+
+    document.querySelectorAll('.tempo-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
             if (state.playing) return;
-            document.querySelectorAll('.speed-btn').forEach(function(b) { b.classList.remove('active'); });
-            this.classList.add('active');
-            state.speed = this.dataset.speed;
+            document.querySelectorAll('.tempo-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            state.bpm = parseInt(btn.dataset.bpm);
         });
     });
-    
-    document.getElementById('continueBtn').addEventListener('click', function() {
+
+    document.getElementById('continueBtn').addEventListener('click', () => {
         feedbackOverlay.classList.remove('show');
         actionBtn.disabled = false;
-        actionBtn.innerHTML = '<span class="lang-en">NEXT ROUND</span><span class="lang-es">SIGUIENTE RONDA</span>';
+        actionBtn.innerHTML = `<span class="lang-en">${translations.en.nextRound}</span><span class="lang-es">${translations.es.nextRound}</span>`;
+        messageDisplay.innerHTML = `<span class="message-text"><span class="lang-en">Ready for round!</span><span class="lang-es">¡Listo para la ronda!</span></span>`;
         setLang(currentLang);
     });
-    
-    document.getElementById('restartBtn').addEventListener('click', function() {
+
+    document.getElementById('restartBtn').addEventListener('click', () => {
         feedbackOverlay.classList.remove('show');
         state.tier = 1;
         state.circuitsCompleted = 0;
         state.streak = 0;
         state.reactionTimes = [];
-        reactionDisplay.textContent = '';
-        document.getElementById('avgTimeDisplay').textContent = '---';
-        progressFill.style.width = '0%';
+        document.getElementById('avgTime').textContent = '---';
+        document.getElementById('progressFill').style.width = '0%';
         actionBtn.disabled = false;
-        actionBtn.innerHTML = '<span class="lang-en">START REFLEX</span><span class="lang-es">INICIAR REFLEJOS</span>';
-        messageText.innerHTML = '<span class="lang-en">React FAST! Tap the green squares before they vanish! ⚡</span><span class="lang-es">¡Reacciona RÁPIDO! ¡Toca los cuadros verdes antes de que desaparezcan! ⚡</span>';
-        messageText.className = 'message-text';
+        actionBtn.innerHTML = `<span class="lang-en">${translations.en.startReflex}</span><span class="lang-es">${translations.es.startReflex}</span>`;
+        messageDisplay.innerHTML = `<span class="message-text"><span class="lang-en">⚡ React FAST! Tap the green squares before they vanish!</span><span class="lang-es">⚡ ¡Reacciona RÁPIDO! ¡Toca los cuadros verdes!</span></span>`;
         setLang(currentLang);
         updateStats();
     });
-    
-    document.getElementById('tierUpBtn').addEventListener('click', function() {
+
+    document.getElementById('tierUpBtn').addEventListener('click', () => {
         tierUpOverlay.classList.remove('show');
         actionBtn.disabled = false;
-        actionBtn.innerHTML = '<span class="lang-en">START TIER ' + state.tier + '</span><span class="lang-es">INICIAR TIER ' + state.tier + '</span>';
+        actionBtn.innerHTML = `<span class="lang-en">${t('startTier')} ${state.tier} ⚡</span><span class="lang-es">${translations.es.startTier} ${state.tier} ⚡</span>`;
         setLang(currentLang);
     });
-    
-    document.getElementById('btnEn').addEventListener('click', function() { setLang('en'); });
-    document.getElementById('btnEs').addEventListener('click', function() { setLang('es'); });
-    
+
+    document.getElementById('btnEn').addEventListener('click', () => setLang('en'));
+    document.getElementById('btnEs').addEventListener('click', () => setLang('es'));
+
     // Initialize
     initGrid();
     setLang(currentLang);
