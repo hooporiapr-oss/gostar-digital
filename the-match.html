@@ -2,662 +2,851 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>THE MATCH - LaughCourt™</title>
-<link rel="icon" type="image/png" href="favicon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>THE MATCH | LaughCourt™</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--purple:#6B21A8;--purple-dark:#581C87;--purple-light:#9333EA;--teal:#00D9A5;--gold:#FFD700;--dark:#0a0a0f;--darker:#050508;--card:#111118;--text:#FFFFFF;--muted:#8892a0}
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Outfit',sans-serif;background:var(--dark);color:var(--text);min-height:100vh;overflow-x:hidden}
-body.es .lang-en{display:none !important}
-body.en .lang-es{display:none !important}
+:root {
+    --cyan: #00CED1;
+    --blue: #3B82F6;
+    --gold: #FFD700;
+    --teal: #00D9A5;
+    --pink: #FF1493;
+    --red: #FF1744;
+    --dark: #0a0a0f;
+    --darker: #050508;
+    --card: #111118;
+    --text: #FFFFFF;
+    --muted: #8892a0;
+    --border: rgba(255,255,255,0.1);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--dark);
+    color: var(--text);
+    height: 100%;
+    overflow: hidden;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
 
-/* Header */
-.header{text-align:center;padding:20px 20px 10px}
-.logo{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:2px}
-.logo .laugh{color:var(--gold)}
-.logo .court{color:var(--text)}
-.court-name{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;letter-spacing:3px;color:var(--teal);margin-top:5px}
-.court-icon{font-size:2rem;margin-right:10px}
+/* Main Container - Fits viewport exactly */
+.game-container {
+    max-width: 420px;
+    height: 100vh;
+    height: 100dvh;
+    margin: 0 auto;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
 
-/* Tier Display */
-.tier-display{text-align:center;padding:10px}
-.tier-badge{display:inline-block;padding:8px 20px;background:linear-gradient(135deg,rgba(107,33,168,0.3),rgba(255,215,0,0.2));border:2px solid var(--gold);border-radius:20px;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;color:var(--gold)}
-.speed-badge{display:inline-block;padding:6px 15px;background:rgba(0,217,165,0.2);border:2px solid var(--teal);border-radius:15px;font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:1px;color:var(--teal);margin-left:10px;cursor:pointer;transition:all 0.3s}
-.speed-badge:hover{background:rgba(0,217,165,0.3)}
-.round-info{margin-top:8px;font-size:0.9rem;color:var(--muted)}
+/* Header - Compact */
+.header {
+    text-align: center;
+    padding: 5px 0;
+    flex-shrink: 0;
+}
+.logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+}
+.logo .laugh { color: var(--gold); }
+.court-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 3px;
+    background: linear-gradient(135deg, var(--cyan), var(--blue));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+.powered-by {
+    font-size: 0.55rem;
+    color: var(--muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+.powered-by .ritnome { color: var(--gold); font-weight: 700; }
+
+/* Stats Bar - Compact */
+.stats-bar {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    padding: 8px;
+    background: var(--card);
+    border-radius: 10px;
+    margin: 8px 0;
+    flex-shrink: 0;
+}
+.stat { text-align: center; }
+.stat-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    color: var(--gold);
+    line-height: 1;
+}
+.stat-label {
+    font-size: 0.55rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Message Display - Compact */
+.message-display {
+    background: var(--card);
+    border: 2px solid var(--cyan);
+    border-radius: 12px;
+    padding: 10px;
+    margin-bottom: 8px;
+    text-align: center;
+    flex-shrink: 0;
+}
+.message-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    color: var(--text);
+}
+.message-text.watch { color: var(--gold); }
+.message-text.go { color: var(--teal); }
+
+/* Target Color - Compact inline */
+.target-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 8px;
+    flex-shrink: 0;
+}
+.target-label {
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+.target-color {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: 3px solid var(--gold);
+    box-shadow: 0 0 15px rgba(255,215,0,0.3);
+    background: var(--card);
+}
+
+/* Ritnome™ BPM Selector - Compact */
+.ritnome-tempo {
+    margin-bottom: 8px;
+    flex-shrink: 0;
+}
+.tempo-label {
+    text-align: center;
+    font-size: 0.55rem;
+    color: var(--muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+.tempo-label .ritnome-mark { color: var(--gold); font-weight: 700; }
+.speed-selector {
+    display: flex;
+    gap: 6px;
+}
+.speed-btn {
+    flex: 1;
+    padding: 8px 4px;
+    border: 2px solid var(--border);
+    background: var(--card);
+    border-radius: 10px;
+    color: var(--muted);
+    font-family: 'Bebas Neue', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+}
+.speed-btn .icon { font-size: 1rem; }
+.speed-btn .bpm { font-size: 1.1rem; line-height: 1; }
+.speed-btn .bpm-label {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.5rem;
+    text-transform: uppercase;
+    opacity: 0.7;
+}
+.speed-btn.active {
+    border-color: var(--cyan);
+    color: var(--cyan);
+    background: rgba(0,206,209,0.1);
+}
+
+/* 5x5 Court Grid - Flexible, takes remaining space */
+.court-wrapper {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+    padding: 5px 0;
+}
+.court-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+    padding: 12px;
+    background: linear-gradient(145deg, #0d0d12, #080810);
+    border-radius: 16px;
+    border: 2px solid rgba(0,206,209,0.2);
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+    width: 100%;
+    max-width: 320px;
+    aspect-ratio: 1;
+}
+.grid-cell {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+    background: linear-gradient(145deg, #1e1e2a, #151520);
+    border: 2px solid rgba(0,206,209,0.25);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
+}
+.grid-cell:active:not(.disabled) { transform: scale(0.95); }
+.grid-cell.disabled { pointer-events: none; opacity: 0.5; }
+.grid-cell.lit {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px currentColor;
+}
+.grid-cell.correct {
+    background: var(--teal) !important;
+    border-color: var(--teal) !important;
+    animation: pulse 0.3s;
+}
+.grid-cell.wrong {
+    background: var(--pink) !important;
+    border-color: var(--pink) !important;
+    animation: shake 0.3s;
+}
+@keyframes pulse { 50% { transform: scale(1.1); } }
+@keyframes shake { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+
+/* Progress & Tier - Compact */
+.progress-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 8px 0;
+    flex-shrink: 0;
+}
+.tier-badge {
+    background: linear-gradient(135deg, var(--cyan), var(--blue));
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    color: var(--dark);
+    white-space: nowrap;
+}
+.progress-bar {
+    flex: 1;
+    height: 10px;
+    background: var(--card);
+    border-radius: 5px;
+    overflow: hidden;
+}
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--cyan), var(--blue));
+    border-radius: 5px;
+    transition: width 0.3s;
+}
+
+/* Action Button - Compact */
+.action-btn {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 3px;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: linear-gradient(135deg, var(--cyan), var(--blue));
+    color: var(--dark);
+    flex-shrink: 0;
+}
+.action-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Feedback Overlay */
+.feedback-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.9);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 20px;
+}
+.feedback-overlay.show { display: flex; }
+.feedback-card {
+    background: var(--card);
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+    max-width: 320px;
+    width: 100%;
+}
+.feedback-emoji { font-size: 3rem; margin-bottom: 10px; }
+.feedback-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 3px;
+    margin-bottom: 8px;
+}
+.feedback-title.success { color: var(--teal); }
+.feedback-title.fail { color: var(--pink); }
+.feedback-title.tierup { color: var(--gold); }
+.feedback-message { color: var(--muted); margin-bottom: 15px; font-size: 0.9rem; }
+.feedback-stats { display: flex; justify-content: center; gap: 25px; margin-bottom: 15px; }
+.feedback-stat-value { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; color: var(--gold); }
+.feedback-stat-label { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; }
+.feedback-ritnome { font-size: 0.6rem; color: var(--gold); letter-spacing: 2px; margin-bottom: 15px; opacity: 0.8; }
+.feedback-btn {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    margin: 3px;
+}
+.feedback-btn.primary { background: linear-gradient(135deg, var(--cyan), var(--blue)); color: var(--dark); }
+.feedback-btn.secondary { background: transparent; color: var(--muted); border: 1px solid var(--muted); }
 
 /* Coach Message */
-.coach-area{padding:15px 20px;text-align:center}
-.coach-bubble{display:inline-block;background:var(--card);border:2px solid rgba(107,33,168,0.3);border-radius:20px;padding:15px 25px;max-width:90%;position:relative}
-.coach-msg{font-size:1rem;line-height:1.5}
-.coach-msg strong{color:var(--gold)}
-.joke-box{margin-top:10px;padding:10px;background:rgba(255,215,0,0.1);border-left:3px solid var(--gold);border-radius:8px;font-style:italic;color:var(--gold);font-size:0.85rem}
-
-/* Target Color Display */
-.target-area{text-align:center;padding:15px}
-.target-label{font-size:0.85rem;color:var(--muted);margin-bottom:8px;letter-spacing:1px}
-.target-color{width:80px;height:80px;border-radius:50%;margin:0 auto;border:4px solid var(--gold);box-shadow:0 0 30px rgba(255,215,0,0.3);transition:all 0.3s}
-
-/* Grid Court */
-.court-container{padding:20px;display:flex;justify-content:center;align-items:center}
-.court-grid{display:grid;gap:12px;max-width:350px;width:100%}
-.grid-cell{aspect-ratio:1;background:var(--card);border:3px solid rgba(107,33,168,0.3);border-radius:16px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center}
-.grid-cell:hover{border-color:rgba(255,215,0,0.5)}
-.grid-cell.lit{transform:scale(1.05);box-shadow:0 0 25px currentColor}
-.grid-cell.correct{border-color:var(--teal);animation:correctPulse 0.5s ease}
-.grid-cell.wrong{border-color:#FF4757;animation:shake 0.5s ease}
-@keyframes correctPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
-@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-10px)}75%{transform:translateX(10px)}}
-
-/* Controls */
-.controls{padding:20px;text-align:center}
-.btn{padding:16px 40px;font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:3px;border:none;border-radius:30px;cursor:pointer;transition:all 0.3s}
-.btn-primary{background:linear-gradient(135deg,var(--gold),#FFA500);color:var(--dark)}
-.btn-primary:hover{transform:scale(1.05);box-shadow:0 5px 25px rgba(255,215,0,0.4)}
-.btn-secondary{background:transparent;border:2px solid var(--purple-light);color:var(--purple-light);margin-left:10px;padding:14px 30px;font-size:1rem}
-.btn-secondary:hover{background:rgba(147,51,234,0.2)}
-.btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
-
-/* Stats Bar */
-.stats-bar{display:flex;justify-content:center;gap:30px;padding:15px;flex-wrap:wrap}
-.stat{text-align:center}
-.stat-value{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--gold)}
-.stat-label{font-size:0.75rem;color:var(--muted);letter-spacing:1px}
-
-/* Speed Selector */
-.speed-selector{padding:20px;text-align:center}
-.speed-selector.hidden{display:none}
-.speed-title{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:3px;color:var(--gold);margin-bottom:20px}
-.speed-options{display:flex;justify-content:center;gap:15px;flex-wrap:wrap}
-.speed-btn{background:var(--card);border:3px solid rgba(107,33,168,0.3);border-radius:20px;padding:20px 25px;cursor:pointer;transition:all 0.3s;min-width:100px}
-.speed-btn:hover{border-color:var(--gold);transform:translateY(-3px)}
-.speed-btn.selected{border-color:var(--teal);background:rgba(0,217,165,0.1)}
-.speed-icon{font-size:2.5rem;margin-bottom:8px}
-.speed-name{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:2px;color:var(--text)}
-.speed-desc{font-size:0.75rem;color:var(--muted);margin-top:5px}
-
-/* Game Area - hidden until speed selected */
-.game-area{display:none}
-.game-area.active{display:block}
-
-/* Modal */
-.modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.9);z-index:100;align-items:center;justify-content:center;padding:20px}
-.modal.active{display:flex}
-.modal-content{background:var(--card);border:3px solid var(--gold);border-radius:24px;padding:40px 30px;max-width:400px;width:100%;text-align:center}
-.modal-title{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:2px;color:var(--gold);margin-bottom:15px}
-.modal-text{color:var(--muted);font-size:1rem;margin-bottom:20px;line-height:1.6}
-.modal-stats{display:flex;justify-content:center;gap:30px;margin:20px 0}
-.modal-btn{margin-top:15px;padding:16px 40px;font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:2px;background:linear-gradient(135deg,var(--gold),#FFA500);color:var(--dark);border:none;border-radius:30px;cursor:pointer;transition:all 0.3s}
-.modal-btn:hover{transform:scale(1.05)}
-.modal-btn-secondary{background:transparent;border:2px solid var(--purple-light);color:var(--purple-light);margin-left:10px}
-
-/* Confetti */
-.confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1000;overflow:hidden}
-.confetti{position:absolute;width:10px;height:10px;top:-10px;animation:fall 3s linear forwards}
-@keyframes fall{0%{transform:translateY(0) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
-
-/* Footer */
-.footer{text-align:center;padding:20px;font-size:0.75rem;color:var(--muted)}
-.footer a{color:var(--gold);text-decoration:none}
+.coach-message {
+    position: fixed;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: linear-gradient(135deg, var(--cyan), var(--blue));
+    color: var(--dark);
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    opacity: 0;
+    transition: all 0.3s;
+    z-index: 50;
+    white-space: nowrap;
+}
+.coach-message.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
 /* Language Toggle */
-.lang-toggle{position:absolute;top:15px;right:15px;display:flex;gap:5px}
-.lang-btn{padding:6px 12px;border:2px solid var(--gold);background:transparent;color:var(--gold);border-radius:15px;font-weight:700;font-size:0.7rem;cursor:pointer;transition:all 0.3s}
-.lang-btn.active{background:var(--gold);color:var(--dark)}
+.lang-toggle {
+    position: fixed;
+    top: 8px;
+    right: 10px;
+    display: flex;
+    gap: 4px;
+    z-index: 100;
+}
+.lang-btn {
+    padding: 4px 10px;
+    border: 1px solid var(--muted);
+    background: transparent;
+    color: var(--muted);
+    border-radius: 5px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+.lang-btn.active { border-color: var(--gold); color: var(--gold); }
 
 /* Back Button */
-.back-btn{position:absolute;top:15px;left:15px;padding:8px 16px;background:transparent;border:2px solid var(--muted);color:var(--muted);border-radius:20px;font-size:0.8rem;cursor:pointer;transition:all 0.3s;text-decoration:none;display:inline-flex;align-items:center;gap:5px}
-.back-btn:hover{border-color:var(--gold);color:var(--gold)}
+.back-btn {
+    position: fixed;
+    top: 8px;
+    left: 10px;
+    padding: 5px 12px;
+    background: rgba(255,255,255,0.1);
+    border: none;
+    border-radius: 15px;
+    color: var(--muted);
+    font-size: 0.75rem;
+    cursor: pointer;
+    text-decoration: none;
+    z-index: 100;
+}
 
-/* Colors */
-.color-red{background:#FF4757}
-.color-blue{background:#3B82F6}
-.color-green{background:#00D9A5}
-.color-yellow{background:#FFD700}
-.color-purple{background:#9333EA}
-.color-orange{background:#FF9500}
-.color-pink{background:#FF6B9D}
-.color-cyan{background:#00D4FF}
+/* Hide lang spans */
+body.en .lang-es { display: none !important; }
+body.es .lang-en { display: none !important; }
+
+/* Desktop adjustments */
+@media (min-height: 700px) {
+    .game-container { padding: 15px; }
+    .court-grid { max-width: 350px; gap: 8px; padding: 15px; }
+    .stats-bar { padding: 12px; gap: 20px; }
+    .stat-value { font-size: 1.4rem; }
+    .message-display { padding: 15px; }
+    .message-text { font-size: 1.3rem; }
+    .action-btn { padding: 16px; font-size: 1.3rem; }
+}
+
+/* Very small screens */
+@media (max-height: 600px) {
+    .game-container { padding: 8px 10px; }
+    .header { padding: 3px 0; }
+    .court-name { font-size: 1.4rem; }
+    .stats-bar { padding: 6px; gap: 12px; margin: 5px 0; }
+    .stat-value { font-size: 1rem; }
+    .message-display { padding: 8px; margin-bottom: 5px; }
+    .message-text { font-size: 1rem; }
+    .target-row { margin-bottom: 5px; }
+    .target-color { width: 35px; height: 35px; }
+    .ritnome-tempo { margin-bottom: 5px; }
+    .speed-btn { padding: 6px 3px; }
+    .speed-btn .bpm { font-size: 1rem; }
+    .court-grid { padding: 10px; gap: 5px; max-width: 280px; }
+    .progress-section { margin: 5px 0; }
+    .action-btn { padding: 12px; font-size: 1.1rem; }
+}
 </style>
 </head>
 <body class="en">
-<div class="confetti-container" id="confetti"></div>
-
-<!-- Language Toggle -->
 <div class="lang-toggle">
-<button class="lang-btn active" data-lang="en">EN</button>
-<button class="lang-btn" data-lang="es">ES</button>
+    <button class="lang-btn active" id="btnEn">EN</button>
+    <button class="lang-btn" id="btnEs">ES</button>
 </div>
 
-<!-- Back Button -->
-<a href="laugh-hub.html" class="back-btn">← <span class="lang-en">Back</span><span class="lang-es">Volver</span></a>
+<a href="laugh-hub.html" class="back-btn">← Back</a>
 
-<!-- Header -->
-<header class="header">
-<div class="logo"><span class="laugh">LAUGH</span><span class="court">COURT</span><sup style="font-size:0.5em">™</sup></div>
-<div class="court-name"><span class="court-icon">🎯</span>THE MATCH</div>
-</header>
+<div class="game-container">
+    <header class="header">
+        <div class="logo"><span class="laugh">LAUGH</span>COURT</div>
+        <h1 class="court-name">🎯 THE MATCH</h1>
+        <div class="powered-by">Powered by <span class="ritnome">Ritnome™</span></div>
+    </header>
 
-<!-- Tier Display -->
-<div class="tier-display">
-<div class="tier-badge">
-<span class="lang-en">TIER</span>
-<span class="lang-es">NIVEL</span>
-<span id="tierNum">1</span> / 10
-</div>
-<div class="speed-badge" id="speedBadge"></div>
-<div class="round-info">
-<span class="lang-en">Round</span>
-<span class="lang-es">Ronda</span>
-<span id="roundNum">1</span> / <span id="roundsTotal">5</span>
-</div>
-</div>
+    <div class="stats-bar">
+        <div class="stat">
+            <div class="stat-value" id="currentTier">1</div>
+            <div class="stat-label">Tier</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value" id="bestTier">0</div>
+            <div class="stat-label">Best</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value" id="totalLaughs">0</div>
+            <div class="stat-label">😂</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value" id="streak">0</div>
+            <div class="stat-label">🔥</div>
+        </div>
+    </div>
 
-<!-- Speed Selector -->
-<div class="speed-selector" id="speedSelector">
-<div class="speed-title">
-<span class="lang-en">SELECT YOUR SPEED</span>
-<span class="lang-es">SELECCIONA TU VELOCIDAD</span>
-</div>
-<div class="speed-options">
-<button class="speed-btn" data-speed="slow">
-<div class="speed-icon">🐢</div>
-<div class="speed-name">SLOW</div>
-<div class="speed-desc">
-<span class="lang-en">1.5 seconds</span>
-<span class="lang-es">1.5 segundos</span>
-</div>
-</button>
-<button class="speed-btn" data-speed="medium">
-<div class="speed-icon">🚶</div>
-<div class="speed-name">MEDIUM</div>
-<div class="speed-desc">
-<span class="lang-en">1.0 second</span>
-<span class="lang-es">1.0 segundo</span>
-</div>
-</button>
-<button class="speed-btn" data-speed="fast">
-<div class="speed-icon">🏃</div>
-<div class="speed-name">FAST</div>
-<div class="speed-desc">
-<span class="lang-en">0.5 seconds</span>
-<span class="lang-es">0.5 segundos</span>
-</div>
-</button>
-</div>
-</div>
+    <div class="message-display">
+        <span class="message-text" id="messageText">
+            <span class="lang-en">Select tempo & START!</span>
+            <span class="lang-es">¡Selecciona tempo e INICIA!</span>
+        </span>
+    </div>
 
-<!-- Coach Message -->
-<div class="game-area" id="gameArea">
-<div class="coach-area">
-<div class="coach-bubble">
-<div class="coach-msg" id="coachMsg">
-<span class="lang-en">🎯 <strong>Find the match!</strong> Watch the colors flash, then tap the one that matches the center!</span>
-<span class="lang-es">🎯 <strong>¡Encuentra el par!</strong> Mira los colores brillar, luego toca el que coincida con el centro!</span>
-</div>
-<div class="joke-box" id="jokeBox">😂 Why did the color go to therapy? It had too many shades of emotion!</div>
-</div>
-</div>
+    <div class="target-row">
+        <span class="target-label">
+            <span class="lang-en">MATCH →</span>
+            <span class="lang-es">BUSCA →</span>
+        </span>
+        <div class="target-color" id="targetColor"></div>
+    </div>
 
-<!-- Target Color -->
-<div class="target-area">
-<div class="target-label">
-<span class="lang-en">MATCH THIS COLOR</span>
-<span class="lang-es">ENCUENTRA ESTE COLOR</span>
-</div>
-<div class="target-color" id="targetColor"></div>
-</div>
+    <div class="ritnome-tempo">
+        <div class="tempo-label">🎵 <span class="ritnome-mark">Ritnome™</span> Tempo</div>
+        <div class="speed-selector">
+            <button class="speed-btn" data-speed="slow" data-bpm="60">
+                <span class="icon">🐢</span>
+                <span class="bpm">60</span>
+                <span class="bpm-label">BPM</span>
+            </button>
+            <button class="speed-btn active" data-speed="medium" data-bpm="90">
+                <span class="icon">🏃</span>
+                <span class="bpm">90</span>
+                <span class="bpm-label">BPM</span>
+            </button>
+            <button class="speed-btn" data-speed="fast" data-bpm="120">
+                <span class="icon">⚡</span>
+                <span class="bpm">120</span>
+                <span class="bpm-label">BPM</span>
+            </button>
+        </div>
+    </div>
 
-<!-- Grid Court -->
-<div class="court-container">
-<div class="court-grid" id="courtGrid"></div>
+    <div class="court-wrapper">
+        <div class="court-grid" id="courtGrid"></div>
+    </div>
+
+    <div class="progress-section">
+        <div class="tier-badge">TIER <span id="tierDisplay">1</span></div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+        </div>
+    </div>
+
+    <button class="action-btn" id="actionBtn">
+        <span class="lang-en">START MATCH 🎯</span>
+        <span class="lang-es">INICIAR 🎯</span>
+    </button>
 </div>
 
-<!-- Controls -->
-<div class="controls">
-<button class="btn btn-primary" id="startBtn">
-<span class="lang-en">START</span>
-<span class="lang-es">INICIAR</span>
-</button>
+<div class="feedback-overlay" id="feedbackOverlay">
+    <div class="feedback-card">
+        <div class="feedback-emoji" id="feedbackEmoji">🎉</div>
+        <h2 class="feedback-title" id="feedbackTitle">GREAT JOB!</h2>
+        <p class="feedback-message" id="feedbackMessage">You found the match!</p>
+        <div class="feedback-stats">
+            <div class="feedback-stat">
+                <div class="feedback-stat-value" id="feedbackTier">1</div>
+                <div class="feedback-stat-label">Tier</div>
+            </div>
+            <div class="feedback-stat">
+                <div class="feedback-stat-value" id="feedbackLaughs">0</div>
+                <div class="feedback-stat-label">😂 Earned</div>
+            </div>
+        </div>
+        <div class="feedback-ritnome">Ritnome™ Training</div>
+        <button class="feedback-btn primary" id="continueBtn">CONTINUE 🎯</button>
+        <button class="feedback-btn secondary" id="restartBtn">RESTART</button>
+    </div>
 </div>
 
-<!-- Stats Bar -->
-<div class="stats-bar">
-<div class="stat">
-<div class="stat-value" id="scoreVal">0</div>
-<div class="stat-label">
-<span class="lang-en">SCORE</span>
-<span class="lang-es">PUNTOS</span>
-</div>
-</div>
-<div class="stat">
-<div class="stat-value" id="streakVal">0</div>
-<div class="stat-label">
-<span class="lang-en">STREAK</span>
-<span class="lang-es">RACHA</span>
-</div>
-</div>
-<div class="stat">
-<div class="stat-value" id="bestVal">0</div>
-<div class="stat-label">
-<span class="lang-en">BEST</span>
-<span class="lang-es">MEJOR</span>
-</div>
-</div>
-</div>
-</div>
-
-<!-- Footer -->
-<footer class="footer">
-<a href="laugh-hub.html">← <span class="lang-en">Back to Hub</span><span class="lang-es">Volver al Hub</span></a>
-</footer>
-
-<!-- Round Complete Modal -->
-<div class="modal" id="roundModal">
-<div class="modal-content">
-<div class="modal-title" id="modalTitle">🎉 ROUND COMPLETE!</div>
-<div class="modal-text" id="modalText">Great job!</div>
-<div class="modal-stats">
-<div class="stat">
-<div class="stat-value" id="modalScore">0</div>
-<div class="stat-label">SCORE</div>
-</div>
-<div class="stat">
-<div class="stat-value" id="modalAccuracy">0%</div>
-<div class="stat-label">ACCURACY</div>
-</div>
-</div>
-<button class="modal-btn" id="modalBtn">CONTINUE</button>
-</div>
-</div>
-
-<!-- Tier Complete Modal -->
-<div class="modal" id="tierModal">
-<div class="modal-content">
-<div class="modal-title">🏆 TIER COMPLETE!</div>
-<div class="modal-text" id="tierModalText">You've mastered this tier!</div>
-<div class="modal-stats">
-<div class="stat">
-<div class="stat-value" id="tierScore">0</div>
-<div class="stat-label">TOTAL SCORE</div>
-</div>
-</div>
-<button class="modal-btn" id="nextTierBtn">NEXT TIER →</button>
-<button class="modal-btn modal-btn-secondary" id="replayTierBtn">REPLAY</button>
-</div>
-</div>
+<div class="coach-message" id="coachMessage"></div>
 
 <script>
-(function(){
-// Language
-var lang = localStorage.getItem('lc-lang') || 'en';
-function setLang(l) {
-    lang = l;
-    localStorage.setItem('lc-lang', l);
-    document.body.className = l;
-    document.querySelectorAll('.lang-btn').forEach(function(b) {
-        b.classList.toggle('active', b.dataset.lang === l);
-    });
-}
-setLang(lang);
-document.querySelectorAll('.lang-btn').forEach(function(b) {
-    b.addEventListener('click', function() { setLang(this.dataset.lang); });
-});
-
-// Jokes
-var jokes = [
-    {en:"Why did the color go to therapy? It had too many shades of emotion!",es:"¿Por qué el color fue a terapia? ¡Tenía demasiados tonos de emoción!"},
-    {en:"I'm not saying you're bright, but your brain just lit up like a Christmas tree!",es:"No digo que seas brillante, ¡pero tu cerebro se iluminó como árbol de Navidad!"},
-    {en:"Your neurons are having a color party right now!",es:"¡Tus neuronas están en una fiesta de colores!"},
-    {en:"Red, blue, green... your brain sees them all and says 'I got this!'",es:"Rojo, azul, verde... ¡tu cerebro los ve todos y dice 'yo puedo'!"},
-    {en:"Why did the rainbow break up? Too many mixed signals!",es:"¿Por qué el arcoíris terminó? ¡Demasiadas señales mixtas!"},
-    {en:"Your memory is so colorful, it makes rainbows jealous!",es:"¡Tu memoria es tan colorida que los arcoíris tienen envidia!"},
-    {en:"I asked my brain to match colors. It said 'Challenge accepted!'",es:"Le pedí a mi cerebro que empareje colores. ¡Dijo 'reto aceptado'!"},
-    {en:"Warning: Excessive color matching may cause uncontrollable smiling!",es:"Advertencia: ¡Emparejar colores puede causar sonrisas incontrolables!"}
-];
-
-function getJoke() {
-    var j = jokes[Math.floor(Math.random() * jokes.length)];
-    return lang === 'es' ? j.es : j.en;
-}
-
-// Colors
-var colors = [
-    {name: 'red', class: 'color-red', hex: '#FF4757'},
-    {name: 'blue', class: 'color-blue', hex: '#3B82F6'},
-    {name: 'green', class: 'color-green', hex: '#00D9A5'},
-    {name: 'yellow', class: 'color-yellow', hex: '#FFD700'},
-    {name: 'purple', class: 'color-purple', hex: '#9333EA'},
-    {name: 'orange', class: 'color-orange', hex: '#FF9500'},
-    {name: 'pink', class: 'color-pink', hex: '#FF6B9D'},
-    {name: 'cyan', class: 'color-cyan', hex: '#00D4FF'}
-];
-
-// Tier Configuration - 5x5 grid always, progressive distractors
-// Flash time is determined by speed selection
-var tierConfig = [
-    {grid: 5, distractors: 6, rounds: 5},   // Tier 1
-    {grid: 5, distractors: 7, rounds: 5},   // Tier 2
-    {grid: 5, distractors: 8, rounds: 6},   // Tier 3
-    {grid: 5, distractors: 9, rounds: 6},   // Tier 4
-    {grid: 5, distractors: 10, rounds: 7},  // Tier 5
-    {grid: 5, distractors: 11, rounds: 7},  // Tier 6
-    {grid: 5, distractors: 12, rounds: 8},  // Tier 7
-    {grid: 5, distractors: 13, rounds: 8},  // Tier 8
-    {grid: 5, distractors: 14, rounds: 9},  // Tier 9
-    {grid: 5, distractors: 15, rounds: 10}  // Tier 10
-];
-
-// Speed settings
-var speedSettings = {
-    slow: {flashTime: 1500, name: 'SLOW', icon: '🐢'},
-    medium: {flashTime: 1000, name: 'MEDIUM', icon: '🚶'},
-    fast: {flashTime: 500, name: 'FAST', icon: '🏃'}
-};
-
-// Game State
-var selectedSpeed = localStorage.getItem('match-speed') || null;
-var tier = parseInt(localStorage.getItem('match-tier')) || 1;
-var round = 1;
-var score = 0;
-var streak = 0;
-var best = parseInt(localStorage.getItem('match-best')) || 0;
-var correct = 0;
-var attempts = 0;
-var targetColor = null;
-var matchIndex = null;
-var canClick = false;
-var cells = [];
-
-// DOM Elements
-var courtGrid = document.getElementById('courtGrid');
-var targetColorEl = document.getElementById('targetColor');
-var startBtn = document.getElementById('startBtn');
-var tierNum = document.getElementById('tierNum');
-var roundNum = document.getElementById('roundNum');
-var roundsTotal = document.getElementById('roundsTotal');
-var scoreVal = document.getElementById('scoreVal');
-var streakVal = document.getElementById('streakVal');
-var bestVal = document.getElementById('bestVal');
-var coachMsg = document.getElementById('coachMsg');
-var jokeBox = document.getElementById('jokeBox');
-var speedSelector = document.getElementById('speedSelector');
-var gameArea = document.getElementById('gameArea');
-var speedBadge = document.getElementById('speedBadge');
-
-// Speed Selection
-document.querySelectorAll('.speed-btn').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-        document.querySelectorAll('.speed-btn').forEach(function(b) { b.classList.remove('selected'); });
-        this.classList.add('selected');
-        selectedSpeed = this.dataset.speed;
-        localStorage.setItem('match-speed', selectedSpeed);
-        updateSpeedBadge();
-        
-        setTimeout(function() {
-            speedSelector.classList.add('hidden');
-            gameArea.classList.add('active');
-            init();
-        }, 300);
-    });
-});
-
-// Speed badge click to change speed
-speedBadge.addEventListener('click', function() {
-    gameArea.classList.remove('active');
-    speedSelector.classList.remove('hidden');
-});
-
-function updateSpeedBadge() {
-    if (selectedSpeed && speedSettings[selectedSpeed]) {
-        var s = speedSettings[selectedSpeed];
-        speedBadge.textContent = s.icon + ' ' + s.name;
-    }
-}
-
-// Check if speed already selected
-if (selectedSpeed) {
-    speedSelector.classList.add('hidden');
-    gameArea.classList.add('active');
-    updateSpeedBadge();
-}
-
-// Initialize
-function init() {
-    if (!selectedSpeed) return;
+(function() {
+    var currentLang = localStorage.getItem('lc-lang') || 'en';
     
-    tierNum.textContent = tier;
-    var config = tierConfig[tier - 1];
-    roundsTotal.textContent = config.rounds;
-    roundNum.textContent = round;
-    scoreVal.textContent = score;
-    streakVal.textContent = streak;
-    bestVal.textContent = best;
-    buildGrid();
-    jokeBox.textContent = '😂 ' + getJoke();
-}
+    var colors = [
+        {name: 'red', hex: '#FF4757'},
+        {name: 'blue', hex: '#3B82F6'},
+        {name: 'green', hex: '#00D9A5'},
+        {name: 'yellow', hex: '#FFD700'},
+        {name: 'purple', hex: '#9333EA'},
+        {name: 'orange', hex: '#FF9500'},
+        {name: 'pink', hex: '#FF6B9D'},
+        {name: 'cyan', hex: '#00D4FF'}
+    ];
+    
+    var state = {
+        tier: parseInt(localStorage.getItem('lc-match-tier')) || 1,
+        bestTier: parseInt(localStorage.getItem('lc-match-best')) || 0,
+        totalLaughs: parseInt(localStorage.getItem('lc-match-laughs')) || 0,
+        streak: 0,
+        speed: 'medium',
+        bpm: 90,
+        targetColor: null,
+        matchIndex: -1,
+        isPlaying: false,
+        isShowing: false,
+        circuitsCompleted: parseInt(localStorage.getItem('lc-match-circuits')) || 0,
+        cells: []
+    };
 
-function buildGrid() {
-    var config = tierConfig[tier - 1];
-    var gridSize = config.grid;
-    courtGrid.innerHTML = '';
-    courtGrid.style.gridTemplateColumns = 'repeat(' + gridSize + ', 1fr)';
-    cells = [];
-    
-    for (var i = 0; i < gridSize * gridSize; i++) {
-        var cell = document.createElement('div');
-        cell.className = 'grid-cell';
-        cell.dataset.index = i;
-        cell.addEventListener('click', function() { handleCellClick(this); });
-        courtGrid.appendChild(cell);
-        cells.push(cell);
-    }
-}
+    var speeds = {
+        slow: { bpm: 60, flash: 1500 },
+        medium: { bpm: 90, flash: 1000 },
+        fast: { bpm: 120, flash: 600 }
+    };
 
-function startRound() {
-    startBtn.disabled = true;
-    canClick = false;
-    
-    // Reset cells
-    cells.forEach(function(cell) {
-        cell.className = 'grid-cell';
-        cell.style.background = '';
-    });
-    
-    var config = tierConfig[tier - 1];
-    var flashTime = speedSettings[selectedSpeed].flashTime;
-    var totalCells = config.grid * config.grid;
-    var numDistractors = Math.min(config.distractors, totalCells - 1);
-    
-    // Pick target color
-    targetColor = colors[Math.floor(Math.random() * colors.length)];
-    targetColorEl.style.background = targetColor.hex;
-    targetColorEl.style.boxShadow = '0 0 30px ' + targetColor.hex;
-    
-    // Pick cells to light up (1 match + distractors)
-    var cellIndices = [];
-    for (var i = 0; i < totalCells; i++) cellIndices.push(i);
-    shuffleArray(cellIndices);
-    
-    var litCells = cellIndices.slice(0, numDistractors + 1);
-    
-    // Assign match to random lit cell
-    matchIndex = litCells[Math.floor(Math.random() * litCells.length)];
-    
-    // Pick distractor colors (different from target)
-    var distractorColors = colors.filter(function(c) { return c.name !== targetColor.name; });
-    shuffleArray(distractorColors);
-    
-    // Light up cells
-    var distractorIdx = 0;
-    litCells.forEach(function(cellIdx) {
-        var cell = cells[cellIdx];
-        if (cellIdx === matchIndex) {
-            cell.style.background = targetColor.hex;
-            cell.dataset.isMatch = 'true';
-        } else {
-            cell.style.background = distractorColors[distractorIdx % distractorColors.length].hex;
-            cell.dataset.isMatch = 'false';
-            distractorIdx++;
+    var tierConfig = [
+        {distractors: 4}, {distractors: 5}, {distractors: 6}, {distractors: 7}, {distractors: 8},
+        {distractors: 9}, {distractors: 10}, {distractors: 11}, {distractors: 12}, {distractors: 14}
+    ];
+
+    var courtGrid = document.getElementById('courtGrid');
+    var targetColorEl = document.getElementById('targetColor');
+    var messageText = document.getElementById('messageText');
+    var actionBtn = document.getElementById('actionBtn');
+    var feedbackOverlay = document.getElementById('feedbackOverlay');
+    var coachMessage = document.getElementById('coachMessage');
+
+    var texts = {
+        en: {
+            selectStart: 'Select tempo & START!',
+            watch: 'WATCH THE COLORS...',
+            yourTurn: 'TAP THE MATCH!',
+            perfect: 'PERFECT!',
+            almost: 'ALMOST!',
+            tierUp: 'TIER UP!',
+            tryAgain: 'The correct one is shown!',
+            circuitsTo: 'circuits to next tier!',
+            movingTo: 'Moving to Tier',
+            continue: 'CONTINUE 🎯',
+            nextRound: 'NEXT 🎯',
+            tryAgainBtn: 'TRY AGAIN 🎯',
+            startMatch: 'START MATCH 🎯',
+            ready: 'Ready for Tier'
+        },
+        es: {
+            selectStart: '¡Selecciona tempo e INICIA!',
+            watch: 'OBSERVA LOS COLORES...',
+            yourTurn: '¡TOCA EL PAR!',
+            perfect: '¡PERFECTO!',
+            almost: '¡CASI!',
+            tierUp: '¡SUBISTE DE NIVEL!',
+            tryAgain: '¡El correcto se muestra!',
+            circuitsTo: 'circuitos para subir!',
+            movingTo: 'Avanzando a Tier',
+            continue: 'CONTINUAR 🎯',
+            nextRound: 'SIGUIENTE 🎯',
+            tryAgainBtn: 'INTENTAR 🎯',
+            startMatch: 'INICIAR 🎯',
+            ready: 'Listo para Tier'
         }
-        cell.classList.add('lit');
-    });
-    
-    // Flash then hide
-    setTimeout(function() {
-        cells.forEach(function(cell) {
-            cell.classList.remove('lit');
-            cell.style.background = '';
+    };
+
+    function t(key) { return texts[currentLang][key] || texts['en'][key]; }
+
+    function setLang(lang) {
+        currentLang = lang;
+        localStorage.setItem('lc-lang', lang);
+        document.body.className = lang;
+        document.getElementById('btnEn').className = lang === 'en' ? 'lang-btn active' : 'lang-btn';
+        document.getElementById('btnEs').className = lang === 'es' ? 'lang-btn active' : 'lang-btn';
+    }
+
+    function initGrid() {
+        courtGrid.innerHTML = '';
+        state.cells = [];
+        for (var i = 0; i < 25; i++) {
+            var cell = document.createElement('div');
+            cell.className = 'grid-cell disabled';
+            cell.dataset.index = i;
+            cell.addEventListener('click', function() { handleCellClick(parseInt(this.dataset.index)); });
+            courtGrid.appendChild(cell);
+            state.cells.push(cell);
+        }
+    }
+
+    function shuffle(arr) {
+        for (var i = arr.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+        }
+        return arr;
+    }
+
+    function startRound() {
+        state.isShowing = true;
+        state.isPlaying = true;
+        actionBtn.disabled = true;
+        
+        state.cells.forEach(function(c) { 
+            c.className = 'grid-cell disabled'; 
+            c.style.background = ''; 
+            c.dataset.isMatch = 'false';
         });
-        canClick = true;
-        updateCoach(lang === 'es' ? '👀 <strong>¡Ahora toca el que coincide!</strong>' : '👀 <strong>Now tap the match!</strong>');
-    }, flashTime);
-}
-
-function handleCellClick(cell) {
-    if (!canClick) return;
-    canClick = false;
-    attempts++;
-    
-    var isMatch = cell.dataset.isMatch === 'true';
-    
-    if (isMatch) {
-        // Correct!
-        cell.style.background = targetColor.hex;
-        cell.classList.add('correct');
-        correct++;
-        streak++;
-        score += 10 + (streak * 2);
         
-        if (streak > best) {
-            best = streak;
-            localStorage.setItem('match-best', best);
+        messageText.innerHTML = '<span class="lang-en">' + texts.en.watch + '</span><span class="lang-es">' + texts.es.watch + '</span>';
+        messageText.className = 'message-text watch';
+        
+        var config = tierConfig[state.tier - 1];
+        var flashTime = speeds[state.speed].flash;
+        var numDistractors = config.distractors;
+        
+        state.targetColor = colors[Math.floor(Math.random() * colors.length)];
+        targetColorEl.style.background = state.targetColor.hex;
+        targetColorEl.style.boxShadow = '0 0 20px ' + state.targetColor.hex;
+        
+        var indices = [];
+        for (var i = 0; i < 25; i++) indices.push(i);
+        shuffle(indices);
+        
+        var litCells = indices.slice(0, numDistractors + 1);
+        state.matchIndex = litCells[Math.floor(Math.random() * litCells.length)];
+        
+        var distractorColors = colors.filter(function(c) { return c.name !== state.targetColor.name; });
+        shuffle(distractorColors);
+        
+        var dIdx = 0;
+        litCells.forEach(function(cellIdx) {
+            var cell = state.cells[cellIdx];
+            if (cellIdx === state.matchIndex) {
+                cell.style.background = state.targetColor.hex;
+                cell.dataset.isMatch = 'true';
+            } else {
+                cell.style.background = distractorColors[dIdx % distractorColors.length].hex;
+                dIdx++;
+            }
+            cell.classList.add('lit');
+        });
+        
+        setTimeout(function() {
+            state.cells.forEach(function(c) { 
+                c.classList.remove('lit'); 
+                c.style.background = ''; 
+                c.classList.remove('disabled');
+            });
+            state.isShowing = false;
+            messageText.innerHTML = '<span class="lang-en">' + texts.en.yourTurn + '</span><span class="lang-es">' + texts.es.yourTurn + '</span>';
+            messageText.className = 'message-text go';
+        }, flashTime);
+    }
+
+    function handleCellClick(index) {
+        if (state.isShowing || !state.isPlaying) return;
+        state.isPlaying = false;
+        
+        var cell = state.cells[index];
+        var isMatch = cell.dataset.isMatch === 'true';
+        
+        if (isMatch) {
+            cell.style.background = state.targetColor.hex;
+            cell.classList.add('correct');
+            state.streak++;
+            
+            var bpmBonus = state.bpm === 120 ? 2 : state.bpm === 90 ? 1 : 0;
+            var laughsEarned = state.tier + bpmBonus;
+            state.totalLaughs += laughsEarned;
+            state.circuitsCompleted++;
+            
+            if (state.tier > state.bestTier) {
+                state.bestTier = state.tier;
+                localStorage.setItem('lc-match-best', state.bestTier);
+            }
+            localStorage.setItem('lc-match-laughs', state.totalLaughs);
+            localStorage.setItem('lc-match-circuits', state.circuitsCompleted);
+            
+            updateStats();
+            showCoach(['PERFECT! 🎯', 'COLOR MASTER! 💪', 'GREAT EYE! 👁️', 'RITNOME! 🎵'][Math.floor(Math.random() * 4)]);
+            
+            var progress = (state.circuitsCompleted % 3) / 3 * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            
+            var tierUp = state.circuitsCompleted % 3 === 0 && state.tier < 10;
+            setTimeout(function() { showFeedback(true, laughsEarned, tierUp); }, 800);
+        } else {
+            cell.classList.add('wrong');
+            state.cells[state.matchIndex].style.background = state.targetColor.hex;
+            state.cells[state.matchIndex].classList.add('correct');
+            state.streak = 0;
+            updateStats();
+            showCoach(currentLang === 'es' ? '¡Casi! 😅' : 'Close! 😅');
+            setTimeout(function() { showFeedback(false, 0, false); }, 1200);
         }
         
-        createConfetti();
+        state.cells.forEach(function(c) { c.classList.add('disabled'); });
+    }
+
+    function showFeedback(success, laughs, tierUp) {
+        var emoji = document.getElementById('feedbackEmoji');
+        var title = document.getElementById('feedbackTitle');
+        var message = document.getElementById('feedbackMessage');
+        var continueBtn = document.getElementById('continueBtn');
+        
+        if (success) {
+            if (tierUp) {
+                emoji.textContent = '🚀';
+                title.textContent = t('tierUp');
+                title.className = 'feedback-title tierup';
+                message.textContent = t('movingTo') + ' ' + (state.tier + 1) + '!';
+                state.tier++;
+                localStorage.setItem('lc-match-tier', state.tier);
+            } else {
+                emoji.textContent = '😂';
+                title.textContent = t('perfect');
+                title.className = 'feedback-title success';
+                message.textContent = (state.circuitsCompleted % 3) + '/3 ' + t('circuitsTo');
+            }
+            continueBtn.textContent = tierUp ? t('continue') : t('nextRound');
+        } else {
+            emoji.textContent = '😅';
+            title.textContent = t('almost');
+            title.className = 'feedback-title fail';
+            message.textContent = t('tryAgain');
+            continueBtn.textContent = t('tryAgainBtn');
+        }
+        
+        document.getElementById('feedbackTier').textContent = state.tier;
+        document.getElementById('feedbackLaughs').textContent = laughs;
+        feedbackOverlay.classList.add('show');
         updateStats();
-        
-        var messages = lang === 'es' 
-            ? ['🎯 <strong>¡PERFECTO!</strong>', '💪 <strong>¡EXCELENTE!</strong>', '🔥 <strong>¡EN FUEGO!</strong>', '⭐ <strong>¡INCREÍBLE!</strong>']
-            : ['🎯 <strong>PERFECT!</strong>', '💪 <strong>EXCELLENT!</strong>', '🔥 <strong>ON FIRE!</strong>', '⭐ <strong>AMAZING!</strong>'];
-        updateCoach(messages[Math.floor(Math.random() * messages.length)]);
-        
-        setTimeout(nextRound, 1000);
-    } else {
-        // Wrong
-        cell.classList.add('wrong');
-        cells[matchIndex].style.background = targetColor.hex;
-        cells[matchIndex].classList.add('correct');
-        streak = 0;
+    }
+
+    function updateStats() {
+        document.getElementById('currentTier').textContent = state.tier;
+        document.getElementById('bestTier').textContent = state.bestTier;
+        document.getElementById('totalLaughs').textContent = state.totalLaughs;
+        document.getElementById('streak').textContent = state.streak;
+        document.getElementById('tierDisplay').textContent = state.tier;
+    }
+
+    function showCoach(msg) {
+        coachMessage.textContent = msg;
+        coachMessage.classList.add('show');
+        setTimeout(function() { coachMessage.classList.remove('show'); }, 2000);
+    }
+
+    // Event Listeners
+    actionBtn.addEventListener('click', function() {
+        if (!state.isPlaying && !state.isShowing) startRound();
+    });
+
+    document.querySelectorAll('.speed-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            if (state.isPlaying) return;
+            document.querySelectorAll('.speed-btn').forEach(function(b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            state.speed = btn.dataset.speed;
+            state.bpm = parseInt(btn.dataset.bpm);
+        });
+    });
+
+    document.getElementById('continueBtn').addEventListener('click', function() {
+        feedbackOverlay.classList.remove('show');
+        actionBtn.disabled = false;
+        messageText.innerHTML = '<span class="lang-en">' + t('ready') + ' ' + state.tier + '!</span><span class="lang-es">' + texts.es.ready + ' ' + state.tier + '!</span>';
+        messageText.className = 'message-text';
+    });
+
+    document.getElementById('restartBtn').addEventListener('click', function() {
+        feedbackOverlay.classList.remove('show');
+        state.tier = 1;
+        state.circuitsCompleted = 0;
+        state.streak = 0;
+        localStorage.setItem('lc-match-tier', 1);
+        localStorage.setItem('lc-match-circuits', 0);
+        document.getElementById('progressFill').style.width = '0%';
+        actionBtn.disabled = false;
+        messageText.innerHTML = '<span class="lang-en">Back to Tier 1!</span><span class="lang-es">¡De vuelta al Tier 1!</span>';
+        messageText.className = 'message-text';
         updateStats();
-        
-        updateCoach(lang === 'es' ? '😅 <strong>¡Casi!</strong> El correcto está iluminado.' : '😅 <strong>Close!</strong> The correct one is lit.');
-        
-        setTimeout(nextRound, 1500);
-    }
-    
-    jokeBox.textContent = '😂 ' + getJoke();
-}
+    });
 
-function nextRound() {
-    var config = tierConfig[tier - 1];
-    round++;
-    
-    if (round > config.rounds) {
-        // Tier complete
-        showTierComplete();
-    } else {
-        roundNum.textContent = round;
-        startBtn.disabled = false;
-        startBtn.innerHTML = lang === 'es' ? 'SIGUIENTE' : 'NEXT';
-        updateCoach(lang === 'es' ? '👍 <strong>¡Listo para la siguiente ronda!</strong>' : '👍 <strong>Ready for the next round!</strong>');
-    }
-}
+    document.getElementById('btnEn').addEventListener('click', function() { setLang('en'); });
+    document.getElementById('btnEs').addEventListener('click', function() { setLang('es'); });
 
-function showTierComplete() {
-    var accuracy = Math.round((correct / attempts) * 100) || 0;
-    
-    document.getElementById('tierScore').textContent = score;
-    document.getElementById('tierModalText').textContent = lang === 'es' 
-        ? '¡Completaste el Nivel ' + tier + ' con ' + accuracy + '% de precisión!'
-        : 'You completed Tier ' + tier + ' with ' + accuracy + '% accuracy!';
-    
-    document.getElementById('tierModal').classList.add('active');
-    createConfetti();
-}
-
-document.getElementById('nextTierBtn').onclick = function() {
-    if (tier < 10) {
-        tier++;
-        localStorage.setItem('match-tier', tier);
-    }
-    resetTier();
-    document.getElementById('tierModal').classList.remove('active');
-};
-
-document.getElementById('replayTierBtn').onclick = function() {
-    resetTier();
-    document.getElementById('tierModal').classList.remove('active');
-};
-
-function resetTier() {
-    round = 1;
-    score = 0;
-    correct = 0;
-    attempts = 0;
-    streak = 0;
-    init();
-    startBtn.disabled = false;
-    startBtn.innerHTML = lang === 'es' ? '<span class="lang-es">INICIAR</span>' : '<span class="lang-en">START</span>';
-    updateCoach(lang === 'es' ? '🎯 <strong>¡Encuentra el par!</strong> Mira los colores brillar, luego toca el que coincida!' : '🎯 <strong>Find the match!</strong> Watch the colors flash, then tap the matching one!');
-}
-
-function updateCoach(msg) {
-    coachMsg.innerHTML = msg;
-}
-
-function updateStats() {
-    scoreVal.textContent = score;
-    streakVal.textContent = streak;
-    bestVal.textContent = best;
-}
-
-function shuffleArray(arr) {
-    for (var i = arr.length - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        var temp = arr[i];
-        arr[i] = arr[j];
-        arr[j] = temp;
-    }
-}
-
-function createConfetti() {
-    var container = document.getElementById('confetti');
-    var confettiColors = ['#FFD700', '#6B21A8', '#00D9A5', '#3B82F6', '#FF4757'];
-    for (var i = 0; i < 30; i++) {
-        setTimeout(function() {
-            var c = document.createElement('div');
-            c.className = 'confetti';
-            c.style.left = Math.random() * 100 + 'vw';
-            c.style.background = confettiColors[Math.floor(Math.random() * confettiColors.length)];
-            c.style.animationDuration = (Math.random() * 1.5 + 2) + 's';
-            c.style.width = c.style.height = (Math.random() * 8 + 5) + 'px';
-            c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
-            container.appendChild(c);
-            setTimeout(function() { c.remove(); }, 3000);
-        }, i * 50);
-    }
-}
-
-startBtn.addEventListener('click', startRound);
-
-// Initialize if speed already selected
-if (selectedSpeed) {
-    init();
-}
+    // Init
+    initGrid();
+    setLang(currentLang);
+    updateStats();
 })();
 </script>
 </body>
