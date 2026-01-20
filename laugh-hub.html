@@ -66,11 +66,18 @@
 
         .courts-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            max-width: 500px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            max-width: 520px;
             width: 100%;
             margin-bottom: 25px;
+        }
+
+        @media (max-width: 500px) {
+            .courts-grid {
+                grid-template-columns: repeat(2, 1fr);
+                max-width: 320px;
+            }
         }
 
         .court-card {
@@ -139,6 +146,18 @@
         }
         .court-card.reflex .court-icon {
             background: linear-gradient(135deg, var(--green), var(--lime));
+        }
+
+        /* THE RITMO - Red/Gold */
+        .court-card.ritmo {
+            border-color: rgba(255,23,68,0.3);
+        }
+        .court-card.ritmo:hover {
+            border-color: #FF1744;
+            box-shadow: 0 10px 40px rgba(255,23,68,0.3);
+        }
+        .court-card.ritmo .court-icon {
+            background: linear-gradient(135deg, #FF1744, var(--gold));
         }
 
         .court-icon {
@@ -253,8 +272,8 @@
     <header class="header">
         <div class="logo"><span class="laugh">LAUGH</span><span class="court">COURT</span></div>
         <p class="tagline">
-            <span class="lang-en">RECALL. MATCH. DRILL. REFLEX.</span>
-            <span class="lang-es">RECALL. MATCH. DRILL. REFLEX.</span>
+            <span class="lang-en">RECALL. MATCH. DRILL. REFLEX. RITMO.</span>
+            <span class="lang-es">RECALL. MATCH. DRILL. REFLEX. RITMO.</span>
         </p>
         <h1 class="select-title">
             <span class="lang-en">💪 SELECT YOUR WORKOUT</span>
@@ -295,6 +314,14 @@
                 <span class="lang-es">Tiempo de Reacción</span>
             </div>
         </a>
+        <a href="the-ritmo.html" class="court-card ritmo">
+            <div class="court-icon">🎵</div>
+            <div class="court-name">THE RITMO</div>
+            <div class="court-desc">
+                <span class="lang-en">Rhythm + Timing</span>
+                <span class="lang-es">Ritmo + Tiempo</span>
+            </div>
+        </a>
     </div>
 
     <div class="user-stats">
@@ -332,7 +359,8 @@
                 var matchLaughs = parseInt(localStorage.getItem('lc-match-laughs') || '0');
                 var drillLaughs = parseInt(localStorage.getItem('lc-drill-laughs') || '0');
                 var reflexLaughs = parseInt(localStorage.getItem('lc-reflex-laughs') || '0');
-                var totalLaughs = recallLaughs + matchLaughs + drillLaughs + reflexLaughs;
+                var ritmoLaughs = parseInt(localStorage.getItem('lc-ritmo-laughs') || '0');
+                var totalLaughs = recallLaughs + matchLaughs + drillLaughs + reflexLaughs + ritmoLaughs;
 
                 // Get streak (could be from any court or overall)
                 var streak = parseInt(localStorage.getItem('lc-streak') || '0');
@@ -342,7 +370,8 @@
                 var matchTier = parseInt(localStorage.getItem('lc-match-best') || '0');
                 var drillTier = parseInt(localStorage.getItem('lc-drill-best') || '0');
                 var reflexTier = parseInt(localStorage.getItem('lc-reflex-best') || '0');
-                var bestTier = Math.max(recallTier, matchTier, drillTier, reflexTier);
+                var ritmoTier = parseInt(localStorage.getItem('lc-ritmo-best') || '0');
+                var bestTier = Math.max(recallTier, matchTier, drillTier, reflexTier, ritmoTier);
 
                 document.getElementById('totalLaughs').textContent = totalLaughs;
                 document.getElementById('currentStreak').textContent = streak;
