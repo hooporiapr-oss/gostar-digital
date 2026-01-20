@@ -692,6 +692,49 @@ app.get('/api/admin/users', adminTokenAuth, function(req, res) {
     res.json({ success: true, users: readJSON(USERS_FILE) });
 });
 
+// ============ BPM ACCESS CHECK ============
+app.get('/api/user/bpm-access/:pin', function(req, res) {
+    var pin = req.params.pin;
+    
+    // Check subscribers
+    var subscribers = readJSON(SUBSCRIBERS_FILE);
+    for (var i = 0; i < subscribers.length; i++) {
+        if (subscribers[i].pin === pin) {
+            var isActive = subscribers[i].status === 'active';
+            return res.json({
+                allBPM: isActive,
+                userType: 'subscriber',
+                status: subscribers[i].status,
+                plan: subscribers[i].plan_type
+            });
+        }
+    }
+    
+    // Check facility trials
+    var trialPins = readJSON(TRIAL_PINS_FILE);
+    for (var k = 0; k < trialPins.length; k++) {
+        if (trialPins[k].pin === pin) {
+            var trial = trialPins[k];
+            var isExpired = new Date(trial.expiresAt) < new Date();
+            var daysLeft = Math.ceil((new Date(trial.expiresAt) - new Date()) / (1000 * 60 * 60 * 24));
+            return res.json({
+                allBPM: false,
+                userType: 'facility_trial',
+                status: isExpired ? 'expired' : 'trialing',
+                daysLeft: Math.max(0, daysLeft),
+                facility: trial.facility
+            });
+        }
+    }
+    
+    // No user found = guest (allow 60 BPM only)
+    return res.json({
+        allBPM: false,
+        userType: 'guest',
+        status: null
+    });
+});
+
 // ============ GAME ROUTES ============
 
 app.get('/', function(req, res) { res.sendFile(path.join(__dirname, 'index.html')); });
