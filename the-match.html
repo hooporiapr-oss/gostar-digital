@@ -25,6 +25,8 @@ body.en .lang-es{display:none !important}
 /* Tier Display */
 .tier-display{text-align:center;padding:10px}
 .tier-badge{display:inline-block;padding:8px 20px;background:linear-gradient(135deg,rgba(107,33,168,0.3),rgba(255,215,0,0.2));border:2px solid var(--gold);border-radius:20px;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;color:var(--gold)}
+.speed-badge{display:inline-block;padding:6px 15px;background:rgba(0,217,165,0.2);border:2px solid var(--teal);border-radius:15px;font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:1px;color:var(--teal);margin-left:10px;cursor:pointer;transition:all 0.3s}
+.speed-badge:hover{background:rgba(0,217,165,0.3)}
 .round-info{margin-top:8px;font-size:0.9rem;color:var(--muted)}
 
 /* Coach Message */
@@ -64,6 +66,22 @@ body.en .lang-es{display:none !important}
 .stat{text-align:center}
 .stat-value{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--gold)}
 .stat-label{font-size:0.75rem;color:var(--muted);letter-spacing:1px}
+
+/* Speed Selector */
+.speed-selector{padding:20px;text-align:center}
+.speed-selector.hidden{display:none}
+.speed-title{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:3px;color:var(--gold);margin-bottom:20px}
+.speed-options{display:flex;justify-content:center;gap:15px;flex-wrap:wrap}
+.speed-btn{background:var(--card);border:3px solid rgba(107,33,168,0.3);border-radius:20px;padding:20px 25px;cursor:pointer;transition:all 0.3s;min-width:100px}
+.speed-btn:hover{border-color:var(--gold);transform:translateY(-3px)}
+.speed-btn.selected{border-color:var(--teal);background:rgba(0,217,165,0.1)}
+.speed-icon{font-size:2.5rem;margin-bottom:8px}
+.speed-name{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:2px;color:var(--text)}
+.speed-desc{font-size:0.75rem;color:var(--muted);margin-top:5px}
+
+/* Game Area - hidden until speed selected */
+.game-area{display:none}
+.game-area.active{display:block}
 
 /* Modal */
 .modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.9);z-index:100;align-items:center;justify-content:center;padding:20px}
@@ -130,6 +148,7 @@ body.en .lang-es{display:none !important}
 <span class="lang-es">NIVEL</span>
 <span id="tierNum">1</span> / 10
 </div>
+<div class="speed-badge" id="speedBadge"></div>
 <div class="round-info">
 <span class="lang-en">Round</span>
 <span class="lang-es">Ronda</span>
@@ -137,7 +156,42 @@ body.en .lang-es{display:none !important}
 </div>
 </div>
 
+<!-- Speed Selector -->
+<div class="speed-selector" id="speedSelector">
+<div class="speed-title">
+<span class="lang-en">SELECT YOUR SPEED</span>
+<span class="lang-es">SELECCIONA TU VELOCIDAD</span>
+</div>
+<div class="speed-options">
+<button class="speed-btn" data-speed="slow">
+<div class="speed-icon">🐢</div>
+<div class="speed-name">SLOW</div>
+<div class="speed-desc">
+<span class="lang-en">1.5 seconds</span>
+<span class="lang-es">1.5 segundos</span>
+</div>
+</button>
+<button class="speed-btn" data-speed="medium">
+<div class="speed-icon">🚶</div>
+<div class="speed-name">MEDIUM</div>
+<div class="speed-desc">
+<span class="lang-en">1.0 second</span>
+<span class="lang-es">1.0 segundo</span>
+</div>
+</button>
+<button class="speed-btn" data-speed="fast">
+<div class="speed-icon">🏃</div>
+<div class="speed-name">FAST</div>
+<div class="speed-desc">
+<span class="lang-en">0.5 seconds</span>
+<span class="lang-es">0.5 segundos</span>
+</div>
+</button>
+</div>
+</div>
+
 <!-- Coach Message -->
+<div class="game-area" id="gameArea">
 <div class="coach-area">
 <div class="coach-bubble">
 <div class="coach-msg" id="coachMsg">
@@ -191,6 +245,7 @@ body.en .lang-es{display:none !important}
 <div class="stat-label">
 <span class="lang-en">BEST</span>
 <span class="lang-es">MEJOR</span>
+</div>
 </div>
 </div>
 </div>
@@ -281,21 +336,30 @@ var colors = [
     {name: 'cyan', class: 'color-cyan', hex: '#00D4FF'}
 ];
 
-// Tier Configuration - 5x5 grid always, progressive difficulty
+// Tier Configuration - 5x5 grid always, progressive distractors
+// Flash time is determined by speed selection
 var tierConfig = [
-    {grid: 5, distractors: 6, rounds: 5, flashTime: 800},   // Tier 1: 6 distractors
-    {grid: 5, distractors: 7, rounds: 5, flashTime: 750},   // Tier 2: 7 distractors
-    {grid: 5, distractors: 8, rounds: 6, flashTime: 700},   // Tier 3: 8 distractors
-    {grid: 5, distractors: 9, rounds: 6, flashTime: 650},   // Tier 4: 9 distractors
-    {grid: 5, distractors: 10, rounds: 7, flashTime: 600},  // Tier 5: 10 distractors
-    {grid: 5, distractors: 11, rounds: 7, flashTime: 550},  // Tier 6: 11 distractors
-    {grid: 5, distractors: 12, rounds: 8, flashTime: 500},  // Tier 7: 12 distractors
-    {grid: 5, distractors: 13, rounds: 8, flashTime: 450},  // Tier 8: 13 distractors
-    {grid: 5, distractors: 14, rounds: 9, flashTime: 400},  // Tier 9: 14 distractors
-    {grid: 5, distractors: 15, rounds: 10, flashTime: 350}  // Tier 10: 15 distractors
+    {grid: 5, distractors: 6, rounds: 5},   // Tier 1
+    {grid: 5, distractors: 7, rounds: 5},   // Tier 2
+    {grid: 5, distractors: 8, rounds: 6},   // Tier 3
+    {grid: 5, distractors: 9, rounds: 6},   // Tier 4
+    {grid: 5, distractors: 10, rounds: 7},  // Tier 5
+    {grid: 5, distractors: 11, rounds: 7},  // Tier 6
+    {grid: 5, distractors: 12, rounds: 8},  // Tier 7
+    {grid: 5, distractors: 13, rounds: 8},  // Tier 8
+    {grid: 5, distractors: 14, rounds: 9},  // Tier 9
+    {grid: 5, distractors: 15, rounds: 10}  // Tier 10
 ];
 
+// Speed settings
+var speedSettings = {
+    slow: {flashTime: 1500, name: 'SLOW', icon: '🐢'},
+    medium: {flashTime: 1000, name: 'MEDIUM', icon: '🚶'},
+    fast: {flashTime: 500, name: 'FAST', icon: '🏃'}
+};
+
 // Game State
+var selectedSpeed = localStorage.getItem('match-speed') || null;
 var tier = parseInt(localStorage.getItem('match-tier')) || 1;
 var round = 1;
 var score = 0;
@@ -320,9 +384,51 @@ var streakVal = document.getElementById('streakVal');
 var bestVal = document.getElementById('bestVal');
 var coachMsg = document.getElementById('coachMsg');
 var jokeBox = document.getElementById('jokeBox');
+var speedSelector = document.getElementById('speedSelector');
+var gameArea = document.getElementById('gameArea');
+var speedBadge = document.getElementById('speedBadge');
+
+// Speed Selection
+document.querySelectorAll('.speed-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+        document.querySelectorAll('.speed-btn').forEach(function(b) { b.classList.remove('selected'); });
+        this.classList.add('selected');
+        selectedSpeed = this.dataset.speed;
+        localStorage.setItem('match-speed', selectedSpeed);
+        updateSpeedBadge();
+        
+        setTimeout(function() {
+            speedSelector.classList.add('hidden');
+            gameArea.classList.add('active');
+            init();
+        }, 300);
+    });
+});
+
+// Speed badge click to change speed
+speedBadge.addEventListener('click', function() {
+    gameArea.classList.remove('active');
+    speedSelector.classList.remove('hidden');
+});
+
+function updateSpeedBadge() {
+    if (selectedSpeed && speedSettings[selectedSpeed]) {
+        var s = speedSettings[selectedSpeed];
+        speedBadge.textContent = s.icon + ' ' + s.name;
+    }
+}
+
+// Check if speed already selected
+if (selectedSpeed) {
+    speedSelector.classList.add('hidden');
+    gameArea.classList.add('active');
+    updateSpeedBadge();
+}
 
 // Initialize
 function init() {
+    if (!selectedSpeed) return;
+    
     tierNum.textContent = tier;
     var config = tierConfig[tier - 1];
     roundsTotal.textContent = config.rounds;
@@ -362,6 +468,7 @@ function startRound() {
     });
     
     var config = tierConfig[tier - 1];
+    var flashTime = speedSettings[selectedSpeed].flashTime;
     var totalCells = config.grid * config.grid;
     var numDistractors = Math.min(config.distractors, totalCells - 1);
     
@@ -407,7 +514,7 @@ function startRound() {
         });
         canClick = true;
         updateCoach(lang === 'es' ? '👀 <strong>¡Ahora toca el que coincide!</strong>' : '👀 <strong>Now tap the match!</strong>');
-    }, config.flashTime);
+    }, flashTime);
 }
 
 function handleCellClick(cell) {
@@ -546,7 +653,11 @@ function createConfetti() {
 }
 
 startBtn.addEventListener('click', startRound);
-init();
+
+// Initialize if speed already selected
+if (selectedSpeed) {
+    init();
+}
 })();
 </script>
 </body>
