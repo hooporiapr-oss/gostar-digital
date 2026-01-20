@@ -16,6 +16,7 @@
             --cyan: #00CED1;
             --green: #00E676;
             --lime: #C6FF00;
+            --red: #FF1744;
             --dark: #0a0a0f;
             --darker: #050508;
             --card: #111118;
@@ -40,7 +41,7 @@
 
         .header {
             text-align: center;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
         .logo {
             font-family: 'Bebas Neue', sans-serif;
@@ -50,18 +51,50 @@
         }
         .logo .laugh { color: var(--gold); }
         .logo .court { color: var(--text); }
-        .tagline {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1rem;
-            letter-spacing: 3px;
+        .powered-by {
+            font-size: 0.65rem;
             color: var(--muted);
-            margin-bottom: 15px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
         }
+        .powered-by .ritnome { color: var(--gold); font-weight: 700; }
         .select-title {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             letter-spacing: 3px;
             color: var(--teal);
+        }
+
+        /* Ritnome™ BPM Badge */
+        .bpm-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 6px 14px;
+            margin-bottom: 20px;
+        }
+        .bpm-badge-label {
+            font-size: 0.6rem;
+            color: var(--muted);
+            letter-spacing: 1px;
+        }
+        .bpm-badge .ritnome { color: var(--gold); font-weight: 700; }
+        .bpm-options {
+            display: flex;
+            gap: 6px;
+        }
+        .bpm-chip {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            background: rgba(255,215,0,0.15);
+            color: var(--gold);
+            letter-spacing: 1px;
         }
 
         .courts-grid {
@@ -70,138 +103,128 @@
             gap: 12px;
             max-width: 520px;
             width: 100%;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
-        @media (max-width: 500px) {
+        @media (max-width: 560px) {
             .courts-grid {
                 grid-template-columns: repeat(2, 1fr);
-                max-width: 320px;
+                max-width: 340px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .courts-grid {
+                grid-template-columns: 1fr;
+                max-width: 280px;
             }
         }
 
         .court-card {
             background: var(--card);
             border: 2px solid var(--border);
-            border-radius: 20px;
-            padding: 20px 15px;
+            border-radius: 16px;
+            padding: 18px 12px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s;
             text-decoration: none;
             color: var(--text);
+            position: relative;
+            overflow: hidden;
+        }
+        .court-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transition: opacity 0.3s;
         }
         .court-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-4px);
             border-color: var(--gold);
-            box-shadow: 0 10px 40px rgba(255,215,0,0.2);
+            box-shadow: 0 8px 30px rgba(255,215,0,0.2);
+        }
+        .court-card:hover::before {
+            opacity: 0.05;
         }
         .court-card:active {
             transform: scale(0.98);
         }
 
         /* THE RECALL - Orange */
-        .court-card.recall {
-            border-color: rgba(255,107,0,0.3);
-        }
-        .court-card.recall:hover {
-            border-color: var(--orange);
-            box-shadow: 0 10px 40px rgba(255,107,0,0.3);
-        }
-        .court-card.recall .court-icon {
-            background: linear-gradient(135deg, var(--orange), #FF8C00);
-        }
+        .court-card.recall { border-color: rgba(255,107,0,0.3); }
+        .court-card.recall:hover { border-color: var(--orange); box-shadow: 0 8px 30px rgba(255,107,0,0.3); }
+        .court-card.recall::before { background: var(--orange); }
+        .court-card.recall .court-icon { background: linear-gradient(135deg, var(--orange), #FF8C00); }
 
-        /* THE MATCH - Cyan */
-        .court-card.match {
-            border-color: rgba(0,206,209,0.3);
-        }
-        .court-card.match:hover {
-            border-color: var(--cyan);
-            box-shadow: 0 10px 40px rgba(0,206,209,0.3);
-        }
-        .court-card.match .court-icon {
-            background: linear-gradient(135deg, var(--cyan), #00B4D8);
-        }
+        /* THE MATCH - Cyan/Purple */
+        .court-card.match { border-color: rgba(107,33,168,0.3); }
+        .court-card.match:hover { border-color: var(--purple); box-shadow: 0 8px 30px rgba(107,33,168,0.3); }
+        .court-card.match::before { background: var(--purple); }
+        .court-card.match .court-icon { background: linear-gradient(135deg, #6B21A8, var(--teal)); }
 
         /* THE DRILL - Purple/Pink */
-        .court-card.drill {
-            border-color: rgba(157,78,221,0.3);
-        }
-        .court-card.drill:hover {
-            border-color: var(--purple);
-            box-shadow: 0 10px 40px rgba(157,78,221,0.3);
-        }
-        .court-card.drill .court-icon {
-            background: linear-gradient(135deg, var(--purple), var(--pink));
-        }
+        .court-card.drill { border-color: rgba(157,78,221,0.3); }
+        .court-card.drill:hover { border-color: var(--purple); box-shadow: 0 8px 30px rgba(157,78,221,0.3); }
+        .court-card.drill::before { background: var(--purple); }
+        .court-card.drill .court-icon { background: linear-gradient(135deg, var(--purple), var(--pink)); }
 
         /* THE REFLEX - Green/Lime */
-        .court-card.reflex {
-            border-color: rgba(0,230,118,0.3);
-        }
-        .court-card.reflex:hover {
-            border-color: var(--green);
-            box-shadow: 0 10px 40px rgba(0,230,118,0.3);
-        }
-        .court-card.reflex .court-icon {
-            background: linear-gradient(135deg, var(--green), var(--lime));
-        }
+        .court-card.reflex { border-color: rgba(0,230,118,0.3); }
+        .court-card.reflex:hover { border-color: var(--green); box-shadow: 0 8px 30px rgba(0,230,118,0.3); }
+        .court-card.reflex::before { background: var(--green); }
+        .court-card.reflex .court-icon { background: linear-gradient(135deg, var(--green), var(--lime)); }
 
         /* THE RITMO - Red/Gold */
-        .court-card.ritmo {
-            border-color: rgba(255,23,68,0.3);
-        }
-        .court-card.ritmo:hover {
-            border-color: #FF1744;
-            box-shadow: 0 10px 40px rgba(255,23,68,0.3);
-        }
-        .court-card.ritmo .court-icon {
-            background: linear-gradient(135deg, #FF1744, var(--gold));
-        }
+        .court-card.ritmo { border-color: rgba(255,23,68,0.3); }
+        .court-card.ritmo:hover { border-color: var(--red); box-shadow: 0 8px 30px rgba(255,23,68,0.3); }
+        .court-card.ritmo::before { background: var(--red); }
+        .court-card.ritmo .court-icon { background: linear-gradient(135deg, var(--red), var(--gold)); }
 
         .court-icon {
-            width: 55px;
-            height: 55px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.6rem;
-            margin: 0 auto 10px;
+            font-size: 1.5rem;
+            margin: 0 auto 8px;
             color: var(--dark);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
         .court-name {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             letter-spacing: 2px;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
         }
         .court-desc {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: var(--muted);
-            line-height: 1.4;
+            line-height: 1.3;
         }
 
         .user-stats {
             background: var(--card);
             border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 15px 25px;
+            border-radius: 14px;
+            padding: 12px 20px;
             display: flex;
-            gap: 25px;
+            gap: 20px;
             justify-content: center;
             flex-wrap: wrap;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         .stat { text-align: center; }
         .stat-value {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             color: var(--gold);
         }
         .stat-label {
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             color: var(--muted);
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -209,11 +232,11 @@
 
         .logout-link {
             color: var(--muted);
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             text-decoration: none;
-            padding: 10px 20px;
+            padding: 8px 16px;
             border: 1px solid var(--border);
-            border-radius: 10px;
+            border-radius: 8px;
             transition: all 0.3s;
         }
         .logout-link:hover {
@@ -223,84 +246,85 @@
 
         .lang-toggle {
             position: fixed;
-            top: 20px;
-            right: 20px;
+            top: 15px;
+            right: 15px;
             display: flex;
-            gap: 5px;
+            gap: 4px;
             background: var(--card);
-            padding: 4px;
-            border-radius: 10px;
+            padding: 3px;
+            border-radius: 8px;
             border: 1px solid var(--border);
+            z-index: 100;
         }
         .lang-btn {
-            padding: 8px 12px;
+            padding: 6px 10px;
             border: none;
             background: transparent;
             color: var(--muted);
-            border-radius: 8px;
+            border-radius: 6px;
             font-weight: 600;
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             cursor: pointer;
             font-family: 'Outfit', sans-serif;
+            transition: all 0.2s;
         }
         .lang-btn.active {
             background: var(--gold);
             color: var(--dark);
         }
 
-        @media (max-width: 500px) {
-            .courts-grid {
-                grid-template-columns: 1fr;
-                max-width: 280px;
-            }
-            .court-card { padding: 20px 15px; }
-            .court-icon { width: 60px; height: 60px; font-size: 1.8rem; }
-            .court-name { font-size: 1.4rem; }
-            .court-desc { font-size: 0.8rem; }
-            .logo { font-size: 2rem; }
-            .select-title { font-size: 1.3rem; }
-        }
-
         /* Ritnome™ Footer */
         .ritnome-footer {
-            margin-top: 30px;
-            padding: 25px 20px;
+            margin-top: 25px;
+            padding: 20px 15px;
             text-align: center;
             border-top: 1px solid var(--border);
             width: 100%;
+            max-width: 520px;
         }
-        .footer-brand { margin-bottom: 10px; }
+        .footer-brand { margin-bottom: 8px; }
         .ritnome-tm {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.6rem;
+            font-size: 1.4rem;
             letter-spacing: 4px;
-            background: linear-gradient(135deg, #FF1744, var(--gold));
+            background: linear-gradient(135deg, var(--red), var(--gold));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             display: block;
         }
         .footer-tagline {
-            font-size: 0.6rem;
+            font-size: 0.55rem;
             letter-spacing: 2px;
             text-transform: uppercase;
             color: var(--muted);
             display: block;
-            margin-top: 3px;
+            margin-top: 2px;
         }
         .footer-company {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: var(--muted);
-            margin: 10px 0;
+            margin: 8px 0;
         }
         .footer-company a {
             color: var(--gold);
             text-decoration: none;
         }
         .footer-copyright {
-            font-size: 0.55rem;
+            font-size: 0.5rem;
             color: var(--muted);
             opacity: 0.6;
+        }
+
+        /* Desktop enhancement */
+        @media (min-width: 700px) {
+            .logo { font-size: 3rem; }
+            .select-title { font-size: 1.8rem; }
+            .courts-grid { gap: 15px; }
+            .court-card { padding: 22px 15px; border-radius: 20px; }
+            .court-icon { width: 60px; height: 60px; font-size: 1.8rem; }
+            .court-name { font-size: 1.3rem; }
+            .court-desc { font-size: 0.75rem; }
         }
     </style>
 </head>
@@ -312,16 +336,23 @@
     </div>
 
     <header class="header">
-        <div class="logo"><span class="laugh">LAUGH</span><span class="court">COURT</span></div>
-        <p class="tagline">
-            <span class="lang-en">RECALL. MATCH. DRILL. REFLEX. RITMO.</span>
-            <span class="lang-es">RECALL. MATCH. DRILL. REFLEX. RITMO.</span>
-        </p>
+        <div class="logo"><span class="laugh">LAUGH</span><span class="court">COURT</span><sup style="font-size:0.4em">™</sup></div>
+        <div class="powered-by">Powered by <span class="ritnome">Ritnome™</span></div>
         <h1 class="select-title">
             <span class="lang-en">💪 SELECT YOUR WORKOUT</span>
             <span class="lang-es">💪 SELECCIONA TU ENTRENAMIENTO</span>
         </h1>
     </header>
+
+    <!-- Ritnome™ BPM Badge -->
+    <div class="bpm-badge">
+        <span class="bpm-badge-label">🎵 <span class="ritnome">Ritnome™</span> Tempo</span>
+        <div class="bpm-options">
+            <span class="bpm-chip">60</span>
+            <span class="bpm-chip">90</span>
+            <span class="bpm-chip">120</span>
+        </div>
+    </div>
 
     <div class="courts-grid">
         <a href="the-recall.html" class="court-card recall">
@@ -336,32 +367,32 @@
             <div class="court-icon">🎯</div>
             <div class="court-name">THE MATCH</div>
             <div class="court-desc">
-                <span class="lang-en">Spatial Memory</span>
-                <span class="lang-es">Memoria Espacial</span>
+                <span class="lang-en">Color Matching</span>
+                <span class="lang-es">Coincidencia de Color</span>
             </div>
         </a>
         <a href="the-drill.html" class="court-card drill">
             <div class="court-icon">🏀</div>
             <div class="court-name">THE DRILL</div>
             <div class="court-desc">
-                <span class="lang-en">Digit Span Memory</span>
-                <span class="lang-es">Memoria Numérica</span>
+                <span class="lang-en">Number Sequence</span>
+                <span class="lang-es">Secuencia Numérica</span>
             </div>
         </a>
         <a href="the-reflex.html" class="court-card reflex">
             <div class="court-icon">⚡</div>
             <div class="court-name">THE REFLEX</div>
             <div class="court-desc">
-                <span class="lang-en">Reaction Time</span>
-                <span class="lang-es">Tiempo de Reacción</span>
+                <span class="lang-en">Reaction Speed</span>
+                <span class="lang-es">Velocidad de Reacción</span>
             </div>
         </a>
         <a href="the-ritmo.html" class="court-card ritmo">
             <div class="court-icon">🎵</div>
             <div class="court-name">THE RITMO</div>
             <div class="court-desc">
-                <span class="lang-en">Rhythm + Timing</span>
-                <span class="lang-es">Ritmo + Tiempo</span>
+                <span class="lang-en">Rhythm & Timing</span>
+                <span class="lang-es">Ritmo y Tiempo</span>
             </div>
         </a>
     </div>
@@ -382,6 +413,19 @@
     </div>
 
     <a href="index.html" class="logout-link">🚪 <span class="lang-en">Exit</span><span class="lang-es">Salir</span></a>
+
+    <footer class="ritnome-footer">
+        <div class="footer-brand">
+            <span class="ritnome-tm">Ritnome™</span>
+            <span class="footer-tagline">Rhythm-Based Cognitive Training</span>
+        </div>
+        <div class="footer-company">
+            <span class="lang-en">by</span>
+            <span class="lang-es">por</span>
+            <a href="https://gostar.digital"> GoStar Digital LLC</a> 🇵🇷
+        </div>
+        <div class="footer-copyright">© 2025 GoStar Digital LLC. All rights reserved.</div>
+    </footer>
 
     <script>
         (function() {
@@ -455,18 +499,5 @@
             loadStats();
         })();
     </script>
-
-    <footer class="ritnome-footer">
-        <div class="footer-brand">
-            <span class="ritnome-tm">Ritnome™</span>
-            <span class="footer-tagline">Rhythm-Based Cognitive Training</span>
-        </div>
-        <div class="footer-company">
-            <span class="lang-en">by</span>
-            <span class="lang-es">por</span>
-            <a href="https://gostar.digital"> GoStar Digital LLC</a> 🇵🇷
-        </div>
-        <div class="footer-copyright">© 2025 GoStar Digital LLC. All rights reserved.</div>
-    </footer>
 </body>
 </html>
