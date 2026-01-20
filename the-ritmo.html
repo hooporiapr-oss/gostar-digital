@@ -132,22 +132,28 @@
             grid-template-columns: repeat(5, 1fr);
             gap: 8px;
             padding: 20px;
-            background: var(--card);
+            background: linear-gradient(145deg, #0d0d12, #080810);
             border-radius: 20px;
-            border: 2px solid var(--border);
+            border: 2px solid rgba(255,23,68,0.2);
             margin-bottom: 15px;
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.5);
         }
         .cell {
             aspect-ratio: 1;
-            background: var(--darker);
+            background: linear-gradient(145deg, #1e1e2a, #151520);
             border-radius: 12px;
-            border: 2px solid var(--border);
+            border: 2px solid rgba(255,215,0,0.25);
             cursor: pointer;
             transition: all 0.15s;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
+        }
+        .cell:hover {
+            border-color: rgba(255,215,0,0.5);
+            background: linear-gradient(145deg, #252532, #1a1a24);
         }
         .cell:active {
             transform: scale(0.95);
