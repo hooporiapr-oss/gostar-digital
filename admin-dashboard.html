@@ -60,7 +60,6 @@ body.es .lang-en { display: none !important; } body.en .lang-es { display: none 
 .court-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
 .court-card-header { padding: 16px 20px; display: flex; align-items: center; gap: 12px; }
 .court-card-header.recall { background: linear-gradient(135deg, rgba(255,107,0,0.2), transparent); border-bottom: 2px solid var(--orange); }
-.court-card-header.search { background: linear-gradient(135deg, rgba(233,30,140,0.2), transparent); border-bottom: 2px solid var(--pink); }
 .court-card-header.match { background: linear-gradient(135deg, rgba(0,206,209,0.2), transparent); border-bottom: 2px solid var(--cyan); }
 .court-card-icon { font-size: 1.5rem; } .court-card-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 2px; flex: 1; }
 .court-card-body { padding: 20px; } .court-card-stats { display: flex; gap: 20px; }
@@ -91,7 +90,6 @@ td { font-size: 0.9rem; } tr:hover { background: var(--card-hover); }
 .aggregated-item:last-child { border-bottom: none; } .aggregated-item:hover { background: var(--card-hover); }
 .aggregated-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
 .aggregated-icon.recall { background: rgba(255,107,0,0.15); color: var(--orange); }
-.aggregated-icon.search { background: rgba(233,30,140,0.15); color: var(--pink); }
 .aggregated-icon.match { background: rgba(0,206,209,0.15); color: var(--cyan); }
 .aggregated-icon.subscription { background: rgba(255,215,0,0.15); color: var(--gold); }
 .aggregated-icon.trial { background: rgba(107,33,168,0.15); color: var(--purple); }
@@ -183,7 +181,6 @@ tr.clickable { cursor: pointer; }
 </div>
 <div class="court-cards-grid">
 <div class="court-card"><div class="court-card-header recall"><div class="court-card-icon">🧠</div><div class="court-card-title">THE RECALL</div></div><div class="court-card-body"><div class="court-card-stats"><div class="court-stat"><div class="court-stat-value" id="recallSessions">0</div><div class="court-stat-label">Circuits</div></div><div class="court-stat"><div class="court-stat-value" id="recallBestTier">0</div><div class="court-stat-label">Best Tier</div></div><div class="court-stat"><div class="court-stat-value" id="recallLaughs">0</div><div class="court-stat-label">😂</div></div></div></div></div>
-<div class="court-card"><div class="court-card-header search"><div class="court-card-icon">🔎</div><div class="court-card-title">THE SEARCH</div></div><div class="court-card-body"><div class="court-card-stats"><div class="court-stat"><div class="court-stat-value" id="searchSessions">0</div><div class="court-stat-label">Circuits</div></div><div class="court-stat"><div class="court-stat-value" id="searchBestTier">0</div><div class="court-stat-label">Best Tier</div></div><div class="court-stat"><div class="court-stat-value" id="searchLaughs">0</div><div class="court-stat-label">😂</div></div></div></div></div>
 <div class="court-card"><div class="court-card-header match"><div class="court-card-icon">🎯</div><div class="court-card-title">THE MATCH</div></div><div class="court-card-body"><div class="court-card-stats"><div class="court-stat"><div class="court-stat-value" id="matchSessions">0</div><div class="court-stat-label">Circuits</div></div><div class="court-stat"><div class="court-stat-value" id="matchBestTier">0</div><div class="court-stat-label">Best Tier</div></div><div class="court-stat"><div class="court-stat-value" id="matchLaughs">0</div><div class="court-stat-label">😂</div></div></div></div></div>
 </div>
 <div class="table-card"><div class="table-header"><h3 class="table-title"><span class="lang-en">RECENT ACTIVITY</span><span class="lang-es">ACTIVIDAD RECIENTE</span></h3></div><div class="activity-list" id="overviewActivity"></div></div>
@@ -198,7 +195,7 @@ tr.clickable { cursor: pointer; }
 </div>
 <div class="table-card">
 <div class="table-header"><h3 class="table-title">ALL SUBSCRIBERS</h3><button class="btn btn-secondary" id="refreshSubscribersBtn">🔄</button></div>
-<div class="table-container"><table><thead><tr><th>Email</th><th>PIN</th><th>Qty</th><th>Status</th><th>😂</th><th>🧠</th><th>🔎</th><th>🎯</th><th>🔥</th><th>Actions</th></tr></thead><tbody id="subscribersTable"></tbody></table></div>
+<div class="table-container"><table><thead><tr><th>Email</th><th>PIN</th><th>Qty</th><th>Status</th><th>😂</th><th>🧠</th><th>🎯</th><th>🔥</th><th>Actions</th></tr></thead><tbody id="subscribersTable"></tbody></table></div>
 </div>
 </section>
 <section class="page-section" id="page-trials">
@@ -281,10 +278,10 @@ function loadActivity() { api('/api/admin/activity').then(function(d) { activiti
 function loadTrials() { api('/api/admin/trial-pins').then(function(d) { trials = d.success ? d.trials || [] : []; renderTrials(); updateTrialStats(); }).catch(function() { trials = []; renderTrials(); }); }
 function updateStats() {
 var total = subscribers.length, active = 0, totalUsers = 0, totalLaughs = 0;
-var recallSessions = 0, searchSessions = 0, matchSessions = 0;
-var recallLaughs = 0, searchLaughs = 0, matchLaughs = 0;
+var recallSessions = 0, matchSessions = 0;
+var recallLaughs = 0, matchLaughs = 0;
 var bestStreak = 0, mostLaughs = 0;
-var bestRecallTier = 0, bestSearchTier = 0, bestMatchTier = 0;
+var bestRecallTier = 0, bestMatchTier = 0;
 subscribers.forEach(function(s) {
 var qty = s.quantity || 1;
 if (s.status === 'active') { active++; totalUsers += qty; }
@@ -296,11 +293,6 @@ if (s.courts.therecall) {
 recallSessions += s.courts.therecall.sessions || 0;
 recallLaughs += s.courts.therecall.laughs || 0;
 if ((s.courts.therecall.bestTier || 0) > bestRecallTier) bestRecallTier = s.courts.therecall.bestTier;
-}
-if (s.courts.thesearch) {
-searchSessions += s.courts.thesearch.sessions || 0;
-searchLaughs += s.courts.thesearch.laughs || 0;
-if ((s.courts.thesearch.bestTier || 0) > bestSearchTier) bestSearchTier = s.courts.thesearch.bestTier;
 }
 if (s.courts.thematch) {
 matchSessions += s.courts.thematch.sessions || 0;
@@ -316,12 +308,6 @@ recallSessions += g.sessions || 0;
 recallLaughs += g.laughs || 0;
 if ((g.bestTier || g.bestRound || 0) > bestRecallTier) bestRecallTier = g.bestTier || g.bestRound || 0;
 }
-if (s.games.laughhunt || s.games.thesearch) {
-var g = s.games.thesearch || s.games.laughhunt;
-searchSessions += g.sessions || 0;
-searchLaughs += g.laughs || 0;
-if ((g.bestTier || 0) > bestSearchTier) bestSearchTier = g.bestTier;
-}
 if (s.games.thematch) {
 matchSessions += s.games.thematch.sessions || 0;
 matchLaughs += s.games.thematch.laughs || 0;
@@ -335,9 +321,6 @@ document.getElementById('totalLaughs').textContent = totalLaughs;
 document.getElementById('recallSessions').textContent = recallSessions;
 document.getElementById('recallBestTier').textContent = bestRecallTier;
 document.getElementById('recallLaughs').textContent = recallLaughs;
-document.getElementById('searchSessions').textContent = searchSessions;
-document.getElementById('searchBestTier').textContent = bestSearchTier;
-document.getElementById('searchLaughs').textContent = searchLaughs;
 document.getElementById('matchSessions').textContent = matchSessions;
 document.getElementById('matchBestTier').textContent = bestMatchTier;
 document.getElementById('matchLaughs').textContent = matchLaughs;
@@ -370,13 +353,12 @@ function formatTimeAgo(ts) { if (!ts) return '-'; var diff = Math.floor((new Dat
 function formatDate(ts) { if (!ts) return '-'; return new Date(ts).toLocaleDateString(); }
 function renderSubscribers() {
 var tb = document.getElementById('subscribersTable');
-if (!subscribers.length) { tb.innerHTML = '<tr><td colspan="10" style="text-align:center;padding:40px;color:var(--muted)">No subscribers</td></tr>'; return; }
+if (!subscribers.length) { tb.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:40px;color:var(--muted)">No subscribers</td></tr>'; return; }
 var html = '';
 subscribers.forEach(function(s) {
-var recall = 0, search = 0, match = 0;
+var recall = 0, match = 0;
 if (s.courts) {
 recall = s.courts.therecall ? s.courts.therecall.bestTier || 0 : 0;
-search = s.courts.thesearch ? s.courts.thesearch.bestTier || 0 : 0;
 match = s.courts.thematch ? s.courts.thematch.bestTier || 0 : 0;
 }
 // Fallback for old games structure
@@ -385,17 +367,13 @@ if (!recall && (s.games.therecall || s.games.laughtrail)) {
 var g = s.games.therecall || s.games.laughtrail;
 recall = g.bestTier || g.bestRound || 0;
 }
-if (!search && (s.games.thesearch || s.games.laughhunt)) {
-var g = s.games.thesearch || s.games.laughhunt;
-search = g.bestTier || 0;
-}
 if (!match && s.games.thematch) {
 match = s.games.thematch.bestTier || 0;
 }
 }
 var qty = s.quantity || 1;
 var qtyBadge = qty > 1 ? '<span class="qty-badge">x' + qty + '</span>' : '';
-html += '<tr class="clickable" onclick="viewSub(\'' + s.pin + '\')"><td>' + (s.email || '-') + '</td><td><strong style="color:var(--gold)">' + s.pin + '</strong></td><td>' + qty + qtyBadge + '</td><td><span class="badge badge-' + s.status + '">' + s.status + '</span></td><td>' + (s.totalLaughs || 0) + '</td><td>T' + recall + '</td><td>T' + search + '</td><td>T' + match + '</td><td>🔥' + (s.streak || 0) + '</td><td><div class="action-btns"><button class="action-btn" onclick="event.stopPropagation();editSub(\'' + s.pin + '\')">✏️</button><button class="action-btn delete" onclick="event.stopPropagation();delSub(\'' + s.pin + '\',\'' + s.email + '\')">🗑️</button></div></td></tr>';
+html += '<tr class="clickable" onclick="viewSub(\'' + s.pin + '\')"><td>' + (s.email || '-') + '</td><td><strong style="color:var(--gold)">' + s.pin + '</strong></td><td>' + qty + qtyBadge + '</td><td><span class="badge badge-' + s.status + '">' + s.status + '</span></td><td>' + (s.totalLaughs || 0) + '</td><td>T' + recall + '</td><td>T' + match + '</td><td>🔥' + (s.streak || 0) + '</td><td><div class="action-btns"><button class="action-btn" onclick="event.stopPropagation();editSub(\'' + s.pin + '\')">✏️</button><button class="action-btn delete" onclick="event.stopPropagation();delSub(\'' + s.pin + '\',\'' + s.email + '\')">🗑️</button></div></td></tr>';
 });
 tb.innerHTML = html;
 }
@@ -409,7 +387,6 @@ var icon = '🏀', iconClass = 'recall';
 if (a.type && a.type.includes('subscription')) { icon = '💳'; iconClass = 'subscription'; }
 else if (a.type && a.type.includes('trial')) { icon = '🎫'; iconClass = 'trial'; }
 else if (a.court === 'therecall' || a.game === 'laughtrail' || a.game === 'therecall') { icon = '🧠'; iconClass = 'recall'; }
-else if (a.court === 'thesearch' || a.game === 'laughhunt' || a.game === 'thesearch') { icon = '🔎'; iconClass = 'search'; }
 else if (a.court === 'thematch' || a.game === 'thematch') { icon = '🎯'; iconClass = 'match'; }
 html += '<div class="aggregated-item"><div class="aggregated-icon ' + iconClass + '">' + icon + '</div><div class="aggregated-content"><div class="aggregated-text">' + (a.username || a.email ? '<strong>' + (a.username || a.email) + '</strong> - ' : '') + (a.details || a.type || 'Activity') + (a.laughs ? ' <span style="color:var(--pink)">😂+' + a.laughs + '</span>' : '') + '</div><div class="aggregated-details">' + formatTimeAgo(a.timestamp) + '</div></div></div>';
 });
@@ -424,7 +401,6 @@ var icon = '🏀', iconClass = 'recall';
 if (a.type && a.type.includes('subscription')) { icon = '💳'; iconClass = 'subscription'; }
 else if (a.type && a.type.includes('trial')) { icon = '🎫'; iconClass = 'trial'; }
 else if (a.court === 'therecall' || a.game === 'laughtrail' || a.game === 'therecall') { icon = '🧠'; iconClass = 'recall'; }
-else if (a.court === 'thesearch' || a.game === 'laughhunt' || a.game === 'thesearch') { icon = '🔎'; iconClass = 'search'; }
 else if (a.court === 'thematch' || a.game === 'thematch') { icon = '🎯'; iconClass = 'match'; }
 html += '<div class="aggregated-item"><div class="aggregated-icon ' + iconClass + '">' + icon + '</div><div class="aggregated-content"><div class="aggregated-text">' + (a.username ? '<strong>' + a.username + '</strong> - ' : '') + (a.details || a.type) + '</div><div class="aggregated-details">' + formatTimeAgo(a.timestamp) + '</div></div></div>';
 });
@@ -434,24 +410,21 @@ window.viewSub = function(pin) {
 var s = subscribers.find(function(x) { return x.pin === pin; });
 if (!s) return;
 window.currentSub = s;
-var recall = {}, search = {}, match = {};
+var recall = {}, match = {};
 if (s.courts) {
 recall = s.courts.therecall || {};
-search = s.courts.thesearch || {};
 match = s.courts.thematch || {};
 }
 // Fallback for old games structure
 if (s.games) {
 if (!recall.sessions && (s.games.therecall || s.games.laughtrail)) recall = s.games.therecall || s.games.laughtrail;
-if (!search.sessions && (s.games.thesearch || s.games.laughhunt)) search = s.games.thesearch || s.games.laughhunt;
 if (!match.sessions && s.games.thematch) match = s.games.thematch;
 }
 var qty = s.quantity || 1;
-var totalSessions = (recall.sessions||0) + (search.sessions||0) + (match.sessions||0);
+var totalSessions = (recall.sessions||0) + (match.sessions||0);
 var html = '<div class="subscriber-detail-header"><div class="subscriber-avatar">' + (s.email ? s.email.charAt(0).toUpperCase() : '?') + '</div><div class="subscriber-info" style="flex:1"><h4>' + s.email + '</h4><p>PIN: <strong style="color:var(--gold)">' + s.pin + '</strong>' + (qty > 1 ? ' <span class="qty-badge">x' + qty + ' users</span>' : '') + '</p></div></div>';
 html += '<div class="subscriber-stats-grid"><div class="subscriber-stat"><div class="subscriber-stat-value">👥' + qty + '</div><div class="subscriber-stat-label">Users</div></div><div class="subscriber-stat"><div class="subscriber-stat-value">😂' + (s.totalLaughs || 0) + '</div><div class="subscriber-stat-label">Laughs</div></div><div class="subscriber-stat"><div class="subscriber-stat-value">🔥' + (s.streak || 0) + '</div><div class="subscriber-stat-label">Streak</div></div><div class="subscriber-stat"><div class="subscriber-stat-value">' + totalSessions + '</div><div class="subscriber-stat-label">Circuits</div></div></div>';
 html += '<div class="court-score-row"><div class="court-score-name"><span class="icon">🧠</span> THE RECALL</div><div class="court-score-value">T' + (recall.bestTier || recall.bestRound || 0) + '</div></div>';
-html += '<div class="court-score-row"><div class="court-score-name"><span class="icon">🔎</span> THE SEARCH</div><div class="court-score-value">T' + (search.bestTier || 0) + '</div></div>';
 html += '<div class="court-score-row"><div class="court-score-name"><span class="icon">🎯</span> THE MATCH</div><div class="court-score-value">T' + (match.bestTier || 0) + '</div></div>';
 html += '<p style="text-align:center;margin-top:20px;font-size:0.8rem;color:var(--muted)">$' + (qty * 5) + '/mo subscription</p>';
 document.getElementById('subscriberModalBody').innerHTML = html;
