@@ -59,6 +59,17 @@
             color: var(--muted);
             margin-top: 3px;
         }
+        .powered-by {
+            margin-top: 8px;
+            font-size: 0.7rem;
+            color: var(--muted);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .powered-by .ritnome {
+            color: var(--gold);
+            font-weight: 700;
+        }
 
         .stats-bar {
             display: flex;
@@ -400,6 +411,51 @@
             .cell { border-radius: 10px; }
             .workout-title { font-size: 1.7rem; }
         }
+
+        /* Ritnome™ Branding */
+        .modal-ritnome {
+            font-size: 0.7rem;
+            color: var(--gold);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            opacity: 0.8;
+        }
+        .ritnome-footer {
+            margin-top: 30px;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            width: 100%;
+            max-width: 400px;
+        }
+        .ritnome-badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            margin-bottom: 10px;
+        }
+        .ritnome-logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: 4px;
+            background: linear-gradient(135deg, var(--red), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .ritnome-tagline {
+            font-size: 0.65rem;
+            color: var(--muted);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .ritnome-copyright {
+            font-size: 0.6rem;
+            color: var(--muted);
+            opacity: 0.6;
+        }
     </style>
 </head>
 <body class="en">
@@ -417,6 +473,7 @@
             <span class="lang-en">Rhythm & Timing Training</span>
             <span class="lang-es">Entrenamiento de Ritmo</span>
         </p>
+        <div class="powered-by">Powered by <span class="ritnome">Ritnome™</span></div>
     </header>
 
     <div class="stats-bar">
@@ -510,12 +567,21 @@
                     <div class="modal-stat-label">😂</div>
                 </div>
             </div>
+            <div class="modal-ritnome">Ritnome™ Rhythm Training</div>
             <button class="btn btn-primary" id="continueBtn">
                 <span class="lang-en">CONTINUE</span>
                 <span class="lang-es">CONTINUAR</span>
             </button>
         </div>
     </div>
+
+    <footer class="ritnome-footer">
+        <div class="ritnome-badge">
+            <span class="ritnome-logo">Ritnome™</span>
+            <span class="ritnome-tagline">Rhythm-Based Cognitive Training</span>
+        </div>
+        <div class="ritnome-copyright">© 2025 GoStar Digital LLC. All rights reserved.</div>
+    </footer>
 
     <script>
     (function() {
