@@ -100,22 +100,38 @@ body.en .lang-es { display: none !important; }
 .lang-btn.active { background: var(--green); color: var(--dark); }
 
 /* Speed Selection */
+.speed-section {
+    text-align: center;
+    margin-bottom: 15px;
+}
+.speed-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-bottom: 10px;
+}
 .speed-select {
     display: flex;
     gap: 10px;
-    margin-bottom: 15px;
+    justify-content: center;
 }
 .speed-btn {
-    padding: 10px 20px;
+    padding: 12px 18px;
     border: 2px solid var(--border);
     background: var(--card);
     color: var(--muted);
-    border-radius: 25px;
+    border-radius: 12px;
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1rem;
+    font-size: 0.85rem;
     letter-spacing: 1px;
     cursor: pointer;
     transition: all 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    min-width: 80px;
 }
 .speed-btn.active {
     border-color: var(--green);
@@ -466,10 +482,28 @@ body.en .lang-es { display: none !important; }
 </div>
 
 <!-- Speed Selection -->
-<div class="speed-select">
-    <button class="speed-btn" data-speed="slow">🐢</button>
-    <button class="speed-btn active" data-speed="medium">🏃</button>
-    <button class="speed-btn" data-speed="fast">⚡</button>
+<div class="speed-section">
+    <div class="speed-label">
+        <span class="lang-en">SELECT SPEED</span>
+        <span class="lang-es">SELECCIONA VELOCIDAD</span>
+    </div>
+    <div class="speed-select">
+        <button class="speed-btn" data-speed="slow">
+            🐢
+            <span class="lang-en">SLOW</span>
+            <span class="lang-es">LENTO</span>
+        </button>
+        <button class="speed-btn active" data-speed="medium">
+            🏃
+            <span class="lang-en">MEDIUM</span>
+            <span class="lang-es">MEDIO</span>
+        </button>
+        <button class="speed-btn" data-speed="fast">
+            ⚡
+            <span class="lang-en">FAST</span>
+            <span class="lang-es">RÁPIDO</span>
+        </button>
+    </div>
 </div>
 
 <!-- Stats Bar -->
