@@ -1,960 +1,1006 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>THE RITMO | LaughCourt™</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --red: #FF1744;
-            --gold: #FFD700;
-            --orange: #FF6D00;
-            --teal: #00D9A5;
-            --dark: #0a0a0f;
-            --darker: #050508;
-            --card: #111118;
-            --text: #FFFFFF;
-            --muted: #8892a0;
-            --border: rgba(255,255,255,0.08);
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Outfit', sans-serif;
-            background: var(--dark);
-            color: var(--text);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 15px;
-            overflow-x: hidden;
-        }
-        body.es .lang-en { display: none !important; }
-        body.en .lang-es { display: none !important; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>THE RITMO | LaughCourt™</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+    --red: #FF1744;
+    --red-dark: #D50000;
+    --orange: #FF6D00;
+    --gold: #FFD700;
+    --teal: #00D9A5;
+    --dark: #0a0a0f;
+    --darker: #050508;
+    --card: #111118;
+    --text: #FFFFFF;
+    --muted: #8892a0;
+    --border: rgba(255,255,255,0.08);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+    height: 100%;
+    overflow: hidden;
+}
+body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--dark);
+    color: var(--text);
+    height: 100vh;
+    height: 100dvh;
+}
+body.en .lang-es { display: none !important; }
+body.es .lang-en { display: none !important; }
 
-        .header {
-            text-align: center;
-            margin-bottom: 15px;
-            width: 100%;
-        }
-        .logo {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.4rem;
-            letter-spacing: 3px;
-        }
-        .logo .laugh { color: var(--gold); }
-        .workout-title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 2rem;
-            letter-spacing: 4px;
-            background: linear-gradient(135deg, var(--red), var(--gold));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .workout-subtitle {
-            font-size: 0.75rem;
-            color: var(--muted);
-            margin-top: 3px;
-        }
-        .powered-by {
-            margin-top: 8px;
-            font-size: 0.7rem;
-            color: var(--muted);
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-        .powered-by .ritnome {
-            color: var(--gold);
-            font-weight: 700;
-        }
+/* Main Container - NO SCROLL */
+.game-container {
+    max-width: 420px;
+    margin: 0 auto;
+    padding: 8px 12px;
+    height: 100vh;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
 
-        .stats-bar {
-            display: flex;
-            justify-content: center;
-            gap: 25px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-        }
-        .stat {
-            text-align: center;
-        }
-        .stat-value {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.5rem;
-            color: var(--gold);
-        }
-        .stat-label {
-            font-size: 0.65rem;
-            color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+/* Language Toggle */
+.lang-toggle {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    display: flex;
+    gap: 4px;
+    z-index: 10;
+}
+.lang-btn {
+    padding: 4px 8px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--muted);
+    border-radius: 4px;
+    font-size: 0.6rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.lang-btn.active {
+    background: var(--red);
+    color: var(--text);
+    border-color: var(--red);
+}
 
-        .speed-selector {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .speed-btn {
-            padding: 10px 20px;
-            border: 2px solid var(--border);
-            background: var(--card);
-            color: var(--muted);
-            border-radius: 12px;
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1rem;
-            letter-spacing: 2px;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2px;
-        }
-        .speed-btn span.label {
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.6rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .speed-btn:hover {
-            border-color: var(--red);
-            color: var(--text);
-        }
-        .speed-btn.active {
-            border-color: var(--red);
-            background: linear-gradient(135deg, var(--red), var(--orange));
-            color: var(--dark);
-        }
+/* Back Button */
+.back-btn {
+    position: absolute;
+    top: 8px;
+    left: 12px;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.7rem;
+    z-index: 10;
+}
+.back-btn:hover { color: var(--text); }
 
-        .game-container {
-            position: relative;
-            width: 100%;
-            max-width: 400px;
-        }
+/* Header - Compact */
+.header {
+    text-align: center;
+    padding: 6px 0;
+    flex-shrink: 0;
+}
+.logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 2px;
+}
+.logo .laugh { color: var(--gold); }
+.court-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 3px;
+    background: linear-gradient(135deg, var(--red), var(--gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+.powered-by {
+    font-size: 0.55rem;
+    color: var(--muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 2px;
+}
+.powered-by .ritnome { color: var(--gold); font-weight: 700; }
 
-        .court {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 8px;
-            padding: 20px;
-            background: linear-gradient(145deg, #0d0d12, #080810);
-            border-radius: 20px;
-            border: 2px solid rgba(255,23,68,0.2);
-            margin-bottom: 15px;
-            box-shadow: inset 0 0 30px rgba(0,0,0,0.5);
-        }
-        .cell {
-            aspect-ratio: 1;
-            background: linear-gradient(145deg, #1e1e2a, #151520);
-            border-radius: 12px;
-            border: 2px solid rgba(255,215,0,0.25);
-            cursor: pointer;
-            transition: all 0.15s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
-        }
-        .cell:hover {
-            border-color: rgba(255,215,0,0.5);
-            background: linear-gradient(145deg, #252532, #1a1a24);
-        }
-        .cell:active {
-            transform: scale(0.95);
-        }
-        .cell.beat {
-            background: linear-gradient(135deg, var(--red), var(--orange));
-            border-color: var(--gold);
-            box-shadow: 0 0 30px rgba(255,23,68,0.6), 0 0 60px rgba(255,215,0,0.3);
-            animation: pulse-beat 0.2s ease-out;
-        }
-        .cell.tap-correct {
-            background: linear-gradient(135deg, var(--teal), #00E676);
-            border-color: var(--teal);
-            box-shadow: 0 0 25px rgba(0,217,165,0.5);
-        }
-        .cell.tap-wrong {
-            background: linear-gradient(135deg, #FF1744, #D50000);
-            border-color: #FF1744;
-            box-shadow: 0 0 25px rgba(255,23,68,0.5);
-        }
+/* Stats Bar - Compact */
+.stats-bar {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    padding: 6px 10px;
+    background: var(--card);
+    border-radius: 8px;
+    margin: 4px 0;
+    flex-shrink: 0;
+}
+.stat { text-align: center; }
+.stat-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    color: var(--gold);
+}
+.stat-value.red { color: var(--red); }
+.stat-label {
+    font-size: 0.5rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
 
-        @keyframes pulse-beat {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
+/* Message Display */
+.message-display {
+    background: linear-gradient(135deg, var(--card), var(--darker));
+    border: 2px solid var(--red);
+    border-radius: 10px;
+    padding: 8px 12px;
+    margin: 4px 0;
+    min-height: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+}
+.message-display::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, rgba(255,23,68,0.1), transparent);
+    pointer-events: none;
+}
+.message-text {
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-align: center;
+}
+.message-text.coach { color: var(--gold); }
+.message-text.success { color: var(--teal); }
+.message-text.fail { color: var(--red); }
 
-        .bpm-display {
-            text-align: center;
-            margin-bottom: 15px;
-            padding: 10px 20px;
-            background: var(--card);
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            display: inline-block;
-        }
-        .bpm-value {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 2rem;
-            color: var(--red);
-        }
-        .bpm-label {
-            font-size: 0.7rem;
-            color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
+/* Rhythm Visual - Inline */
+.rhythm-visual {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    min-height: 30px;
+    margin-top: 4px;
+}
+.rhythm-note {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--card);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--muted);
+    transition: all 0.2s;
+}
+.rhythm-note.active {
+    background: linear-gradient(135deg, var(--red), var(--gold));
+    border-color: var(--gold);
+    color: var(--dark);
+    transform: scale(1.2);
+    box-shadow: 0 0 15px rgba(255,23,68,0.5);
+}
+.rhythm-note.done {
+    background: var(--teal);
+    border-color: var(--teal);
+    color: var(--dark);
+}
+.rhythm-note.missed {
+    background: var(--red);
+    border-color: var(--red);
+    color: var(--text);
+}
 
-        .message {
-            text-align: center;
-            min-height: 50px;
-            margin-bottom: 10px;
-        }
-        .message-text {
-            font-size: 1rem;
-            color: var(--text);
-            line-height: 1.4;
-        }
-        .message-text.coach {
-            color: var(--gold);
-        }
+/* Ritnome™ Tempo Selector - Inline */
+.tempo-section {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 4px 0;
+    flex-shrink: 0;
+}
+.tempo-label {
+    font-size: 0.55rem;
+    color: var(--muted);
+    white-space: nowrap;
+}
+.tempo-label .ritnome { color: var(--gold); font-weight: 700; }
+.tempo-buttons {
+    display: flex;
+    gap: 4px;
+    flex: 1;
+}
+.tempo-btn {
+    flex: 1;
+    padding: 6px 4px;
+    border: 1px solid var(--card);
+    background: var(--card);
+    border-radius: 6px;
+    color: var(--muted);
+    font-size: 0.6rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+}
+.tempo-btn .icon { font-size: 0.8rem; }
+.tempo-btn .bpm { font-family: 'Bebas Neue', sans-serif; font-size: 0.9rem; }
+.tempo-btn.active {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: rgba(255,215,0,0.1);
+}
 
-        .controls {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        .btn {
-            padding: 15px 35px;
-            border: none;
-            border-radius: 14px;
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.1rem;
-            letter-spacing: 2px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, var(--red), var(--orange));
-            color: var(--text);
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 25px rgba(255,23,68,0.4);
-        }
+/* Court Grid - VISIBLE CELLS */
+.court-grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 4px;
+    padding: 8px;
+    background: linear-gradient(145deg, var(--card), var(--darker));
+    border-radius: 12px;
+    border: 2px solid rgba(255,23,68,0.3);
+    min-height: 0;
+    aspect-ratio: 1;
+    margin: 4px 0;
+}
+.grid-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+    position: relative;
+    background: linear-gradient(145deg, #1e1e2a, #151520);
+    border: 1px solid rgba(255,215,0,0.2);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05);
+}
+.grid-cell:hover {
+    border-color: rgba(255,215,0,0.4);
+    background: linear-gradient(145deg, #252532, #1a1a24);
+}
+.grid-cell:active { transform: scale(0.95); }
+.grid-cell.beat {
+    background: linear-gradient(135deg, var(--red), var(--orange));
+    border-color: var(--gold);
+    box-shadow: 0 0 25px rgba(255,23,68,0.6), 0 0 50px rgba(255,215,0,0.3);
+    animation: pulseBeat 0.2s ease-out;
+}
+.grid-cell.tap-correct {
+    background: linear-gradient(135deg, var(--teal), #00E676);
+    border-color: var(--teal);
+    box-shadow: 0 0 20px rgba(0,217,165,0.5);
+}
+.grid-cell.tap-wrong {
+    background: linear-gradient(135deg, var(--red), var(--red-dark));
+    border-color: var(--red);
+    box-shadow: 0 0 20px rgba(255,23,68,0.5);
+}
+@keyframes pulseBeat {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
 
-        .progress-section {
-            width: 100%;
-            max-width: 400px;
-            margin-bottom: 15px;
-        }
-        .progress-bar {
-            height: 8px;
-            background: var(--card);
-            border-radius: 4px;
-            overflow: hidden;
-        }
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--red), var(--gold));
-            border-radius: 4px;
-            transition: width 0.3s;
-        }
-        .progress-text {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.7rem;
-            color: var(--muted);
-            margin-top: 5px;
-        }
+/* Progress Bar */
+.progress-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 4px 0;
+    flex-shrink: 0;
+}
+.tier-badge {
+    background: linear-gradient(135deg, var(--red), var(--orange));
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    color: var(--text);
+}
+.progress-bar {
+    flex: 1;
+    height: 8px;
+    background: var(--card);
+    border-radius: 4px;
+    overflow: hidden;
+}
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--red), var(--gold));
+    border-radius: 4px;
+    transition: width 0.3s ease-out;
+}
 
-        .lang-toggle {
-            position: fixed;
-            top: 15px;
-            right: 15px;
-            display: flex;
-            gap: 5px;
-            background: var(--card);
-            padding: 4px;
-            border-radius: 10px;
-            border: 1px solid var(--border);
-            z-index: 100;
-        }
-        .lang-btn {
-            padding: 6px 10px;
-            border: none;
-            background: transparent;
-            color: var(--muted);
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 0.75rem;
-            cursor: pointer;
-        }
-        .lang-btn.active {
-            background: var(--gold);
-            color: var(--dark);
-        }
+/* Action Button */
+.action-btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s;
+    background: linear-gradient(135deg, var(--red), var(--orange));
+    color: var(--text);
+    flex-shrink: 0;
+}
+.action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 25px rgba(255,23,68,0.5);
+}
+.action-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
 
-        .back-link {
-            position: fixed;
-            top: 15px;
-            left: 15px;
-            color: var(--muted);
-            text-decoration: none;
-            font-size: 1.5rem;
-            z-index: 100;
-        }
+/* Feedback Overlay */
+.feedback-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.9);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+.feedback-overlay.show { display: flex; }
+.feedback-card {
+    background: var(--card);
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+    max-width: 320px;
+    width: 90%;
+    animation: slideUp 0.3s ease-out;
+    border: 2px solid var(--gold);
+}
+@keyframes slideUp {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+.feedback-emoji { font-size: 3rem; margin-bottom: 10px; }
+.feedback-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+    color: var(--gold);
+}
+.feedback-message {
+    color: var(--muted);
+    margin-bottom: 15px;
+    font-size: 0.85rem;
+}
+.feedback-ritnome {
+    font-size: 0.6rem;
+    color: var(--muted);
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+}
+.feedback-ritnome .ritnome { color: var(--gold); }
+.feedback-stats {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    margin-bottom: 20px;
+}
+.feedback-stat-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    color: var(--gold);
+}
+.feedback-stat-label {
+    font-size: 0.6rem;
+    color: var(--muted);
+    text-transform: uppercase;
+}
+.feedback-btn {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    margin: 4px;
+}
+.feedback-btn.primary {
+    background: linear-gradient(135deg, var(--red), var(--orange));
+    color: var(--text);
+}
+.feedback-btn.secondary {
+    background: var(--darker);
+    color: var(--muted);
+    border: 1px solid var(--muted);
+}
 
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.9);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            padding: 20px;
-        }
-        .modal-overlay.show {
-            display: flex;
-        }
-        .modal {
-            background: var(--card);
-            border: 2px solid var(--gold);
-            border-radius: 24px;
-            padding: 30px;
-            text-align: center;
-            max-width: 340px;
-            width: 100%;
-        }
-        .modal-icon {
-            font-size: 4rem;
-            margin-bottom: 15px;
-        }
-        .modal-title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.8rem;
-            letter-spacing: 3px;
-            margin-bottom: 10px;
-            color: var(--gold);
-        }
-        .modal-text {
-            color: var(--muted);
-            margin-bottom: 20px;
-            line-height: 1.5;
-        }
-        .modal-stats {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-        .modal-stat {
-            text-align: center;
-        }
-        .modal-stat-value {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 2rem;
-            color: var(--gold);
-        }
-        .modal-stat-label {
-            font-size: 0.7rem;
-            color: var(--muted);
-            text-transform: uppercase;
-        }
+/* Coach Message Toast */
+.coach-message {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: linear-gradient(135deg, var(--red), var(--gold));
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: var(--dark);
+    opacity: 0;
+    transition: all 0.4s ease-out;
+    z-index: 50;
+    white-space: nowrap;
+}
+.coach-message.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
 
-        .rhythm-visual {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 15px;
-            min-height: 40px;
-        }
-        .rhythm-note {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background: var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
-            transition: all 0.2s;
-        }
-        .rhythm-note.active {
-            background: linear-gradient(135deg, var(--red), var(--gold));
-            transform: scale(1.2);
-            box-shadow: 0 0 20px rgba(255,23,68,0.5);
-        }
-        .rhythm-note.done {
-            background: var(--teal);
-        }
-        .rhythm-note.missed {
-            background: #FF1744;
-        }
-
-        @media (max-width: 400px) {
-            .court { padding: 15px; gap: 6px; }
-            .cell { border-radius: 10px; }
-            .workout-title { font-size: 1.7rem; }
-        }
-
-        /* Ritnome™ Branding */
-        .modal-ritnome {
-            font-size: 0.7rem;
-            color: var(--gold);
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 15px;
-            opacity: 0.8;
-        }
-        .ritnome-footer {
-            margin-top: 30px;
-            padding: 20px;
-            text-align: center;
-            border-top: 1px solid var(--border);
-            width: 100%;
-            max-width: 400px;
-        }
-        .ritnome-badge {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            margin-bottom: 10px;
-        }
-        .ritnome-logo {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.5rem;
-            letter-spacing: 4px;
-            background: linear-gradient(135deg, var(--red), var(--gold));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .ritnome-tagline {
-            font-size: 0.65rem;
-            color: var(--muted);
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-        .ritnome-copyright {
-            font-size: 0.6rem;
-            color: var(--muted);
-            opacity: 0.6;
-        }
-    </style>
+/* Desktop */
+@media (min-width: 700px) {
+    .game-container {
+        max-width: 480px;
+        padding: 15px 20px;
+    }
+    .header { padding: 10px 0; }
+    .logo { font-size: 1.2rem; }
+    .court-name { font-size: 1.8rem; }
+    .stats-bar { padding: 10px 15px; gap: 25px; }
+    .stat-value { font-size: 1.4rem; }
+    .court-grid { gap: 6px; padding: 12px; }
+    .grid-cell { border-radius: 8px; }
+    .action-btn { padding: 16px; font-size: 1.3rem; }
+    .rhythm-note { width: 30px; height: 30px; font-size: 0.75rem; }
+}
+</style>
 </head>
 <body class="en">
-    <a href="laugh-hub.html" class="back-link">←</a>
-    
-    <div class="lang-toggle">
-        <button class="lang-btn active" id="btnEn">EN</button>
-        <button class="lang-btn" id="btnEs">ES</button>
-    </div>
 
+<!-- Language Toggle -->
+<div class="lang-toggle">
+    <button class="lang-btn active" id="btnEn">EN</button>
+    <button class="lang-btn" id="btnEs">ES</button>
+</div>
+
+<!-- Back Button -->
+<a href="laugh-hub.html" class="back-btn">← <span class="lang-en">Back</span><span class="lang-es">Volver</span></a>
+
+<div class="game-container">
+    <!-- Header -->
     <header class="header">
-        <div class="logo"><span class="laugh">LAUGH</span>COURT</div>
-        <h1 class="workout-title">🎵 THE RITMO</h1>
-        <p class="workout-subtitle">
-            <span class="lang-en">Rhythm & Timing Training</span>
-            <span class="lang-es">Entrenamiento de Ritmo</span>
-        </p>
+        <div class="logo"><span class="laugh">LAUGH</span>COURT<sup style="font-size:0.5em">™</sup></div>
+        <div class="court-name">🎵 THE RITMO</div>
         <div class="powered-by">Powered by <span class="ritnome">Ritnome™</span></div>
     </header>
 
+    <!-- Stats Bar -->
     <div class="stats-bar">
         <div class="stat">
-            <div class="stat-value" id="tierDisplay">1</div>
-            <div class="stat-label">TIER</div>
+            <div class="stat-value red" id="currentTier">1</div>
+            <div class="stat-label"><span class="lang-en">Tier</span><span class="lang-es">Nivel</span></div>
         </div>
         <div class="stat">
             <div class="stat-value" id="circuitDisplay">0/3</div>
-            <div class="stat-label">
-                <span class="lang-en">CIRCUITS</span>
-                <span class="lang-es">CIRCUITOS</span>
-            </div>
+            <div class="stat-label"><span class="lang-en">Circuit</span><span class="lang-es">Circuito</span></div>
         </div>
         <div class="stat">
-            <div class="stat-value" id="laughsDisplay">0</div>
+            <div class="stat-value" id="totalLaughs">0</div>
             <div class="stat-label">😂</div>
         </div>
         <div class="stat">
-            <div class="stat-value" id="streakDisplay">0</div>
+            <div class="stat-value" id="streak">0</div>
             <div class="stat-label">🔥</div>
         </div>
     </div>
 
-    <div class="speed-selector" id="speedSelector">
-        <button class="speed-btn active" data-speed="slow" data-bpm="60">
-            🐢
-            <span class="label">SLOW</span>
-        </button>
-        <button class="speed-btn" data-speed="medium" data-bpm="90">
-            🏃
-            <span class="label">MEDIUM</span>
-        </button>
-        <button class="speed-btn" data-speed="fast" data-bpm="120">
-            ⚡
-            <span class="label">FAST</span>
-        </button>
+    <!-- Message Display with Rhythm Visual -->
+    <div class="message-display" id="messageDisplay">
+        <span class="message-text" id="messageText">
+            <span class="lang-en">🎵 Listen to the rhythm, then tap it back!</span>
+            <span class="lang-es">🎵 ¡Escucha el ritmo, luego repítelo!</span>
+        </span>
+        <div class="rhythm-visual" id="rhythmVisual"></div>
     </div>
 
-    <div class="bpm-display">
-        <div class="bpm-value" id="bpmDisplay">60</div>
-        <div class="bpm-label">BPM</div>
-    </div>
-
-    <div class="rhythm-visual" id="rhythmVisual"></div>
-
-    <div class="progress-section">
-        <div class="progress-bar">
-            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
-        </div>
-        <div class="progress-text">
-            <span>TIER <span id="progressTier">1</span></span>
-            <span><span id="progressPercent">0</span>%</span>
-        </div>
-    </div>
-
-    <div class="game-container">
-        <div class="court" id="court"></div>
-    </div>
-
-    <div class="message">
-        <p class="message-text" id="messageText">
-            <span class="lang-en">Listen to the rhythm, then tap it back!</span>
-            <span class="lang-es">¡Escucha el ritmo, luego repítelo!</span>
-        </p>
-    </div>
-
-    <div class="controls">
-        <button class="btn btn-primary" id="startBtn">
-            <span class="lang-en">▶ START RITMO</span>
-            <span class="lang-es">▶ INICIAR RITMO</span>
-        </button>
-    </div>
-
-    <!-- Level Up Modal -->
-    <div class="modal-overlay" id="levelUpModal">
-        <div class="modal">
-            <div class="modal-icon">🎵</div>
-            <h2 class="modal-title">
-                <span class="lang-en">TIER UP!</span>
-                <span class="lang-es">¡SUBISTE DE NIVEL!</span>
-            </h2>
-            <p class="modal-text" id="levelUpText"></p>
-            <div class="modal-stats">
-                <div class="modal-stat">
-                    <div class="modal-stat-value" id="modalTier">2</div>
-                    <div class="modal-stat-label">NEW TIER</div>
-                </div>
-                <div class="modal-stat">
-                    <div class="modal-stat-value" id="modalLaughs">0</div>
-                    <div class="modal-stat-label">😂</div>
-                </div>
-            </div>
-            <div class="modal-ritnome">Ritnome™ Rhythm Training</div>
-            <button class="btn btn-primary" id="continueBtn">
-                <span class="lang-en">CONTINUE</span>
-                <span class="lang-es">CONTINUAR</span>
+    <!-- Ritnome™ Tempo Selector -->
+    <div class="tempo-section" id="tempoSection">
+        <div class="tempo-label">🎵 <span class="ritnome">Ritnome™</span></div>
+        <div class="tempo-buttons">
+            <button class="tempo-btn active" data-bpm="60">
+                <span class="icon">🐢</span>
+                <span class="bpm">60</span>
+                <span>BPM</span>
+            </button>
+            <button class="tempo-btn" data-bpm="90">
+                <span class="icon">🏃</span>
+                <span class="bpm">90</span>
+                <span>BPM</span>
+            </button>
+            <button class="tempo-btn" data-bpm="120">
+                <span class="icon">⚡</span>
+                <span class="bpm">120</span>
+                <span>BPM</span>
             </button>
         </div>
     </div>
 
-    <footer class="ritnome-footer">
-        <div class="ritnome-badge">
-            <span class="ritnome-logo">Ritnome™</span>
-            <span class="ritnome-tagline">Rhythm-Based Cognitive Training</span>
+    <!-- Court Grid -->
+    <div class="court-grid" id="courtGrid"></div>
+
+    <!-- Progress Bar -->
+    <div class="progress-section">
+        <div class="tier-badge">
+            <span class="lang-en">TIER</span><span class="lang-es">NIVEL</span> 
+            <span id="tierDisplay">1</span>
         </div>
-        <div class="ritnome-copyright">© 2025 GoStar Digital LLC. All rights reserved.</div>
-    </footer>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+        </div>
+    </div>
 
-    <script>
-    (function() {
-        // ===== AUDIO ENGINE =====
-        var audioCtx = null;
-        function initAudio() {
-            if (!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    <!-- Action Button -->
+    <button class="action-btn" id="actionBtn">
+        <span class="lang-en">START RITMO 🎵</span>
+        <span class="lang-es">INICIAR RITMO 🎵</span>
+    </button>
+</div>
+
+<!-- Feedback Overlay -->
+<div class="feedback-overlay" id="feedbackOverlay">
+    <div class="feedback-card">
+        <div class="feedback-emoji" id="feedbackEmoji">🎵</div>
+        <h2 class="feedback-title" id="feedbackTitle">TIER UP!</h2>
+        <p class="feedback-message" id="feedbackMessage">Amazing rhythm!</p>
+        <div class="feedback-ritnome"><span class="ritnome">Ritnome™</span> Rhythm Training</div>
+        <div class="feedback-stats">
+            <div class="feedback-stat">
+                <div class="feedback-stat-value" id="feedbackTier">2</div>
+                <div class="feedback-stat-label"><span class="lang-en">New Tier</span><span class="lang-es">Nuevo Nivel</span></div>
+            </div>
+            <div class="feedback-stat">
+                <div class="feedback-stat-value" id="feedbackLaughs">0</div>
+                <div class="feedback-stat-label">😂</div>
+            </div>
+        </div>
+        <button class="feedback-btn primary" id="continueBtn">
+            <span class="lang-en">CONTINUE 🎵</span>
+            <span class="lang-es">CONTINUAR 🎵</span>
+        </button>
+        <button class="feedback-btn secondary" id="restartBtn">
+            <span class="lang-en">RESTART</span>
+            <span class="lang-es">REINICIAR</span>
+        </button>
+    </div>
+</div>
+
+<!-- Coach Message Toast -->
+<div class="coach-message" id="coachMessage"></div>
+
+<script>
+(function() {
+    // Translations
+    const translations = {
+        en: {
+            startRitmo: 'START RITMO 🎵',
+            nextRound: 'NEXT ROUND 🎵',
+            listen: '🎵 Listen to the rhythm...',
+            yourTurn: 'Your turn! Tap the rhythm!',
+            tierUp: 'TIER UP!',
+            perfectRhythm: 'Perfect rhythm! 😂',
+            gotRhythm: 'You got rhythm! 🔥',
+            smoothMoves: 'Smooth moves!',
+            onPoint: 'On point! 🎵',
+            almost: 'Almost had it!',
+            tryAgain: 'Try again, feel the beat',
+            listenCloser: 'Listen closer...',
+            youllGetIt: "You'll get it!",
+            ready: 'Ready for the next beat?',
+            amazing: 'Amazing rhythm!'
+        },
+        es: {
+            startRitmo: 'INICIAR RITMO 🎵',
+            nextRound: 'SIGUIENTE 🎵',
+            listen: '🎵 Escucha el ritmo...',
+            yourTurn: '¡Tu turno! ¡Repite el ritmo!',
+            tierUp: '¡SUBISTE DE NIVEL!',
+            perfectRhythm: '¡Ritmo perfecto! 😂',
+            gotRhythm: '¡Tienes sabor! 🔥',
+            smoothMoves: '¡Qué flow!',
+            onPoint: '¡En punto! 🎵',
+            almost: '¡Casi!',
+            tryAgain: 'Intenta de nuevo',
+            listenCloser: 'Escucha mejor...',
+            youllGetIt: '¡Tú puedes!',
+            ready: '¿Listo para el siguiente ritmo?',
+            amazing: '¡Ritmo increíble!'
+        }
+    };
+
+    let currentLang = 'en';
+    const t = (key) => translations[currentLang][key] || key;
+
+    function setLang(lang) {
+        currentLang = lang;
+        document.body.className = lang;
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.id === 'btn' + lang.charAt(0).toUpperCase() + lang.slice(1));
+        });
+    }
+
+    // Audio Engine
+    let audioCtx = null;
+    function initAudio() {
+        if (!audioCtx) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+        }
+    }
+
+    function playBeat(freq, duration) {
+        if (!audioCtx) return;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.frequency.value = freq || 440;
+        osc.type = 'sine';
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + (duration || 0.15));
+        osc.start(audioCtx.currentTime);
+        osc.stop(audioCtx.currentTime + (duration || 0.15));
+    }
+
+    function playSuccess() {
+        if (!audioCtx) return;
+        playBeat(523, 0.1);
+        setTimeout(() => playBeat(659, 0.1), 100);
+        setTimeout(() => playBeat(784, 0.15), 200);
+    }
+
+    function playFail() {
+        if (!audioCtx) return;
+        playBeat(200, 0.3);
+    }
+
+    // Game State
+    const state = {
+        tier: 1,
+        circuit: 0,
+        totalLaughs: 0,
+        streak: 0,
+        bpm: 60,
+        gamePhase: 'idle', // idle, playing, listening
+        rhythmPattern: [],
+        playerPattern: [],
+        currentBeatIndex: 0,
+        beatTimeout: null,
+        listenTimeout: null
+    };
+
+    // DOM Elements
+    const courtGrid = document.getElementById('courtGrid');
+    const messageDisplay = document.getElementById('messageDisplay');
+    const messageText = document.getElementById('messageText');
+    const rhythmVisual = document.getElementById('rhythmVisual');
+    const actionBtn = document.getElementById('actionBtn');
+    const feedbackOverlay = document.getElementById('feedbackOverlay');
+    const coachMessage = document.getElementById('coachMessage');
+    let cells = [];
+
+    // Initialize grid
+    function initGrid() {
+        courtGrid.innerHTML = '';
+        cells = [];
+        for (let i = 0; i < 25; i++) {
+            const cell = document.createElement('div');
+            cell.className = 'grid-cell';
+            cell.dataset.index = i;
+            cell.addEventListener('click', () => handleCellTap(i));
+            courtGrid.appendChild(cell);
+            cells.push(cell);
+        }
+    }
+
+    // Generate rhythm pattern
+    function generatePattern() {
+        const length = Math.min(3 + Math.floor(state.tier / 2), 8); // 3-8 beats
+        const pattern = [];
+        const usedCells = [];
+
+        for (let i = 0; i < length; i++) {
+            let cellIndex;
+            do {
+                cellIndex = Math.floor(Math.random() * 25);
+            } while (usedCells.includes(cellIndex) && usedCells.length < 25);
+            usedCells.push(cellIndex);
+            pattern.push({ cell: cellIndex, time: i });
+        }
+        return pattern;
+    }
+
+    // Update rhythm visual
+    function updateRhythmVisual() {
+        rhythmVisual.innerHTML = '';
+        for (let i = 0; i < state.rhythmPattern.length; i++) {
+            const note = document.createElement('div');
+            note.className = 'rhythm-note';
+            note.textContent = i + 1;
+            note.id = 'note-' + i;
+            rhythmVisual.appendChild(note);
+        }
+    }
+
+    // Play rhythm
+    function playRhythm() {
+        state.gamePhase = 'playing';
+        state.currentBeatIndex = 0;
+        const interval = 60000 / state.bpm;
+
+        messageText.innerHTML = t('listen');
+        messageText.className = 'message-text coach';
+
+        function playNextBeat() {
+            if (state.currentBeatIndex >= state.rhythmPattern.length) {
+                setTimeout(() => startListening(), interval);
+                return;
             }
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
-        }
 
-        function playBeat(freq, duration) {
-            if (!audioCtx) return;
-            var osc = audioCtx.createOscillator();
-            var gain = audioCtx.createGain();
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.frequency.value = freq || 440;
-            osc.type = 'sine';
-            gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + (duration || 0.15));
-            osc.start(audioCtx.currentTime);
-            osc.stop(audioCtx.currentTime + (duration || 0.15));
-        }
+            const beat = state.rhythmPattern[state.currentBeatIndex];
 
-        function playSuccess() {
-            if (!audioCtx) return;
-            playBeat(523, 0.1);
-            setTimeout(function() { playBeat(659, 0.1); }, 100);
-            setTimeout(function() { playBeat(784, 0.15); }, 200);
-        }
+            // Visual
+            cells[beat.cell].classList.add('beat');
+            const noteEl = document.getElementById('note-' + state.currentBeatIndex);
+            if (noteEl) noteEl.classList.add('active');
 
-        function playFail() {
-            if (!audioCtx) return;
-            playBeat(200, 0.3);
-        }
+            // Audio
+            const freq = 300 + (beat.cell % 5) * 100;
+            playBeat(freq, 0.15);
 
-        // ===== GAME STATE =====
-        var tier = 1;
-        var circuit = 0;
-        var laughs = 0;
-        var streak = 0;
-        var bestTier = 0;
-        var bpm = 60;
-        var speed = 'slow';
-        var currentLang = localStorage.getItem('lc-lang') || 'en';
-
-        var gamePhase = 'idle'; // idle, playing, listening
-        var rhythmPattern = [];
-        var playerPattern = [];
-        var currentBeatIndex = 0;
-        var beatTimeout = null;
-        var listenTimeout = null;
-
-        var gridSize = 25; // 5x5
-        var court = document.getElementById('court');
-        var cells = [];
-
-        // ===== COACH MESSAGES =====
-        var coachMessages = {
-            en: {
-                start: ["Feel the rhythm!", "Let's groove!", "Listen carefully...", "Ready to vibe?"],
-                success: ["Perfect beat! 😂", "You got rhythm! 🔥", "Smooth moves!", "On point! 🎵", "¡Así se baila!"],
-                fail: ["Almost had it!", "Try again, feel the beat", "Listen closer...", "You'll get it!"],
-                tierUp: ["Tier {tier}! The beat drops harder!", "Level {tier}! Feel that rhythm!", "Tier {tier}! You're on fire! 🔥"]
-            },
-            es: {
-                start: ["¡Siente el ritmo!", "¡A bailar!", "Escucha bien...", "¿Listo para el flow?"],
-                success: ["¡Ritmo perfecto! 😂", "¡Tienes sabor! 🔥", "¡Qué flow!", "¡En punto! 🎵", "¡Así se baila!"],
-                fail: ["¡Casi!", "Intenta de nuevo", "Escucha mejor...", "¡Tú puedes!"],
-                tierUp: ["¡Nivel {tier}! ¡Más ritmo!", "¡Nivel {tier}! ¡Qué sabor!", "¡Nivel {tier}! ¡Fuego! 🔥"]
-            }
-        };
-
-        function getCoachMessage(type) {
-            var msgs = coachMessages[currentLang][type];
-            var msg = msgs[Math.floor(Math.random() * msgs.length)];
-            return msg.replace('{tier}', tier);
-        }
-
-        // ===== INITIALIZE GRID =====
-        function initGrid() {
-            court.innerHTML = '';
-            cells = [];
-            for (var i = 0; i < gridSize; i++) {
-                var cell = document.createElement('div');
-                cell.className = 'cell';
-                cell.dataset.index = i;
-                cell.addEventListener('click', function() {
-                    handleCellTap(parseInt(this.dataset.index));
-                });
-                court.appendChild(cell);
-                cells.push(cell);
-            }
-        }
-
-        // ===== GENERATE RHYTHM PATTERN =====
-        function generatePattern() {
-            var length = Math.min(3 + Math.floor(tier / 2), 8); // 3-8 beats based on tier
-            var pattern = [];
-            var usedCells = [];
-            
-            for (var i = 0; i < length; i++) {
-                var cellIndex;
-                do {
-                    cellIndex = Math.floor(Math.random() * gridSize);
-                } while (usedCells.includes(cellIndex) && usedCells.length < gridSize);
-                usedCells.push(cellIndex);
-                pattern.push({
-                    cell: cellIndex,
-                    time: i // Beat index
-                });
-            }
-            return pattern;
-        }
-
-        // ===== UPDATE RHYTHM VISUAL =====
-        function updateRhythmVisual() {
-            var container = document.getElementById('rhythmVisual');
-            container.innerHTML = '';
-            for (var i = 0; i < rhythmPattern.length; i++) {
-                var note = document.createElement('div');
-                note.className = 'rhythm-note';
-                note.textContent = i + 1;
-                note.id = 'note-' + i;
-                container.appendChild(note);
-            }
-        }
-
-        // ===== PLAY RHYTHM =====
-        function playRhythm() {
-            gamePhase = 'playing';
-            currentBeatIndex = 0;
-            var interval = 60000 / bpm;
-            
-            updateMessage(getCoachMessage('start'), true);
-            
-            function playNextBeat() {
-                if (currentBeatIndex >= rhythmPattern.length) {
-                    // Done playing, switch to listen mode
-                    setTimeout(function() {
-                        startListening();
-                    }, interval);
-                    return;
+            setTimeout(() => {
+                cells[beat.cell].classList.remove('beat');
+                if (noteEl) {
+                    noteEl.classList.remove('active');
+                    noteEl.classList.add('done');
                 }
-                
-                var beat = rhythmPattern[currentBeatIndex];
-                
-                // Visual
-                cells[beat.cell].classList.add('beat');
-                var noteEl = document.getElementById('note-' + currentBeatIndex);
-                if (noteEl) noteEl.classList.add('active');
-                
-                // Audio
-                var freq = 300 + (beat.cell % 5) * 100; // Different pitch per column
-                playBeat(freq, 0.15);
-                
-                setTimeout(function() {
-                    cells[beat.cell].classList.remove('beat');
-                    if (noteEl) {
-                        noteEl.classList.remove('active');
-                        noteEl.classList.add('done');
-                    }
-                }, interval * 0.8);
-                
-                currentBeatIndex++;
-                beatTimeout = setTimeout(playNextBeat, interval);
-            }
-            
-            playNextBeat();
+            }, interval * 0.8);
+
+            state.currentBeatIndex++;
+            state.beatTimeout = setTimeout(playNextBeat, interval);
         }
 
-        // ===== START LISTENING =====
-        function startListening() {
-            gamePhase = 'listening';
-            playerPattern = [];
-            currentBeatIndex = 0;
-            
-            // Reset note visuals
-            var notes = document.querySelectorAll('.rhythm-note');
-            notes.forEach(function(n) { n.classList.remove('done', 'active', 'missed'); });
-            
-            updateMessage(currentLang === 'en' ? "Your turn! Tap the rhythm!" : "¡Tu turno! ¡Repite el ritmo!");
-            
-            // Timeout for player response
-            var timeout = (rhythmPattern.length + 3) * (60000 / bpm);
-            listenTimeout = setTimeout(function() {
-                if (gamePhase === 'listening') {
-                    handleFail();
-                }
-            }, timeout);
-        }
+        playNextBeat();
+    }
 
-        // ===== HANDLE CELL TAP =====
-        function handleCellTap(index) {
-            initAudio();
-            
-            if (gamePhase !== 'listening') return;
-            
-            var expectedBeat = rhythmPattern[currentBeatIndex];
-            var noteEl = document.getElementById('note-' + currentBeatIndex);
-            
-            if (index === expectedBeat.cell) {
-                // Correct!
-                cells[index].classList.add('tap-correct');
-                if (noteEl) noteEl.classList.add('done');
-                playBeat(440 + currentBeatIndex * 50, 0.1);
-                
-                setTimeout(function() {
-                    cells[index].classList.remove('tap-correct');
-                }, 200);
-                
-                currentBeatIndex++;
-                
-                if (currentBeatIndex >= rhythmPattern.length) {
-                    // Pattern complete!
-                    clearTimeout(listenTimeout);
-                    handleSuccess();
-                }
-            } else {
-                // Wrong!
-                cells[index].classList.add('tap-wrong');
-                if (noteEl) noteEl.classList.add('missed');
-                
-                setTimeout(function() {
-                    cells[index].classList.remove('tap-wrong');
-                }, 300);
-                
-                clearTimeout(listenTimeout);
+    // Start listening
+    function startListening() {
+        state.gamePhase = 'listening';
+        state.playerPattern = [];
+        state.currentBeatIndex = 0;
+
+        // Reset note visuals
+        document.querySelectorAll('.rhythm-note').forEach(n => {
+            n.classList.remove('done', 'active', 'missed');
+        });
+
+        messageText.textContent = t('yourTurn');
+        messageText.className = 'message-text success';
+
+        // Timeout for player response
+        const timeout = (state.rhythmPattern.length + 3) * (60000 / state.bpm);
+        state.listenTimeout = setTimeout(() => {
+            if (state.gamePhase === 'listening') {
                 handleFail();
             }
-        }
+        }, timeout);
+    }
 
-        // ===== HANDLE SUCCESS =====
-        function handleSuccess() {
-            gamePhase = 'idle';
-            streak++;
-            laughs++;
-            circuit++;
-            
-            playSuccess();
-            updateMessage(getCoachMessage('success'), true);
-            updateStats();
-            
-            if (circuit >= 3) {
-                // Tier up!
-                circuit = 0;
-                tier++;
-                if (tier > bestTier) bestTier = tier;
-                saveProgress();
-                showLevelUpModal();
-            } else {
-                saveProgress();
-                setTimeout(function() {
-                    document.getElementById('startBtn').style.display = 'block';
-                    updateMessage(currentLang === 'en' ? "Ready for the next beat?" : "¿Listo para el siguiente ritmo?");
-                }, 1500);
+    // Handle cell tap
+    function handleCellTap(index) {
+        initAudio();
+        if (state.gamePhase !== 'listening') return;
+
+        const expectedBeat = state.rhythmPattern[state.currentBeatIndex];
+        const noteEl = document.getElementById('note-' + state.currentBeatIndex);
+
+        if (index === expectedBeat.cell) {
+            // Correct!
+            cells[index].classList.add('tap-correct');
+            if (noteEl) noteEl.classList.add('done');
+            playBeat(440 + state.currentBeatIndex * 50, 0.1);
+
+            setTimeout(() => cells[index].classList.remove('tap-correct'), 200);
+
+            state.currentBeatIndex++;
+
+            if (state.currentBeatIndex >= state.rhythmPattern.length) {
+                clearTimeout(state.listenTimeout);
+                handleSuccess();
             }
-        }
+        } else {
+            // Wrong!
+            cells[index].classList.add('tap-wrong');
+            if (noteEl) noteEl.classList.add('missed');
 
-        // ===== HANDLE FAIL =====
-        function handleFail() {
-            gamePhase = 'idle';
-            streak = 0;
-            
-            playFail();
-            updateMessage(getCoachMessage('fail'));
-            updateStats();
-            
-            setTimeout(function() {
-                document.getElementById('startBtn').style.display = 'block';
+            setTimeout(() => cells[index].classList.remove('tap-wrong'), 300);
+
+            clearTimeout(state.listenTimeout);
+            handleFail();
+        }
+    }
+
+    // Handle success
+    function handleSuccess() {
+        state.gamePhase = 'idle';
+        state.streak++;
+        state.totalLaughs++;
+        state.circuit++;
+
+        playSuccess();
+
+        const successMessages = [t('perfectRhythm'), t('gotRhythm'), t('smoothMoves'), t('onPoint')];
+        showCoachMessage(successMessages[Math.floor(Math.random() * successMessages.length)]);
+
+        updateStats();
+
+        if (state.circuit >= 3) {
+            // Tier up!
+            state.circuit = 0;
+            state.tier++;
+            showTierUpModal();
+        } else {
+            setTimeout(() => {
+                actionBtn.disabled = false;
+                actionBtn.innerHTML = `<span class="lang-en">${translations.en.nextRound}</span><span class="lang-es">${translations.es.nextRound}</span>`;
+                messageText.textContent = t('ready');
+                messageText.className = 'message-text';
+                setLang(currentLang);
             }, 1500);
         }
+    }
 
-        // ===== SHOW LEVEL UP MODAL =====
-        function showLevelUpModal() {
-            document.getElementById('modalTier').textContent = tier;
-            document.getElementById('modalLaughs').textContent = laughs;
-            document.getElementById('levelUpText').textContent = getCoachMessage('tierUp');
-            document.getElementById('levelUpModal').classList.add('show');
-        }
+    // Handle fail
+    function handleFail() {
+        state.gamePhase = 'idle';
+        state.streak = 0;
 
-        // ===== UPDATE UI =====
-        function updateStats() {
-            document.getElementById('tierDisplay').textContent = tier;
-            document.getElementById('circuitDisplay').textContent = circuit + '/3';
-            document.getElementById('laughsDisplay').textContent = laughs;
-            document.getElementById('streakDisplay').textContent = streak;
-            document.getElementById('progressTier').textContent = tier;
-            var progress = (circuit / 3) * 100;
-            document.getElementById('progressFill').style.width = progress + '%';
-            document.getElementById('progressPercent').textContent = Math.round(progress);
-        }
+        playFail();
 
-        function updateMessage(text, isCoach) {
-            var el = document.getElementById('messageText');
-            el.textContent = text;
-            el.className = 'message-text' + (isCoach ? ' coach' : '');
-        }
+        const failMessages = [t('almost'), t('tryAgain'), t('listenCloser'), t('youllGetIt')];
+        showCoachMessage(failMessages[Math.floor(Math.random() * failMessages.length)]);
 
-        // ===== START GAME =====
-        function startGame() {
-            initAudio();
-            document.getElementById('startBtn').style.display = 'none';
-            document.getElementById('speedSelector').style.pointerEvents = 'none';
-            
-            rhythmPattern = generatePattern();
-            updateRhythmVisual();
-            
-            setTimeout(function() {
-                playRhythm();
-            }, 500);
-        }
+        updateStats();
 
-        // ===== SAVE/LOAD PROGRESS =====
-        function saveProgress() {
-            localStorage.setItem('lc-ritmo-tier', tier);
-            localStorage.setItem('lc-ritmo-circuit', circuit);
-            localStorage.setItem('lc-ritmo-laughs', laughs);
-            localStorage.setItem('lc-ritmo-best', bestTier);
-        }
+        setTimeout(() => {
+            actionBtn.disabled = false;
+            actionBtn.innerHTML = `<span class="lang-en">${translations.en.startRitmo}</span><span class="lang-es">${translations.es.startRitmo}</span>`;
+            setLang(currentLang);
+        }, 1500);
+    }
 
-        function loadProgress() {
-            tier = parseInt(localStorage.getItem('lc-ritmo-tier')) || 1;
-            circuit = parseInt(localStorage.getItem('lc-ritmo-circuit')) || 0;
-            laughs = parseInt(localStorage.getItem('lc-ritmo-laughs')) || 0;
-            bestTier = parseInt(localStorage.getItem('lc-ritmo-best')) || 0;
-            updateStats();
-        }
+    // Show tier up modal
+    function showTierUpModal() {
+        document.getElementById('feedbackEmoji').textContent = '🎵';
+        document.getElementById('feedbackTitle').textContent = t('tierUp');
+        document.getElementById('feedbackMessage').textContent = t('amazing');
+        document.getElementById('feedbackTier').textContent = state.tier;
+        document.getElementById('feedbackLaughs').textContent = state.totalLaughs;
+        feedbackOverlay.classList.add('show');
+        updateStats();
+    }
 
-        // ===== LANGUAGE =====
-        function setLang(l) {
-            currentLang = l;
-            localStorage.setItem('lc-lang', l);
-            document.body.className = l;
-            document.getElementById('btnEn').className = l === 'en' ? 'lang-btn active' : 'lang-btn';
-            document.getElementById('btnEs').className = l === 'es' ? 'lang-btn active' : 'lang-btn';
-        }
+    // Start game
+    function startGame() {
+        initAudio();
+        actionBtn.disabled = true;
+        document.getElementById('tempoSection').style.pointerEvents = 'none';
 
-        // ===== SPEED SELECTOR =====
-        function setupSpeedSelector() {
-            var btns = document.querySelectorAll('.speed-btn');
-            btns.forEach(function(btn) {
-                btn.addEventListener('click', function() {
-                    btns.forEach(function(b) { b.classList.remove('active'); });
-                    this.classList.add('active');
-                    speed = this.dataset.speed;
-                    bpm = parseInt(this.dataset.bpm);
-                    document.getElementById('bpmDisplay').textContent = bpm;
-                });
-            });
-        }
+        state.rhythmPattern = generatePattern();
+        updateRhythmVisual();
 
-        // ===== EVENT LISTENERS =====
-        document.getElementById('startBtn').addEventListener('click', startGame);
-        document.getElementById('continueBtn').addEventListener('click', function() {
-            document.getElementById('levelUpModal').classList.remove('show');
-            document.getElementById('startBtn').style.display = 'block';
-            document.getElementById('speedSelector').style.pointerEvents = 'auto';
-            updateStats();
+        setTimeout(() => playRhythm(), 500);
+    }
+
+    // Update stats
+    function updateStats() {
+        document.getElementById('currentTier').textContent = state.tier;
+        document.getElementById('circuitDisplay').textContent = state.circuit + '/3';
+        document.getElementById('totalLaughs').textContent = state.totalLaughs;
+        document.getElementById('streak').textContent = state.streak;
+        document.getElementById('tierDisplay').textContent = state.tier;
+
+        const progress = (state.circuit / 3) * 100;
+        document.getElementById('progressFill').style.width = progress + '%';
+    }
+
+    function showCoachMessage(msg) {
+        coachMessage.textContent = msg;
+        coachMessage.classList.add('show');
+        setTimeout(() => coachMessage.classList.remove('show'), 2500);
+    }
+
+    // Event Listeners
+    actionBtn.addEventListener('click', startGame);
+
+    document.querySelectorAll('.tempo-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (state.gamePhase !== 'idle') return;
+            document.querySelectorAll('.tempo-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            state.bpm = parseInt(btn.dataset.bpm);
         });
-        document.getElementById('btnEn').addEventListener('click', function() { setLang('en'); });
-        document.getElementById('btnEs').addEventListener('click', function() { setLang('es'); });
+    });
 
-        // ===== INIT =====
-        initGrid();
-        loadProgress();
+    document.getElementById('continueBtn').addEventListener('click', () => {
+        feedbackOverlay.classList.remove('show');
+        actionBtn.disabled = false;
+        document.getElementById('tempoSection').style.pointerEvents = 'auto';
+        actionBtn.innerHTML = `<span class="lang-en">${translations.en.startRitmo}</span><span class="lang-es">${translations.es.startRitmo}</span>`;
+        messageText.innerHTML = `<span class="lang-en">🎵 Listen to the rhythm, then tap it back!</span><span class="lang-es">🎵 ¡Escucha el ritmo, luego repítelo!</span>`;
+        messageText.className = 'message-text';
+        rhythmVisual.innerHTML = '';
         setLang(currentLang);
-        setupSpeedSelector();
-    })();
-    </script>
+        updateStats();
+    });
+
+    document.getElementById('restartBtn').addEventListener('click', () => {
+        feedbackOverlay.classList.remove('show');
+        state.tier = 1;
+        state.circuit = 0;
+        state.streak = 0;
+        document.getElementById('progressFill').style.width = '0%';
+        actionBtn.disabled = false;
+        document.getElementById('tempoSection').style.pointerEvents = 'auto';
+        actionBtn.innerHTML = `<span class="lang-en">${translations.en.startRitmo}</span><span class="lang-es">${translations.es.startRitmo}</span>`;
+        messageText.innerHTML = `<span class="lang-en">🎵 Listen to the rhythm, then tap it back!</span><span class="lang-es">🎵 ¡Escucha el ritmo, luego repítelo!</span>`;
+        messageText.className = 'message-text';
+        rhythmVisual.innerHTML = '';
+        setLang(currentLang);
+        updateStats();
+    });
+
+    document.getElementById('btnEn').addEventListener('click', () => setLang('en'));
+    document.getElementById('btnEs').addEventListener('click', () => setLang('es'));
+
+    // Initialize
+    initGrid();
+    setLang(currentLang);
+    updateStats();
+})();
+</script>
 </body>
 </html>
