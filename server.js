@@ -17,6 +17,14 @@ const ADMIN_PASS = process.env.ADMIN_PASS || 'GoStar2025';
 // Admin PIN (new dashboard auth)
 const ADMIN_PIN = process.env.ADMIN_PIN || '1234';
 
+// ============ SESSION LOCKOUT SYSTEM ============
+// Stores active sessions: PIN → { token, createdAt }
+// Only ONE active session per PIN allowed
+const activeSessions = new Map();
+
+// Session timeout (optional cleanup of stale sessions)
+const SESSION_TIMEOUT_MS = 24 * 60 * 60 * 1000; // 24 hours
+
 // ============ STRIPE SETUP ============
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
 const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
@@ -149,6 +157,173 @@ function generateLicensePin() {
 function generateToken() {
     return Buffer.from(Date.now() + '-' + Math.random().toString(36).substring(2, 15)).toString('base64');
 }
+
+// ============ SESSION LOCKOUT FUNCTIONS ============
+
+// Generate a unique session token
+function generateSessionToken() {
+    return 'sess_' + Date.now() + '_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+}
+
+// Create new session for PIN (invalidates any existing session)
+function createSession(pin) {
+    var token = generateSessionToken();
+    activeSessions.set(pin, {
+        token: token,
+        createdAt: Date.now()
+    });
+    console.log('[SESSION] Created for PIN ' + pin + ' → Token: ' + token.substring(0, 20) + '...');
+    return token;
+}
+
+// Validate if token is the active session for PIN
+function validateSession(pin, token) {
+    var session = activeSessions.get(pin);
+    if (!session) {
+        console.log('[SESSION] No session found for PIN ' + pin);
+        return false;
+    }
+    if (session.token !== token) {
+        console.log('[SESSION] Token mismatch for PIN ' + pin + ' (session was taken over)');
+        return false;
+    }
+    // Check timeout (optional - auto-expire old sessions)
+    if (Date.now() - session.createdAt > SESSION_TIMEOUT_MS) {
+        console.log('[SESSION] Session expired for PIN ' + pin);
+        activeSessions.delete(pin);
+        return false;
+    }
+    return true;
+}
+
+// Destroy session for PIN
+function destroySession(pin) {
+    activeSessions.delete(pin);
+    console.log('[SESSION] Destroyed for PIN ' + pin);
+}
+
+// ============ SESSION API ENDPOINTS ============
+
+// Create session - called on login
+// Returns new token, invalidates any previous session for this PIN
+app.post('/api/session/create', function(req, res) {
+    var pin = req.body.pin;
+    
+    if (!pin) {
+        return res.status(400).json({ success: false, error: 'PIN required' });
+    }
+    
+    // Check if PIN is valid (subscriber or trial)
+    var isValidPin = false;
+    var userType = null;
+    
+    // Check subscribers
+    var subscribers = readJSON(SUBSCRIBERS_FILE);
+    for (var i = 0; i < subscribers.length; i++) {
+        if (subscribers[i].pin === pin) {
+            var isActive = subscribers[i].status === 'active' || subscribers[i].status === 'trialing';
+            if (!isActive) {
+                return res.status(401).json({ success: false, error: 'Subscription not active' });
+            }
+            isValidPin = true;
+            userType = 'subscriber';
+            break;
+        }
+    }
+    
+    // Check facility trials if not found
+    if (!isValidPin) {
+        var trialPins = readJSON(TRIAL_PINS_FILE);
+        for (var k = 0; k < trialPins.length; k++) {
+            if (trialPins[k].pin === pin) {
+                if (new Date(trialPins[k].expiresAt) < new Date()) {
+                    return res.status(401).json({ success: false, error: 'Trial expired' });
+                }
+                isValidPin = true;
+                userType = 'facility_trial';
+                break;
+            }
+        }
+    }
+    
+    if (!isValidPin) {
+        return res.status(401).json({ success: false, error: 'Invalid PIN' });
+    }
+    
+    // Create new session (invalidates any existing)
+    var token = createSession(pin);
+    
+    logActivity('session_created', pin, null, 'New session started (previous sessions invalidated)', { userType: userType });
+    
+    res.json({
+        success: true,
+        token: token,
+        userType: userType,
+        message: 'Session created. Any other devices using this PIN have been logged out.'
+    });
+});
+
+// Validate session - called by heartbeat
+// Returns whether token is still the active session
+app.post('/api/session/validate', function(req, res) {
+    var pin = req.body.pin;
+    var token = req.body.token;
+    
+    if (!pin || !token) {
+        return res.status(400).json({ valid: false, error: 'PIN and token required' });
+    }
+    
+    var isValid = validateSession(pin, token);
+    
+    if (!isValid) {
+        return res.json({
+            valid: false,
+            reason: 'Session invalid or taken over by another device',
+            action: 'logout'
+        });
+    }
+    
+    res.json({
+        valid: true,
+        message: 'Session active'
+    });
+});
+
+// Destroy session - called on logout
+app.post('/api/session/destroy', function(req, res) {
+    var pin = req.body.pin;
+    var token = req.body.token;
+    
+    if (!pin) {
+        return res.status(400).json({ success: false, error: 'PIN required' });
+    }
+    
+    // Only destroy if token matches (prevent malicious logout)
+    if (token && validateSession(pin, token)) {
+        destroySession(pin);
+        logActivity('session_destroyed', pin, null, 'User logged out');
+        return res.json({ success: true, message: 'Session destroyed' });
+    }
+    
+    res.json({ success: true, message: 'No active session to destroy' });
+});
+
+// Get active sessions count (admin only)
+app.get('/api/admin/sessions', adminTokenAuth, function(req, res) {
+    var sessions = [];
+    activeSessions.forEach(function(session, pin) {
+        sessions.push({
+            pin: pin,
+            createdAt: new Date(session.createdAt).toISOString(),
+            ageMinutes: Math.floor((Date.now() - session.createdAt) / 60000)
+        });
+    });
+    res.json({
+        success: true,
+        totalActive: activeSessions.size,
+        sessions: sessions
+    });
+});
 
 // ============ STRIPE HELPER FUNCTIONS ============
 
@@ -1190,4 +1365,5 @@ app.listen(PORT, function() {
     console.log('Platform Version: ' + PLATFORM_VERSION + ' (' + PLATFORM_VERSION_NAME + ')');
     console.log('Admin Dashboard: /admin-dashboard');
     console.log('Stripe configured:', !!stripe);
+    console.log('Session lockout system: ACTIVE');
 });
