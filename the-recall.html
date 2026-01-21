@@ -213,9 +213,29 @@ body {
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.15s;
-    background: linear-gradient(145deg, #1e1e2a, #151520);
-    border: 2px solid rgba(255,107,0,0.25);
-    box-shadow: 0 2px 6px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
+    background: linear-gradient(145deg, #1a1a24, #0f0f18);
+    border: 3px solid;
+}
+/* Rainbow Row Borders */
+.grid-cell:nth-child(-n+5) { 
+    border-color: #FF6B00; 
+    box-shadow: 0 0 8px rgba(255,107,0,0.3), inset 0 0 10px rgba(255,107,0,0.1);
+}
+.grid-cell:nth-child(n+6):nth-child(-n+10) { 
+    border-color: #FFD700; 
+    box-shadow: 0 0 8px rgba(255,215,0,0.3), inset 0 0 10px rgba(255,215,0,0.1);
+}
+.grid-cell:nth-child(n+11):nth-child(-n+15) { 
+    border-color: #00D9A5; 
+    box-shadow: 0 0 8px rgba(0,217,165,0.3), inset 0 0 10px rgba(0,217,165,0.1);
+}
+.grid-cell:nth-child(n+16):nth-child(-n+20) { 
+    border-color: #FF1493; 
+    box-shadow: 0 0 8px rgba(255,20,147,0.3), inset 0 0 10px rgba(255,20,147,0.1);
+}
+.grid-cell:nth-child(n+21) { 
+    border-color: #9D4EDD; 
+    box-shadow: 0 0 8px rgba(157,78,221,0.3), inset 0 0 10px rgba(157,78,221,0.1);
 }
 .grid-cell:active:not(.disabled) { transform: scale(0.95); }
 .grid-cell.disabled { pointer-events: none; opacity: 0.5; }
@@ -518,7 +538,7 @@ body.es .lang-en { display: none !important; }
     .speed-btn .icon { font-size: 0.75rem; }
     .speed-btn .bpm { font-size: 0.85rem; }
     .court-grid { padding: 6px; gap: 3px; border-radius: 10px; }
-    .grid-cell { border-radius: 6px; border-width: 1px; }
+    .grid-cell { border-radius: 6px; border-width: 2px; }
     .progress-section { margin: 3px 0; gap: 6px; }
     .tier-badge { padding: 3px 8px; font-size: 0.6rem; }
     .progress-bar { height: 6px; }
@@ -659,13 +679,11 @@ body.es .lang-en { display: none !important; }
 
 <script>
 (function() {
-    // ==================== ENVIRONMENT DETECTION ====================
+    // ==================== PREVIEW MODE - Skip Auth ====================
     var host = window.location.hostname;
     var isProduction = (host.indexOf('laughcourt') > -1 || host.indexOf('github.io') > -1);
-    var isLocal = (host === 'localhost' || host === '127.0.0.1' || host === '');
-    var isPreview = !isProduction && !isLocal;
-
-    // ==================== PRODUCTION AUTH & HEARTBEAT ====================
+    
+    // Skip auth for preview
     if (isProduction) {
         var user = null;
         try { user = JSON.parse(localStorage.getItem('lc-user')); } catch(e) {}
@@ -673,48 +691,11 @@ body.es .lang-en { display: none !important; }
             window.location.replace('index.html');
             return;
         }
-
-        var sessionPin = sessionStorage.getItem('lc-pin');
-        var sessionToken = sessionStorage.getItem('lc-token');
-
-        function validateSession() {
-            if (!sessionPin || !sessionToken) {
-                window.location.href = 'index.html';
-                return;
-            }
-            fetch('/api/session/validate', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ pin: sessionPin, token: sessionToken })
-            })
-            .then(function(r) { return r.json(); })
-            .then(function(d) {
-                if (!d.valid) {
-                    alert(d.message || 'Session ended. Please log in again.');
-                    localStorage.removeItem('lc-user');
-                    localStorage.removeItem('lc-bpm-access');
-                    sessionStorage.removeItem('lc-pin');
-                    sessionStorage.removeItem('lc-token');
-                    window.location.href = 'index.html';
-                }
-            })
-            .catch(function(err) {
-                console.log('Session validation error:', err);
-            });
-        }
-
-        validateSession();
-        setInterval(validateSession, 30000);
     }
-    // ==================== END PRODUCTION AUTH & HEARTBEAT ====================
 
     var currentLang = localStorage.getItem('lc-lang') || 'en';
     
-    var bpmAccess = { allBPM: false, userType: 'guest' };
-    try {
-        var storedAccess = localStorage.getItem('lc-bpm-access');
-        if (storedAccess) bpmAccess = JSON.parse(storedAccess);
-    } catch(e) {}
+    var bpmAccess = { allBPM: true, userType: 'preview' }; // All BPM unlocked for preview
 
     var state = {
         tier: parseInt(localStorage.getItem('lc-recall-tier')) || 1,
@@ -798,12 +779,6 @@ body.es .lang-en { display: none !important; }
             if (!bpmAccess.allBPM && bpm > 60) btn.classList.add('locked');
             else btn.classList.remove('locked');
         });
-        if (!bpmAccess.allBPM) {
-            state.speed = 'slow';
-            state.bpm = 60;
-            speedBtns.forEach(function(b) { b.classList.remove('active'); });
-            document.querySelector('.speed-btn[data-bpm="60"]').classList.add('active');
-        }
     }
 
     function showUpgradeModal() { upgradeOverlay.classList.add('show'); }
