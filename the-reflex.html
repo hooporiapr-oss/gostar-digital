@@ -212,6 +212,7 @@ body.es .lang-en { display: none !important; }
     flex-direction: column;
     align-items: center;
     gap: 1px;
+    position: relative;
 }
 .tempo-btn .icon { font-size: 0.8rem; }
 .tempo-btn .bpm { font-family: 'Bebas Neue', sans-serif; font-size: 0.9rem; }
@@ -219,6 +220,22 @@ body.es .lang-en { display: none !important; }
     border-color: var(--gold);
     color: var(--gold);
     background: rgba(255,215,0,0.1);
+}
+
+/* BPM Lock Styles */
+.tempo-btn.locked {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+.tempo-btn.locked::after {
+    content: '🔒';
+    position: absolute;
+    top: 2px;
+    right: 4px;
+    font-size: 0.6rem;
+}
+.tempo-btn.locked:hover {
+    border-color: var(--gold);
 }
 
 /* Court Grid - VISIBLE CELLS */
@@ -490,6 +507,91 @@ body.es .lang-en { display: none !important; }
     cursor: pointer;
 }
 
+/* Upgrade Modal */
+.upgrade-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.95);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+    padding: 20px;
+}
+.upgrade-overlay.show { display: flex; }
+.upgrade-card {
+    background: linear-gradient(145deg, #1a1a25, #0d0d12);
+    border: 2px solid var(--gold);
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+    max-width: 340px;
+    width: 100%;
+    box-shadow: 0 0 40px rgba(255,215,0,0.2);
+}
+.upgrade-icon { font-size: 3rem; margin-bottom: 15px; }
+.upgrade-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 3px;
+    color: var(--gold);
+    margin-bottom: 10px;
+}
+.upgrade-subtitle {
+    color: var(--text);
+    font-size: 1rem;
+    margin-bottom: 20px;
+}
+.upgrade-benefits {
+    text-align: left;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 10px;
+}
+.upgrade-benefit {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    color: var(--text);
+    font-size: 0.9rem;
+}
+.upgrade-benefit .check { color: var(--teal); }
+.upgrade-price {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    color: var(--gold);
+    margin-bottom: 5px;
+}
+.upgrade-price-note {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-bottom: 20px;
+}
+.upgrade-btn {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    background: linear-gradient(135deg, var(--gold), #FFA500);
+    color: var(--dark);
+    margin-bottom: 10px;
+}
+.upgrade-close {
+    background: transparent;
+    border: 1px solid var(--muted);
+    color: var(--muted);
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
 /* Coach Message Toast */
 .coach-message {
     position: fixed;
@@ -580,12 +682,12 @@ body.es .lang-en { display: none !important; }
     <div class="tempo-section">
         <div class="tempo-label">🎵 <span class="ritnome">Ritnome™</span></div>
         <div class="tempo-buttons">
-            <button class="tempo-btn" data-bpm="60">
+            <button class="tempo-btn active" data-bpm="60">
                 <span class="icon">🐢</span>
                 <span class="bpm">60</span>
                 <span>BPM</span>
             </button>
-            <button class="tempo-btn active" data-bpm="90">
+            <button class="tempo-btn" data-bpm="90">
                 <span class="icon">🏃</span>
                 <span class="bpm">90</span>
                 <span>BPM</span>
@@ -655,6 +757,51 @@ body.es .lang-en { display: none !important; }
     </div>
 </div>
 
+<!-- Upgrade Modal -->
+<div class="upgrade-overlay" id="upgradeOverlay">
+    <div class="upgrade-card">
+        <div class="upgrade-icon">🔓</div>
+        <h2 class="upgrade-title">
+            <span class="lang-en">UNLOCK ALL TEMPOS</span>
+            <span class="lang-es">DESBLOQUEA TODOS</span>
+        </h2>
+        <p class="upgrade-subtitle">
+            <span class="lang-en">Train at 90 & 120 BPM for maximum cognitive benefits</span>
+            <span class="lang-es">Entrena a 90 y 120 BPM para máximos beneficios</span>
+        </p>
+        <div class="upgrade-benefits">
+            <div class="upgrade-benefit">
+                <span class="check">✓</span>
+                <span class="lang-en">60 BPM — Foundation (Current)</span>
+                <span class="lang-es">60 BPM — Base (Actual)</span>
+            </div>
+            <div class="upgrade-benefit">
+                <span class="check">🔒</span>
+                <span class="lang-en">90 BPM — Optimal Challenge</span>
+                <span class="lang-es">90 BPM — Desafío Óptimo</span>
+            </div>
+            <div class="upgrade-benefit">
+                <span class="check">🔒</span>
+                <span class="lang-en">120 BPM — Elite Training</span>
+                <span class="lang-es">120 BPM — Entrenamiento Élite</span>
+            </div>
+        </div>
+        <div class="upgrade-price">$5<span style="font-size: 1rem;">/month</span></div>
+        <div class="upgrade-price-note">
+            <span class="lang-en">Cancel anytime • Instant access</span>
+            <span class="lang-es">Cancela cuando quieras • Acceso inmediato</span>
+        </div>
+        <button class="upgrade-btn" id="upgradeBtn">
+            <span class="lang-en">UPGRADE NOW 🚀</span>
+            <span class="lang-es">ACTUALIZAR 🚀</span>
+        </button>
+        <button class="upgrade-close" id="upgradeClose">
+            <span class="lang-en">Continue with 60 BPM</span>
+            <span class="lang-es">Continuar con 60 BPM</span>
+        </button>
+    </div>
+</div>
+
 <!-- Coach Message Toast -->
 <div class="coach-message" id="coachMessage"></div>
 
@@ -719,13 +866,20 @@ body.es .lang-en { display: none !important; }
         });
     }
 
+    // BPM Access Control
+    const bpmAccess = {
+        allBPM: false,
+        userType: 'guest',
+        checked: false
+    };
+
     // Game State
     const state = {
         tier: 1,
         totalLaughs: 0,
         streak: 0,
         circuitsCompleted: 0,
-        bpm: 90,
+        bpm: 60, // Default to 60 BPM for trial users
         playing: false,
         currentIndex: 0,
         targetCell: null,
@@ -752,6 +906,82 @@ body.es .lang-en { display: none !important; }
     const feedbackOverlay = document.getElementById('feedbackOverlay');
     const tierUpOverlay = document.getElementById('tierUpOverlay');
     const coachMessage = document.getElementById('coachMessage');
+    const upgradeOverlay = document.getElementById('upgradeOverlay');
+
+    // Check BPM access from server
+    function checkBPMAccess() {
+        const userPIN = localStorage.getItem('lc-user-pin');
+        
+        if (!userPIN) {
+            // Guest user - 60 BPM only
+            bpmAccess.allBPM = false;
+            bpmAccess.userType = 'guest';
+            bpmAccess.checked = true;
+            applyBPMLocks();
+            return;
+        }
+        
+        // Check server for access level
+        fetch('/api/user/bpm-access/' + userPIN)
+            .then(res => res.json())
+            .then(data => {
+                bpmAccess.allBPM = data.allBPM || false;
+                bpmAccess.userType = data.userType || 'guest';
+                bpmAccess.checked = true;
+                applyBPMLocks();
+            })
+            .catch(err => {
+                console.log('BPM access check failed, defaulting to locked:', err);
+                bpmAccess.allBPM = false;
+                bpmAccess.userType = 'guest';
+                bpmAccess.checked = true;
+                applyBPMLocks();
+            });
+    }
+
+    // Apply locks to 90 and 120 BPM buttons
+    function applyBPMLocks() {
+        const tempoBtns = document.querySelectorAll('.tempo-btn');
+        
+        tempoBtns.forEach(btn => {
+            const bpm = parseInt(btn.dataset.bpm);
+            
+            if (bpm > 60 && !bpmAccess.allBPM) {
+                btn.classList.add('locked');
+            } else {
+                btn.classList.remove('locked');
+            }
+        });
+        
+        // Ensure 60 BPM is selected for locked users
+        if (!bpmAccess.allBPM) {
+            selectTempo(60);
+        }
+    }
+
+    // Select a tempo
+    function selectTempo(bpm) {
+        state.bpm = bpm;
+        
+        document.querySelectorAll('.tempo-btn').forEach(b => { 
+            b.classList.remove('active'); 
+        });
+        
+        const targetBtn = document.querySelector('.tempo-btn[data-bpm="' + bpm + '"]');
+        if (targetBtn) {
+            targetBtn.classList.add('active');
+        }
+    }
+
+    // Show upgrade modal
+    function showUpgradeModal() {
+        upgradeOverlay.classList.add('show');
+    }
+
+    // Hide upgrade modal
+    function hideUpgradeModal() {
+        upgradeOverlay.classList.remove('show');
+    }
 
     // Initialize grid
     function initGrid() {
@@ -967,12 +1197,20 @@ body.es .lang-en { display: none !important; }
     // Event Listeners
     actionBtn.addEventListener('click', startGame);
 
+    // Tempo button clicks with BPM lock check
     document.querySelectorAll('.tempo-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             if (state.playing) return;
-            document.querySelectorAll('.tempo-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            state.bpm = parseInt(btn.dataset.bpm);
+            
+            const bpm = parseInt(btn.dataset.bpm);
+            
+            // Check if locked
+            if (bpm > 60 && !bpmAccess.allBPM) {
+                showUpgradeModal();
+                return;
+            }
+            
+            selectTempo(bpm);
         });
     });
 
@@ -1006,6 +1244,15 @@ body.es .lang-en { display: none !important; }
         setLang(currentLang);
     });
 
+    // Upgrade modal events
+    document.getElementById('upgradeBtn').addEventListener('click', () => {
+        window.location.href = 'index.html?upgrade=true';
+    });
+
+    document.getElementById('upgradeClose').addEventListener('click', () => {
+        hideUpgradeModal();
+    });
+
     document.getElementById('btnEn').addEventListener('click', () => setLang('en'));
     document.getElementById('btnEs').addEventListener('click', () => setLang('es'));
 
@@ -1013,6 +1260,7 @@ body.es .lang-en { display: none !important; }
     initGrid();
     setLang(currentLang);
     updateStats();
+    checkBPMAccess(); // Check BPM access on load
 })();
 </script>
 </body>
