@@ -13,9 +13,8 @@
     --gold: #FFD700;
     --teal: #00D9A5;
     --pink: #FF1493;
-    --red: #FF1744;
+    --purple: #9D4EDD;
     --dark: #0a0a0f;
-    --darker: #050508;
     --card: #111118;
     --text: #FFFFFF;
     --muted: #8892a0;
@@ -137,8 +136,8 @@ body {
     text-transform: uppercase;
 }
 .target-color {
-    width: 38px;
-    height: 38px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     border: 3px solid var(--gold);
     box-shadow: 0 0 15px rgba(255,215,0,0.3);
@@ -205,7 +204,7 @@ body {
 }
 .speed-btn.locked .icon { opacity: 0.5; }
 
-/* COURT GRID - MOBILE PERFECT FIT */
+/* COURT GRID - 40vh MOBILE PERFECT FIT */
 .court-wrapper {
     flex: 1;
     display: flex;
@@ -534,7 +533,7 @@ body.es .lang-en { display: none !important; }
     .stat-value { font-size: 1.2rem; }
     .message-display { padding: 10px; }
     .message-text { font-size: 1.1rem; }
-    .target-color { width: 45px; height: 45px; }
+    .target-color { width: 42px; height: 42px; }
     .court-grid { gap: 6px; padding: 10px; }
     .action-btn { padding: 14px; font-size: 1.2rem; }
 }
@@ -552,7 +551,7 @@ body.es .lang-en { display: none !important; }
     .message-display { padding: 5px; margin-bottom: 3px; }
     .message-text { font-size: 0.85rem; }
     .target-row { margin-bottom: 3px; gap: 6px; }
-    .target-color { width: 30px; height: 30px; }
+    .target-color { width: 28px; height: 28px; }
     .ritnome-tempo { margin-bottom: 3px; }
     .tempo-label { font-size: 0.45rem; margin-bottom: 2px; }
     .speed-btn { padding: 4px 2px; border-radius: 6px; }
@@ -791,10 +790,11 @@ body.es .lang-en { display: none !important; }
         cells: []
     };
 
+    // ==================== RITNOME™ BPM-SYNCED TIMING ====================
     var speeds = {
-        slow: { bpm: 60, flash: 1500 },
-        medium: { bpm: 90, flash: 1000 },
-        fast: { bpm: 120, flash: 600 }
+        slow: { bpm: 60, flash: 1500 },      // 60 BPM
+        medium: { bpm: 90, flash: 1000 },    // 90 BPM
+        fast: { bpm: 120, flash: 667 }       // 120 BPM
     };
 
     var tierConfig = [
@@ -894,6 +894,117 @@ body.es .lang-en { display: none !important; }
         return arr;
     }
 
+    // ==================== RITNOME™ AUDIO ENGINE ====================
+    var audioCtx = null;
+    function getAudioContext() {
+        if (!audioCtx) {
+            try {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            } catch(e) {
+                console.log('Audio not supported');
+                return null;
+            }
+        }
+        return audioCtx;
+    }
+
+    // Ritnome™ Musical Scale - C Major Pentatonic
+    var ritnomeScale = [
+        261.63, 293.66, 329.63, 392.00, 440.00,
+        523.25, 587.33, 659.25, 783.99, 880.00, 1046.50
+    ];
+
+    function playRitnomeTone(index) {
+        var ctx = getAudioContext();
+        if (!ctx) return;
+        
+        try {
+            if (ctx.state === 'suspended') ctx.resume();
+            
+            var osc = ctx.createOscillator();
+            var gain = ctx.createGain();
+            
+            osc.type = 'sine';
+            osc.frequency.value = ritnomeScale[index % ritnomeScale.length];
+            
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            
+            var beatDuration = 60 / state.bpm;
+            gain.gain.setValueAtTime(0, ctx.currentTime);
+            gain.gain.linearRampToValueAtTime(0.4, ctx.currentTime + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + beatDuration * 0.8);
+            
+            osc.start(ctx.currentTime);
+            osc.stop(ctx.currentTime + beatDuration);
+        } catch(e) {}
+    }
+
+    function playSuccessTone() {
+        var ctx = getAudioContext();
+        if (!ctx) return;
+        
+        try {
+            if (ctx.state === 'suspended') ctx.resume();
+            
+            [0, 2, 4].forEach(function(note, i) {
+                setTimeout(function() {
+                    var osc = ctx.createOscillator();
+                    var gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.value = ritnomeScale[note + 5];
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+                    osc.start(ctx.currentTime);
+                    osc.stop(ctx.currentTime + 0.2);
+                }, i * 100);
+            });
+        } catch(e) {}
+    }
+
+    function playErrorTone() {
+        var ctx = getAudioContext();
+        if (!ctx) return;
+        
+        try {
+            if (ctx.state === 'suspended') ctx.resume();
+            
+            var osc = ctx.createOscillator();
+            var gain = ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.value = 180;
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            gain.gain.setValueAtTime(0.25, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+            osc.start(ctx.currentTime);
+            osc.stop(ctx.currentTime + 0.35);
+        } catch(e) {}
+    }
+
+    function playRevealTone() {
+        var ctx = getAudioContext();
+        if (!ctx) return;
+        
+        try {
+            if (ctx.state === 'suspended') ctx.resume();
+            
+            var osc = ctx.createOscillator();
+            var gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.value = 523.25; // C5
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            gain.gain.setValueAtTime(0.3, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
+            osc.start(ctx.currentTime);
+            osc.stop(ctx.currentTime + 0.25);
+        } catch(e) {}
+    }
+    // ==================== END RITNOME™ AUDIO ENGINE ====================
+
     function startRound() {
         state.isShowing = true;
         state.isPlaying = true;
@@ -927,7 +1038,7 @@ body.es .lang-en { display: none !important; }
         shuffle(distractorColors);
         
         var dIdx = 0;
-        litCells.forEach(function(cellIdx) {
+        litCells.forEach(function(cellIdx, i) {
             var cell = state.cells[cellIdx];
             if (cellIdx === state.matchIndex) {
                 cell.style.background = state.targetColor.hex;
@@ -938,6 +1049,9 @@ body.es .lang-en { display: none !important; }
             }
             cell.classList.add('lit');
         });
+        
+        // Play reveal tone
+        playRevealTone();
         
         setTimeout(function() {
             state.cells.forEach(function(c) { 
@@ -961,6 +1075,7 @@ body.es .lang-en { display: none !important; }
         if (isMatch) {
             cell.style.background = state.targetColor.hex;
             cell.classList.add('correct');
+            playSuccessTone();
             state.streak++;
             
             var bpmBonus = state.bpm === 120 ? 2 : state.bpm === 90 ? 1 : 0;
@@ -985,6 +1100,7 @@ body.es .lang-en { display: none !important; }
             setTimeout(function() { showFeedback(true, laughsEarned, tierUp); }, 800);
         } else {
             cell.classList.add('wrong');
+            playErrorTone();
             state.cells[state.matchIndex].style.background = state.targetColor.hex;
             state.cells[state.matchIndex].classList.add('correct');
             state.streak = 0;
