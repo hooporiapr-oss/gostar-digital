@@ -614,6 +614,25 @@ body.es .lang-en { display: none !important; }
 </head>
 <body class="en">
 
+<!-- ============ BULLETPROOF AUTH GATE ============ -->
+<script>
+(function(){
+    var host = window.location.hostname;
+    var isLocal = (host === 'localhost' || host === '127.0.0.1' || host === '');
+    if (!isLocal) {
+        var user = null;
+        try { user = JSON.parse(localStorage.getItem('lc-user')); } catch(e) {}
+        var hasValidUser = user && user.pin && user.pin.length >= 4;
+        if (!hasValidUser) {
+            document.documentElement.style.display = 'none';
+            window.location.replace('index.html');
+            throw new Error('Auth required');
+        }
+    }
+})();
+</script>
+<!-- ============ END AUTH GATE ============ -->
+
 <!-- Language Toggle -->
 <div class="lang-toggle">
     <button class="lang-btn active" id="btnEn">EN</button>
