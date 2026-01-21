@@ -232,6 +232,16 @@ body.en .lang-es { display: none !important; }
     text-align: center;
 }
 
+.nav-item-badge {
+    background: var(--red);
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 10px;
+    margin-left: auto;
+}
+
 .sidebar-footer {
     padding: 20px 24px;
     border-top: 1px solid var(--border);
@@ -464,7 +474,7 @@ body.en .lang-es { display: none !important; }
     letter-spacing: 2px;
 }
 
-.table-actions { display: flex; gap: 10px; }
+.table-actions { display: flex; gap: 10px; flex-wrap: wrap; }
 
 .btn {
     padding: 10px 20px;
@@ -482,6 +492,10 @@ body.en .lang-es { display: none !important; }
 .btn-secondary:hover { border-color: var(--gold); }
 .btn-danger { background: transparent; border: 1px solid var(--danger); color: var(--danger); }
 .btn-danger:hover { background: var(--danger); color: var(--text); }
+.btn-teal { background: var(--teal); color: var(--dark); }
+.btn-teal:hover { background: #00c49a; }
+.btn-purple { background: var(--purple); color: var(--text); }
+.btn-purple:hover { background: #8a3fcc; }
 
 .table-container { overflow-x: auto; }
 
@@ -514,6 +528,10 @@ tr:hover { background: var(--card-hover); }
 .badge-trialing { background: rgba(157,78,221,0.15); color: var(--purple); }
 .badge-active { background: rgba(0,217,165,0.15); color: var(--teal); }
 .badge-canceled, .badge-expired { background: rgba(255,71,87,0.15); color: var(--danger); }
+.badge-update { background: rgba(0,206,209,0.15); color: var(--cyan); }
+.badge-announcement { background: rgba(255,215,0,0.15); color: var(--gold); }
+.badge-maintenance { background: rgba(255,107,0,0.15); color: var(--orange); }
+.badge-promotion { background: rgba(0,230,118,0.15); color: var(--green); }
 
 .action-btns { display: flex; gap: 6px; }
 
@@ -565,10 +583,158 @@ tr:hover { background: var(--card-hover); }
 .aggregated-icon.ritmo { background: rgba(255,23,68,0.15); color: var(--red); }
 .aggregated-icon.subscription { background: rgba(255,215,0,0.15); color: var(--gold); }
 .aggregated-icon.trial { background: rgba(157,78,221,0.15); color: var(--purple); }
+.aggregated-icon.notification { background: rgba(0,206,209,0.15); color: var(--cyan); }
 
 .aggregated-content { flex: 1; }
 .aggregated-text { font-size: 0.9rem; }
 .aggregated-details { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+
+/* ==================== NOTIFICATION CARDS ==================== */
+.notification-card {
+    background: var(--darker);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 15px;
+    transition: all 0.2s;
+}
+.notification-card:hover {
+    border-color: var(--gold);
+}
+.notification-card.expired {
+    opacity: 0.6;
+}
+
+.notification-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+}
+
+.notification-card-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+}
+
+.notification-card-meta {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.notification-card-body {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.notification-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.notification-card-stats {
+    display: flex;
+    gap: 15px;
+    font-size: 0.75rem;
+    color: var(--muted);
+}
+
+.notification-card-stat {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.notification-card-stat strong {
+    color: var(--text);
+}
+
+/* ==================== CHECKBOX TOGGLE ==================== */
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px;
+    background: var(--darker);
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.checkbox-toggle {
+    position: relative;
+    width: 50px;
+    height: 26px;
+    flex-shrink: 0;
+}
+
+.checkbox-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.checkbox-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: var(--border);
+    border-radius: 26px;
+    transition: 0.3s;
+}
+
+.checkbox-slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    bottom: 3px;
+    background: white;
+    border-radius: 50%;
+    transition: 0.3s;
+}
+
+.checkbox-toggle input:checked + .checkbox-slider {
+    background: var(--teal);
+}
+
+.checkbox-toggle input:checked + .checkbox-slider:before {
+    transform: translateX(24px);
+}
+
+.checkbox-label {
+    flex: 1;
+}
+
+.checkbox-label-title {
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 2px;
+}
+
+.checkbox-label-desc {
+    font-size: 0.75rem;
+    color: var(--muted);
+}
+
+.extend-days-input {
+    width: 70px;
+    padding: 8px 12px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 0.9rem;
+    text-align: center;
+    font-family: 'Outfit', sans-serif;
+}
 
 /* ==================== MODALS ==================== */
 .modal-overlay {
@@ -633,7 +799,7 @@ tr:hover { background: var(--card-hover); }
     letter-spacing: 1px;
 }
 
-.form-input, .form-select {
+.form-input, .form-select, .form-textarea {
     width: 100%;
     padding: 14px 16px;
     background: var(--darker);
@@ -644,9 +810,23 @@ tr:hover { background: var(--card-hover); }
     font-family: 'Outfit', sans-serif;
     transition: border-color 0.2s;
 }
-.form-input:focus, .form-select:focus {
+.form-input:focus, .form-select:focus, .form-textarea:focus {
     outline: none;
     border-color: var(--gold);
+}
+
+.form-textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.form-row {
+    display: flex;
+    gap: 15px;
+}
+
+.form-row .form-group {
+    flex: 1;
 }
 
 .modal-footer {
@@ -817,6 +997,41 @@ tr.clickable { cursor: pointer; }
     margin-left: 5px;
 }
 
+/* ==================== VERSION BANNER ==================== */
+.version-banner {
+    background: linear-gradient(135deg, rgba(255,215,0,0.1), rgba(0,217,165,0.1));
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.version-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.version-badge {
+    background: var(--gold);
+    color: var(--dark);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+}
+
+.version-name {
+    font-size: 0.9rem;
+    color: var(--muted);
+}
+
 /* ==================== FOOTER ==================== */
 .admin-footer {
     margin-top: 40px;
@@ -872,6 +1087,7 @@ tr.clickable { cursor: pointer; }
     .sidebar-footer .lang-toggle,
     .logout-btn span { display: none; }
     .nav-item { justify-content: center; padding: 12px; }
+    .nav-item-badge { display: none; }
     .main-content { margin-left: 80px; }
 }
 
@@ -880,6 +1096,7 @@ tr.clickable { cursor: pointer; }
     .main-content { margin-left: 0; }
     .stats-grid { grid-template-columns: 1fr 1fr; }
     .subscriber-stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .form-row { flex-direction: column; gap: 0; }
 }
 </style>
 </head>
@@ -941,6 +1158,12 @@ tr.clickable { cursor: pointer; }
                 <span class="lang-en">Trial PINs</span>
                 <span class="lang-es">PINs de Prueba</span>
             </button>
+            <button class="nav-item" data-page="notifications">
+                <span class="nav-item-icon">📢</span>
+                <span class="lang-en">Notifications</span>
+                <span class="lang-es">Notificaciones</span>
+                <span class="nav-item-badge" id="notifBadge" style="display:none">0</span>
+            </button>
             <button class="nav-item" data-page="activity">
                 <span class="nav-item-icon">📋</span>
                 <span class="lang-en">Activity</span>
@@ -970,6 +1193,16 @@ tr.clickable { cursor: pointer; }
                     <span class="lang-es">5 Entrenamientos • 10 Niveles • 3 Circuitos • Powered by Ritnome™</span>
                 </p>
             </header>
+
+            <div class="version-banner">
+                <div class="version-info">
+                    <span class="version-badge" id="platformVersion">v2.0.0</span>
+                    <span class="version-name" id="platformVersionName">LaughCourt 5-Court Edition</span>
+                </div>
+                <button class="btn btn-primary" onclick="showPage('notifications');document.querySelector('[data-page=notifications]').click();">
+                    📢 Send Update
+                </button>
+            </div>
 
             <div class="stats-grid">
                 <div class="stat-card">
@@ -1248,6 +1481,7 @@ tr.clickable { cursor: pointer; }
                                 <th>Facility</th>
                                 <th>Status</th>
                                 <th>Users</th>
+                                <th>Bonus</th>
                                 <th>Expires</th>
                                 <th>Actions</th>
                             </tr>
@@ -1255,6 +1489,55 @@ tr.clickable { cursor: pointer; }
                         <tbody id="trialsTable"></tbody>
                     </table>
                 </div>
+            </div>
+        </section>
+
+        <!-- ========== NOTIFICATIONS PAGE ========== -->
+        <section class="page-section" id="page-notifications">
+            <header class="page-header">
+                <h1 class="page-title">
+                    📢 <span class="lang-en">NOTIFICATIONS</span>
+                    <span class="lang-es">NOTIFICACIONES</span>
+                </h1>
+                <p class="page-subtitle">
+                    <span class="lang-en">Send platform updates to subscribers & trial users • Auto-extend trials</span>
+                    <span class="lang-es">Envía actualizaciones a suscriptores y usuarios de prueba • Auto-extensión</span>
+                </p>
+            </header>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-card-icon cyan">📢</div>
+                    <div class="stat-card-value" id="totalNotifications">0</div>
+                    <div class="stat-card-label">Total</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-icon teal">✅</div>
+                    <div class="stat-card-value" id="activeNotifications">0</div>
+                    <div class="stat-card-label">Active</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-icon gold">👁️</div>
+                    <div class="stat-card-value" id="totalSeen">0</div>
+                    <div class="stat-card-label">Views</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-icon purple">🎁</div>
+                    <div class="stat-card-value" id="totalExtended">0</div>
+                    <div class="stat-card-label">Trials Extended</div>
+                </div>
+            </div>
+
+            <div class="table-card">
+                <div class="table-header">
+                    <h3 class="table-title">PLATFORM UPDATES</h3>
+                    <div class="table-actions">
+                        <button class="btn btn-secondary" id="refreshNotificationsBtn">🔄</button>
+                        <button class="btn btn-purple" id="bulkExtendBtn">🎁 Extend All Trials</button>
+                        <button class="btn btn-primary" id="newNotificationBtn">+ New Update</button>
+                    </div>
+                </div>
+                <div id="notificationsList" style="padding: 20px;"></div>
             </div>
         </section>
 
@@ -1510,6 +1793,129 @@ tr.clickable { cursor: pointer; }
     </div>
 </div>
 
+<!-- Create Notification Modal -->
+<div class="modal-overlay" id="createNotificationModal">
+    <div class="modal" style="max-width:560px">
+        <div class="modal-header">
+            <h3 class="modal-title">📢 NEW PLATFORM UPDATE</h3>
+            <button class="modal-close" data-close="createNotificationModal">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label class="form-label">Title</label>
+                <input type="text" class="form-input" id="notifTitle" placeholder="LaughCourt v2.0 — 5 Workouts!">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Message</label>
+                <textarea class="form-textarea" id="notifMessage" placeholder="We've added 2 new workouts! Enjoy THE REFLEX and THE RITMO..."></textarea>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Type</label>
+                    <select class="form-select" id="notifType">
+                        <option value="update">🚀 Update</option>
+                        <option value="announcement">📣 Announcement</option>
+                        <option value="maintenance">🔧 Maintenance</option>
+                        <option value="promotion">🎁 Promotion</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Expires In</label>
+                    <select class="form-select" id="notifExpires">
+                        <option value="7">7 days</option>
+                        <option value="14">14 days</option>
+                        <option value="30" selected>30 days</option>
+                        <option value="60">60 days</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="checkbox-group">
+                <label class="checkbox-toggle">
+                    <input type="checkbox" id="notifExtendTrials">
+                    <span class="checkbox-slider"></span>
+                </label>
+                <div class="checkbox-label">
+                    <div class="checkbox-label-title">🎁 Extend Active Trials</div>
+                    <div class="checkbox-label-desc">Add bonus days to all active trial PINs as a goodwill gesture</div>
+                </div>
+                <input type="number" class="extend-days-input" id="notifExtendDays" value="3" min="1" max="14">
+                <span style="color:var(--muted);font-size:0.85rem">days</span>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" data-close="createNotificationModal">Cancel</button>
+            <button class="btn btn-primary" id="createNotificationBtn">📢 Send Update</button>
+        </div>
+    </div>
+</div>
+
+<!-- Notification Sent Modal -->
+<div class="modal-overlay" id="notificationSentModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 class="modal-title">✅ UPDATE SENT</h3>
+            <button class="modal-close" data-close="notificationSentModal">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="confirm-dialog">
+                <div class="confirm-dialog-icon">🎉</div>
+                <div class="confirm-dialog-title" id="notifSentTitle">Notification Created!</div>
+                <div class="confirm-dialog-text" id="notifSentText">Users will see this on their next login.</div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" data-close="notificationSentModal">Done</button>
+        </div>
+    </div>
+</div>
+
+<!-- Bulk Extend Modal -->
+<div class="modal-overlay" id="bulkExtendModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 class="modal-title">🎁 EXTEND ALL TRIALS</h3>
+            <button class="modal-close" data-close="bulkExtendModal">×</button>
+        </div>
+        <div class="modal-body">
+            <p style="margin-bottom:20px;color:var(--muted)">Add bonus days to ALL active trial PINs at once.</p>
+            <div class="form-group">
+                <label class="form-label">Days to Add</label>
+                <input type="number" class="form-input" id="bulkExtendDays" value="3" min="1" max="14">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Reason (for activity log)</label>
+                <input type="text" class="form-input" id="bulkExtendReason" placeholder="Platform upgrade appreciation">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" data-close="bulkExtendModal">Cancel</button>
+            <button class="btn btn-primary" id="confirmBulkExtendBtn">🎁 Extend All</button>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Notification Modal -->
+<div class="modal-overlay" id="deleteNotificationModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 class="modal-title">DELETE NOTIFICATION</h3>
+            <button class="modal-close" data-close="deleteNotificationModal">×</button>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="deleteNotifId">
+            <div class="confirm-dialog">
+                <div class="confirm-dialog-icon">⚠️</div>
+                <div class="confirm-dialog-text" id="deleteNotifText">Delete this notification?</div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" data-close="deleteNotificationModal">Cancel</button>
+            <button class="btn btn-danger" id="confirmDeleteNotifBtn">Delete</button>
+        </div>
+    </div>
+</div>
+
 <!-- Toast -->
 <div class="toast" id="toast">
     <span class="toast-icon" id="toastIcon">✓</span>
@@ -1525,6 +1931,8 @@ tr.clickable { cursor: pointer; }
     let subscribers = [];
     let activities = [];
     let trials = [];
+    let notifications = [];
+    let platformVersion = { version: '2.0.0', versionName: 'LaughCourt 5-Court Edition' };
     let currentLang = localStorage.getItem('lc-lang') || 'en';
 
     // ==================== INITIALIZATION ====================
@@ -1671,6 +2079,14 @@ tr.clickable { cursor: pointer; }
         document.getElementById('copyTrialPinBtn').addEventListener('click', copyTrialPin);
         document.getElementById('confirmExtendBtn').addEventListener('click', extendTrial);
         document.getElementById('confirmDeleteTrialBtn').addEventListener('click', deleteTrial);
+        
+        // Notification events
+        document.getElementById('refreshNotificationsBtn').addEventListener('click', loadNotifications);
+        document.getElementById('newNotificationBtn').addEventListener('click', () => openModal('createNotificationModal'));
+        document.getElementById('createNotificationBtn').addEventListener('click', createNotification);
+        document.getElementById('bulkExtendBtn').addEventListener('click', () => openModal('bulkExtendModal'));
+        document.getElementById('confirmBulkExtendBtn').addEventListener('click', bulkExtendTrials);
+        document.getElementById('confirmDeleteNotifBtn').addEventListener('click', deleteNotification);
     }
 
     // ==================== UI HELPERS ====================
@@ -1678,6 +2094,9 @@ tr.clickable { cursor: pointer; }
         document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
         document.getElementById('page-' + page).classList.add('active');
     }
+    
+    // Make showPage globally accessible
+    window.showPage = showPage;
 
     function openModal(id) {
         document.getElementById(id).classList.add('show');
@@ -1722,9 +2141,23 @@ tr.clickable { cursor: pointer; }
     }
 
     function loadAllData() {
+        loadPlatformVersion();
         loadSubscribers();
         loadActivity();
         loadTrials();
+        loadNotifications();
+    }
+
+    // ==================== PLATFORM VERSION ====================
+    function loadPlatformVersion() {
+        fetch('/api/platform/version')
+            .then(r => r.json())
+            .then(d => {
+                platformVersion = d;
+                document.getElementById('platformVersion').textContent = 'v' + d.version;
+                document.getElementById('platformVersionName').textContent = d.versionName;
+            })
+            .catch(() => {});
     }
 
     // ==================== SUBSCRIBERS ====================
@@ -2051,18 +2484,22 @@ tr.clickable { cursor: pointer; }
         const tb = document.getElementById('trialsTable');
 
         if (!trials.length) {
-            tb.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--muted)">No trial PINs yet</td></tr>';
+            tb.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--muted)">No trial PINs yet</td></tr>';
             return;
         }
 
         let html = '';
         trials.forEach(t => {
+            const bonusDays = t.bonusDaysReceived || 0;
+            const bonusBadge = bonusDays > 0 ? `<span style="color:var(--teal);font-size:0.75rem">+${bonusDays}d</span>` : '-';
+            
             html += `
                 <tr>
                     <td><strong style="color:var(--gold);font-size:1.2rem;letter-spacing:2px">${t.pin}</strong></td>
                     <td>${t.facility}${t.notes ? `<br><small style="color:var(--muted)">${t.notes}</small>` : ''}</td>
                     <td><span class="badge badge-${t.status}">${t.status}</span></td>
                     <td>${t.currentUsers || 0}/${t.maxUsers}</td>
+                    <td>${bonusBadge}</td>
                     <td>${formatDate(t.expiresAt)}</td>
                     <td>
                         <div class="action-btns">
@@ -2159,6 +2596,189 @@ tr.clickable { cursor: pointer; }
         });
     }
 
+    // ==================== NOTIFICATIONS ====================
+    function loadNotifications() {
+        api('/api/admin/notifications').then(d => {
+            notifications = d.success ? d.notifications || [] : [];
+            renderNotifications();
+            updateNotificationStats();
+        }).catch(() => {
+            notifications = [];
+            renderNotifications();
+        });
+    }
+
+    function updateNotificationStats() {
+        const total = notifications.length;
+        const active = notifications.filter(n => n.status === 'active').length;
+        const totalSeen = notifications.reduce((sum, n) => sum + (n.totalSeen || 0), 0);
+        const totalExtended = notifications.reduce((sum, n) => sum + (n.trialsExtendedCount || 0), 0);
+
+        document.getElementById('totalNotifications').textContent = total;
+        document.getElementById('activeNotifications').textContent = active;
+        document.getElementById('totalSeen').textContent = totalSeen;
+        document.getElementById('totalExtended').textContent = totalExtended;
+
+        // Update sidebar badge
+        const badge = document.getElementById('notifBadge');
+        if (active > 0) {
+            badge.textContent = active;
+            badge.style.display = 'inline';
+        } else {
+            badge.style.display = 'none';
+        }
+    }
+
+    function renderNotifications() {
+        const container = document.getElementById('notificationsList');
+
+        if (!notifications.length) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">📢</div>
+                    <div class="empty-state-text">No notifications yet</div>
+                    <p style="color:var(--muted);font-size:0.85rem;margin-top:10px">Send your first platform update to subscribers!</p>
+                </div>
+            `;
+            return;
+        }
+
+        let html = '';
+        notifications.forEach(n => {
+            const typeIcons = {
+                update: '🚀',
+                announcement: '📣',
+                maintenance: '🔧',
+                promotion: '🎁'
+            };
+            const icon = typeIcons[n.type] || '📢';
+            const isExpired = n.status === 'expired';
+            
+            html += `
+                <div class="notification-card ${isExpired ? 'expired' : ''}">
+                    <div class="notification-card-header">
+                        <div class="notification-card-title">${icon} ${n.title}</div>
+                        <div class="notification-card-meta">
+                            <span class="badge badge-${n.type}">${n.type}</span>
+                            <span class="badge badge-${n.status}">${n.status}</span>
+                        </div>
+                    </div>
+                    <div class="notification-card-body">${n.message}</div>
+                    <div class="notification-card-footer">
+                        <div class="notification-card-stats">
+                            <div class="notification-card-stat">
+                                👁️ <strong>${n.totalSeen || 0}</strong> seen
+                            </div>
+                            <div class="notification-card-stat">
+                                💳 <strong>${n.seenBySubscribers || 0}</strong> subs
+                            </div>
+                            <div class="notification-card-stat">
+                                🎫 <strong>${n.seenByTrials || 0}</strong> trials
+                            </div>
+                            ${n.extendedTrials ? `
+                                <div class="notification-card-stat" style="color:var(--teal)">
+                                    🎁 <strong>+${n.extendDays}d</strong> to ${n.trialsExtendedCount} trials
+                                </div>
+                            ` : ''}
+                        </div>
+                        <div class="action-btns">
+                            <button class="action-btn delete" onclick="deleteNotifModal('${n.id}','${n.title.replace(/'/g, "\\'")}')">🗑️</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+    }
+
+    function createNotification() {
+        const title = document.getElementById('notifTitle').value.trim();
+        const message = document.getElementById('notifMessage').value.trim();
+        const type = document.getElementById('notifType').value;
+        const expiresInDays = parseInt(document.getElementById('notifExpires').value) || 30;
+        const extendTrials = document.getElementById('notifExtendTrials').checked;
+        const extendDays = parseInt(document.getElementById('notifExtendDays').value) || 3;
+
+        if (!title || !message) {
+            showToast('Title and message required', true);
+            return;
+        }
+
+        api('/api/admin/notifications', {
+            method: 'POST',
+            body: {
+                title,
+                message,
+                type,
+                expiresInDays,
+                extendTrials,
+                extendDays
+            }
+        }).then(d => {
+            if (d.success) {
+                closeModal('createNotificationModal');
+                
+                // Clear form
+                document.getElementById('notifTitle').value = '';
+                document.getElementById('notifMessage').value = '';
+                document.getElementById('notifExtendTrials').checked = false;
+
+                // Show success
+                document.getElementById('notifSentTitle').textContent = title;
+                let text = 'Users will see this on their next login.';
+                if (d.trialsExtended > 0) {
+                    text += ` +${extendDays} bonus days added to ${d.trialsExtended} active trials!`;
+                }
+                document.getElementById('notifSentText').textContent = text;
+                openModal('notificationSentModal');
+
+                loadNotifications();
+                loadTrials();
+                loadActivity();
+            } else {
+                showToast(d.error || 'Error', true);
+            }
+        });
+    }
+
+    function bulkExtendTrials() {
+        const days = parseInt(document.getElementById('bulkExtendDays').value) || 3;
+        const reason = document.getElementById('bulkExtendReason').value.trim() || 'Manual bulk extension';
+
+        api('/api/admin/bulk-extend-trials', {
+            method: 'POST',
+            body: { days, reason }
+        }).then(d => {
+            if (d.success) {
+                closeModal('bulkExtendModal');
+                showToast(`Extended ${d.trialsExtended} trials by ${days} days`);
+                loadTrials();
+                loadActivity();
+            } else {
+                showToast(d.error || 'Error', true);
+            }
+        });
+    }
+
+    window.deleteNotifModal = function(id, title) {
+        document.getElementById('deleteNotifId').value = id;
+        document.getElementById('deleteNotifText').innerHTML = `Delete notification <strong style="color:var(--gold)">"${title}"</strong>?`;
+        openModal('deleteNotificationModal');
+    };
+
+    function deleteNotification() {
+        const id = document.getElementById('deleteNotifId').value;
+        api('/api/admin/notifications/' + id, { method: 'DELETE' }).then(d => {
+            if (d.success) {
+                closeModal('deleteNotificationModal');
+                loadNotifications();
+                showToast('Notification deleted');
+            } else {
+                showToast(d.error || 'Error', true);
+            }
+        });
+    }
+
     // ==================== ACTIVITY ====================
     function loadActivity() {
         api('/api/admin/activity').then(d => {
@@ -2198,6 +2818,7 @@ tr.clickable { cursor: pointer; }
     }
 
     function getActivityIcon(a) {
+        if (a.type && a.type.includes('notification')) return { icon: '📢', cls: 'notification' };
         if (a.type && a.type.includes('subscription')) return { icon: '💳', cls: 'subscription' };
         if (a.type && a.type.includes('trial')) return { icon: '🎫', cls: 'trial' };
         
