@@ -353,7 +353,7 @@
 
         .modal-title {
             font-family: 'Russo One', sans-serif;
-            font-size: 22px;
+            font-size: 24px;
             color: #FFD700;
             margin-bottom: 12px;
         }
@@ -361,15 +361,46 @@
         .modal-text {
             font-size: 14px;
             opacity: 0.9;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             line-height: 1.5;
+        }
+
+        .modal-score {
+            font-family: 'Russo One', sans-serif;
+            font-size: 48px;
+            color: #FFD700;
+            margin: 16px 0;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        .modal-stats {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 20px;
+        }
+
+        .modal-stat {
+            text-align: center;
+        }
+
+        .modal-stat-value {
+            font-size: 24px;
+            font-weight: 800;
+            color: #00D9A5;
+        }
+
+        .modal-stat-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            opacity: 0.7;
         }
 
         .modal-btn {
             width: 100%;
-            padding: 14px;
+            padding: 16px;
             border-radius: 12px;
-            font-size: 15px;
+            font-size: 16px;
             font-weight: 700;
             text-transform: uppercase;
             cursor: pointer;
@@ -380,6 +411,18 @@
         .modal-btn-primary {
             background: linear-gradient(135deg, #FFD700, #FF6B00);
             color: #000;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+
+        .modal-btn-secondary {
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
         }
 
         /* Celebration Animation */
@@ -474,6 +517,27 @@
         </div>
     </div>
 
+    <!-- Circuit Complete Modal -->
+    <div class="modal-overlay" id="circuitModal">
+        <div class="modal-content">
+            <div class="modal-title" id="circuitModalTitle">🏆 CIRCUIT COMPLETE!</div>
+            <div class="modal-score" id="circuitScore">0</div>
+            <p class="modal-text" id="circuitModalText">Great workout!</p>
+            <div class="modal-stats">
+                <div class="modal-stat">
+                    <div class="modal-stat-value" id="circuitLaughs">0</div>
+                    <div class="modal-stat-label">😂 Laughs</div>
+                </div>
+                <div class="modal-stat">
+                    <div class="modal-stat-value" id="circuitBest">0</div>
+                    <div class="modal-stat-label">🏆 Best</div>
+                </div>
+            </div>
+            <button class="modal-btn modal-btn-primary" onclick="nextCircuit()" data-en="🔥 NEXT CIRCUIT" data-es="🔥 SIGUIENTE">🔥 NEXT CIRCUIT</button>
+            <button class="modal-btn modal-btn-secondary" onclick="closeCircuitModal()" data-en="DONE" data-es="LISTO">DONE</button>
+        </div>
+    </div>
+
     <!-- Tier Up Modal -->
     <div class="modal-overlay" id="tierModal">
         <div class="modal-content">
@@ -507,7 +571,7 @@
                 if (ctx.state === 'suspended') ctx.resume();
                 
                 // Rising triumphant arpeggio
-                var notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+                var notes = [523.25, 659.25, 783.99, 1046.50];
                 notes.forEach(function(freq, i) {
                     var osc = ctx.createOscillator();
                     var gain = ctx.createGain();
@@ -543,6 +607,31 @@
             } catch(e) {}
         }
 
+        function playCircuitCompleteSound() {
+            var ctx = getAudioContext();
+            if (!ctx) return;
+            try {
+                if (ctx.state === 'suspended') ctx.resume();
+                
+                // Victory fanfare
+                var notes = [523.25, 659.25, 783.99, 659.25, 783.99, 1046.50];
+                notes.forEach(function(freq, i) {
+                    var osc = ctx.createOscillator();
+                    var gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.value = freq;
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    var startTime = ctx.currentTime + (i * 0.12);
+                    gain.gain.setValueAtTime(0, startTime);
+                    gain.gain.linearRampToValueAtTime(0.4, startTime + 0.02);
+                    gain.gain.exponentialRampToValueAtTime(0.01, startTime + 0.4);
+                    osc.start(startTime);
+                    osc.stop(startTime + 0.45);
+                });
+            } catch(e) {}
+        }
+
         // ============================================
         // GAME STATE
         // ============================================
@@ -554,6 +643,7 @@
             laughs: 0,
             circuits: 0,
             bestScore: 0,
+            totalLaughs: 0,
             lang: 'en',
             speed: 'slow',
             playing: false,
@@ -609,7 +699,7 @@
             try {
                 state.tier = parseInt(localStorage.getItem('lc-match-tier')) || 1;
                 state.bestScore = parseInt(localStorage.getItem('lc-match-best')) || 0;
-                state.laughs = parseInt(localStorage.getItem('lc-match-laughs')) || 0;
+                state.totalLaughs = parseInt(localStorage.getItem('lc-match-laughs')) || 0;
                 state.circuits = parseInt(localStorage.getItem('lc-match-circuits')) || 0;
                 state.lang = localStorage.getItem('lc-lang') || 'en';
                 state.speed = localStorage.getItem('lc-match-speed') || 'slow';
@@ -620,7 +710,7 @@
             try {
                 localStorage.setItem('lc-match-tier', state.tier);
                 localStorage.setItem('lc-match-best', state.bestScore);
-                localStorage.setItem('lc-match-laughs', state.laughs);
+                localStorage.setItem('lc-match-laughs', state.totalLaughs);
                 localStorage.setItem('lc-match-circuits', state.circuits);
                 localStorage.setItem('lc-lang', state.lang);
                 localStorage.setItem('lc-match-speed', state.speed);
@@ -654,12 +744,12 @@
         function startGame() {
             if (state.playing) return;
 
-            // Initialize audio on first interaction
             getAudioContext();
 
             state.playing = true;
             state.score = 0;
             state.play = 1;
+            state.laughs = 0;
             state.consecutiveCorrect = 0;
 
             document.getElementById('startBtn').disabled = true;
@@ -668,7 +758,6 @@
         }
 
         function startPlay() {
-            // Clear any pending timer
             if (state.nextPlayTimer) {
                 clearTimeout(state.nextPlayTimer);
                 state.nextPlayTimer = null;
@@ -681,21 +770,17 @@
 
             clearAllCells();
 
-            // Pick NEW target color for this play
             state.targetColor = COLORS[Math.floor(Math.random() * COLORS.length)];
 
-            // Set center court to target color
             var centerCell = document.querySelector('.grid-cell[data-index="' + CENTER_CELL + '"]');
             centerCell.classList.add('color-' + state.targetColor);
 
             setMessage(MESSAGES.watch[state.lang]);
 
-            // Get tier config
             var tierConfig = TIERS[state.tier - 1];
             var numDistractors = tierConfig.distractors;
             var totalCells = numDistractors + 1;
 
-            // Pick random cells (excluding center)
             var availableCells = [];
             for (var i = 0; i < 25; i++) {
                 if (i !== CENTER_CELL) availableCells.push(i);
@@ -703,18 +788,13 @@
             shuffleArray(availableCells);
 
             var selectedCells = availableCells.slice(0, totalCells);
-            state.shownCells = selectedCells.slice(); // copy
+            state.shownCells = selectedCells.slice();
 
-            // Shuffle again so match isn't always first visually
             shuffleArray(selectedCells);
-            
-            // Pick one random cell to be the match
             state.matchCell = selectedCells[0];
 
-            // Get distractor colors
             var distractorColors = COLORS.filter(function(c) { return c !== state.targetColor; });
 
-            // Assign colors to cells
             selectedCells.forEach(function(cellIndex, i) {
                 var cell = document.querySelector('.grid-cell[data-index="' + cellIndex + '"]');
                 var color;
@@ -732,7 +812,6 @@
 
             disableTapping();
 
-            // After show time, hide colors
             var showTime = SPEEDS[state.speed];
             setTimeout(function() {
                 if (state.phase === 'showing') {
@@ -760,17 +839,15 @@
 
             var cellIndex = parseInt(cell.dataset.index);
             
-            // Immediately change phase to prevent double taps
             state.phase = 'feedback';
             disableTapping();
 
             if (cellIndex === state.matchCell) {
-                // CORRECT! 🔥
                 state.score += 10;
                 state.laughs++;
+                state.totalLaughs++;
                 state.consecutiveCorrect++;
                 
-                // Play fire sound!
                 playFireSound();
                 
                 cell.classList.add('color-' + state.targetColor, 'correct');
@@ -784,7 +861,6 @@
                     showCelebration('🔥');
                 }
 
-                // Check tier advancement
                 if (state.consecutiveCorrect >= 5 && state.tier < TIERS.length) {
                     state.tier++;
                     state.consecutiveCorrect = 0;
@@ -792,14 +868,12 @@
                     setTimeout(function() { showTierModal(); }, 400);
                 }
             } else {
-                // WRONG
                 state.consecutiveCorrect = 0;
                 
                 playWrongSound();
                 
                 cell.classList.add('wrong');
                 
-                // Reveal where the match actually was
                 var matchCellEl = document.querySelector('.grid-cell[data-index="' + state.matchCell + '"]');
                 if (matchCellEl) {
                     matchCellEl.classList.add('color-' + state.targetColor);
@@ -810,7 +884,6 @@
 
             updateDisplay();
 
-            // FAST BREAK CONTINUITY - Move to next play
             state.nextPlayTimer = setTimeout(function() {
                 nextPlay();
             }, 1000);
@@ -836,9 +909,54 @@
             }
 
             saveState();
-            setMessage(MESSAGES.circuitDone[state.lang] + ' 🏆 ' + state.score);
+            
+            // Play victory sound
+            playCircuitCompleteSound();
+            
+            // Show circuit complete modal
+            showCircuitModal();
+        }
+
+        function showCircuitModal() {
+            document.getElementById('circuitScore').textContent = state.score;
+            document.getElementById('circuitLaughs').textContent = state.laughs;
+            document.getElementById('circuitBest').textContent = state.bestScore;
+            
+            var title = state.lang === 'en' ? '🏆 CIRCUIT COMPLETE!' : '🏆 ¡CIRCUITO COMPLETO!';
+            var text = state.lang === 'en' ? 'Great workout!' : '¡Buen entrenamiento!';
+            
+            if (state.score === state.bestScore && state.score > 0) {
+                title = state.lang === 'en' ? '🏆 NEW BEST SCORE!' : '🏆 ¡NUEVO RÉCORD!';
+                text = state.lang === 'en' ? 'You\'re on fire!' : '¡Estás en llamas!';
+            }
+            
+            document.getElementById('circuitModalTitle').textContent = title;
+            document.getElementById('circuitModalText').textContent = text;
+            document.getElementById('circuitModal').classList.add('active');
+        }
+
+        function nextCircuit() {
+            document.getElementById('circuitModal').classList.remove('active');
+            clearAllCells();
+            state.score = 0;
+            state.play = 1;
+            state.laughs = 0;
+            state.consecutiveCorrect = 0;
+            updateDisplay();
+            
+            // Small delay then start
+            setTimeout(function() {
+                state.playing = true;
+                document.getElementById('startBtn').disabled = true;
+                startPlay();
+            }, 300);
+        }
+
+        function closeCircuitModal() {
+            document.getElementById('circuitModal').classList.remove('active');
+            clearAllCells();
             document.getElementById('startBtn').disabled = false;
-            showCelebration('🏆');
+            setMessage(MESSAGES.start[state.lang]);
         }
 
         function clearAllCells() {
@@ -865,7 +983,6 @@
         }
 
         function resetGame() {
-            // Clear any pending timer
             if (state.nextPlayTimer) {
                 clearTimeout(state.nextPlayTimer);
                 state.nextPlayTimer = null;
@@ -875,6 +992,7 @@
             state.phase = 'idle';
             state.score = 0;
             state.play = 1;
+            state.laughs = 0;
             state.consecutiveCorrect = 0;
             state.shownCells = [];
             state.matchCell = -1;
