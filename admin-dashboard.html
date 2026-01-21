@@ -724,18 +724,6 @@ tr:hover { background: var(--card-hover); }
     color: var(--muted);
 }
 
-.extend-days-input {
-    width: 70px;
-    padding: 8px 12px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--text);
-    font-size: 0.9rem;
-    text-align: center;
-    font-family: 'Outfit', sans-serif;
-}
-
 /* ==================== MODALS ==================== */
 .modal-overlay {
     position: fixed;
@@ -1030,6 +1018,56 @@ tr.clickable { cursor: pointer; }
 .version-name {
     font-size: 0.9rem;
     color: var(--muted);
+}
+
+/* ==================== UPDATE HISTORY ==================== */
+.update-history {
+    margin-top: 30px;
+}
+
+.update-history-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+}
+
+.update-history-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+}
+.update-history-item:last-child { border-bottom: none; }
+
+.update-history-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    background: rgba(0,206,209,0.15);
+    color: var(--cyan);
+    flex-shrink: 0;
+}
+
+.update-history-content { flex: 1; }
+.update-history-text { font-size: 0.85rem; }
+.update-history-meta { font-size: 0.7rem; color: var(--muted); margin-top: 2px; }
+
+.update-history-badge {
+    background: rgba(0,217,165,0.15);
+    color: var(--teal);
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 700;
 }
 
 /* ==================== FOOTER ==================== */
@@ -1496,12 +1534,12 @@ tr.clickable { cursor: pointer; }
         <section class="page-section" id="page-notifications">
             <header class="page-header">
                 <h1 class="page-title">
-                    📢 <span class="lang-en">NOTIFICATIONS</span>
-                    <span class="lang-es">NOTIFICACIONES</span>
+                    📢 <span class="lang-en">PLATFORM UPDATES</span>
+                    <span class="lang-es">ACTUALIZACIONES</span>
                 </h1>
                 <p class="page-subtitle">
-                    <span class="lang-en">Send platform updates to subscribers & trial users • Auto-extend trials</span>
-                    <span class="lang-es">Envía actualizaciones a suscriptores y usuarios de prueba • Auto-extensión</span>
+                    <span class="lang-en">Send updates to all users • Auto-extend active trials by 3 days</span>
+                    <span class="lang-es">Envía actualizaciones a todos • Auto-extensión de 3 días para pruebas</span>
                 </p>
             </header>
 
@@ -1509,7 +1547,7 @@ tr.clickable { cursor: pointer; }
                 <div class="stat-card">
                     <div class="stat-card-icon cyan">📢</div>
                     <div class="stat-card-value" id="totalNotifications">0</div>
-                    <div class="stat-card-label">Total</div>
+                    <div class="stat-card-label">Total Sent</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-card-icon teal">✅</div>
@@ -1519,7 +1557,7 @@ tr.clickable { cursor: pointer; }
                 <div class="stat-card">
                     <div class="stat-card-icon gold">👁️</div>
                     <div class="stat-card-value" id="totalSeen">0</div>
-                    <div class="stat-card-label">Views</div>
+                    <div class="stat-card-label">Total Views</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-card-icon purple">🎁</div>
@@ -1530,12 +1568,21 @@ tr.clickable { cursor: pointer; }
 
             <div class="table-card">
                 <div class="table-header">
-                    <h3 class="table-title">PLATFORM UPDATES</h3>
-                    <div class="table-actions">
-                        <button class="btn btn-secondary" id="refreshNotificationsBtn">🔄</button>
-                        <button class="btn btn-purple" id="bulkExtendBtn">🎁 Extend All Trials</button>
-                        <button class="btn btn-primary" id="newNotificationBtn">+ New Update</button>
-                    </div>
+                    <h3 class="table-title">SEND NEW UPDATE</h3>
+                    <button class="btn btn-primary" id="newNotificationBtn">+ New Update</button>
+                </div>
+                <div style="padding: 20px;">
+                    <p style="color: var(--muted); font-size: 0.9rem; margin-bottom: 15px;">
+                        Send platform updates that users see on their next login. Optionally extend all active trials by 3 days as a goodwill gesture.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Update History -->
+            <div class="table-card">
+                <div class="table-header">
+                    <h3 class="table-title">📋 UPDATE HISTORY</h3>
+                    <button class="btn btn-secondary" id="refreshNotificationsBtn">🔄</button>
                 </div>
                 <div id="notificationsList" style="padding: 20px;"></div>
             </div>
@@ -1836,11 +1883,9 @@ tr.clickable { cursor: pointer; }
                     <span class="checkbox-slider"></span>
                 </label>
                 <div class="checkbox-label">
-                    <div class="checkbox-label-title">🎁 Extend Active Trials</div>
-                    <div class="checkbox-label-desc">Add bonus days to all active trial PINs as a goodwill gesture</div>
+                    <div class="checkbox-label-title">🎁 Extend Active Trials (+3 days)</div>
+                    <div class="checkbox-label-desc">Add 3 bonus days to ALL active trial PINs as a goodwill gesture</div>
                 </div>
-                <input type="number" class="extend-days-input" id="notifExtendDays" value="3" min="1" max="14">
-                <span style="color:var(--muted);font-size:0.85rem">days</span>
             </div>
         </div>
         <div class="modal-footer">
@@ -1854,43 +1899,22 @@ tr.clickable { cursor: pointer; }
 <div class="modal-overlay" id="notificationSentModal">
     <div class="modal">
         <div class="modal-header">
-            <h3 class="modal-title">✅ UPDATE SENT</h3>
+            <h3 class="modal-title">✅ UPDATE SENT!</h3>
             <button class="modal-close" data-close="notificationSentModal">×</button>
         </div>
         <div class="modal-body">
             <div class="confirm-dialog">
                 <div class="confirm-dialog-icon">🎉</div>
-                <div class="confirm-dialog-title" id="notifSentTitle">Notification Created!</div>
-                <div class="confirm-dialog-text" id="notifSentText">Users will see this on their next login.</div>
+                <div class="confirm-dialog-title" id="notifSentTitle">Update Published!</div>
+                <div class="confirm-dialog-text" id="notifSentText">Users will see this modal on their next login.</div>
+                <div id="notifSentExtendInfo" style="margin-top:15px;padding:15px;background:var(--darker);border-radius:10px;display:none;">
+                    <div style="color:var(--teal);font-weight:600;margin-bottom:5px;">🎁 Trials Extended!</div>
+                    <div id="notifSentExtendDetails" style="color:var(--muted);font-size:0.85rem;"></div>
+                </div>
             </div>
         </div>
         <div class="modal-footer">
-            <button class="btn btn-primary" data-close="notificationSentModal">Done</button>
-        </div>
-    </div>
-</div>
-
-<!-- Bulk Extend Modal -->
-<div class="modal-overlay" id="bulkExtendModal">
-    <div class="modal">
-        <div class="modal-header">
-            <h3 class="modal-title">🎁 EXTEND ALL TRIALS</h3>
-            <button class="modal-close" data-close="bulkExtendModal">×</button>
-        </div>
-        <div class="modal-body">
-            <p style="margin-bottom:20px;color:var(--muted)">Add bonus days to ALL active trial PINs at once.</p>
-            <div class="form-group">
-                <label class="form-label">Days to Add</label>
-                <input type="number" class="form-input" id="bulkExtendDays" value="3" min="1" max="14">
-            </div>
-            <div class="form-group">
-                <label class="form-label">Reason (for activity log)</label>
-                <input type="text" class="form-input" id="bulkExtendReason" placeholder="Platform upgrade appreciation">
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-secondary" data-close="bulkExtendModal">Cancel</button>
-            <button class="btn btn-primary" id="confirmBulkExtendBtn">🎁 Extend All</button>
+            <button class="btn btn-primary" data-close="notificationSentModal">Got It!</button>
         </div>
     </div>
 </div>
@@ -2084,8 +2108,6 @@ tr.clickable { cursor: pointer; }
         document.getElementById('refreshNotificationsBtn').addEventListener('click', loadNotifications);
         document.getElementById('newNotificationBtn').addEventListener('click', () => openModal('createNotificationModal'));
         document.getElementById('createNotificationBtn').addEventListener('click', createNotification);
-        document.getElementById('bulkExtendBtn').addEventListener('click', () => openModal('bulkExtendModal'));
-        document.getElementById('confirmBulkExtendBtn').addEventListener('click', bulkExtendTrials);
         document.getElementById('confirmDeleteNotifBtn').addEventListener('click', deleteNotification);
     }
 
@@ -2127,6 +2149,12 @@ tr.clickable { cursor: pointer; }
     function formatDate(ts) {
         if (!ts) return '-';
         return new Date(ts).toLocaleDateString();
+    }
+    
+    function formatDateTime(ts) {
+        if (!ts) return '-';
+        const d = new Date(ts);
+        return d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
     }
 
     // ==================== API ====================
@@ -2636,8 +2664,8 @@ tr.clickable { cursor: pointer; }
             container.innerHTML = `
                 <div class="empty-state">
                     <div class="empty-state-icon">📢</div>
-                    <div class="empty-state-text">No notifications yet</div>
-                    <p style="color:var(--muted);font-size:0.85rem;margin-top:10px">Send your first platform update to subscribers!</p>
+                    <div class="empty-state-text">No updates sent yet</div>
+                    <p style="color:var(--muted);font-size:0.85rem;margin-top:10px">Click "+ New Update" to send your first platform announcement!</p>
                 </div>
             `;
             return;
@@ -2653,6 +2681,9 @@ tr.clickable { cursor: pointer; }
             };
             const icon = typeIcons[n.type] || '📢';
             const isExpired = n.status === 'expired';
+            const extendedInfo = n.extendedTrials && n.trialsExtendedCount > 0 
+                ? `<span class="update-history-badge">+3d → ${n.trialsExtendedCount} trials</span>` 
+                : '';
             
             html += `
                 <div class="notification-card ${isExpired ? 'expired' : ''}">
@@ -2667,7 +2698,7 @@ tr.clickable { cursor: pointer; }
                     <div class="notification-card-footer">
                         <div class="notification-card-stats">
                             <div class="notification-card-stat">
-                                👁️ <strong>${n.totalSeen || 0}</strong> seen
+                                👁️ <strong>${n.totalSeen || 0}</strong> views
                             </div>
                             <div class="notification-card-stat">
                                 💳 <strong>${n.seenBySubscribers || 0}</strong> subs
@@ -2675,15 +2706,18 @@ tr.clickable { cursor: pointer; }
                             <div class="notification-card-stat">
                                 🎫 <strong>${n.seenByTrials || 0}</strong> trials
                             </div>
-                            ${n.extendedTrials ? `
+                            ${n.extendedTrials && n.trialsExtendedCount > 0 ? `
                                 <div class="notification-card-stat" style="color:var(--teal)">
-                                    🎁 <strong>+${n.extendDays}d</strong> to ${n.trialsExtendedCount} trials
+                                    🎁 <strong>+3d</strong> → ${n.trialsExtendedCount} trials
                                 </div>
                             ` : ''}
                         </div>
                         <div class="action-btns">
                             <button class="action-btn delete" onclick="deleteNotifModal('${n.id}','${n.title.replace(/'/g, "\\'")}')">🗑️</button>
                         </div>
+                    </div>
+                    <div style="font-size:0.7rem;color:var(--muted);margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">
+                        Sent: ${formatDateTime(n.createdAt)} • Expires: ${formatDate(n.expiresAt)}
                     </div>
                 </div>
             `;
@@ -2697,7 +2731,6 @@ tr.clickable { cursor: pointer; }
         const type = document.getElementById('notifType').value;
         const expiresInDays = parseInt(document.getElementById('notifExpires').value) || 30;
         const extendTrials = document.getElementById('notifExtendTrials').checked;
-        const extendDays = parseInt(document.getElementById('notifExtendDays').value) || 3;
 
         if (!title || !message) {
             showToast('Title and message required', true);
@@ -2712,7 +2745,7 @@ tr.clickable { cursor: pointer; }
                 type,
                 expiresInDays,
                 extendTrials,
-                extendDays
+                extendDays: 3  // Always 3 days
             }
         }).then(d => {
             if (d.success) {
@@ -2723,13 +2756,23 @@ tr.clickable { cursor: pointer; }
                 document.getElementById('notifMessage').value = '';
                 document.getElementById('notifExtendTrials').checked = false;
 
-                // Show success
+                // Show success modal
                 document.getElementById('notifSentTitle').textContent = title;
-                let text = 'Users will see this on their next login.';
+                document.getElementById('notifSentText').textContent = 'Users will see this modal on their next login.';
+                
+                // Show extension info if applicable
+                const extendInfo = document.getElementById('notifSentExtendInfo');
+                const extendDetails = document.getElementById('notifSentExtendDetails');
                 if (d.trialsExtended > 0) {
-                    text += ` +${extendDays} bonus days added to ${d.trialsExtended} active trials!`;
+                    extendInfo.style.display = 'block';
+                    extendDetails.textContent = `+3 bonus days added to ${d.trialsExtended} active trial${d.trialsExtended > 1 ? 's' : ''}!`;
+                } else if (extendTrials) {
+                    extendInfo.style.display = 'block';
+                    extendDetails.textContent = 'No active trials to extend at this time.';
+                } else {
+                    extendInfo.style.display = 'none';
                 }
-                document.getElementById('notifSentText').textContent = text;
+                
                 openModal('notificationSentModal');
 
                 loadNotifications();
@@ -2741,28 +2784,9 @@ tr.clickable { cursor: pointer; }
         });
     }
 
-    function bulkExtendTrials() {
-        const days = parseInt(document.getElementById('bulkExtendDays').value) || 3;
-        const reason = document.getElementById('bulkExtendReason').value.trim() || 'Manual bulk extension';
-
-        api('/api/admin/bulk-extend-trials', {
-            method: 'POST',
-            body: { days, reason }
-        }).then(d => {
-            if (d.success) {
-                closeModal('bulkExtendModal');
-                showToast(`Extended ${d.trialsExtended} trials by ${days} days`);
-                loadTrials();
-                loadActivity();
-            } else {
-                showToast(d.error || 'Error', true);
-            }
-        });
-    }
-
     window.deleteNotifModal = function(id, title) {
         document.getElementById('deleteNotifId').value = id;
-        document.getElementById('deleteNotifText').innerHTML = `Delete notification <strong style="color:var(--gold)">"${title}"</strong>?`;
+        document.getElementById('deleteNotifText').innerHTML = `Delete update <strong style="color:var(--gold)">"${title}"</strong>?`;
         openModal('deleteNotificationModal');
     };
 
