@@ -31,7 +31,6 @@ html, body {
     -webkit-tap-highlight-color: transparent;
 }
 
-/* Main Container - Fits viewport exactly */
 .game-container {
     max-width: 420px;
     height: 100vh;
@@ -43,7 +42,6 @@ html, body {
     overflow: hidden;
 }
 
-/* Header - Compact */
 .header {
     text-align: center;
     padding: 5px 0;
@@ -72,7 +70,6 @@ html, body {
 }
 .powered-by .ritnome { color: var(--gold); font-weight: 700; }
 
-/* Stats Bar - Compact */
 .stats-bar {
     display: flex;
     justify-content: center;
@@ -97,7 +94,6 @@ html, body {
     letter-spacing: 1px;
 }
 
-/* Message Display - Compact */
 .message-display {
     background: var(--card);
     border: 2px solid var(--orange);
@@ -116,7 +112,6 @@ html, body {
 .message-text.watch { color: var(--gold); }
 .message-text.go { color: var(--teal); }
 
-/* Ritnome™ BPM Selector - Compact */
 .ritnome-tempo {
     margin-bottom: 8px;
     flex-shrink: 0;
@@ -164,7 +159,6 @@ html, body {
     background: rgba(255,107,0,0.1);
 }
 
-/* Locked BPM button styles */
 .speed-btn.locked {
     opacity: 0.5;
     cursor: pointer;
@@ -179,7 +173,6 @@ html, body {
 }
 .speed-btn.locked .icon { opacity: 0.5; }
 
-/* 5x5 Court Grid - Flexible, takes remaining space */
 .court-wrapper {
     flex: 1;
     display: flex;
@@ -238,7 +231,6 @@ html, body {
 @keyframes pulse { 50% { transform: scale(1.1); } }
 @keyframes shake { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
 
-/* Progress & Tier - Compact */
 .progress-section {
     display: flex;
     align-items: center;
@@ -270,7 +262,6 @@ html, body {
     transition: width 0.3s;
 }
 
-/* Action Button - Compact */
 .action-btn {
     width: 100%;
     padding: 14px;
@@ -287,7 +278,6 @@ html, body {
 }
 .action-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-/* Feedback Overlay */
 .feedback-overlay {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -335,7 +325,6 @@ html, body {
 .feedback-btn.primary { background: linear-gradient(135deg, var(--orange), var(--gold)); color: var(--dark); }
 .feedback-btn.secondary { background: transparent; color: var(--muted); border: 1px solid var(--muted); }
 
-/* Upgrade Modal */
 .upgrade-overlay {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -436,7 +425,6 @@ html, body {
 }
 .upgrade-close:hover { border-color: var(--text); color: var(--text); }
 
-/* Coach Message */
 .coach-message {
     position: fixed;
     bottom: 15px;
@@ -455,7 +443,6 @@ html, body {
 }
 .coach-message.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-/* Language Toggle */
 .lang-toggle {
     position: fixed;
     top: 8px;
@@ -476,7 +463,6 @@ html, body {
 }
 .lang-btn.active { border-color: var(--gold); color: var(--gold); }
 
-/* Back Button */
 .back-btn {
     position: fixed;
     top: 8px;
@@ -492,11 +478,9 @@ html, body {
     z-index: 100;
 }
 
-/* Hide lang spans */
 body.en .lang-es { display: none !important; }
 body.es .lang-en { display: none !important; }
 
-/* Desktop adjustments */
 @media (min-height: 700px) {
     .game-container { padding: 15px; }
     .court-grid { max-width: 350px; gap: 8px; padding: 15px; }
@@ -507,7 +491,6 @@ body.es .lang-en { display: none !important; }
     .action-btn { padding: 16px; font-size: 1.3rem; }
 }
 
-/* Very small screens */
 @media (max-height: 600px) {
     .game-container { padding: 8px 10px; }
     .header { padding: 3px 0; }
@@ -526,25 +509,6 @@ body.es .lang-en { display: none !important; }
 </style>
 </head>
 <body class="en">
-
-<!-- ============ BULLETPROOF AUTH GATE ============ -->
-<script>
-(function(){
-    var host = window.location.hostname;
-    var isLocal = (host === 'localhost' || host === '127.0.0.1' || host === '');
-    if (!isLocal) {
-        var user = null;
-        try { user = JSON.parse(localStorage.getItem('lc-user')); } catch(e) {}
-        var hasValidUser = user && user.pin && user.pin.length >= 4;
-        if (!hasValidUser) {
-            document.documentElement.style.display = 'none';
-            window.location.replace('index.html');
-            throw new Error('Auth required');
-        }
-    }
-})();
-</script>
-<!-- ============ END AUTH GATE ============ -->
 
 <div class="lang-toggle">
     <button class="lang-btn active" id="btnEn">EN</button>
@@ -645,7 +609,6 @@ body.es .lang-en { display: none !important; }
     </div>
 </div>
 
-<!-- Upgrade Modal -->
 <div class="upgrade-overlay" id="upgradeOverlay">
     <div class="upgrade-card">
         <div class="upgrade-icon">🔓🎵</div>
@@ -678,6 +641,55 @@ body.es .lang-en { display: none !important; }
 
 <script>
 (function() {
+    // ==================== ENVIRONMENT DETECTION ====================
+    var host = window.location.hostname;
+    var isProduction = (host.indexOf('laughcourt') > -1 || host.indexOf('github.io') > -1);
+    var isLocal = (host === 'localhost' || host === '127.0.0.1' || host === '');
+    var isPreview = !isProduction && !isLocal;
+
+    // ==================== PRODUCTION AUTH & HEARTBEAT ====================
+    if (isProduction) {
+        var user = null;
+        try { user = JSON.parse(localStorage.getItem('lc-user')); } catch(e) {}
+        if (!user || !user.pin || user.pin.length < 4) {
+            window.location.replace('index.html');
+            return;
+        }
+
+        var sessionPin = sessionStorage.getItem('lc-pin');
+        var sessionToken = sessionStorage.getItem('lc-token');
+
+        function validateSession() {
+            if (!sessionPin || !sessionToken) {
+                window.location.href = 'index.html';
+                return;
+            }
+            fetch('/api/session/validate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ pin: sessionPin, token: sessionToken })
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(d) {
+                if (!d.valid) {
+                    alert(d.message || 'Session ended. Please log in again.');
+                    localStorage.removeItem('lc-user');
+                    localStorage.removeItem('lc-bpm-access');
+                    sessionStorage.removeItem('lc-pin');
+                    sessionStorage.removeItem('lc-token');
+                    window.location.href = 'index.html';
+                }
+            })
+            .catch(function(err) {
+                console.log('Session validation error:', err);
+            });
+        }
+
+        validateSession();
+        setInterval(validateSession, 30000);
+    }
+    // ==================== END PRODUCTION AUTH & HEARTBEAT ====================
+
     var currentLang = localStorage.getItem('lc-lang') || 'en';
     
     // BPM Access Control
@@ -764,21 +776,16 @@ body.es .lang-en { display: none !important; }
         document.getElementById('btnEs').className = lang === 'es' ? 'lang-btn active' : 'lang-btn';
     }
 
-    // Initialize BPM buttons based on access
     function initBpmButtons() {
         var speedBtns = document.querySelectorAll('.speed-btn');
         speedBtns.forEach(function(btn) {
             var bpm = parseInt(btn.dataset.bpm);
-            
             if (!bpmAccess.allBPM && bpm > 60) {
-                // Lock 90 and 120 BPM for trial/guest users
                 btn.classList.add('locked');
             } else {
                 btn.classList.remove('locked');
             }
         });
-        
-        // Default to 60 BPM for trial users
         if (!bpmAccess.allBPM) {
             state.speed = 'slow';
             state.bpm = 60;
@@ -787,15 +794,8 @@ body.es .lang-en { display: none !important; }
         }
     }
 
-    // Show upgrade modal
-    function showUpgradeModal() {
-        upgradeOverlay.classList.add('show');
-    }
-
-    // Hide upgrade modal
-    function hideUpgradeModal() {
-        upgradeOverlay.classList.remove('show');
-    }
+    function showUpgradeModal() { upgradeOverlay.classList.add('show'); }
+    function hideUpgradeModal() { upgradeOverlay.classList.remove('show'); }
 
     function initGrid() {
         courtGrid.innerHTML = '';
@@ -976,7 +976,6 @@ body.es .lang-en { display: none !important; }
         setTimeout(function() { coachMessage.classList.remove('show'); }, 2000);
     }
 
-    // Audio
     var audioCtx = null;
     function getAudioContext() {
         if (!audioCtx) { try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) { return null; } }
@@ -1008,7 +1007,6 @@ body.es .lang-en { display: none !important; }
         } catch(e) {}
     }
 
-    // Event Listeners
     actionBtn.addEventListener('click', function() {
         if (!state.isPlaying && !state.isShowing) startRound();
     });
@@ -1016,15 +1014,11 @@ body.es .lang-en { display: none !important; }
     document.querySelectorAll('.speed-btn').forEach(function(btn) {
         btn.addEventListener('click', function() {
             if (state.isPlaying) return;
-            
             var bpm = parseInt(btn.dataset.bpm);
-            
-            // Check if locked
             if (!bpmAccess.allBPM && bpm > 60) {
                 showUpgradeModal();
                 return;
             }
-            
             document.querySelectorAll('.speed-btn').forEach(function(b) { b.classList.remove('active'); });
             btn.classList.add('active');
             state.speed = btn.dataset.speed;
@@ -1032,10 +1026,7 @@ body.es .lang-en { display: none !important; }
         });
     });
 
-    // Upgrade modal close
-    document.getElementById('upgradeClose').addEventListener('click', function() {
-        hideUpgradeModal();
-    });
+    document.getElementById('upgradeClose').addEventListener('click', function() { hideUpgradeModal(); });
 
     document.getElementById('continueBtn').addEventListener('click', function() {
         feedbackOverlay.classList.remove('show');
@@ -1061,7 +1052,6 @@ body.es .lang-en { display: none !important; }
     document.getElementById('btnEn').addEventListener('click', function() { setLang('en'); });
     document.getElementById('btnEs').addEventListener('click', function() { setLang('es'); });
 
-    // Init
     initGrid();
     initBpmButtons();
     setLang(currentLang);
