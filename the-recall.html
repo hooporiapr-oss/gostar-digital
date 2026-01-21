@@ -12,9 +12,8 @@
     --gold: #FFD700;
     --teal: #00D9A5;
     --pink: #FF1493;
-    --red: #FF1744;
+    --purple: #9D4EDD;
     --dark: #0a0a0f;
-    --darker: #050508;
     --card: #111118;
     --text: #FFFFFF;
     --muted: #8892a0;
@@ -181,7 +180,7 @@ body {
 }
 .speed-btn.locked .icon { opacity: 0.5; }
 
-/* COURT GRID - THE KEY TO MOBILE FIT */
+/* COURT GRID - 40vh MOBILE PERFECT FIT */
 .court-wrapper {
     flex: 1;
     display: flex;
@@ -679,11 +678,13 @@ body.es .lang-en { display: none !important; }
 
 <script>
 (function() {
-    // ==================== PREVIEW MODE - Skip Auth ====================
+    // ==================== ENVIRONMENT DETECTION ====================
     var host = window.location.hostname;
     var isProduction = (host.indexOf('laughcourt') > -1 || host.indexOf('github.io') > -1);
-    
-    // Skip auth for preview
+    var isLocal = (host === 'localhost' || host === '127.0.0.1' || host === '');
+    var isPreview = !isProduction && !isLocal;
+
+    // ==================== PRODUCTION AUTH & HEARTBEAT ====================
     if (isProduction) {
         var user = null;
         try { user = JSON.parse(localStorage.getItem('lc-user')); } catch(e) {}
@@ -691,11 +692,48 @@ body.es .lang-en { display: none !important; }
             window.location.replace('index.html');
             return;
         }
+
+        var sessionPin = sessionStorage.getItem('lc-pin');
+        var sessionToken = sessionStorage.getItem('lc-token');
+
+        function validateSession() {
+            if (!sessionPin || !sessionToken) {
+                window.location.href = 'index.html';
+                return;
+            }
+            fetch('/api/session/validate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ pin: sessionPin, token: sessionToken })
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(d) {
+                if (!d.valid) {
+                    alert(d.message || 'Session ended. Please log in again.');
+                    localStorage.removeItem('lc-user');
+                    localStorage.removeItem('lc-bpm-access');
+                    sessionStorage.removeItem('lc-pin');
+                    sessionStorage.removeItem('lc-token');
+                    window.location.href = 'index.html';
+                }
+            })
+            .catch(function(err) {
+                console.log('Session validation error:', err);
+            });
+        }
+
+        validateSession();
+        setInterval(validateSession, 30000);
     }
+    // ==================== END PRODUCTION AUTH & HEARTBEAT ====================
 
     var currentLang = localStorage.getItem('lc-lang') || 'en';
     
-    var bpmAccess = { allBPM: true, userType: 'preview' }; // All BPM unlocked for preview
+    var bpmAccess = { allBPM: false, userType: 'guest' };
+    try {
+        var storedAccess = localStorage.getItem('lc-bpm-access');
+        if (storedAccess) bpmAccess = JSON.parse(storedAccess);
+    } catch(e) {}
 
     var state = {
         tier: parseInt(localStorage.getItem('lc-recall-tier')) || 1,
@@ -712,10 +750,11 @@ body.es .lang-en { display: none !important; }
         cells: []
     };
 
+    // ==================== RITNOME™ BPM-SYNCED TIMING ====================
     var speeds = {
-        slow: { bpm: 60, flash: 800, pause: 400 },
-        medium: { bpm: 90, flash: 500, pause: 300 },
-        fast: { bpm: 120, flash: 350, pause: 200 }
+        slow: { bpm: 60, flash: 1000, pause: 500 },      // 60 BPM = 1 beat per second
+        medium: { bpm: 90, flash: 667, pause: 333 },     // 90 BPM = 1.5 beats per second
+        fast: { bpm: 120, flash: 500, pause: 250 }       // 120 BPM = 2 beats per second
     };
 
     var getSequenceLength = function(tier) { return tier + 1; };
@@ -779,6 +818,12 @@ body.es .lang-en { display: none !important; }
             if (!bpmAccess.allBPM && bpm > 60) btn.classList.add('locked');
             else btn.classList.remove('locked');
         });
+        if (!bpmAccess.allBPM) {
+            state.speed = 'slow';
+            state.bpm = 60;
+            speedBtns.forEach(function(b) { b.classList.remove('active'); });
+            document.querySelector('.speed-btn[data-bpm="60"]').classList.add('active');
+        }
     }
 
     function showUpgradeModal() { upgradeOverlay.classList.add('show'); }
@@ -808,6 +853,111 @@ body.es .lang-en { display: none !important; }
         return seq;
     }
 
+    // ==================== RITNOME™ AUDIO ENGINE ====================
+    var audioCtx = null;
+    function getAudioContext() {
+        if (!audioCtx) {
+            try {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            } catch(e) {
+                console.log('Audio not supported');
+                return null;
+            }
+        }
+        return audioCtx;
+    }
+
+    // Ritnome™ Musical Scale - C Major Pentatonic for pleasant tones
+    var ritnomeScale = [
+        261.63,  // C4
+        293.66,  // D4
+        329.63,  // E4
+        392.00,  // G4
+        440.00,  // A4
+        523.25,  // C5
+        587.33,  // D5
+        659.25,  // E5
+        783.99,  // G5
+        880.00,  // A5
+        1046.50  // C6
+    ];
+
+    function playRitnomeTone(index) {
+        var ctx = getAudioContext();
+        if (!ctx) return;
+        
+        try {
+            if (ctx.state === 'suspended') ctx.resume();
+            
+            var osc = ctx.createOscillator();
+            var gain = ctx.createGain();
+            
+            // Warm sine wave for pleasant cognitive training
+            osc.type = 'sine';
+            osc.frequency.value = ritnomeScale[index % ritnomeScale.length];
+            
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            
+            // Smooth envelope synced to BPM
+            var beatDuration = 60 / state.bpm;
+            gain.gain.setValueAtTime(0, ctx.currentTime);
+            gain.gain.linearRampToValueAtTime(0.4, ctx.currentTime + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + beatDuration * 0.8);
+            
+            osc.start(ctx.currentTime);
+            osc.stop(ctx.currentTime + beatDuration);
+        } catch(e) {
+            console.log('Tone error:', e);
+        }
+    }
+
+    function playSuccessTone() {
+        var ctx = getAudioContext();
+        if (!ctx) return;
+        
+        try {
+            if (ctx.state === 'suspended') ctx.resume();
+            
+            // Play ascending arpeggio for success
+            [0, 2, 4].forEach(function(note, i) {
+                setTimeout(function() {
+                    var osc = ctx.createOscillator();
+                    var gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.value = ritnomeScale[note + 5];
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+                    osc.start(ctx.currentTime);
+                    osc.stop(ctx.currentTime + 0.2);
+                }, i * 100);
+            });
+        } catch(e) {}
+    }
+
+    function playErrorTone() {
+        var ctx = getAudioContext();
+        if (!ctx) return;
+        
+        try {
+            if (ctx.state === 'suspended') ctx.resume();
+            
+            var osc = ctx.createOscillator();
+            var gain = ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.value = 180;
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            gain.gain.setValueAtTime(0.25, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+            osc.start(ctx.currentTime);
+            osc.stop(ctx.currentTime + 0.35);
+        } catch(e) {}
+    }
+    // ==================== END RITNOME™ AUDIO ENGINE ====================
+
     function showSequence() {
         state.isShowing = true;
         actionBtn.disabled = true;
@@ -829,7 +979,7 @@ body.es .lang-en { display: none !important; }
             }
             var cell = state.cells[state.sequence[i]];
             cell.classList.add('lit');
-            playTone(i);
+            playRitnomeTone(i);  // Ritnome™ tone on each flash
             setTimeout(function() {
                 cell.classList.remove('lit');
                 i++;
@@ -849,7 +999,7 @@ body.es .lang-en { display: none !important; }
         
         if (index === expected) {
             cell.classList.add('correct');
-            playTone(currentIndex);
+            playRitnomeTone(currentIndex);  // Ritnome™ tone on correct tap
             setTimeout(function() { 
                 cell.classList.remove('correct');
                 cell.classList.add('completed');
@@ -867,6 +1017,8 @@ body.es .lang-en { display: none !important; }
     function handleSuccess() {
         state.isPlaying = false;
         state.cells.forEach(function(c) { c.classList.add('disabled'); });
+        
+        playSuccessTone();  // Ritnome™ success arpeggio
         
         var bpmBonus = state.bpm === 120 ? 2 : state.bpm === 90 ? 1 : 0;
         var laughsEarned = state.tier + bpmBonus;
@@ -959,37 +1111,6 @@ body.es .lang-en { display: none !important; }
         coachMessage.textContent = msg;
         coachMessage.classList.add('show');
         setTimeout(function() { coachMessage.classList.remove('show'); }, 2000);
-    }
-
-    var audioCtx = null;
-    function getAudioContext() {
-        if (!audioCtx) { try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) { return null; } }
-        return audioCtx;
-    }
-    var noteFreqs = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88, 523.25, 587.33, 659.25, 698.46];
-    function playTone(index) {
-        var ctx = getAudioContext(); if (!ctx) return;
-        try {
-            if (ctx.state === 'suspended') ctx.resume();
-            var osc = ctx.createOscillator(), gain = ctx.createGain();
-            osc.type = 'sine'; osc.frequency.value = noteFreqs[index % noteFreqs.length];
-            osc.connect(gain); gain.connect(ctx.destination);
-            gain.gain.setValueAtTime(0.3, ctx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
-            osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.25);
-        } catch(e) {}
-    }
-    function playErrorTone() {
-        var ctx = getAudioContext(); if (!ctx) return;
-        try {
-            if (ctx.state === 'suspended') ctx.resume();
-            var osc = ctx.createOscillator(), gain = ctx.createGain();
-            osc.type = 'triangle'; osc.frequency.value = 180;
-            osc.connect(gain); gain.connect(ctx.destination);
-            gain.gain.setValueAtTime(0.25, ctx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.25);
-            osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.3);
-        } catch(e) {}
     }
 
     actionBtn.addEventListener('click', function() {
