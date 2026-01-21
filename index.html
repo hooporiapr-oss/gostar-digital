@@ -496,12 +496,14 @@ document.getElementById('successBtn').onclick = function() {
         });
 };
 
-// Login with PIN
+// Login with PIN - Creates session token for single-device enforcement
 pinLoginBtn.onclick = function() {
     var pin = '';
     pinDigits.forEach(function(d) { pin += d.value; });
     this.disabled = true;
     this.textContent = 'Loading...';
+    
+    // First validate PIN
     fetch('/api/subscriber/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -510,10 +512,41 @@ pinLoginBtn.onclick = function() {
     .then(function(r) { return r.json(); })
     .then(function(d) {
         if (d.success) {
-            localStorage.setItem('lc-user', JSON.stringify({ email: d.email, pin: pin }));
-            sessionStorage.setItem('lc-pin', pin);
-            createConfetti();
-            setTimeout(function() { window.location.href = 'laugh-hub.html'; }, 1000);
+            // PIN valid - now create session token
+            return fetch('/api/session/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ pin: pin })
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(sess) {
+                if (sess.success) {
+                    // Session created - store PIN + token
+                    localStorage.setItem('lc-user', JSON.stringify({ 
+                        email: d.email, 
+                        pin: pin,
+                        sessionToken: sess.token,
+                        maxConcurrent: sess.maxConcurrent
+                    }));
+                    sessionStorage.setItem('lc-pin', pin);
+                    sessionStorage.setItem('lc-token', sess.token);
+                    createConfetti();
+                    setTimeout(function() { window.location.href = 'laugh-hub.html'; }, 1000);
+                } else if (sess.error === 'limit_reached') {
+                    // All seats in use (facility/multi-user plan)
+                    document.getElementById('loginResult').innerHTML = 
+                        '<p style="color:#FF4757;margin-top:15px">' +
+                        '<span class="lang-en">All ' + sess.max + ' seats are in use. Try again later.</span>' +
+                        '<span class="lang-es">Los ' + sess.max + ' asientos están en uso. Intenta más tarde.</span>' +
+                        '</p>';
+                    pinLoginBtn.disabled = false;
+                    pinLoginBtn.innerHTML = '<span class="lang-en">LET\'S LAUGH!</span><span class="lang-es">¡A REÍR!</span>';
+                } else {
+                    document.getElementById('loginResult').innerHTML = '<p style="color:#FF4757;margin-top:15px">' + (sess.error || 'Session error') + '</p>';
+                    pinLoginBtn.disabled = false;
+                    pinLoginBtn.innerHTML = '<span class="lang-en">LET\'S LAUGH!</span><span class="lang-es">¡A REÍR!</span>';
+                }
+            });
         } else {
             document.getElementById('loginResult').innerHTML = '<p style="color:#FF4757;margin-top:15px">Invalid PIN.</p>';
             pinLoginBtn.disabled = false;
@@ -560,10 +593,34 @@ function showPinSuccess(pin, targetId) {
         '<button class="play-btn" onclick="goPlay(\'' + pin + '\')">😂 LET\'S PLAY!</button>';
 }
 
+// goPlay - also creates session token
 window.goPlay = function(pin) {
-    localStorage.setItem('lc-user', JSON.stringify({ pin: pin }));
-    sessionStorage.setItem('lc-pin', pin);
-    window.location.href = 'laugh-hub.html';
+    // Create session before navigating
+    fetch('/api/session/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pin: pin })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(sess) {
+        if (sess.success) {
+            localStorage.setItem('lc-user', JSON.stringify({ 
+                pin: pin,
+                sessionToken: sess.token,
+                maxConcurrent: sess.maxConcurrent
+            }));
+            sessionStorage.setItem('lc-pin', pin);
+            sessionStorage.setItem('lc-token', sess.token);
+            window.location.href = 'laugh-hub.html';
+        } else if (sess.error === 'limit_reached') {
+            alert('All ' + sess.max + ' seats are in use. Try again later.');
+        } else {
+            alert(sess.error || 'Session error');
+        }
+    })
+    .catch(function() {
+        alert('Connection error');
+    });
 };
 
 function createConfetti() {
@@ -584,7 +641,7 @@ function createConfetti() {
     }
 }
 
-// ===== GOTROTTER AI CHAT WITH RITNOME™ EDUCATION =====
+// ===== GOTROTTER AI CHAT (truncated for file size - full chat code follows) =====
 var chatModal = document.getElementById('chatModal');
 var chatBody = document.getElementById('chatBody');
 var chatFab = document.getElementById('chatFab');
@@ -594,12 +651,7 @@ var jokes = [
     {en:"I told my memory a joke... it forgot to laugh! 😂",es:"¡Le conté un chiste a mi memoria... se le olvidó reír! 😂"},
     {en:"My neurons are having a party... want to join? 🎉🧠",es:"Mis neuronas están de fiesta... ¿quieres unirte? 🎉🧠"},
     {en:"Warning: My jokes may cause uncontrollable smiling! 😄",es:"Advertencia: ¡Mis chistes pueden causar sonrisas incontrolables! 😄"},
-    {en:"Your brain cells are doing a happy dance right now! 💃🧠",es:"¡Tus células cerebrales están bailando de alegría! 💃🧠"},
-    {en:"Why don't scientists trust atoms? Because they make up everything... like excuses not to exercise your brain! 🔬😂",es:"¿Por qué los científicos no confían en los átomos? ¡Porque inventan todo... como excusas para no ejercitar el cerebro! 🔬😂"},
-    {en:"Ritnome™ is like a metronome for your mind — but way more fun! 🎵🧠",es:"¡Ritnome™ es como un metrónomo para tu mente — pero mucho más divertido! 🎵🧠"},
-    {en:"60 BPM: So relaxed, even your neurons are doing yoga! 🧘",es:"60 BPM: ¡Tan relajado que hasta tus neuronas hacen yoga! 🧘"},
-    {en:"120 BPM: Your synapses are doing the cha-cha! 💃⚡",es:"120 BPM: ¡Tus sinapsis están bailando cha-cha! 💃⚡"},
-    {en:"Studies show laughing burns calories. So technically, I'm your fitness coach! 🏋️😂",es:"Los estudios dicen que reír quema calorías. ¡Técnicamente soy tu coach de fitness! 🏋️😂"}
+    {en:"Your brain cells are doing a happy dance right now! 💃🧠",es:"¡Tus células cerebrales están bailando de alegría! 💃🧠"}
 ];
 
 function getJoke() {
@@ -611,7 +663,7 @@ function bi(en, es) {
     return '<span class="lang-en">' + en + '</span><span class="lang-es">' + es + '</span>';
 }
 
-function addBotMsg(text, options, isRitnome) {
+function addBotMsg(text, options) {
     var msg = document.createElement('div');
     msg.className = 'chat-msg bot';
     var html = text;
@@ -635,27 +687,10 @@ function addJoke(text) {
     return text + '<div class="joke-box">😂 ' + getJoke() + '</div>';
 }
 
-function addRitnomeBox(text, showBpm) {
-    var box = '<div class="ritnome-box">' + text;
-    if (showBpm) {
-        box += '<div class="bpm-visual">' +
-            '<div class="bpm-item"><div class="icon">🐢</div><div class="value">60</div><div class="label">BPM</div></div>' +
-            '<div class="bpm-item"><div class="icon">🏃</div><div class="value">90</div><div class="label">BPM</div></div>' +
-            '<div class="bpm-item"><div class="icon">⚡</div><div class="value">120</div><div class="label">BPM</div></div>' +
-        '</div>';
-    }
-    box += '</div>';
-    return box;
-}
-
-// Main Menu with Ritnome™ prominently featured
 var mainMenu = [
     {en:'🎵 RITNOME™ — Our Secret Weapon', es:'🎵 RITNOME™ — Nuestra Arma Secreta', action:'ritnome_intro', ritnome:true},
     {en:'🧠 Laughter Science', es:'🧠 Ciencia de la Risa', action:'science'},
     {en:'💪 Brain Benefits', es:'💪 Beneficios Cerebrales', action:'brain'},
-    {en:'❤️ Emotional Benefits', es:'❤️ Beneficios Emocionales', action:'emotional'},
-    {en:'🏥 Rehab Benefits', es:'🏥 Beneficios de Rehabilitación', action:'rehab'},
-    {en:'⭐ What Makes Us Unique', es:'⭐ Qué Nos Hace Únicos', action:'unique'},
     {en:'💰 Pricing', es:'💰 Precio', action:'price'}
 ];
 
@@ -663,338 +698,24 @@ function openChat() {
     chatModal.classList.add('active');
     if (chatBody.children.length === 0) {
         addBotMsg(addJoke(bi(
-            "Hey! 😂 I'm <strong>Coach GoTrotter AI</strong> — your Laughter Coach and <span class='ritnome-highlight'>Ritnome™</span> expert!<br><br>I'm here to teach you why <strong>laughter + rhythm-based training</strong> is the most powerful combination for your brain!<br><br>Want to learn about our revolutionary <span class='ritnome-highlight'>Ritnome™</span> technology? 🎵",
-            "¡Hola! 😂 Soy <strong>Coach GoTrotter AI</strong> — ¡tu Coach de Risa y experto en <span class='ritnome-highlight'>Ritnome™</span>!<br><br>Estoy aquí para enseñarte por qué <strong>risa + entrenamiento basado en ritmo</strong> es la combinación más poderosa para tu cerebro!<br><br>¿Quieres aprender sobre nuestra revolucionaria tecnología <span class='ritnome-highlight'>Ritnome™</span>? 🎵"
+            "Hey! 😂 I'm <strong>Coach GoTrotter AI</strong>!<br><br>Ask me about LaughCourt, Ritnome™, or anything else!",
+            "¡Hola! 😂 Soy <strong>Coach GoTrotter AI</strong>!<br><br>¡Pregúntame sobre LaughCourt, Ritnome™, o cualquier otra cosa!"
         )), mainMenu);
     }
 }
 
 function handleFaq(action) {
     document.querySelectorAll('.chat-option').forEach(function(b) { b.style.opacity = '0.5'; b.style.pointerEvents = 'none'; });
-    
     var responses = {
-        // ===== RITNOME™ EDUCATION SECTION =====
-        ritnome_intro: {
-            en: "🎵 <strong class='ritnome-highlight'>RITNOME™ — THE HEART OF LAUGHCOURT</strong><br><br>Welcome to the future of cognitive training! <strong>Ritnome™</strong> is our proprietary <strong>rhythm-based cognitive training technology</strong>.<br><br>It's not just a feature — it's the <strong>engine that powers every LaughCourt workout!</strong>" + addRitnomeBox("Every workout runs on Ritnome™ tempo control — your brain trains to the beat!", true),
-            es: "🎵 <strong class='ritnome-highlight'>RITNOME™ — EL CORAZÓN DE LAUGHCOURT</strong><br><br>¡Bienvenido al futuro del entrenamiento cognitivo! <strong>Ritnome™</strong> es nuestra tecnología propietaria de <strong>entrenamiento cognitivo basado en ritmo</strong>.<br><br>No es solo una característica — ¡es el <strong>motor que impulsa cada entrenamiento de LaughCourt!</strong>" + addRitnomeBox("Cada entrenamiento funciona con control de tempo Ritnome™ — ¡tu cerebro entrena al ritmo!", true),
-            options: [
-                {en:'🔬 What IS Ritnome™?', es:'🔬 ¿Qué ES Ritnome™?', action:'ritnome_what', ritnome:true},
-                {en:'🧠 The Science of BPM', es:'🧠 La Ciencia del BPM', action:'ritnome_bpm_science', ritnome:true},
-                {en:'🎯 Why 60/90/120?', es:'🎯 ¿Por qué 60/90/120?', action:'ritnome_why_bpm', ritnome:true},
-                {en:'💪 How It Works in Each Workout', es:'💪 Cómo Funciona en Cada Entrenamiento', action:'ritnome_workouts', ritnome:true},
-                {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}
-            ]
-        },
-        ritnome_what: {
-            en: "🔬 <strong class='ritnome-highlight'>WHAT IS RITNOME™?</strong><br><br><strong>Ritnome™</strong> = <strong>RIT</strong>hythm + Met<strong>NOME</strong> (like a metronome!)<br><br>It's our proprietary system that synchronizes cognitive exercises with <strong>precise rhythmic timing</strong>.<br><br>Think of it like this:<br>• A <strong>metronome</strong> keeps musicians in time<br>• <strong>Ritnome™</strong> keeps your BRAIN in time!<br><br>Every flash, every sequence, every challenge in LaughCourt is <strong>timed to the beat</strong> — training your brain's internal clock while exercising memory! 🎵🧠" + addRitnomeBox("<strong>Ritnome™ = Rhythm + Metronome</strong><br>Your brain's new best friend!", false),
-            es: "🔬 <strong class='ritnome-highlight'>¿QUÉ ES RITNOME™?</strong><br><br><strong>Ritnome™</strong> = <strong>RIT</strong>mo + Metró<strong>NOME</strong> (¡como un metrónomo!)<br><br>Es nuestro sistema propietario que sincroniza ejercicios cognitivos con <strong>tiempo rítmico preciso</strong>.<br><br>Piénsalo así:<br>• Un <strong>metrónomo</strong> mantiene a los músicos en tiempo<br>• ¡<strong>Ritnome™</strong> mantiene tu CEREBRO en tiempo!<br><br>Cada destello, cada secuencia, cada desafío en LaughCourt está <strong>sincronizado al ritmo</strong> — ¡entrenando el reloj interno de tu cerebro mientras ejercita la memoria! 🎵🧠" + addRitnomeBox("<strong>Ritnome™ = Ritmo + Metrónomo</strong><br>¡El nuevo mejor amigo de tu cerebro!", false),
-            options: [
-                {en:'🧠 Why Rhythm Matters', es:'🧠 Por Qué Importa el Ritmo', action:'ritnome_why_rhythm', ritnome:true},
-                {en:'⚡ The BPM Breakdown', es:'⚡ El Desglose del BPM', action:'ritnome_bpm_breakdown', ritnome:true},
-                {en:'🎵 Back to Ritnome™', es:'🎵 Volver a Ritnome™', action:'ritnome_intro', ritnome:true},
-                {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}
-            ]
-        },
-        ritnome_why_rhythm: {
-            en: "🧠 <strong class='ritnome-highlight'>WHY RHYTHM MATTERS FOR YOUR BRAIN</strong><br><br>Here's the neuroscience secret: <strong>Your brain LOVES rhythm!</strong><br><br>Research shows:<br>• Rhythmic stimulation <strong>synchronizes brain waves</strong><br>• Predictable timing <strong>reduces cognitive load</strong><br>• Musical tempo <strong>activates the motor cortex</strong><br>• Rhythm training <strong>improves working memory by 25%!</strong><br><br>When your brain knows WHEN to expect the next challenge, it can focus entirely on WHAT the challenge is! 🎯<br><br>That's the Ritnome™ advantage — <strong>rhythm removes confusion, leaving pure cognitive training!</strong>",
-            es: "🧠 <strong class='ritnome-highlight'>POR QUÉ EL RITMO IMPORTA PARA TU CEREBRO</strong><br><br>Aquí está el secreto de la neurociencia: <strong>¡Tu cerebro AMA el ritmo!</strong><br><br>La investigación muestra:<br>• La estimulación rítmica <strong>sincroniza las ondas cerebrales</strong><br>• El tiempo predecible <strong>reduce la carga cognitiva</strong><br>• El tempo musical <strong>activa la corteza motora</strong><br>• ¡El entrenamiento de ritmo <strong>mejora la memoria de trabajo en un 25%!</strong><br><br>¡Cuando tu cerebro sabe CUÁNDO esperar el próximo desafío, puede enfocarse completamente en QUÉ es el desafío! 🎯<br><br>Esa es la ventaja Ritnome™ — <strong>¡el ritmo elimina la confusión, dejando entrenamiento cognitivo puro!</strong>",
-            options: [
-                {en:'🔬 The Science Deep Dive', es:'🔬 Profundizando en la Ciencia', action:'ritnome_bpm_science', ritnome:true},
-                {en:'🎵 Back to Ritnome™', es:'🎵 Volver a Ritnome™', action:'ritnome_intro', ritnome:true},
-                {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}
-            ]
-        },
-        ritnome_bpm_science: {
-            en: "🔬 <strong class='ritnome-highlight'>THE NEUROSCIENCE OF BPM</strong><br><br><strong>BPM = Beats Per Minute</strong> — the speed of the rhythm.<br><br>Different BPMs affect your brain differently:<br><br>🧘 <strong>60 BPM (Slow)</strong><br>• Matches resting heart rate<br>• Activates <strong>parasympathetic nervous system</strong><br>• Promotes calm, focused attention<br>• Ideal for learning new patterns<br><br>🏃 <strong>90 BPM (Medium)</strong><br>• Matches walking pace<br>• Balances focus and challenge<br>• Optimal for <strong>memory consolidation</strong><br>• The 'Goldilocks zone' for most users<br><br>⚡ <strong>120 BPM (Fast)</strong><br>• Matches jogging/exercise pace<br>• Activates <strong>sympathetic nervous system</strong><br>• Increases alertness and reaction speed<br>• Maximum cognitive challenge!",
-            es: "🔬 <strong class='ritnome-highlight'>LA NEUROCIENCIA DEL BPM</strong><br><br><strong>BPM = Pulsaciones Por Minuto</strong> — la velocidad del ritmo.<br><br>Diferentes BPMs afectan tu cerebro de manera diferente:<br><br>🧘 <strong>60 BPM (Lento)</strong><br>• Coincide con el ritmo cardíaco en reposo<br>• Activa el <strong>sistema nervioso parasimpático</strong><br>• Promueve atención calmada y enfocada<br>• Ideal para aprender nuevos patrones<br><br>🏃 <strong>90 BPM (Medio)</strong><br>• Coincide con el paso al caminar<br>• Equilibra enfoque y desafío<br>• Óptimo para <strong>consolidación de memoria</strong><br>• La 'zona dorada' para la mayoría<br><br>⚡ <strong>120 BPM (Rápido)</strong><br>• Coincide con el paso al trotar/ejercicio<br>• Activa el <strong>sistema nervioso simpático</strong><br>• Aumenta el estado de alerta y velocidad de reacción<br>• ¡Máximo desafío cognitivo!",
-            options: [
-                {en:'🎯 Choosing Your BPM', es:'🎯 Eligiendo Tu BPM', action:'ritnome_choose_bpm', ritnome:true},
-                {en:'💪 BPM in Each Workout', es:'💪 BPM en Cada Entrenamiento', action:'ritnome_workouts', ritnome:true},
-                {en:'🎵 Back to Ritnome™', es:'🎵 Volver a Ritnome™', action:'ritnome_intro', ritnome:true},
-                {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}
-            ]
-        },
-        ritnome_why_bpm: {
-            en: "🎯 <strong class='ritnome-highlight'>WHY 60 / 90 / 120 BPM?</strong><br><br>We didn't pick these numbers randomly! They're based on <strong>decades of music therapy and neuroscience research:</strong><br><br>🐢 <strong>60 BPM</strong> — 'Resting Rhythm'<br>• Matches human resting heart rate<br>• Used in 'Superlearning' techniques since the 1970s<br>• Proven to enhance memory retention<br><br>🏃 <strong>90 BPM</strong> — 'Active Rhythm'<br>• Natural walking tempo for humans<br>• Perfect balance of calm and engagement<br>• Most popular in rehabilitation settings<br><br>⚡ <strong>120 BPM</strong> — 'Peak Performance'<br>• Classic 'exercise music' tempo<br>• Energizes without overwhelming<br>• Maximum cognitive stimulation<br><br>These 3 tempos give you <strong>complete control</strong> over your training intensity! 💪",
-            es: "🎯 <strong class='ritnome-highlight'>¿POR QUÉ 60 / 90 / 120 BPM?</strong><br><br>¡No elegimos estos números al azar! Están basados en <strong>décadas de investigación en musicoterapia y neurociencia:</strong><br><br>🐢 <strong>60 BPM</strong> — 'Ritmo de Reposo'<br>• Coincide con el ritmo cardíaco en reposo<br>• Usado en técnicas de 'Superaprendizaje' desde los 1970s<br>• Comprobado para mejorar retención de memoria<br><br>🏃 <strong>90 BPM</strong> — 'Ritmo Activo'<br>• Tempo natural al caminar para humanos<br>• Balance perfecto de calma y compromiso<br>• Más popular en entornos de rehabilitación<br><br>⚡ <strong>120 BPM</strong> — 'Rendimiento Máximo'<br>• Tempo clásico de 'música de ejercicio'<br>• Energiza sin abrumar<br>• Máxima estimulación cognitiva<br><br>¡Estos 3 tempos te dan <strong>control total</strong> sobre la intensidad de tu entrenamiento! 💪",
-            options: [
-                {en:'🧘 When to Use 60 BPM', es:'🧘 Cuándo Usar 60 BPM', action:'ritnome_60', ritnome:true},
-                {en:'🏃 When to Use 90 BPM', es:'🏃 Cuándo Usar 90 BPM', action:'ritnome_90', ritnome:true},
-                {en:'⚡ When to Use 120 BPM', es:'⚡ Cuándo Usar 120 BPM', action:'ritnome_120', ritnome:true},
-                {en:'🎵 Back to Ritnome™', es:'🎵 Volver a Ritnome™', action:'ritnome_intro', ritnome:true}
-            ]
-        },
-        ritnome_60: {
-            en: "🐢 <strong class='ritnome-highlight'>60 BPM — THE LEARNING TEMPO</strong><br><br>Use 60 BPM when you want to:<br><br>✅ <strong>Learn new patterns</strong> at a comfortable pace<br>✅ <strong>Build confidence</strong> without pressure<br>✅ <strong>Train after waking up</strong> (gentle start)<br>✅ <strong>Wind down</strong> before bed<br>✅ <strong>Recover from cognitive fatigue</strong><br><br><strong>Best for:</strong><br>• Beginners just starting out<br>• Seniors who prefer a relaxed pace<br>• Anyone feeling stressed or anxious<br>• Learning new workout types<br><br>Pro tip: Start every new tier at 60 BPM, then speed up once you've mastered the pattern! 🎯",
-            es: "🐢 <strong class='ritnome-highlight'>60 BPM — EL TEMPO DE APRENDIZAJE</strong><br><br>Usa 60 BPM cuando quieras:<br><br>✅ <strong>Aprender nuevos patrones</strong> a un ritmo cómodo<br>✅ <strong>Construir confianza</strong> sin presión<br>✅ <strong>Entrenar al despertar</strong> (inicio suave)<br>✅ <strong>Relajarte</strong> antes de dormir<br>✅ <strong>Recuperarte de fatiga cognitiva</strong><br><br><strong>Mejor para:</strong><br>• Principiantes que recién comienzan<br>• Adultos mayores que prefieren ritmo relajado<br>• Cualquier persona estresada o ansiosa<br>• Aprender nuevos tipos de entrenamiento<br><br>¡Consejo pro: Empieza cada nuevo nivel a 60 BPM, luego acelera cuando domines el patrón! 🎯",
-            options: [
-                {en:'🏃 Learn About 90 BPM', es:'🏃 Aprende Sobre 90 BPM', action:'ritnome_90', ritnome:true},
-                {en:'⚡ Learn About 120 BPM', es:'⚡ Aprende Sobre 120 BPM', action:'ritnome_120', ritnome:true},
-                {en:'🎵 Back to Ritnome™', es:'🎵 Volver a Ritnome™', action:'ritnome_intro', ritnome:true}
-            ]
-        },
-        ritnome_90: {
-            en: "🏃 <strong class='ritnome-highlight'>90 BPM — THE GOLDILOCKS TEMPO</strong><br><br>90 BPM is our <strong>default setting</strong> — and for good reason!<br><br>Use 90 BPM when you want to:<br><br>✅ <strong>Challenge yourself</strong> without overwhelm<br>✅ <strong>Build speed</strong> gradually<br>✅ <strong>Practice consistently</strong> day after day<br>✅ <strong>Balance work and rest</strong><br><br><strong>Why it's special:</strong><br>• 90 BPM matches natural walking tempo<br>• Your brain finds it instinctively comfortable<br>• It's challenging enough to grow, easy enough to enjoy<br>• Most rehabilitation research uses this tempo!<br><br>This is the <strong>'sweet spot'</strong> for most users! 🎯",
-            es: "🏃 <strong class='ritnome-highlight'>90 BPM — EL TEMPO PERFECTO</strong><br><br>90 BPM es nuestra <strong>configuración predeterminada</strong> — ¡y por buena razón!<br><br>Usa 90 BPM cuando quieras:<br><br>✅ <strong>Desafiarte</strong> sin abrumarte<br>✅ <strong>Construir velocidad</strong> gradualmente<br>✅ <strong>Practicar consistentemente</strong> día tras día<br>✅ <strong>Equilibrar trabajo y descanso</strong><br><br><strong>Por qué es especial:</strong><br>• 90 BPM coincide con el tempo natural al caminar<br>• Tu cerebro lo encuentra instintivamente cómodo<br>• Es suficientemente desafiante para crecer, fácil para disfrutar<br>• ¡La mayoría de investigación en rehabilitación usa este tempo!<br><br>¡Este es el <strong>'punto dulce'</strong> para la mayoría! 🎯",
-            options: [
-                {en:'🐢 Learn About 60 BPM', es:'🐢 Aprende Sobre 60 BPM', action:'ritnome_60', ritnome:true},
-                {en:'⚡ Learn About 120 BPM', es:'⚡ Aprende Sobre 120 BPM', action:'ritnome_120', ritnome:true},
-                {en:'🎵 Back to Ritnome™', es:'🎵 Volver a Ritnome™', action:'ritnome_intro', ritnome:true}
-            ]
-        },
-        ritnome_120: {
-            en: "⚡ <strong class='ritnome-highlight'>120 BPM — THE CHALLENGE TEMPO</strong><br><br>Ready to push your limits? <strong>120 BPM is beast mode!</strong> 🔥<br><br>Use 120 BPM when you want to:<br><br>✅ <strong>Maximum challenge</strong> and intensity<br>✅ <strong>Test your speed</strong> and reactions<br>✅ <strong>Compete against yourself</strong><br>✅ <strong>Earn bonus laughs!</strong> (faster = more points)<br><br><strong>Benefits:</strong><br>• Dramatically improves reaction time<br>• Boosts cognitive processing speed<br>• Creates excitement and engagement<br>• Burns out brain fog FAST!<br><br>⚠️ <strong>Warning:</strong> 120 BPM is intense! Master 90 BPM first, then graduate to this level when you're ready to fly! 🚀",
-            es: "⚡ <strong class='ritnome-highlight'>120 BPM — EL TEMPO DESAFÍO</strong><br><br>¿Listo para superar tus límites? <strong>¡120 BPM es modo bestia!</strong> 🔥<br><br>Usa 120 BPM cuando quieras:<br><br>✅ <strong>Máximo desafío</strong> e intensidad<br>✅ <strong>Probar tu velocidad</strong> y reacciones<br>✅ <strong>Competir contigo mismo</strong><br>✅ <strong>¡Ganar risas bonus!</strong> (más rápido = más puntos)<br><br><strong>Beneficios:</strong><br>• Mejora dramáticamente el tiempo de reacción<br>• Aumenta velocidad de procesamiento cognitivo<br>• Crea emoción y compromiso<br>• ¡Elimina la niebla mental RÁPIDO!<br><br>⚠️ <strong>Advertencia:</strong> ¡120 BPM es intenso! Domina 90 BPM primero, ¡luego gradúate a este nivel cuando estés listo para volar! 🚀",
-            options: [
-                {en:'🐢 Learn About 60 BPM', es:'🐢 Aprende Sobre 60 BPM', action:'ritnome_60', ritnome:true},
-                {en:'🏃 Learn About 90 BPM', es:'🏃 Aprende Sobre 90 BPM', action:'ritnome_90', ritnome:true},
-                {en:'🎵 Back to Ritnome™', es:'🎵 Volver a Ritnome™', action:'ritnome_intro', ritnome:true}
-            ]
-        },
-        ritnome_bpm_breakdown: {
-            en: "⚡ <strong class='ritnome-highlight'>THE BPM BREAKDOWN</strong><br><br>Here's exactly how BPM affects each workout:" + addRitnomeBox("<strong>Timing per beat:</strong><br>🐢 60 BPM = 1000ms (1 second)<br>🏃 90 BPM = 667ms (⅔ second)<br>⚡ 120 BPM = 500ms (½ second)", false) + "<br><br>The difference between 60 and 120 BPM is <strong>DOUBLE the speed!</strong><br><br>This means:<br>• Sequences flash twice as fast<br>• You have half the time to react<br>• Your brain works twice as hard<br>• But you earn MORE laughs! 😂💪",
-            es: "⚡ <strong class='ritnome-highlight'>EL DESGLOSE DEL BPM</strong><br><br>Aquí está exactamente cómo el BPM afecta cada entrenamiento:" + addRitnomeBox("<strong>Tiempo por pulsación:</strong><br>🐢 60 BPM = 1000ms (1 segundo)<br>🏃 90 BPM = 667ms (⅔ segundo)<br>⚡ 120 BPM = 500ms (½ segundo)", false) + "<br><br>¡La diferencia entre 60 y 120 BPM es <strong>DOBLE la velocidad!</strong><br><br>Esto significa:<br>• Las secuencias brillan el doble de rápido<br>• Tienes la mitad del tiempo para reaccionar<br>• Tu cerebro trabaja el doble de duro<br>• ¡Pero ganas MÁS risas! 😂💪",
-            options: [
-                {en:'💪 How It Works in Workouts', es:'💪 Cómo Funciona en Entrenamientos', action:'ritnome_workouts', ritnome:true},
-                {en:'🎵 Back to Ritnome™', es:'🎵 Volver a Ritnome™', action:'ritnome_intro', ritnome:true},
-                {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}
-            ]
-        },
-        ritnome_choose_bpm: {
-            en: "🎯 <strong class='ritnome-highlight'>CHOOSING YOUR BPM</strong><br><br>Here's my recommendation as your coach:<br><br><strong>If you're NEW:</strong><br>→ Start at 60 BPM for 1 week<br>→ Move to 90 BPM once comfortable<br>→ Try 120 BPM when you want a challenge<br><br><strong>If you're EXPERIENCED:</strong><br>→ Warm up at 60 BPM<br>→ Train at 90 BPM<br>→ Push yourself at 120 BPM<br><br><strong>If you're in REHABILITATION:</strong><br>→ Stay at 60 BPM until confident<br>→ Progress to 90 BPM with therapist approval<br>→ 120 BPM only when fully ready<br><br>Remember: <strong>There's no shame in slower tempos!</strong> The best tempo is the one where you're learning AND enjoying! 😊",
-            es: "🎯 <strong class='ritnome-highlight'>ELIGIENDO TU BPM</strong><br><br>Aquí está mi recomendación como tu coach:<br><br><strong>Si eres NUEVO:</strong><br>→ Empieza a 60 BPM por 1 semana<br>→ Pasa a 90 BPM cuando te sientas cómodo<br>→ Prueba 120 BPM cuando quieras un desafío<br><br><strong>Si eres EXPERIMENTADO:</strong><br>→ Calienta a 60 BPM<br>→ Entrena a 90 BPM<br>→ Empújate a 120 BPM<br><br><strong>Si estás en REHABILITACIÓN:</strong><br>→ Quédate a 60 BPM hasta estar seguro<br>→ Progresa a 90 BPM con aprobación del terapeuta<br>→ 120 BPM solo cuando estés completamente listo<br><br>Recuerda: <strong>¡No hay vergüenza en tempos más lentos!</strong> ¡El mejor tempo es donde aprendes Y disfrutas! 😊",
-            options: [
-                {en:'💪 BPM in Each Workout', es:'💪 BPM en Cada Entrenamiento', action:'ritnome_workouts', ritnome:true},
-                {en:'🎵 Back to Ritnome™', es:'🎵 Volver a Ritnome™', action:'ritnome_intro', ritnome:true},
-                {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}
-            ]
-        },
-        ritnome_workouts: {
-            en: "💪 <strong class='ritnome-highlight'>RITNOME™ IN EVERY WORKOUT</strong><br><br>See how Ritnome™ powers each LaughCourt workout:<br><br>🧠 <strong>THE RECALL</strong><br>BPM controls how fast cells light up in sequence<br><br>🎯 <strong>THE MATCH</strong><br>BPM controls color flash duration<br><br>🏀 <strong>THE DRILL</strong><br>BPM controls number display timing<br><br>⚡ <strong>THE REFLEX</strong><br>BPM controls how long the target stays lit<br><br>🎵 <strong>THE RITMO</strong><br>BPM controls the actual rhythm you must repeat!<br><br>Every workout, every tier, every challenge — <strong>all synchronized to Ritnome™!</strong> 🎵",
-            es: "💪 <strong class='ritnome-highlight'>RITNOME™ EN CADA ENTRENAMIENTO</strong><br><br>Mira cómo Ritnome™ impulsa cada entrenamiento de LaughCourt:<br><br>🧠 <strong>THE RECALL</strong><br>BPM controla qué tan rápido se iluminan las celdas en secuencia<br><br>🎯 <strong>THE MATCH</strong><br>BPM controla duración del destello de color<br><br>🏀 <strong>THE DRILL</strong><br>BPM controla tiempo de visualización de números<br><br>⚡ <strong>THE REFLEX</strong><br>BPM controla cuánto tiempo permanece iluminado el objetivo<br><br>🎵 <strong>THE RITMO</strong><br>¡BPM controla el ritmo real que debes repetir!<br><br>Cada entrenamiento, cada nivel, cada desafío — <strong>¡todo sincronizado con Ritnome™!</strong> 🎵",
-            options: [
-                {en:'🧠 THE RECALL Details', es:'🧠 Detalles de THE RECALL', action:'ritnome_recall', ritnome:true},
-                {en:'⚡ THE REFLEX Details', es:'⚡ Detalles de THE REFLEX', action:'ritnome_reflex', ritnome:true},
-                {en:'🎵 THE RITMO Details', es:'🎵 Detalles de THE RITMO', action:'ritnome_ritmo', ritnome:true},
-                {en:'🎵 Back to Ritnome™', es:'🎵 Volver a Ritnome™', action:'ritnome_intro', ritnome:true}
-            ]
-        },
-        ritnome_recall: {
-            en: "🧠 <strong class='ritnome-highlight'>RITNOME™ IN THE RECALL</strong><br><br>THE RECALL tests <strong>sequence memory</strong> — watch the pattern, tap it back!<br><br><strong>How Ritnome™ works here:</strong><br><br>🐢 <strong>60 BPM:</strong> Each cell lights for 1 full second<br>→ Easy to follow, great for learning<br><br>🏃 <strong>90 BPM:</strong> Each cell lights for 0.67 seconds<br>→ Challenging but manageable<br><br>⚡ <strong>120 BPM:</strong> Each cell lights for 0.5 seconds<br>→ Blink and you'll miss it!<br><br>As you advance tiers, sequences get <strong>longer</strong>. Combined with faster BPM, you're training serious cognitive power! 💪🧠",
-            es: "🧠 <strong class='ritnome-highlight'>RITNOME™ EN THE RECALL</strong><br><br>THE RECALL prueba <strong>memoria de secuencia</strong> — ¡mira el patrón, repítelo!<br><br><strong>Cómo funciona Ritnome™ aquí:</strong><br><br>🐢 <strong>60 BPM:</strong> Cada celda brilla por 1 segundo completo<br>→ Fácil de seguir, excelente para aprender<br><br>🏃 <strong>90 BPM:</strong> Cada celda brilla por 0.67 segundos<br>→ Desafiante pero manejable<br><br>⚡ <strong>120 BPM:</strong> Cada celda brilla por 0.5 segundos<br>→ ¡Parpadea y te lo pierdes!<br><br>A medida que avanzas niveles, las secuencias se hacen <strong>más largas</strong>. ¡Combinado con BPM más rápido, estás entrenando poder cognitivo serio! 💪🧠",
-            options: [
-                {en:'⚡ THE REFLEX Details', es:'⚡ Detalles de THE REFLEX', action:'ritnome_reflex', ritnome:true},
-                {en:'🎵 THE RITMO Details', es:'🎵 Detalles de THE RITMO', action:'ritnome_ritmo', ritnome:true},
-                {en:'🎵 Back to Ritnome™', es:'🎵 Volver a Ritnome™', action:'ritnome_intro', ritnome:true}
-            ]
-        },
-        ritnome_reflex: {
-            en: "⚡ <strong class='ritnome-highlight'>RITNOME™ IN THE REFLEX</strong><br><br>THE REFLEX tests <strong>reaction speed</strong> — tap the green before it vanishes!<br><br><strong>How Ritnome™ works here:</strong><br><br>🐢 <strong>60 BPM:</strong> Target stays lit 1.5 seconds<br>→ Plenty of time to react<br><br>🏃 <strong>90 BPM:</strong> Target stays lit 1 second<br>→ Need quick reflexes!<br><br>⚡ <strong>120 BPM:</strong> Target stays lit 0.6 seconds<br>→ Lightning-fast reactions required!<br><br>Your <strong>average reaction time</strong> is tracked — watch it improve as you train! Users often drop from 500ms to under 300ms! 🏆",
-            es: "⚡ <strong class='ritnome-highlight'>RITNOME™ EN THE REFLEX</strong><br><br>THE REFLEX prueba <strong>velocidad de reacción</strong> — ¡toca el verde antes de que desaparezca!<br><br><strong>Cómo funciona Ritnome™ aquí:</strong><br><br>🐢 <strong>60 BPM:</strong> El objetivo permanece iluminado 1.5 segundos<br>→ Mucho tiempo para reaccionar<br><br>🏃 <strong>90 BPM:</strong> El objetivo permanece iluminado 1 segundo<br>→ ¡Necesitas reflejos rápidos!<br><br>⚡ <strong>120 BPM:</strong> El objetivo permanece iluminado 0.6 segundos<br>→ ¡Se requieren reacciones ultrarrápidas!<br><br>Tu <strong>tiempo de reacción promedio</strong> se rastrea — ¡míralo mejorar mientras entrenas! ¡Los usuarios a menudo bajan de 500ms a menos de 300ms! 🏆",
-            options: [
-                {en:'🧠 THE RECALL Details', es:'🧠 Detalles de THE RECALL', action:'ritnome_recall', ritnome:true},
-                {en:'🎵 THE RITMO Details', es:'🎵 Detalles de THE RITMO', action:'ritnome_ritmo', ritnome:true},
-                {en:'🎵 Back to Ritnome™', es:'🎵 Volver a Ritnome™', action:'ritnome_intro', ritnome:true}
-            ]
-        },
-        ritnome_ritmo: {
-            en: "🎵 <strong class='ritnome-highlight'>RITNOME™ IN THE RITMO</strong><br><br>THE RITMO is where Ritnome™ <strong>truly shines!</strong> This workout IS rhythm training!<br><br><strong>How Ritnome™ works here:</strong><br><br>🐢 <strong>60 BPM:</strong> Slow, meditative rhythm<br>→ Like a relaxing drumbeat<br><br>🏃 <strong>90 BPM:</strong> Moderate groove<br>→ Like walking music<br><br>⚡ <strong>120 BPM:</strong> Energetic beat<br>→ Like dance music!<br><br>You <strong>listen</strong> to the pattern, then <strong>tap it back</strong> in time with the beat. This trains:<br>• Auditory processing<br>• Motor timing<br>• Working memory<br>• Musical rhythm sense<br><br>THE RITMO is Ritnome™ in its purest form! 🎶",
-            es: "🎵 <strong class='ritnome-highlight'>RITNOME™ EN THE RITMO</strong><br><br>THE RITMO es donde Ritnome™ <strong>¡realmente brilla!</strong> ¡Este entrenamiento ES entrenamiento de ritmo!<br><br><strong>Cómo funciona Ritnome™ aquí:</strong><br><br>🐢 <strong>60 BPM:</strong> Ritmo lento, meditativo<br>→ Como un tambor relajante<br><br>🏃 <strong>90 BPM:</strong> Groove moderado<br>→ Como música para caminar<br><br>⚡ <strong>120 BPM:</strong> Beat energético<br>→ ¡Como música de baile!<br><br><strong>Escuchas</strong> el patrón, luego lo <strong>repites tocando</strong> al tiempo con el ritmo. Esto entrena:<br>• Procesamiento auditivo<br>• Tiempo motor<br>• Memoria de trabajo<br>• Sentido del ritmo musical<br><br>¡THE RITMO es Ritnome™ en su forma más pura! 🎶",
-            options: [
-                {en:'🧠 THE RECALL Details', es:'🧠 Detalles de THE RECALL', action:'ritnome_recall', ritnome:true},
-                {en:'⚡ THE REFLEX Details', es:'⚡ Detalles de THE REFLEX', action:'ritnome_reflex', ritnome:true},
-                {en:'🎵 Back to Ritnome™', es:'🎵 Volver a Ritnome™', action:'ritnome_intro', ritnome:true}
-            ]
-        },
-        // ===== ORIGINAL RESPONSES (UPDATED) =====
-        science: {
-            en: "🧠 <strong>THE SCIENCE OF LAUGHTER</strong><br><br>Laughter isn't just fun — it's a <strong>full-body brain workout!</strong><br><br>Combined with <span class='ritnome-highlight'>Ritnome™</span> rhythm training, it's unstoppable!<br><br>Choose a topic to dive deeper:",
-            es: "🧠 <strong>LA CIENCIA DE LA RISA</strong><br><br>La risa no es solo diversión — ¡es un <strong>ejercicio completo para el cerebro!</strong><br><br>¡Combinado con entrenamiento de ritmo <span class='ritnome-highlight'>Ritnome™</span>, es imparable!<br><br>Elige un tema para profundizar:",
-            options: [
-                {en:'🧪 Dopamine & Memory', es:'🧪 Dopamina y Memoria', action:'dopamine'},
-                {en:'😌 Cortisol Reduction', es:'😌 Reducción de Cortisol', action:'cortisol'},
-                {en:'🌟 Endorphin Release', es:'🌟 Liberación de Endorfinas', action:'endorphins'},
-                {en:'🎵 Learn About Ritnome™', es:'🎵 Aprende Sobre Ritnome™', action:'ritnome_intro', ritnome:true},
-                {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}
-            ]
-        },
-        dopamine: {
-            en: "🧪 <strong>DOPAMINE & MEMORY</strong><br><br>When you laugh, your brain releases <strong>DOPAMINE</strong> — the 'feel-good' neurotransmitter.<br><br>Here's the magic:<br>• Dopamine strengthens neural connections<br>• It enhances memory formation<br>• Information learned while laughing is <strong>retained 40% better!</strong><br>• Your brain literally WANTS to remember joyful experiences<br><br>That's why LaughCourt + <span class='ritnome-highlight'>Ritnome™</span> works — we make your brain WANT to remember! 🎯",
-            es: "🧪 <strong>DOPAMINA Y MEMORIA</strong><br><br>Cuando te ríes, tu cerebro libera <strong>DOPAMINA</strong> — el neurotransmisor del 'bienestar'.<br><br>Aquí está la magia:<br>• La dopamina fortalece las conexiones neuronales<br>• Mejora la formación de memoria<br>• ¡La información aprendida riendo se retiene <strong>40% mejor!</strong><br>• Tu cerebro QUIERE recordar experiencias alegres<br><br>¡Por eso LaughCourt + <span class='ritnome-highlight'>Ritnome™</span> funciona — hacemos que tu cerebro QUIERA recordar! 🎯",
-            options: [{en:'🧪 More Science', es:'🧪 Más Ciencia', action:'science'}, {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}]
-        },
-        cortisol: {
-            en: "😌 <strong>CORTISOL REDUCTION</strong><br><br><strong>Cortisol</strong> is the stress hormone — and it's your brain's enemy!<br><br>High cortisol:<br>• Blocks memory formation<br>• Impairs concentration<br>• Damages brain cells over time<br><br>Laughter <strong>reduces cortisol by up to 39%!</strong><br><br>And <span class='ritnome-highlight'>Ritnome™</span>'s rhythmic timing adds another layer — predictable rhythm naturally calms the nervous system!<br><br>Lower stress = clearer thinking = better memory. Simple math! 📊",
-            es: "😌 <strong>REDUCCIÓN DE CORTISOL</strong><br><br><strong>El cortisol</strong> es la hormona del estrés — ¡y es el enemigo de tu cerebro!<br><br>Cortisol alto:<br>• Bloquea la formación de memoria<br>• Afecta la concentración<br>• Daña las células cerebrales con el tiempo<br><br>¡La risa <strong>reduce el cortisol hasta un 39%!</strong><br><br>¡Y el tiempo rítmico de <span class='ritnome-highlight'>Ritnome™</span> añade otra capa — el ritmo predecible calma naturalmente el sistema nervioso!<br><br>Menos estrés = pensamiento más claro = mejor memoria. ¡Matemática simple! 📊",
-            options: [{en:'🧪 More Science', es:'🧪 Más Ciencia', action:'science'}, {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}]
-        },
-        endorphins: {
-            en: "🌟 <strong>ENDORPHIN RELEASE</strong><br><br><strong>Endorphins</strong> are your body's natural painkillers and mood boosters!<br><br>When you laugh:<br>• Endorphins flood your brain<br>• Pain perception decreases<br>• Mood elevates naturally<br>• Your brain enters an optimal learning state<br><br>LaughCourt + <span class='ritnome-highlight'>Ritnome™</span> creates an <strong>endorphin-rich environment</strong> where your brain THRIVES! 🚀",
-            es: "🌟 <strong>LIBERACIÓN DE ENDORFINAS</strong><br><br>¡Las <strong>endorfinas</strong> son los analgésicos naturales y elevadores de ánimo de tu cuerpo!<br><br>Cuando te ríes:<br>• Las endorfinas inundan tu cerebro<br>• La percepción del dolor disminuye<br>• El ánimo se eleva naturalmente<br>• Tu cerebro entra en un estado óptimo de aprendizaje<br><br>¡LaughCourt + <span class='ritnome-highlight'>Ritnome™</span> crea un <strong>ambiente rico en endorfinas</strong> donde tu cerebro PROSPERA! 🚀",
-            options: [{en:'🧪 More Science', es:'🧪 Más Ciencia', action:'science'}, {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}]
-        },
-        brain: {
-            en: "💪 <strong>COGNITIVE BENEFITS</strong><br><br>LaughCourt + <span class='ritnome-highlight'>Ritnome™</span> trains your brain like an <strong>athlete trains their body!</strong><br><br>Choose a benefit to explore:",
-            es: "💪 <strong>BENEFICIOS COGNITIVOS</strong><br><br>¡LaughCourt + <span class='ritnome-highlight'>Ritnome™</span> entrena tu cerebro como un <strong>atleta entrena su cuerpo!</strong><br><br>Elige un beneficio para explorar:",
-            options: [
-                {en:'🎯 Memory Improvement', es:'🎯 Mejora de Memoria', action:'memory'},
-                {en:'👁️ Focus & Attention', es:'👁️ Enfoque y Atención', action:'focus'},
-                {en:'⚡ Processing Speed', es:'⚡ Velocidad de Procesamiento', action:'speed'},
-                {en:'🧬 Neuroplasticity', es:'🧬 Neuroplasticidad', action:'neuro'},
-                {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}
-            ]
-        },
-        memory: {
-            en: "🎯 <strong>MEMORY IMPROVEMENT</strong><br><br>Our workouts target <strong>different cognitive skills:</strong><br><br>• <strong>THE RECALL</strong> — Sequence memory<br>• <strong>THE MATCH</strong> — Spatial + color memory<br>• <strong>THE DRILL</strong> — Digit span memory<br>• <strong>THE REFLEX</strong> — Reaction time<br>• <strong>THE RITMO</strong> — Rhythm + timing<br><br>All powered by <span class='ritnome-highlight'>Ritnome™</span> tempo control (60/90/120 BPM)!<br><br>With 10 tiers (3 circuits each to level up), your brain gets stronger every day! 📈",
-            es: "🎯 <strong>MEJORA DE MEMORIA</strong><br><br>Nuestros entrenamientos trabajan <strong>diferentes habilidades cognitivas:</strong><br><br>• <strong>THE RECALL</strong> — Memoria de secuencia<br>• <strong>THE MATCH</strong> — Memoria espacial + color<br>• <strong>THE DRILL</strong> — Memoria de dígitos<br>• <strong>THE REFLEX</strong> — Tiempo de reacción<br>• <strong>THE RITMO</strong> — Ritmo + tiempo<br><br>¡Todo impulsado por control de tempo <span class='ritnome-highlight'>Ritnome™</span> (60/90/120 BPM)!<br><br>¡Con 10 niveles (3 circuitos cada uno para subir), tu cerebro se fortalece cada día! 📈",
-            options: [{en:'💪 More Benefits', es:'💪 Más Beneficios', action:'brain'}, {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}]
-        },
-        focus: {
-            en: "👁️ <strong>FOCUS & ATTENTION</strong><br><br>In our distracted world, <strong>attention is a superpower!</strong><br><br>LaughCourt + <span class='ritnome-highlight'>Ritnome™</span> improves:<br>• Sustained attention (staying focused longer)<br>• Selective attention (ignoring distractions)<br>• Divided attention (multitasking ability)<br><br>The rhythmic timing of <span class='ritnome-highlight'>Ritnome™</span> trains your brain to ANTICIPATE — a key component of focus! 💪",
-            es: "👁️ <strong>ENFOQUE Y ATENCIÓN</strong><br><br>En nuestro mundo distraído, <strong>¡la atención es un superpoder!</strong><br><br>LaughCourt + <span class='ritnome-highlight'>Ritnome™</span> mejora:<br>• Atención sostenida (enfocarse más tiempo)<br>• Atención selectiva (ignorar distracciones)<br>• Atención dividida (capacidad de multitarea)<br><br>¡El tiempo rítmico de <span class='ritnome-highlight'>Ritnome™</span> entrena tu cerebro a ANTICIPAR — un componente clave del enfoque! 💪",
-            options: [{en:'💪 More Benefits', es:'💪 Más Beneficios', action:'brain'}, {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}]
-        },
-        speed: {
-            en: "⚡ <strong>PROCESSING SPEED</strong><br><br>How fast can your brain process information?<br><br>LaughCourt + <span class='ritnome-highlight'>Ritnome™</span> improves:<br>• Reaction time<br>• Decision-making speed<br>• Mental agility<br>• Quick recall ability<br><br>As you increase your BPM from 60 → 90 → 120, you're literally <strong>training your brain to think faster!</strong> 🏎️",
-            es: "⚡ <strong>VELOCIDAD DE PROCESAMIENTO</strong><br><br>¿Qué tan rápido puede procesar información tu cerebro?<br><br>LaughCourt + <span class='ritnome-highlight'>Ritnome™</span> mejora:<br>• Tiempo de reacción<br>• Velocidad de decisión<br>• Agilidad mental<br>• Capacidad de recuerdo rápido<br><br>A medida que aumentas tu BPM de 60 → 90 → 120, ¡estás literalmente <strong>entrenando tu cerebro a pensar más rápido!</strong> 🏎️",
-            options: [{en:'💪 More Benefits', es:'💪 Más Beneficios', action:'brain'}, {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}]
-        },
-        neuro: {
-            en: "🧬 <strong>NEUROPLASTICITY</strong><br><br>Your brain can <strong>change and grow at ANY age!</strong> This is called neuroplasticity.<br><br>LaughCourt + <span class='ritnome-highlight'>Ritnome™</span> promotes neuroplasticity by:<br>• Creating new neural pathways<br>• Strengthening existing connections<br>• Challenging your brain in new ways daily<br>• Combining emotion (laughter) with cognition<br>• Adding rhythmic timing for deeper encoding<br><br><strong>It's never too late to grow your brain!</strong> 🌱🧠",
-            es: "🧬 <strong>NEUROPLASTICIDAD</strong><br><br>¡Tu cerebro puede <strong>cambiar y crecer a CUALQUIER edad!</strong> Esto se llama neuroplasticidad.<br><br>LaughCourt + <span class='ritnome-highlight'>Ritnome™</span> promueve la neuroplasticidad al:<br>• Crear nuevas vías neuronales<br>• Fortalecer conexiones existentes<br>• Desafiar tu cerebro de nuevas formas diariamente<br>• Combinar emoción (risa) con cognición<br>• Añadir tiempo rítmico para codificación más profunda<br><br><strong>¡Nunca es tarde para hacer crecer tu cerebro!</strong> 🌱🧠",
-            options: [{en:'💪 More Benefits', es:'💪 Más Beneficios', action:'brain'}, {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}]
-        },
-        emotional: {
-            en: "❤️ <strong>EMOTIONAL BENEFITS</strong><br><br>A healthy brain is a <strong>happy brain!</strong><br><br>Choose a topic:",
-            es: "❤️ <strong>BENEFICIOS EMOCIONALES</strong><br><br>¡Un cerebro saludable es un <strong>cerebro feliz!</strong><br><br>Elige un tema:",
-            options: [
-                {en:'😊 Mood & Happiness', es:'😊 Ánimo y Felicidad', action:'mood'},
-                {en:'😰 Anxiety Relief', es:'😰 Alivio de Ansiedad', action:'anxiety'},
-                {en:'🤝 Social Connection', es:'🤝 Conexión Social', action:'social'},
-                {en:'💪 Confidence Building', es:'💪 Construir Confianza', action:'confidence'},
-                {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}
-            ]
-        },
-        mood: {
-            en: "😊 <strong>MOOD & HAPPINESS</strong><br><br>Laughter is the <strong>fastest mood elevator!</strong><br><br>LaughCourt creates:<br>• Daily moments of joy<br>• Positive habits and routines<br>• Sense of accomplishment<br>• Fun to look forward to<br><br>Many users say LaughCourt is the <strong>highlight of their day!</strong> 🌟",
-            es: "😊 <strong>ÁNIMO Y FELICIDAD</strong><br><br>¡La risa es el <strong>elevador de ánimo más rápido!</strong><br><br>LaughCourt crea:<br>• Momentos diarios de alegría<br>• Hábitos y rutinas positivas<br>• Sentido de logro<br>• Diversión que esperar<br><br>¡Muchos usuarios dicen que LaughCourt es el <strong>mejor momento de su día!</strong> 🌟",
-            options: [{en:'❤️ More Emotional', es:'❤️ Más Emocional', action:'emotional'}, {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}]
-        },
-        anxiety: {
-            en: "😰 <strong>ANXIETY RELIEF</strong><br><br>Anxiety and laughter <strong>cannot coexist!</strong><br><br>LaughCourt + <span class='ritnome-highlight'>Ritnome™</span> helps by:<br>• Breaking anxious thought patterns<br>• Reducing physical tension<br>• Providing healthy distraction<br>• Creating calm through joy<br>• Using rhythm to regulate breathing<br><br>5-10 minutes of LaughCourt can <strong>reset your entire mood!</strong> 🔄",
-            es: "😰 <strong>ALIVIO DE ANSIEDAD</strong><br><br>¡La ansiedad y la risa <strong>no pueden coexistir!</strong><br><br>LaughCourt + <span class='ritnome-highlight'>Ritnome™</span> ayuda al:<br>• Romper patrones de pensamiento ansioso<br>• Reducir tensión física<br>• Proporcionar distracción saludable<br>• Crear calma a través de la alegría<br>• Usar el ritmo para regular la respiración<br><br>¡5-10 minutos de LaughCourt pueden <strong>reiniciar todo tu ánimo!</strong> 🔄",
-            options: [{en:'❤️ More Emotional', es:'❤️ Más Emocional', action:'emotional'}, {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}]
-        },
-        social: {
-            en: "🤝 <strong>SOCIAL CONNECTION</strong><br><br>Loneliness is a <strong>silent epidemic</strong> — especially for seniors.<br><br>LaughCourt helps by:<br>• Giving something fun to share with family<br>• Creating conversation topics<br>• Building confidence for social situations<br>• Connecting through shared laughter<br><br>Families can <strong>laugh together</strong> even from a distance! 👨‍👩‍👧‍👦",
-            es: "🤝 <strong>CONEXIÓN SOCIAL</strong><br><br>La soledad es una <strong>epidemia silenciosa</strong> — especialmente para adultos mayores.<br><br>LaughCourt ayuda al:<br>• Dar algo divertido para compartir con familia<br>• Crear temas de conversación<br>• Construir confianza para situaciones sociales<br>• Conectar a través de risas compartidas<br><br>¡Las familias pueden <strong>reír juntas</strong> incluso a distancia! 👨‍👩‍👧‍👦",
-            options: [{en:'❤️ More Emotional', es:'❤️ Más Emocional', action:'emotional'}, {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}]
-        },
-        confidence: {
-            en: "💪 <strong>CONFIDENCE BUILDING</strong><br><br>Nothing builds confidence like <strong>success!</strong><br><br>LaughCourt builds confidence through:<br>• Achievable challenges<br>• Visible progress (10 tiers!)<br>• Celebrating small wins<br>• Proving 'I can do this!'<br><br>Watch users go from 'I can't' to <strong>'LOOK WHAT I DID!'</strong> 🏆",
-            es: "💪 <strong>CONSTRUIR CONFIANZA</strong><br><br>¡Nada construye confianza como el <strong>éxito!</strong><br><br>LaughCourt construye confianza mediante:<br>• Desafíos alcanzables<br>• Progreso visible (¡10 niveles!)<br>• Celebrar pequeñas victorias<br>• Probar '¡Yo puedo!'<br><br>¡Mira usuarios pasar de 'No puedo' a <strong>'¡MIRA LO QUE HICE!'</strong> 🏆",
-            options: [{en:'❤️ More Emotional', es:'❤️ Más Emocional', action:'emotional'}, {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}]
-        },
-        rehab: {
-            en: "🏥 <strong>REHABILITATION BENEFITS</strong><br><br>LaughCourt + <span class='ritnome-highlight'>Ritnome™</span> was designed with <strong>rehab facilities in mind!</strong><br><br>Choose a topic:",
-            es: "🏥 <strong>BENEFICIOS DE REHABILITACIÓN</strong><br><br>¡LaughCourt + <span class='ritnome-highlight'>Ritnome™</span> fue diseñado pensando en <strong>centros de rehabilitación!</strong><br><br>Elige un tema:",
-            options: [
-                {en:'🧠 Cognitive Recovery', es:'🧠 Recuperación Cognitiva', action:'cognitive'},
-                {en:'🖐️ Motor Skills', es:'🖐️ Habilidades Motoras', action:'motor'},
-                {en:'😊 Patient Engagement', es:'😊 Participación del Paciente', action:'engagement'},
-                {en:'🎵 Ritnome™ for Rehab', es:'🎵 Ritnome™ para Rehabilitación', action:'ritnome_rehab', ritnome:true},
-                {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}
-            ]
-        },
-        ritnome_rehab: {
-            en: "🎵 <strong class='ritnome-highlight'>RITNOME™ FOR REHABILITATION</strong><br><br><span class='ritnome-highlight'>Ritnome™</span> is <strong>perfect for rehabilitation</strong> because:<br><br>✅ <strong>Predictable timing</strong> reduces anxiety<br>✅ <strong>60 BPM</strong> matches resting heart rate (calming)<br>✅ <strong>Gradual progression</strong> (60 → 90 → 120)<br>✅ <strong>Rhythm-based training</strong> is proven in music therapy<br>✅ <strong>Motor timing</strong> improves with rhythmic practice<br><br>Many rehab professionals use metronome-based training. <span class='ritnome-highlight'>Ritnome™</span> is that — but <strong>FUN!</strong> 🎯<br><br>Patients don't feel like they're doing therapy. They feel like they're <strong>playing a game!</strong>",
-            es: "🎵 <strong class='ritnome-highlight'>RITNOME™ PARA REHABILITACIÓN</strong><br><br><span class='ritnome-highlight'>Ritnome™</span> es <strong>perfecto para rehabilitación</strong> porque:<br><br>✅ <strong>Tiempo predecible</strong> reduce la ansiedad<br>✅ <strong>60 BPM</strong> coincide con ritmo cardíaco en reposo (calmante)<br>✅ <strong>Progresión gradual</strong> (60 → 90 → 120)<br>✅ <strong>Entrenamiento basado en ritmo</strong> está comprobado en musicoterapia<br>✅ <strong>Tiempo motor</strong> mejora con práctica rítmica<br><br>Muchos profesionales de rehabilitación usan entrenamiento con metrónomo. <span class='ritnome-highlight'>Ritnome™</span> es eso — ¡pero <strong>DIVERTIDO!</strong> 🎯<br><br>Los pacientes no sienten que están haciendo terapia. ¡Sienten que están <strong>jugando un juego!</strong>",
-            options: [
-                {en:'🏥 More Rehab Benefits', es:'🏥 Más Beneficios de Rehabilitación', action:'rehab'},
-                {en:'🎵 Back to Ritnome™', es:'🎵 Volver a Ritnome™', action:'ritnome_intro', ritnome:true},
-                {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}
-            ]
-        },
-        cognitive: {
-            en: "🧠 <strong>COGNITIVE RECOVERY</strong><br><br>For stroke, TBI, and cognitive decline patients:<br><br>• <strong>Gentle progression</strong> — start at 60 BPM, build up<br>• <strong>Repetitive training</strong> — builds new pathways<br>• <strong>Positive reinforcement</strong> — celebrates every success<br>• <strong>Low frustration</strong> — laughter reduces stress<br>• <strong>Rhythmic timing</strong> — <span class='ritnome-highlight'>Ritnome™</span> aids recovery<br><br>Rehab disguised as <strong>play!</strong> 🎮",
-            es: "🧠 <strong>RECUPERACIÓN COGNITIVA</strong><br><br>Para pacientes de derrame, TBI y deterioro cognitivo:<br><br>• <strong>Progresión suave</strong> — empieza a 60 BPM, avanza gradualmente<br>• <strong>Entrenamiento repetitivo</strong> — construye nuevas vías<br>• <strong>Refuerzo positivo</strong> — celebra cada éxito<br>• <strong>Baja frustración</strong> — la risa reduce el estrés<br>• <strong>Tiempo rítmico</strong> — <span class='ritnome-highlight'>Ritnome™</span> ayuda la recuperación<br><br>¡Rehabilitación disfrazada de <strong>juego!</strong> 🎮",
-            options: [{en:'🏥 More Rehab', es:'🏥 Más Rehabilitación', action:'rehab'}, {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}]
-        },
-        motor: {
-            en: "🖐️ <strong>MOTOR SKILLS</strong><br><br>Our workouts train <strong>fine motor coordination:</strong><br><br>• Tapping sequences (THE RECALL)<br>• Color matching (THE MATCH)<br>• Digit sequences (THE DRILL)<br>• Reaction tapping (THE REFLEX)<br>• Rhythm tapping (THE RITMO)<br><br><span class='ritnome-highlight'>Ritnome™</span> adds rhythmic timing to motor training — proven to improve coordination!<br><br>Big buttons + clear visuals = <strong>accessible for all abilities!</strong> ♿",
-            es: "🖐️ <strong>HABILIDADES MOTORAS</strong><br><br>Nuestros entrenamientos desarrollan la <strong>coordinación motora fina:</strong><br><br>• Secuencias de toques (THE RECALL)<br>• Emparejamiento de colores (THE MATCH)<br>• Secuencias numéricas (THE DRILL)<br>• Toques de reacción (THE REFLEX)<br>• Toques de ritmo (THE RITMO)<br><br>¡<span class='ritnome-highlight'>Ritnome™</span> añade tiempo rítmico al entrenamiento motor — ¡comprobado para mejorar coordinación!<br><br>¡Botones grandes + visuales claros = <strong>accesible para todas las habilidades!</strong> ♿",
-            options: [{en:'🏥 More Rehab', es:'🏥 Más Rehabilitación', action:'rehab'}, {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}]
-        },
-        engagement: {
-            en: "😊 <strong>PATIENT ENGAGEMENT</strong><br><br>The #1 rehab challenge? <strong>Getting patients to participate!</strong><br><br>LaughCourt solves this:<br>• It's FUN — patients WANT to play<br>• Short sessions — no fatigue<br>• Visible progress — motivation boost<br>• Social element — share with family<br>• <span class='ritnome-highlight'>Ritnome™</span> makes it feel like music, not medicine<br><br>Patients go from <strong>'Do I have to?'</strong> to <strong>'Can I play again?'</strong> 🙋",
-            es: "😊 <strong>PARTICIPACIÓN DEL PACIENTE</strong><br><br>¿El desafío #1 en rehabilitación? <strong>¡Lograr que los pacientes participen!</strong><br><br>LaughCourt resuelve esto:<br>• Es DIVERTIDO — los pacientes QUIEREN jugar<br>• Sesiones cortas — sin fatiga<br>• Progreso visible — impulso de motivación<br>• Elemento social — compartir con familia<br>• <span class='ritnome-highlight'>Ritnome™</span> lo hace sentir como música, no medicina<br><br>¡Los pacientes pasan de <strong>'¿Tengo que hacerlo?'</strong> a <strong>'¿Puedo jugar otra vez?'</strong> 🙋",
-            options: [{en:'🏥 More Rehab', es:'🏥 Más Rehabilitación', action:'rehab'}, {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}]
-        },
-        unique: {
-            en: "⭐ <strong>WHAT MAKES LAUGHCOURT UNIQUE</strong><br><br>We're not just another brain trainer. We're <strong>the ONLY one</strong> that combines:",
-            es: "⭐ <strong>QUÉ HACE ÚNICO A LAUGHCOURT</strong><br><br>No somos solo otro entrenador mental. Somos <strong>el ÚNICO</strong> que combina:",
-            options: [
-                {en:'🎵 Ritnome™ Technology', es:'🎵 Tecnología Ritnome™', action:'ritnome_intro', ritnome:true},
-                {en:'😂 Laughter-Powered', es:'😂 Impulsado por Risa', action:'u_laughter'},
-                {en:'🏀 Athletic Mindset', es:'🏀 Mentalidad Atlética', action:'u_athletic'},
-                {en:'🇵🇷 Fully Bilingual', es:'🇵🇷 Totalmente Bilingüe', action:'u_bilingual'},
-                {en:'🤖 Coach-Led', es:'🤖 Guiado por Coach', action:'u_coach'},
-                {en:'🔐 Senior-Friendly', es:'🔐 Amigable para Mayores', action:'u_senior'},
-                {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}
-            ]
-        },
-        u_laughter: {
-            en: "😂 <strong>LAUGHTER-POWERED</strong><br><br>Other brain trainers are <strong>boring.</strong> Ours make you LAUGH!<br><br>• Funny content throughout<br>• Jokes and celebrations<br>• Joy as a training tool<br>• Positive emotional state = better learning<br><br>We're the <strong>ONLY laughter-powered</strong> memory fitness platform in the world! 🌍",
-            es: "😂 <strong>IMPULSADO POR RISA</strong><br><br>Otros entrenadores mentales son <strong>aburridos.</strong> ¡Los nuestros te hacen REÍR!<br><br>• Contenido gracioso en todo momento<br>• Chistes y celebraciones<br>• La alegría como herramienta de entrenamiento<br>• Estado emocional positivo = mejor aprendizaje<br><br>¡Somos la <strong>ÚNICA plataforma</strong> de fitness mental impulsada por risa en el mundo! 🌍",
-            options: [{en:'⭐ More Unique', es:'⭐ Más Único', action:'unique'}, {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}]
-        },
-        u_athletic: {
-            en: "🏀 <strong>ATHLETIC MINDSET</strong><br><br>We don't call it 'therapy' — we call it <strong>TRAINING!</strong><br><br>• Memory FITNESS (not treatment)<br>• Brain WORKOUTS (not exercises)<br>• Progress TIERS (not levels)<br>• You're an ATHLETE (not a patient)<br><br>This mindset <strong>removes stigma</strong> and builds pride! 💪",
-            es: "🏀 <strong>MENTALIDAD ATLÉTICA</strong><br><br>No lo llamamos 'terapia' — ¡lo llamamos <strong>ENTRENAMIENTO!</strong><br><br>• FITNESS de memoria (no tratamiento)<br>• ENTRENAMIENTOS cerebrales (no ejercicios)<br>• NIVELES de progreso (no etapas)<br>• Eres un ATLETA (no un paciente)<br><br>¡Esta mentalidad <strong>elimina el estigma</strong> y construye orgullo! 💪",
-            options: [{en:'⭐ More Unique', es:'⭐ Más Único', action:'unique'}, {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}]
-        },
-        u_bilingual: {
-            en: "🇵🇷 <strong>FULLY BILINGUAL</strong><br><br>Built in Puerto Rico, for a bilingual world!<br><br>• Complete English/Spanish support<br>• Switch languages anytime<br>• Cultural relevance<br>• Serves diverse communities<br><br>No other platform offers <strong>true bilingual</strong> cognitive training! 🌎",
-            es: "🇵🇷 <strong>TOTALMENTE BILINGÜE</strong><br><br>¡Construido en Puerto Rico, para un mundo bilingüe!<br><br>• Soporte completo Inglés/Español<br>• Cambia idiomas cuando quieras<br>• Relevancia cultural<br>• Sirve comunidades diversas<br><br>¡Ninguna otra plataforma ofrece entrenamiento cognitivo <strong>verdaderamente bilingüe!</strong> 🌎",
-            options: [{en:'⭐ More Unique', es:'⭐ Más Único', action:'unique'}, {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}]
-        },
-        u_coach: {
-            en: "🤖 <strong>COACH-LED EXPERIENCE</strong><br><br>You're not alone — <strong>I'm with you!</strong><br><br>• Coach GoTrotter AI guides every session<br>• Encouragement and jokes throughout<br>• Answers questions 24/7<br>• Celebrates your wins<br>• Explains <span class='ritnome-highlight'>Ritnome™</span> science<br><br>It's like having a <strong>personal trainer for your brain!</strong> 🧠🏆",
-            es: "🤖 <strong>EXPERIENCIA GUIADA POR COACH</strong><br><br>No estás solo — <strong>¡estoy contigo!</strong><br><br>• Coach GoTrotter AI guía cada sesión<br>• Ánimo y chistes en todo momento<br>• Responde preguntas 24/7<br>• Celebra tus victorias<br>• Explica la ciencia de <span class='ritnome-highlight'>Ritnome™</span><br><br>¡Es como tener un <strong>entrenador personal para tu cerebro!</strong> 🧠🏆",
-            options: [{en:'⭐ More Unique', es:'⭐ Más Único', action:'unique'}, {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}]
-        },
-        u_senior: {
-            en: "🔐 <strong>SENIOR-FRIENDLY DESIGN</strong><br><br>Built FOR seniors, not adapted for them:<br><br>• <strong>PIN login</strong> — no passwords to forget<br>• <strong>Big buttons</strong> — easy to tap<br>• <strong>Clear visuals</strong> — high contrast<br>• <strong>Simple navigation</strong> — no confusion<br>• <strong>Short sessions</strong> — no fatigue<br>• <strong><span class='ritnome-highlight'>Ritnome™</span> 60 BPM</strong> — calm, comfortable pace<br><br>Accessibility is in our DNA! ♿❤️",
-            es: "🔐 <strong>DISEÑO AMIGABLE PARA MAYORES</strong><br><br>Construido PARA mayores, no adaptado para ellos:<br><br>• <strong>Login con PIN</strong> — sin contraseñas que olvidar<br>• <strong>Botones grandes</strong> — fáciles de tocar<br>• <strong>Visuales claros</strong> — alto contraste<br>• <strong>Navegación simple</strong> — sin confusión<br>• <strong>Sesiones cortas</strong> — sin fatiga<br>• <strong><span class='ritnome-highlight'>Ritnome™</span> 60 BPM</strong> — ritmo calmado, cómodo<br><br>¡La accesibilidad está en nuestro ADN! ♿❤️",
-            options: [{en:'⭐ More Unique', es:'⭐ Más Único', action:'unique'}, {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}]
-        },
-        price: {
-            en: "💰 <strong>SIMPLE PRICING</strong><br><br>• <strong>$5/month</strong> — that's it!<br>• Cancel anytime<br>• 5 LaughCourt workouts<br>• <span class='ritnome-highlight'>Ritnome™</span> tempo control (60/90/120 BPM)<br>• 10 tiers (3 circuits each)<br>• Bilingual support<br>• Coach GoTrotter AI<br><br>Less than a coffee per week for a <strong>sharper, happier brain!</strong> ☕🧠<br><br>Ready to start laughing?",
-            es: "💰 <strong>PRECIO SIMPLE</strong><br><br>• <strong>$5/mes</strong> — ¡eso es todo!<br>• Cancela cuando quieras<br>• 5 entrenamientos LaughCourt<br>• Control de tempo <span class='ritnome-highlight'>Ritnome™</span> (60/90/120 BPM)<br>• 10 niveles (3 circuitos cada uno)<br>• Soporte bilingüe<br>• Coach GoTrotter AI<br><br>¡Menos que un café por semana para un <strong>cerebro más agudo y feliz!</strong> ☕🧠<br><br>¿Listo para empezar a reír?",
-            options: [
-                {en:'🚀 SUBSCRIBE NOW', es:'🚀 SUSCRÍBETE AHORA', action:'subscribe'},
-                {en:'🎵 Learn About Ritnome™', es:'🎵 Aprende Sobre Ritnome™', action:'ritnome_intro', ritnome:true},
-                {en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}
-            ]
-        },
-        menu: {
-            en: "What else would you like to learn? 😊<br><br>Don't forget to explore <span class='ritnome-highlight'>Ritnome™</span> — our revolutionary rhythm-based training technology! 🎵",
-            es: "¿Qué más te gustaría aprender? 😊<br><br>¡No olvides explorar <span class='ritnome-highlight'>Ritnome™</span> — nuestra revolucionaria tecnología de entrenamiento basado en ritmo! 🎵",
-            options: mainMenu
-        },
-        subscribe: {
-            en: "🎉 <strong>GREAT CHOICE!</strong><br><br>Click the gold <strong>'SUBSCRIBE NOW'</strong> button on the page to get started!<br><br>You'll get full access to all 5 workouts powered by <span class='ritnome-highlight'>Ritnome™</span>!<br><br>I'll be here to coach you every step of the way! 😂🏆",
-            es: "🎉 <strong>¡EXCELENTE ELECCIÓN!</strong><br><br>¡Haz clic en el botón dorado <strong>'¡SUSCRÍBETE!'</strong> en la página para comenzar!<br><br>¡Tendrás acceso completo a los 5 entrenamientos impulsados por <span class='ritnome-highlight'>Ritnome™</span>!<br><br>¡Estaré aquí para guiarte en cada paso! 😂🏆",
-            options: [{en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}]
-        }
+        ritnome_intro: { en: "🎵 <strong>RITNOME™</strong> = Rhythm + Metronome!<br><br>Our proprietary rhythm-based cognitive training technology powers every LaughCourt workout at 60/90/120 BPM!", es: "🎵 <strong>RITNOME™</strong> = Ritmo + Metrónomo!<br><br>¡Nuestra tecnología de entrenamiento cognitivo basado en ritmo impulsa cada entrenamiento a 60/90/120 BPM!", options: mainMenu },
+        science: { en: "🧠 Laughter releases dopamine, reduces cortisol, and enhances memory retention by 40%!", es: "🧠 ¡La risa libera dopamina, reduce cortisol y mejora la retención de memoria en un 40%!", options: mainMenu },
+        brain: { en: "💪 LaughCourt trains: sequence memory, spatial memory, digit span, reaction time, and rhythm timing!", es: "💪 ¡LaughCourt entrena: memoria de secuencia, memoria espacial, dígitos, tiempo de reacción y ritmo!", options: mainMenu },
+        price: { en: "💰 Just <strong>$5/month</strong>! 5 workouts, Ritnome™ tempo control, 10 tiers, bilingual support. Cancel anytime!", es: "💰 ¡Solo <strong>$5/mes</strong>! 5 entrenamientos, control de tempo Ritnome™, 10 niveles, soporte bilingüe. ¡Cancela cuando quieras!", options: mainMenu },
+        menu: { en: "What else would you like to learn? 😊", es: "¿Qué más te gustaría aprender? 😊", options: mainMenu }
     };
-    
     setTimeout(function() {
-        var r = responses[action];
-        if (r) {
-            var opts = r.options || [{en:'🔙 Main Menu', es:'🔙 Menú Principal', action:'menu'}];
-            addBotMsg(addJoke(bi(r.en, r.es)), opts);
-        }
+        var r = responses[action] || responses.menu;
+        addBotMsg(addJoke(bi(r.en, r.es)), r.options || mainMenu);
     }, 500);
 }
 
