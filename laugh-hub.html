@@ -388,6 +388,136 @@
             opacity: 0.6;
         }
 
+        /* ==================== NOTIFICATION MODAL ==================== */
+        .notif-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.85);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+        .notif-overlay.show {
+            display: flex;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .notif-modal {
+            background: var(--card);
+            border: 2px solid var(--gold);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 400px;
+            overflow: hidden;
+            animation: slideUp 0.4s ease;
+            box-shadow: 0 20px 60px rgba(255,215,0,0.2);
+        }
+        .notif-header {
+            background: linear-gradient(135deg, rgba(255,215,0,0.2), rgba(255,107,0,0.1));
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+        .notif-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        .notif-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.4rem;
+            letter-spacing: 2px;
+            color: var(--gold);
+        }
+        .notif-type {
+            display: inline-block;
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 3px 10px;
+            border-radius: 10px;
+            margin-top: 8px;
+        }
+        .notif-type.update { background: rgba(0,206,209,0.2); color: var(--cyan); }
+        .notif-type.announcement { background: rgba(255,215,0,0.2); color: var(--gold); }
+        .notif-type.maintenance { background: rgba(255,107,0,0.2); color: var(--orange); }
+        .notif-type.promotion { background: rgba(0,230,118,0.2); color: var(--green); }
+        
+        .notif-body {
+            padding: 25px 20px;
+            text-align: center;
+        }
+        .notif-message {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--text);
+            margin-bottom: 20px;
+        }
+        .notif-bonus {
+            background: linear-gradient(135deg, rgba(0,217,165,0.15), rgba(0,217,165,0.05));
+            border: 1px solid var(--teal);
+            border-radius: 12px;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+        }
+        .notif-bonus-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            color: var(--teal);
+            margin-bottom: 5px;
+        }
+        .notif-bonus-text {
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+        .notif-bonus-text strong {
+            color: var(--teal);
+        }
+        
+        .notif-footer {
+            padding: 15px 20px 20px;
+            text-align: center;
+        }
+        .notif-btn {
+            width: 100%;
+            padding: 14px 24px;
+            background: linear-gradient(135deg, var(--gold), #FFA500);
+            color: var(--dark);
+            border: none;
+            border-radius: 12px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 700;
+        }
+        .notif-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255,215,0,0.4);
+        }
+        .notif-btn:active {
+            transform: scale(0.98);
+        }
+        .notif-counter {
+            font-size: 0.7rem;
+            color: var(--muted);
+            margin-top: 10px;
+        }
+
         /* Desktop enhancement */
         @media (min-width: 700px) {
             .logo { font-size: 3rem; }
@@ -397,6 +527,8 @@
             .court-icon { width: 60px; height: 60px; font-size: 1.8rem; }
             .court-name { font-size: 1.3rem; }
             .court-desc { font-size: 0.75rem; }
+            .notif-modal { max-width: 450px; }
+            .notif-title { font-size: 1.6rem; }
         }
     </style>
 </head>
@@ -405,6 +537,35 @@
     <div class="lang-toggle">
         <button class="lang-btn active" id="btnEn">EN</button>
         <button class="lang-btn" id="btnEs">ES</button>
+    </div>
+
+    <!-- ==================== NOTIFICATION MODAL ==================== -->
+    <div class="notif-overlay" id="notifOverlay">
+        <div class="notif-modal">
+            <div class="notif-header">
+                <div class="notif-icon" id="notifIcon">📢</div>
+                <div class="notif-title" id="notifTitle">Platform Update</div>
+                <div class="notif-type update" id="notifType">Update</div>
+            </div>
+            <div class="notif-body">
+                <div class="notif-message" id="notifMessage">
+                    We've made some exciting improvements to LaughCourt!
+                </div>
+                <div class="notif-bonus" id="notifBonus" style="display:none;">
+                    <div class="notif-bonus-title">🎁 BONUS!</div>
+                    <div class="notif-bonus-text" id="notifBonusText">
+                        Your trial has been extended by <strong>3 days</strong>!
+                    </div>
+                </div>
+            </div>
+            <div class="notif-footer">
+                <button class="notif-btn" id="notifDismissBtn">
+                    <span class="lang-en">GOT IT!</span>
+                    <span class="lang-es">¡ENTENDIDO!</span>
+                </button>
+                <div class="notif-counter" id="notifCounter"></div>
+            </div>
+        </div>
     </div>
 
     <!-- Trial Banner (hidden by default) -->
@@ -526,6 +687,9 @@
     <script>
         (function() {
             var currentLang = localStorage.getItem('lc-lang') || 'en';
+            var currentPin = null;
+            var pendingNotifications = [];
+            var currentNotifIndex = 0;
 
             function setLang(l) {
                 currentLang = l;
@@ -578,6 +742,7 @@
                         window.location.href = 'index.html';
                         return false;
                     }
+                    currentPin = u.pin;
                     return u.pin;
                 } catch(e) {
                     window.location.href = 'index.html';
@@ -640,6 +805,103 @@
                 }
             }
 
+            // ==================== NOTIFICATION SYSTEM ====================
+            
+            function checkNotifications(pin) {
+                fetch('/api/notifications/' + pin)
+                    .then(function(r) { return r.json(); })
+                    .then(function(data) {
+                        if (data.success && data.notifications && data.notifications.length > 0) {
+                            pendingNotifications = data.notifications;
+                            currentNotifIndex = 0;
+                            showNotification(0);
+                        }
+                    })
+                    .catch(function(err) {
+                        console.log('Notification check failed:', err);
+                    });
+            }
+
+            function showNotification(index) {
+                if (index >= pendingNotifications.length) {
+                    // All notifications shown
+                    document.getElementById('notifOverlay').classList.remove('show');
+                    return;
+                }
+
+                var notif = pendingNotifications[index];
+                var typeIcons = {
+                    update: '🚀',
+                    announcement: '📣',
+                    maintenance: '🔧',
+                    promotion: '🎁'
+                };
+
+                // Set content
+                document.getElementById('notifIcon').textContent = typeIcons[notif.type] || '📢';
+                document.getElementById('notifTitle').textContent = notif.title;
+                document.getElementById('notifMessage').textContent = notif.message;
+                
+                // Set type badge
+                var typeBadge = document.getElementById('notifType');
+                typeBadge.className = 'notif-type ' + notif.type;
+                typeBadge.textContent = notif.type.charAt(0).toUpperCase() + notif.type.slice(1);
+
+                // Show bonus section if trial was extended
+                var bonusSection = document.getElementById('notifBonus');
+                if (notif.extendedTrials && notif.extendDays > 0) {
+                    bonusSection.style.display = 'block';
+                    document.getElementById('notifBonusText').innerHTML = 
+                        currentLang === 'es' 
+                            ? '¡Tu prueba ha sido extendida por <strong>' + notif.extendDays + ' días</strong>!'
+                            : 'Your trial has been extended by <strong>' + notif.extendDays + ' days</strong>!';
+                } else {
+                    bonusSection.style.display = 'none';
+                }
+
+                // Show counter if multiple notifications
+                var counter = document.getElementById('notifCounter');
+                if (pendingNotifications.length > 1) {
+                    counter.textContent = (index + 1) + ' / ' + pendingNotifications.length;
+                    counter.style.display = 'block';
+                } else {
+                    counter.style.display = 'none';
+                }
+
+                // Show modal
+                document.getElementById('notifOverlay').classList.add('show');
+            }
+
+            function dismissNotification() {
+                var notif = pendingNotifications[currentNotifIndex];
+                
+                // Mark as seen on server
+                fetch('/api/notifications/seen', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        pin: currentPin,
+                        notificationId: notif.id
+                    })
+                }).catch(function(err) {
+                    console.log('Failed to mark notification as seen:', err);
+                });
+
+                // Show next notification or close
+                currentNotifIndex++;
+                showNotification(currentNotifIndex);
+            }
+
+            // Dismiss button handler
+            document.getElementById('notifDismissBtn').addEventListener('click', dismissNotification);
+
+            // Close on overlay click (outside modal)
+            document.getElementById('notifOverlay').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    dismissNotification();
+                }
+            });
+
             // Logout handler - clear stored data
             document.getElementById('logoutLink').addEventListener('click', function(e) {
                 // Clear BPM access on logout
@@ -652,6 +914,9 @@
 
             // Check BPM access
             checkBpmAccess(pin);
+
+            // Check for notifications
+            checkNotifications(pin);
 
             document.getElementById('btnEn').addEventListener('click', function() { setLang('en'); });
             document.getElementById('btnEs').addEventListener('click', function() { setLang('es'); });
