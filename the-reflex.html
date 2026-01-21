@@ -633,6 +633,25 @@ body.es .lang-en { display: none !important; }
 </head>
 <body class="en">
 
+<!-- ============ BULLETPROOF AUTH GATE ============ -->
+<script>
+(function(){
+    var host = window.location.hostname;
+    var isLocal = (host === 'localhost' || host === '127.0.0.1' || host === '');
+    if (!isLocal) {
+        var user = null;
+        try { user = JSON.parse(localStorage.getItem('lc-user')); } catch(e) {}
+        var hasValidUser = user && user.pin && user.pin.length >= 4;
+        if (!hasValidUser) {
+            document.documentElement.style.display = 'none';
+            window.location.replace('index.html');
+            throw new Error('Auth required');
+        }
+    }
+})();
+</script>
+<!-- ============ END AUTH GATE ============ -->
+
 <!-- Language Toggle -->
 <div class="lang-toggle">
     <button class="lang-btn active" id="btnEn">EN</button>
@@ -879,7 +898,7 @@ body.es .lang-en { display: none !important; }
         totalLaughs: 0,
         streak: 0,
         circuitsCompleted: 0,
-        bpm: 60, // Default to 60 BPM for trial users
+        bpm: 60,
         playing: false,
         currentIndex: 0,
         targetCell: null,
@@ -888,32 +907,26 @@ body.es .lang-en { display: none !important; }
         cellTimeout: null
     };
 
-    // BPM to cell lit duration (faster BPM = less time)
     const getBpmDuration = (bpm) => {
-        if (bpm === 60) return 1500;  // Slow
-        if (bpm === 90) return 1000;  // Medium
-        return 600;                    // Fast (120)
+        if (bpm === 60) return 1500;
+        if (bpm === 90) return 1000;
+        return 600;
     };
 
-    // Get targets for current tier (tier 1 = 5, tier 2 = 6, etc.)
     const getTargetCount = () => 4 + state.tier;
 
-    // DOM Elements
     const courtGrid = document.getElementById('courtGrid');
     const messageDisplay = document.getElementById('messageDisplay');
-    const messageText = document.getElementById('messageText');
     const actionBtn = document.getElementById('actionBtn');
     const feedbackOverlay = document.getElementById('feedbackOverlay');
     const tierUpOverlay = document.getElementById('tierUpOverlay');
     const coachMessage = document.getElementById('coachMessage');
     const upgradeOverlay = document.getElementById('upgradeOverlay');
 
-    // Check BPM access from server
     function checkBPMAccess() {
         const userPIN = localStorage.getItem('lc-user-pin');
         
         if (!userPIN) {
-            // Guest user - 60 BPM only
             bpmAccess.allBPM = false;
             bpmAccess.userType = 'guest';
             bpmAccess.checked = true;
@@ -921,7 +934,6 @@ body.es .lang-en { display: none !important; }
             return;
         }
         
-        // Check server for access level
         fetch('/api/user/bpm-access/' + userPIN)
             .then(res => res.json())
             .then(data => {
@@ -931,7 +943,6 @@ body.es .lang-en { display: none !important; }
                 applyBPMLocks();
             })
             .catch(err => {
-                console.log('BPM access check failed, defaulting to locked:', err);
                 bpmAccess.allBPM = false;
                 bpmAccess.userType = 'guest';
                 bpmAccess.checked = true;
@@ -939,13 +950,9 @@ body.es .lang-en { display: none !important; }
             });
     }
 
-    // Apply locks to 90 and 120 BPM buttons
     function applyBPMLocks() {
-        const tempoBtns = document.querySelectorAll('.tempo-btn');
-        
-        tempoBtns.forEach(btn => {
+        document.querySelectorAll('.tempo-btn').forEach(btn => {
             const bpm = parseInt(btn.dataset.bpm);
-            
             if (bpm > 60 && !bpmAccess.allBPM) {
                 btn.classList.add('locked');
             } else {
@@ -953,37 +960,26 @@ body.es .lang-en { display: none !important; }
             }
         });
         
-        // Ensure 60 BPM is selected for locked users
         if (!bpmAccess.allBPM) {
             selectTempo(60);
         }
     }
 
-    // Select a tempo
     function selectTempo(bpm) {
         state.bpm = bpm;
-        
-        document.querySelectorAll('.tempo-btn').forEach(b => { 
-            b.classList.remove('active'); 
-        });
-        
+        document.querySelectorAll('.tempo-btn').forEach(b => b.classList.remove('active'));
         const targetBtn = document.querySelector('.tempo-btn[data-bpm="' + bpm + '"]');
-        if (targetBtn) {
-            targetBtn.classList.add('active');
-        }
+        if (targetBtn) targetBtn.classList.add('active');
     }
 
-    // Show upgrade modal
     function showUpgradeModal() {
         upgradeOverlay.classList.add('show');
     }
 
-    // Hide upgrade modal
     function hideUpgradeModal() {
         upgradeOverlay.classList.remove('show');
     }
 
-    // Initialize grid
     function initGrid() {
         courtGrid.innerHTML = '';
         for (let i = 0; i < 25; i++) {
@@ -1003,13 +999,10 @@ body.es .lang-en { display: none !important; }
         }
     }
 
-    // Light up random cell
     function lightCell() {
-        // Clear any previously lit cell
         const cells = document.querySelectorAll('.grid-cell');
         cells.forEach(c => c.classList.remove('lit', 'hit', 'miss'));
 
-        // Pick random cell
         const randomIndex = Math.floor(Math.random() * 25);
         state.targetCell = randomIndex;
         state.roundStartTime = Date.now();
@@ -1017,12 +1010,10 @@ body.es .lang-en { display: none !important; }
         const cell = cells[randomIndex];
         cell.classList.add('lit');
 
-        // Set timer animation duration based on BPM
         const duration = getBpmDuration(state.bpm);
         const timerRing = cell.querySelector('.timer-ring');
         timerRing.style.animationDuration = duration + 'ms';
 
-        // Start timeout for miss
         state.cellTimeout = setTimeout(() => {
             if (state.playing && cell.classList.contains('lit')) {
                 handleMiss(cell);
@@ -1030,12 +1021,10 @@ body.es .lang-en { display: none !important; }
         }, duration);
     }
 
-    // Handle cell click
     function handleCellClick(index, cell) {
         if (!state.playing) return;
 
         if (index === state.targetCell && cell.classList.contains('lit')) {
-            // HIT!
             clearTimeout(state.cellTimeout);
             const reactionTime = Date.now() - state.roundStartTime;
             state.reactionTimes.push(reactionTime);
@@ -1043,25 +1032,21 @@ body.es .lang-en { display: none !important; }
             cell.classList.remove('lit');
             cell.classList.add('hit');
 
-            // Show reaction time in message display
-            messageDisplay.innerHTML = `<span class="reaction-time">${reactionTime}ms</span>`;
+            messageDisplay.innerHTML = '<span class="reaction-time">' + reactionTime + 'ms</span>';
 
-            // Calculate laughs with BPM bonus
             let laughsEarned = state.tier;
             if (state.bpm === 120) laughsEarned += 2;
             else if (state.bpm === 90) laughsEarned += 1;
-            if (reactionTime < 300) laughsEarned += 2; // Quick reaction bonus
+            if (reactionTime < 300) laughsEarned += 2;
 
             state.totalLaughs += laughsEarned;
             state.currentIndex++;
 
-            // Update progress
             const progress = (state.currentIndex / getTargetCount()) * 100;
             document.getElementById('progressFill').style.width = progress + '%';
 
             updateStats();
 
-            // Check if round complete
             if (state.currentIndex >= getTargetCount()) {
                 setTimeout(() => roundComplete(true), 300);
             } else {
@@ -1070,12 +1055,10 @@ body.es .lang-en { display: none !important; }
                 }, 400);
             }
         } else if (!cell.classList.contains('lit') && state.targetCell !== null) {
-            // Wrong cell
             showCoachMessage(t('wrongCell'));
         }
     }
 
-    // Handle miss (timeout)
     function handleMiss(cell) {
         cell.classList.remove('lit');
         cell.classList.add('miss');
@@ -1083,12 +1066,11 @@ body.es .lang-en { display: none !important; }
         state.playing = false;
         state.streak = 0;
 
-        messageDisplay.innerHTML = `<span class="message-text fail">${t('miss')}</span>`;
+        messageDisplay.innerHTML = '<span class="message-text fail">' + t('miss') + '</span>';
 
         setTimeout(() => roundComplete(false), 500);
     }
 
-    // Round complete
     function roundComplete(success) {
         state.playing = false;
         clearTimeout(state.cellTimeout);
@@ -1100,16 +1082,13 @@ body.es .lang-en { display: none !important; }
             state.streak++;
             state.circuitsCompleted++;
 
-            // Calculate average reaction time
             const avgTime = Math.round(state.reactionTimes.reduce((a, b) => a + b, 0) / state.reactionTimes.length);
 
-            // Bonus laughs for fast average
             let bonusLaughs = 0;
             if (avgTime < 350) bonusLaughs = state.tier * 2;
             else if (avgTime < 500) bonusLaughs = state.tier;
             state.totalLaughs += bonusLaughs;
 
-            // Show feedback
             const emoji = avgTime < 350 ? '⚡' : avgTime < 500 ? '🎯' : '💪';
             const title = avgTime < 350 ? t('lightningFast') : avgTime < 500 ? t('perfectRound') : t('goodReflexes');
 
@@ -1121,7 +1100,6 @@ body.es .lang-en { display: none !important; }
                 t('avgReaction') + ': <strong>' + avgTime + 'ms</strong><br>' +
                 t('circuit') + ': ' + state.circuitsCompleted + '/3';
 
-            // Check for tier up
             if (state.circuitsCompleted >= 3 && state.tier < 10) {
                 showTierUp();
             } else {
@@ -1141,7 +1119,6 @@ body.es .lang-en { display: none !important; }
         updateStats();
     }
 
-    // Show tier up
     function showTierUp() {
         state.tier++;
         state.circuitsCompleted = 0;
@@ -1154,7 +1131,6 @@ body.es .lang-en { display: none !important; }
         updateStats();
     }
 
-    // Start game
     function startGame() {
         state.playing = true;
         state.currentIndex = 0;
@@ -1167,15 +1143,14 @@ body.es .lang-en { display: none !important; }
         cells.forEach(c => c.classList.remove('lit', 'hit', 'miss'));
 
         actionBtn.disabled = true;
-        messageDisplay.innerHTML = `<span class="message-text">${t('ready')}</span>`;
+        messageDisplay.innerHTML = '<span class="message-text">' + t('ready') + '</span>';
 
         setTimeout(() => {
-            messageDisplay.innerHTML = `<span class="message-text success">${t('go')}</span>`;
+            messageDisplay.innerHTML = '<span class="message-text success">' + t('go') + '</span>';
             lightCell();
         }, 1000);
     }
 
-    // Update stats
     function updateStats() {
         document.getElementById('currentTier').textContent = state.tier;
         document.getElementById('totalLaughs').textContent = state.totalLaughs;
@@ -1194,17 +1169,14 @@ body.es .lang-en { display: none !important; }
         setTimeout(() => coachMessage.classList.remove('show'), 2500);
     }
 
-    // Event Listeners
     actionBtn.addEventListener('click', startGame);
 
-    // Tempo button clicks with BPM lock check
     document.querySelectorAll('.tempo-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             if (state.playing) return;
             
             const bpm = parseInt(btn.dataset.bpm);
             
-            // Check if locked
             if (bpm > 60 && !bpmAccess.allBPM) {
                 showUpgradeModal();
                 return;
@@ -1217,8 +1189,8 @@ body.es .lang-en { display: none !important; }
     document.getElementById('continueBtn').addEventListener('click', () => {
         feedbackOverlay.classList.remove('show');
         actionBtn.disabled = false;
-        actionBtn.innerHTML = `<span class="lang-en">${translations.en.nextRound}</span><span class="lang-es">${translations.es.nextRound}</span>`;
-        messageDisplay.innerHTML = `<span class="message-text"><span class="lang-en">Ready for round!</span><span class="lang-es">¡Listo para la ronda!</span></span>`;
+        actionBtn.innerHTML = '<span class="lang-en">' + translations.en.nextRound + '</span><span class="lang-es">' + translations.es.nextRound + '</span>';
+        messageDisplay.innerHTML = '<span class="message-text"><span class="lang-en">Ready for round!</span><span class="lang-es">¡Listo para la ronda!</span></span>';
         setLang(currentLang);
     });
 
@@ -1231,8 +1203,8 @@ body.es .lang-en { display: none !important; }
         document.getElementById('avgTime').textContent = '---';
         document.getElementById('progressFill').style.width = '0%';
         actionBtn.disabled = false;
-        actionBtn.innerHTML = `<span class="lang-en">${translations.en.startReflex}</span><span class="lang-es">${translations.es.startReflex}</span>`;
-        messageDisplay.innerHTML = `<span class="message-text"><span class="lang-en">⚡ React FAST! Tap the green squares before they vanish!</span><span class="lang-es">⚡ ¡Reacciona RÁPIDO! ¡Toca los cuadros verdes!</span></span>`;
+        actionBtn.innerHTML = '<span class="lang-en">' + translations.en.startReflex + '</span><span class="lang-es">' + translations.es.startReflex + '</span>';
+        messageDisplay.innerHTML = '<span class="message-text"><span class="lang-en">⚡ React FAST! Tap the green squares before they vanish!</span><span class="lang-es">⚡ ¡Reacciona RÁPIDO! ¡Toca los cuadros verdes!</span></span>';
         setLang(currentLang);
         updateStats();
     });
@@ -1240,11 +1212,10 @@ body.es .lang-en { display: none !important; }
     document.getElementById('tierUpBtn').addEventListener('click', () => {
         tierUpOverlay.classList.remove('show');
         actionBtn.disabled = false;
-        actionBtn.innerHTML = `<span class="lang-en">${t('startTier')} ${state.tier} ⚡</span><span class="lang-es">${translations.es.startTier} ${state.tier} ⚡</span>`;
+        actionBtn.innerHTML = '<span class="lang-en">' + t('startTier') + ' ' + state.tier + ' ⚡</span><span class="lang-es">' + translations.es.startTier + ' ' + state.tier + ' ⚡</span>';
         setLang(currentLang);
     });
 
-    // Upgrade modal events
     document.getElementById('upgradeBtn').addEventListener('click', () => {
         window.location.href = 'index.html?upgrade=true';
     });
@@ -1256,11 +1227,10 @@ body.es .lang-en { display: none !important; }
     document.getElementById('btnEn').addEventListener('click', () => setLang('en'));
     document.getElementById('btnEs').addEventListener('click', () => setLang('es'));
 
-    // Initialize
     initGrid();
     setLang(currentLang);
     updateStats();
-    checkBPMAccess(); // Check BPM access on load
+    checkBPMAccess();
 })();
 </script>
 </body>
