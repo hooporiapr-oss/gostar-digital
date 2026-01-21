@@ -173,6 +173,7 @@ html, body {
     flex-direction: column;
     align-items: center;
     gap: 1px;
+    position: relative;
 }
 .speed-btn .icon { font-size: 1rem; }
 .speed-btn .bpm { font-size: 1.1rem; line-height: 1; }
@@ -186,6 +187,23 @@ html, body {
     border-color: var(--cyan);
     color: var(--cyan);
     background: rgba(0,206,209,0.1);
+}
+
+/* BPM Lock Styles */
+.speed-btn.locked {
+    opacity: 0.5;
+    cursor: not-allowed;
+    position: relative;
+}
+.speed-btn.locked::after {
+    content: '🔒';
+    position: absolute;
+    top: 2px;
+    right: 4px;
+    font-size: 0.7rem;
+}
+.speed-btn.locked:hover {
+    border-color: var(--gold);
 }
 
 /* 5x5 Court Grid - Flexible, takes remaining space */
@@ -338,6 +356,91 @@ html, body {
 .feedback-btn.primary { background: linear-gradient(135deg, var(--cyan), var(--blue)); color: var(--dark); }
 .feedback-btn.secondary { background: transparent; color: var(--muted); border: 1px solid var(--muted); }
 
+/* Upgrade Modal */
+.upgrade-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.95);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+    padding: 20px;
+}
+.upgrade-overlay.show { display: flex; }
+.upgrade-card {
+    background: linear-gradient(145deg, #1a1a25, #0d0d12);
+    border: 2px solid var(--gold);
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+    max-width: 340px;
+    width: 100%;
+    box-shadow: 0 0 40px rgba(255,215,0,0.2);
+}
+.upgrade-icon { font-size: 3rem; margin-bottom: 15px; }
+.upgrade-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 3px;
+    color: var(--gold);
+    margin-bottom: 10px;
+}
+.upgrade-subtitle {
+    color: var(--text);
+    font-size: 1rem;
+    margin-bottom: 20px;
+}
+.upgrade-benefits {
+    text-align: left;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 10px;
+}
+.upgrade-benefit {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    color: var(--text);
+    font-size: 0.9rem;
+}
+.upgrade-benefit .check { color: var(--teal); }
+.upgrade-price {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    color: var(--gold);
+    margin-bottom: 5px;
+}
+.upgrade-price-note {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-bottom: 20px;
+}
+.upgrade-btn {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    background: linear-gradient(135deg, var(--gold), #FFA500);
+    color: var(--dark);
+    margin-bottom: 10px;
+}
+.upgrade-close {
+    background: transparent;
+    border: 1px solid var(--muted);
+    color: var(--muted);
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
 /* Coach Message */
 .coach-message {
     position: fixed;
@@ -481,12 +584,12 @@ body.es .lang-en { display: none !important; }
     <div class="ritnome-tempo">
         <div class="tempo-label">🎵 <span class="ritnome-mark">Ritnome™</span> Tempo</div>
         <div class="speed-selector">
-            <button class="speed-btn" data-speed="slow" data-bpm="60">
+            <button class="speed-btn active" data-speed="slow" data-bpm="60">
                 <span class="icon">🐢</span>
                 <span class="bpm">60</span>
                 <span class="bpm-label">BPM</span>
             </button>
-            <button class="speed-btn active" data-speed="medium" data-bpm="90">
+            <button class="speed-btn" data-speed="medium" data-bpm="90">
                 <span class="icon">🏃</span>
                 <span class="bpm">90</span>
                 <span class="bpm-label">BPM</span>
@@ -537,11 +640,63 @@ body.es .lang-en { display: none !important; }
     </div>
 </div>
 
+<!-- Upgrade Modal -->
+<div class="upgrade-overlay" id="upgradeOverlay">
+    <div class="upgrade-card">
+        <div class="upgrade-icon">🔓</div>
+        <h2 class="upgrade-title">
+            <span class="lang-en">UNLOCK ALL TEMPOS</span>
+            <span class="lang-es">DESBLOQUEA TODOS</span>
+        </h2>
+        <p class="upgrade-subtitle">
+            <span class="lang-en">Train at 90 & 120 BPM for maximum cognitive benefits</span>
+            <span class="lang-es">Entrena a 90 y 120 BPM para máximos beneficios</span>
+        </p>
+        <div class="upgrade-benefits">
+            <div class="upgrade-benefit">
+                <span class="check">✓</span>
+                <span class="lang-en">60 BPM — Foundation (Current)</span>
+                <span class="lang-es">60 BPM — Base (Actual)</span>
+            </div>
+            <div class="upgrade-benefit">
+                <span class="check">🔒</span>
+                <span class="lang-en">90 BPM — Optimal Challenge</span>
+                <span class="lang-es">90 BPM — Desafío Óptimo</span>
+            </div>
+            <div class="upgrade-benefit">
+                <span class="check">🔒</span>
+                <span class="lang-en">120 BPM — Elite Training</span>
+                <span class="lang-es">120 BPM — Entrenamiento Élite</span>
+            </div>
+        </div>
+        <div class="upgrade-price">$5<span style="font-size: 1rem;">/month</span></div>
+        <div class="upgrade-price-note">
+            <span class="lang-en">Cancel anytime • Instant access</span>
+            <span class="lang-es">Cancela cuando quieras • Acceso inmediato</span>
+        </div>
+        <button class="upgrade-btn" id="upgradeBtn">
+            <span class="lang-en">UPGRADE NOW 🚀</span>
+            <span class="lang-es">ACTUALIZAR 🚀</span>
+        </button>
+        <button class="upgrade-close" id="upgradeClose">
+            <span class="lang-en">Continue with 60 BPM</span>
+            <span class="lang-es">Continuar con 60 BPM</span>
+        </button>
+    </div>
+</div>
+
 <div class="coach-message" id="coachMessage"></div>
 
 <script>
 (function() {
     var currentLang = localStorage.getItem('lc-lang') || 'en';
+    
+    // BPM Access Control
+    var bpmAccess = {
+        allBPM: false,
+        userType: 'guest',
+        checked: false
+    };
     
     var colors = [
         {name: 'red', hex: '#FF4757'},
@@ -559,8 +714,8 @@ body.es .lang-en { display: none !important; }
         bestTier: parseInt(localStorage.getItem('lc-match-best')) || 0,
         totalLaughs: parseInt(localStorage.getItem('lc-match-laughs')) || 0,
         streak: 0,
-        speed: 'medium',
-        bpm: 90,
+        speed: 'slow',
+        bpm: 60,
         targetColor: null,
         matchIndex: -1,
         isPlaying: false,
@@ -586,6 +741,7 @@ body.es .lang-en { display: none !important; }
     var actionBtn = document.getElementById('actionBtn');
     var feedbackOverlay = document.getElementById('feedbackOverlay');
     var coachMessage = document.getElementById('coachMessage');
+    var upgradeOverlay = document.getElementById('upgradeOverlay');
 
     var texts = {
         en: {
@@ -630,6 +786,82 @@ body.es .lang-en { display: none !important; }
         document.body.className = lang;
         document.getElementById('btnEn').className = lang === 'en' ? 'lang-btn active' : 'lang-btn';
         document.getElementById('btnEs').className = lang === 'es' ? 'lang-btn active' : 'lang-btn';
+    }
+
+    // Check BPM access from server
+    function checkBPMAccess() {
+        var userPIN = localStorage.getItem('lc-user-pin');
+        
+        if (!userPIN) {
+            // Guest user - 60 BPM only
+            bpmAccess.allBPM = false;
+            bpmAccess.userType = 'guest';
+            bpmAccess.checked = true;
+            applyBPMLocks();
+            return;
+        }
+        
+        // Check server for access level
+        fetch('/api/user/bpm-access/' + userPIN)
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+                bpmAccess.allBPM = data.allBPM || false;
+                bpmAccess.userType = data.userType || 'guest';
+                bpmAccess.checked = true;
+                applyBPMLocks();
+            })
+            .catch(function(err) {
+                console.log('BPM access check failed, defaulting to locked:', err);
+                bpmAccess.allBPM = false;
+                bpmAccess.userType = 'guest';
+                bpmAccess.checked = true;
+                applyBPMLocks();
+            });
+    }
+    
+    // Apply locks to 90 and 120 BPM buttons
+    function applyBPMLocks() {
+        var speedBtns = document.querySelectorAll('.speed-btn');
+        
+        speedBtns.forEach(function(btn) {
+            var bpm = parseInt(btn.dataset.bpm);
+            
+            if (bpm > 60 && !bpmAccess.allBPM) {
+                btn.classList.add('locked');
+            } else {
+                btn.classList.remove('locked');
+            }
+        });
+        
+        // Ensure 60 BPM is selected for locked users
+        if (!bpmAccess.allBPM) {
+            selectSpeed('slow', 60);
+        }
+    }
+    
+    // Select a speed
+    function selectSpeed(speed, bpm) {
+        state.speed = speed;
+        state.bpm = bpm;
+        
+        document.querySelectorAll('.speed-btn').forEach(function(b) { 
+            b.classList.remove('active'); 
+        });
+        
+        var targetBtn = document.querySelector('.speed-btn[data-bpm="' + bpm + '"]');
+        if (targetBtn) {
+            targetBtn.classList.add('active');
+        }
+    }
+    
+    // Show upgrade modal
+    function showUpgradeModal() {
+        upgradeOverlay.classList.add('show');
+    }
+    
+    // Hide upgrade modal
+    function hideUpgradeModal() {
+        upgradeOverlay.classList.remove('show');
     }
 
     function initGrid() {
@@ -809,13 +1041,20 @@ body.es .lang-en { display: none !important; }
         if (!state.isPlaying && !state.isShowing) startRound();
     });
 
+    // Speed button clicks with BPM lock check
     document.querySelectorAll('.speed-btn').forEach(function(btn) {
         btn.addEventListener('click', function() {
             if (state.isPlaying) return;
-            document.querySelectorAll('.speed-btn').forEach(function(b) { b.classList.remove('active'); });
-            btn.classList.add('active');
-            state.speed = btn.dataset.speed;
-            state.bpm = parseInt(btn.dataset.bpm);
+            
+            var bpm = parseInt(btn.dataset.bpm);
+            
+            // Check if locked
+            if (bpm > 60 && !bpmAccess.allBPM) {
+                showUpgradeModal();
+                return;
+            }
+            
+            selectSpeed(btn.dataset.speed, bpm);
         });
     });
 
@@ -840,6 +1079,15 @@ body.es .lang-en { display: none !important; }
         updateStats();
     });
 
+    // Upgrade modal events
+    document.getElementById('upgradeBtn').addEventListener('click', function() {
+        window.location.href = 'index.html?upgrade=true';
+    });
+    
+    document.getElementById('upgradeClose').addEventListener('click', function() {
+        hideUpgradeModal();
+    });
+
     document.getElementById('btnEn').addEventListener('click', function() { setLang('en'); });
     document.getElementById('btnEs').addEventListener('click', function() { setLang('es'); });
 
@@ -847,6 +1095,7 @@ body.es .lang-en { display: none !important; }
     initGrid();
     setLang(currentLang);
     updateStats();
+    checkBPMAccess(); // Check BPM access on load
 })();
 </script>
 </body>
