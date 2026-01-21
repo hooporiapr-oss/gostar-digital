@@ -18,12 +18,14 @@ const ADMIN_PASS = process.env.ADMIN_PASS || 'GoStar2025';
 const ADMIN_PIN = process.env.ADMIN_PIN || '1234';
 
 // ============ SESSION LOCKOUT SYSTEM ============
-// Stores active sessions: PIN → { token, createdAt }
-// Only ONE active session per PIN allowed
+// Stores active sessions: PIN → { maxConcurrent, sessions: Map(token → {createdAt, lastHeartbeat}) }
+// Individual (qty=1): Newest device wins (old session ends)
+// Facility/Multi-user (qty>1): Hard block at limit
 const activeSessions = new Map();
 
-// Session timeout (optional cleanup of stale sessions)
-const SESSION_TIMEOUT_MS = 24 * 60 * 60 * 1000; // 24 hours
+// Session timeout - stale sessions auto-expire
+const SESSION_TIMEOUT_MS = 2 * 60 * 1000; // 2 minutes (miss ~4 heartbeats = dead)
+const HEARTBEAT_INTERVAL_MS = 30 * 1000; // Expected heartbeat every 30 sec
 
 // ============ STRIPE SETUP ============
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
@@ -165,47 +167,115 @@ function generateSessionToken() {
     return 'sess_' + Date.now() + '_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 }
 
-// Create new session for PIN (invalidates any existing session)
-function createSession(pin) {
-    var token = generateSessionToken();
-    activeSessions.set(pin, {
-        token: token,
-        createdAt: Date.now()
+// Clean expired sessions for a PIN
+function cleanExpiredSessions(pin) {
+    var pinData = activeSessions.get(pin);
+    if (!pinData) return;
+    
+    var now = Date.now();
+    var expired = [];
+    pinData.sessions.forEach(function(session, token) {
+        if (now - session.lastHeartbeat > SESSION_TIMEOUT_MS) {
+            expired.push(token);
+        }
     });
-    console.log('[SESSION] Created for PIN ' + pin + ' → Token: ' + token.substring(0, 20) + '...');
-    return token;
+    expired.forEach(function(token) {
+        pinData.sessions.delete(token);
+    });
+    
+    if (expired.length > 0) {
+        console.log('[SESSION] Cleaned ' + expired.length + ' expired session(s) for PIN ' + pin);
+    }
 }
 
-// Validate if token is the active session for PIN
+// Create new session for PIN
+// Individual (max=1): Clears old sessions (newest wins)
+// Multi-user (max>1): Hard block if at limit
+function createSession(pin, maxConcurrent) {
+    var pinData = activeSessions.get(pin);
+    
+    // Initialize if first session for this PIN
+    if (!pinData) {
+        pinData = { maxConcurrent: maxConcurrent, sessions: new Map() };
+        activeSessions.set(pin, pinData);
+    }
+    
+    // Update max in case plan changed
+    pinData.maxConcurrent = maxConcurrent;
+    
+    // Clean expired sessions first
+    cleanExpiredSessions(pin);
+    
+    // INDIVIDUAL (max = 1): Newest device wins - clear all existing
+    if (maxConcurrent === 1) {
+        if (pinData.sessions.size > 0) {
+            console.log('[SESSION] Individual PIN ' + pin + ': Clearing old session (newest device wins)');
+            pinData.sessions.clear();
+        }
+    } 
+    // MULTI-USER (max > 1): Hard block if at capacity
+    else {
+        if (pinData.sessions.size >= maxConcurrent) {
+            console.log('[SESSION] PIN ' + pin + ' at capacity (' + pinData.sessions.size + '/' + maxConcurrent + ')');
+            return { error: 'limit_reached', current: pinData.sessions.size, max: maxConcurrent };
+        }
+    }
+    
+    // Create new token
+    var token = generateSessionToken();
+    var now = Date.now();
+    pinData.sessions.set(token, { createdAt: now, lastHeartbeat: now });
+    
+    console.log('[SESSION] Created for PIN ' + pin + ' (' + pinData.sessions.size + '/' + maxConcurrent + ')');
+    return { token: token, current: pinData.sessions.size, max: maxConcurrent };
+}
+
+// Validate if token is active for PIN
 function validateSession(pin, token) {
-    var session = activeSessions.get(pin);
+    var pinData = activeSessions.get(pin);
+    if (!pinData) {
+        return { valid: false, reason: 'no_session' };
+    }
+    
+    var session = pinData.sessions.get(token);
     if (!session) {
-        console.log('[SESSION] No session found for PIN ' + pin);
-        return false;
+        return { valid: false, reason: 'token_invalid' };
     }
-    if (session.token !== token) {
-        console.log('[SESSION] Token mismatch for PIN ' + pin + ' (session was taken over)');
-        return false;
+    
+    // Check if expired
+    if (Date.now() - session.lastHeartbeat > SESSION_TIMEOUT_MS) {
+        pinData.sessions.delete(token);
+        return { valid: false, reason: 'expired' };
     }
-    // Check timeout (optional - auto-expire old sessions)
-    if (Date.now() - session.createdAt > SESSION_TIMEOUT_MS) {
-        console.log('[SESSION] Session expired for PIN ' + pin);
-        activeSessions.delete(pin);
-        return false;
-    }
-    return true;
+    
+    // Update heartbeat
+    session.lastHeartbeat = Date.now();
+    return { valid: true };
 }
 
-// Destroy session for PIN
-function destroySession(pin) {
-    activeSessions.delete(pin);
-    console.log('[SESSION] Destroyed for PIN ' + pin);
+// Destroy specific session
+function destroySession(pin, token) {
+    var pinData = activeSessions.get(pin);
+    if (pinData && pinData.sessions.has(token)) {
+        pinData.sessions.delete(token);
+        console.log('[SESSION] Destroyed token for PIN ' + pin + ' (' + pinData.sessions.size + ' remaining)');
+        return true;
+    }
+    return false;
+}
+
+// Get session count for a PIN
+function getSessionCount(pin) {
+    var pinData = activeSessions.get(pin);
+    if (!pinData) return { current: 0, max: 0 };
+    cleanExpiredSessions(pin);
+    return { current: pinData.sessions.size, max: pinData.maxConcurrent };
 }
 
 // ============ SESSION API ENDPOINTS ============
 
 // Create session - called on login
-// Returns new token, invalidates any previous session for this PIN
+// Returns new token, respects concurrent limits
 app.post('/api/session/create', function(req, res) {
     var pin = req.body.pin;
     
@@ -213,9 +283,11 @@ app.post('/api/session/create', function(req, res) {
         return res.status(400).json({ success: false, error: 'PIN required' });
     }
     
-    // Check if PIN is valid (subscriber or trial)
+    // Check if PIN is valid and get max concurrent sessions
     var isValidPin = false;
     var userType = null;
+    var maxConcurrent = 1;
+    var userInfo = {};
     
     // Check subscribers
     var subscribers = readJSON(SUBSCRIBERS_FILE);
@@ -227,6 +299,8 @@ app.post('/api/session/create', function(req, res) {
             }
             isValidPin = true;
             userType = 'subscriber';
+            maxConcurrent = subscribers[i].quantity || 1;
+            userInfo = { email: subscribers[i].email, plan: subscribers[i].plan_type };
             break;
         }
     }
@@ -241,6 +315,8 @@ app.post('/api/session/create', function(req, res) {
                 }
                 isValidPin = true;
                 userType = 'facility_trial';
+                maxConcurrent = trialPins[k].maxUsers || 50;
+                userInfo = { facility: trialPins[k].facility };
                 break;
             }
         }
@@ -250,21 +326,40 @@ app.post('/api/session/create', function(req, res) {
         return res.status(401).json({ success: false, error: 'Invalid PIN' });
     }
     
-    // Create new session (invalidates any existing)
-    var token = createSession(pin);
+    // Create session with concurrent limit
+    var result = createSession(pin, maxConcurrent);
     
-    logActivity('session_created', pin, null, 'New session started (previous sessions invalidated)', { userType: userType });
+    // Check if blocked due to limit
+    if (result.error === 'limit_reached') {
+        logActivity('session_blocked', pin, userInfo.facility || null, 
+            'Session blocked: ' + result.current + '/' + result.max + ' seats in use');
+        
+        return res.status(403).json({
+            success: false,
+            error: 'limit_reached',
+            message: 'All ' + result.max + ' seats are currently in use. Please try again later.',
+            current: result.current,
+            max: result.max
+        });
+    }
+    
+    logActivity('session_created', pin, userInfo.facility || null, 
+        'Session started (' + result.current + '/' + result.max + ')', { userType: userType });
     
     res.json({
         success: true,
-        token: token,
+        token: result.token,
         userType: userType,
-        message: 'Session created. Any other devices using this PIN have been logged out.'
+        maxConcurrent: result.max,
+        activeSessions: result.current,
+        message: maxConcurrent === 1 
+            ? 'Session created. Previous devices will be logged out.'
+            : 'Session created (' + result.current + '/' + result.max + ' seats in use).'
     });
 });
 
 // Validate session - called by heartbeat
-// Returns whether token is still the active session
+// Returns whether token is still active
 app.post('/api/session/validate', function(req, res) {
     var pin = req.body.pin;
     var token = req.body.token;
@@ -273,12 +368,23 @@ app.post('/api/session/validate', function(req, res) {
         return res.status(400).json({ valid: false, error: 'PIN and token required' });
     }
     
-    var isValid = validateSession(pin, token);
+    var result = validateSession(pin, token);
     
-    if (!isValid) {
+    if (!result.valid) {
+        // Determine user-friendly message
+        var message = 'Session ended';
+        if (result.reason === 'token_invalid') {
+            message = 'Another device is now using this account';
+        } else if (result.reason === 'expired') {
+            message = 'Session timed out due to inactivity';
+        } else if (result.reason === 'no_session') {
+            message = 'Session not found. Please log in again.';
+        }
+        
         return res.json({
             valid: false,
-            reason: 'Session invalid or taken over by another device',
+            reason: result.reason,
+            message: message,
             action: 'logout'
         });
     }
@@ -294,34 +400,53 @@ app.post('/api/session/destroy', function(req, res) {
     var pin = req.body.pin;
     var token = req.body.token;
     
-    if (!pin) {
-        return res.status(400).json({ success: false, error: 'PIN required' });
+    if (!pin || !token) {
+        return res.status(400).json({ success: false, error: 'PIN and token required' });
     }
     
-    // Only destroy if token matches (prevent malicious logout)
-    if (token && validateSession(pin, token)) {
-        destroySession(pin);
+    var destroyed = destroySession(pin, token);
+    
+    if (destroyed) {
         logActivity('session_destroyed', pin, null, 'User logged out');
-        return res.json({ success: true, message: 'Session destroyed' });
     }
     
-    res.json({ success: true, message: 'No active session to destroy' });
+    res.json({ success: true, message: destroyed ? 'Session destroyed' : 'Session not found' });
 });
 
 // Get active sessions count (admin only)
 app.get('/api/admin/sessions', adminTokenAuth, function(req, res) {
     var sessions = [];
-    activeSessions.forEach(function(session, pin) {
-        sessions.push({
-            pin: pin,
-            createdAt: new Date(session.createdAt).toISOString(),
-            ageMinutes: Math.floor((Date.now() - session.createdAt) / 60000)
+    activeSessions.forEach(function(pinData, pin) {
+        // Clean expired first
+        cleanExpiredSessions(pin);
+        
+        var sessionList = [];
+        pinData.sessions.forEach(function(session, token) {
+            sessionList.push({
+                tokenPrefix: token.substring(0, 15) + '...',
+                createdAt: new Date(session.createdAt).toISOString(),
+                lastHeartbeat: new Date(session.lastHeartbeat).toISOString(),
+                ageMinutes: Math.floor((Date.now() - session.createdAt) / 60000)
+            });
         });
+        
+        if (sessionList.length > 0) {
+            sessions.push({
+                pin: pin,
+                maxConcurrent: pinData.maxConcurrent,
+                activeSessions: sessionList.length,
+                sessions: sessionList
+            });
+        }
     });
+    
+    var totalSessions = sessions.reduce(function(sum, s) { return sum + s.activeSessions; }, 0);
+    
     res.json({
         success: true,
-        totalActive: activeSessions.size,
-        sessions: sessions
+        totalPins: sessions.length,
+        totalActiveSessions: totalSessions,
+        pins: sessions
     });
 });
 
