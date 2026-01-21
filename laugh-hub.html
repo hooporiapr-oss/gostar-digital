@@ -546,6 +546,25 @@
 </head>
 <body class="en">
 
+    <!-- ============ BULLETPROOF AUTH GATE ============ -->
+    <script>
+    (function(){
+        var host = window.location.hostname;
+        var isLocal = (host === 'localhost' || host === '127.0.0.1' || host === '');
+        if (!isLocal) {
+            var user = null;
+            try { user = JSON.parse(localStorage.getItem('lc-user')); } catch(e) {}
+            var hasValidUser = user && user.pin && user.pin.length >= 4;
+            if (!hasValidUser) {
+                document.documentElement.style.display = 'none';
+                window.location.replace('index.html');
+                throw new Error('Auth required');
+            }
+        }
+    })();
+    </script>
+    <!-- ============ END AUTH GATE ============ -->
+
     <div class="lang-toggle">
         <button class="lang-btn active" id="btnEn">EN</button>
         <button class="lang-btn" id="btnEs">ES</button>
@@ -706,6 +725,12 @@
             var pendingNotifications = [];
             var currentNotifIndex = 0;
 
+            // Get PIN from stored user (already validated by auth gate)
+            try {
+                var user = JSON.parse(localStorage.getItem('lc-user'));
+                currentPin = user.pin;
+            } catch(e) {}
+
             function setLang(l) {
                 currentLang = l;
                 localStorage.setItem('lc-lang', l);
@@ -737,32 +762,6 @@
                 document.getElementById('totalLaughs').textContent = totalLaughs;
                 document.getElementById('currentStreak').textContent = streak;
                 document.getElementById('bestTier').textContent = bestTier;
-            }
-
-            // Auth protection - only runs on live site (not in iframe preview)
-            function checkAuth() {
-                // Skip auth check if in iframe (preview) or file protocol
-                if (window.self !== window.top) return true;
-                if (window.location.protocol === 'file:') return true;
-                
-                // Check for valid user on live site
-                var user = localStorage.getItem('lc-user');
-                if (!user) {
-                    window.location.href = 'index.html';
-                    return false;
-                }
-                try {
-                    var u = JSON.parse(user);
-                    if (!u.pin) {
-                        window.location.href = 'index.html';
-                        return false;
-                    }
-                    currentPin = u.pin;
-                    return u.pin;
-                } catch(e) {
-                    window.location.href = 'index.html';
-                    return false;
-                }
             }
 
             // Check BPM access from server
@@ -923,21 +922,17 @@
                 localStorage.removeItem('lc-bpm-access');
             });
 
-            // Run auth check
-            var pin = checkAuth();
-            if (!pin) return;
-
-            // Check BPM access
-            checkBpmAccess(pin);
-
-            // Check for notifications
-            checkNotifications(pin);
-
             document.getElementById('btnEn').addEventListener('click', function() { setLang('en'); });
             document.getElementById('btnEs').addEventListener('click', function() { setLang('es'); });
 
             setLang(currentLang);
             loadStats();
+
+            // Check BPM access and notifications
+            if (currentPin) {
+                checkBpmAccess(currentPin);
+                checkNotifications(currentPin);
+            }
         })();
     </script>
 </body>
