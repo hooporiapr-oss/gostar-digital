@@ -568,25 +568,6 @@ body.es .lang-en { display: none !important; }
 </head>
 <body class="en">
 
-<!-- ============ BULLETPROOF AUTH GATE ============ -->
-<script>
-(function(){
-    var host = window.location.hostname;
-    var isLocal = (host === 'localhost' || host === '127.0.0.1' || host === '');
-    if (!isLocal) {
-        var user = null;
-        try { user = JSON.parse(localStorage.getItem('lc-user')); } catch(e) {}
-        var hasValidUser = user && user.pin && user.pin.length >= 4;
-        if (!hasValidUser) {
-            document.documentElement.style.display = 'none';
-            window.location.replace('index.html');
-            throw new Error('Auth required');
-        }
-    }
-})();
-</script>
-<!-- ============ END AUTH GATE ============ -->
-
 <div class="lang-toggle">
     <button class="lang-btn active" id="btnEn">EN</button>
     <button class="lang-btn" id="btnEs">ES</button>
@@ -742,6 +723,55 @@ body.es .lang-en { display: none !important; }
 
 <script>
 (function() {
+    // ==================== ENVIRONMENT DETECTION ====================
+    var host = window.location.hostname;
+    var isProduction = (host.indexOf('laughcourt') > -1 || host.indexOf('github.io') > -1);
+    var isLocal = (host === 'localhost' || host === '127.0.0.1' || host === '');
+    var isPreview = !isProduction && !isLocal;
+
+    // ==================== PRODUCTION AUTH & HEARTBEAT ====================
+    if (isProduction) {
+        var user = null;
+        try { user = JSON.parse(localStorage.getItem('lc-user')); } catch(e) {}
+        if (!user || !user.pin || user.pin.length < 4) {
+            window.location.replace('index.html');
+            return;
+        }
+
+        var sessionPin = sessionStorage.getItem('lc-pin');
+        var sessionToken = sessionStorage.getItem('lc-token');
+
+        function validateSession() {
+            if (!sessionPin || !sessionToken) {
+                window.location.href = 'index.html';
+                return;
+            }
+            fetch('/api/session/validate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ pin: sessionPin, token: sessionToken })
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(d) {
+                if (!d.valid) {
+                    alert(d.message || 'Session ended. Please log in again.');
+                    localStorage.removeItem('lc-user');
+                    localStorage.removeItem('lc-bpm-access');
+                    sessionStorage.removeItem('lc-pin');
+                    sessionStorage.removeItem('lc-token');
+                    window.location.href = 'index.html';
+                }
+            })
+            .catch(function(err) {
+                console.log('Session validation error:', err);
+            });
+        }
+
+        validateSession();
+        setInterval(validateSession, 30000);
+    }
+    // ==================== END PRODUCTION AUTH & HEARTBEAT ====================
+
     const translations = {
         en: {
             startRitmo: 'START RITMO 🎵',
@@ -840,6 +870,15 @@ body.es .lang-en { display: none !important; }
     let cells = [];
 
     function checkBPMAccess() {
+        // Skip API call in preview/local - just apply locks
+        if (!isProduction) {
+            bpmAccess.allBPM = false;
+            bpmAccess.userType = 'guest';
+            bpmAccess.checked = true;
+            applyBPMLocks();
+            return;
+        }
+
         const userPIN = localStorage.getItem('lc-user-pin');
         if (!userPIN) { bpmAccess.allBPM = false; bpmAccess.checked = true; applyBPMLocks(); return; }
         fetch('/api/user/bpm-access/' + userPIN)
