@@ -6,6 +6,10 @@ const bcrypt = require('bcryptjs');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// ============ PLATFORM VERSION ============
+const PLATFORM_VERSION = '2.0.0';
+const PLATFORM_VERSION_NAME = 'LaughCourt 5-Court Edition';
+
 // Admin credentials (legacy Basic Auth)
 const ADMIN_USER = process.env.ADMIN_USER || 'admin';
 const ADMIN_PASS = process.env.ADMIN_PASS || 'GoStar2025';
@@ -38,6 +42,7 @@ const USERS_FILE = path.join(DATA_DIR, 'users.json');
 const ACTIVITY_FILE = path.join(DATA_DIR, 'activity.json');
 const SUBSCRIBERS_FILE = path.join(DATA_DIR, 'subscribers.json');
 const TRIAL_PINS_FILE = path.join(DATA_DIR, 'trial-pins.json');
+const NOTIFICATIONS_FILE = path.join(DATA_DIR, 'notifications.json');
 
 // Ensure data directory and files exist
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR);
@@ -47,6 +52,7 @@ if (!fs.existsSync(USERS_FILE)) fs.writeFileSync(USERS_FILE, '[]');
 if (!fs.existsSync(ACTIVITY_FILE)) fs.writeFileSync(ACTIVITY_FILE, '[]');
 if (!fs.existsSync(SUBSCRIBERS_FILE)) fs.writeFileSync(SUBSCRIBERS_FILE, '[]');
 if (!fs.existsSync(TRIAL_PINS_FILE)) fs.writeFileSync(TRIAL_PINS_FILE, '[]');
+if (!fs.existsSync(NOTIFICATIONS_FILE)) fs.writeFileSync(NOTIFICATIONS_FILE, '[]');
 
 // ============ STRIPE WEBHOOK (must be before JSON parser) ============
 app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), function(req, res) {
@@ -104,6 +110,7 @@ function logActivity(type, username, facility, details, extra) {
         if (extra.email) activity.email = extra.email;
         if (extra.tier) activity.tier = extra.tier;
         if (extra.round) activity.round = extra.round;
+        if (extra.notificationId) activity.notificationId = extra.notificationId;
     }
     activities.unshift(activity);
     if (activities.length > 500) activities = activities.slice(0, 500);
@@ -165,6 +172,7 @@ function handleCheckoutComplete(session) {
             quantity: parseInt(quantity),
             created_at: new Date().toISOString(), current_period_end: null,
             totalLaughs: 0, streak: 0, lastActive: null,
+            seenNotifications: [],
             games: { laughtrail: { sessions: 0, bestRound: 0, laughs: 0 }, laughhunt: { sessions: 0, bestTier: 0, laughs: 0 } }
         };
         subscribers.push(newSub);
@@ -176,6 +184,7 @@ function handleCheckoutComplete(session) {
         subscribers[subIndex].plan_type = planType;
         subscribers[subIndex].status = 'active';
         subscribers[subIndex].quantity = parseInt(quantity);
+        if (!subscribers[subIndex].seenNotifications) subscribers[subIndex].seenNotifications = [];
         if (!subscribers[subIndex].games) {
             subscribers[subIndex].games = { laughtrail: { sessions: 0, bestRound: 0, laughs: 0 }, laughhunt: { sessions: 0, bestTier: 0, laughs: 0 } };
         }
@@ -496,6 +505,319 @@ app.post('/api/admin/logout', function(req, res) {
     res.json({ success: true });
 });
 
+// ============ PLATFORM VERSION & NOTIFICATIONS ============
+
+// Get platform version
+app.get('/api/platform/version', function(req, res) {
+    res.json({
+        version: PLATFORM_VERSION,
+        versionName: PLATFORM_VERSION_NAME,
+        workouts: ['THE RECALL', 'THE MATCH', 'THE DRILL', 'THE REFLEX', 'THE RITMO'],
+        workoutCount: 5,
+        lastUpdated: new Date().toISOString()
+    });
+});
+
+// Get unseen notifications for a user (by PIN)
+app.get('/api/notifications/:pin', function(req, res) {
+    var pin = req.params.pin;
+    var notifications = readJSON(NOTIFICATIONS_FILE);
+    var now = new Date();
+    
+    // Filter active notifications
+    var activeNotifications = notifications.filter(function(n) {
+        return n.status === 'active' && (!n.expiresAt || new Date(n.expiresAt) > now);
+    });
+    
+    // Check subscriber
+    var subscribers = readJSON(SUBSCRIBERS_FILE);
+    for (var i = 0; i < subscribers.length; i++) {
+        if (subscribers[i].pin === pin) {
+            var seen = subscribers[i].seenNotifications || [];
+            var unseen = activeNotifications.filter(function(n) {
+                return seen.indexOf(n.id) === -1;
+            });
+            return res.json({
+                success: true,
+                userType: 'subscriber',
+                notifications: unseen,
+                totalUnseen: unseen.length
+            });
+        }
+    }
+    
+    // Check facility trial
+    var trialPins = readJSON(TRIAL_PINS_FILE);
+    for (var k = 0; k < trialPins.length; k++) {
+        if (trialPins[k].pin === pin) {
+            var seen = trialPins[k].seenNotifications || [];
+            var unseen = activeNotifications.filter(function(n) {
+                return seen.indexOf(n.id) === -1;
+            });
+            return res.json({
+                success: true,
+                userType: 'facility_trial',
+                notifications: unseen,
+                totalUnseen: unseen.length,
+                trialInfo: {
+                    facility: trialPins[k].facility,
+                    daysLeft: Math.max(0, Math.ceil((new Date(trialPins[k].expiresAt) - now) / (1000 * 60 * 60 * 24)))
+                }
+            });
+        }
+    }
+    
+    // Guest - show all active notifications (no tracking)
+    return res.json({
+        success: true,
+        userType: 'guest',
+        notifications: activeNotifications,
+        totalUnseen: activeNotifications.length
+    });
+});
+
+// Mark notification as seen
+app.post('/api/notifications/seen', function(req, res) {
+    var pin = req.body.pin;
+    var notificationId = req.body.notificationId;
+    
+    if (!pin || !notificationId) {
+        return res.status(400).json({ success: false, error: 'PIN and notificationId required' });
+    }
+    
+    // Check subscriber
+    var subscribers = readJSON(SUBSCRIBERS_FILE);
+    for (var i = 0; i < subscribers.length; i++) {
+        if (subscribers[i].pin === pin) {
+            if (!subscribers[i].seenNotifications) subscribers[i].seenNotifications = [];
+            if (subscribers[i].seenNotifications.indexOf(notificationId) === -1) {
+                subscribers[i].seenNotifications.push(notificationId);
+                writeJSON(SUBSCRIBERS_FILE, subscribers);
+            }
+            return res.json({ success: true, message: 'Notification marked as seen' });
+        }
+    }
+    
+    // Check facility trial
+    var trialPins = readJSON(TRIAL_PINS_FILE);
+    for (var k = 0; k < trialPins.length; k++) {
+        if (trialPins[k].pin === pin) {
+            if (!trialPins[k].seenNotifications) trialPins[k].seenNotifications = [];
+            if (trialPins[k].seenNotifications.indexOf(notificationId) === -1) {
+                trialPins[k].seenNotifications.push(notificationId);
+                writeJSON(TRIAL_PINS_FILE, trialPins);
+            }
+            return res.json({ success: true, message: 'Notification marked as seen' });
+        }
+    }
+    
+    return res.status(404).json({ success: false, error: 'User not found' });
+});
+
+// ============ ADMIN NOTIFICATION MANAGEMENT ============
+
+// Create platform notification
+app.post('/api/admin/notifications', adminTokenAuth, function(req, res) {
+    var title = req.body.title;
+    var message = req.body.message;
+    var type = req.body.type || 'update'; // update, announcement, maintenance, promotion
+    var extendTrials = req.body.extendTrials || false;
+    var extendDays = parseInt(req.body.extendDays) || 3;
+    var expiresInDays = parseInt(req.body.expiresInDays) || 30;
+    var targetAudience = req.body.targetAudience || 'all'; // all, subscribers, trials
+    
+    if (!title || !message) {
+        return res.status(400).json({ success: false, error: 'Title and message required' });
+    }
+    
+    var notifications = readJSON(NOTIFICATIONS_FILE);
+    
+    var expiresAt = new Date();
+    expiresAt.setDate(expiresAt.getDate() + expiresInDays);
+    
+    var newNotification = {
+        id: 'notif_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+        title: title.trim(),
+        message: message.trim(),
+        type: type,
+        targetAudience: targetAudience,
+        version: PLATFORM_VERSION,
+        status: 'active',
+        createdAt: new Date().toISOString(),
+        expiresAt: expiresAt.toISOString(),
+        extendedTrials: false,
+        extendDays: 0,
+        trialsExtendedCount: 0
+    };
+    
+    // Handle bulk trial extension if requested
+    var trialsExtended = 0;
+    if (extendTrials && extendDays > 0) {
+        var trialPins = readJSON(TRIAL_PINS_FILE);
+        var now = new Date();
+        
+        for (var i = 0; i < trialPins.length; i++) {
+            // Only extend active, non-expired trials
+            if (trialPins[i].status === 'active' && new Date(trialPins[i].expiresAt) > now) {
+                var currentExpiry = new Date(trialPins[i].expiresAt);
+                currentExpiry.setDate(currentExpiry.getDate() + extendDays);
+                trialPins[i].expiresAt = currentExpiry.toISOString();
+                trialPins[i].bonusDaysReceived = (trialPins[i].bonusDaysReceived || 0) + extendDays;
+                trialPins[i].lastExtendedAt = new Date().toISOString();
+                trialPins[i].lastExtendedReason = 'Platform update: ' + title;
+                trialsExtended++;
+            }
+        }
+        
+        if (trialsExtended > 0) {
+            writeJSON(TRIAL_PINS_FILE, trialPins);
+            newNotification.extendedTrials = true;
+            newNotification.extendDays = extendDays;
+            newNotification.trialsExtendedCount = trialsExtended;
+        }
+    }
+    
+    notifications.unshift(newNotification);
+    writeJSON(NOTIFICATIONS_FILE, notifications);
+    
+    logActivity('notification_created', 'admin', null, 
+        'Created notification: ' + title + (trialsExtended > 0 ? ' (+' + extendDays + ' days to ' + trialsExtended + ' trials)' : ''),
+        { notificationId: newNotification.id }
+    );
+    
+    res.json({
+        success: true,
+        notification: newNotification,
+        trialsExtended: trialsExtended
+    });
+});
+
+// Get all notifications (admin)
+app.get('/api/admin/notifications', adminTokenAuth, function(req, res) {
+    var notifications = readJSON(NOTIFICATIONS_FILE);
+    
+    // Update expired status
+    var now = new Date();
+    var updated = false;
+    for (var i = 0; i < notifications.length; i++) {
+        if (notifications[i].status === 'active' && notifications[i].expiresAt && new Date(notifications[i].expiresAt) < now) {
+            notifications[i].status = 'expired';
+            updated = true;
+        }
+    }
+    if (updated) writeJSON(NOTIFICATIONS_FILE, notifications);
+    
+    // Get seen counts
+    var subscribers = readJSON(SUBSCRIBERS_FILE);
+    var trialPins = readJSON(TRIAL_PINS_FILE);
+    
+    notifications = notifications.map(function(n) {
+        var seenBySubscribers = 0;
+        var seenByTrials = 0;
+        
+        for (var i = 0; i < subscribers.length; i++) {
+            if (subscribers[i].seenNotifications && subscribers[i].seenNotifications.indexOf(n.id) !== -1) {
+                seenBySubscribers++;
+            }
+        }
+        for (var k = 0; k < trialPins.length; k++) {
+            if (trialPins[k].seenNotifications && trialPins[k].seenNotifications.indexOf(n.id) !== -1) {
+                seenByTrials++;
+            }
+        }
+        
+        n.seenBySubscribers = seenBySubscribers;
+        n.seenByTrials = seenByTrials;
+        n.totalSeen = seenBySubscribers + seenByTrials;
+        return n;
+    });
+    
+    res.json({ success: true, notifications: notifications });
+});
+
+// Update notification
+app.put('/api/admin/notifications/:id', adminTokenAuth, function(req, res) {
+    var notifications = readJSON(NOTIFICATIONS_FILE);
+    
+    for (var i = 0; i < notifications.length; i++) {
+        if (notifications[i].id === req.params.id) {
+            if (req.body.title) notifications[i].title = req.body.title.trim();
+            if (req.body.message) notifications[i].message = req.body.message.trim();
+            if (req.body.status) notifications[i].status = req.body.status;
+            if (req.body.type) notifications[i].type = req.body.type;
+            writeJSON(NOTIFICATIONS_FILE, notifications);
+            return res.json({ success: true, notification: notifications[i] });
+        }
+    }
+    
+    res.status(404).json({ success: false, error: 'Notification not found' });
+});
+
+// Delete notification
+app.delete('/api/admin/notifications/:id', adminTokenAuth, function(req, res) {
+    var notifications = readJSON(NOTIFICATIONS_FILE);
+    
+    for (var i = 0; i < notifications.length; i++) {
+        if (notifications[i].id === req.params.id) {
+            var deleted = notifications.splice(i, 1)[0];
+            writeJSON(NOTIFICATIONS_FILE, notifications);
+            logActivity('notification_deleted', 'admin', null, 'Deleted notification: ' + deleted.title);
+            return res.json({ success: true });
+        }
+    }
+    
+    res.status(404).json({ success: false, error: 'Notification not found' });
+});
+
+// ============ BULK TRIAL EXTENSION (standalone) ============
+
+app.post('/api/admin/bulk-extend-trials', adminTokenAuth, function(req, res) {
+    var days = parseInt(req.body.days) || 3;
+    var reason = req.body.reason || 'Manual bulk extension';
+    
+    if (days < 1 || days > 30) {
+        return res.status(400).json({ success: false, error: 'Days must be 1-30' });
+    }
+    
+    var trialPins = readJSON(TRIAL_PINS_FILE);
+    var now = new Date();
+    var extended = 0;
+    var extendedTrials = [];
+    
+    for (var i = 0; i < trialPins.length; i++) {
+        // Only extend active, non-expired trials
+        if (trialPins[i].status === 'active' && new Date(trialPins[i].expiresAt) > now) {
+            var currentExpiry = new Date(trialPins[i].expiresAt);
+            currentExpiry.setDate(currentExpiry.getDate() + days);
+            trialPins[i].expiresAt = currentExpiry.toISOString();
+            trialPins[i].bonusDaysReceived = (trialPins[i].bonusDaysReceived || 0) + days;
+            trialPins[i].lastExtendedAt = new Date().toISOString();
+            trialPins[i].lastExtendedReason = reason;
+            extended++;
+            extendedTrials.push({
+                facility: trialPins[i].facility,
+                pin: trialPins[i].pin,
+                newExpiry: trialPins[i].expiresAt
+            });
+        }
+    }
+    
+    if (extended > 0) {
+        writeJSON(TRIAL_PINS_FILE, trialPins);
+        logActivity('bulk_trial_extension', 'admin', null, 
+            'Extended ' + extended + ' trials by ' + days + ' days: ' + reason
+        );
+    }
+    
+    res.json({
+        success: true,
+        trialsExtended: extended,
+        daysAdded: days,
+        reason: reason,
+        extendedTrials: extendedTrials
+    });
+});
+
 // ============ FACILITY TRIAL PIN MANAGEMENT ============
 
 // Create facility trial PIN
@@ -524,7 +846,9 @@ app.post('/api/admin/trial-pin', adminTokenAuth, function(req, res) {
         status: 'active',
         notes: notes.trim(),
         createdAt: new Date().toISOString(),
-        expiresAt: expiresAt.toISOString()
+        expiresAt: expiresAt.toISOString(),
+        seenNotifications: [],
+        bonusDaysReceived: 0
     };
     
     trialPins.push(newTrial);
@@ -580,6 +904,8 @@ app.post('/api/admin/trial-pin/:id/extend', adminTokenAuth, function(req, res) {
             baseDate.setDate(baseDate.getDate() + extraDays);
             trialPins[i].expiresAt = baseDate.toISOString();
             trialPins[i].status = 'active';
+            trialPins[i].bonusDaysReceived = (trialPins[i].bonusDaysReceived || 0) + extraDays;
+            trialPins[i].lastExtendedAt = new Date().toISOString();
             writeJSON(TRIAL_PINS_FILE, trialPins);
             logActivity('trial_extended', trialPins[i].facility, trialPins[i].facility, 'Extended by ' + extraDays + ' days');
             return res.json({ success: true, trial: trialPins[i] });
@@ -612,7 +938,8 @@ app.get('/api/admin/subscribers', adminTokenAuth, function(req, res) {
             email: sub.email, pin: sub.pin, plan_type: sub.plan_type, status: sub.status,
             quantity: sub.quantity || 1,
             created_at: sub.created_at, totalLaughs: sub.totalLaughs || 0, streak: sub.streak || 0,
-            lastActive: sub.lastActive, games: games, family_members: sub.family_members || []
+            lastActive: sub.lastActive, games: games, family_members: sub.family_members || [],
+            seenNotifications: sub.seenNotifications || []
         };
     });
     res.json({ success: true, subscribers: result });
@@ -722,7 +1049,8 @@ app.get('/api/user/bpm-access/:pin', function(req, res) {
                 userType: 'facility_trial',
                 status: isExpired ? 'expired' : 'trialing',
                 daysLeft: Math.max(0, daysLeft),
-                facility: trial.facility
+                facility: trial.facility,
+                bonusDaysReceived: trial.bonusDaysReceived || 0
             });
         }
     }
@@ -741,7 +1069,7 @@ app.get('/', function(req, res) { res.sendFile(path.join(__dirname, 'index.html'
 app.get('/admin-dashboard', function(req, res) { res.sendFile(path.join(__dirname, 'admin-dashboard.html')); });
 app.get('/admin', adminAuth, function(req, res) { res.sendFile(path.join(__dirname, 'admin.html')); });
 app.get('/play', function(req, res) { res.sendFile(path.join(__dirname, 'index.html')); });
-app.get('/health', function(req, res) { res.json({ status: 'healthy', timestamp: new Date().toISOString() }); });
+app.get('/health', function(req, res) { res.json({ status: 'healthy', timestamp: new Date().toISOString(), version: PLATFORM_VERSION }); });
 
 // Play login - UPDATED for facility trials
 app.post('/api/play/login', function(req, res) {
@@ -859,6 +1187,7 @@ app.get('/api/game/stats/pin/:pin', function(req, res) {
 
 app.listen(PORT, function() {
     console.log('LaughCourt running on port ' + PORT);
+    console.log('Platform Version: ' + PLATFORM_VERSION + ' (' + PLATFORM_VERSION_NAME + ')');
     console.log('Admin Dashboard: /admin-dashboard');
     console.log('Stripe configured:', !!stripe);
 });
