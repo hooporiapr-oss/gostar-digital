@@ -435,11 +435,18 @@ document.getElementById('forgotPinBtn').onclick = function() {
     forgotModal.classList.add('active'); 
 };
 
-// Check URL for success
+// Check URL for success (after Stripe payment)
 if (window.location.search.includes('success')) {
     window.history.replaceState({}, '', window.location.pathname);
     successModal.classList.add('active');
     createConfetti();
+}
+
+// Check URL for upgrade (from locked BPM in workouts) - NEW!
+if (window.location.search.includes('upgrade=true')) {
+    window.history.replaceState({}, '', window.location.pathname);
+    // Redirect to Stripe checkout
+    window.location.href = 'https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005';
 }
 
 // PIN Input handling
