@@ -147,12 +147,14 @@
             justify-content: center;
             min-height: 0;
             overflow: hidden;
-            position: relative;
         }
 
-        /* Court Container - holds grid and SVG overlay */
-        .court-container {
-            position: relative;
+        /* Court Grid - 40vh mobile fit */
+        .court-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-template-rows: repeat(5, 1fr);
+            gap: 6px;
             width: 100%;
             max-width: min(100%, 40vh);
             max-height: 40vh;
@@ -160,65 +162,19 @@
         }
 
         @media (max-height: 600px) {
-            .court-container {
+            .court-grid {
                 max-width: min(100%, 32vh);
                 max-height: 32vh;
+                gap: 4px;
             }
         }
 
         @media (min-height: 750px) {
-            .court-container {
+            .court-grid {
                 max-width: min(100%, 44vh);
                 max-height: 44vh;
             }
         }
-
-        /* Court Grid */
-        .court-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            grid-template-rows: repeat(5, 1fr);
-            gap: 6px;
-            width: 100%;
-            height: 100%;
-            position: relative;
-            z-index: 2;
-        }
-
-        /* SVG Trail Overlay */
-        .trail-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            pointer-events: none;
-        }
-
-        .trail-line {
-            stroke-width: 3;
-            stroke-linecap: round;
-            fill: none;
-            filter: drop-shadow(0 0 6px currentColor);
-            stroke-dasharray: 1000;
-            stroke-dashoffset: 1000;
-            animation: drawTrail 0.3s ease-out forwards;
-        }
-
-        @keyframes drawTrail {
-            to {
-                stroke-dashoffset: 0;
-            }
-        }
-
-        /* Trail colors */
-        .trail-red { stroke: #ff4444; filter: drop-shadow(0 0 8px #ff4444); }
-        .trail-blue { stroke: #4488ff; filter: drop-shadow(0 0 8px #4488ff); }
-        .trail-green { stroke: #44ff44; filter: drop-shadow(0 0 8px #44ff44); }
-        .trail-yellow { stroke: #ffff44; filter: drop-shadow(0 0 8px #ffff44); }
-        .trail-purple { stroke: #aa44ff; filter: drop-shadow(0 0 8px #aa44ff); }
-        .trail-orange { stroke: #ff9944; filter: drop-shadow(0 0 8px #ff9944); }
 
         /* Grid Cells with Rainbow Row Borders */
         .grid-cell {
@@ -498,10 +454,7 @@
 
         <!-- Court Wrapper -->
         <div class="court-wrapper">
-            <div class="court-container">
-                <svg class="trail-overlay" id="trailOverlay"></svg>
-                <div class="court-grid" id="courtGrid"></div>
-            </div>
+            <div class="court-grid" id="courtGrid"></div>
         </div>
 
         <!-- Message Display -->
@@ -532,6 +485,65 @@
 
     <script>
         // ============================================
+        // AUDIO - Fire Sound Effect
+        // ============================================
+        var audioCtx = null;
+
+        function getAudioContext() {
+            if (!audioCtx) {
+                try {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                } catch(e) {
+                    return null;
+                }
+            }
+            return audioCtx;
+        }
+
+        function playFireSound() {
+            var ctx = getAudioContext();
+            if (!ctx) return;
+            try {
+                if (ctx.state === 'suspended') ctx.resume();
+                
+                // Rising triumphant arpeggio
+                var notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+                notes.forEach(function(freq, i) {
+                    var osc = ctx.createOscillator();
+                    var gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.value = freq;
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    var startTime = ctx.currentTime + (i * 0.08);
+                    gain.gain.setValueAtTime(0, startTime);
+                    gain.gain.linearRampToValueAtTime(0.4, startTime + 0.02);
+                    gain.gain.exponentialRampToValueAtTime(0.01, startTime + 0.3);
+                    osc.start(startTime);
+                    osc.stop(startTime + 0.35);
+                });
+            } catch(e) {}
+        }
+
+        function playWrongSound() {
+            var ctx = getAudioContext();
+            if (!ctx) return;
+            try {
+                if (ctx.state === 'suspended') ctx.resume();
+                var osc = ctx.createOscillator();
+                var gain = ctx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.value = 150;
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+                osc.start(ctx.currentTime);
+                osc.stop(ctx.currentTime + 0.3);
+            } catch(e) {}
+        }
+
+        // ============================================
         // GAME STATE
         // ============================================
         var state = {
@@ -549,7 +561,8 @@
             targetColor: null,
             matchCell: -1,
             shownCells: [],
-            cellColors: {} // store color for each shown cell
+            cellColors: {},
+            nextPlayTimer: null
         };
 
         var CENTER_CELL = 12;
@@ -575,9 +588,9 @@
             start: { en: 'Tap START for Jump Ball!', es: '¡Toca INICIO para el Salto!' },
             watch: { en: '👀 Find the match...', es: '👀 Encuentra el igual...' },
             tap: { en: '🎯 Where was it?', es: '🎯 ¿Dónde estaba?' },
-            correct: { en: '✓ MATCH!', es: '✓ ¡CORRECTO!' },
+            correct: { en: '🔥 MATCH!', es: '🔥 ¡CORRECTO!' },
             wrong: { en: '✗ Not there!', es: '✗ ¡Ahí no!' },
-            streak: { en: '🔥 On Fire!', es: '🔥 ¡En Racha!' },
+            streak: { en: '🔥🔥 ON FIRE!', es: '🔥🔥 ¡EN LLAMAS!' },
             circuitDone: { en: 'Circuit complete!', es: '¡Circuito completo!' }
         };
 
@@ -624,63 +637,15 @@
                 if (i === CENTER_CELL) {
                     cell.classList.add('center-court');
                 } else {
-                    cell.onclick = function() { handleTap(this); };
+                    cell.addEventListener('click', handleCellClick);
                 }
                 grid.appendChild(cell);
             }
         }
 
-        // ============================================
-        // TRAIL SYSTEM
-        // ============================================
-        function getCellCenter(cellIndex) {
-            var grid = document.getElementById('courtGrid');
-            var cell = document.querySelector('.grid-cell[data-index="' + cellIndex + '"]');
-            
-            if (!cell || !grid) return { x: 0, y: 0 };
-            
-            var gridRect = grid.getBoundingClientRect();
-            var cellRect = cell.getBoundingClientRect();
-            
-            return {
-                x: cellRect.left - gridRect.left + cellRect.width / 2,
-                y: cellRect.top - gridRect.top + cellRect.height / 2
-            };
-        }
-
-        function drawTrails() {
-            var svg = document.getElementById('trailOverlay');
-            var container = document.querySelector('.court-container');
-            
-            // Set SVG size to match container
-            var rect = container.getBoundingClientRect();
-            svg.setAttribute('width', rect.width);
-            svg.setAttribute('height', rect.height);
-            svg.innerHTML = '';
-
-            var centerPos = getCellCenter(CENTER_CELL);
-
-            state.shownCells.forEach(function(cellIndex, i) {
-                var cellPos = getCellCenter(cellIndex);
-                var color = state.cellColors[cellIndex];
-
-                var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-                line.setAttribute('x1', centerPos.x);
-                line.setAttribute('y1', centerPos.y);
-                line.setAttribute('x2', cellPos.x);
-                line.setAttribute('y2', cellPos.y);
-                line.setAttribute('class', 'trail-line trail-' + color);
-                
-                // Stagger animation slightly
-                line.style.animationDelay = (i * 0.05) + 's';
-                
-                svg.appendChild(line);
-            });
-        }
-
-        function clearTrails() {
-            var svg = document.getElementById('trailOverlay');
-            svg.innerHTML = '';
+        function handleCellClick(e) {
+            var cell = e.currentTarget;
+            handleTap(cell);
         }
 
         // ============================================
@@ -688,6 +653,9 @@
         // ============================================
         function startGame() {
             if (state.playing) return;
+
+            // Initialize audio on first interaction
+            getAudioContext();
 
             state.playing = true;
             state.score = 0;
@@ -700,13 +668,18 @@
         }
 
         function startPlay() {
+            // Clear any pending timer
+            if (state.nextPlayTimer) {
+                clearTimeout(state.nextPlayTimer);
+                state.nextPlayTimer = null;
+            }
+
             state.phase = 'showing';
             state.shownCells = [];
             state.matchCell = -1;
             state.cellColors = {};
 
             clearAllCells();
-            clearTrails();
 
             // Pick NEW target color for this play
             state.targetColor = COLORS[Math.floor(Math.random() * COLORS.length)];
@@ -730,9 +703,12 @@
             shuffleArray(availableCells);
 
             var selectedCells = availableCells.slice(0, totalCells);
-            state.shownCells = selectedCells;
+            state.shownCells = selectedCells.slice(); // copy
 
-            // First cell gets the MATCH color
+            // Shuffle again so match isn't always first visually
+            shuffleArray(selectedCells);
+            
+            // Pick one random cell to be the match
             state.matchCell = selectedCells[0];
 
             // Get distractor colors
@@ -743,7 +719,7 @@
                 var cell = document.querySelector('.grid-cell[data-index="' + cellIndex + '"]');
                 var color;
                 
-                if (i === 0) {
+                if (cellIndex === state.matchCell) {
                     color = state.targetColor;
                 } else {
                     color = distractorColors[Math.floor(Math.random() * distractorColors.length)];
@@ -754,30 +730,28 @@
                 state.cellColors[cellIndex] = color;
             });
 
-            // Draw trails from center to each cell!
-            setTimeout(function() {
-                drawTrails();
-            }, 50);
-
             disableTapping();
 
-            // After show time, hide colors and trails
+            // After show time, hide colors
             var showTime = SPEEDS[state.speed];
             setTimeout(function() {
-                hideColors();
-                clearTrails();
-                state.phase = 'guessing';
-                enableTapping();
-                setMessage(MESSAGES.tap[state.lang]);
+                if (state.phase === 'showing') {
+                    hideColors();
+                    state.phase = 'guessing';
+                    enableTapping();
+                    setMessage(MESSAGES.tap[state.lang]);
+                }
             }, showTime);
         }
 
         function hideColors() {
             state.shownCells.forEach(function(cellIndex) {
                 var cell = document.querySelector('.grid-cell[data-index="' + cellIndex + '"]');
-                COLORS.forEach(function(c) {
-                    cell.classList.remove('color-' + c);
-                });
+                if (cell) {
+                    COLORS.forEach(function(c) {
+                        cell.classList.remove('color-' + c);
+                    });
+                }
             });
         }
 
@@ -786,14 +760,18 @@
 
             var cellIndex = parseInt(cell.dataset.index);
             
+            // Immediately change phase to prevent double taps
             state.phase = 'feedback';
             disableTapping();
 
             if (cellIndex === state.matchCell) {
-                // CORRECT!
+                // CORRECT! 🔥
                 state.score += 10;
                 state.laughs++;
                 state.consecutiveCorrect++;
+                
+                // Play fire sound!
+                playFireSound();
                 
                 cell.classList.add('color-' + state.targetColor, 'correct');
                 
@@ -803,37 +781,49 @@
                     showCelebration('🔥');
                 } else {
                     setMessage(MESSAGES.correct[state.lang]);
-                    showCelebration('🎯');
+                    showCelebration('🔥');
                 }
 
+                // Check tier advancement
                 if (state.consecutiveCorrect >= 5 && state.tier < TIERS.length) {
                     state.tier++;
                     state.consecutiveCorrect = 0;
                     saveState();
-                    setTimeout(function() { showTierModal(); }, 500);
+                    setTimeout(function() { showTierModal(); }, 400);
                 }
             } else {
                 // WRONG
                 state.consecutiveCorrect = 0;
+                
+                playWrongSound();
+                
                 cell.classList.add('wrong');
                 
+                // Reveal where the match actually was
                 var matchCellEl = document.querySelector('.grid-cell[data-index="' + state.matchCell + '"]');
-                matchCellEl.classList.add('color-' + state.targetColor);
+                if (matchCellEl) {
+                    matchCellEl.classList.add('color-' + state.targetColor);
+                }
                 
                 setMessage(MESSAGES.wrong[state.lang]);
             }
 
             updateDisplay();
 
-            setTimeout(function() {
-                if (state.play >= 10) {
-                    completeCircuit();
-                } else {
-                    state.play++;
-                    updateDisplay();
-                    startPlay();
-                }
-            }, 1500);
+            // FAST BREAK CONTINUITY - Move to next play
+            state.nextPlayTimer = setTimeout(function() {
+                nextPlay();
+            }, 1000);
+        }
+
+        function nextPlay() {
+            if (state.play >= 10) {
+                completeCircuit();
+            } else {
+                state.play++;
+                updateDisplay();
+                startPlay();
+            }
         }
 
         function completeCircuit() {
@@ -875,6 +865,12 @@
         }
 
         function resetGame() {
+            // Clear any pending timer
+            if (state.nextPlayTimer) {
+                clearTimeout(state.nextPlayTimer);
+                state.nextPlayTimer = null;
+            }
+
             state.playing = false;
             state.phase = 'idle';
             state.score = 0;
@@ -885,7 +881,6 @@
             state.cellColors = {};
 
             clearAllCells();
-            clearTrails();
             document.getElementById('startBtn').disabled = false;
             updateDisplay();
             setMessage(MESSAGES.start[state.lang]);
