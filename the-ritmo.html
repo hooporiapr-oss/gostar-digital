@@ -35,7 +35,6 @@ body {
 body.en .lang-es { display: none !important; }
 body.es .lang-en { display: none !important; }
 
-/* Main Container - NO SCROLL */
 .game-container {
     max-width: 420px;
     margin: 0 auto;
@@ -47,7 +46,6 @@ body.es .lang-en { display: none !important; }
     overflow: hidden;
 }
 
-/* Language Toggle */
 .lang-toggle {
     position: absolute;
     top: 8px;
@@ -73,7 +71,6 @@ body.es .lang-en { display: none !important; }
     border-color: var(--red);
 }
 
-/* Back Button */
 .back-btn {
     position: absolute;
     top: 8px;
@@ -85,7 +82,6 @@ body.es .lang-en { display: none !important; }
 }
 .back-btn:hover { color: var(--text); }
 
-/* Header - Compact */
 .header {
     text-align: center;
     padding: 6px 0;
@@ -115,7 +111,6 @@ body.es .lang-en { display: none !important; }
 }
 .powered-by .ritnome { color: var(--gold); font-weight: 700; }
 
-/* Stats Bar - Compact */
 .stats-bar {
     display: flex;
     justify-content: center;
@@ -140,7 +135,6 @@ body.es .lang-en { display: none !important; }
     letter-spacing: 1px;
 }
 
-/* Message Display */
 .message-display {
     background: linear-gradient(135deg, var(--card), var(--darker));
     border: 2px solid var(--red);
@@ -172,7 +166,6 @@ body.es .lang-en { display: none !important; }
 .message-text.success { color: var(--teal); }
 .message-text.fail { color: var(--red); }
 
-/* Rhythm Visual - Inline */
 .rhythm-visual {
     display: flex;
     justify-content: center;
@@ -213,7 +206,6 @@ body.es .lang-en { display: none !important; }
     color: var(--text);
 }
 
-/* Ritnome™ Tempo Selector - Inline */
 .tempo-section {
     display: flex;
     align-items: center;
@@ -256,8 +248,6 @@ body.es .lang-en { display: none !important; }
     color: var(--gold);
     background: rgba(255,215,0,0.1);
 }
-
-/* BPM Lock Styles */
 .tempo-btn.locked {
     opacity: 0.5;
     cursor: not-allowed;
@@ -269,11 +259,7 @@ body.es .lang-en { display: none !important; }
     right: 4px;
     font-size: 0.6rem;
 }
-.tempo-btn.locked:hover {
-    border-color: var(--gold);
-}
 
-/* Court Grid - VISIBLE CELLS */
 .court-grid {
     flex: 1;
     display: grid;
@@ -326,7 +312,6 @@ body.es .lang-en { display: none !important; }
     100% { transform: scale(1); }
 }
 
-/* Progress Bar */
 .progress-section {
     display: flex;
     align-items: center;
@@ -358,7 +343,6 @@ body.es .lang-en { display: none !important; }
     transition: width 0.3s ease-out;
 }
 
-/* Action Button */
 .action-btn {
     width: 100%;
     padding: 12px;
@@ -383,7 +367,6 @@ body.es .lang-en { display: none !important; }
     transform: none;
 }
 
-/* Feedback Overlay */
 .feedback-overlay {
     position: fixed;
     inset: 0;
@@ -464,7 +447,6 @@ body.es .lang-en { display: none !important; }
     border: 1px solid var(--muted);
 }
 
-/* Upgrade Modal */
 .upgrade-overlay {
     position: fixed;
     inset: 0;
@@ -549,7 +531,6 @@ body.es .lang-en { display: none !important; }
     cursor: pointer;
 }
 
-/* Coach Message Toast */
 .coach-message {
     position: fixed;
     bottom: 80px;
@@ -571,12 +552,8 @@ body.es .lang-en { display: none !important; }
     opacity: 1;
 }
 
-/* Desktop */
 @media (min-width: 700px) {
-    .game-container {
-        max-width: 480px;
-        padding: 15px 20px;
-    }
+    .game-container { max-width: 480px; padding: 15px 20px; }
     .header { padding: 10px 0; }
     .logo { font-size: 1.2rem; }
     .court-name { font-size: 1.8rem; }
@@ -591,24 +568,39 @@ body.es .lang-en { display: none !important; }
 </head>
 <body class="en">
 
-<!-- Language Toggle -->
+<!-- ============ BULLETPROOF AUTH GATE ============ -->
+<script>
+(function(){
+    var host = window.location.hostname;
+    var isLocal = (host === 'localhost' || host === '127.0.0.1' || host === '');
+    if (!isLocal) {
+        var user = null;
+        try { user = JSON.parse(localStorage.getItem('lc-user')); } catch(e) {}
+        var hasValidUser = user && user.pin && user.pin.length >= 4;
+        if (!hasValidUser) {
+            document.documentElement.style.display = 'none';
+            window.location.replace('index.html');
+            throw new Error('Auth required');
+        }
+    }
+})();
+</script>
+<!-- ============ END AUTH GATE ============ -->
+
 <div class="lang-toggle">
     <button class="lang-btn active" id="btnEn">EN</button>
     <button class="lang-btn" id="btnEs">ES</button>
 </div>
 
-<!-- Back Button -->
 <a href="laugh-hub.html" class="back-btn">← <span class="lang-en">Back</span><span class="lang-es">Volver</span></a>
 
 <div class="game-container">
-    <!-- Header -->
     <header class="header">
         <div class="logo"><span class="laugh">LAUGH</span>COURT<sup style="font-size:0.5em">™</sup></div>
         <div class="court-name">🎵 THE RITMO</div>
         <div class="powered-by">Powered by <span class="ritnome">Ritnome™</span></div>
     </header>
 
-    <!-- Stats Bar -->
     <div class="stats-bar">
         <div class="stat">
             <div class="stat-value red" id="currentTier">1</div>
@@ -628,7 +620,6 @@ body.es .lang-en { display: none !important; }
         </div>
     </div>
 
-    <!-- Message Display with Rhythm Visual -->
     <div class="message-display" id="messageDisplay">
         <span class="message-text" id="messageText">
             <span class="lang-en">🎵 Listen to the rhythm, then tap it back!</span>
@@ -637,7 +628,6 @@ body.es .lang-en { display: none !important; }
         <div class="rhythm-visual" id="rhythmVisual"></div>
     </div>
 
-    <!-- Ritnome™ Tempo Selector -->
     <div class="tempo-section" id="tempoSection">
         <div class="tempo-label">🎵 <span class="ritnome">Ritnome™</span></div>
         <div class="tempo-buttons">
@@ -659,10 +649,8 @@ body.es .lang-en { display: none !important; }
         </div>
     </div>
 
-    <!-- Court Grid -->
     <div class="court-grid" id="courtGrid"></div>
 
-    <!-- Progress Bar -->
     <div class="progress-section">
         <div class="tier-badge">
             <span class="lang-en">TIER</span><span class="lang-es">NIVEL</span> 
@@ -673,14 +661,12 @@ body.es .lang-en { display: none !important; }
         </div>
     </div>
 
-    <!-- Action Button -->
     <button class="action-btn" id="actionBtn">
         <span class="lang-en">START RITMO 🎵</span>
         <span class="lang-es">INICIAR RITMO 🎵</span>
     </button>
 </div>
 
-<!-- Feedback Overlay -->
 <div class="feedback-overlay" id="feedbackOverlay">
     <div class="feedback-card">
         <div class="feedback-emoji" id="feedbackEmoji">🎵</div>
@@ -708,7 +694,6 @@ body.es .lang-en { display: none !important; }
     </div>
 </div>
 
-<!-- Upgrade Modal -->
 <div class="upgrade-overlay" id="upgradeOverlay">
     <div class="upgrade-card">
         <div class="upgrade-icon">🔓</div>
@@ -753,12 +738,10 @@ body.es .lang-en { display: none !important; }
     </div>
 </div>
 
-<!-- Coach Message Toast -->
 <div class="coach-message" id="coachMessage"></div>
 
 <script>
 (function() {
-    // Translations
     const translations = {
         en: {
             startRitmo: 'START RITMO 🎵',
@@ -807,22 +790,12 @@ body.es .lang-en { display: none !important; }
         });
     }
 
-    // BPM Access Control
-    const bpmAccess = {
-        allBPM: false,
-        userType: 'guest',
-        checked: false
-    };
+    const bpmAccess = { allBPM: false, userType: 'guest', checked: false };
 
-    // Audio Engine
     let audioCtx = null;
     function initAudio() {
-        if (!audioCtx) {
-            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        }
-        if (audioCtx.state === 'suspended') {
-            audioCtx.resume();
-        }
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
     }
 
     function playBeat(freq, duration) {
@@ -851,24 +824,13 @@ body.es .lang-en { display: none !important; }
         playBeat(200, 0.3);
     }
 
-    // Game State
     const state = {
-        tier: 1,
-        circuit: 0,
-        totalLaughs: 0,
-        streak: 0,
-        bpm: 60, // Default to 60 BPM for trial users
-        gamePhase: 'idle', // idle, playing, listening
-        rhythmPattern: [],
-        playerPattern: [],
-        currentBeatIndex: 0,
-        beatTimeout: null,
-        listenTimeout: null
+        tier: 1, circuit: 0, totalLaughs: 0, streak: 0, bpm: 60,
+        gamePhase: 'idle', rhythmPattern: [], playerPattern: [],
+        currentBeatIndex: 0, beatTimeout: null, listenTimeout: null
     };
 
-    // DOM Elements
     const courtGrid = document.getElementById('courtGrid');
-    const messageDisplay = document.getElementById('messageDisplay');
     const messageText = document.getElementById('messageText');
     const rhythmVisual = document.getElementById('rhythmVisual');
     const actionBtn = document.getElementById('actionBtn');
@@ -877,82 +839,34 @@ body.es .lang-en { display: none !important; }
     const upgradeOverlay = document.getElementById('upgradeOverlay');
     let cells = [];
 
-    // Check BPM access from server
     function checkBPMAccess() {
         const userPIN = localStorage.getItem('lc-user-pin');
-        
-        if (!userPIN) {
-            // Guest user - 60 BPM only
-            bpmAccess.allBPM = false;
-            bpmAccess.userType = 'guest';
-            bpmAccess.checked = true;
-            applyBPMLocks();
-            return;
-        }
-        
-        // Check server for access level
+        if (!userPIN) { bpmAccess.allBPM = false; bpmAccess.checked = true; applyBPMLocks(); return; }
         fetch('/api/user/bpm-access/' + userPIN)
             .then(res => res.json())
-            .then(data => {
-                bpmAccess.allBPM = data.allBPM || false;
-                bpmAccess.userType = data.userType || 'guest';
-                bpmAccess.checked = true;
-                applyBPMLocks();
-            })
-            .catch(err => {
-                console.log('BPM access check failed, defaulting to locked:', err);
-                bpmAccess.allBPM = false;
-                bpmAccess.userType = 'guest';
-                bpmAccess.checked = true;
-                applyBPMLocks();
-            });
+            .then(data => { bpmAccess.allBPM = data.allBPM || false; bpmAccess.checked = true; applyBPMLocks(); })
+            .catch(() => { bpmAccess.allBPM = false; bpmAccess.checked = true; applyBPMLocks(); });
     }
 
-    // Apply locks to 90 and 120 BPM buttons
     function applyBPMLocks() {
-        const tempoBtns = document.querySelectorAll('.tempo-btn');
-        
-        tempoBtns.forEach(btn => {
+        document.querySelectorAll('.tempo-btn').forEach(btn => {
             const bpm = parseInt(btn.dataset.bpm);
-            
-            if (bpm > 60 && !bpmAccess.allBPM) {
-                btn.classList.add('locked');
-            } else {
-                btn.classList.remove('locked');
-            }
+            if (bpm > 60 && !bpmAccess.allBPM) btn.classList.add('locked');
+            else btn.classList.remove('locked');
         });
-        
-        // Ensure 60 BPM is selected for locked users
-        if (!bpmAccess.allBPM) {
-            selectTempo(60);
-        }
+        if (!bpmAccess.allBPM) selectTempo(60);
     }
 
-    // Select a tempo
     function selectTempo(bpm) {
         state.bpm = bpm;
-        
-        document.querySelectorAll('.tempo-btn').forEach(b => { 
-            b.classList.remove('active'); 
-        });
-        
+        document.querySelectorAll('.tempo-btn').forEach(b => b.classList.remove('active'));
         const targetBtn = document.querySelector('.tempo-btn[data-bpm="' + bpm + '"]');
-        if (targetBtn) {
-            targetBtn.classList.add('active');
-        }
+        if (targetBtn) targetBtn.classList.add('active');
     }
 
-    // Show upgrade modal
-    function showUpgradeModal() {
-        upgradeOverlay.classList.add('show');
-    }
+    function showUpgradeModal() { upgradeOverlay.classList.add('show'); }
+    function hideUpgradeModal() { upgradeOverlay.classList.remove('show'); }
 
-    // Hide upgrade modal
-    function hideUpgradeModal() {
-        upgradeOverlay.classList.remove('show');
-    }
-
-    // Initialize grid
     function initGrid() {
         courtGrid.innerHTML = '';
         cells = [];
@@ -966,24 +880,19 @@ body.es .lang-en { display: none !important; }
         }
     }
 
-    // Generate rhythm pattern
     function generatePattern() {
-        const length = Math.min(3 + Math.floor(state.tier / 2), 8); // 3-8 beats
+        const length = Math.min(3 + Math.floor(state.tier / 2), 8);
         const pattern = [];
         const usedCells = [];
-
         for (let i = 0; i < length; i++) {
             let cellIndex;
-            do {
-                cellIndex = Math.floor(Math.random() * 25);
-            } while (usedCells.includes(cellIndex) && usedCells.length < 25);
+            do { cellIndex = Math.floor(Math.random() * 25); } while (usedCells.includes(cellIndex) && usedCells.length < 25);
             usedCells.push(cellIndex);
             pattern.push({ cell: cellIndex, time: i });
         }
         return pattern;
     }
 
-    // Update rhythm visual
     function updateRhythmVisual() {
         rhythmVisual.innerHTML = '';
         for (let i = 0; i < state.rhythmPattern.length; i++) {
@@ -995,12 +904,10 @@ body.es .lang-en { display: none !important; }
         }
     }
 
-    // Play rhythm
     function playRhythm() {
         state.gamePhase = 'playing';
         state.currentBeatIndex = 0;
         const interval = 60000 / state.bpm;
-
         messageText.innerHTML = t('listen');
         messageText.className = 'message-text coach';
 
@@ -1009,113 +916,68 @@ body.es .lang-en { display: none !important; }
                 setTimeout(() => startListening(), interval);
                 return;
             }
-
             const beat = state.rhythmPattern[state.currentBeatIndex];
-
-            // Visual
             cells[beat.cell].classList.add('beat');
             const noteEl = document.getElementById('note-' + state.currentBeatIndex);
             if (noteEl) noteEl.classList.add('active');
-
-            // Audio
-            const freq = 300 + (beat.cell % 5) * 100;
-            playBeat(freq, 0.15);
-
+            playBeat(300 + (beat.cell % 5) * 100, 0.15);
             setTimeout(() => {
                 cells[beat.cell].classList.remove('beat');
-                if (noteEl) {
-                    noteEl.classList.remove('active');
-                    noteEl.classList.add('done');
-                }
+                if (noteEl) { noteEl.classList.remove('active'); noteEl.classList.add('done'); }
             }, interval * 0.8);
-
             state.currentBeatIndex++;
             state.beatTimeout = setTimeout(playNextBeat, interval);
         }
-
         playNextBeat();
     }
 
-    // Start listening
     function startListening() {
         state.gamePhase = 'listening';
         state.playerPattern = [];
         state.currentBeatIndex = 0;
-
-        // Reset note visuals
-        document.querySelectorAll('.rhythm-note').forEach(n => {
-            n.classList.remove('done', 'active', 'missed');
-        });
-
+        document.querySelectorAll('.rhythm-note').forEach(n => n.classList.remove('done', 'active', 'missed'));
         messageText.textContent = t('yourTurn');
         messageText.className = 'message-text success';
-
-        // Timeout for player response
         const timeout = (state.rhythmPattern.length + 3) * (60000 / state.bpm);
-        state.listenTimeout = setTimeout(() => {
-            if (state.gamePhase === 'listening') {
-                handleFail();
-            }
-        }, timeout);
+        state.listenTimeout = setTimeout(() => { if (state.gamePhase === 'listening') handleFail(); }, timeout);
     }
 
-    // Handle cell tap
     function handleCellTap(index) {
         initAudio();
         if (state.gamePhase !== 'listening') return;
-
         const expectedBeat = state.rhythmPattern[state.currentBeatIndex];
         const noteEl = document.getElementById('note-' + state.currentBeatIndex);
 
         if (index === expectedBeat.cell) {
-            // Correct!
             cells[index].classList.add('tap-correct');
             if (noteEl) noteEl.classList.add('done');
             playBeat(440 + state.currentBeatIndex * 50, 0.1);
-
             setTimeout(() => cells[index].classList.remove('tap-correct'), 200);
-
             state.currentBeatIndex++;
-
-            if (state.currentBeatIndex >= state.rhythmPattern.length) {
-                clearTimeout(state.listenTimeout);
-                handleSuccess();
-            }
+            if (state.currentBeatIndex >= state.rhythmPattern.length) { clearTimeout(state.listenTimeout); handleSuccess(); }
         } else {
-            // Wrong!
             cells[index].classList.add('tap-wrong');
             if (noteEl) noteEl.classList.add('missed');
-
             setTimeout(() => cells[index].classList.remove('tap-wrong'), 300);
-
             clearTimeout(state.listenTimeout);
             handleFail();
         }
     }
 
-    // Handle success
     function handleSuccess() {
         state.gamePhase = 'idle';
         state.streak++;
         state.totalLaughs++;
         state.circuit++;
-
         playSuccess();
-
-        const successMessages = [t('perfectRhythm'), t('gotRhythm'), t('smoothMoves'), t('onPoint')];
-        showCoachMessage(successMessages[Math.floor(Math.random() * successMessages.length)]);
-
+        const msgs = [t('perfectRhythm'), t('gotRhythm'), t('smoothMoves'), t('onPoint')];
+        showCoachMessage(msgs[Math.floor(Math.random() * msgs.length)]);
         updateStats();
-
-        if (state.circuit >= 3) {
-            // Tier up!
-            state.circuit = 0;
-            state.tier++;
-            showTierUpModal();
-        } else {
+        if (state.circuit >= 3) { state.circuit = 0; state.tier++; showTierUpModal(); }
+        else {
             setTimeout(() => {
                 actionBtn.disabled = false;
-                actionBtn.innerHTML = `<span class="lang-en">${translations.en.nextRound}</span><span class="lang-es">${translations.es.nextRound}</span>`;
+                actionBtn.innerHTML = '<span class="lang-en">' + translations.en.nextRound + '</span><span class="lang-es">' + translations.es.nextRound + '</span>';
                 messageText.textContent = t('ready');
                 messageText.className = 'message-text';
                 setLang(currentLang);
@@ -1123,26 +985,20 @@ body.es .lang-en { display: none !important; }
         }
     }
 
-    // Handle fail
     function handleFail() {
         state.gamePhase = 'idle';
         state.streak = 0;
-
         playFail();
-
-        const failMessages = [t('almost'), t('tryAgain'), t('listenCloser'), t('youllGetIt')];
-        showCoachMessage(failMessages[Math.floor(Math.random() * failMessages.length)]);
-
+        const msgs = [t('almost'), t('tryAgain'), t('listenCloser'), t('youllGetIt')];
+        showCoachMessage(msgs[Math.floor(Math.random() * msgs.length)]);
         updateStats();
-
         setTimeout(() => {
             actionBtn.disabled = false;
-            actionBtn.innerHTML = `<span class="lang-en">${translations.en.startRitmo}</span><span class="lang-es">${translations.es.startRitmo}</span>`;
+            actionBtn.innerHTML = '<span class="lang-en">' + translations.en.startRitmo + '</span><span class="lang-es">' + translations.es.startRitmo + '</span>';
             setLang(currentLang);
         }, 1500);
     }
 
-    // Show tier up modal
     function showTierUpModal() {
         document.getElementById('feedbackEmoji').textContent = '🎵';
         document.getElementById('feedbackTitle').textContent = t('tierUp');
@@ -1153,28 +1009,22 @@ body.es .lang-en { display: none !important; }
         updateStats();
     }
 
-    // Start game
     function startGame() {
         initAudio();
         actionBtn.disabled = true;
         document.getElementById('tempoSection').style.pointerEvents = 'none';
-
         state.rhythmPattern = generatePattern();
         updateRhythmVisual();
-
         setTimeout(() => playRhythm(), 500);
     }
 
-    // Update stats
     function updateStats() {
         document.getElementById('currentTier').textContent = state.tier;
         document.getElementById('circuitDisplay').textContent = state.circuit + '/3';
         document.getElementById('totalLaughs').textContent = state.totalLaughs;
         document.getElementById('streak').textContent = state.streak;
         document.getElementById('tierDisplay').textContent = state.tier;
-
-        const progress = (state.circuit / 3) * 100;
-        document.getElementById('progressFill').style.width = progress + '%';
+        document.getElementById('progressFill').style.width = (state.circuit / 3) * 100 + '%';
     }
 
     function showCoachMessage(msg) {
@@ -1183,22 +1033,13 @@ body.es .lang-en { display: none !important; }
         setTimeout(() => coachMessage.classList.remove('show'), 2500);
     }
 
-    // Event Listeners
     actionBtn.addEventListener('click', startGame);
 
-    // Tempo button clicks with BPM lock check
     document.querySelectorAll('.tempo-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             if (state.gamePhase !== 'idle') return;
-            
             const bpm = parseInt(btn.dataset.bpm);
-            
-            // Check if locked
-            if (bpm > 60 && !bpmAccess.allBPM) {
-                showUpgradeModal();
-                return;
-            }
-            
+            if (bpm > 60 && !bpmAccess.allBPM) { showUpgradeModal(); return; }
             selectTempo(bpm);
         });
     });
@@ -1207,8 +1048,8 @@ body.es .lang-en { display: none !important; }
         feedbackOverlay.classList.remove('show');
         actionBtn.disabled = false;
         document.getElementById('tempoSection').style.pointerEvents = 'auto';
-        actionBtn.innerHTML = `<span class="lang-en">${translations.en.startRitmo}</span><span class="lang-es">${translations.es.startRitmo}</span>`;
-        messageText.innerHTML = `<span class="lang-en">🎵 Listen to the rhythm, then tap it back!</span><span class="lang-es">🎵 ¡Escucha el ritmo, luego repítelo!</span>`;
+        actionBtn.innerHTML = '<span class="lang-en">' + translations.en.startRitmo + '</span><span class="lang-es">' + translations.es.startRitmo + '</span>';
+        messageText.innerHTML = '<span class="lang-en">🎵 Listen to the rhythm, then tap it back!</span><span class="lang-es">🎵 ¡Escucha el ritmo, luego repítelo!</span>';
         messageText.className = 'message-text';
         rhythmVisual.innerHTML = '';
         setLang(currentLang);
@@ -1217,37 +1058,27 @@ body.es .lang-en { display: none !important; }
 
     document.getElementById('restartBtn').addEventListener('click', () => {
         feedbackOverlay.classList.remove('show');
-        state.tier = 1;
-        state.circuit = 0;
-        state.streak = 0;
+        state.tier = 1; state.circuit = 0; state.streak = 0;
         document.getElementById('progressFill').style.width = '0%';
         actionBtn.disabled = false;
         document.getElementById('tempoSection').style.pointerEvents = 'auto';
-        actionBtn.innerHTML = `<span class="lang-en">${translations.en.startRitmo}</span><span class="lang-es">${translations.es.startRitmo}</span>`;
-        messageText.innerHTML = `<span class="lang-en">🎵 Listen to the rhythm, then tap it back!</span><span class="lang-es">🎵 ¡Escucha el ritmo, luego repítelo!</span>`;
+        actionBtn.innerHTML = '<span class="lang-en">' + translations.en.startRitmo + '</span><span class="lang-es">' + translations.es.startRitmo + '</span>';
+        messageText.innerHTML = '<span class="lang-en">🎵 Listen to the rhythm, then tap it back!</span><span class="lang-es">🎵 ¡Escucha el ritmo, luego repítelo!</span>';
         messageText.className = 'message-text';
         rhythmVisual.innerHTML = '';
         setLang(currentLang);
         updateStats();
     });
 
-    // Upgrade modal events
-    document.getElementById('upgradeBtn').addEventListener('click', () => {
-        window.location.href = 'index.html?upgrade=true';
-    });
-
-    document.getElementById('upgradeClose').addEventListener('click', () => {
-        hideUpgradeModal();
-    });
-
+    document.getElementById('upgradeBtn').addEventListener('click', () => { window.location.href = 'index.html?upgrade=true'; });
+    document.getElementById('upgradeClose').addEventListener('click', hideUpgradeModal);
     document.getElementById('btnEn').addEventListener('click', () => setLang('en'));
     document.getElementById('btnEs').addEventListener('click', () => setLang('es'));
 
-    // Initialize
     initGrid();
     setLang(currentLang);
     updateStats();
-    checkBPMAccess(); // Check BPM access on load
+    checkBPMAccess();
 })();
 </script>
 </body>
