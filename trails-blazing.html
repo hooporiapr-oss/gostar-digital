@@ -37,7 +37,6 @@
             overflow: hidden;
         }
 
-        /* Header */
         .header {
             display: flex;
             justify-content: space-between;
@@ -74,7 +73,6 @@
             cursor: pointer;
         }
 
-        /* Speed Selector */
         .speed-selector {
             display: flex;
             gap: 4px;
@@ -99,7 +97,6 @@
             color: #000;
         }
 
-        /* Stats Bar */
         .stats-bar {
             display: flex;
             justify-content: space-around;
@@ -127,7 +124,6 @@
             letter-spacing: 0.5px;
         }
 
-        /* Tier Badge */
         .tier-badge {
             background: linear-gradient(135deg, #FFD700, #FF6B00);
             color: #000;
@@ -139,7 +135,6 @@
             letter-spacing: 1px;
         }
 
-        /* Court Wrapper */
         .court-wrapper {
             flex: 1;
             display: flex;
@@ -149,7 +144,6 @@
             overflow: hidden;
         }
 
-        /* Court Grid - 40vh mobile fit */
         .court-grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
@@ -176,7 +170,6 @@
             }
         }
 
-        /* Grid Cells with Rainbow Row Borders */
         .grid-cell {
             border-radius: 8px;
             display: flex;
@@ -189,31 +182,26 @@
             position: relative;
         }
 
-        /* Row 1 - Orange */
         .grid-cell:nth-child(-n+5) {
             border-color: #FF6B00;
             box-shadow: 0 0 8px rgba(255,107,0,0.3), inset 0 0 10px rgba(255,107,0,0.1);
         }
 
-        /* Row 2 - Gold */
         .grid-cell:nth-child(n+6):nth-child(-n+10) {
             border-color: #FFD700;
             box-shadow: 0 0 8px rgba(255,215,0,0.3), inset 0 0 10px rgba(255,215,0,0.1);
         }
 
-        /* Row 3 - Teal */
         .grid-cell:nth-child(n+11):nth-child(-n+15) {
             border-color: #00D9A5;
             box-shadow: 0 0 8px rgba(0,217,165,0.3), inset 0 0 10px rgba(0,217,165,0.1);
         }
 
-        /* Row 4 - Pink */
         .grid-cell:nth-child(n+16):nth-child(-n+20) {
             border-color: #FF1493;
             box-shadow: 0 0 8px rgba(255,20,147,0.3), inset 0 0 10px rgba(255,20,147,0.1);
         }
 
-        /* Row 5 - Purple */
         .grid-cell:nth-child(n+21) {
             border-color: #9D4EDD;
             box-shadow: 0 0 8px rgba(157,78,221,0.3), inset 0 0 10px rgba(157,78,221,0.1);
@@ -227,7 +215,6 @@
             pointer-events: none;
         }
 
-        /* Center Court - Jump Ball Target */
         .grid-cell.center-court {
             border-width: 4px;
             pointer-events: none;
@@ -242,7 +229,6 @@
             opacity: 0.6;
         }
 
-        /* Game Colors */
         .color-red { background: linear-gradient(135deg, #ff4444, #cc0000) !important; }
         .color-blue { background: linear-gradient(135deg, #4488ff, #0044cc) !important; }
         .color-green { background: linear-gradient(135deg, #44ff44, #00cc00) !important; }
@@ -250,7 +236,6 @@
         .color-purple { background: linear-gradient(135deg, #aa44ff, #6600cc) !important; }
         .color-orange { background: linear-gradient(135deg, #ff9944, #cc6600) !important; }
 
-        /* Correct/Wrong feedback */
         .grid-cell.correct {
             animation: correctPulse 0.5s ease-out;
         }
@@ -271,7 +256,6 @@
             40%, 80% { transform: translateX(5px); }
         }
 
-        /* Bottom Controls */
         .bottom-controls {
             display: flex;
             gap: 10px;
@@ -308,7 +292,6 @@
             cursor: not-allowed;
         }
 
-        /* Message Display */
         .message-display {
             text-align: center;
             padding: 6px;
@@ -322,7 +305,6 @@
             color: #FFD700;
         }
 
-        /* Modal Overlay */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -425,7 +407,6 @@
             color: white;
         }
 
-        /* Celebration Animation */
         .celebration {
             position: fixed;
             top: 50%;
@@ -443,7 +424,6 @@
             100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
         }
 
-        /* Footer */
         .footer {
             text-align: center;
             padding: 4px;
@@ -463,7 +443,6 @@
 </head>
 <body>
     <div class="game-container">
-        <!-- Header -->
         <div class="header">
             <div class="logo">THE MATCH</div>
             <div class="header-controls">
@@ -476,7 +455,6 @@
             </div>
         </div>
 
-        <!-- Stats Bar -->
         <div class="stats-bar">
             <div class="stat-item">
                 <div class="stat-value" id="score">0</div>
@@ -495,23 +473,19 @@
             </div>
         </div>
 
-        <!-- Court Wrapper -->
         <div class="court-wrapper">
             <div class="court-grid" id="courtGrid"></div>
         </div>
 
-        <!-- Message Display -->
         <div class="message-display">
-            <p id="message" data-en="Tap START for Jump Ball!" data-es="¡Toca INICIO para el Salto!">Tap START for Jump Ball!</p>
+            <p id="message">Tap START for Jump Ball!</p>
         </div>
 
-        <!-- Bottom Controls -->
         <div class="bottom-controls">
-            <button class="btn btn-primary" id="startBtn" onclick="startGame()" data-en="START" data-es="INICIO">START</button>
-            <button class="btn btn-secondary" id="resetBtn" onclick="resetGame()" data-en="RESET" data-es="REINICIAR">RESET</button>
+            <button class="btn btn-primary" id="startBtn" onclick="startGame()">START</button>
+            <button class="btn btn-secondary" id="resetBtn" onclick="resetGame()">RESET</button>
         </div>
 
-        <!-- Footer -->
         <div class="footer">
             <p><span class="laughcourt-badge">LaughCourt™</span> Cognitive Fitness</p>
         </div>
@@ -533,8 +507,8 @@
                     <div class="modal-stat-label">🏆 Best</div>
                 </div>
             </div>
-            <button class="modal-btn modal-btn-primary" onclick="nextCircuit()" data-en="🔥 NEXT CIRCUIT" data-es="🔥 SIGUIENTE">🔥 NEXT CIRCUIT</button>
-            <button class="modal-btn modal-btn-secondary" onclick="closeCircuitModal()" data-en="DONE" data-es="LISTO">DONE</button>
+            <button class="modal-btn modal-btn-primary" onclick="nextCircuit()">🔥 NEXT CIRCUIT</button>
+            <button class="modal-btn modal-btn-secondary" onclick="closeCircuitModal()">DONE</button>
         </div>
     </div>
 
@@ -543,13 +517,13 @@
         <div class="modal-content">
             <div class="modal-title" id="tierModalTitle">🏆 TIER UP!</div>
             <p class="modal-text" id="tierModalText">You've advanced to the next tier!</p>
-            <button class="modal-btn modal-btn-primary" onclick="closeTierModal()" data-en="LET'S GO!" data-es="¡VAMOS!">LET'S GO!</button>
+            <button class="modal-btn modal-btn-primary" onclick="closeTierModal()">LET'S GO!</button>
         </div>
     </div>
 
     <script>
         // ============================================
-        // AUDIO - Fire Sound Effect
+        // AUDIO
         // ============================================
         var audioCtx = null;
 
@@ -569,8 +543,6 @@
             if (!ctx) return;
             try {
                 if (ctx.state === 'suspended') ctx.resume();
-                
-                // Rising triumphant arpeggio
                 var notes = [523.25, 659.25, 783.99, 1046.50];
                 notes.forEach(function(freq, i) {
                     var osc = ctx.createOscillator();
@@ -612,8 +584,6 @@
             if (!ctx) return;
             try {
                 if (ctx.state === 'suspended') ctx.resume();
-                
-                // Victory fanfare
                 var notes = [523.25, 659.25, 783.99, 659.25, 783.99, 1046.50];
                 notes.forEach(function(freq, i) {
                     var osc = ctx.createOscillator();
@@ -652,11 +622,12 @@
             matchCell: -1,
             shownCells: [],
             cellColors: {},
-            nextPlayTimer: null
+            pendingTierUp: false
         };
 
-        var CENTER_CELL = 12;
+        var gameTimer = null;
 
+        var CENTER_CELL = 12;
         var COLORS = ['red', 'blue', 'green', 'yellow', 'purple', 'orange'];
 
         var TIERS = [
@@ -680,8 +651,7 @@
             tap: { en: '🎯 Where was it?', es: '🎯 ¿Dónde estaba?' },
             correct: { en: '🔥 MATCH!', es: '🔥 ¡CORRECTO!' },
             wrong: { en: '✗ Not there!', es: '✗ ¡Ahí no!' },
-            streak: { en: '🔥🔥 ON FIRE!', es: '🔥🔥 ¡EN LLAMAS!' },
-            circuitDone: { en: 'Circuit complete!', es: '¡Circuito completo!' }
+            streak: { en: '🔥🔥 ON FIRE!', es: '🔥🔥 ¡EN LLAMAS!' }
         };
 
         // ============================================
@@ -734,8 +704,17 @@
         }
 
         function handleCellClick(e) {
-            var cell = e.currentTarget;
-            handleTap(cell);
+            handleTap(e.currentTarget);
+        }
+
+        // ============================================
+        // TIMER MANAGEMENT
+        // ============================================
+        function clearGameTimer() {
+            if (gameTimer) {
+                clearTimeout(gameTimer);
+                gameTimer = null;
+            }
         }
 
         // ============================================
@@ -751,6 +730,7 @@
             state.play = 1;
             state.laughs = 0;
             state.consecutiveCorrect = 0;
+            state.pendingTierUp = false;
 
             document.getElementById('startBtn').disabled = true;
             updateDisplay();
@@ -758,10 +738,7 @@
         }
 
         function startPlay() {
-            if (state.nextPlayTimer) {
-                clearTimeout(state.nextPlayTimer);
-                state.nextPlayTimer = null;
-            }
+            clearGameTimer();
 
             state.phase = 'showing';
             state.shownCells = [];
@@ -795,16 +772,9 @@
 
             var distractorColors = COLORS.filter(function(c) { return c !== state.targetColor; });
 
-            selectedCells.forEach(function(cellIndex, i) {
+            selectedCells.forEach(function(cellIndex) {
                 var cell = document.querySelector('.grid-cell[data-index="' + cellIndex + '"]');
-                var color;
-                
-                if (cellIndex === state.matchCell) {
-                    color = state.targetColor;
-                } else {
-                    color = distractorColors[Math.floor(Math.random() * distractorColors.length)];
-                }
-                
+                var color = (cellIndex === state.matchCell) ? state.targetColor : distractorColors[Math.floor(Math.random() * distractorColors.length)];
                 cell.classList.add('color-' + color);
                 cell.dataset.color = color;
                 state.cellColors[cellIndex] = color;
@@ -813,8 +783,8 @@
             disableTapping();
 
             var showTime = SPEEDS[state.speed];
-            setTimeout(function() {
-                if (state.phase === 'showing') {
+            gameTimer = setTimeout(function() {
+                if (state.phase === 'showing' && state.playing) {
                     hideColors();
                     state.phase = 'guessing';
                     enableTapping();
@@ -835,23 +805,26 @@
         }
 
         function handleTap(cell) {
-            if (state.phase !== 'guessing') return;
+            if (state.phase !== 'guessing' || !state.playing) return;
 
             var cellIndex = parseInt(cell.dataset.index);
-            
+
             state.phase = 'feedback';
             disableTapping();
 
-            if (cellIndex === state.matchCell) {
+            var isCorrect = (cellIndex === state.matchCell);
+            var shouldTierUp = false;
+
+            if (isCorrect) {
                 state.score += 10;
                 state.laughs++;
                 state.totalLaughs++;
                 state.consecutiveCorrect++;
-                
+
                 playFireSound();
-                
+
                 cell.classList.add('color-' + state.targetColor, 'correct');
-                
+
                 if (state.consecutiveCorrect >= 3) {
                     setMessage(MESSAGES.streak[state.lang] + ' +' + (state.consecutiveCorrect * 5));
                     state.score += state.consecutiveCorrect * 5;
@@ -861,35 +834,46 @@
                     showCelebration('🔥');
                 }
 
+                // Check tier up
                 if (state.consecutiveCorrect >= 5 && state.tier < TIERS.length) {
+                    shouldTierUp = true;
                     state.tier++;
                     state.consecutiveCorrect = 0;
                     saveState();
-                    setTimeout(function() { showTierModal(); }, 400);
                 }
             } else {
                 state.consecutiveCorrect = 0;
-                
                 playWrongSound();
-                
                 cell.classList.add('wrong');
-                
+
                 var matchCellEl = document.querySelector('.grid-cell[data-index="' + state.matchCell + '"]');
                 if (matchCellEl) {
                     matchCellEl.classList.add('color-' + state.targetColor);
                 }
-                
+
                 setMessage(MESSAGES.wrong[state.lang]);
             }
 
             updateDisplay();
 
-            state.nextPlayTimer = setTimeout(function() {
-                nextPlay();
-            }, 1000);
+            // Decide what happens next
+            if (shouldTierUp) {
+                // Show tier modal, pause the game
+                state.pendingTierUp = true;
+                gameTimer = setTimeout(function() {
+                    showTierModal();
+                }, 600);
+            } else {
+                // Continue to next play
+                gameTimer = setTimeout(function() {
+                    goToNextPlay();
+                }, 1000);
+            }
         }
 
-        function nextPlay() {
+        function goToNextPlay() {
+            if (!state.playing) return;
+
             if (state.play >= 10) {
                 completeCircuit();
             } else {
@@ -900,6 +884,7 @@
         }
 
         function completeCircuit() {
+            clearGameTimer();
             state.playing = false;
             state.phase = 'idle';
             state.circuits++;
@@ -909,11 +894,7 @@
             }
 
             saveState();
-            
-            // Play victory sound
             playCircuitCompleteSound();
-            
-            // Show circuit complete modal
             showCircuitModal();
         }
 
@@ -921,15 +902,15 @@
             document.getElementById('circuitScore').textContent = state.score;
             document.getElementById('circuitLaughs').textContent = state.laughs;
             document.getElementById('circuitBest').textContent = state.bestScore;
-            
+
             var title = state.lang === 'en' ? '🏆 CIRCUIT COMPLETE!' : '🏆 ¡CIRCUITO COMPLETO!';
             var text = state.lang === 'en' ? 'Great workout!' : '¡Buen entrenamiento!';
-            
+
             if (state.score === state.bestScore && state.score > 0) {
                 title = state.lang === 'en' ? '🏆 NEW BEST SCORE!' : '🏆 ¡NUEVO RÉCORD!';
                 text = state.lang === 'en' ? 'You\'re on fire!' : '¡Estás en llamas!';
             }
-            
+
             document.getElementById('circuitModalTitle').textContent = title;
             document.getElementById('circuitModalText').textContent = text;
             document.getElementById('circuitModal').classList.add('active');
@@ -938,16 +919,18 @@
         function nextCircuit() {
             document.getElementById('circuitModal').classList.remove('active');
             clearAllCells();
+
             state.score = 0;
             state.play = 1;
             state.laughs = 0;
             state.consecutiveCorrect = 0;
+            state.playing = true;
+            state.phase = 'idle';
+
+            document.getElementById('startBtn').disabled = true;
             updateDisplay();
-            
-            // Small delay then start
-            setTimeout(function() {
-                state.playing = true;
-                document.getElementById('startBtn').disabled = true;
+
+            gameTimer = setTimeout(function() {
                 startPlay();
             }, 300);
         }
@@ -955,8 +938,33 @@
         function closeCircuitModal() {
             document.getElementById('circuitModal').classList.remove('active');
             clearAllCells();
+            state.playing = false;
+            state.phase = 'idle';
             document.getElementById('startBtn').disabled = false;
             setMessage(MESSAGES.start[state.lang]);
+        }
+
+        function showTierModal() {
+            var tierInfo = TIERS[state.tier - 1];
+            var title = '🏆 ' + (state.lang === 'en' ? tierInfo.name : tierInfo.nameEs) + '!';
+            var text = state.lang === 'en'
+                ? 'You\'ve reached ' + tierInfo.name + ' tier! More distractors!'
+                : '¡Has alcanzado el nivel ' + tierInfo.nameEs + '!';
+
+            document.getElementById('tierModalTitle').textContent = title;
+            document.getElementById('tierModalText').textContent = text;
+            document.getElementById('tierModal').classList.add('active');
+        }
+
+        function closeTierModal() {
+            document.getElementById('tierModal').classList.remove('active');
+            state.pendingTierUp = false;
+            updateDisplay();
+
+            // Resume game - go to next play
+            gameTimer = setTimeout(function() {
+                goToNextPlay();
+            }, 300);
         }
 
         function clearAllCells() {
@@ -983,23 +991,19 @@
         }
 
         function resetGame() {
-            if (state.nextPlayTimer) {
-                clearTimeout(state.nextPlayTimer);
-                state.nextPlayTimer = null;
-            }
-
+            clearGameTimer();
             state.playing = false;
             state.phase = 'idle';
             state.score = 0;
             state.play = 1;
             state.laughs = 0;
             state.consecutiveCorrect = 0;
-            state.shownCells = [];
-            state.matchCell = -1;
-            state.cellColors = {};
+            state.pendingTierUp = false;
 
             clearAllCells();
             document.getElementById('startBtn').disabled = false;
+            document.getElementById('circuitModal').classList.remove('active');
+            document.getElementById('tierModal').classList.remove('active');
             updateDisplay();
             setMessage(MESSAGES.start[state.lang]);
         }
@@ -1077,25 +1081,6 @@
             cele.textContent = emoji;
             document.body.appendChild(cele);
             setTimeout(function() { cele.remove(); }, 800);
-        }
-
-        // ============================================
-        // MODALS
-        // ============================================
-        function showTierModal() {
-            var tierInfo = TIERS[state.tier - 1];
-            var title = '🏆 ' + (state.lang === 'en' ? tierInfo.name : tierInfo.nameEs) + '!';
-            var text = state.lang === 'en'
-                ? 'You\'ve reached ' + tierInfo.name + ' tier! More distractors to beat!'
-                : '¡Has alcanzado el nivel ' + tierInfo.nameEs + '! ¡Más distractores!';
-
-            document.getElementById('tierModalTitle').textContent = title;
-            document.getElementById('tierModalText').textContent = text;
-            document.getElementById('tierModal').classList.add('active');
-        }
-
-        function closeTierModal() {
-            document.getElementById('tierModal').classList.remove('active');
         }
 
         // Initialize on load
