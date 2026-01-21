@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>GoTrotter | The Cognitive Sport</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --hardwood: #C4935A;
+            --hardwood-dark: #8B6914;
+            --basketball: #FF6B35;
+            --black: #1A1A1A;
+            --white: #FFFFFF;
+            --gold: #FFD700;
+            --green: #4CAF50;
+            --red: #F44336;
+            
+            --font-display: 'Bebas Neue', sans-serif;
+            --font-heading: 'Oswald', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: var(--font-heading);
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            color: var(--white);
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            margin-bottom: 10px;
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            letter-spacing: 2px;
+        }
+
+        .logo span {
+            color: var(--basketball);
+        }
+
+        .home-btn {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            color: var(--white);
+            font-family: var(--font-heading);
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        .home-btn:hover {
+            background: var(--basketball);
+        }
+
+        /* Division Selectors */
+        .selectors {
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .selector-group {
+            flex: 1;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        .selector-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .selector-options {
+            display: flex;
+            gap: 5px;
+        }
+
+        .selector-btn {
+            flex: 1;
+            padding: 10px 5px;
+            border: 2px solid rgba(255,255,255,0.1);
+            background: transparent;
+            color: var(--white);
+            font-family: var(--font-heading);
+            font-size: 0.85rem;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .selector-btn.active {
+            background: var(--basketball);
+            border-color: var(--basketball);
+        }
+
+        .selector-btn:hover:not(.active) {
+            border-color: var(--basketball);
+        }
+
+        /* Score Display */
+        .score-bar {
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 12px 20px;
+            margin-bottom: 15px;
+        }
+
+        .division-display {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+        }
+
+        .score-display {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            color: var(--gold);
+        }
+
+        .matches-display {
+            font-size: 1.1rem;
+            color: var(--basketball);
+        }
+
+        /* Court Container */
+        .court-container {
+            width: 100%;
+            max-width: 400px;
+            aspect-ratio: 1;
+            max-height: 40vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* The Court - 5x5 Grid */
+        .court {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-template-rows: repeat(5, 1fr);
+            gap: 4px;
+            width: 100%;
+            height: 100%;
+            background: 
+                repeating-linear-gradient(
+                    90deg,
+                    var(--hardwood) 0px,
+                    var(--hardwood) 20px,
+                    var(--hardwood-dark) 20px,
+                    var(--hardwood-dark) 40px
+                );
+            border: 4px solid var(--white);
+            border-radius: 12px;
+            padding: 8px;
+            position: relative;
+        }
+
+        /* Court Lines */
+        .court::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-50%);
+        }
+
+        .court::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 60px;
+            height: 60px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Court Cells */
+        .cell {
+            background: rgba(255,255,255,0.1);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            position: relative;
+            border: 2px solid transparent;
+        }
+
+        .cell:active {
+            transform: scale(0.95);
+        }
+
+        .cell.center {
+            background: rgba(0,0,0,0.3);
+            border: 3px solid var(--white);
+            cursor: default;
+        }
+
+        .cell.correct {
+            animation: correctPulse 0.5s ease;
+            border-color: var(--green) !important;
+        }
+
+        .cell.wrong {
+            animation: wrongShake 0.5s ease;
+            border-color: var(--red) !important;
+        }
+
+        .cell.revealed {
+            border: 3px solid var(--gold);
+        }
+
+        @keyframes correctPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes wrongShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        /* Rainbow Row Borders */
+        .cell:nth-child(-n+5) { border-top: 3px solid #FF6B6B; }
+        .cell:nth-child(n+6):nth-child(-n+10) { border-top: 3px solid #FFE66D; }
+        .cell:nth-child(n+11):nth-child(-n+15) { border-top: 3px solid #4ECDC4; }
+        .cell:nth-child(n+16):nth-child(-n+20) { border-top: 3px solid #45B7D1; }
+        .cell:nth-child(n+21) { border-top: 3px solid #96CEB4; }
+
+        /* Game Colors */
+        .color-red { background: #E53935 !important; }
+        .color-blue { background: #1E88E5 !important; }
+        .color-green { background: #43A047 !important; }
+        .color-yellow { background: #FDD835 !important; }
+        .color-purple { background: #8E24AA !important; }
+        .color-orange { background: #FB8C00 !important; }
+        .color-pink { background: #EC407A !important; }
+        .color-teal { background: #26A69A !important; }
+
+        /* Start/Status Area */
+        .status-area {
+            width: 100%;
+            max-width: 400px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .start-btn {
+            background: var(--basketball);
+            color: var(--white);
+            border: none;
+            padding: 18px 60px;
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            letter-spacing: 4px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(255,107,53,0.4);
+        }
+
+        .start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255,107,53,0.6);
+        }
+
+        .start-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .status-text {
+            font-size: 1.2rem;
+            margin-top: 15px;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .status-text.watching {
+            color: var(--gold);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Circuit Complete Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+            border: 3px solid var(--basketball);
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            max-width: 350px;
+            width: 100%;
+        }
+
+        .modal-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .modal-score {
+            font-family: var(--font-display);
+            font-size: 3rem;
+            color: var(--gold);
+            margin-bottom: 20px;
+        }
+
+        .modal-division {
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 30px;
+        }
+
+        .modal-btn {
+            background: var(--basketball);
+            color: var(--white);
+            border: none;
+            padding: 15px 40px;
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            letter-spacing: 2px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 5px;
+            transition: all 0.3s;
+        }
+
+        .modal-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .modal-btn.secondary {
+            background: transparent;
+            border: 2px solid var(--white);
+        }
+
+        /* Language Toggle */
+        .lang-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--basketball);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 30px;
+            color: var(--white);
+            font-family: var(--font-heading);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            z-index: 1001;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+
+        .lang-toggle:hover {
+            transform: scale(1.1);
+            background: var(--white);
+            color: var(--black);
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 420px) {
+            .header {
+                padding: 5px 0;
+            }
+            
+            .logo {
+                font-size: 1.5rem;
+            }
+            
+            .selector-btn {
+                padding: 8px 3px;
+                font-size: 0.75rem;
+            }
+            
+            .court-container {
+                max-height: 45vh;
+            }
+            
+            .start-btn {
+                padding: 15px 45px;
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="logo">GO<span>TROTTER</span></div>
+        <a href="index.html" class="home-btn" data-en="← Home" data-es="← Inicio">← Home</a>
+    </div>
+
+    <!-- Division Selectors -->
+    <div class="selectors">
+        <div class="selector-group">
+            <span class="selector-label" data-en="Level" data-es="Nivel">Level</span>
+            <div class="selector-options">
+                <button class="selector-btn active" data-level="1">1</button>
+                <button class="selector-btn" data-level="2">2</button>
+                <button class="selector-btn" data-level="3">3</button>
+                <button class="selector-btn" data-level="4">4</button>
+                <button class="selector-btn" data-level="5">5</button>
+            </div>
+        </div>
+        <div class="selector-group">
+            <span class="selector-label" data-en="Speed" data-es="Velocidad">Speed</span>
+            <div class="selector-options">
+                <button class="selector-btn speed-btn active" data-speed="slow" data-en="Slow" data-es="Lento">Slow</button>
+                <button class="selector-btn speed-btn" data-speed="med" data-en="Med" data-es="Med">Med</button>
+                <button class="selector-btn speed-btn" data-speed="fast" data-en="Fast" data-es="Rápido">Fast</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Score Bar -->
+    <div class="score-bar">
+        <div class="division-display">L1 <span data-en="SLOW" data-es="LENTO">SLOW</span></div>
+        <div class="score-display">0</div>
+        <div class="matches-display">0/1</div>
+    </div>
+
+    <!-- The Court -->
+    <div class="court-container">
+        <div class="court" id="court">
+            <!-- 25 cells (5x5), center is cell 12 (index 12) -->
+        </div>
+    </div>
+
+    <!-- Status Area -->
+    <div class="status-area">
+        <button class="start-btn" id="startBtn" data-en="GO" data-es="IR">GO</button>
+        <p class="status-text" id="statusText" data-en="Select your division and press GO" data-es="Selecciona tu división y presiona IR">Select your division and press GO</p>
+    </div>
+
+    <!-- Circuit Complete Modal -->
+    <div class="modal-overlay" id="modal">
+        <div class="modal">
+            <div class="modal-icon">🏆</div>
+            <h2 class="modal-title" data-en="CIRCUIT COMPLETE!" data-es="¡CIRCUITO COMPLETO!">CIRCUIT COMPLETE!</h2>
+            <div class="modal-score" id="modalScore">0</div>
+            <p class="modal-division" id="modalDivision">Level 1 Slow</p>
+            <button class="modal-btn" id="nextCircuitBtn" data-en="NEXT CIRCUIT" data-es="SIGUIENTE">NEXT CIRCUIT</button>
+            <button class="modal-btn secondary" id="changeDivisionBtn" data-en="CHANGE DIVISION" data-es="CAMBIAR">CHANGE DIVISION</button>
+        </div>
+    </div>
+
+    <!-- Language Toggle -->
+    <button class="lang-toggle" id="langToggle">🌐 ES</button>
+
+    <!-- Fire Sound (base64 for portability) -->
+    <audio id="fireSound" preload="auto">
+        <source src="data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAABhgC7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAAAAAAAAAAAAYYNAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//tQZAAP8AAAaQAAAAgAAA0gAAABAAABpAAAACAAADSAAAAETEFNRTMuMTAwVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV" type="audio/mp3">
+    </audio>
+
+    <script>
+        // Game Configuration
+        const COLORS = ['red', 'blue', 'green', 'yellow', 'purple', 'orange', 'pink', 'teal'];
+        const LEVEL_CONFIG = {
+            1: { matches: 1, distractors: 3 },
+            2: { matches: 2, distractors: 4 },
+            3: { matches: 3, distractors: 5 },
+            4: { matches: 4, distractors: 6 },
+            5: { matches: 5, distractors: 7 }
+        };
+        const SPEED_CONFIG = {
+            slow: 2500,
+            med: 1500,
+            fast: 800
+        };
+        const PLAYS_PER_CIRCUIT = 5;
+        const CENTER_CELL = 12;
+
+        // Game State
+        let currentLevel = 1;
+        let currentSpeed = 'slow';
+        let score = 0;
+        let playsCompleted = 0;
+        let matchesFound = 0;
+        let matchesNeeded = 1;
+        let targetColor = '';
+        let matchCells = [];
+        let isPlaying = false;
+        let canTap = false;
+        let language = 'en';
+
+        // DOM Elements
+        const court = document.getElementById('court');
+        const startBtn = document.getElementById('startBtn');
+        const statusText = document.getElementById('statusText');
+        const divisionDisplay = document.querySelector('.division-display');
+        const scoreDisplay = document.querySelector('.score-display');
+        const matchesDisplay = document.querySelector('.matches-display');
+        const modal = document.getElementById('modal');
+        const modalScore = document.getElementById('modalScore');
+        const modalDivision = document.getElementById('modalDivision');
+        const fireSound = document.getElementById('fireSound');
+
+        // Initialize Court
+        function initCourt() {
+            court.innerHTML = '';
+            for (let i = 0; i < 25; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'cell' + (i === CENTER_CELL ? ' center' : '');
+                cell.dataset.index = i;
+                if (i !== CENTER_CELL) {
+                    cell.addEventListener('click', () => handleCellTap(i));
+                }
+                court.appendChild(cell);
+            }
+        }
+
+        // Update Division Display
+        function updateDivision() {
+            const speedText = language === 'en' ? currentSpeed.toUpperCase() : 
+                (currentSpeed === 'slow' ? 'LENTO' : currentSpeed === 'med' ? 'MED' : 'RÁPIDO');
+            divisionDisplay.textContent = `L${currentLevel} ${speedText}`;
+            matchesNeeded = LEVEL_CONFIG[currentLevel].matches;
+            updateMatchesDisplay();
+            
+            // Save to localStorage
+            localStorage.setItem('gotrotter_level', currentLevel);
+            localStorage.setItem('gotrotter_speed', currentSpeed);
+        }
+
+        function updateMatchesDisplay() {
+            matchesDisplay.textContent = `${matchesFound}/${matchesNeeded}`;
+        }
+
+        // Start a Play
+        function startPlay() {
+            if (isPlaying) return;
+            isPlaying = true;
+            canTap = false;
+            matchesFound = 0;
+            matchCells = [];
+            updateMatchesDisplay();
+            
+            startBtn.disabled = true;
+            statusText.textContent = language === 'en' ? 'WATCH THE COURT...' : 'MIRA LA CANCHA...';
+            statusText.className = 'status-text watching';
+
+            // Clear all cells
+            document.querySelectorAll('.cell').forEach(cell => {
+                cell.className = cell.dataset.index == CENTER_CELL ? 'cell center' : 'cell';
+            });
+
+            // Select target color
+            targetColor = COLORS[Math.floor(Math.random() * COLORS.length)];
+            
+            // Get available cells (not center)
+            const availableCells = [];
+            for (let i = 0; i < 25; i++) {
+                if (i !== CENTER_CELL) availableCells.push(i);
+            }
+            shuffleArray(availableCells);
+
+            // Select match cells
+            const config = LEVEL_CONFIG[currentLevel];
+            matchCells = availableCells.slice(0, config.matches);
+            
+            // Select distractor cells
+            const distractorCells = availableCells.slice(config.matches, config.matches + config.distractors);
+            
+            // Show center color
+            const centerCell = document.querySelector(`.cell[data-index="${CENTER_CELL}"]`);
+            centerCell.classList.add(`color-${targetColor}`);
+
+            // Show match colors
+            matchCells.forEach(index => {
+                document.querySelector(`.cell[data-index="${index}"]`).classList.add(`color-${targetColor}`);
+            });
+
+            // Show distractor colors
+            distractorCells.forEach(index => {
+                const cell = document.querySelector(`.cell[data-index="${index}"]`);
+                let distractorColor;
+                do {
+                    distractorColor = COLORS[Math.floor(Math.random() * COLORS.length)];
+                } while (distractorColor === targetColor);
+                cell.classList.add(`color-${distractorColor}`);
+            });
+
+            // Hide after display time
+            const displayTime = SPEED_CONFIG[currentSpeed];
+            setTimeout(() => {
+                // Hide all colors except center
+                document.querySelectorAll('.cell:not(.center)').forEach(cell => {
+                    COLORS.forEach(c => cell.classList.remove(`color-${c}`));
+                });
+                
+                statusText.textContent = language === 'en' ? 'FIND THE MATCHES!' : '¡ENCUENTRA LAS COINCIDENCIAS!';
+                statusText.className = 'status-text';
+                canTap = true;
+            }, displayTime);
+        }
+
+        // Handle Cell Tap
+        function handleCellTap(index) {
+            if (!canTap || !isPlaying) return;
+
+            const cell = document.querySelector(`.cell[data-index="${index}"]`);
+            
+            // Check if already tapped
+            if (cell.classList.contains('correct') || cell.classList.contains('wrong')) return;
+
+            if (matchCells.includes(index)) {
+                // Correct!
+                cell.classList.add('correct', `color-${targetColor}`);
+                matchesFound++;
+                updateMatchesDisplay();
+                
+                // Play fire sound
+                fireSound.currentTime = 0;
+                fireSound.play().catch(() => {});
+                
+                // Add points
+                score += 10 * currentLevel;
+                scoreDisplay.textContent = score;
+
+                // Check if all matches found
+                if (matchesFound >= matchesNeeded) {
+                    // All found bonus
+                    score += 25 * currentLevel;
+                    scoreDisplay.textContent = score;
+                    
+                    setTimeout(() => {
+                        completedPlay();
+                    }, 500);
+                }
+            } else {
+                // Wrong!
+                cell.classList.add('wrong');
+                
+                // Reveal remaining matches
+                setTimeout(() => {
+                    matchCells.forEach(i => {
+                        const matchCell = document.querySelector(`.cell[data-index="${i}"]`);
+                        if (!matchCell.classList.contains('correct')) {
+                            matchCell.classList.add('revealed', `color-${targetColor}`);
+                        }
+                    });
+                    setTimeout(() => {
+                        completedPlay();
+                    }, 1000);
+                }, 300);
+            }
+        }
+
+        // Complete a Play
+        function completedPlay() {
+            canTap = false;
+            isPlaying = false;
+            playsCompleted++;
+
+            if (playsCompleted >= PLAYS_PER_CIRCUIT) {
+                // Circuit complete!
+                showModal();
+            } else {
+                statusText.textContent = language === 'en' ? 
+                    `Play ${playsCompleted}/${PLAYS_PER_CIRCUIT} complete` :
+                    `Jugada ${playsCompleted}/${PLAYS_PER_CIRCUIT} completa`;
+                startBtn.disabled = false;
+            }
+        }
+
+        // Show Modal
+        function showModal() {
+            modalScore.textContent = score;
+            const speedText = language === 'en' ? 
+                (currentSpeed === 'slow' ? 'Slow' : currentSpeed === 'med' ? 'Medium' : 'Fast') :
+                (currentSpeed === 'slow' ? 'Lento' : currentSpeed === 'med' ? 'Medio' : 'Rápido');
+            modalDivision.textContent = `Level ${currentLevel} ${speedText}`;
+            modal.classList.add('active');
+        }
+
+        // Next Circuit
+        document.getElementById('nextCircuitBtn').addEventListener('click', () => {
+            modal.classList.remove('active');
+            playsCompleted = 0;
+            // Keep score for continuous play
+            startBtn.disabled = false;
+            statusText.textContent = language === 'en' ? 'Ready for next circuit!' : '¡Listo para el siguiente circuito!';
+        });
+
+        // Change Division
+        document.getElementById('changeDivisionBtn').addEventListener('click', () => {
+            modal.classList.remove('active');
+            score = 0;
+            playsCompleted = 0;
+            scoreDisplay.textContent = '0';
+            startBtn.disabled = false;
+            statusText.textContent = language === 'en' ? 'Select your division and press GO' : 'Selecciona tu división y presiona IR';
+        });
+
+        // Level Selectors
+        document.querySelectorAll('[data-level]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (isPlaying) return;
+                document.querySelectorAll('[data-level]').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentLevel = parseInt(btn.dataset.level);
+                updateDivision();
+            });
+        });
+
+        // Speed Selectors
+        document.querySelectorAll('[data-speed]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (isPlaying) return;
+                document.querySelectorAll('[data-speed]').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentSpeed = btn.dataset.speed;
+                updateDivision();
+            });
+        });
+
+        // Start Button
+        startBtn.addEventListener('click', startPlay);
+
+        // Language Toggle
+        document.getElementById('langToggle').addEventListener('click', () => {
+            language = language === 'en' ? 'es' : 'en';
+            document.querySelectorAll('[data-en]').forEach(el => {
+                el.textContent = el.dataset[language];
+            });
+            updateDivision();
+            localStorage.setItem('gotrotter_lang', language);
+            // Update toggle button text
+            document.getElementById('langToggle').textContent = language === 'en' ? '🌐 ES' : '🌐 EN';
+        });
+
+        // Utility: Shuffle Array
+        function shuffleArray(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+        }
+
+        // Load saved preferences
+        function loadPreferences() {
+            const savedLevel = localStorage.getItem('gotrotter_level');
+            const savedSpeed = localStorage.getItem('gotrotter_speed');
+            const savedLang = localStorage.getItem('gotrotter_lang');
+            
+            if (savedLevel) {
+                currentLevel = parseInt(savedLevel);
+                document.querySelectorAll('[data-level]').forEach(b => b.classList.remove('active'));
+                document.querySelector(`[data-level="${currentLevel}"]`)?.classList.add('active');
+            }
+            
+            if (savedSpeed) {
+                currentSpeed = savedSpeed;
+                document.querySelectorAll('[data-speed]').forEach(b => b.classList.remove('active'));
+                document.querySelector(`[data-speed="${currentSpeed}"]`)?.classList.add('active');
+            }
+            
+            if (savedLang) {
+                language = savedLang;
+                document.querySelectorAll('[data-en]').forEach(el => {
+                    el.textContent = el.dataset[language];
+                });
+                // Update toggle button text
+                document.getElementById('langToggle').textContent = language === 'en' ? '🌐 ES' : '🌐 EN';
+            }
+        }
+
+        // Initialize
+        initCourt();
+        loadPreferences();
+        updateDivision();
+    </script>
+
+</body>
+</html>
