@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎫 Trial PIN Generator | GoTrotter</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #0a0a0f;
+    color: white;
+    min-height: 100vh;
+    padding: 40px 20px;
+}
+.container {
+    max-width: 500px;
+    margin: 0 auto;
+}
+h1 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+.subtitle {
+    text-align: center;
+    color: #888;
+    margin-bottom: 40px;
+}
+.card {
+    background: #111118;
+    border: 1px solid #222;
+    border-radius: 16px;
+    padding: 30px;
+    margin-bottom: 20px;
+}
+.form-group {
+    margin-bottom: 20px;
+}
+label {
+    display: block;
+    font-size: 0.85rem;
+    color: #888;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+input, select {
+    width: 100%;
+    padding: 14px 16px;
+    background: #0a0a0f;
+    border: 1px solid #333;
+    border-radius: 10px;
+    color: white;
+    font-size: 1rem;
+}
+input:focus, select:focus {
+    outline: none;
+    border-color: #FFD700;
+}
+.btn {
+    width: 100%;
+    padding: 16px;
+    background: #FFD700;
+    color: #000;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 10px;
+}
+.btn:hover {
+    background: #e6c200;
+}
+.btn:disabled {
+    background: #444;
+    color: #888;
+    cursor: not-allowed;
+}
+.result {
+    display: none;
+    text-align: center;
+    padding: 30px;
+}
+.result.show {
+    display: block;
+}
+.pin-display {
+    font-size: 4rem;
+    font-weight: 700;
+    color: #FFD700;
+    letter-spacing: 10px;
+    margin: 20px 0;
+}
+.result-info {
+    color: #888;
+    margin-bottom: 20px;
+}
+.copy-btn {
+    background: #00D9A5;
+    padding: 12px 30px;
+    font-size: 1rem;
+}
+.copy-btn:hover {
+    background: #00c49a;
+}
+.error {
+    background: #ff4757;
+    color: white;
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 15px;
+    display: none;
+}
+.error.show {
+    display: block;
+}
+.success-icon {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+.back-btn {
+    background: transparent;
+    border: 1px solid #444;
+    color: #888;
+    margin-top: 15px;
+}
+.back-btn:hover {
+    border-color: #FFD700;
+    color: #FFD700;
+}
+.admin-key-section {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #222;
+}
+.key-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    margin-top: 10px;
+}
+.key-status.valid { color: #00D9A5; }
+.key-status.invalid { color: #ff4757; }
+.trials-list {
+    margin-top: 30px;
+}
+.trial-item {
+    background: #0a0a0f;
+    border: 1px solid #222;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.trial-pin {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #FFD700;
+    letter-spacing: 3px;
+}
+.trial-facility {
+    color: #888;
+    font-size: 0.9rem;
+}
+.trial-status {
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+}
+.trial-status.active {
+    background: rgba(0,217,165,0.2);
+    color: #00D9A5;
+}
+.trial-status.expired {
+    background: rgba(255,71,87,0.2);
+    color: #ff4757;
+}
+.section-title {
+    font-size: 1rem;
+    color: #888;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.empty-state {
+    text-align: center;
+    color: #555;
+    padding: 30px;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🎫 Trial PIN Generator</h1>
+    <p class="subtitle">GoTrotter Coach Admin</p>
+
+    <!-- Admin Key Section -->
+    <div class="card">
+        <div class="admin-key-section">
+            <div class="form-group" style="margin-bottom:0">
+                <label>🔐 Admin Key</label>
+                <input type="password" id="adminKey" placeholder="Enter your admin key">
+                <div class="key-status" id="keyStatus"></div>
+            </div>
+        </div>
+
+        <!-- Create Form -->
+        <div id="createForm">
+            <div class="form-group">
+                <label>🏢 Facility Name</label>
+                <input type="text" id="facility" placeholder="Rehabilitación y Risas">
+            </div>
+
+            <div class="form-group">
+                <label>👥 Max Users</label>
+                <select id="maxUsers">
+                    <option value="10">10 users</option>
+                    <option value="25">25 users</option>
+                    <option value="50" selected>50 users</option>
+                    <option value="75">75 users</option>
+                    <option value="100">100 users</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>📅 Trial Days</label>
+                <select id="days">
+                    <option value="3">3 days</option>
+                    <option value="7" selected>7 days</option>
+                    <option value="14">14 days</option>
+                    <option value="30">30 days</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>📝 Notes (Optional)</label>
+                <input type="text" id="notes" placeholder="Contact info, phone, etc.">
+            </div>
+
+            <button class="btn" id="createBtn" onclick="createTrial()">🎫 Generate Trial PIN</button>
+            
+            <div class="error" id="error"></div>
+        </div>
+
+        <!-- Result -->
+        <div class="result" id="result">
+            <div class="success-icon">✅</div>
+            <div>Trial PIN Created!</div>
+            <div class="pin-display" id="pinDisplay">0000</div>
+            <div class="result-info" id="resultInfo"></div>
+            <button class="btn copy-btn" onclick="copyPin()">📋 Copy PIN</button>
+            <button class="btn back-btn" onclick="resetForm()">+ Create Another</button>
+        </div>
+    </div>
+
+    <!-- Existing Trials -->
+    <div class="card trials-list" id="trialsSection">
+        <div class="section-title">📋 Active Trials</div>
+        <div id="trialsList">
+            <div class="empty-state">Enter admin key to view trials</div>
+        </div>
+    </div>
+</div>
+
+<script>
+var API_URL = window.location.origin;
+var currentPin = '';
+
+// Check admin key on input
+document.getElementById('adminKey').addEventListener('input', function() {
+    var key = this.value;
+    if (key.length > 10) {
+        checkKey(key);
+    } else {
+        document.getElementById('keyStatus').innerHTML = '';
+    }
+});
+
+function checkKey(key) {
+    fetch(API_URL + '/api/trials/list', {
+        headers: { 'X-Admin-Key': key }
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+        if (data.success) {
+            document.getElementById('keyStatus').innerHTML = '✅ Valid key';
+            document.getElementById('keyStatus').className = 'key-status valid';
+            renderTrials(data.trials);
+        } else {
+            document.getElementById('keyStatus').innerHTML = '❌ Invalid key';
+            document.getElementById('keyStatus').className = 'key-status invalid';
+        }
+    })
+    .catch(function() {
+        document.getElementById('keyStatus').innerHTML = '❌ Invalid key';
+        document.getElementById('keyStatus').className = 'key-status invalid';
+    });
+}
+
+function createTrial() {
+    var key = document.getElementById('adminKey').value;
+    var facility = document.getElementById('facility').value.trim();
+    var maxUsers = document.getElementById('maxUsers').value;
+    var days = document.getElementById('days').value;
+    var notes = document.getElementById('notes').value.trim();
+
+    if (!key) {
+        showError('Enter your admin key first');
+        return;
+    }
+    if (!facility) {
+        showError('Enter facility name');
+        return;
+    }
+
+    document.getElementById('createBtn').disabled = true;
+    document.getElementById('createBtn').textContent = 'Creating...';
+    hideError();
+
+    fetch(API_URL + '/api/trials/create', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Admin-Key': key
+        },
+        body: JSON.stringify({
+            facility: facility,
+            maxUsers: parseInt(maxUsers),
+            days: parseInt(days),
+            notes: notes
+        })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+        document.getElementById('createBtn').disabled = false;
+        document.getElementById('createBtn').textContent = '🎫 Generate Trial PIN';
+
+        if (data.success) {
+            currentPin = data.trial.pin;
+            document.getElementById('pinDisplay').textContent = currentPin;
+            document.getElementById('resultInfo').textContent = facility + ' • ' + maxUsers + ' users • ' + days + ' days';
+            document.getElementById('createForm').style.display = 'none';
+            document.getElementById('result').classList.add('show');
+            checkKey(key); // Refresh list
+        } else {
+            showError(data.error || 'Failed to create trial');
+        }
+    })
+    .catch(function(err) {
+        document.getElementById('createBtn').disabled = false;
+        document.getElementById('createBtn').textContent = '🎫 Generate Trial PIN';
+        showError('Connection error');
+    });
+}
+
+function copyPin() {
+    navigator.clipboard.writeText(currentPin).then(function() {
+        var btn = document.querySelector('.copy-btn');
+        btn.textContent = '✅ Copied!';
+        setTimeout(function() { btn.textContent = '📋 Copy PIN'; }, 2000);
+    });
+}
+
+function resetForm() {
+    document.getElementById('facility').value = '';
+    document.getElementById('notes').value = '';
+    document.getElementById('createForm').style.display = 'block';
+    document.getElementById('result').classList.remove('show');
+}
+
+function showError(msg) {
+    document.getElementById('error').textContent = msg;
+    document.getElementById('error').classList.add('show');
+}
+
+function hideError() {
+    document.getElementById('error').classList.remove('show');
+}
+
+function renderTrials(trials) {
+    var container = document.getElementById('trialsList');
+    
+    if (!trials || trials.length === 0) {
+        container.innerHTML = '<div class="empty-state">No trials yet</div>';
+        return;
+    }
+
+    var activeTrials = trials.filter(function(t) { return t.status === 'active'; });
+    
+    if (activeTrials.length === 0) {
+        container.innerHTML = '<div class="empty-state">No active trials</div>';
+        return;
+    }
+
+    var html = '';
+    activeTrials.forEach(function(t) {
+        var daysLeft = Math.ceil((new Date(t.expiresAt) - new Date()) / (1000*60*60*24));
+        html += '<div class="trial-item">' +
+            '<div>' +
+                '<div class="trial-pin">' + t.pin + '</div>' +
+                '<div class="trial-facility">' + t.facility + ' • ' + (t.currentUsers||0) + '/' + t.maxUsers + ' users • ' + Math.max(0,daysLeft) + ' days left</div>' +
+            '</div>' +
+            '<span class="trial-status active">Active</span>' +
+        '</div>';
+    });
+    container.innerHTML = html;
+}
+</script>
+
+</body>
+</html>
