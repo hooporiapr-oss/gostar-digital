@@ -2201,10 +2201,11 @@ tr.clickable { cursor: pointer; }
             const bestLevel = s.bestLevel || 0;
             const bestSpeed = s.bestSpeed || '-';
             const division = bestLevel > 0 ? getDivisionName(bestLevel, bestSpeed) : '-';
+            const safeEmail = (s.email || '-').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
 
             html += `
-                <tr class="clickable" onclick="viewSub('${s.pin}')">
-                    <td>${s.email || '-'}</td>
+                <tr class="clickable" data-pin="${s.pin}" data-action="view">
+                    <td>${safeEmail}</td>
                     <td><strong style="color:var(--gold)">${s.pin}</strong></td>
                     <td>${qty}${qtyBadge}</td>
                     <td><span class="badge badge-${s.status}">${s.status}</span></td>
@@ -2215,18 +2216,41 @@ tr.clickable { cursor: pointer; }
                     <td>🔥${s.streak || 0}</td>
                     <td>
                         <div class="action-btns">
-                            <button class="action-btn" onclick="event.stopPropagation();editSub('${s.pin}')">✏️</button>
-                            <button class="action-btn delete" onclick="event.stopPropagation();delSub('${s.pin}','${s.email}')">🗑️</button>
+                            <button class="action-btn edit-sub-btn" data-pin="${s.pin}">✏️</button>
+                            <button class="action-btn delete del-sub-btn" data-pin="${s.pin}" data-email="${safeEmail}">🗑️</button>
                         </div>
                     </td>
                 </tr>
             `;
         });
         tb.innerHTML = html;
+        
+        // Attach event listeners after rendering
+        tb.querySelectorAll('tr.clickable').forEach(row => {
+            row.addEventListener('click', function(e) {
+                if (!e.target.closest('.action-btns')) {
+                    viewSub(this.dataset.pin);
+                }
+            });
+        });
+        
+        tb.querySelectorAll('.edit-sub-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                editSub(this.dataset.pin);
+            });
+        });
+        
+        tb.querySelectorAll('.del-sub-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                delSub(this.dataset.pin, this.dataset.email);
+            });
+        });
     }
 
     // Global subscriber functions
-    window.viewSub = function(pin) {
+    function viewSub(pin) {
         const s = subscribers.find(x => x.pin === pin);
         if (!s) return;
 
@@ -2274,9 +2298,9 @@ tr.clickable { cursor: pointer; }
 
         document.getElementById('subscriberModalBody').innerHTML = html;
         openModal('subscriberModal');
-    };
+    }
 
-    window.editSub = function(pin) {
+    function editSub(pin) {
         const s = subscribers.find(x => x.pin === pin);
         if (!s) return;
         document.getElementById('editSubPin').value = pin;
@@ -2284,13 +2308,15 @@ tr.clickable { cursor: pointer; }
         document.getElementById('editSubQty').value = s.quantity || 1;
         document.getElementById('editSubStatus').value = s.status || 'active';
         openModal('editSubscriberModal');
-    };
+    }
 
-    window.delSub = function(pin, email) {
+    function delSub(pin, email) {
+        // Decode HTML entities
+        const decodedEmail = email.replace(/&#39;/g, "'").replace(/&quot;/g, '"');
         document.getElementById('deleteSubPin').value = pin;
-        document.getElementById('deleteSubscriberText').innerHTML = `Delete <strong style="color:var(--gold)">${email}</strong>?`;
+        document.getElementById('deleteSubscriberText').innerHTML = `Delete <strong style="color:var(--gold)">${decodedEmail}</strong>?`;
         openModal('deleteSubscriberModal');
-    };
+    }
 
     function saveSubscriber() {
         const pin = document.getElementById('editSubPin').value;
@@ -2362,6 +2388,7 @@ tr.clickable { cursor: pointer; }
         trials.forEach(t => {
             const bonusDays = t.bonusDaysReceived || 0;
             const bonusBadge = bonusDays > 0 ? `<span style="color:var(--teal);font-size:0.75rem">+${bonusDays}d</span>` : '-';
+            const safeFacility = (t.facility || '').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
             
             html += `
                 <tr>
@@ -2373,15 +2400,36 @@ tr.clickable { cursor: pointer; }
                     <td>${formatDate(t.expiresAt)}</td>
                     <td>
                         <div class="action-btns">
-                            <button class="action-btn" onclick="copyPin('${t.pin}')" title="Copy">📋</button>
-                            <button class="action-btn" onclick="extendTrialModal('${t.id}','${t.facility}')" title="Extend">⏰</button>
-                            <button class="action-btn delete" onclick="deleteTrialModal('${t.id}','${t.facility}')" title="Delete">🗑️</button>
+                            <button class="action-btn copy-pin-btn" data-pin="${t.pin}" title="Copy">📋</button>
+                            <button class="action-btn extend-trial-btn" data-id="${t.id}" data-facility="${safeFacility}" title="Extend">⏰</button>
+                            <button class="action-btn delete del-trial-btn" data-id="${t.id}" data-facility="${safeFacility}" title="Delete">🗑️</button>
                         </div>
                     </td>
                 </tr>
             `;
         });
         tb.innerHTML = html;
+        
+        // Attach event listeners after rendering
+        tb.querySelectorAll('.copy-pin-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                copyPin(this.dataset.pin);
+            });
+        });
+        
+        tb.querySelectorAll('.extend-trial-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const facility = this.dataset.facility.replace(/&#39;/g, "'").replace(/&quot;/g, '"');
+                extendTrialModal(this.dataset.id, facility);
+            });
+        });
+        
+        tb.querySelectorAll('.del-trial-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const facility = this.dataset.facility.replace(/&#39;/g, "'").replace(/&quot;/g, '"');
+                deleteTrialModal(this.dataset.id, facility);
+            });
+        });
     }
 
     function createTrial() {
@@ -2419,15 +2467,15 @@ tr.clickable { cursor: pointer; }
             .then(() => showToast('PIN copied!'));
     }
 
-    window.copyPin = function(pin) {
+    function copyPin(pin) {
         navigator.clipboard.writeText(pin).then(() => showToast('PIN ' + pin + ' copied!'));
-    };
+    }
 
-    window.extendTrialModal = function(id, facility) {
+    function extendTrialModal(id, facility) {
         document.getElementById('extendTrialId').value = id;
         document.getElementById('extendTrialFacility').textContent = facility;
         openModal('extendTrialModal');
-    };
+    }
 
     function extendTrial() {
         const id = document.getElementById('extendTrialId').value;
@@ -2447,11 +2495,11 @@ tr.clickable { cursor: pointer; }
         });
     }
 
-    window.deleteTrialModal = function(id, facility) {
+    function deleteTrialModal(id, facility) {
         document.getElementById('deleteTrialId').value = id;
         document.getElementById('deleteTrialText').innerHTML = `Delete trial for <strong style="color:var(--gold)">${facility}</strong>?`;
         openModal('deleteTrialModal');
-    };
+    }
 
     function deleteTrial() {
         const id = document.getElementById('deleteTrialId').value;
@@ -2523,6 +2571,7 @@ tr.clickable { cursor: pointer; }
             };
             const icon = typeIcons[n.type] || '📢';
             const isExpired = n.status === 'expired';
+            const safeTitle = (n.title || '').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
             
             html += `
                 <div class="notification-card ${isExpired ? 'expired' : ''}">
@@ -2552,7 +2601,7 @@ tr.clickable { cursor: pointer; }
                             ` : ''}
                         </div>
                         <div class="action-btns">
-                            <button class="action-btn delete" onclick="deleteNotifModal('${n.id}','${n.title.replace(/'/g, "\\'")}')">🗑️</button>
+                            <button class="action-btn delete del-notif-btn" data-id="${n.id}" data-title="${safeTitle}">🗑️</button>
                         </div>
                     </div>
                     <div style="font-size:0.7rem;color:var(--muted);margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">
@@ -2562,6 +2611,14 @@ tr.clickable { cursor: pointer; }
             `;
         });
         container.innerHTML = html;
+        
+        // Attach event listeners after rendering
+        container.querySelectorAll('.del-notif-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const title = this.dataset.title.replace(/&#39;/g, "'").replace(/&quot;/g, '"');
+                deleteNotifModal(this.dataset.id, title);
+            });
+        });
     }
 
     function createNotification() {
@@ -2623,11 +2680,11 @@ tr.clickable { cursor: pointer; }
         });
     }
 
-    window.deleteNotifModal = function(id, title) {
+    function deleteNotifModal(id, title) {
         document.getElementById('deleteNotifId').value = id;
         document.getElementById('deleteNotifText').innerHTML = `Delete update <strong style="color:var(--gold)">"${title}"</strong>?`;
         openModal('deleteNotificationModal');
-    };
+    }
 
     function deleteNotification() {
         const id = document.getElementById('deleteNotifId').value;
