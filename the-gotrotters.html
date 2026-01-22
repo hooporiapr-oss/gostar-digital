@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>THE GOTROTTERS | GoTrotter - The LaughCourt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+    --orange: #FF6B35;
+    --gold: #FFD700;
+    --teal: #00D9A5;
+    --dark: #0a0a0f;
+    --card: #111118;
+    --text: #FFFFFF;
+    --muted: #8892a0;
+    --border: rgba(255,255,255,0.1);
+    --nav-height: 84px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html {
+    height: 100%;
+    font-family: 'Outfit', sans-serif;
+    background: var(--dark);
+    color: var(--text);
+}
+body {
+    min-height: 100%;
+    background: var(--dark);
+    padding-top: calc(var(--nav-height) + env(safe-area-inset-top));
+    padding-bottom: env(safe-area-inset-bottom);
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Mini Nav */
+.mini-nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    padding-top: env(safe-area-inset-top);
+    z-index: 1000;
+}
+.nav-row-1 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 44px;
+    padding: 0 12px;
+}
+.nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.15rem;
+    letter-spacing: 1px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.nav-logo .ball { font-size: 0.95rem; }
+.nav-logo .go { color: var(--gold); }
+.nav-logo .trotter { color: var(--text); }
+.nav-right { display: flex; align-items: center; gap: 6px; }
+.nav-lang { display: flex; gap: 2px; }
+.nav-lang-btn {
+    padding: 4px 7px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    border-radius: 4px;
+    font-size: 0.6rem;
+    font-weight: 600;
+    cursor: pointer;
+    min-width: 24px;
+    min-height: 24px;
+}
+.nav-lang-btn.active { border-color: var(--gold); color: var(--gold); }
+
+.nav-row-2 {
+    display: flex;
+    height: 36px;
+    border-top: 1px solid var(--border);
+}
+.nav-tab {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    text-decoration: none;
+    color: var(--muted);
+    background: transparent;
+}
+.nav-tab:not(:last-child) { border-right: 1px solid var(--border); }
+.nav-tab.active { color: var(--orange); background: rgba(255,107,53,0.1); }
+
+/* Page Content */
+.page-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px 15px;
+}
+
+/* Hero Section */
+.hero {
+    text-align: center;
+    padding: 30px 0 20px;
+}
+.hero-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--orange), var(--gold));
+    color: var(--dark);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    padding: 5px 15px;
+    border-radius: 20px;
+    margin-bottom: 15px;
+}
+.hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.8rem;
+    letter-spacing: 4px;
+    background: linear-gradient(135deg, var(--orange), var(--gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+}
+.hero-subtitle {
+    color: var(--muted);
+    font-size: 1rem;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+}
+.hero-tagline {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    color: var(--teal);
+    letter-spacing: 3px;
+}
+
+/* Story Section */
+.story-section {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 25px 20px;
+    margin: 25px 0;
+    border: 1px solid var(--border);
+}
+.story-text {
+    color: var(--muted);
+    line-height: 1.7;
+    font-size: 0.95rem;
+    text-align: center;
+}
+.story-text strong {
+    color: var(--gold);
+}
+
+/* Starting Five Header */
+.roster-header {
+    text-align: center;
+    margin: 30px 0 20px;
+}
+.roster-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 4px;
+    color: var(--text);
+    margin-bottom: 5px;
+}
+.roster-subtitle {
+    color: var(--muted);
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+}
+
+/* Player Cards */
+.roster {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.player-card {
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: all 0.3s;
+}
+.player-card:hover {
+    border-color: var(--orange);
+    transform: translateX(5px);
+    box-shadow: 0 10px 30px rgba(255,107,53,0.15);
+}
+.player-svg {
+    width: 90px;
+    height: 90px;
+    flex-shrink: 0;
+}
+.player-info {
+    flex: 1;
+}
+.player-position {
+    font-size: 0.6rem;
+    color: var(--orange);
+    letter-spacing: 3px;
+    font-weight: 600;
+    margin-bottom: 3px;
+}
+.player-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    color: var(--gold);
+    letter-spacing: 2px;
+    margin-bottom: 5px;
+}
+.player-trait {
+    font-size: 0.85rem;
+    color: var(--teal);
+    font-style: italic;
+    margin-bottom: 8px;
+}
+.player-bio {
+    font-size: 0.8rem;
+    color: var(--muted);
+    line-height: 1.5;
+}
+.player-laugh {
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+/* CTA Section */
+.cta-section {
+    text-align: center;
+    padding: 40px 20px;
+    margin-top: 30px;
+}
+.cta-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    color: var(--text);
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+}
+.cta-btn {
+    display: inline-block;
+    padding: 14px 40px;
+    background: linear-gradient(135deg, var(--orange), #FF8C00);
+    color: var(--dark);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 3px;
+    text-decoration: none;
+    border-radius: 30px;
+    transition: all 0.3s;
+}
+.cta-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 30px rgba(255,107,53,0.3);
+}
+
+/* Footer */
+.page-footer {
+    text-align: center;
+    padding: 30px 20px;
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+}
+.footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+    margin-bottom: 5px;
+}
+.footer-logo .go { color: var(--gold); }
+.footer-logo .trotter { color: var(--text); }
+.footer-tagline {
+    color: var(--muted);
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+}
+
+/* Language */
+body.en .lang-es { display: none !important; }
+body.es .lang-en { display: none !important; }
+
+/* Responsive */
+@media (min-width: 500px) {
+    .hero-title { font-size: 3.5rem; }
+    .player-svg { width: 110px; height: 110px; }
+    .player-name { font-size: 1.8rem; }
+}
+
+@media (max-width: 380px) {
+    .player-card { padding: 15px; gap: 15px; }
+    .player-svg { width: 70px; height: 70px; }
+    .player-name { font-size: 1.3rem; }
+    .player-bio { font-size: 0.75rem; }
+    .player-laugh { font-size: 1.5rem; }
+}
+</style>
+</head>
+<body class="en">
+
+<nav class="mini-nav">
+    <div class="nav-row-1">
+        <a href="/play" class="nav-logo">
+            <span class="ball">🏀</span>
+            <span class="go">GO</span><span class="trotter">TROTTER</span>
+        </a>
+        <div class="nav-right">
+            <div class="nav-lang">
+                <button class="nav-lang-btn active" id="btnEn">EN</button>
+                <button class="nav-lang-btn" id="btnEs">ES</button>
+            </div>
+        </div>
+    </div>
+    <div class="nav-row-2">
+        <a href="/the-match" class="nav-tab">🎯 MATCH</a>
+        <a href="/the-sequence" class="nav-tab">🔢 SEQUENCE</a>
+        <a href="/the-gotrotters" class="nav-tab active">🧡 TEAM</a>
+    </div>
+</nav>
+
+<div class="page-container">
+
+    <section class="hero">
+        <div class="hero-badge">
+            <span class="lang-en">MEET THE TEAM</span>
+            <span class="lang-es">CONOCE AL EQUIPO</span>
+        </div>
+        <h1 class="hero-title">THE GOTROTTERS</h1>
+        <p class="hero-subtitle">
+            <span class="lang-en">The Starting Five Laughers</span>
+            <span class="lang-es">Los Cinco Titulares</span>
+        </p>
+        <p class="hero-tagline">
+            <span class="lang-en">Where Joy Meets The Game</span>
+            <span class="lang-es">Donde La Alegría Se Une Al Juego</span>
+        </p>
+    </section>
+
+    <section class="story-section">
+        <p class="story-text">
+            <span class="lang-en">
+                The <strong>GoTrotters</strong> carry the spirit of legends who proved basketball isn't just a game — it's <strong>joy in motion</strong>. They're here to remind us that laughter is the ultimate exercise, and every mind deserves to play.
+            </span>
+            <span class="lang-es">
+                Los <strong>GoTrotters</strong> llevan el espíritu de leyendas que demostraron que el baloncesto no es solo un juego — es <strong>alegría en movimiento</strong>. Están aquí para recordarnos que la risa es el mejor ejercicio, y toda mente merece jugar.
+            </span>
+        </p>
+    </section>
+
+    <section class="roster-header">
+        <h2 class="roster-title">
+            <span class="lang-en">🏀 THE STARTING FIVE 🏀</span>
+            <span class="lang-es">🏀 LOS CINCO TITULARES 🏀</span>
+        </h2>
+        <p class="roster-subtitle">
+            <span class="lang-en">TAP A PLAYER TO FEEL THE JOY</span>
+            <span class="lang-es">TOCA UN JUGADOR Y SIENTE LA ALEGRÍA</span>
+        </p>
+    </section>
+
+    <div class="roster">
+
+        <!-- CURLY -->
+        <div class="player-card" onclick="this.classList.toggle('active')">
+            <div class="player-svg">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="45" fill="url(#curlyGrad)"/>
+                    <ellipse cx="35" cy="30" rx="15" ry="10" fill="rgba(255,255,255,0.2)"/>
+                    <ellipse cx="50" cy="20" rx="20" ry="8" fill="rgba(255,255,255,0.15)"/>
+                    <path d="M 28 42 Q 35 38 42 42" stroke="#1a1a1a" stroke-width="4" fill="none" stroke-linecap="round"/>
+                    <path d="M 58 42 Q 65 38 72 42" stroke="#1a1a1a" stroke-width="4" fill="none" stroke-linecap="round"/>
+                    <path d="M 25 58 Q 50 85 75 58" stroke="#1a1a1a" stroke-width="3" fill="#FF8C00"/>
+                    <path d="M 30 62 Q 50 78 70 62" fill="#8B0000"/>
+                    <rect x="35" y="62" width="30" height="8" fill="white" rx="2"/>
+                    <circle cx="25" cy="55" r="8" fill="rgba(255,0,100,0.2)"/>
+                    <circle cx="75" cy="55" r="8" fill="rgba(255,0,100,0.2)"/>
+                    <path d="M 25 32 Q 35 28 45 32" stroke="#c44a1c" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    <path d="M 55 32 Q 65 28 75 32" stroke="#c44a1c" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    <defs><radialGradient id="curlyGrad" cx="30%" cy="30%"><stop offset="0%" stop-color="#FF8C42"/><stop offset="100%" stop-color="#FF6B35"/></radialGradient></defs>
+                </svg>
+            </div>
+            <div class="player-info">
+                <div class="player-position">POINT GUARD</div>
+                <div class="player-name">CURLY</div>
+                <div class="player-trait">
+                    <span class="lang-en">"Infectious Energy"</span>
+                    <span class="lang-es">"Energía Contagiosa"</span>
+                </div>
+                <div class="player-bio">
+                    <span class="lang-en">The floor general who leads with pure joy. Every dribble, every move, every giggle spreads like wildfire.</span>
+                    <span class="lang-es">El general de la cancha que lidera con pura alegría. Cada dribling, cada movimiento, cada risa se contagia.</span>
+                </div>
+            </div>
+            <div class="player-laugh">😆</div>
+        </div>
+
+        <!-- PISTOL -->
+        <div class="player-card">
+            <div class="player-svg">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="45" fill="url(#pistolGrad)"/>
+                    <ellipse cx="35" cy="30" rx="15" ry="10" fill="rgba(255,255,255,0.2)"/>
+                    <ellipse cx="50" cy="12" rx="30" ry="12" fill="#c44a1c"/>
+                    <ellipse cx="35" cy="15" rx="15" ry="10" fill="#b8390e"/>
+                    <ellipse cx="60" cy="13" rx="18" ry="9" fill="#c44a1c"/>
+                    <circle cx="35" cy="45" r="8" fill="white"/>
+                    <circle cx="65" cy="43" r="8" fill="white"/>
+                    <circle cx="37" cy="45" r="4" fill="#1a1a1a"/>
+                    <circle cx="67" cy="43" r="4" fill="#1a1a1a"/>
+                    <circle cx="38" cy="44" r="1.5" fill="white"/>
+                    <circle cx="68" cy="42" r="1.5" fill="white"/>
+                    <path d="M 35 65 Q 55 75 75 60" stroke="#1a1a1a" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    <path d="M 25 35 Q 35 38 45 35" stroke="#c44a1c" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    <path d="M 55 30 Q 65 25 75 32" stroke="#c44a1c" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    <circle cx="75" cy="55" r="6" fill="rgba(255,0,100,0.15)"/>
+                    <defs><radialGradient id="pistolGrad" cx="30%" cy="30%"><stop offset="0%" stop-color="#FF8C42"/><stop offset="100%" stop-color="#FF6B35"/></radialGradient></defs>
+                </svg>
+            </div>
+            <div class="player-info">
+                <div class="player-position">SHOOTING GUARD</div>
+                <div class="player-name">PISTOL</div>
+                <div class="player-trait">
+                    <span class="lang-en">"Quick Wit"</span>
+                    <span class="lang-es">"Ingenio Rápido"</span>
+                </div>
+                <div class="player-bio">
+                    <span class="lang-en">Flashy, unpredictable, always ahead of the game. His humor hits before you see it coming.</span>
+                    <span class="lang-es">Llamativo, impredecible, siempre adelantado. Su humor llega antes de que lo veas venir.</span>
+                </div>
+            </div>
+            <div class="player-laugh">😏</div>
+        </div>
+
+        <!-- THE PEARL -->
+        <div class="player-card">
+            <div class="player-svg">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="45" fill="url(#pearlGrad)"/>
+                    <ellipse cx="35" cy="28" rx="18" ry="12" fill="rgba(255,255,255,0.25)"/>
+                    <ellipse cx="50" cy="18" rx="35" ry="15" fill="#c44a1c"/>
+                    <ellipse cx="50" cy="15" rx="30" ry="12" fill="#b8390e"/>
+                    <path d="M 28 45 Q 35 50 42 45" stroke="#1a1a1a" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    <path d="M 58 45 Q 65 50 72 45" stroke="#1a1a1a" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    <path d="M 28 44 L 26 40" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M 42 44 L 44 40" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M 58 44 L 56 40" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M 72 44 L 74 40" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M 30 60 Q 50 75 70 60" stroke="#1a1a1a" stroke-width="3" fill="#FF8C00"/>
+                    <path d="M 35 63 Q 50 72 65 63" fill="#8B0000"/>
+                    <path d="M 26 38 Q 35 35 44 38" stroke="#c44a1c" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                    <path d="M 56 38 Q 65 35 74 38" stroke="#c44a1c" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                    <circle cx="25" cy="55" r="7" fill="rgba(255,0,100,0.12)"/>
+                    <circle cx="75" cy="55" r="7" fill="rgba(255,0,100,0.12)"/>
+                    <defs><radialGradient id="pearlGrad" cx="30%" cy="30%"><stop offset="0%" stop-color="#FFA055"/><stop offset="100%" stop-color="#FF6B35"/></radialGradient></defs>
+                </svg>
+            </div>
+            <div class="player-info">
+                <div class="player-position">SMALL FORWARD</div>
+                <div class="player-name">THE PEARL</div>
+                <div class="player-trait">
+                    <span class="lang-en">"Smooth & Elegant"</span>
+                    <span class="lang-es">"Suave y Elegante"</span>
+                </div>
+                <div class="player-bio">
+                    <span class="lang-en">Grace under pressure. His warm smile brings calm to any court and peace to any mind.</span>
+                    <span class="lang-es">Gracia bajo presión. Su cálida sonrisa trae calma a cualquier cancha y paz a cualquier mente.</span>
+                </div>
+            </div>
+            <div class="player-laugh">😌</div>
+        </div>
+
+        <!-- MEADOWLARK -->
+        <div class="player-card">
+            <div class="player-svg">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="45" fill="url(#meadowGrad)"/>
+                    <ellipse cx="35" cy="28" rx="15" ry="10" fill="rgba(255,255,255,0.2)"/>
+                    <path d="M 25 40 L 40 45 L 25 50" stroke="#1a1a1a" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M 75 40 L 60 45 L 75 50" stroke="#1a1a1a" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    <ellipse cx="22" cy="52" rx="3" ry="5" fill="#4FC3F7"/>
+                    <ellipse cx="78" cy="52" rx="3" ry="5" fill="#4FC3F7"/>
+                    <ellipse cx="50" cy="68" rx="25" ry="20" fill="#1a1a1a"/>
+                    <ellipse cx="50" cy="65" rx="22" ry="15" fill="#8B0000"/>
+                    <ellipse cx="50" cy="75" rx="12" ry="8" fill="#FF5252"/>
+                    <rect x="32" y="55" width="36" height="10" fill="white" rx="3"/>
+                    <circle cx="20" cy="50" r="10" fill="rgba(255,0,100,0.25)"/>
+                    <circle cx="80" cy="50" r="10" fill="rgba(255,0,100,0.25)"/>
+                    <path d="M 22 30 Q 33 22 44 30" stroke="#c44a1c" stroke-width="4" fill="none" stroke-linecap="round"/>
+                    <path d="M 56 30 Q 67 22 78 30" stroke="#c44a1c" stroke-width="4" fill="none" stroke-linecap="round"/>
+                    <defs><radialGradient id="meadowGrad" cx="30%" cy="30%"><stop offset="0%" stop-color="#FF8C42"/><stop offset="100%" stop-color="#FF6B35"/></radialGradient></defs>
+                </svg>
+            </div>
+            <div class="player-info">
+                <div class="player-position">POWER FORWARD</div>
+                <div class="player-name">MEADOWLARK</div>
+                <div class="player-trait">
+                    <span class="lang-en">"The Showman"</span>
+                    <span class="lang-es">"El Showman"</span>
+                </div>
+                <div class="player-bio">
+                    <span class="lang-en">The heart and soul. When Meadowlark laughs, the whole world laughs with him. Pure, unfiltered JOY.</span>
+                    <span class="lang-es">El corazón y alma. Cuando Meadowlark ríe, el mundo entero ríe con él. Alegría pura y sin filtros.</span>
+                </div>
+            </div>
+            <div class="player-laugh">🤣</div>
+        </div>
+
+        <!-- CLYDE -->
+        <div class="player-card">
+            <div class="player-svg">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="45" fill="url(#clydeGrad)"/>
+                    <ellipse cx="35" cy="30" rx="15" ry="10" fill="rgba(255,255,255,0.2)"/>
+                    <path d="M 8 35 Q 5 50 12 65 Q 18 60 15 45 Q 12 35 8 35" fill="#c44a1c"/>
+                    <path d="M 92 35 Q 95 50 88 65 Q 82 60 85 45 Q 88 35 92 35" fill="#c44a1c"/>
+                    <ellipse cx="50" cy="82" rx="10" ry="8" fill="#c44a1c"/>
+                    <ellipse cx="35" cy="45" rx="10" ry="7" fill="white"/>
+                    <ellipse cx="65" cy="45" rx="10" ry="7" fill="white"/>
+                    <path d="M 23 42 Q 35 38 47 42 L 47 45 Q 35 42 23 45 Z" fill="#e85d24"/>
+                    <path d="M 53 42 Q 65 38 77 42 L 77 45 Q 65 42 53 45 Z" fill="#e85d24"/>
+                    <circle cx="38" cy="46" r="5" fill="#1a1a1a"/>
+                    <circle cx="68" cy="46" r="5" fill="#1a1a1a"/>
+                    <circle cx="39" cy="45" r="1.5" fill="white"/>
+                    <circle cx="69" cy="45" r="1.5" fill="white"/>
+                    <path d="M 35 65 Q 45 68 55 67 Q 65 66 70 62" stroke="#1a1a1a" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    <circle cx="72" cy="61" r="2" fill="#1a1a1a"/>
+                    <path d="M 23 35 L 45 33" stroke="#c44a1c" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    <path d="M 55 32 L 77 35" stroke="#c44a1c" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    <defs><radialGradient id="clydeGrad" cx="30%" cy="30%"><stop offset="0%" stop-color="#FF8C42"/><stop offset="100%" stop-color="#FF6B35"/></radialGradient></defs>
+                </svg>
+            </div>
+            <div class="player-info">
+                <div class="player-position">CENTER</div>
+                <div class="player-name">CLYDE</div>
+                <div class="player-trait">
+                    <span class="lang-en">"Cool & Unshakeable"</span>
+                    <span class="lang-es">"Tranquilo e Inquebrantable"</span>
+                </div>
+                <div class="player-bio">
+                    <span class="lang-en">The anchor. Nothing rattles him. That knowing smirk says "I've seen it all" — and he's still smiling.</span>
+                    <span class="lang-es">El ancla. Nada lo perturba. Esa sonrisa dice "lo he visto todo" — y sigue sonriendo.</span>
+                </div>
+            </div>
+            <div class="player-laugh">😎</div>
+        </div>
+
+    </div>
+
+    <section class="cta-section">
+        <p class="cta-text">
+            <span class="lang-en">READY TO PLAY WITH THE GOTROTTERS?</span>
+            <span class="lang-es">¿LISTO PARA JUGAR CON LOS GOTROTTERS?</span>
+        </p>
+        <a href="/play" class="cta-btn">
+            <span class="lang-en">🏀 ENTER THE LAUGHCOURT</span>
+            <span class="lang-es">🏀 ENTRA A LA CANCHA</span>
+        </a>
+    </section>
+
+    <footer class="page-footer">
+        <div class="footer-logo">
+            🏀 <span class="go">GO</span><span class="trotter">TROTTER</span>
+        </div>
+        <div class="footer-tagline">THE LAUGHCOURT™</div>
+    </footer>
+
+</div>
+
+<script>
+(function() {
+    var currentLang = localStorage.getItem('gotrotter_lang') || 'en';
+    function setLang(lang) {
+        currentLang = lang;
+        localStorage.setItem('gotrotter_lang', lang);
+        document.body.className = lang;
+        document.getElementById('btnEn').className = lang === 'en' ? 'nav-lang-btn active' : 'nav-lang-btn';
+        document.getElementById('btnEs').className = lang === 'es' ? 'nav-lang-btn active' : 'nav-lang-btn';
+    }
+    document.getElementById('btnEn').onclick = function() { setLang('en'); };
+    document.getElementById('btnEs').onclick = function() { setLang('es'); };
+    setLang(currentLang);
+})();
+</script>
+
+</body>
+</html>
