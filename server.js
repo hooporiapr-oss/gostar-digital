@@ -7,7 +7,7 @@ const PORT = process.env.PORT || 3000;
 
 // ============ PLATFORM VERSION ============
 const PLATFORM_VERSION = '2.0.0';
-const PLATFORM_VERSION_NAME = 'GoTrotter - The Cognitive Sport';
+const PLATFORM_VERSION_NAME = 'GoTrotter - The LaughCourt';
 
 // ============ ADMIN SECRET KEY ============
 // Use this for trial PIN management (replaces dashboard)
