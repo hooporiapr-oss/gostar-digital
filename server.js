@@ -22,8 +22,7 @@ const SESSION_TIMEOUT_MS = 2 * 60 * 1000;
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
 const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
 const STRIPE_PRICES = {
-    individual_monthly: process.env.STRIPE_PRICE_INDIVIDUAL_MONTHLY,
-    individual_annual: process.env.STRIPE_PRICE_INDIVIDUAL_ANNUAL
+    individual_monthly: process.env.STRIPE_PRICE_INDIVIDUAL_MONTHLY
 };
 
 let stripe = null;
@@ -324,7 +323,7 @@ app.post('/api/stripe/checkout', function(req, res) {
     
     if (!priceId) return res.status(400).json({ error: 'Invalid plan type' });
     
-    var baseUrl = process.env.SITE_URL || 'https://gotrotters.com';
+    var baseUrl = process.env.SITE_URL || 'https://gotrotter.ai';
     
     stripe.checkout.sessions.create({
         mode: 'subscription',
@@ -868,6 +867,10 @@ app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+app.get('/coach-admin', function(req, res) {
+    res.sendFile(path.join(__dirname, 'trial-admin.html'));
+});
+
 app.get('/play', function(req, res) {
     res.sendFile(path.join(__dirname, 'gotrotter.html'));
 });
@@ -912,6 +915,7 @@ app.listen(PORT, function() {
     console.log('   /           → Landing page');
     console.log('   /hub        → User hub');
     console.log('   /play       → Game');
+    console.log('   /coach-admin → Trial PIN Generator');
     console.log('');
     console.log('🔧 ADMIN ENDPOINTS (use X-Admin-Key header):');
     console.log('   POST /api/trials/create    → Create trial PIN');
