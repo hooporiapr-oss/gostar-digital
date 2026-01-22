@@ -1,1223 +1,1011 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>How To Play | GoTrotter - The LaughCourt</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
-:root {
-    --gold: #FFD700;
-    --orange: #FF6B00;
-    --teal: #00D9A5;
-    --cyan: #00CED1;
-    --red: #FF1744;
-    --dark: #0a0a0f;
-    --darker: #050508;
-    --card: #111118;
-    --text: #FFFFFF;
-    --muted: #8892a0;
-}
-
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-body {
-    font-family: 'Outfit', sans-serif;
-    background: var(--dark);
-    color: var(--text);
-    min-height: 100vh;
-    overflow-x: hidden;
-}
-
-/* ============ HERO SECTION ============ */
-.hero {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 40px 20px;
-    position: relative;
-    overflow: hidden;
-}
-
-.hero::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle at center, rgba(255,215,0,0.08) 0%, transparent 50%);
-    animation: pulse 8s ease-in-out infinite;
-}
-
-@keyframes pulse {
-    0%, 100% { transform: scale(1); opacity: 0.5; }
-    50% { transform: scale(1.1); opacity: 0.8; }
-}
-
-.hero-content {
-    position: relative;
-    z-index: 1;
-}
-
-.hero-emoji {
-    font-size: 5rem;
-    margin-bottom: 20px;
-    animation: bounce 2s ease-in-out infinite;
-}
-
-@keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-20px); }
-}
-
-.hero-logo {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 4rem;
-    letter-spacing: 8px;
-    margin-bottom: 10px;
-}
-
-.hero-logo .go { color: var(--gold); }
-.hero-logo .trotter { color: var(--text); }
-
-.hero-tagline {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.5rem;
-    letter-spacing: 6px;
-    color: var(--gold);
-    margin-bottom: 30px;
-}
-
-.hero-subtitle {
-    font-size: 1.2rem;
-    color: var(--muted);
-    max-width: 500px;
-    line-height: 1.6;
-    margin-bottom: 40px;
-}
-
-.scroll-indicator {
-    position: absolute;
-    bottom: 40px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    color: var(--muted);
-    font-size: 0.85rem;
-    animation: fadeInUp 1s ease-out 1s both;
-}
-
-.scroll-arrow {
-    font-size: 1.5rem;
-    animation: scrollBounce 1.5s ease-in-out infinite;
-}
-
-@keyframes scrollBounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(10px); }
-}
-
-@keyframes fadeInUp {
-    from { opacity: 0; transform: translate(-50%, 20px); }
-    to { opacity: 1; transform: translate(-50%, 0); }
-}
-
-/* ============ SECTIONS ============ */
-.section {
-    padding: 100px 20px;
-    max-width: 1100px;
-    margin: 0 auto;
-}
-
-.section-badge {
-    display: inline-block;
-    background: rgba(255,215,0,0.15);
-    color: var(--gold);
-    padding: 8px 20px;
-    border-radius: 30px;
-    font-size: 0.8rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 20px;
-}
-
-.section-badge.orange {
-    background: rgba(255,107,0,0.15);
-    color: var(--orange);
-}
-
-.section-badge.cyan {
-    background: rgba(0,217,165,0.15);
-    color: var(--teal);
-}
-
-.section-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 3rem;
-    letter-spacing: 4px;
-    margin-bottom: 20px;
-    line-height: 1.1;
-}
-
-.section-text {
-    font-size: 1.1rem;
-    color: var(--muted);
-    line-height: 1.8;
-    margin-bottom: 30px;
-}
-
-/* ============ TWO WORKOUTS SECTION ============ */
-.workouts-intro {
-    text-align: center;
-    margin-bottom: 60px;
-}
-
-.workouts-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 30px;
-}
-
-@media (max-width: 900px) {
-    .workouts-grid { grid-template-columns: 1fr; }
-}
-
-.workout-card {
-    background: var(--card);
-    border-radius: 24px;
-    padding: 40px 30px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-    transition: all 0.4s ease;
-}
-
-.workout-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 5px;
-}
-
-.workout-card.match::before {
-    background: linear-gradient(90deg, var(--gold), var(--orange));
-}
-
-.workout-card.sequence::before {
-    background: linear-gradient(90deg, var(--teal), var(--cyan));
-}
-
-.workout-card:hover {
-    transform: translateY(-10px);
-}
-
-.workout-card.match:hover {
-    box-shadow: 0 25px 50px rgba(255,107,0,0.2);
-}
-
-.workout-card.sequence:hover {
-    box-shadow: 0 25px 50px rgba(0,217,165,0.2);
-}
-
-.workout-icon {
-    font-size: 3rem;
-    margin-bottom: 15px;
-}
-
-.workout-name {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 2rem;
-    letter-spacing: 4px;
-    margin-bottom: 10px;
-}
-
-.workout-card.match .workout-name { color: var(--orange); }
-.workout-card.sequence .workout-name { color: var(--teal); }
-
-.workout-type {
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: var(--muted);
-    margin-bottom: 20px;
-}
-
-/* ============ GAME GRIDS ============ */
-.game-grid-5x5 {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 8px;
-    max-width: 220px;
-    margin: 0 auto 25px;
-}
-
-.game-grid-4x4 {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-    max-width: 200px;
-    margin: 0 auto 25px;
-}
-
-.grid-cell {
-    aspect-ratio: 1;
-    background: var(--darker);
-    border: 2px solid rgba(255,255,255,0.1);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
-    transition: all 0.3s;
-}
-
-.grid-cell.center {
-    background: var(--orange);
-    border-color: var(--orange);
-}
-
-.grid-cell.highlight-orange {
-    background: var(--orange);
-    border-color: var(--orange);
-    animation: cellPulseOrange 0.5s ease-out;
-}
-
-.grid-cell.highlight-cyan {
-    background: var(--teal);
-    border-color: var(--teal);
-    animation: cellPulseCyan 0.5s ease-out;
-}
-
-@keyframes cellPulseOrange {
-    0% { transform: scale(1); box-shadow: 0 0 0 rgba(255,107,0,0); }
-    50% { transform: scale(1.1); box-shadow: 0 0 20px rgba(255,107,0,0.5); }
-    100% { transform: scale(1); box-shadow: 0 0 0 rgba(255,107,0,0); }
-}
-
-@keyframes cellPulseCyan {
-    0% { transform: scale(1); box-shadow: 0 0 0 rgba(0,217,165,0); }
-    50% { transform: scale(1.1); box-shadow: 0 0 20px rgba(0,217,165,0.5); }
-    100% { transform: scale(1); box-shadow: 0 0 0 rgba(0,217,165,0); }
-}
-
-.workout-mechanic {
-    font-size: 0.95rem;
-    color: var(--muted);
-    line-height: 1.6;
-    margin-bottom: 25px;
-}
-
-.workout-mechanic strong {
-    color: var(--text);
-}
-
-.workout-btn {
-    display: inline-block;
-    padding: 14px 35px;
-    border-radius: 50px;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.1rem;
-    letter-spacing: 3px;
-    text-decoration: none;
-    transition: all 0.3s;
-}
-
-.workout-card.match .workout-btn {
-    background: linear-gradient(135deg, var(--gold), var(--orange));
-    color: var(--dark);
-}
-
-.workout-card.sequence .workout-btn {
-    background: linear-gradient(135deg, var(--teal), var(--cyan));
-    color: var(--dark);
-}
-
-.workout-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-}
-
-/* ============ HOW TO PLAY TABS ============ */
-.tabs-container {
-    margin-top: 50px;
-}
-
-.tabs-header {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 40px;
-}
-
-.tab-btn {
-    padding: 15px 40px;
-    background: var(--card);
-    border: 2px solid transparent;
-    border-radius: 50px;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.2rem;
-    letter-spacing: 3px;
-    color: var(--muted);
-    cursor: pointer;
-    transition: all 0.3s;
-}
-
-.tab-btn:hover {
-    color: var(--text);
-}
-
-.tab-btn.active.match {
-    border-color: var(--orange);
-    color: var(--orange);
-    background: rgba(255,107,0,0.1);
-}
-
-.tab-btn.active.sequence {
-    border-color: var(--teal);
-    color: var(--teal);
-    background: rgba(0,217,165,0.1);
-}
-
-.tab-content {
-    display: none;
-}
-
-.tab-content.active {
-    display: block;
-    animation: fadeIn 0.4s ease-out;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* ============ STEPS ============ */
-.steps {
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-    max-width: 700px;
-    margin: 0 auto;
-}
-
-.step {
-    display: flex;
-    gap: 25px;
-    align-items: flex-start;
-    background: var(--card);
-    border-radius: 20px;
-    padding: 25px 30px;
-    transition: all 0.3s;
-}
-
-.step:hover {
-    transform: translateX(10px);
-}
-
-.step.match:hover { border-left: 3px solid var(--orange); }
-.step.sequence:hover { border-left: 3px solid var(--teal); }
-
-.step-number {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.5rem;
-    color: var(--dark);
-    flex-shrink: 0;
-}
-
-.step.match .step-number {
-    background: linear-gradient(135deg, var(--gold), var(--orange));
-}
-
-.step.sequence .step-number {
-    background: linear-gradient(135deg, var(--teal), var(--cyan));
-}
-
-.step-content h3 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.3rem;
-    letter-spacing: 2px;
-    margin-bottom: 8px;
-}
-
-.step.match .step-content h3 { color: var(--orange); }
-.step.sequence .step-content h3 { color: var(--teal); }
-
-.step-content p {
-    color: var(--muted);
-    line-height: 1.6;
-    font-size: 0.95rem;
-}
-
-/* ============ 15 DIVISIONS ============ */
-.divisions-intro {
-    text-align: center;
-    margin-bottom: 50px;
-}
-
-.divisions-formula {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 2.5rem;
-    letter-spacing: 3px;
-    margin: 30px 0;
-}
-
-.divisions-formula .levels { color: var(--teal); }
-.divisions-formula .times { color: var(--muted); }
-.divisions-formula .speeds { color: var(--orange); }
-.divisions-formula .equals { color: var(--muted); }
-.divisions-formula .total { color: var(--gold); }
-
-.divisions-note {
-    font-size: 1rem;
-    color: var(--muted);
-    margin-top: 15px;
-}
-
-.speed-cards {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    margin: 40px 0;
-}
-
-@media (max-width: 700px) {
-    .speed-cards { grid-template-columns: 1fr; }
-}
-
-.speed-card {
-    background: var(--card);
-    border-radius: 20px;
-    padding: 30px;
-    text-align: center;
-    transition: all 0.3s;
-    position: relative;
-    overflow: hidden;
-}
-
-.speed-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-}
-
-.speed-card.slow::before { background: var(--teal); }
-.speed-card.medium::before { background: var(--gold); }
-.speed-card.fast::before { background: var(--red); }
-
-.speed-card:hover {
-    transform: translateY(-10px);
-}
-
-.speed-card.slow:hover { box-shadow: 0 20px 40px rgba(0,217,165,0.2); }
-.speed-card.medium:hover { box-shadow: 0 20px 40px rgba(255,215,0,0.2); }
-.speed-card.fast:hover { box-shadow: 0 20px 40px rgba(255,23,68,0.2); }
-
-.speed-icon {
-    font-size: 3rem;
-    margin-bottom: 15px;
-}
-
-.speed-name {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.5rem;
-    letter-spacing: 3px;
-    margin-bottom: 5px;
-}
-
-.speed-card.slow .speed-name { color: var(--teal); }
-.speed-card.medium .speed-name { color: var(--gold); }
-.speed-card.fast .speed-name { color: var(--red); }
-
-.speed-access {
-    font-size: 0.8rem;
-    padding: 5px 15px;
-    border-radius: 20px;
-    display: inline-block;
-    margin-bottom: 10px;
-}
-
-.speed-card.slow .speed-access {
-    background: rgba(0,217,165,0.15);
-    color: var(--teal);
-}
-
-.speed-card.medium .speed-access,
-.speed-card.fast .speed-access {
-    background: rgba(255,215,0,0.15);
-    color: var(--gold);
-}
-
-.speed-levels {
-    font-size: 0.85rem;
-    color: var(--muted);
-}
-
-/* ============ CELEBRATION ============ */
-.celebration-section {
-    background: linear-gradient(135deg, rgba(255,215,0,0.1), rgba(255,107,0,0.05));
-    border-radius: 30px;
-    padding: 60px 40px;
-    text-align: center;
-    margin: 60px 0;
-    position: relative;
-    overflow: hidden;
-}
-
-.laugh-emojis {
-    font-size: 4rem;
-    margin-bottom: 20px;
-    animation: laughPulse 1s ease-in-out infinite;
-}
-
-@keyframes laughPulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-}
-
-.celebration-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 2.5rem;
-    letter-spacing: 4px;
-    margin-bottom: 15px;
-}
-
-.celebration-text {
-    color: var(--muted);
-    font-size: 1.1rem;
-    max-width: 500px;
-    margin: 0 auto;
-    line-height: 1.6;
-}
-
-/* ============ TIPS ============ */
-.tips-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-    margin: 40px 0;
-}
-
-@media (max-width: 600px) {
-    .tips-grid { grid-template-columns: 1fr; }
-}
-
-.tip-card {
-    background: var(--card);
-    border-radius: 16px;
-    padding: 25px;
-    display: flex;
-    gap: 15px;
-    align-items: flex-start;
-}
-
-.tip-icon {
-    font-size: 1.5rem;
-    flex-shrink: 0;
-}
-
-.tip-text {
-    color: var(--muted);
-    font-size: 0.95rem;
-    line-height: 1.5;
-}
-
-.tip-text strong {
-    color: var(--text);
-}
-
-/* ============ CTA ============ */
-.cta-section {
-    text-align: center;
-    padding: 80px 20px 120px;
-}
-
-.cta-emoji {
-    font-size: 4rem;
-    margin-bottom: 20px;
-}
-
-.cta-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 3rem;
-    letter-spacing: 4px;
-    margin-bottom: 20px;
-}
-
-.cta-text {
-    color: var(--muted);
-    font-size: 1.1rem;
-    margin-bottom: 40px;
-}
-
-.cta-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-}
-
-.cta-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 20px 50px;
-    color: var(--dark);
-    text-decoration: none;
-    border-radius: 50px;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.3rem;
-    letter-spacing: 4px;
-    transition: all 0.3s;
-}
-
-.cta-btn.match {
-    background: linear-gradient(135deg, var(--gold), var(--orange));
-    box-shadow: 0 10px 40px rgba(255,107,0,0.3);
-}
-
-.cta-btn.sequence {
-    background: linear-gradient(135deg, var(--teal), var(--cyan));
-    box-shadow: 0 10px 40px rgba(0,217,165,0.3);
-}
-
-.cta-btn:hover {
-    transform: translateY(-5px);
-}
-
-.cta-btn.match:hover {
-    box-shadow: 0 20px 50px rgba(255,107,0,0.4);
-}
-
-.cta-btn.sequence:hover {
-    box-shadow: 0 20px 50px rgba(0,217,165,0.4);
-}
-
-/* ============ FOOTER ============ */
-.footer {
-    text-align: center;
-    padding: 40px 20px;
-    border-top: 1px solid rgba(255,255,255,0.05);
-}
-
-.footer-logo {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.5rem;
-    letter-spacing: 4px;
-    background: linear-gradient(135deg, var(--gold), var(--orange));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 10px;
-}
-
-.footer-tagline {
-    font-size: 0.7rem;
-    letter-spacing: 3px;
-    color: var(--muted);
-    text-transform: uppercase;
-}
-
-.footer-company {
-    font-size: 0.75rem;
-    color: var(--muted);
-    margin-top: 15px;
-}
-
-.footer-company a {
-    color: var(--gold);
-    text-decoration: none;
-}
-
-/* ============ ANIMATIONS ============ */
-.fade-in {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: all 0.8s ease-out;
-}
-
-.fade-in.visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-/* ============ RESPONSIVE ============ */
-@media (max-width: 600px) {
-    .hero-logo { font-size: 2.5rem; letter-spacing: 4px; }
-    .hero-tagline { font-size: 1rem; letter-spacing: 3px; }
-    .hero-emoji { font-size: 3.5rem; }
-    .section-title { font-size: 2rem; }
-    .step { flex-direction: column; align-items: center; text-align: center; }
-    .divisions-formula { font-size: 1.5rem; }
-    .cta-title { font-size: 2rem; }
-    .cta-btn { padding: 16px 35px; font-size: 1.1rem; }
-    .tabs-header { flex-direction: column; }
-    .tab-btn { width: 100%; }
-    .workout-card { padding: 30px 20px; }
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>How to Play | GoTrotter - The LaughCourt</title>
+    <meta name="description" content="Learn how to play THE MATCH and THE SEQUENCE - two fun memory workouts that sharpen your mind and make you smile.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #FFD700;
+            --orange: #FF6B35;
+            --teal: #00D9A5;
+            --cyan: #00CED1;
+            --red: #FF1744;
+            --dark: #0a0a0f;
+            --darker: #050508;
+            --card: #111118;
+            --text: #FFFFFF;
+            --muted: #8892a0;
+            --border: rgba(255,255,255,0.08);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--dark);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body.es .lang-en { display: none !important; }
+        body.en .lang-es { display: none !important; }
+
+        /* Language Toggle */
+        .lang-toggle {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            gap: 4px;
+            background: var(--card);
+            padding: 3px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            z-index: 100;
+        }
+        .lang-btn {
+            padding: 6px 10px;
+            border: none;
+            background: transparent;
+            color: var(--muted);
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.7rem;
+            cursor: pointer;
+            font-family: 'Outfit', sans-serif;
+            transition: all 0.2s;
+        }
+        .lang-btn.active {
+            background: var(--gold);
+            color: var(--dark);
+        }
+
+        /* Back Link */
+        .back-link {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: color 0.3s;
+            z-index: 100;
+        }
+        .back-link:hover {
+            color: var(--gold);
+        }
+
+        /* ============ HERO ============ */
+        .hero {
+            padding: 100px 20px 60px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 30% 40%, rgba(255,107,53,0.08) 0%, transparent 40%),
+                radial-gradient(circle at 70% 60%, rgba(0,217,165,0.08) 0%, transparent 40%);
+            pointer-events: none;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .hero-logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.5rem;
+            letter-spacing: 6px;
+            margin-bottom: 5px;
+        }
+        .hero-logo .go { color: var(--gold); }
+        .hero-logo .trotter { color: var(--text); }
+        .hero-tagline {
+            font-size: 0.7rem;
+            color: var(--gold);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+        }
+        .hero-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3rem;
+            letter-spacing: 4px;
+            margin-bottom: 15px;
+        }
+        .hero-subtitle {
+            color: var(--muted);
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        /* ============ GAME SECTIONS ============ */
+        .game-section {
+            padding: 60px 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .game-section:nth-child(odd) {
+            background: var(--darker);
+        }
+        .game-section .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .game-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .game-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+        .game-name {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.5rem;
+            letter-spacing: 5px;
+            margin-bottom: 5px;
+        }
+        .game-section.match .game-name { color: var(--orange); }
+        .game-section.sequence .game-name { color: var(--teal); }
+        
+        .game-type {
+            font-size: 0.8rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Visual Demo Area */
+        .game-demo {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* THE MATCH Demo Grid */
+        .demo-grid-5x5 {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 6px;
+            width: 100%;
+            max-width: 250px;
+        }
+        .demo-cell {
+            aspect-ratio: 1;
+            background: var(--darker);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+        .demo-cell.center {
+            background: var(--orange);
+            border-color: var(--orange);
+            box-shadow: 0 0 15px rgba(255,107,53,0.4);
+        }
+        .demo-cell.match-hint {
+            background: rgba(255,107,53,0.3);
+            border-color: var(--orange);
+        }
+        .demo-cell.wrong-hint {
+            background: rgba(255,255,255,0.05);
+        }
+
+        /* THE SEQUENCE Demo Grid */
+        .demo-grid-4x4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            width: 100%;
+            max-width: 220px;
+        }
+        .demo-cell-seq {
+            aspect-ratio: 1;
+            background: var(--darker);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all 0.3s;
+        }
+        .demo-cell-seq.highlight {
+            background: rgba(0,217,165,0.3);
+            border-color: var(--teal);
+            box-shadow: 0 0 15px rgba(0,217,165,0.4);
+            transform: scale(1.05);
+        }
+        .demo-cell-seq.sequence-1 { animation: pulse-seq 2s ease-in-out infinite 0s; }
+        .demo-cell-seq.sequence-2 { animation: pulse-seq 2s ease-in-out infinite 0.5s; }
+        .demo-cell-seq.sequence-3 { animation: pulse-seq 2s ease-in-out infinite 1s; }
+        
+        @keyframes pulse-seq {
+            0%, 30%, 100% { 
+                background: var(--darker); 
+                border-color: var(--border);
+                transform: scale(1);
+            }
+            15% { 
+                background: rgba(0,217,165,0.4); 
+                border-color: var(--teal);
+                transform: scale(1.08);
+            }
+        }
+
+        .demo-caption {
+            font-size: 0.85rem;
+            color: var(--muted);
+            text-align: center;
+            font-style: italic;
+        }
+
+        /* Steps */
+        .game-steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        @media (max-width: 600px) {
+            .game-steps { grid-template-columns: 1fr; gap: 15px; }
+        }
+        .step {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 25px 20px;
+            text-align: center;
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+        }
+        .step:hover {
+            border-color: var(--gold);
+            transform: translateY(-5px);
+        }
+        .step-number {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.2rem;
+            margin: 0 auto 12px;
+        }
+        .game-section.match .step-number {
+            background: linear-gradient(135deg, var(--gold), var(--orange));
+            color: var(--dark);
+        }
+        .game-section.sequence .step-number {
+            background: linear-gradient(135deg, var(--teal), var(--cyan));
+            color: var(--dark);
+        }
+        .step-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+        .step-desc {
+            font-size: 0.85rem;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        /* Skills Badge */
+        .skills-trained {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .skill-badge {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 0.75rem;
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .skill-badge span { font-size: 1rem; }
+
+        /* ============ DIVISIONS SECTION ============ */
+        .divisions-section {
+            padding: 80px 20px;
+            text-align: center;
+        }
+        .divisions-section .container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .section-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.2rem;
+            letter-spacing: 4px;
+            margin-bottom: 10px;
+        }
+        .section-subtitle {
+            color: var(--muted);
+            font-size: 1rem;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .divisions-grid-wrapper {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        .divisions-grid {
+            display: grid;
+            grid-template-columns: auto repeat(5, 1fr);
+            gap: 6px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        .div-cell {
+            background: rgba(255,255,255,0.03);
+            border-radius: 6px;
+            padding: 10px 8px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.75rem;
+            color: var(--muted);
+            text-align: center;
+            transition: all 0.3s;
+        }
+        .div-cell.header {
+            background: transparent;
+            color: var(--gold);
+            font-size: 0.7rem;
+        }
+        .div-cell.row-header {
+            background: transparent;
+            text-align: right;
+            padding-right: 12px;
+        }
+        .div-cell.row-header.slow { color: var(--teal); }
+        .div-cell.row-header.med { color: var(--orange); }
+        .div-cell.row-header.fast { color: var(--red); }
+        .div-cell:not(.header):not(.row-header):hover {
+            background: rgba(255,215,0,0.15);
+            color: var(--text);
+            transform: scale(1.05);
+        }
+
+        .divisions-note {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            font-size: 0.8rem;
+        }
+        .divisions-note span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        .dot.free { background: var(--teal); }
+        .dot.paid { background: var(--orange); }
+
+        /* ============ PRICING STRIP ============ */
+        .pricing-strip {
+            padding: 50px 20px;
+            background: var(--darker);
+            text-align: center;
+        }
+        .pricing-strip .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .pricing-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.8rem;
+            letter-spacing: 3px;
+            margin-bottom: 25px;
+        }
+        .pricing-boxes {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .price-box {
+            background: var(--card);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 25px 35px;
+            min-width: 180px;
+            transition: all 0.3s;
+        }
+        .price-box:hover {
+            transform: translateY(-5px);
+        }
+        .price-box.free { border-color: var(--teal); }
+        .price-box.paid { border-color: var(--gold); }
+        .price-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--muted);
+            margin-bottom: 8px;
+        }
+        .price-value {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.2rem;
+            letter-spacing: 2px;
+        }
+        .price-box.free .price-value { color: var(--teal); }
+        .price-box.paid .price-value { color: var(--gold); }
+        .price-note {
+            font-size: 0.8rem;
+            color: var(--muted);
+            margin-top: 5px;
+        }
+
+        /* ============ FINAL CTA ============ */
+        .final-cta {
+            padding: 100px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .final-cta::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255,215,0,0.08) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .final-cta .container {
+            position: relative;
+            z-index: 1;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .final-emoji {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        .final-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3rem;
+            letter-spacing: 4px;
+            margin-bottom: 15px;
+        }
+        .final-subtitle {
+            color: var(--muted);
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 350px;
+            margin: 0 auto 30px;
+        }
+        .cta-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 20px 30px;
+            border-radius: 50px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.3rem;
+            letter-spacing: 3px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .cta-btn.primary {
+            background: linear-gradient(135deg, var(--gold), var(--orange));
+            color: var(--dark);
+            box-shadow: 0 10px 40px rgba(255,107,53,0.3);
+        }
+        .cta-btn.primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(255,107,53,0.4);
+        }
+        .cta-btn.secondary {
+            background: transparent;
+            color: var(--text);
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+        .cta-btn.secondary:hover {
+            border-color: var(--teal);
+            color: var(--teal);
+        }
+
+        .cta-note {
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+        .cta-note a {
+            color: var(--gold);
+            text-decoration: none;
+        }
+        .cta-note a:hover {
+            text-decoration: underline;
+        }
+
+        /* ============ FOOTER ============ */
+        .footer {
+            padding: 40px 20px;
+            text-align: center;
+            border-top: 1px solid var(--border);
+        }
+        .footer-logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.3rem;
+            letter-spacing: 4px;
+            margin-bottom: 5px;
+        }
+        .footer-logo .go { color: var(--gold); }
+        .footer-logo .trotter { color: var(--text); }
+        .footer-tagline {
+            font-size: 0.6rem;
+            color: var(--gold);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+        .footer-links {
+            margin-bottom: 10px;
+            font-size: 0.75rem;
+        }
+        .footer-links a {
+            color: var(--muted);
+            text-decoration: none;
+            margin: 0 10px;
+            transition: color 0.3s;
+        }
+        .footer-links a:hover { color: var(--gold); }
+        .footer-company {
+            font-size: 0.7rem;
+            color: var(--muted);
+        }
+        .footer-company a {
+            color: var(--gold);
+            text-decoration: none;
+        }
+
+        /* ============ ANIMATIONS ============ */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ============ RESPONSIVE ============ */
+        @media (max-width: 600px) {
+            .hero { padding: 80px 20px 50px; }
+            .hero-logo { font-size: 2rem; }
+            .hero-title { font-size: 2.2rem; }
+            .game-name { font-size: 2rem; }
+            .section-title { font-size: 1.8rem; }
+            .final-title { font-size: 2.2rem; }
+            .cta-btn { font-size: 1.1rem; padding: 18px 25px; }
+            .demo-grid-5x5 { max-width: 200px; gap: 4px; }
+            .demo-grid-4x4 { max-width: 180px; gap: 6px; }
+            .demo-cell { font-size: 1rem; }
+            .demo-cell-seq { font-size: 1.2rem; }
+            .divisions-grid-wrapper { padding: 20px 15px; }
+            .div-cell { padding: 8px 5px; font-size: 0.65rem; }
+        }
+    </style>
 </head>
-<body>
+<body class="en">
 
-<!-- ============ HERO ============ -->
-<section class="hero">
-    <div class="hero-content">
-        <div class="hero-emoji">🏀</div>
-        <div class="hero-logo">
+    <div class="lang-toggle">
+        <button class="lang-btn active" id="btnEn">EN</button>
+        <button class="lang-btn" id="btnEs">ES</button>
+    </div>
+
+    <a href="/" class="back-link">
+        ← <span class="lang-en">Home</span><span class="lang-es">Inicio</span>
+    </a>
+
+    <!-- ============ HERO ============ -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-logo">
+                <span class="go">GO</span><span class="trotter">TROTTER</span>
+            </div>
+            <div class="hero-tagline">The LaughCourt</div>
+            <h1 class="hero-title">
+                <span class="lang-en">HOW TO PLAY</span>
+                <span class="lang-es">CÓMO JUGAR</span>
+            </h1>
+            <p class="hero-subtitle">
+                <span class="lang-en">Two memory workouts. Simple rules. Endless fun.<br>Master both to complete The LaughCourt.</span>
+                <span class="lang-es">Dos ejercicios de memoria. Reglas simples. Diversión infinita.<br>Domina ambos para completar The LaughCourt.</span>
+            </p>
+        </div>
+    </section>
+
+    <!-- ============ THE MATCH ============ -->
+    <section class="game-section match fade-in">
+        <div class="container">
+            <div class="game-header">
+                <div class="game-icon">🎯</div>
+                <h2 class="game-name">THE MATCH</h2>
+                <div class="game-type">
+                    <span class="lang-en">Recognition Memory</span>
+                    <span class="lang-es">Memoria de Reconocimiento</span>
+                </div>
+            </div>
+
+            <div class="game-demo">
+                <div class="demo-grid-5x5">
+                    <div class="demo-cell wrong-hint"></div>
+                    <div class="demo-cell match-hint"></div>
+                    <div class="demo-cell wrong-hint"></div>
+                    <div class="demo-cell wrong-hint"></div>
+                    <div class="demo-cell match-hint"></div>
+                    <div class="demo-cell wrong-hint"></div>
+                    <div class="demo-cell wrong-hint"></div>
+                    <div class="demo-cell match-hint"></div>
+                    <div class="demo-cell wrong-hint"></div>
+                    <div class="demo-cell wrong-hint"></div>
+                    <div class="demo-cell match-hint"></div>
+                    <div class="demo-cell wrong-hint"></div>
+                    <div class="demo-cell center">🎯</div>
+                    <div class="demo-cell wrong-hint"></div>
+                    <div class="demo-cell match-hint"></div>
+                    <div class="demo-cell wrong-hint"></div>
+                    <div class="demo-cell wrong-hint"></div>
+                    <div class="demo-cell match-hint"></div>
+                    <div class="demo-cell wrong-hint"></div>
+                    <div class="demo-cell wrong-hint"></div>
+                    <div class="demo-cell match-hint"></div>
+                    <div class="demo-cell wrong-hint"></div>
+                    <div class="demo-cell wrong-hint"></div>
+                    <div class="demo-cell match-hint"></div>
+                    <div class="demo-cell wrong-hint"></div>
+                </div>
+                <div class="demo-caption">
+                    <span class="lang-en">The highlighted cells match the center target color</span>
+                    <span class="lang-es">Las celdas resaltadas coinciden con el color del objetivo central</span>
+                </div>
+            </div>
+
+            <div class="game-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-title">
+                        <span class="lang-en">WATCH</span>
+                        <span class="lang-es">OBSERVA</span>
+                    </div>
+                    <div class="step-desc">
+                        <span class="lang-en">Colors flash across the 5×5 grid. The center shows your target color.</span>
+                        <span class="lang-es">Los colores aparecen en la cuadrícula 5×5. El centro muestra tu color objetivo.</span>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-title">
+                        <span class="lang-en">REMEMBER</span>
+                        <span class="lang-es">RECUERDA</span>
+                    </div>
+                    <div class="step-desc">
+                        <span class="lang-en">Memorize which cells matched the target color before they disappear.</span>
+                        <span class="lang-es">Memoriza qué celdas coincidieron con el color objetivo antes de que desaparezcan.</span>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-title">
+                        <span class="lang-en">TAP</span>
+                        <span class="lang-es">TOCA</span>
+                    </div>
+                    <div class="step-desc">
+                        <span class="lang-en">Tap all the cells that matched. Get them all right to advance!</span>
+                        <span class="lang-es">Toca todas las celdas que coincidieron. ¡Aciértalas todas para avanzar!</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="skills-trained">
+                <div class="skill-badge"><span>🧠</span> <span class="lang-en">Visual Memory</span><span class="lang-es">Memoria Visual</span></div>
+                <div class="skill-badge"><span>👁️</span> <span class="lang-en">Pattern Recognition</span><span class="lang-es">Reconocimiento de Patrones</span></div>
+                <div class="skill-badge"><span>⚡</span> <span class="lang-en">Quick Recall</span><span class="lang-es">Recuerdo Rápido</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ THE SEQUENCE ============ -->
+    <section class="game-section sequence fade-in">
+        <div class="container">
+            <div class="game-header">
+                <div class="game-icon">🔢</div>
+                <h2 class="game-name">THE SEQUENCE</h2>
+                <div class="game-type">
+                    <span class="lang-en">Sequential Memory</span>
+                    <span class="lang-es">Memoria Secuencial</span>
+                </div>
+            </div>
+
+            <div class="game-demo">
+                <div class="demo-grid-4x4">
+                    <div class="demo-cell-seq sequence-1">😊</div>
+                    <div class="demo-cell-seq">😂</div>
+                    <div class="demo-cell-seq sequence-3">🤣</div>
+                    <div class="demo-cell-seq">😄</div>
+                    <div class="demo-cell-seq">😁</div>
+                    <div class="demo-cell-seq sequence-2">😆</div>
+                    <div class="demo-cell-seq">😃</div>
+                    <div class="demo-cell-seq">🙂</div>
+                    <div class="demo-cell-seq">😀</div>
+                    <div class="demo-cell-seq">😸</div>
+                    <div class="demo-cell-seq">😹</div>
+                    <div class="demo-cell-seq">🤭</div>
+                    <div class="demo-cell-seq">😏</div>
+                    <div class="demo-cell-seq">😌</div>
+                    <div class="demo-cell-seq">🥳</div>
+                    <div class="demo-cell-seq">🎉</div>
+                </div>
+                <div class="demo-caption">
+                    <span class="lang-en">Watch the pattern light up, then tap it back in order</span>
+                    <span class="lang-es">Observa el patrón iluminarse, luego repítelo en orden</span>
+                </div>
+            </div>
+
+            <div class="game-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-title">
+                        <span class="lang-en">WATCH</span>
+                        <span class="lang-es">OBSERVA</span>
+                    </div>
+                    <div class="step-desc">
+                        <span class="lang-en">Laugh emojis light up one by one in a specific pattern.</span>
+                        <span class="lang-es">Los emojis se iluminan uno por uno en un patrón específico.</span>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-title">
+                        <span class="lang-en">REMEMBER</span>
+                        <span class="lang-es">RECUERDA</span>
+                    </div>
+                    <div class="step-desc">
+                        <span class="lang-en">Keep track of the exact order. The sequence gets longer each round!</span>
+                        <span class="lang-es">Sigue el orden exacto. ¡La secuencia crece cada ronda!</span>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-title">
+                        <span class="lang-en">REPEAT</span>
+                        <span class="lang-es">REPITE</span>
+                    </div>
+                    <div class="step-desc">
+                        <span class="lang-en">Tap the emojis in the same order. Perfect sequences unlock new tiers!</span>
+                        <span class="lang-es">Toca los emojis en el mismo orden. ¡Secuencias perfectas desbloquean nuevos niveles!</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="skills-trained">
+                <div class="skill-badge"><span>🔗</span> <span class="lang-en">Working Memory</span><span class="lang-es">Memoria de Trabajo</span></div>
+                <div class="skill-badge"><span>📝</span> <span class="lang-en">Order Retention</span><span class="lang-es">Retención de Orden</span></div>
+                <div class="skill-badge"><span>🎯</span> <span class="lang-en">Focus</span><span class="lang-es">Concentración</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ DIVISIONS ============ -->
+    <section class="divisions-section fade-in">
+        <div class="container">
+            <h2 class="section-title">
+                <span class="lang-en">🏆 15 DIVISIONS PER WORKOUT</span>
+                <span class="lang-es">🏆 15 DIVISIONES POR EJERCICIO</span>
+            </h2>
+            <p class="section-subtitle">
+                <span class="lang-en">5 levels of difficulty × 3 speeds = 15 unique challenges.<br>Find your division. Train at your pace. Level up when ready.</span>
+                <span class="lang-es">5 niveles de dificultad × 3 velocidades = 15 desafíos únicos.<br>Encuentra tu división. Entrena a tu ritmo. Sube de nivel cuando estés listo.</span>
+            </p>
+
+            <div class="divisions-grid-wrapper">
+                <div class="divisions-grid">
+                    <div class="div-cell header"></div>
+                    <div class="div-cell header">L1</div>
+                    <div class="div-cell header">L2</div>
+                    <div class="div-cell header">L3</div>
+                    <div class="div-cell header">L4</div>
+                    <div class="div-cell header">L5</div>
+                    
+                    <div class="div-cell row-header slow">SLOW</div>
+                    <div class="div-cell">1-S</div>
+                    <div class="div-cell">2-S</div>
+                    <div class="div-cell">3-S</div>
+                    <div class="div-cell">4-S</div>
+                    <div class="div-cell">5-S</div>
+                    
+                    <div class="div-cell row-header med">MED</div>
+                    <div class="div-cell">1-M</div>
+                    <div class="div-cell">2-M</div>
+                    <div class="div-cell">3-M</div>
+                    <div class="div-cell">4-M</div>
+                    <div class="div-cell">5-M</div>
+                    
+                    <div class="div-cell row-header fast">FAST</div>
+                    <div class="div-cell">1-F</div>
+                    <div class="div-cell">2-F</div>
+                    <div class="div-cell">3-F</div>
+                    <div class="div-cell">4-F</div>
+                    <div class="div-cell">5-F</div>
+                </div>
+            </div>
+
+            <div class="divisions-note">
+                <span><div class="dot free"></div> <span class="lang-en">SLOW = Free forever</span><span class="lang-es">LENTO = Gratis siempre</span></span>
+                <span><div class="dot paid"></div> <span class="lang-en">MED + FAST = $5/month</span><span class="lang-es">MED + RÁPIDO = $5/mes</span></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ PRICING STRIP ============ -->
+    <section class="pricing-strip fade-in">
+        <div class="container">
+            <h2 class="pricing-title">
+                <span class="lang-en">SIMPLE PRICING</span>
+                <span class="lang-es">PRECIO SIMPLE</span>
+            </h2>
+            <div class="pricing-boxes">
+                <div class="price-box free">
+                    <div class="price-label">
+                        <span class="lang-en">SLOW Speed</span>
+                        <span class="lang-es">Velocidad LENTA</span>
+                    </div>
+                    <div class="price-value">
+                        <span class="lang-en">FREE</span>
+                        <span class="lang-es">GRATIS</span>
+                    </div>
+                    <div class="price-note">
+                        <span class="lang-en">7 Day Free Trial</span>
+                        <span class="lang-es">Prueba Gratis 7 Días</span>
+                    </div>
+                </div>
+                <div class="price-box paid">
+                    <div class="price-label">
+                        <span class="lang-en">All Speeds</span>
+                        <span class="lang-es">Todas las Velocidades</span>
+                    </div>
+                    <div class="price-value">$5/<span class="lang-en">mo</span><span class="lang-es">mes</span></div>
+                    <div class="price-note">
+                        <span class="lang-en">MED + FAST unlocked</span>
+                        <span class="lang-es">MED + RÁPIDO desbloqueados</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ FINAL CTA ============ -->
+    <section class="final-cta fade-in">
+        <div class="container">
+            <div class="final-emoji">🏀</div>
+            <h2 class="final-title">
+                <span class="lang-en">READY TO PLAY?</span>
+                <span class="lang-es">¿LISTO PARA JUGAR?</span>
+            </h2>
+            <p class="final-subtitle">
+                <span class="lang-en">The LaughCourt is calling. Step onto the court.</span>
+                <span class="lang-es">The LaughCourt te llama. Entra a la cancha.</span>
+            </p>
+
+            <div class="cta-buttons">
+                <a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="cta-btn primary">
+                    <span class="lang-en">🆕 START 7 DAY FREE TRIAL</span>
+                    <span class="lang-es">🆕 PRUEBA GRATIS 7 DÍAS</span>
+                </a>
+                <a href="/login" class="cta-btn secondary">
+                    <span class="lang-en">🔑 I HAVE A PIN</span>
+                    <span class="lang-es">🔑 TENGO UN PIN</span>
+                </a>
+            </div>
+
+            <p class="cta-note">
+                <span class="lang-en">Questions? <a href="https://gotrotter.ai">Chat with Coach GoTrotter AI</a></span>
+                <span class="lang-es">¿Preguntas? <a href="https://gotrotter.ai">Habla con Coach GoTrotter AI</a></span>
+            </p>
+        </div>
+    </section>
+
+    <!-- ============ FOOTER ============ -->
+    <footer class="footer">
+        <div class="footer-logo">
             <span class="go">GO</span><span class="trotter">TROTTER</span>
         </div>
-        <div class="hero-tagline">THE LAUGHCOURT</div>
-        <p class="hero-subtitle">
-            Two workouts. One court. Endless brain gains.<br>
-            Train your memory and <strong style="color: var(--gold)">laugh</strong> along the way.
-        </p>
-    </div>
-    <div class="scroll-indicator">
-        <span>Scroll to learn</span>
-        <span class="scroll-arrow">↓</span>
-    </div>
-</section>
+        <div class="footer-tagline">The LaughCourt</div>
+        <div class="footer-links">
+            <a href="/privacy.html">Privacy Policy</a>
+            <a href="/terms.html">Terms of Use</a>
+        </div>
+        <div class="footer-company">
+            by <a href="https://gostar.digital">GoStar Digital LLC</a> 🇵🇷
+        </div>
+    </footer>
 
-<!-- ============ TWO WORKOUTS ============ -->
-<section class="section fade-in">
-    <div class="workouts-intro">
-        <span class="section-badge">🧠 Two Workouts</span>
-        <h2 class="section-title">CHOOSE YOUR TRAINING</h2>
-        <p class="section-text" style="max-width: 650px; margin: 0 auto;">
-            The LaughCourt offers two distinct memory workouts. Each targets different cognitive skills. Master both to become a complete brain athlete.
-        </p>
-    </div>
-    
-    <div class="workouts-grid">
-        <!-- THE MATCH -->
-        <div class="workout-card match">
-            <div class="workout-icon">🎯</div>
-            <div class="workout-name">THE MATCH</div>
-            <div class="workout-type">Recognition Memory</div>
+    <script>
+        (function() {
+            // ==================== LANGUAGE ====================
+            var currentLang = localStorage.getItem('gotrotter_lang') || 'en';
             
-            <div class="game-grid-5x5" id="matchGrid">
-                <div class="grid-cell"></div>
-                <div class="grid-cell"></div>
-                <div class="grid-cell"></div>
-                <div class="grid-cell"></div>
-                <div class="grid-cell"></div>
-                <div class="grid-cell"></div>
-                <div class="grid-cell"></div>
-                <div class="grid-cell"></div>
-                <div class="grid-cell"></div>
-                <div class="grid-cell"></div>
-                <div class="grid-cell"></div>
-                <div class="grid-cell"></div>
-                <div class="grid-cell center">🎯</div>
-                <div class="grid-cell"></div>
-                <div class="grid-cell"></div>
-                <div class="grid-cell"></div>
-                <div class="grid-cell"></div>
-                <div class="grid-cell"></div>
-                <div class="grid-cell"></div>
-                <div class="grid-cell"></div>
-                <div class="grid-cell"></div>
-                <div class="grid-cell"></div>
-                <div class="grid-cell"></div>
-                <div class="grid-cell"></div>
-                <div class="grid-cell"></div>
-            </div>
-            
-            <p class="workout-mechanic">
-                <strong>5×5 grid</strong> with a center target.<br>
-                Colors flash around the grid.<br>
-                <strong>Tap the cells</strong> that matched the center!
-            </p>
-            
-            <a href="/play" class="workout-btn">PLAY THE MATCH →</a>
-        </div>
-        
-        <!-- THE SEQUENCE -->
-        <div class="workout-card sequence">
-            <div class="workout-icon">🔢</div>
-            <div class="workout-name">THE SEQUENCE</div>
-            <div class="workout-type">Sequential Memory</div>
-            
-            <div class="game-grid-4x4" id="sequenceGrid">
-                <div class="grid-cell">😊</div>
-                <div class="grid-cell">😂</div>
-                <div class="grid-cell">🤣</div>
-                <div class="grid-cell">😄</div>
-                <div class="grid-cell">😁</div>
-                <div class="grid-cell">😆</div>
-                <div class="grid-cell">😃</div>
-                <div class="grid-cell">🙂</div>
-                <div class="grid-cell">😀</div>
-                <div class="grid-cell">😸</div>
-                <div class="grid-cell">😹</div>
-                <div class="grid-cell">🤭</div>
-                <div class="grid-cell">😏</div>
-                <div class="grid-cell">😌</div>
-                <div class="grid-cell">🥳</div>
-                <div class="grid-cell">🎉</div>
-            </div>
-            
-            <p class="workout-mechanic">
-                <strong>4×4 grid</strong> filled with laugh emojis.<br>
-                Watch the pattern light up in order.<br>
-                <strong>Tap it back</strong> in the exact sequence!
-            </p>
-            
-            <a href="/the-sequence" class="workout-btn">PLAY THE SEQUENCE →</a>
-        </div>
-    </div>
-</section>
-
-<!-- ============ HOW TO PLAY (TABBED) ============ -->
-<section class="section fade-in">
-    <div style="text-align: center;">
-        <span class="section-badge">📖 How To Play</span>
-        <h2 class="section-title">MASTER THE WORKOUTS</h2>
-    </div>
-    
-    <div class="tabs-container">
-        <div class="tabs-header">
-            <button class="tab-btn active match" data-tab="match">THE MATCH</button>
-            <button class="tab-btn sequence" data-tab="sequence">THE SEQUENCE</button>
-        </div>
-        
-        <!-- THE MATCH STEPS -->
-        <div class="tab-content active" id="tab-match">
-            <div class="steps">
-                <div class="step match">
-                    <div class="step-number">1</div>
-                    <div class="step-content">
-                        <h3>WATCH THE CENTER</h3>
-                        <p>A target color appears in the center cell. This is what you're looking for. Lock it into your memory!</p>
-                    </div>
-                </div>
-                
-                <div class="step match">
-                    <div class="step-number">2</div>
-                    <div class="step-content">
-                        <h3>SCAN THE GRID</h3>
-                        <p>Colors flash across the 5×5 grid. Some will match the center, some won't. Track every cell that matches!</p>
-                    </div>
-                </div>
-                
-                <div class="step match">
-                    <div class="step-number">3</div>
-                    <div class="step-content">
-                        <h3>TAP THE MATCHES</h3>
-                        <p>After the show ends, tap every cell that matched the center color. The more you get right, the higher you climb!</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- THE SEQUENCE STEPS -->
-        <div class="tab-content" id="tab-sequence">
-            <div class="steps">
-                <div class="step sequence">
-                    <div class="step-number">1</div>
-                    <div class="step-content">
-                        <h3>WATCH THE PATTERN</h3>
-                        <p>Cells light up one at a time in a specific order. Pay attention to which cells and what sequence!</p>
-                    </div>
-                </div>
-                
-                <div class="step sequence">
-                    <div class="step-number">2</div>
-                    <div class="step-content">
-                        <h3>REMEMBER THE ORDER</h3>
-                        <p>The pattern gets longer as you level up. Use mental tricks — trace paths, group clusters, find patterns within patterns.</p>
-                    </div>
-                </div>
-                
-                <div class="step sequence">
-                    <div class="step-number">3</div>
-                    <div class="step-content">
-                        <h3>TAP IT BACK</h3>
-                        <p>Replay the exact sequence by tapping cells in order. One wrong tap and you'll need to try again. Precision matters!</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ============ 15 DIVISIONS ============ -->
-<section class="section fade-in">
-    <div class="divisions-intro">
-        <span class="section-badge">🏆 15 Divisions</span>
-        <h2 class="section-title">YOUR JOURNEY TO MASTERY</h2>
-        <p class="section-text" style="max-width: 650px; margin: 0 auto;">
-            Each workout has 15 divisions. Start slow, build confidence, then turn up the heat.
-        </p>
-        
-        <div class="divisions-formula">
-            <span class="levels">5 LEVELS</span>
-            <span class="times"> × </span>
-            <span class="speeds">3 SPEEDS</span>
-            <span class="equals"> = </span>
-            <span class="total">15 DIVISIONS</span>
-        </div>
-        
-        <p class="divisions-note">× 2 workouts = <strong style="color: var(--gold);">30 total divisions</strong> to conquer!</p>
-    </div>
-    
-    <div class="speed-cards">
-        <div class="speed-card slow">
-            <div class="speed-icon">🐢</div>
-            <div class="speed-name">SLOW</div>
-            <span class="speed-access">FREE</span>
-            <div class="speed-levels">Levels 1-5</div>
-        </div>
-        
-        <div class="speed-card medium">
-            <div class="speed-icon">🏃</div>
-            <div class="speed-name">MEDIUM</div>
-            <span class="speed-access">$5/mo</span>
-            <div class="speed-levels">Levels 1-5</div>
-        </div>
-        
-        <div class="speed-card fast">
-            <div class="speed-icon">🚀</div>
-            <div class="speed-name">FAST</div>
-            <span class="speed-access">$5/mo</span>
-            <div class="speed-levels">Levels 1-5</div>
-        </div>
-    </div>
-</section>
-
-<!-- ============ CELEBRATION ============ -->
-<section class="section fade-in">
-    <div class="celebration-section">
-        <div class="laugh-emojis">😂🎉😂</div>
-        <h2 class="celebration-title">LAUGHTER IS THE BEST MEDICINE</h2>
-        <p class="celebration-text">
-            Every correct round triggers a celebration! Watch the laughing emojis dance across your screen. Because cognitive training should feel like play, not work.
-        </p>
-    </div>
-</section>
-
-<!-- ============ TIPS ============ -->
-<section class="section fade-in">
-    <span class="section-badge">💡 Pro Tips</span>
-    <h2 class="section-title">TRAIN LIKE A CHAMPION</h2>
-    
-    <div class="tips-grid">
-        <div class="tip-card">
-            <div class="tip-icon">🎯</div>
-            <div class="tip-text">
-                <strong>Start with SLOW.</strong> Build your foundation before speeding up. Mastery comes from repetition.
-            </div>
-        </div>
-        
-        <div class="tip-card">
-            <div class="tip-icon">🧘</div>
-            <div class="tip-text">
-                <strong>Stay relaxed.</strong> Tension kills memory. Take a breath before each pattern plays.
-            </div>
-        </div>
-        
-        <div class="tip-card">
-            <div class="tip-icon">👀</div>
-            <div class="tip-text">
-                <strong>Use your eyes.</strong> Follow the lights without moving your head. Let your eyes do the work.
-            </div>
-        </div>
-        
-        <div class="tip-card">
-            <div class="tip-icon">🔁</div>
-            <div class="tip-text">
-                <strong>Train both workouts.</strong> THE MATCH builds recognition. THE SEQUENCE builds recall. You need both!
-            </div>
-        </div>
-        
-        <div class="tip-card">
-            <div class="tip-icon">😤</div>
-            <div class="tip-text">
-                <strong>Embrace mistakes.</strong> Every error teaches your brain something new. Fail forward!
-            </div>
-        </div>
-        
-        <div class="tip-card">
-            <div class="tip-icon">😂</div>
-            <div class="tip-text">
-                <strong>Laugh it off!</strong> Missed a pattern? Laugh, reset, and go again. Joy fuels the brain.
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ============ CTA ============ -->
-<section class="cta-section fade-in">
-    <div class="cta-emoji">🏀</div>
-    <h2 class="cta-title">READY TO PLAY?</h2>
-    <p class="cta-text">Your brain is waiting. The LaughCourt is calling.</p>
-    <div class="cta-buttons">
-        <a href="/play" class="cta-btn match">THE MATCH 🎯</a>
-        <a href="/the-sequence" class="cta-btn sequence">THE SEQUENCE 🔢</a>
-    </div>
-</section>
-
-<!-- ============ FOOTER ============ -->
-<footer class="footer">
-    <div class="footer-logo">GoTrotter™</div>
-    <div class="footer-tagline">The LaughCourt</div>
-    <div class="footer-company">by <a href="https://gostar.digital">GoStar Digital LLC</a> 🇵🇷</div>
-</footer>
-
-<script>
-// ============ SCROLL ANIMATIONS ============
-function handleScroll() {
-    var elements = document.querySelectorAll('.fade-in');
-    for (var i = 0; i < elements.length; i++) {
-        var el = elements[i];
-        var rect = el.getBoundingClientRect();
-        var windowHeight = window.innerHeight;
-        if (rect.top < windowHeight * 0.85) {
-            el.classList.add('visible');
-        }
-    }
-}
-
-window.addEventListener('scroll', handleScroll);
-window.addEventListener('load', handleScroll);
-
-// ============ TAB SWITCHING ============
-var tabBtns = document.querySelectorAll('.tab-btn');
-tabBtns.forEach(function(btn) {
-    btn.addEventListener('click', function() {
-        var tabId = this.getAttribute('data-tab');
-        
-        // Update buttons
-        tabBtns.forEach(function(b) { 
-            b.classList.remove('active'); 
-        });
-        this.classList.add('active');
-        
-        // Update content
-        document.querySelectorAll('.tab-content').forEach(function(content) {
-            content.classList.remove('active');
-        });
-        document.getElementById('tab-' + tabId).classList.add('active');
-    });
-});
-
-// ============ MATCH GRID DEMO ============
-var matchGrid = document.getElementById('matchGrid');
-var matchCells = matchGrid.querySelectorAll('.grid-cell:not(.center)');
-var matchDemoRunning = false;
-
-function playMatchDemo() {
-    if (matchDemoRunning) return;
-    matchDemoRunning = true;
-    
-    var pattern = [1, 5, 8, 16, 21, 3, 11, 19, 23];
-    var index = 0;
-    
-    function lightNext() {
-        if (index > 0 && pattern[index - 1] !== undefined) {
-            var prevCell = matchCells[pattern[index - 1] < 12 ? pattern[index - 1] : pattern[index - 1] - 1];
-            if (prevCell) prevCell.classList.remove('highlight-orange');
-        }
-        
-        if (index < pattern.length) {
-            var cellIndex = pattern[index] < 12 ? pattern[index] : pattern[index] - 1;
-            if (matchCells[cellIndex]) {
-                matchCells[cellIndex].classList.add('highlight-orange');
+            function setLang(l) {
+                currentLang = l;
+                localStorage.setItem('gotrotter_lang', l);
+                document.body.className = l;
+                document.getElementById('btnEn').className = l === 'en' ? 'lang-btn active' : 'lang-btn';
+                document.getElementById('btnEs').className = l === 'es' ? 'lang-btn active' : 'lang-btn';
             }
-            index++;
-            setTimeout(lightNext, 400);
-        } else {
-            setTimeout(function() {
-                matchCells.forEach(function(c) { c.classList.remove('highlight-orange'); });
-                matchDemoRunning = false;
-            }, 300);
-        }
-    }
-    
-    lightNext();
-}
 
-// ============ SEQUENCE GRID DEMO ============
-var sequenceGrid = document.getElementById('sequenceGrid');
-var sequenceCells = sequenceGrid.querySelectorAll('.grid-cell');
-var sequenceDemoRunning = false;
+            document.getElementById('btnEn').addEventListener('click', function() { setLang('en'); });
+            document.getElementById('btnEs').addEventListener('click', function() { setLang('es'); });
+            setLang(currentLang);
 
-function playSequenceDemo() {
-    if (sequenceDemoRunning) return;
-    sequenceDemoRunning = true;
-    
-    var pattern = [2, 5, 9, 14, 7, 0, 11, 4];
-    var index = 0;
-    
-    function lightNext() {
-        if (index > 0) {
-            sequenceCells[pattern[index - 1]].classList.remove('highlight-cyan');
-        }
-        
-        if (index < pattern.length) {
-            sequenceCells[pattern[index]].classList.add('highlight-cyan');
-            index++;
-            setTimeout(lightNext, 500);
-        } else {
-            setTimeout(function() {
-                sequenceCells[pattern[pattern.length - 1]].classList.remove('highlight-cyan');
-                sequenceDemoRunning = false;
-            }, 400);
-        }
-    }
-    
-    lightNext();
-}
+            // ==================== SCROLL ANIMATIONS ====================
+            function handleScroll() {
+                var elements = document.querySelectorAll('.fade-in');
+                for (var i = 0; i < elements.length; i++) {
+                    var el = elements[i];
+                    var rect = el.getBoundingClientRect();
+                    var windowHeight = window.innerHeight;
+                    if (rect.top < windowHeight * 0.85) {
+                        el.classList.add('visible');
+                    }
+                }
+            }
 
-// Play demos when cards are visible
-var matchObserver = new IntersectionObserver(function(entries) {
-    entries.forEach(function(entry) {
-        if (entry.isIntersecting && !matchDemoRunning) {
-            setTimeout(playMatchDemo, 600);
-        }
-    });
-}, { threshold: 0.5 });
-
-var sequenceObserver = new IntersectionObserver(function(entries) {
-    entries.forEach(function(entry) {
-        if (entry.isIntersecting && !sequenceDemoRunning) {
-            setTimeout(playSequenceDemo, 800);
-        }
-    });
-}, { threshold: 0.5 });
-
-matchObserver.observe(matchGrid);
-sequenceObserver.observe(sequenceGrid);
-
-// Replay on click
-matchGrid.addEventListener('click', function() {
-    if (!matchDemoRunning) playMatchDemo();
-});
-
-sequenceGrid.addEventListener('click', function() {
-    if (!sequenceDemoRunning) playSequenceDemo();
-});
-</script>
-
+            window.addEventListener('scroll', handleScroll);
+            window.addEventListener('load', handleScroll);
+        })();
+    </script>
 </body>
 </html>
