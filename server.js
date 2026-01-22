@@ -867,7 +867,7 @@ app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-app.get('/coach-admin', function(req, res) {
+app.get('/trial-pin', function(req, res) {
     res.sendFile(path.join(__dirname, 'trial-pin.html'));
 });
 
@@ -915,7 +915,7 @@ app.listen(PORT, function() {
     console.log('   /           → Landing page');
     console.log('   /hub        → User hub');
     console.log('   /play       → Game');
-    console.log('   /coach-admin → Trial PIN Generator');
+    console.log('   /trial-pin  → Trial PIN Generator');
     console.log('');
     console.log('🔧 ADMIN ENDPOINTS (use X-Admin-Key header):');
     console.log('   POST /api/trials/create    → Create trial PIN');
