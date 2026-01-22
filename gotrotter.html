@@ -174,6 +174,7 @@ body {
     justify-content: center;
     min-height: 0;
     overflow: hidden;
+    position: relative;
 }
 .court-grid {
     display: grid;
@@ -319,6 +320,98 @@ body {
 }
 .action-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 .action-btn:active:not(:disabled) { transform: scale(0.98); }
+
+/* ==================== LAUGH EMOJI CELEBRATION ==================== */
+.emoji-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 999;
+    overflow: hidden;
+}
+
+.burst-emoji {
+    position: absolute;
+    font-size: 2rem;
+    animation: emojiBurst 1.2s ease-out forwards;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+@keyframes emojiBurst {
+    0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(0.3);
+    }
+    20% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.2);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(var(--tx), var(--ty)) scale(0.8) rotate(var(--rot));
+    }
+}
+
+/* Big celebration burst */
+.burst-emoji.big {
+    font-size: 3rem;
+    animation: emojiBurstBig 1.5s ease-out forwards;
+}
+
+@keyframes emojiBurstBig {
+    0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(0.2);
+    }
+    15% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.5);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(var(--tx), var(--ty)) scale(1) rotate(var(--rot));
+    }
+}
+
+/* Party mode - extra special */
+.burst-emoji.party {
+    font-size: 2.5rem;
+    animation: emojiParty 2s ease-out forwards;
+}
+
+@keyframes emojiParty {
+    0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(0);
+    }
+    10% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.8);
+    }
+    30% {
+        opacity: 1;
+        transform: translate(calc(var(--tx) * 0.3), calc(var(--ty) * 0.3)) scale(1.3);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(var(--tx), var(--ty)) scale(0.5) rotate(var(--rot));
+    }
+}
+
+/* Joy pulse on court after celebration */
+.court-grid.joy-pulse {
+    animation: joyPulse 0.5s ease-out;
+}
+
+@keyframes joyPulse {
+    0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7); }
+    50% { box-shadow: 0 0 30px 10px rgba(255, 215, 0, 0.4); }
+    100% { box-shadow: none; }
+}
 
 /* OVERLAYS */
 .feedback-overlay {
@@ -547,6 +640,8 @@ body.es .lang-en { display: none !important; }
     .grid-cell { border-width: 2px; border-radius: 5px; }
     .division-display { padding: 4px 10px; margin: 3px 0; }
     .action-btn { padding: 10px; font-size: 1.1rem; }
+    .burst-emoji { font-size: 1.5rem; }
+    .burst-emoji.big { font-size: 2rem; }
 }
 </style>
 </head>
@@ -561,6 +656,9 @@ body.es .lang-en { display: none !important; }
     <span class="lang-en">← Home</span>
     <span class="lang-es">← Inicio</span>
 </a>
+
+<!-- Emoji Celebration Container -->
+<div class="emoji-container" id="emojiContainer"></div>
 
 <div class="game-container">
     <header class="header">
@@ -837,6 +935,10 @@ body.es .lang-en { display: none !important; }
     var PLAYS_PER_CIRCUIT = 5;
     var CENTER_CELL = 12;
 
+    // ==================== LAUGH EMOJI CONFIG ====================
+    var LAUGH_EMOJIS = ['😂', '😆', '🤣', '😄', '😁', '🥳', '😊', '🎉'];
+    var PARTY_EMOJIS = ['🥳', '🎉', '😂', '🤣', '✨', '💫', '🌟', '🏆'];
+
     // ==================== GAME STATE ====================
     var state = {
         level: parseInt(localStorage.getItem('gt-level')) || 1,
@@ -860,6 +962,95 @@ body.es .lang-en { display: none !important; }
     var actionBtn = document.getElementById('actionBtn');
     var feedbackOverlay = document.getElementById('feedbackOverlay');
     var coachMessage = document.getElementById('coachMessage');
+    var emojiContainer = document.getElementById('emojiContainer');
+
+    // ==================== LAUGH EMOJI CELEBRATION SYSTEM ====================
+    function getCourtCenter() {
+        var courtRect = courtGrid.getBoundingClientRect();
+        return {
+            x: courtRect.left + courtRect.width / 2,
+            y: courtRect.top + courtRect.height / 2
+        };
+    }
+
+    function createBurstEmoji(emoji, x, y, type) {
+        var el = document.createElement('div');
+        el.className = 'burst-emoji' + (type ? ' ' + type : '');
+        el.textContent = emoji;
+        
+        // Random burst direction
+        var angle = Math.random() * Math.PI * 2;
+        var distance = 80 + Math.random() * 120;
+        var tx = Math.cos(angle) * distance + 'px';
+        var ty = Math.sin(angle) * distance + 'px';
+        var rot = (Math.random() - 0.5) * 720 + 'deg';
+        
+        el.style.cssText = 
+            'left:' + x + 'px;' +
+            'top:' + y + 'px;' +
+            '--tx:' + tx + ';' +
+            '--ty:' + ty + ';' +
+            '--rot:' + rot + ';';
+        
+        emojiContainer.appendChild(el);
+        
+        // Clean up after animation
+        setTimeout(function() {
+            if (el.parentNode) el.parentNode.removeChild(el);
+        }, type === 'party' ? 2000 : 1500);
+    }
+
+    function laughCelebration(intensity) {
+        // intensity: 'small' (1 match), 'medium' (found all), 'big' (streak 3+), 'party' (perfect circuit/streak 5+)
+        var center = getCourtCenter();
+        var count, emojis, type;
+        
+        switch(intensity) {
+            case 'small':
+                count = 2;
+                emojis = LAUGH_EMOJIS;
+                type = '';
+                break;
+            case 'medium':
+                count = 5;
+                emojis = LAUGH_EMOJIS;
+                type = '';
+                break;
+            case 'big':
+                count = 8;
+                emojis = LAUGH_EMOJIS;
+                type = 'big';
+                break;
+            case 'party':
+                count = 12;
+                emojis = PARTY_EMOJIS;
+                type = 'party';
+                break;
+            default:
+                count = 3;
+                emojis = LAUGH_EMOJIS;
+                type = '';
+        }
+        
+        // Stagger the emoji spawns for better visual effect
+        for (var i = 0; i < count; i++) {
+            (function(index) {
+                setTimeout(function() {
+                    var emoji = emojis[Math.floor(Math.random() * emojis.length)];
+                    // Slight position variation
+                    var offsetX = (Math.random() - 0.5) * 40;
+                    var offsetY = (Math.random() - 0.5) * 40;
+                    createBurstEmoji(emoji, center.x + offsetX, center.y + offsetY, type);
+                }, index * 50);
+            })(i);
+        }
+        
+        // Add joy pulse to court
+        courtGrid.classList.add('joy-pulse');
+        setTimeout(function() {
+            courtGrid.classList.remove('joy-pulse');
+        }, 500);
+    }
 
     // ==================== AUDIO ====================
     var audioCtx = null;
@@ -1068,6 +1259,9 @@ body.es .lang-en { display: none !important; }
             state.score += 10 * state.level;
             updateStats();
 
+            // Small celebration for each correct tap
+            laughCelebration('small');
+
             // Check if all matches found
             if (state.matchesFound >= state.matchesNeeded) {
                 // All found bonus
@@ -1075,7 +1269,27 @@ body.es .lang-en { display: none !important; }
                 state.streak++;
                 updateStats();
                 playSuccessSound();
-                showCoach(['🔥 FIRE!', '💪 STRONG!', '🎯 LOCKED!', '🏀 SWISH!'][Math.floor(Math.random() * 4)]);
+                
+                // Determine celebration intensity based on streak
+                var celebrationIntensity;
+                var coachMsg;
+                
+                if (state.streak >= 5) {
+                    // Party mode for 5+ streak!
+                    celebrationIntensity = 'party';
+                    coachMsg = ['🎉 PARTY!', '🏆 LEGENDARY!', '🌟 SUPERSTAR!', '💫 UNSTOPPABLE!'][Math.floor(Math.random() * 4)];
+                } else if (state.streak >= 3) {
+                    // Big celebration for 3+ streak
+                    celebrationIntensity = 'big';
+                    coachMsg = ['😂 ON FIRE!', '🤣 AMAZING!', '😆 CRUSHING IT!', '🥳 NAILED IT!'][Math.floor(Math.random() * 4)];
+                } else {
+                    // Medium celebration for completing the round
+                    celebrationIntensity = 'medium';
+                    coachMsg = ['😄 NICE!', '😊 GREAT!', '😁 SMOOTH!', '🎉 GOT IT!'][Math.floor(Math.random() * 4)];
+                }
+                
+                laughCelebration(celebrationIntensity);
+                showCoach(coachMsg);
                 setTimeout(completedPlay, 500);
             }
         } else {
@@ -1110,7 +1324,8 @@ body.es .lang-en { display: none !important; }
         localStorage.setItem('gt-streak', state.streak);
 
         if (state.playsCompleted >= PLAYS_PER_CIRCUIT) {
-            // Circuit complete!
+            // Circuit complete! Party celebration!
+            laughCelebration('party');
             showCircuitModal();
         } else {
             var playText = currentLang === 'es' ? 'Jugada' : 'Play';
@@ -1129,6 +1344,11 @@ body.es .lang-en { display: none !important; }
             speedText = state.speed === 'slow' ? 'Lento' : state.speed === 'med' ? 'Medio' : 'Rápido';
         }
         document.getElementById('feedbackMessage').textContent = 'Level ' + state.level + ' ' + speedText;
+        
+        // Update emoji based on streak
+        var emoji = state.streak >= 5 ? '🏆' : state.streak >= 3 ? '🎉' : '😄';
+        document.getElementById('feedbackEmoji').textContent = emoji;
+        
         feedbackOverlay.classList.add('show');
     }
 
