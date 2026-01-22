@@ -480,7 +480,7 @@ app.post('/api/login', function(req, res) {
 });
 
 // ============================================================
-// FORGOT PIN ENDPOINT (email lookup)
+// FORGOT PIN ENDPOINT (instant PIN reveal)
 // ============================================================
 app.post('/api/forgot-pin', function(req, res) {
     var email = req.body.email;
@@ -502,28 +502,54 @@ app.post('/api/forgot-pin', function(req, res) {
     }
     
     if (foundSubscriber) {
-        // TODO: Integrate email service (SendGrid, AWS SES, etc.)
-        // For now, log the PIN recovery request
-        console.log('📧 PIN recovery requested for:', email, '| PIN:', foundSubscriber.pin);
-        logActivity('pin_recovery', email, null, 'PIN recovery requested');
+        console.log('🔑 PIN recovered for:', email);
+        logActivity('pin_recovered', email, null, 'PIN retrieved successfully');
         
-        // ⚠️ In production, send email here instead of logging
-        // Example with SendGrid:
-        // sgMail.send({
-        //     to: email,
-        //     from: 'noreply@gotrotter.ai',
-        //     subject: 'Your GoTrotter PIN',
-        //     text: 'Your GoTrotter PIN is: ' + foundSubscriber.pin
-        // });
-    } else {
-        // Log attempt but don't reveal if email exists (security)
-        console.log('📧 PIN recovery attempted for unknown email:', email);
+        // Check if subscription is active
+        var isActive = foundSubscriber.status === 'active' || foundSubscriber.status === 'trialing';
+        
+        return res.json({
+            success: true,
+            found: true,
+            pin: foundSubscriber.pin,
+            email: foundSubscriber.email,
+            status: foundSubscriber.status,
+            isActive: isActive,
+            message: isActive ? 'Welcome back, GoTrotter!' : 'Subscription not active. Please renew.'
+        });
     }
     
-    // Always return success (don't reveal if email exists)
-    res.json({
+    // Check trial PINs by facility name (in case they entered facility name as email)
+    var trialPins = readJSON(TRIAL_PINS_FILE);
+    for (var k = 0; k < trialPins.length; k++) {
+        if (trialPins[k].facility && trialPins[k].facility.toLowerCase() === email) {
+            var trial = trialPins[k];
+            var isExpired = new Date(trial.expiresAt) < new Date();
+            
+            console.log('🔑 Trial PIN recovered for facility:', trial.facility);
+            logActivity('pin_recovered', trial.facility, trial.facility, 'Trial PIN retrieved');
+            
+            return res.json({
+                success: true,
+                found: true,
+                pin: trial.pin,
+                email: trial.facility,
+                status: isExpired ? 'expired' : 'trialing',
+                isActive: !isExpired,
+                isTrial: true,
+                message: isExpired ? 'Trial has expired.' : 'Welcome back!'
+            });
+        }
+    }
+    
+    // Email not found
+    console.log('❌ PIN recovery failed - email not found:', email);
+    logActivity('pin_recovery_failed', email, null, 'Email not found');
+    
+    return res.json({
         success: true,
-        message: 'If this email is registered, your PIN has been sent.'
+        found: false,
+        message: 'No account found with this email. Start your free trial!'
     });
 });
 
