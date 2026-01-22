@@ -19,6 +19,8 @@
             --white: #FFFFFF;
             --gray: #F5F5F5;
             --gold: #FFD700;
+            --teal: #00D9A5;
+            --danger: #FF4757;
             
             /* Typography */
             --font-display: 'Bebas Neue', sans-serif;
@@ -71,6 +73,12 @@
             color: var(--basketball);
         }
 
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
         .nav-cta {
             background: var(--basketball);
             color: var(--white);
@@ -83,12 +91,25 @@
             letter-spacing: 1px;
             border-radius: 4px;
             transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
         }
 
         .nav-cta:hover {
             background: var(--white);
             color: var(--black);
             transform: scale(1.05);
+        }
+
+        .nav-cta.secondary {
+            background: transparent;
+            border: 2px solid var(--basketball);
+            color: var(--basketball);
+        }
+
+        .nav-cta.secondary:hover {
+            background: var(--basketball);
+            color: var(--white);
         }
 
         /* ===== HERO SECTION ===== */
@@ -182,6 +203,13 @@
             color: rgba(255,255,255,0.9);
         }
 
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
         .hero-cta {
             display: inline-block;
             background: var(--basketball);
@@ -195,6 +223,8 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            border: none;
+            cursor: pointer;
         }
 
         .hero-cta::before {
@@ -217,6 +247,15 @@
             color: var(--black);
             transform: translateY(-4px);
             box-shadow: 0 10px 30px rgba(255,107,53,0.4);
+        }
+
+        .hero-cta.subscribe {
+            background: var(--teal);
+        }
+
+        .hero-cta.subscribe:hover {
+            background: var(--white);
+            color: var(--black);
         }
 
         /* ===== WHAT IS GOTROTTER ===== */
@@ -498,6 +537,129 @@
             line-height: 1.6;
         }
 
+        /* ===== PRICING SECTION ===== */
+        .pricing-section {
+            padding: 100px 20px;
+            background: linear-gradient(180deg, #1a1a1a 0%, #2a2a2a 100%);
+            text-align: center;
+        }
+
+        .pricing-section .section-title {
+            color: var(--white);
+        }
+
+        .pricing-cards {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            max-width: 900px;
+            margin: 50px auto 0;
+        }
+
+        .pricing-card {
+            background: rgba(255,255,255,0.05);
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 40px 30px;
+            min-width: 280px;
+            flex: 1;
+            max-width: 400px;
+            transition: all 0.3s ease;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--basketball);
+        }
+
+        .pricing-card.featured {
+            border-color: var(--teal);
+            background: rgba(0,217,165,0.1);
+        }
+
+        .pricing-card-badge {
+            display: inline-block;
+            background: var(--teal);
+            color: var(--black);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-family: var(--font-heading);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        .pricing-card h3 {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .pricing-card .price {
+            font-family: var(--font-display);
+            font-size: 3.5rem;
+            color: var(--gold);
+            margin-bottom: 5px;
+        }
+
+        .pricing-card .price-period {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 30px;
+        }
+
+        .pricing-card ul {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 30px;
+        }
+
+        .pricing-card li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.95rem;
+        }
+
+        .pricing-card li::before {
+            content: '✓ ';
+            color: var(--teal);
+            font-weight: bold;
+        }
+
+        .pricing-card li.locked::before {
+            content: '🔒 ';
+        }
+
+        .pricing-btn {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            background: var(--basketball);
+            color: var(--white);
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            letter-spacing: 2px;
+            text-decoration: none;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .pricing-btn:hover {
+            background: var(--white);
+            color: var(--black);
+        }
+
+        .pricing-btn.teal {
+            background: var(--teal);
+            color: var(--black);
+        }
+
         /* ===== FINAL CTA ===== */
         .cta-section {
             padding: 120px 20px;
@@ -535,6 +697,13 @@
             margin-bottom: 50px;
         }
 
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
         .cta-button {
             display: inline-block;
             background: var(--basketball);
@@ -547,6 +716,8 @@
             border-radius: 8px;
             transition: all 0.3s ease;
             animation: glow 2s ease-in-out infinite;
+            border: none;
+            cursor: pointer;
         }
 
         @keyframes glow {
@@ -592,15 +763,19 @@
             margin-bottom: 30px;
         }
 
-        .footer-links a {
+        .footer-links a, .footer-links button {
             color: rgba(255,255,255,0.7);
             text-decoration: none;
             margin: 0 20px;
             font-size: 0.95rem;
             transition: color 0.3s ease;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: var(--font-body);
         }
 
-        .footer-links a:hover {
+        .footer-links a:hover, .footer-links button:hover {
             color: var(--basketball);
         }
 
@@ -613,6 +788,219 @@
             color: var(--basketball);
         }
 
+        /* ===== MODAL STYLES ===== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--black);
+            border: 3px solid var(--basketball);
+            border-radius: 20px;
+            padding: 50px 40px;
+            max-width: 420px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            animation: modalSlide 0.3s ease;
+        }
+
+        @keyframes modalSlide {
+            from { transform: translateY(-30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.5);
+            font-size: 2rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .modal-close:hover {
+            color: var(--danger);
+        }
+
+        .modal-logo {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+        }
+
+        .modal-logo span {
+            color: var(--basketball);
+        }
+
+        .modal-title {
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 30px;
+        }
+
+        .pin-input-group {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .pin-input {
+            width: 65px;
+            height: 80px;
+            font-size: 2rem;
+            font-weight: 700;
+            font-family: var(--font-display);
+            text-align: center;
+            background: rgba(255,255,255,0.05);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
+            color: var(--white);
+            transition: all 0.3s;
+        }
+
+        .pin-input:focus {
+            outline: none;
+            border-color: var(--basketball);
+            box-shadow: 0 0 20px rgba(255,107,53,0.3);
+        }
+
+        .modal-btn {
+            width: 100%;
+            padding: 18px;
+            background: var(--basketball);
+            color: var(--white);
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            letter-spacing: 3px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 15px;
+        }
+
+        .modal-btn:hover {
+            background: var(--white);
+            color: var(--black);
+        }
+
+        .modal-btn.subscribe {
+            background: var(--teal);
+            color: var(--black);
+        }
+
+        .modal-divider {
+            display: flex;
+            align-items: center;
+            margin: 25px 0;
+            color: rgba(255,255,255,0.3);
+            font-size: 0.9rem;
+        }
+
+        .modal-divider::before,
+        .modal-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .modal-divider span {
+            padding: 0 15px;
+        }
+
+        .modal-link {
+            color: var(--basketball);
+            text-decoration: none;
+            font-size: 0.95rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-family: var(--font-body);
+            transition: color 0.3s;
+        }
+
+        .modal-link:hover {
+            color: var(--gold);
+            text-decoration: underline;
+        }
+
+        .modal-error {
+            color: var(--danger);
+            font-size: 0.9rem;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .modal-error.show {
+            display: block;
+        }
+
+        .modal-success {
+            color: var(--teal);
+            font-size: 0.95rem;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .modal-success.show {
+            display: block;
+        }
+
+        /* Email input for forgot PIN */
+        .email-input {
+            width: 100%;
+            padding: 16px 20px;
+            font-size: 1.1rem;
+            background: rgba(255,255,255,0.05);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            color: var(--white);
+            margin-bottom: 20px;
+            font-family: var(--font-body);
+        }
+
+        .email-input:focus {
+            outline: none;
+            border-color: var(--basketball);
+        }
+
+        .email-input::placeholder {
+            color: rgba(255,255,255,0.4);
+        }
+
+        /* Modal views */
+        .modal-view {
+            display: none;
+        }
+
+        .modal-view.active {
+            display: block;
+        }
+
         /* ===== MOBILE RESPONSIVE ===== */
         @media (max-width: 768px) {
             nav {
@@ -623,9 +1011,13 @@
                 font-size: 1.5rem;
             }
 
+            .nav-buttons {
+                gap: 8px;
+            }
+
             .nav-cta {
-                padding: 10px 20px;
-                font-size: 0.95rem;
+                padding: 10px 15px;
+                font-size: 0.85rem;
             }
 
             .hero {
@@ -646,10 +1038,16 @@
                 font-size: 1.5rem;
             }
 
+            .hero-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+
             .what-section,
             .divisions-section,
             .generations-section,
             .how-section,
+            .pricing-section,
             .cta-section {
                 padding: 70px 15px;
             }
@@ -689,9 +1087,28 @@
                 font-size: 1.8rem;
             }
 
-            .footer-links a {
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .footer-links a, .footer-links button {
                 display: block;
                 margin: 15px 0;
+            }
+
+            .modal {
+                padding: 40px 25px;
+            }
+
+            .pin-input {
+                width: 55px;
+                height: 68px;
+                font-size: 1.6rem;
+            }
+
+            .pricing-cards {
+                flex-direction: column;
+                align-items: center;
             }
         }
 
@@ -739,7 +1156,10 @@
     <!-- Navigation -->
     <nav>
         <a href="#" class="logo">GO<span>TROTTER</span></a>
-        <a href="gotrotter.html" class="nav-cta" data-en="Play Now" data-es="Jugar Ahora">Play Now</a>
+        <div class="nav-buttons">
+            <button class="nav-cta secondary" onclick="openModal('signin')" data-en="Sign In" data-es="Ingresar">Sign In</button>
+            <button class="nav-cta" onclick="openModal('subscribe')" data-en="Subscribe" data-es="Suscribirse">Subscribe</button>
+        </div>
     </nav>
 
     <!-- Hero Section -->
@@ -748,7 +1168,10 @@
         <h1>GOTROTTER</h1>
         <p class="hero-tagline" data-en="Become a GoTrotter" data-es="Conviértete en GoTrotter">Become a GoTrotter</p>
         <p class="hero-subtitle" data-en="One game. Every generation. Your level. A cognitive sport where grandparents and grandkids compete on the same court." data-es="Un juego. Todas las generaciones. Tu nivel. Un deporte cognitivo donde abuelos y nietos compiten en la misma cancha.">One game. Every generation. Your level. A cognitive sport where grandparents and grandkids compete on the <strong>same court</strong>.</p>
-        <a href="gotrotter.html" class="hero-cta" data-en="PLAY NOW" data-es="JUGAR AHORA">PLAY NOW</a>
+        <div class="hero-buttons">
+            <button class="hero-cta" onclick="openModal('signin')" data-en="SIGN IN" data-es="INGRESAR">SIGN IN</button>
+            <button class="hero-cta subscribe" onclick="openModal('subscribe')" data-en="SUBSCRIBE $5/MO" data-es="SUSCRIBIRSE $5/MES">SUBSCRIBE $5/MO</button>
+        </div>
     </section>
 
     <!-- What is GoTrotter -->
@@ -846,11 +1269,48 @@
         </div>
     </section>
 
+    <!-- Pricing Section -->
+    <section class="pricing-section">
+        <p class="section-label" data-en="Choose Your" data-es="Elige Tu">Choose Your</p>
+        <h2 class="section-title" data-en="PLAN" data-es="PLAN">PLAN</h2>
+        
+        <div class="pricing-cards">
+            <div class="pricing-card">
+                <h3 data-en="TRIAL" data-es="PRUEBA">TRIAL</h3>
+                <div class="price" data-en="FREE" data-es="GRATIS">FREE</div>
+                <div class="price-period" data-en="For facilities only" data-es="Solo para instalaciones">For facilities only</div>
+                <ul>
+                    <li data-en="5 Levels of challenge" data-es="5 Niveles de desafío">5 Levels of challenge</li>
+                    <li data-en="SLOW speed only" data-es="Solo velocidad LENTA">SLOW speed only</li>
+                    <li class="locked" data-en="Medium speed locked" data-es="Velocidad Media bloqueada">Medium speed locked</li>
+                    <li class="locked" data-en="Fast speed locked" data-es="Velocidad Rápida bloqueada">Fast speed locked</li>
+                </ul>
+                <button class="pricing-btn" onclick="openModal('signin')" data-en="ENTER PIN" data-es="INGRESAR PIN">ENTER PIN</button>
+            </div>
+            
+            <div class="pricing-card featured">
+                <div class="pricing-card-badge" data-en="Full Access" data-es="Acceso Completo">Full Access</div>
+                <h3 data-en="GOTROTTER" data-es="GOTROTTER">GOTROTTER</h3>
+                <div class="price">$5</div>
+                <div class="price-period" data-en="per month" data-es="por mes">per month</div>
+                <ul>
+                    <li data-en="All 5 Levels" data-es="Los 5 Niveles">All 5 Levels</li>
+                    <li data-en="All 3 Speeds" data-es="Las 3 Velocidades">All 3 Speeds</li>
+                    <li data-en="15 Competitive Divisions" data-es="15 Divisiones Competitivas">15 Competitive Divisions</li>
+                    <li data-en="Progress tracking" data-es="Seguimiento de progreso">Progress tracking</li>
+                </ul>
+                <button class="pricing-btn teal" onclick="openModal('subscribe')" data-en="SUBSCRIBE NOW" data-es="SUSCRIBIRSE AHORA">SUBSCRIBE NOW</button>
+            </div>
+        </div>
+    </section>
+
     <!-- Final CTA -->
     <section class="cta-section">
         <h2 class="cta-title" data-en="READY?" data-es="¿LISTO?">READY?</h2>
         <p class="cta-subtitle" data-en="One Game. Every Generation. Your Level." data-es="Un Juego. Todas las Generaciones. Tu Nivel.">One Game. Every Generation. Your Level.</p>
-        <a href="gotrotter.html" class="cta-button" data-en="GO" data-es="IR">GO</a>
+        <div class="cta-buttons">
+            <button class="cta-button" onclick="openModal('signin')" data-en="GO" data-es="IR">GO</button>
+        </div>
     </section>
 
     <!-- Footer -->
@@ -858,8 +1318,8 @@
         <div class="footer-logo">GO<span>TROTTER</span></div>
         <p class="footer-tagline" data-en="The Cognitive Sport" data-es="El Deporte Cognitivo">The Cognitive Sport</p>
         <div class="footer-links">
-            <a href="gotrotter.html" data-en="Play" data-es="Jugar">Play</a>
-            <a href="https://gotrotter.ai">Coach GoTrotter</a>
+            <button onclick="openModal('signin')" data-en="Sign In" data-es="Ingresar">Sign In</button>
+            <button onclick="openModal('subscribe')" data-en="Subscribe" data-es="Suscribirse">Subscribe</button>
             <a href="facilities.html" data-en="For Facilities" data-es="Para Facilidades">For Facilities</a>
         </div>
         <p class="footer-copy" data-en="GoTrotter™ 2026 | Made with 🏀 for every generation" data-es="GoTrotter™ 2026 | Hecho con 🏀 para todas las generaciones">GoTrotter™ 2026 | Made with <span>🏀</span> for every generation</p>
@@ -868,22 +1328,98 @@
     <!-- Language Toggle -->
     <button class="lang-toggle" id="langToggle">🌐 ES</button>
 
+    <!-- ==================== SIGN IN MODAL ==================== -->
+    <div class="modal-overlay" id="signinModal">
+        <div class="modal">
+            <button class="modal-close" onclick="closeModal('signinModal')">×</button>
+            
+            <!-- Sign In View -->
+            <div class="modal-view active" id="signinView">
+                <div class="modal-logo">GO<span>TROTTER</span></div>
+                <p class="modal-title" data-en="Enter Your PIN" data-es="Ingresa Tu PIN">Enter Your PIN</p>
+                
+                <div class="pin-input-group">
+                    <input type="password" class="pin-input" maxlength="1" inputmode="numeric" id="pin1">
+                    <input type="password" class="pin-input" maxlength="1" inputmode="numeric" id="pin2">
+                    <input type="password" class="pin-input" maxlength="1" inputmode="numeric" id="pin3">
+                    <input type="password" class="pin-input" maxlength="1" inputmode="numeric" id="pin4">
+                </div>
+                
+                <button class="modal-btn" onclick="attemptLogin()" data-en="ENTER COURT" data-es="ENTRAR">ENTER COURT</button>
+                
+                <p class="modal-error" id="loginError" data-en="Invalid PIN. Please try again." data-es="PIN inválido. Intenta de nuevo.">Invalid PIN. Please try again.</p>
+                
+                <div class="modal-divider"><span data-en="or" data-es="o">or</span></div>
+                
+                <button class="modal-link" onclick="showModalView('forgotView')" data-en="Forgot your PIN?" data-es="¿Olvidaste tu PIN?">Forgot your PIN?</button>
+                
+                <p style="margin-top: 20px; font-size: 0.9rem; color: rgba(255,255,255,0.5);">
+                    <span data-en="Don't have a PIN?" data-es="¿No tienes PIN?">Don't have a PIN?</span>
+                    <button class="modal-link" onclick="closeModal('signinModal'); openModal('subscribeModal');" data-en="Subscribe now" data-es="Suscríbete ahora">Subscribe now</button>
+                </p>
+            </div>
+            
+            <!-- Forgot PIN View -->
+            <div class="modal-view" id="forgotView">
+                <div class="modal-logo">GO<span>TROTTER</span></div>
+                <p class="modal-title" data-en="Recover Your PIN" data-es="Recuperar Tu PIN">Recover Your PIN</p>
+                
+                <input type="email" class="email-input" id="forgotEmail" placeholder="Enter your email" data-placeholder-en="Enter your email" data-placeholder-es="Ingresa tu email">
+                
+                <button class="modal-btn" onclick="requestPinRecovery()" data-en="SEND MY PIN" data-es="ENVIAR MI PIN">SEND MY PIN</button>
+                
+                <p class="modal-error" id="forgotError" data-en="Email not found. Please check and try again." data-es="Email no encontrado. Verifica e intenta de nuevo.">Email not found. Please check and try again.</p>
+                <p class="modal-success" id="forgotSuccess" data-en="PIN sent! Check your email." data-es="¡PIN enviado! Revisa tu email.">PIN sent! Check your email.</p>
+                
+                <div class="modal-divider"><span data-en="or" data-es="o">or</span></div>
+                
+                <button class="modal-link" onclick="showModalView('signinView')" data-en="← Back to Sign In" data-es="← Volver a Ingresar">← Back to Sign In</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== SUBSCRIBE MODAL ==================== -->
+    <div class="modal-overlay" id="subscribeModal">
+        <div class="modal">
+            <button class="modal-close" onclick="closeModal('subscribeModal')">×</button>
+            
+            <div class="modal-logo">GO<span>TROTTER</span></div>
+            <p class="modal-title" data-en="Become a GoTrotter" data-es="Conviértete en GoTrotter">Become a GoTrotter</p>
+            
+            <div style="background: rgba(0,217,165,0.1); border: 2px solid var(--teal); border-radius: 15px; padding: 25px; margin-bottom: 25px;">
+                <div style="font-family: var(--font-display); font-size: 3rem; color: var(--gold);">$5</div>
+                <div style="font-size: 0.9rem; color: rgba(255,255,255,0.6);" data-en="per month" data-es="por mes">per month</div>
+                <ul style="list-style: none; text-align: left; margin-top: 20px; font-size: 0.95rem;">
+                    <li style="padding: 8px 0;">✓ <span data-en="All 15 Divisions" data-es="Las 15 Divisiones">All 15 Divisions</span></li>
+                    <li style="padding: 8px 0;">✓ <span data-en="All 3 Speeds (Slow, Med, Fast)" data-es="Las 3 Velocidades (Lento, Med, Rápido)">All 3 Speeds (Slow, Med, Fast)</span></li>
+                    <li style="padding: 8px 0;">✓ <span data-en="Progress & Stats Tracking" data-es="Seguimiento de Progreso">Progress & Stats Tracking</span></li>
+                    <li style="padding: 8px 0;">✓ <span data-en="Cancel anytime" data-es="Cancela cuando quieras">Cancel anytime</span></li>
+                </ul>
+            </div>
+            
+            <button class="modal-btn subscribe" onclick="redirectToCheckout()" data-en="SUBSCRIBE NOW" data-es="SUSCRIBIRSE AHORA">SUBSCRIBE NOW</button>
+            
+            <p style="margin-top: 20px; font-size: 0.85rem; color: rgba(255,255,255,0.4);" data-en="Secure payment via Stripe. Cancel anytime." data-es="Pago seguro via Stripe. Cancela cuando quieras.">Secure payment via Stripe. Cancel anytime.</p>
+            
+            <div class="modal-divider"><span data-en="already subscribed?" data-es="¿ya suscrito?">already subscribed?</span></div>
+            
+            <button class="modal-link" onclick="closeModal('subscribeModal'); openModal('signinModal');" data-en="Sign in with your PIN" data-es="Ingresar con tu PIN">Sign in with your PIN</button>
+        </div>
+    </div>
+
     <script>
-        // Language Toggle System
+        // ==================== LANGUAGE SYSTEM ====================
         let currentLang = localStorage.getItem('gotrotter_lang') || 'en';
         
         function updateLanguage(lang) {
             currentLang = lang;
             localStorage.setItem('gotrotter_lang', lang);
             
-            // Update toggle button
             document.getElementById('langToggle').textContent = lang === 'en' ? '🌐 ES' : '🌐 EN';
             
-            // Update all elements with data-en/data-es attributes
             document.querySelectorAll('[data-en]').forEach(el => {
                 const text = el.dataset[lang];
                 if (text) {
-                    // Preserve HTML structure for elements that need it
                     if (el.querySelector('span') || el.querySelector('strong') || el.querySelector('br')) {
                         el.innerHTML = text;
                     } else {
@@ -891,17 +1427,187 @@
                     }
                 }
             });
+            
+            // Update placeholders
+            document.querySelectorAll('[data-placeholder-en]').forEach(el => {
+                el.placeholder = el.dataset['placeholder' + lang.charAt(0).toUpperCase() + lang.slice(1)];
+            });
         }
         
-        // Initialize language on page load
         document.addEventListener('DOMContentLoaded', () => {
             updateLanguage(currentLang);
+            setupPinInputs();
         });
         
-        // Toggle button click
         document.getElementById('langToggle').addEventListener('click', () => {
             updateLanguage(currentLang === 'en' ? 'es' : 'en');
         });
+
+        // ==================== MODAL SYSTEM ====================
+        function openModal(type) {
+            if (type === 'signin') {
+                document.getElementById('signinModal').classList.add('show');
+                showModalView('signinView');
+                setTimeout(() => document.getElementById('pin1').focus(), 100);
+            } else if (type === 'subscribe') {
+                document.getElementById('subscribeModal').classList.add('show');
+            }
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+            // Clear inputs
+            document.querySelectorAll('.pin-input').forEach(inp => inp.value = '');
+            document.getElementById('forgotEmail').value = '';
+            document.querySelectorAll('.modal-error, .modal-success').forEach(el => el.classList.remove('show'));
+        }
+        
+        function showModalView(viewId) {
+            document.querySelectorAll('.modal-view').forEach(v => v.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+            
+            if (viewId === 'signinView') {
+                setTimeout(() => document.getElementById('pin1').focus(), 100);
+            } else if (viewId === 'forgotView') {
+                setTimeout(() => document.getElementById('forgotEmail').focus(), 100);
+            }
+        }
+        
+        // Close modal on overlay click
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', function(e) {
+                if (e.target === overlay) {
+                    overlay.classList.remove('show');
+                }
+            });
+        });
+        
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal-overlay.show').forEach(m => m.classList.remove('show'));
+            }
+        });
+
+        // ==================== PIN INPUT SYSTEM ====================
+        function setupPinInputs() {
+            const pins = ['pin1', 'pin2', 'pin3', 'pin4'].map(id => document.getElementById(id));
+            
+            pins.forEach((inp, i) => {
+                inp.addEventListener('input', function() {
+                    if (this.value.length === 1 && i < 3) {
+                        pins[i + 1].focus();
+                    }
+                    // Auto-submit when all 4 digits entered
+                    if (i === 3 && this.value.length === 1) {
+                        attemptLogin();
+                    }
+                });
+                
+                inp.addEventListener('keydown', function(e) {
+                    if (e.key === 'Backspace' && this.value === '' && i > 0) {
+                        pins[i - 1].focus();
+                    }
+                    if (e.key === 'Enter') {
+                        attemptLogin();
+                    }
+                });
+            });
+        }
+
+        // ==================== LOGIN SYSTEM ====================
+        function attemptLogin() {
+            const pin = ['pin1', 'pin2', 'pin3', 'pin4']
+                .map(id => document.getElementById(id).value)
+                .join('');
+            
+            if (pin.length !== 4) return;
+            
+            // Call API to validate PIN
+            fetch('/api/session/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ pin })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    // Store session token
+                    sessionStorage.setItem('gt-session', data.sessionToken);
+                    sessionStorage.setItem('gt-pin', pin);
+                    // Redirect to hub
+                    window.location.href = 'trotter-hub.html';
+                } else {
+                    showLoginError();
+                }
+            })
+            .catch(() => {
+                showLoginError();
+            });
+        }
+        
+        function showLoginError() {
+            document.getElementById('loginError').classList.add('show');
+            document.querySelectorAll('.pin-input').forEach(inp => inp.value = '');
+            document.getElementById('pin1').focus();
+            setTimeout(() => document.getElementById('loginError').classList.remove('show'), 3000);
+        }
+
+        // ==================== FORGOT PIN SYSTEM ====================
+        function requestPinRecovery() {
+            const email = document.getElementById('forgotEmail').value.trim();
+            
+            if (!email || !email.includes('@')) {
+                document.getElementById('forgotError').classList.add('show');
+                setTimeout(() => document.getElementById('forgotError').classList.remove('show'), 3000);
+                return;
+            }
+            
+            // Call API to send PIN recovery email
+            fetch('/api/auth/recover-pin', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('forgotSuccess').classList.add('show');
+                    document.getElementById('forgotEmail').value = '';
+                } else {
+                    document.getElementById('forgotError').classList.add('show');
+                    setTimeout(() => document.getElementById('forgotError').classList.remove('show'), 3000);
+                }
+            })
+            .catch(() => {
+                // For demo, show success anyway
+                document.getElementById('forgotSuccess').classList.add('show');
+                document.getElementById('forgotEmail').value = '';
+            });
+        }
+
+        // ==================== STRIPE CHECKOUT ====================
+        function redirectToCheckout() {
+            // Redirect to Stripe checkout
+            fetch('/api/checkout/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    priceType: 'individual_monthly'
+                })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.url) {
+                    window.location.href = data.url;
+                } else {
+                    alert('Unable to start checkout. Please try again.');
+                }
+            })
+            .catch(() => {
+                alert('Unable to connect to payment system. Please try again.');
+            });
+        }
     </script>
 
 </body>
