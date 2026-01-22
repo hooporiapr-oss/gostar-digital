@@ -1050,7 +1050,11 @@ app.get('/the-sequence', function(req, res) {
 });
 
 app.get('/play', function(req, res) {
-    res.sendFile(path.join(__dirname, 'gotrotter.html'));
+    res.sendFile(path.join(__dirname, 'play.html'));
+});
+
+app.get('/the-match', function(req, res) {
+    res.sendFile(path.join(__dirname, 'the-match.html'));
 });
 
 app.get('/hub', function(req, res) {
@@ -1096,10 +1100,11 @@ app.listen(PORT, function() {
     console.log('🎯 ROUTES:');
     console.log('   /            → Landing page');
     console.log('   /login       → PIN Login');
-    console.log('   /hub         → User hub');
-    console.log('   /play        → THE MATCH (color memory)');
-    console.log('   /the-sequence → THE SEQUENCE (pattern memory)');
+    console.log('   /play        → Game choice screen (auth required)');
+    console.log('   /the-match   → THE MATCH game');
+    console.log('   /the-sequence → THE SEQUENCE game');
     console.log('   /how-to-play → How to play guide');
+    console.log('   /hub         → Legacy user hub');
     console.log('   /trial-pin   → Trial PIN Generator');
     console.log('');
     console.log('🔧 ADMIN ENDPOINTS (use X-Admin-Key header):');
