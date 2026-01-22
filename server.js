@@ -6,7 +6,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // ============ PLATFORM VERSION ============
-const PLATFORM_VERSION = '2.0.0';
+const PLATFORM_VERSION = '2.1.0';
 const PLATFORM_VERSION_NAME = 'GoTrotter - The LaughCourt';
 
 // ============ ADMIN SECRET KEY ============
@@ -390,7 +390,144 @@ app.get('/api/stripe/status-pin/:pin', function(req, res) {
     return res.json({ subscribed: false, status: null });
 });
 
-// ============ SUBSCRIBER LOGIN ============
+// ============================================================
+// UNIFIED LOGIN ENDPOINT (validates PIN + creates session)
+// ============================================================
+app.post('/api/login', function(req, res) {
+    var pin = req.body.pin;
+    if (!pin) return res.status(400).json({ success: false, error: 'PIN is required' });
+    
+    var isValidPin = false;
+    var userType = null;
+    var maxConcurrent = 1;
+    var userInfo = {};
+    
+    // Check subscribers
+    var subscribers = readJSON(SUBSCRIBERS_FILE);
+    for (var i = 0; i < subscribers.length; i++) {
+        if (subscribers[i].pin === pin) {
+            var isActive = subscribers[i].status === 'active' || subscribers[i].status === 'trialing';
+            if (!isActive) {
+                return res.status(401).json({ success: false, error: 'Subscription not active. Please renew.' });
+            }
+            
+            isValidPin = true;
+            userType = 'subscriber';
+            maxConcurrent = subscribers[i].quantity || 1;
+            userInfo = {
+                email: subscribers[i].email,
+                plan: subscribers[i].plan_type,
+                status: subscribers[i].status
+            };
+            break;
+        }
+    }
+    
+    // Check trial PINs
+    if (!isValidPin) {
+        var trialPins = readJSON(TRIAL_PINS_FILE);
+        for (var k = 0; k < trialPins.length; k++) {
+            if (trialPins[k].pin === pin) {
+                var trial = trialPins[k];
+                
+                if (new Date(trial.expiresAt) < new Date()) {
+                    trial.status = 'expired';
+                    writeJSON(TRIAL_PINS_FILE, trialPins);
+                    return res.status(401).json({ success: false, error: 'Trial has expired' });
+                }
+                
+                isValidPin = true;
+                userType = 'facility_trial';
+                maxConcurrent = trial.maxUsers || 50;
+                
+                var daysLeft = Math.ceil((new Date(trial.expiresAt) - new Date()) / (1000 * 60 * 60 * 24));
+                userInfo = {
+                    facility: trial.facility,
+                    status: 'trialing',
+                    daysLeft: Math.max(0, daysLeft)
+                };
+                break;
+            }
+        }
+    }
+    
+    if (!isValidPin) {
+        logActivity('login_failed', pin, null, 'Invalid PIN attempt');
+        return res.status(401).json({ success: false, error: 'Invalid PIN' });
+    }
+    
+    // Create session
+    var sessionResult = createSession(pin, maxConcurrent);
+    
+    if (sessionResult.error === 'limit_reached') {
+        logActivity('login_blocked', pin, userInfo.facility || null, 'All seats in use: ' + sessionResult.current + '/' + sessionResult.max);
+        return res.status(403).json({
+            success: false,
+            error: 'All ' + sessionResult.max + ' seats are currently in use. Please try again later.'
+        });
+    }
+    
+    logActivity('login_success', userInfo.email || userInfo.facility, userInfo.facility || null, 'Logged in (' + sessionResult.current + '/' + sessionResult.max + ' seats)');
+    
+    res.json({
+        success: true,
+        token: sessionResult.token,
+        userType: userType,
+        userInfo: userInfo,
+        activeSessions: sessionResult.current,
+        maxSessions: sessionResult.max
+    });
+});
+
+// ============================================================
+// FORGOT PIN ENDPOINT (email lookup)
+// ============================================================
+app.post('/api/forgot-pin', function(req, res) {
+    var email = req.body.email;
+    if (!email || !email.includes('@')) {
+        return res.status(400).json({ success: false, error: 'Valid email required' });
+    }
+    
+    email = email.toLowerCase().trim();
+    
+    // Look up subscriber by email
+    var subscribers = readJSON(SUBSCRIBERS_FILE);
+    var foundSubscriber = null;
+    
+    for (var i = 0; i < subscribers.length; i++) {
+        if (subscribers[i].email && subscribers[i].email.toLowerCase() === email) {
+            foundSubscriber = subscribers[i];
+            break;
+        }
+    }
+    
+    if (foundSubscriber) {
+        // TODO: Integrate email service (SendGrid, AWS SES, etc.)
+        // For now, log the PIN recovery request
+        console.log('📧 PIN recovery requested for:', email, '| PIN:', foundSubscriber.pin);
+        logActivity('pin_recovery', email, null, 'PIN recovery requested');
+        
+        // ⚠️ In production, send email here instead of logging
+        // Example with SendGrid:
+        // sgMail.send({
+        //     to: email,
+        //     from: 'noreply@gotrotter.ai',
+        //     subject: 'Your GoTrotter PIN',
+        //     text: 'Your GoTrotter PIN is: ' + foundSubscriber.pin
+        // });
+    } else {
+        // Log attempt but don't reveal if email exists (security)
+        console.log('📧 PIN recovery attempted for unknown email:', email);
+    }
+    
+    // Always return success (don't reveal if email exists)
+    res.json({
+        success: true,
+        message: 'If this email is registered, your PIN has been sent.'
+    });
+});
+
+// ============ SUBSCRIBER LOGIN (legacy - kept for compatibility) ============
 app.post('/api/subscriber/login', function(req, res) {
     var pin = req.body.pin;
     if (!pin) return res.status(400).json({ error: 'PIN is required' });
@@ -689,6 +826,13 @@ app.get('/api/game/stats/pin/:pin', function(req, res) {
     return res.status(404).json({ error: 'Not found' });
 });
 
+// ============ NOTIFICATIONS ============
+app.get('/api/notifications/:pin', function(req, res) {
+    // Placeholder for notification system
+    // Can be expanded to pull from a notifications file/database
+    res.json({ success: true, notifications: [] });
+});
+
 // ============================================================
 // TRIAL PIN MANAGEMENT (Protected by Admin Secret Key)
 // ============================================================
@@ -887,6 +1031,10 @@ app.get('/hub', function(req, res) {
     res.sendFile(path.join(__dirname, 'trotter-hub.html'));
 });
 
+app.get('/login', function(req, res) {
+    res.sendFile(path.join(__dirname, 'login.html'));
+});
+
 // ============ HEALTH & VERSION ============
 app.get('/health', function(req, res) {
     res.json({
@@ -921,6 +1069,7 @@ app.listen(PORT, function() {
     console.log('');
     console.log('🎯 ROUTES:');
     console.log('   /            → Landing page');
+    console.log('   /login       → PIN Login');
     console.log('   /hub         → User hub');
     console.log('   /play        → THE MATCH (color memory)');
     console.log('   /the-sequence → THE SEQUENCE (pattern memory)');
@@ -934,6 +1083,10 @@ app.listen(PORT, function() {
     console.log('   DELETE /api/trials/delete/:id → Delete trial');
     console.log('   GET  /api/subscribers/list → List subscribers');
     console.log('   GET  /api/activity/list    → View activity');
+    console.log('');
+    console.log('🔑 AUTH ENDPOINTS:');
+    console.log('   POST /api/login            → Unified login (PIN + session)');
+    console.log('   POST /api/forgot-pin       → PIN recovery by email');
     console.log('');
     console.log('🏀 Ready to play!');
     console.log('');
