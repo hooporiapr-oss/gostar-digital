@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>GoTrotter | The Cognitive Sport</title>
+<title>THE MATCH | GoTrotter - The LaughCourt</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
@@ -33,53 +33,57 @@ body {
     overflow: hidden;
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
-/* MOBILE-FIRST PERFECT FIT */
+/* ==================== MOBILE-FIRST PERFECT FIT ==================== */
 .game-container {
     width: 100%;
     max-width: 420px;
     height: 100vh;
     height: 100dvh;
     margin: 0 auto;
-    padding: 6px 10px;
-    padding-top: max(6px, env(safe-area-inset-top));
-    padding-bottom: max(6px, env(safe-area-inset-bottom));
+    padding: 8px 12px;
+    padding-top: max(8px, env(safe-area-inset-top));
+    padding-bottom: max(8px, env(safe-area-inset-bottom));
     display: flex;
     flex-direction: column;
     overflow: hidden;
 }
 
+/* ==================== HEADER ==================== */
 .header {
     text-align: center;
-    padding: 2px 0;
+    padding: 4px 0;
     flex-shrink: 0;
 }
 .logo {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     letter-spacing: 2px;
 }
-.logo .go { color: var(--text); }
-.logo .trotter { color: var(--orange); }
+.logo .go { color: var(--gold); }
+.logo .trotter { color: var(--text); }
 .tagline {
-    font-size: 0.5rem;
+    font-size: 0.55rem;
     color: var(--muted);
     letter-spacing: 2px;
     text-transform: uppercase;
 }
 
+/* ==================== STATS BAR ==================== */
 .stats-bar {
     display: flex;
     justify-content: center;
-    gap: 15px;
-    padding: 6px 10px;
+    gap: 12px;
+    padding: 8px 10px;
     background: var(--card);
-    border-radius: 8px;
-    margin: 4px 0;
+    border-radius: 10px;
+    margin: 6px 0;
     flex-shrink: 0;
 }
-.stat { text-align: center; }
+.stat { text-align: center; min-width: 45px; }
 .stat-value {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 1.1rem;
@@ -87,20 +91,25 @@ body {
     line-height: 1;
 }
 .stat-label {
-    font-size: 0.45rem;
+    font-size: 0.5rem;
     color: var(--muted);
     text-transform: uppercase;
     letter-spacing: 1px;
 }
 
+/* ==================== MESSAGE DISPLAY ==================== */
 .message-display {
     background: var(--card);
     border: 2px solid var(--orange);
-    border-radius: 8px;
-    padding: 8px;
-    margin-bottom: 4px;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 6px;
     text-align: center;
     flex-shrink: 0;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .message-text {
     font-family: 'Bebas Neue', sans-serif;
@@ -111,43 +120,48 @@ body {
 .message-text.watch { color: var(--gold); }
 .message-text.go { color: var(--teal); }
 
-/* DIVISION SELECTORS */
+/* ==================== DIVISION SELECTORS ==================== */
 .selectors-row {
     display: flex;
     gap: 8px;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
     flex-shrink: 0;
 }
 .selector-group {
     flex: 1;
     background: var(--card);
-    border-radius: 8px;
-    padding: 6px;
+    border-radius: 10px;
+    padding: 8px;
 }
 .selector-label {
     text-align: center;
-    font-size: 0.5rem;
+    font-size: 0.55rem;
     color: var(--muted);
     letter-spacing: 1px;
     text-transform: uppercase;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
 }
 .selector-options {
     display: flex;
-    gap: 3px;
+    gap: 4px;
 }
 .selector-btn {
     flex: 1;
-    padding: 6px 2px;
+    min-height: 44px;
+    min-width: 44px;
+    padding: 8px 4px;
     border: 2px solid var(--border);
     background: transparent;
-    border-radius: 6px;
+    border-radius: 8px;
     color: var(--muted);
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     cursor: pointer;
     transition: all 0.2s;
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .selector-btn.active {
     border-color: var(--orange);
@@ -161,12 +175,12 @@ body {
 .selector-btn.locked::after {
     content: '🔒';
     position: absolute;
-    top: -2px;
-    right: 2px;
+    top: 2px;
+    right: 4px;
     font-size: 0.5rem;
 }
 
-/* COURT GRID - 40vh MOBILE PERFECT FIT */
+/* ==================== COURT GRID - PERFECT FIT ==================== */
 .court-wrapper {
     flex: 1;
     display: flex;
@@ -175,12 +189,14 @@ body {
     min-height: 0;
     overflow: hidden;
     position: relative;
+    padding: 4px;
 }
+
 .court-grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 4px;
-    padding: 8px;
+    gap: clamp(3px, 1vw, 6px);
+    padding: clamp(6px, 2vw, 12px);
     background: 
         repeating-linear-gradient(
             90deg,
@@ -191,21 +207,23 @@ body {
         );
     border-radius: 12px;
     border: 3px solid var(--text);
-    width: 100%;
-    height: 100%;
-    max-width: min(100%, 40vh);
-    max-height: 40vh;
+    /* PERFECT FIT: Use the smaller of width or available height, but ensure minimum for 44px cells */
+    width: min(100%, calc(100vh - 320px), 350px);
+    height: min(100%, calc(100vh - 320px), 350px);
+    min-width: 240px;
+    min-height: 240px;
     aspect-ratio: 1;
     position: relative;
 }
+
 /* Court center circle */
 .court-grid::before {
     content: '';
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     border: 2px solid rgba(255,255,255,0.2);
     border-radius: 50%;
     transform: translate(-50%, -50%);
@@ -234,7 +252,11 @@ body {
     background: rgba(255,255,255,0.1);
     border: 3px solid transparent;
     position: relative;
+    /* GUARANTEE 44px minimum touch target */
+    min-width: 40px;
+    min-height: 40px;
 }
+
 /* Rainbow Row Borders */
 .grid-cell:nth-child(-n+5) { border-color: #FF6B6B; }
 .grid-cell:nth-child(n+6):nth-child(-n+10) { border-color: #FFE66D; }
@@ -276,15 +298,17 @@ body {
 @keyframes pulse { 50% { transform: scale(1.1); } }
 @keyframes shake { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
 
+/* ==================== DIVISION DISPLAY ==================== */
 .division-display {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 6px 12px;
+    padding: 8px 12px;
     background: var(--card);
-    border-radius: 8px;
-    margin: 4px 0;
+    border-radius: 10px;
+    margin: 6px 0;
     flex-shrink: 0;
+    min-height: 44px;
 }
 .division-badge {
     font-family: 'Bebas Neue', sans-serif;
@@ -303,13 +327,15 @@ body {
     color: var(--gold);
 }
 
+/* ==================== ACTION BUTTON ==================== */
 .action-btn {
     width: 100%;
+    min-height: 52px;
     padding: 14px;
     border: none;
-    border-radius: 10px;
+    border-radius: 12px;
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.3rem;
+    font-size: 1.4rem;
     letter-spacing: 4px;
     cursor: pointer;
     transition: all 0.2s;
@@ -356,7 +382,6 @@ body {
     }
 }
 
-/* Big celebration burst */
 .burst-emoji.big {
     font-size: 3rem;
     animation: emojiBurstBig 1.5s ease-out forwards;
@@ -377,7 +402,6 @@ body {
     }
 }
 
-/* Party mode - extra special */
 .burst-emoji.party {
     font-size: 2.5rem;
     animation: emojiParty 2s ease-out forwards;
@@ -402,7 +426,6 @@ body {
     }
 }
 
-/* Joy pulse on court after celebration */
 .court-grid.joy-pulse {
     animation: joyPulse 0.5s ease-out;
 }
@@ -413,7 +436,7 @@ body {
     100% { box-shadow: none; }
 }
 
-/* OVERLAYS */
+/* ==================== OVERLAYS ==================== */
 .feedback-overlay {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -446,11 +469,12 @@ body {
 .feedback-message { color: var(--muted); margin-bottom: 15px; font-size: 0.9rem; }
 .feedback-stats { display: flex; justify-content: center; gap: 25px; margin-bottom: 15px; }
 .feedback-stat-value { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; color: var(--gold); }
-.feedback-stat-label { font-size: 0.6rem; color: var(--muted); text-transform: uppercase; }
+.feedback-stat-label { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; }
 .feedback-btn {
+    min-height: 48px;
     padding: 12px 30px;
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
     font-family: 'Bebas Neue', sans-serif;
     font-size: 1rem;
     letter-spacing: 2px;
@@ -460,7 +484,7 @@ body {
 .feedback-btn.primary { background: linear-gradient(135deg, var(--orange), #FF8C00); color: var(--dark); }
 .feedback-btn.secondary { background: transparent; color: var(--muted); border: 1px solid var(--muted); }
 
-/* UPGRADE OVERLAY */
+/* ==================== UPGRADE OVERLAY ==================== */
 .upgrade-overlay {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -504,7 +528,7 @@ body {
     margin-bottom: 15px;
 }
 .upgrade-speed-chip {
-    padding: 6px 12px;
+    padding: 8px 14px;
     border-radius: 10px;
     font-family: 'Bebas Neue', sans-serif;
     font-size: 0.9rem;
@@ -530,6 +554,7 @@ body {
 .upgrade-btn {
     display: block;
     width: 100%;
+    min-height: 52px;
     padding: 14px;
     background: linear-gradient(135deg, var(--gold), #FFA500);
     color: var(--dark);
@@ -543,13 +568,14 @@ body {
     margin-bottom: 10px;
 }
 .upgrade-close {
+    min-height: 44px;
     background: transparent;
     border: 1px solid var(--muted);
     color: var(--muted);
-    padding: 8px 20px;
-    border-radius: 8px;
+    padding: 10px 20px;
+    border-radius: 10px;
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     letter-spacing: 1px;
     cursor: pointer;
 }
@@ -561,10 +587,10 @@ body {
     transform: translateX(-50%) translateY(100px);
     background: linear-gradient(135deg, var(--orange), var(--gold));
     color: var(--dark);
-    padding: 10px 20px;
+    padding: 12px 24px;
     border-radius: 20px;
     font-weight: 700;
-    font-size: 0.9rem;
+    font-size: 1rem;
     opacity: 0;
     transition: all 0.3s;
     z-index: 50;
@@ -572,22 +598,24 @@ body {
 }
 .coach-message.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-/* Language & Navigation */
+/* ==================== NAVIGATION ==================== */
 .lang-toggle {
     position: fixed;
-    top: 8px;
+    top: max(8px, env(safe-area-inset-top));
     right: 10px;
     display: flex;
     gap: 4px;
     z-index: 100;
 }
 .lang-btn {
-    padding: 4px 10px;
+    min-width: 36px;
+    min-height: 36px;
+    padding: 6px 10px;
     border: 1px solid var(--muted);
-    background: transparent;
+    background: var(--card);
     color: var(--muted);
-    border-radius: 4px;
-    font-size: 0.65rem;
+    border-radius: 6px;
+    font-size: 0.7rem;
     font-weight: 600;
     cursor: pointer;
 }
@@ -595,53 +623,96 @@ body {
 
 .back-btn {
     position: fixed;
-    top: 8px;
+    top: max(8px, env(safe-area-inset-top));
     left: 10px;
-    padding: 5px 12px;
-    background: rgba(255,255,255,0.1);
-    border: none;
+    min-width: 44px;
+    min-height: 36px;
+    padding: 8px 14px;
+    background: var(--card);
+    border: 1px solid var(--border);
     border-radius: 12px;
     color: var(--muted);
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     cursor: pointer;
     text-decoration: none;
     z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Language visibility */
 body.en .lang-es { display: none !important; }
 body.es .lang-en { display: none !important; }
 
-/* LARGER SCREENS */
+/* ==================== RESPONSIVE - LARGER SCREENS ==================== */
 @media (min-height: 750px) {
-    .game-container { padding: 10px 15px; }
-    .logo { font-size: 2rem; }
-    .stats-bar { padding: 8px 12px; }
+    .game-container { padding: 12px 16px; }
+    .logo { font-size: 1.8rem; }
+    .stats-bar { padding: 10px 14px; gap: 15px; }
     .stat-value { font-size: 1.2rem; }
-    .message-display { padding: 10px; }
+    .stat-label { font-size: 0.55rem; }
+    .message-display { padding: 12px; }
     .message-text { font-size: 1.1rem; }
     .court-grid { gap: 5px; padding: 10px; }
-    .action-btn { padding: 16px; font-size: 1.4rem; }
+    .action-btn { padding: 16px; font-size: 1.5rem; min-height: 56px; }
 }
 
-/* VERY SHORT SCREENS */
-@media (max-height: 600px) {
-    .game-container { padding: 4px 8px; }
-    .logo { font-size: 1.5rem; }
-    .tagline { font-size: 0.45rem; }
-    .stats-bar { padding: 4px 6px; gap: 10px; margin: 3px 0; }
-    .stat-value { font-size: 0.9rem; }
-    .message-display { padding: 5px; margin-bottom: 3px; }
-    .message-text { font-size: 0.85rem; }
-    .selectors-row { gap: 5px; margin-bottom: 3px; }
-    .selector-group { padding: 4px; }
-    .selector-btn { padding: 5px 2px; font-size: 0.8rem; }
-    .court-grid { padding: 6px; gap: 3px; }
-    .grid-cell { border-width: 2px; border-radius: 5px; }
-    .division-display { padding: 4px 10px; margin: 3px 0; }
-    .action-btn { padding: 10px; font-size: 1.1rem; }
+/* ==================== RESPONSIVE - SHORT SCREENS ==================== */
+@media (max-height: 650px) {
+    .game-container { padding: 4px 10px; }
+    .header { padding: 2px 0; }
+    .logo { font-size: 1.4rem; }
+    .tagline { font-size: 0.5rem; }
+    .stats-bar { padding: 6px 8px; gap: 10px; margin: 4px 0; }
+    .stat-value { font-size: 1rem; }
+    .stat-label { font-size: 0.45rem; }
+    .message-display { padding: 8px; margin-bottom: 4px; min-height: 40px; }
+    .message-text { font-size: 0.9rem; }
+    .selectors-row { gap: 6px; margin-bottom: 4px; }
+    .selector-group { padding: 6px; }
+    .selector-label { font-size: 0.5rem; margin-bottom: 4px; }
+    .selector-btn { min-height: 40px; font-size: 0.85rem; padding: 6px 2px; }
+    .court-grid { 
+        padding: 6px; 
+        gap: 3px;
+        min-width: 220px;
+        min-height: 220px;
+    }
+    .grid-cell { border-width: 2px; border-radius: 5px; min-width: 36px; min-height: 36px; }
+    .division-display { padding: 6px 10px; margin: 4px 0; min-height: 40px; }
+    .division-badge { font-size: 0.9rem; }
+    .action-btn { padding: 12px; font-size: 1.2rem; min-height: 48px; }
     .burst-emoji { font-size: 1.5rem; }
     .burst-emoji.big { font-size: 2rem; }
+}
+
+/* ==================== RESPONSIVE - VERY SHORT (LANDSCAPE) ==================== */
+@media (max-height: 500px) {
+    .header { display: none; }
+    .stats-bar { padding: 4px 6px; margin: 2px 0; }
+    .stat-value { font-size: 0.9rem; }
+    .message-display { padding: 6px; min-height: 36px; }
+    .message-text { font-size: 0.8rem; }
+    .selectors-row { margin-bottom: 2px; }
+    .selector-group { padding: 4px; }
+    .selector-btn { min-height: 36px; font-size: 0.8rem; }
+    .court-grid {
+        min-width: 200px;
+        min-height: 200px;
+    }
+    .division-display { padding: 4px 8px; margin: 2px 0; min-height: 36px; }
+    .action-btn { padding: 10px; font-size: 1.1rem; min-height: 44px; }
+}
+
+/* ==================== RESPONSIVE - NARROW SCREENS (320px) ==================== */
+@media (max-width: 350px) {
+    .game-container { padding: 6px 8px; }
+    .stats-bar { gap: 8px; padding: 6px 8px; }
+    .stat { min-width: 40px; }
+    .stat-value { font-size: 1rem; }
+    .selector-btn { font-size: 0.8rem; padding: 6px 2px; }
+    .selector-options { gap: 3px; }
 }
 </style>
 </head>
@@ -652,8 +723,8 @@ body.es .lang-en { display: none !important; }
     <button class="lang-btn" id="btnEs">ES</button>
 </div>
 
-<a href="index.html" class="back-btn">
-    <span class="lang-en">← Home</span>
+<a href="/" class="back-btn">
+    <span class="lang-en">← Hub</span>
     <span class="lang-es">← Inicio</span>
 </a>
 
@@ -801,8 +872,8 @@ body.es .lang-en { display: none !important; }
             <span class="lang-es">DESBLOQUEAR VELOCIDADES</span>
         </h2>
         <p class="upgrade-text">
-            <span class="lang-en">You're training at <strong>SLOW</strong> speed. Upgrade to unlock <strong>MEDIUM</strong> and <strong>FAST</strong> for maximum brain training!</span>
-            <span class="lang-es">Estás entrenando en <strong>LENTO</strong>. ¡Actualiza para desbloquear <strong>MEDIO</strong> y <strong>RÁPIDO</strong> para máximo entrenamiento!</span>
+            <span class="lang-en">You're training at <strong>SLOW</strong> speed. Upgrade to unlock <strong>MEDIUM</strong> and <strong>FAST</strong> for the full experience!</span>
+            <span class="lang-es">Estás entrenando en <strong>LENTO</strong>. ¡Actualiza para desbloquear <strong>MEDIO</strong> y <strong>RÁPIDO</strong>!</span>
         </p>
         <div class="upgrade-speed-preview">
             <span class="upgrade-speed-chip current">✓ Slow</span>
@@ -836,7 +907,7 @@ body.es .lang-en { display: none !important; }
         var user = null;
         try { user = JSON.parse(localStorage.getItem('gt-user')); } catch(e) {}
         if (!user || !user.pin || user.pin.length < 4) {
-            window.location.replace('index.html');
+            window.location.replace('/');
             return;
         }
 
@@ -845,7 +916,7 @@ body.es .lang-en { display: none !important; }
 
         function validateSession() {
             if (!sessionPin || !sessionToken) {
-                window.location.href = 'index.html';
+                window.location.href = '/';
                 return;
             }
             fetch('/api/session/validate', {
@@ -861,7 +932,7 @@ body.es .lang-en { display: none !important; }
                     localStorage.removeItem('gt-speed-access');
                     sessionStorage.removeItem('gt-pin');
                     sessionStorage.removeItem('gt-token');
-                    window.location.href = 'index.html';
+                    window.location.href = '/';
                 }
             })
             .catch(function(err) {
@@ -906,7 +977,6 @@ body.es .lang-en { display: none !important; }
                 btn.classList.remove('locked');
             }
         });
-        // Force slow if not subscribed
         if (!speedAccess.allSpeeds) {
             state.speed = 'slow';
             speedBtns.forEach(function(b) { b.classList.remove('active'); });
@@ -935,7 +1005,6 @@ body.es .lang-en { display: none !important; }
     var PLAYS_PER_CIRCUIT = 5;
     var CENTER_CELL = 12;
 
-    // ==================== LAUGH EMOJI CONFIG ====================
     var LAUGH_EMOJIS = ['😂', '😆', '🤣', '😄', '😁', '🥳', '😊', '🎉'];
     var PARTY_EMOJIS = ['🥳', '🎉', '😂', '🤣', '✨', '💫', '🌟', '🏆'];
 
@@ -964,7 +1033,7 @@ body.es .lang-en { display: none !important; }
     var coachMessage = document.getElementById('coachMessage');
     var emojiContainer = document.getElementById('emojiContainer');
 
-    // ==================== LAUGH EMOJI CELEBRATION SYSTEM ====================
+    // ==================== CELEBRATION SYSTEM ====================
     function getCourtCenter() {
         var courtRect = courtGrid.getBoundingClientRect();
         return {
@@ -978,7 +1047,6 @@ body.es .lang-en { display: none !important; }
         el.className = 'burst-emoji' + (type ? ' ' + type : '');
         el.textContent = emoji;
         
-        // Random burst direction
         var angle = Math.random() * Math.PI * 2;
         var distance = 80 + Math.random() * 120;
         var tx = Math.cos(angle) * distance + 'px';
@@ -994,50 +1062,27 @@ body.es .lang-en { display: none !important; }
         
         emojiContainer.appendChild(el);
         
-        // Clean up after animation
         setTimeout(function() {
             if (el.parentNode) el.parentNode.removeChild(el);
         }, type === 'party' ? 2000 : 1500);
     }
 
     function laughCelebration(intensity) {
-        // intensity: 'small' (1 match), 'medium' (found all), 'big' (streak 3+), 'party' (perfect circuit/streak 5+)
         var center = getCourtCenter();
         var count, emojis, type;
         
         switch(intensity) {
-            case 'small':
-                count = 2;
-                emojis = LAUGH_EMOJIS;
-                type = '';
-                break;
-            case 'medium':
-                count = 5;
-                emojis = LAUGH_EMOJIS;
-                type = '';
-                break;
-            case 'big':
-                count = 8;
-                emojis = LAUGH_EMOJIS;
-                type = 'big';
-                break;
-            case 'party':
-                count = 12;
-                emojis = PARTY_EMOJIS;
-                type = 'party';
-                break;
-            default:
-                count = 3;
-                emojis = LAUGH_EMOJIS;
-                type = '';
+            case 'small': count = 2; emojis = LAUGH_EMOJIS; type = ''; break;
+            case 'medium': count = 5; emojis = LAUGH_EMOJIS; type = ''; break;
+            case 'big': count = 8; emojis = LAUGH_EMOJIS; type = 'big'; break;
+            case 'party': count = 12; emojis = PARTY_EMOJIS; type = 'party'; break;
+            default: count = 3; emojis = LAUGH_EMOJIS; type = '';
         }
         
-        // Stagger the emoji spawns for better visual effect
         for (var i = 0; i < count; i++) {
             (function(index) {
                 setTimeout(function() {
                     var emoji = emojis[Math.floor(Math.random() * emojis.length)];
-                    // Slight position variation
                     var offsetX = (Math.random() - 0.5) * 40;
                     var offsetY = (Math.random() - 0.5) * 40;
                     createBurstEmoji(emoji, center.x + offsetX, center.y + offsetY, type);
@@ -1045,11 +1090,8 @@ body.es .lang-en { display: none !important; }
             })(i);
         }
         
-        // Add joy pulse to court
         courtGrid.classList.add('joy-pulse');
-        setTimeout(function() {
-            courtGrid.classList.remove('joy-pulse');
-        }, 500);
+        setTimeout(function() { courtGrid.classList.remove('joy-pulse'); }, 500);
     }
 
     // ==================== AUDIO ====================
@@ -1139,9 +1181,7 @@ body.es .lang-en { display: none !important; }
     function shuffleArray(arr) {
         for (var i = arr.length - 1; i > 0; i--) {
             var j = Math.floor(Math.random() * (i + 1));
-            var temp = arr[i];
-            arr[i] = arr[j];
-            arr[j] = temp;
+            var temp = arr[i]; arr[i] = arr[j]; arr[j] = temp;
         }
     }
 
@@ -1187,51 +1227,32 @@ body.es .lang-en { display: none !important; }
         messageText.innerHTML = '<span class="lang-en">WATCH THE COURT...</span><span class="lang-es">MIRA LA CANCHA...</span>';
         messageText.className = 'message-text watch';
 
-        // Clear all cells
         state.cells.forEach(function(cell, idx) {
             cell.className = idx === CENTER_CELL ? 'grid-cell center' : 'grid-cell';
         });
 
-        // Select target color
         state.targetColor = COLORS[Math.floor(Math.random() * COLORS.length)];
 
-        // Get available cells (not center)
         var availableCells = [];
-        for (var i = 0; i < 25; i++) {
-            if (i !== CENTER_CELL) availableCells.push(i);
-        }
+        for (var i = 0; i < 25; i++) { if (i !== CENTER_CELL) availableCells.push(i); }
         shuffleArray(availableCells);
 
-        // Select match cells and distractor cells
         var config = LEVEL_CONFIG[state.level];
         state.matchCells = availableCells.slice(0, config.matches);
         var distractorCells = availableCells.slice(config.matches, config.matches + config.distractors);
 
-        // Show center color
         state.cells[CENTER_CELL].classList.add('color-' + state.targetColor);
-
-        // Show match colors
-        state.matchCells.forEach(function(idx) {
-            state.cells[idx].classList.add('color-' + state.targetColor);
-        });
-
-        // Show distractor colors
+        state.matchCells.forEach(function(idx) { state.cells[idx].classList.add('color-' + state.targetColor); });
         distractorCells.forEach(function(idx) {
             var distractorColor;
-            do {
-                distractorColor = COLORS[Math.floor(Math.random() * COLORS.length)];
-            } while (distractorColor === state.targetColor);
+            do { distractorColor = COLORS[Math.floor(Math.random() * COLORS.length)]; } while (distractorColor === state.targetColor);
             state.cells[idx].classList.add('color-' + distractorColor);
         });
 
-        // Hide after display time
         var displayTime = SPEED_CONFIG[state.speed];
         setTimeout(function() {
-            // Hide all colors except center
             state.cells.forEach(function(cell, idx) {
-                if (idx !== CENTER_CELL) {
-                    COLORS.forEach(function(c) { cell.classList.remove('color-' + c); });
-                }
+                if (idx !== CENTER_CELL) { COLORS.forEach(function(c) { cell.classList.remove('color-' + c); }); }
             });
             messageText.innerHTML = '<span class="lang-en">FIND THE MATCHES!</span><span class="lang-es">¡ENCUENTRA LAS COINCIDENCIAS!</span>';
             messageText.className = 'message-text go';
@@ -1242,64 +1263,44 @@ body.es .lang-en { display: none !important; }
     // ==================== HANDLE TAP ====================
     function handleCellTap(index) {
         if (!state.canTap || !state.isPlaying) return;
-
         var cell = state.cells[index];
-
-        // Check if already tapped
         if (cell.classList.contains('correct') || cell.classList.contains('wrong')) return;
 
         if (state.matchCells.indexOf(index) !== -1) {
-            // Correct!
             cell.classList.add('correct', 'color-' + state.targetColor);
             state.matchesFound++;
             updateMatchesDisplay();
             playCorrectSound();
-
-            // Add points
             state.score += 10 * state.level;
             updateStats();
-
-            // Small celebration for each correct tap
             laughCelebration('small');
 
-            // Check if all matches found
             if (state.matchesFound >= state.matchesNeeded) {
-                // All found bonus
                 state.score += 25 * state.level;
                 state.streak++;
                 updateStats();
                 playSuccessSound();
                 
-                // Determine celebration intensity based on streak
-                var celebrationIntensity;
-                var coachMsg;
-                
+                var celebrationIntensity, coachMsg;
                 if (state.streak >= 5) {
-                    // Party mode for 5+ streak!
                     celebrationIntensity = 'party';
                     coachMsg = ['🎉 PARTY!', '🏆 LEGENDARY!', '🌟 SUPERSTAR!', '💫 UNSTOPPABLE!'][Math.floor(Math.random() * 4)];
                 } else if (state.streak >= 3) {
-                    // Big celebration for 3+ streak
                     celebrationIntensity = 'big';
                     coachMsg = ['😂 ON FIRE!', '🤣 AMAZING!', '😆 CRUSHING IT!', '🥳 NAILED IT!'][Math.floor(Math.random() * 4)];
                 } else {
-                    // Medium celebration for completing the round
                     celebrationIntensity = 'medium';
                     coachMsg = ['😄 NICE!', '😊 GREAT!', '😁 SMOOTH!', '🎉 GOT IT!'][Math.floor(Math.random() * 4)];
                 }
-                
                 laughCelebration(celebrationIntensity);
                 showCoach(coachMsg);
                 setTimeout(completedPlay, 500);
             }
         } else {
-            // Wrong!
             cell.classList.add('wrong');
             playErrorSound();
             state.streak = 0;
             updateStats();
-
-            // Reveal remaining matches
             setTimeout(function() {
                 state.matchCells.forEach(function(i) {
                     var matchCell = state.cells[i];
@@ -1318,13 +1319,10 @@ body.es .lang-en { display: none !important; }
         state.isPlaying = false;
         state.playsCompleted++;
         updateStats();
-
-        // Save progress
         localStorage.setItem('gt-score', state.score);
         localStorage.setItem('gt-streak', state.streak);
 
         if (state.playsCompleted >= PLAYS_PER_CIRCUIT) {
-            // Circuit complete! Party celebration!
             laughCelebration('party');
             showCircuitModal();
         } else {
@@ -1340,15 +1338,9 @@ body.es .lang-en { display: none !important; }
         document.getElementById('feedbackScore').textContent = state.score;
         document.getElementById('feedbackStreak').textContent = state.streak;
         var speedText = state.speed === 'slow' ? 'Slow' : state.speed === 'med' ? 'Medium' : 'Fast';
-        if (currentLang === 'es') {
-            speedText = state.speed === 'slow' ? 'Lento' : state.speed === 'med' ? 'Medio' : 'Rápido';
-        }
+        if (currentLang === 'es') speedText = state.speed === 'slow' ? 'Lento' : state.speed === 'med' ? 'Medio' : 'Rápido';
         document.getElementById('feedbackMessage').textContent = 'Level ' + state.level + ' ' + speedText;
-        
-        // Update emoji based on streak
-        var emoji = state.streak >= 5 ? '🏆' : state.streak >= 3 ? '🎉' : '😄';
-        document.getElementById('feedbackEmoji').textContent = emoji;
-        
+        document.getElementById('feedbackEmoji').textContent = state.streak >= 5 ? '🏆' : state.streak >= 3 ? '🎉' : '😄';
         feedbackOverlay.classList.add('show');
     }
 
@@ -1365,10 +1357,7 @@ body.es .lang-en { display: none !important; }
 
     document.getElementById('changeDivisionBtn').addEventListener('click', function() {
         feedbackOverlay.classList.remove('show');
-        state.score = 0;
-        state.playsCompleted = 0;
-        state.circuitNum = 1;
-        state.streak = 0;
+        state.score = 0; state.playsCompleted = 0; state.circuitNum = 1; state.streak = 0;
         localStorage.setItem('gt-score', 0);
         localStorage.setItem('gt-streak', 0);
         updateStats();
@@ -1378,7 +1367,7 @@ body.es .lang-en { display: none !important; }
         actionBtn.disabled = false;
     });
 
-    // ==================== LEVEL SELECTORS ====================
+    // ==================== SELECTORS ====================
     document.querySelectorAll('[data-level]').forEach(function(btn) {
         btn.addEventListener('click', function() {
             if (state.isPlaying) return;
@@ -1390,18 +1379,11 @@ body.es .lang-en { display: none !important; }
         });
     });
 
-    // ==================== SPEED SELECTORS ====================
     document.querySelectorAll('.speed-btn').forEach(function(btn) {
         btn.addEventListener('click', function() {
             if (state.isPlaying) return;
             var speed = btn.dataset.speed;
-            
-            // Check if locked
-            if (!speedAccess.allSpeeds && speed !== 'slow') {
-                showUpgradeModal();
-                return;
-            }
-            
+            if (!speedAccess.allSpeeds && speed !== 'slow') { showUpgradeModal(); return; }
             document.querySelectorAll('.speed-btn').forEach(function(b) { b.classList.remove('active'); });
             btn.classList.add('active');
             state.speed = speed;
@@ -1410,12 +1392,10 @@ body.es .lang-en { display: none !important; }
         });
     });
 
-    // ==================== START BUTTON ====================
     actionBtn.addEventListener('click', startPlay);
 
     // ==================== LOAD SAVED STATE ====================
     function loadSavedState() {
-        // Load level
         var savedLevel = localStorage.getItem('gt-level');
         if (savedLevel) {
             state.level = parseInt(savedLevel);
@@ -1423,8 +1403,6 @@ body.es .lang-en { display: none !important; }
             var levelBtn = document.querySelector('[data-level="' + state.level + '"]');
             if (levelBtn) levelBtn.classList.add('active');
         }
-
-        // Load speed (but respect access)
         var savedSpeed = localStorage.getItem('gt-speed');
         if (savedSpeed && (speedAccess.allSpeeds || savedSpeed === 'slow')) {
             state.speed = savedSpeed;
@@ -1441,7 +1419,6 @@ body.es .lang-en { display: none !important; }
     setLang(currentLang);
     updateDivisionDisplay();
     updateStats();
-
 })();
 </script>
 </body>
