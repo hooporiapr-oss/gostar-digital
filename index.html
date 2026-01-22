@@ -1596,11 +1596,11 @@
         // ==================== STRIPE CHECKOUT ====================
         function redirectToCheckout() {
             // Redirect to Stripe checkout
-            fetch('/api/checkout/create', {
+            fetch('/api/stripe/checkout', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 
-                    priceType: 'individual_monthly'
+                    planType: 'individual_monthly'
                 })
             })
             .then(r => r.json())
