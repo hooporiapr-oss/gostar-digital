@@ -875,6 +875,10 @@ app.get('/how-to-play', function(req, res) {
     res.sendFile(path.join(__dirname, 'how-to-play.html'));
 });
 
+app.get('/the-sequence', function(req, res) {
+    res.sendFile(path.join(__dirname, 'the-sequence.html'));
+});
+
 app.get('/play', function(req, res) {
     res.sendFile(path.join(__dirname, 'gotrotter.html'));
 });
@@ -918,7 +922,8 @@ app.listen(PORT, function() {
     console.log('🎯 ROUTES:');
     console.log('   /            → Landing page');
     console.log('   /hub         → User hub');
-    console.log('   /play        → Game');
+    console.log('   /play        → THE MATCH (color memory)');
+    console.log('   /the-sequence → THE SEQUENCE (pattern memory)');
     console.log('   /how-to-play → How to play guide');
     console.log('   /trial-pin   → Trial PIN Generator');
     console.log('');
