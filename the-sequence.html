@@ -14,7 +14,7 @@
     --pink: #FF1493;
     --purple: #9D4EDD;
     --cyan: #00CED1;
-    --dark: #1A1A1A;
+    --dark: #0a0a0f;
     --card: #111118;
     --hardwood: #C4935A;
     --hardwood-dark: #8B6914;
@@ -32,8 +32,203 @@ body {
     overflow: hidden;
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
+/* ==================== MINI NAV HEADER ==================== */
+.mini-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 52px;
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 12px;
+    padding-top: env(safe-area-inset-top);
+    z-index: 1000;
+}
+
+.nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 1px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.nav-logo .ball { font-size: 1.1rem; }
+.nav-logo .go { color: var(--gold); }
+.nav-logo .trotter { color: var(--text); }
+
+.nav-tabs {
+    display: flex;
+    gap: 4px;
+}
+.nav-tab {
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    text-decoration: none;
+    color: var(--muted);
+    background: transparent;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+}
+.nav-tab:hover {
+    color: var(--text);
+    background: rgba(255,255,255,0.05);
+}
+.nav-tab.active {
+    color: var(--teal);
+    background: rgba(0,217,165,0.15);
+    border-color: var(--teal);
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Language Toggle in Nav */
+.nav-lang {
+    display: flex;
+    gap: 2px;
+}
+.nav-lang-btn {
+    padding: 6px 8px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    border-radius: 4px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    cursor: pointer;
+    min-width: 28px;
+    min-height: 28px;
+}
+.nav-lang-btn.active {
+    border-color: var(--gold);
+    color: var(--gold);
+}
+
+/* Settings Dropdown */
+.settings-wrapper {
+    position: relative;
+}
+.settings-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+.settings-btn:hover {
+    background: rgba(255,255,255,0.05);
+    color: var(--text);
+}
+.settings-btn.open {
+    background: rgba(255,255,255,0.1);
+    color: var(--gold);
+}
+
+.settings-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: 200px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px;
+    display: none;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+}
+.settings-dropdown.show {
+    display: block;
+}
+
+.settings-section {
+    margin-bottom: 12px;
+}
+.settings-section:last-child {
+    margin-bottom: 0;
+}
+.settings-label {
+    font-size: 0.6rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+}
+.speed-status {
+    display: flex;
+    gap: 6px;
+}
+.speed-chip {
+    flex: 1;
+    padding: 6px 4px;
+    border-radius: 6px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.7rem;
+    text-align: center;
+    background: rgba(255,255,255,0.05);
+    color: var(--muted);
+}
+.speed-chip.unlocked {
+    background: rgba(0,217,165,0.15);
+    color: var(--teal);
+}
+.speed-chip.locked {
+    background: rgba(255,215,0,0.1);
+    color: var(--gold);
+}
+
+.settings-link {
+    display: block;
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    font-family: 'Outfit', sans-serif;
+}
+.settings-link.upgrade {
+    background: linear-gradient(135deg, var(--gold), #FFA500);
+    color: var(--dark);
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+.settings-link.logout {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+}
+.settings-link:hover {
+    opacity: 0.9;
+    transform: scale(0.98);
+}
+
+/* ==================== GAME CONTAINER ==================== */
 .game-container {
     width: 100%;
     max-width: 420px;
@@ -41,7 +236,7 @@ body {
     height: 100dvh;
     margin: 0 auto;
     padding: 6px 10px;
-    padding-top: max(6px, env(safe-area-inset-top));
+    padding-top: calc(58px + env(safe-area-inset-top));
     padding-bottom: max(6px, env(safe-area-inset-bottom));
     display: flex;
     flex-direction: column;
@@ -53,29 +248,17 @@ body {
     padding: 2px 0;
     flex-shrink: 0;
 }
-.logo {
+.game-title {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.8rem;
-    letter-spacing: 2px;
+    font-size: 1.4rem;
+    letter-spacing: 3px;
+    color: var(--teal);
 }
-.logo .go { color: var(--text); }
-.logo .trotter { color: var(--cyan); }
 .tagline {
     font-size: 0.5rem;
     color: var(--muted);
     letter-spacing: 2px;
     text-transform: uppercase;
-}
-.game-mode-badge {
-    display: inline-block;
-    background: linear-gradient(135deg, var(--cyan), var(--teal));
-    color: var(--dark);
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.7rem;
-    letter-spacing: 2px;
-    padding: 3px 12px;
-    border-radius: 10px;
-    margin-top: 2px;
 }
 
 .stats-bar {
@@ -104,7 +287,7 @@ body {
 
 .message-display {
     background: var(--card);
-    border: 2px solid var(--cyan);
+    border: 2px solid var(--teal);
     border-radius: 8px;
     padding: 8px;
     margin-bottom: 4px;
@@ -154,11 +337,15 @@ body {
     cursor: pointer;
     transition: all 0.2s;
     position: relative;
+    min-height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .selector-btn.active {
-    border-color: var(--cyan);
-    color: var(--cyan);
-    background: rgba(0,206,209,0.1);
+    border-color: var(--teal);
+    color: var(--teal);
+    background: rgba(0,217,165,0.1);
 }
 .selector-btn.locked { opacity: 0.5; cursor: pointer; }
 .selector-btn.locked::after {
@@ -201,11 +388,11 @@ body {
     padding: 10px;
     background: repeating-linear-gradient(90deg, var(--hardwood) 0px, var(--hardwood) 15px, var(--hardwood-dark) 15px, var(--hardwood-dark) 30px);
     border-radius: 12px;
-    border: 3px solid var(--cyan);
+    border: 3px solid var(--teal);
     width: 100%;
     height: 100%;
-    max-width: min(100%, 40vh);
-    max-height: 40vh;
+    max-width: min(100%, 38vh);
+    max-height: 38vh;
     aspect-ratio: 1;
 }
 
@@ -220,6 +407,8 @@ body {
     background: rgba(255,255,255,0.15);
     border: 3px solid rgba(255,255,255,0.3);
     font-size: 1.5rem;
+    min-width: 40px;
+    min-height: 40px;
 }
 .grid-cell:active:not(.disabled) { transform: scale(0.95); }
 .grid-cell.disabled { pointer-events: none; opacity: 0.6; }
@@ -231,9 +420,9 @@ body {
     transform: scale(1.05);
 }
 .grid-cell.player-tap {
-    background: var(--cyan) !important;
-    border-color: var(--cyan) !important;
-    box-shadow: 0 0 20px var(--cyan);
+    background: var(--teal) !important;
+    border-color: var(--teal) !important;
+    box-shadow: 0 0 20px var(--teal);
 }
 .grid-cell.correct {
     animation: correctPulse 0.4s;
@@ -265,7 +454,7 @@ body {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 1rem;
     letter-spacing: 2px;
-    color: var(--cyan);
+    color: var(--teal);
 }
 .sequence-counter {
     font-family: 'Bebas Neue', sans-serif;
@@ -288,10 +477,11 @@ body {
     letter-spacing: 4px;
     cursor: pointer;
     transition: all 0.2s;
-    background: linear-gradient(135deg, var(--cyan), var(--teal));
+    background: linear-gradient(135deg, var(--teal), #00B894);
     color: var(--dark);
     flex-shrink: 0;
     margin-top: 4px;
+    min-height: 52px;
 }
 .action-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 .action-btn:active:not(:disabled) { transform: scale(0.98); }
@@ -321,8 +511,8 @@ body {
 
 .court-grid.joy-pulse { animation: joyPulse 0.5s ease-out; }
 @keyframes joyPulse {
-    0% { box-shadow: 0 0 0 0 rgba(0,206,209,0.7); }
-    50% { box-shadow: 0 0 30px 10px rgba(0,206,209,0.4); }
+    0% { box-shadow: 0 0 0 0 rgba(0,217,165,0.7); }
+    50% { box-shadow: 0 0 30px 10px rgba(0,217,165,0.4); }
     100% { box-shadow: none; }
 }
 
@@ -340,7 +530,7 @@ body {
 .overlay.show { display: flex; }
 .overlay-card {
     background: var(--card);
-    border: 2px solid var(--cyan);
+    border: 2px solid var(--teal);
     border-radius: 20px;
     padding: 30px;
     text-align: center;
@@ -370,8 +560,9 @@ body {
     letter-spacing: 2px;
     cursor: pointer;
     margin: 5px;
-    background: linear-gradient(135deg, var(--cyan), var(--teal));
+    background: linear-gradient(135deg, var(--teal), #00B894);
     color: var(--dark);
+    min-height: 48px;
 }
 .overlay-btn.gold { background: linear-gradient(135deg, var(--gold), #FFA500); }
 .overlay-btn.secondary { background: transparent; color: var(--muted); border: 1px solid var(--muted); }
@@ -394,7 +585,7 @@ body {
     bottom: 100px;
     left: 50%;
     transform: translateX(-50%) translateY(100px);
-    background: linear-gradient(135deg, var(--cyan), var(--teal));
+    background: linear-gradient(135deg, var(--teal), #00B894);
     color: var(--dark);
     padding: 10px 20px;
     border-radius: 20px;
@@ -406,83 +597,97 @@ body {
 }
 .coach-message.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-.lang-toggle {
-    position: fixed;
-    top: 8px;
-    right: 10px;
-    display: flex;
-    gap: 4px;
-    z-index: 100;
-}
-.lang-btn {
-    padding: 4px 10px;
-    border: 1px solid var(--muted);
-    background: transparent;
-    color: var(--muted);
-    border-radius: 4px;
-    font-size: 0.65rem;
-    font-weight: 600;
-    cursor: pointer;
-}
-.lang-btn.active { border-color: var(--gold); color: var(--gold); }
-
-.back-btn {
-    position: fixed;
-    top: 8px;
-    left: 10px;
-    padding: 5px 12px;
-    background: rgba(255,255,255,0.1);
-    border: none;
-    border-radius: 12px;
-    color: var(--muted);
-    font-size: 0.7rem;
-    cursor: pointer;
-    text-decoration: none;
-    z-index: 100;
-}
-
 body.en .lang-es { display: none !important; }
 body.es .lang-en { display: none !important; }
 
 @media (min-height: 750px) {
-    .game-container { padding: 10px 15px; }
-    .logo { font-size: 2rem; }
+    .game-container { padding-top: calc(62px + env(safe-area-inset-top)); }
+    .game-title { font-size: 1.5rem; }
     .stat-value { font-size: 1.2rem; }
     .message-text { font-size: 1.1rem; }
     .court-grid { gap: 8px; padding: 12px; }
     .action-btn { padding: 16px; font-size: 1.4rem; }
 }
 @media (max-height: 600px) {
-    .game-container { padding: 4px 8px; }
-    .logo { font-size: 1.5rem; }
+    .game-container { padding: 4px 8px; padding-top: calc(54px + env(safe-area-inset-top)); }
+    .game-title { font-size: 1.2rem; }
     .stats-bar { padding: 4px 6px; gap: 10px; margin: 3px 0; }
     .stat-value { font-size: 0.9rem; }
     .message-display { padding: 5px; margin-bottom: 3px; }
     .message-text { font-size: 0.85rem; }
-    .court-grid { padding: 8px; gap: 4px; }
-    .action-btn { padding: 10px; font-size: 1.1rem; }
+    .court-grid { padding: 8px; gap: 4px; max-height: 35vh; max-width: min(100%, 35vh); }
+    .action-btn { padding: 10px; font-size: 1.1rem; min-height: 44px; }
+}
+
+/* Hide tabs on very narrow screens */
+@media (max-width: 350px) {
+    .nav-tabs { display: none; }
+}
+@media (min-width: 380px) {
+    .nav-tabs { display: flex; }
 }
 </style>
 </head>
 <body class="en">
 
-<div class="lang-toggle">
-    <button class="lang-btn active" id="btnEn">EN</button>
-    <button class="lang-btn" id="btnEs">ES</button>
-</div>
-
-<a href="/hub" class="back-btn">
-    <span class="lang-en">← Hub</span>
-    <span class="lang-es">← Hub</span>
-</a>
+<!-- ==================== MINI NAV HEADER ==================== -->
+<nav class="mini-nav">
+    <a href="/play" class="nav-logo">
+        <span class="ball">🏀</span>
+        <span class="go">GO</span><span class="trotter">TROTTER</span>
+    </a>
+    
+    <div class="nav-tabs">
+        <a href="/the-match" class="nav-tab">THE MATCH</a>
+        <a href="/the-sequence" class="nav-tab active">THE SEQUENCE</a>
+    </div>
+    
+    <div class="nav-right">
+        <div class="nav-lang">
+            <button class="nav-lang-btn active" id="btnEn">EN</button>
+            <button class="nav-lang-btn" id="btnEs">ES</button>
+        </div>
+        
+        <div class="settings-wrapper">
+            <button class="settings-btn" id="settingsBtn">⚙️</button>
+            <div class="settings-dropdown" id="settingsDropdown">
+                <div class="settings-section">
+                    <div class="settings-label">
+                        <span class="lang-en">Speed Access</span>
+                        <span class="lang-es">Acceso Velocidad</span>
+                    </div>
+                    <div class="speed-status" id="speedStatus">
+                        <span class="speed-chip unlocked">✓ SLOW</span>
+                        <span class="speed-chip locked">🔒 MED</span>
+                        <span class="speed-chip locked">🔒 FAST</span>
+                    </div>
+                </div>
+                <div class="settings-section" id="upgradeSection">
+                    <a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="settings-link upgrade">
+                        <span class="lang-en">🚀 UNLOCK ALL SPEEDS</span>
+                        <span class="lang-es">🚀 DESBLOQUEAR TODO</span>
+                    </a>
+                </div>
+                <div class="settings-section">
+                    <button class="settings-link logout" id="logoutBtn">
+                        <span class="lang-en">← Log Out</span>
+                        <span class="lang-es">← Cerrar Sesión</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
 
 <div class="emoji-container" id="emojiContainer"></div>
 
 <div class="game-container">
     <header class="header">
-        <div class="logo"><span class="go">GO</span><span class="trotter">TROTTER</span></div>
-        <div class="tagline">The LaughCourt</div>
-        <div class="game-mode-badge">THE SEQUENCE</div>
+        <div class="game-title">🔢 THE SEQUENCE</div>
+        <div class="tagline">
+            <span class="lang-en">Remember the pattern</span>
+            <span class="lang-es">Recuerda el patrón</span>
+        </div>
     </header>
 
     <div class="stats-bar">
@@ -608,17 +813,18 @@ body.es .lang-en { display: none !important; }
     var host = window.location.hostname;
     var isProduction = (host.indexOf('gotrotter') > -1 || host.indexOf('github.io') > -1);
 
+    // ==================== PRODUCTION AUTH & HEARTBEAT ====================
     if (isProduction) {
         var user = null;
         try { user = JSON.parse(localStorage.getItem('gt-user')); } catch(e) {}
         if (!user || !user.pin || user.pin.length < 4) {
-            window.location.replace('index.html');
+            window.location.replace('/login');
             return;
         }
         var sessionPin = sessionStorage.getItem('gt-pin');
         var sessionToken = sessionStorage.getItem('gt-token');
         function validateSession() {
-            if (!sessionPin || !sessionToken) { window.location.href = 'index.html'; return; }
+            if (!sessionPin || !sessionToken) { window.location.href = '/login'; return; }
             fetch('/api/session/validate', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -627,8 +833,9 @@ body.es .lang-en { display: none !important; }
                 if (!d.valid) {
                     alert(d.message || 'Session ended.');
                     localStorage.removeItem('gt-user');
+                    localStorage.removeItem('gt-speed-access');
                     sessionStorage.clear();
-                    window.location.href = 'index.html';
+                    window.location.href = '/login';
                 }
             }).catch(function() {});
         }
@@ -636,20 +843,78 @@ body.es .lang-en { display: none !important; }
         setInterval(validateSession, 30000);
     }
 
+    // ==================== SETTINGS DROPDOWN ====================
+    var settingsBtn = document.getElementById('settingsBtn');
+    var settingsDropdown = document.getElementById('settingsDropdown');
+    
+    settingsBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        settingsBtn.classList.toggle('open');
+        settingsDropdown.classList.toggle('show');
+    });
+    
+    document.addEventListener('click', function(e) {
+        if (!settingsDropdown.contains(e.target) && e.target !== settingsBtn) {
+            settingsBtn.classList.remove('open');
+            settingsDropdown.classList.remove('show');
+        }
+    });
+
+    // ==================== LOGOUT ====================
+    document.getElementById('logoutBtn').addEventListener('click', function() {
+        var sessionPin = sessionStorage.getItem('gt-pin');
+        var sessionToken = sessionStorage.getItem('gt-token');
+        
+        if (sessionPin && sessionToken) {
+            fetch('/api/session/destroy', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ pin: sessionPin, token: sessionToken })
+            }).catch(function() {});
+        }
+        
+        localStorage.removeItem('gt-user');
+        localStorage.removeItem('gt-speed-access');
+        sessionStorage.removeItem('gt-pin');
+        sessionStorage.removeItem('gt-token');
+        window.location.href = '/login';
+    });
+
+    // ==================== LANGUAGE ====================
     var currentLang = localStorage.getItem('gotrotter_lang') || 'en';
     function setLang(lang) {
         currentLang = lang;
         localStorage.setItem('gotrotter_lang', lang);
         document.body.className = lang;
-        document.getElementById('btnEn').className = lang === 'en' ? 'lang-btn active' : 'lang-btn';
-        document.getElementById('btnEs').className = lang === 'es' ? 'lang-btn active' : 'lang-btn';
+        document.getElementById('btnEn').className = lang === 'en' ? 'nav-lang-btn active' : 'nav-lang-btn';
+        document.getElementById('btnEs').className = lang === 'es' ? 'nav-lang-btn active' : 'nav-lang-btn';
         updateDivisionDisplay();
     }
     document.getElementById('btnEn').onclick = function() { setLang('en'); };
     document.getElementById('btnEs').onclick = function() { setLang('es'); };
 
+    // ==================== SPEED ACCESS ====================
     var speedAccess = { allSpeeds: false };
     try { var sa = localStorage.getItem('gt-speed-access'); if (sa) speedAccess = JSON.parse(sa); } catch(e) {}
+
+    function updateSpeedStatusUI() {
+        var speedStatus = document.getElementById('speedStatus');
+        var upgradeSection = document.getElementById('upgradeSection');
+        
+        if (speedAccess.allSpeeds) {
+            speedStatus.innerHTML = 
+                '<span class="speed-chip unlocked">✓ SLOW</span>' +
+                '<span class="speed-chip unlocked">✓ MED</span>' +
+                '<span class="speed-chip unlocked">✓ FAST</span>';
+            upgradeSection.style.display = 'none';
+        } else {
+            speedStatus.innerHTML = 
+                '<span class="speed-chip unlocked">✓ SLOW</span>' +
+                '<span class="speed-chip locked">🔒 MED</span>' +
+                '<span class="speed-chip locked">🔒 FAST</span>';
+            upgradeSection.style.display = 'block';
+        }
+    }
 
     function initSpeedButtons() {
         document.querySelectorAll('.speed-btn').forEach(function(btn) {
@@ -661,11 +926,13 @@ body.es .lang-en { display: none !important; }
             document.querySelectorAll('.speed-btn').forEach(function(b) { b.classList.remove('active'); });
             document.querySelector('.speed-btn[data-speed="slow"]').classList.add('active');
         }
+        updateSpeedStatusUI();
     }
 
     function showUpgrade() { document.getElementById('upgradeOverlay').classList.add('show'); }
     document.getElementById('upgradeClose').onclick = function() { document.getElementById('upgradeOverlay').classList.remove('show'); };
 
+    // ==================== GAME CONFIG ====================
     var TOTAL_CELLS = 16;
     var ROUNDS_PER_TIER = 3;
     var TOTAL_TIERS = 10;
@@ -675,6 +942,7 @@ body.es .lang-en { display: none !important; }
     var PARTY_EMOJIS = ['🥳', '🎉', '😂', '🤣', '✨', '💫', '🌟', '🏆'];
     var CELL_EMOJIS = ['😊', '😄', '😁', '😆', '🤣', '😂', '🥳', '😃', '😀', '😸', '😹', '🤭', '😏', '😌', '🎉', '✨'];
 
+    // ==================== GAME STATE ====================
     var state = {
         level: parseInt(localStorage.getItem('gt-seq-level')) || 1,
         speed: localStorage.getItem('gt-seq-speed') || 'slow',
@@ -696,6 +964,7 @@ body.es .lang-en { display: none !important; }
     var coachMessage = document.getElementById('coachMessage');
     var emojiContainer = document.getElementById('emojiContainer');
 
+    // ==================== CELEBRATION SYSTEM ====================
     function getCourtCenter() {
         var r = courtGrid.getBoundingClientRect();
         return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
@@ -728,6 +997,7 @@ body.es .lang-en { display: none !important; }
         setTimeout(function() { courtGrid.classList.remove('joy-pulse'); }, 500);
     }
 
+    // ==================== AUDIO ====================
     var audioCtx = null;
     function playTone(freq, dur) {
         if (!audioCtx) try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) { return; }
@@ -746,6 +1016,7 @@ body.es .lang-en { display: none !important; }
     function playSuccess() { [523, 659, 784].forEach(function(f, i) { setTimeout(function() { playTone(f, 0.12); }, i * 80); }); }
     function playError() { playTone(200, 0.3); }
 
+    // ==================== INIT COURT ====================
     function initCourt() {
         courtGrid.innerHTML = '';
         state.cells = [];
@@ -794,6 +1065,7 @@ body.es .lang-en { display: none !important; }
         setTimeout(function() { coachMessage.classList.remove('show'); }, 2000);
     }
 
+    // ==================== GAME LOGIC ====================
     function generateSequence() {
         var len = getSeqLen(), avail = [];
         for (var i = 0; i < TOTAL_CELLS; i++) avail.push(i);
@@ -922,6 +1194,7 @@ body.es .lang-en { display: none !important; }
         updateStats();
     }
 
+    // ==================== SELECTORS ====================
     document.querySelectorAll('[data-level]').forEach(function(btn) {
         btn.onclick = function() {
             if (state.isPlaying) return;
@@ -955,6 +1228,7 @@ body.es .lang-en { display: none !important; }
 
     actionBtn.onclick = startRound;
 
+    // ==================== LOAD STATE ====================
     function loadState() {
         var sl = localStorage.getItem('gt-seq-level');
         if (sl) { state.level = parseInt(sl); document.querySelectorAll('[data-level]').forEach(function(b) { b.classList.remove('active'); }); var lb = document.querySelector('[data-level="' + state.level + '"]'); if (lb) lb.classList.add('active'); }
@@ -962,6 +1236,7 @@ body.es .lang-en { display: none !important; }
         if (ss && (speedAccess.allSpeeds || ss === 'slow')) { state.speed = ss; document.querySelectorAll('.speed-btn').forEach(function(b) { b.classList.remove('active'); }); var sb = document.querySelector('.speed-btn[data-speed="' + state.speed + '"]'); if (sb) sb.classList.add('active'); }
     }
 
+    // ==================== INIT ====================
     initCourt();
     initSpeedButtons();
     loadState();
