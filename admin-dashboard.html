@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Dashboard | LaughCourt™</title>
+<title>Admin Dashboard | GoTrotter</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -61,8 +61,8 @@ body.en .lang-es { display: none !important; }
     letter-spacing: 4px;
     margin-bottom: 10px;
 }
-.login-logo .laugh { color: var(--gold); }
-.login-logo .court { color: var(--text); }
+.login-logo .go { color: var(--gold); }
+.login-logo .trotter { color: var(--text); }
 
 .login-badge {
     display: inline-block;
@@ -164,7 +164,7 @@ body.en .lang-es { display: none !important; }
     letter-spacing: 3px;
     margin-bottom: 5px;
 }
-.sidebar-logo .laugh { color: var(--gold); }
+.sidebar-logo .go { color: var(--gold); }
 
 .sidebar-team {
     font-size: 0.65rem;
@@ -371,79 +371,77 @@ body.en .lang-es { display: none !important; }
     letter-spacing: 1px;
 }
 
-/* ==================== COURT CARDS - 5 WORKOUTS ==================== */
-.court-cards-grid {
+/* ==================== DIVISION GRID ==================== */
+.division-grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 15px;
     margin-bottom: 30px;
 }
 
-@media (max-width: 1200px) {
-    .court-cards-grid { grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 900px) {
+    .division-grid { grid-template-columns: repeat(2, 1fr); }
 }
-@media (max-width: 800px) {
-    .court-cards-grid { grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 500px) {
-    .court-cards-grid { grid-template-columns: 1fr; }
+@media (max-width: 600px) {
+    .division-grid { grid-template-columns: 1fr; }
 }
 
-.court-card {
+.division-card {
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: 16px;
     overflow: hidden;
     transition: all 0.3s;
 }
-.court-card:hover {
+.division-card:hover {
     transform: translateY(-3px);
     border-color: var(--gold);
 }
 
-.court-card-header {
+.division-card-header {
     padding: 14px 16px;
     display: flex;
     align-items: center;
     gap: 10px;
 }
-.court-card-header.recall {
-    background: linear-gradient(135deg, rgba(255,107,0,0.2), transparent);
-    border-bottom: 2px solid var(--orange);
+.division-card-header.slow {
+    background: linear-gradient(135deg, rgba(0,217,165,0.2), transparent);
+    border-bottom: 2px solid var(--teal);
 }
-.court-card-header.match {
-    background: linear-gradient(135deg, rgba(0,206,209,0.2), transparent);
-    border-bottom: 2px solid var(--cyan);
+.division-card-header.medium {
+    background: linear-gradient(135deg, rgba(255,215,0,0.2), transparent);
+    border-bottom: 2px solid var(--gold);
 }
-.court-card-header.drill {
-    background: linear-gradient(135deg, rgba(157,78,221,0.2), transparent);
-    border-bottom: 2px solid var(--purple);
-}
-.court-card-header.reflex {
-    background: linear-gradient(135deg, rgba(0,230,118,0.2), transparent);
-    border-bottom: 2px solid var(--green);
-}
-.court-card-header.ritmo {
+.division-card-header.fast {
     background: linear-gradient(135deg, rgba(255,23,68,0.2), transparent);
     border-bottom: 2px solid var(--red);
 }
 
-.court-card-icon { font-size: 1.3rem; }
-.court-card-title {
+.division-card-icon { font-size: 1.3rem; }
+.division-card-title {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 0.95rem;
     letter-spacing: 2px;
     flex: 1;
 }
+.division-card-speed {
+    font-size: 0.7rem;
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-weight: 700;
+}
+.division-card-speed.slow { background: rgba(0,217,165,0.2); color: var(--teal); }
+.division-card-speed.medium { background: rgba(255,215,0,0.2); color: var(--gold); }
+.division-card-speed.fast { background: rgba(255,23,68,0.2); color: var(--red); }
 
-.court-card-body { padding: 16px; }
-.court-card-stats { display: flex; gap: 12px; }
-.court-stat { text-align: center; flex: 1; }
-.court-stat-value {
+.division-card-body { padding: 16px; }
+.division-card-stats { display: flex; gap: 12px; }
+.division-stat { text-align: center; flex: 1; }
+.division-stat-value {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 1.2rem;
 }
-.court-stat-label {
+.division-stat-label {
     font-size: 0.6rem;
     color: var(--muted);
     text-transform: uppercase;
@@ -576,12 +574,8 @@ tr:hover { background: var(--card-hover); }
     font-size: 1.1rem;
     flex-shrink: 0;
 }
-.aggregated-icon.recall { background: rgba(255,107,0,0.15); color: var(--orange); }
-.aggregated-icon.match { background: rgba(0,206,209,0.15); color: var(--cyan); }
-.aggregated-icon.drill { background: rgba(157,78,221,0.15); color: var(--purple); }
-.aggregated-icon.reflex { background: rgba(0,230,118,0.15); color: var(--green); }
-.aggregated-icon.ritmo { background: rgba(255,23,68,0.15); color: var(--red); }
-.aggregated-icon.subscription { background: rgba(255,215,0,0.15); color: var(--gold); }
+.aggregated-icon.game { background: rgba(255,215,0,0.15); color: var(--gold); }
+.aggregated-icon.subscription { background: rgba(0,217,165,0.15); color: var(--teal); }
 .aggregated-icon.trial { background: rgba(157,78,221,0.15); color: var(--purple); }
 .aggregated-icon.notification { background: rgba(0,206,209,0.15); color: var(--cyan); }
 
@@ -918,7 +912,7 @@ tr.clickable { cursor: pointer; }
     letter-spacing: 1px;
 }
 
-.court-score-row {
+.division-score-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -927,14 +921,14 @@ tr.clickable { cursor: pointer; }
     border-radius: 10px;
     margin-bottom: 10px;
 }
-.court-score-name {
+.division-score-name {
     display: flex;
     align-items: center;
     gap: 10px;
     font-weight: 500;
 }
-.court-score-name span.icon { font-size: 1.2rem; }
-.court-score-value {
+.division-score-name span.icon { font-size: 1.2rem; }
+.division-score-value {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 1.3rem;
     color: var(--text);
@@ -1020,56 +1014,6 @@ tr.clickable { cursor: pointer; }
     color: var(--muted);
 }
 
-/* ==================== UPDATE HISTORY ==================== */
-.update-history {
-    margin-top: 30px;
-}
-
-.update-history-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1rem;
-    letter-spacing: 2px;
-    color: var(--muted);
-    margin-bottom: 15px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid var(--border);
-}
-
-.update-history-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 0;
-    border-bottom: 1px solid var(--border);
-}
-.update-history-item:last-child { border-bottom: none; }
-
-.update-history-icon {
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1rem;
-    background: rgba(0,206,209,0.15);
-    color: var(--cyan);
-    flex-shrink: 0;
-}
-
-.update-history-content { flex: 1; }
-.update-history-text { font-size: 0.85rem; }
-.update-history-meta { font-size: 0.7rem; color: var(--muted); margin-top: 2px; }
-
-.update-history-badge {
-    background: rgba(0,217,165,0.15);
-    color: var(--teal);
-    padding: 3px 8px;
-    border-radius: 6px;
-    font-size: 0.7rem;
-    font-weight: 700;
-}
-
 /* ==================== FOOTER ==================== */
 .admin-footer {
     margin-top: 40px;
@@ -1078,11 +1022,11 @@ tr.clickable { cursor: pointer; }
     border-top: 1px solid var(--border);
 }
 .admin-footer .footer-brand { margin-bottom: 10px; }
-.admin-footer .ritnome-tm {
+.admin-footer .gotrotter-tm {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 1.6rem;
     letter-spacing: 4px;
-    background: linear-gradient(135deg, #FF1744, #FFD700);
+    background: linear-gradient(135deg, var(--gold), var(--orange));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -1143,7 +1087,7 @@ tr.clickable { cursor: pointer; }
 <!-- ==================== LOGIN SCREEN ==================== -->
 <div class="login-screen" id="loginScreen">
     <div class="login-card">
-        <div class="login-logo"><span class="laugh">LAUGH</span><span class="court">COURT</span></div>
+        <div class="login-logo"><span class="go">GO</span><span class="trotter">TROTTER</span></div>
         <div class="login-badge">Coach Admin Portal</div>
         <p class="login-subtitle">
             <span class="lang-en">Enter your 4-digit admin PIN</span>
@@ -1172,9 +1116,9 @@ tr.clickable { cursor: pointer; }
     <!-- SIDEBAR -->
     <aside class="sidebar">
         <div class="sidebar-header">
-            <div class="sidebar-logo"><span class="laugh">LAUGH</span><span class="court">COURT</span></div>
-            <div class="sidebar-team">RECALL • MATCH • DRILL • REFLEX • RITMO</div>
-            <span class="admin-badge">🏀 Admin</span>
+            <div class="sidebar-logo"><span class="go">GO</span><span class="trotter">TROTTER</span></div>
+            <div class="sidebar-team">5 LEVELS • 3 SPEEDS • 15 DIVISIONS</div>
+            <span class="admin-badge">🏀 Coach Admin</span>
         </div>
         <nav class="nav-section">
             <div class="nav-section-title">
@@ -1225,17 +1169,17 @@ tr.clickable { cursor: pointer; }
         <!-- ========== OVERVIEW PAGE ========== -->
         <section class="page-section active" id="page-overview">
             <header class="page-header">
-                <h1 class="page-title">LAUGHCOURT ADMIN</h1>
+                <h1 class="page-title">GOTROTTER ADMIN</h1>
                 <p class="page-subtitle">
-                    <span class="lang-en">5 Workouts • 10 Tiers • 3 Circuits Each • Ritnome™ Powered</span>
-                    <span class="lang-es">5 Entrenamientos • 10 Niveles • 3 Circuitos • Powered by Ritnome™</span>
+                    <span class="lang-en">The Cognitive Sport • 5 Levels × 3 Speeds = 15 Divisions</span>
+                    <span class="lang-es">El Deporte Cognitivo • 5 Niveles × 3 Velocidades = 15 Divisiones</span>
                 </p>
             </header>
 
             <div class="version-banner">
                 <div class="version-info">
-                    <span class="version-badge" id="platformVersion">v2.0.0</span>
-                    <span class="version-name" id="platformVersionName">LaughCourt 5-Court Edition</span>
+                    <span class="version-badge" id="platformVersion">v1.0.0</span>
+                    <span class="version-name" id="platformVersionName">GoTrotter Launch Edition</span>
                 </div>
                 <button class="btn btn-primary" onclick="showPage('notifications');document.querySelector('[data-page=notifications]').click();">
                     📢 Send Update
@@ -1268,123 +1212,82 @@ tr.clickable { cursor: pointer; }
                     </div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-card-icon pink">😂</div>
-                    <div class="stat-card-value" id="totalLaughs">0</div>
+                    <div class="stat-card-icon orange">🏀</div>
+                    <div class="stat-card-value" id="totalGames">0</div>
                     <div class="stat-card-label">
-                        <span class="lang-en">Total Laughs</span>
-                        <span class="lang-es">Risas</span>
+                        <span class="lang-en">Total Games</span>
+                        <span class="lang-es">Juegos</span>
                     </div>
                 </div>
             </div>
 
-            <!-- 5 WORKOUT CARDS -->
-            <div class="court-cards-grid">
-                <div class="court-card">
-                    <div class="court-card-header recall">
-                        <div class="court-card-icon">🧠</div>
-                        <div class="court-card-title">THE RECALL</div>
+            <!-- 3 SPEED DIVISION CARDS -->
+            <div class="division-grid">
+                <div class="division-card">
+                    <div class="division-card-header slow">
+                        <div class="division-card-icon">🐢</div>
+                        <div class="division-card-title">SLOW DIVISIONS</div>
+                        <span class="division-card-speed slow">2500ms</span>
                     </div>
-                    <div class="court-card-body">
-                        <div class="court-card-stats">
-                            <div class="court-stat">
-                                <div class="court-stat-value" id="recallSessions">0</div>
-                                <div class="court-stat-label">Circuits</div>
+                    <div class="division-card-body">
+                        <div class="division-card-stats">
+                            <div class="division-stat">
+                                <div class="division-stat-value" id="slowGames">0</div>
+                                <div class="division-stat-label">Games</div>
                             </div>
-                            <div class="court-stat">
-                                <div class="court-stat-value" id="recallBestTier">0</div>
-                                <div class="court-stat-label">Best</div>
+                            <div class="division-stat">
+                                <div class="division-stat-value" id="slowBestLevel">0</div>
+                                <div class="division-stat-label">Best Lvl</div>
                             </div>
-                            <div class="court-stat">
-                                <div class="court-stat-value" id="recallLaughs">0</div>
-                                <div class="court-stat-label">😂</div>
+                            <div class="division-stat">
+                                <div class="division-stat-value" id="slowPlayers">0</div>
+                                <div class="division-stat-label">Players</div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="court-card">
-                    <div class="court-card-header match">
-                        <div class="court-card-icon">🎯</div>
-                        <div class="court-card-title">THE MATCH</div>
+                <div class="division-card">
+                    <div class="division-card-header medium">
+                        <div class="division-card-icon">🏃</div>
+                        <div class="division-card-title">MEDIUM DIVISIONS</div>
+                        <span class="division-card-speed medium">1500ms</span>
                     </div>
-                    <div class="court-card-body">
-                        <div class="court-card-stats">
-                            <div class="court-stat">
-                                <div class="court-stat-value" id="matchSessions">0</div>
-                                <div class="court-stat-label">Circuits</div>
+                    <div class="division-card-body">
+                        <div class="division-card-stats">
+                            <div class="division-stat">
+                                <div class="division-stat-value" id="medGames">0</div>
+                                <div class="division-stat-label">Games</div>
                             </div>
-                            <div class="court-stat">
-                                <div class="court-stat-value" id="matchBestTier">0</div>
-                                <div class="court-stat-label">Best</div>
+                            <div class="division-stat">
+                                <div class="division-stat-value" id="medBestLevel">0</div>
+                                <div class="division-stat-label">Best Lvl</div>
                             </div>
-                            <div class="court-stat">
-                                <div class="court-stat-value" id="matchLaughs">0</div>
-                                <div class="court-stat-label">😂</div>
+                            <div class="division-stat">
+                                <div class="division-stat-value" id="medPlayers">0</div>
+                                <div class="division-stat-label">Players</div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="court-card">
-                    <div class="court-card-header drill">
-                        <div class="court-card-icon">🏀</div>
-                        <div class="court-card-title">THE DRILL</div>
+                <div class="division-card">
+                    <div class="division-card-header fast">
+                        <div class="division-card-icon">🚀</div>
+                        <div class="division-card-title">FAST DIVISIONS</div>
+                        <span class="division-card-speed fast">800ms</span>
                     </div>
-                    <div class="court-card-body">
-                        <div class="court-card-stats">
-                            <div class="court-stat">
-                                <div class="court-stat-value" id="drillSessions">0</div>
-                                <div class="court-stat-label">Circuits</div>
+                    <div class="division-card-body">
+                        <div class="division-card-stats">
+                            <div class="division-stat">
+                                <div class="division-stat-value" id="fastGames">0</div>
+                                <div class="division-stat-label">Games</div>
                             </div>
-                            <div class="court-stat">
-                                <div class="court-stat-value" id="drillBestTier">0</div>
-                                <div class="court-stat-label">Best</div>
+                            <div class="division-stat">
+                                <div class="division-stat-value" id="fastBestLevel">0</div>
+                                <div class="division-stat-label">Best Lvl</div>
                             </div>
-                            <div class="court-stat">
-                                <div class="court-stat-value" id="drillLaughs">0</div>
-                                <div class="court-stat-label">😂</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="court-card">
-                    <div class="court-card-header reflex">
-                        <div class="court-card-icon">⚡</div>
-                        <div class="court-card-title">THE REFLEX</div>
-                    </div>
-                    <div class="court-card-body">
-                        <div class="court-card-stats">
-                            <div class="court-stat">
-                                <div class="court-stat-value" id="reflexSessions">0</div>
-                                <div class="court-stat-label">Circuits</div>
-                            </div>
-                            <div class="court-stat">
-                                <div class="court-stat-value" id="reflexBestTier">0</div>
-                                <div class="court-stat-label">Best</div>
-                            </div>
-                            <div class="court-stat">
-                                <div class="court-stat-value" id="reflexLaughs">0</div>
-                                <div class="court-stat-label">😂</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="court-card">
-                    <div class="court-card-header ritmo">
-                        <div class="court-card-icon">🎵</div>
-                        <div class="court-card-title">THE RITMO</div>
-                    </div>
-                    <div class="court-card-body">
-                        <div class="court-card-stats">
-                            <div class="court-stat">
-                                <div class="court-stat-value" id="ritmoSessions">0</div>
-                                <div class="court-stat-label">Circuits</div>
-                            </div>
-                            <div class="court-stat">
-                                <div class="court-stat-value" id="ritmoBestTier">0</div>
-                                <div class="court-stat-label">Best</div>
-                            </div>
-                            <div class="court-stat">
-                                <div class="court-stat-value" id="ritmoLaughs">0</div>
-                                <div class="court-stat-label">😂</div>
+                            <div class="division-stat">
+                                <div class="division-stat-value" id="fastPlayers">0</div>
+                                <div class="division-stat-label">Players</div>
                             </div>
                         </div>
                     </div>
@@ -1410,8 +1313,8 @@ tr.clickable { cursor: pointer; }
                     <span class="lang-es">SUSCRIPTORES</span>
                 </h1>
                 <p class="page-subtitle">
-                    <span class="lang-en">$5/user • 5 LaughCourt Workouts • Full Ritnome™ Access</span>
-                    <span class="lang-es">$5/usuario • 5 Entrenamientos • Acceso Ritnome™ Completo</span>
+                    <span class="lang-en">$5/user • All 15 Divisions • Full Speed Access</span>
+                    <span class="lang-es">$5/usuario • 15 Divisiones • Acceso Completo</span>
                 </p>
             </header>
 
@@ -1432,9 +1335,9 @@ tr.clickable { cursor: pointer; }
                     <div class="stat-card-label">Best Streak</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-card-icon pink">😂</div>
-                    <div class="stat-card-value" id="laughLeader">0</div>
-                    <div class="stat-card-label">Most Laughs</div>
+                    <div class="stat-card-icon purple">🏆</div>
+                    <div class="stat-card-value" id="bestDivision">-</div>
+                    <div class="stat-card-label">Best Division</div>
                 </div>
             </div>
 
@@ -1451,12 +1354,10 @@ tr.clickable { cursor: pointer; }
                                 <th>PIN</th>
                                 <th>Qty</th>
                                 <th>Status</th>
-                                <th>😂</th>
-                                <th>🧠</th>
-                                <th>🎯</th>
-                                <th>🏀</th>
-                                <th>⚡</th>
-                                <th>🎵</th>
+                                <th>Games</th>
+                                <th>Best Lvl</th>
+                                <th>Best Speed</th>
+                                <th>Division</th>
                                 <th>🔥</th>
                                 <th>Actions</th>
                             </tr>
@@ -1475,8 +1376,8 @@ tr.clickable { cursor: pointer; }
                     <span class="lang-es">PINS DE PRUEBA</span>
                 </h1>
                 <p class="page-subtitle">
-                    <span class="lang-en">Generate facility trial PINs (1-100 users, 7 days, 60 BPM only)</span>
-                    <span class="lang-es">Genera PINs de prueba para instalaciones (1-100 usuarios, 7 días, solo 60 BPM)</span>
+                    <span class="lang-en">Generate facility trial PINs (1-100 users, 7 days, SLOW speed only)</span>
+                    <span class="lang-es">Genera PINs de prueba (1-100 usuarios, 7 días, solo velocidad LENTA)</span>
                 </p>
             </header>
 
@@ -1600,15 +1501,15 @@ tr.clickable { cursor: pointer; }
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-card-icon orange">🏀</div>
-                    <div class="stat-card-value" id="courtsToday">0</div>
+                    <div class="stat-card-value" id="gamesToday">0</div>
                     <div class="stat-card-label">
-                        <span class="lang-en">Workouts Today</span>
+                        <span class="lang-en">Games Today</span>
                         <span class="lang-es">Hoy</span>
                     </div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-card-icon teal">📅</div>
-                    <div class="stat-card-value" id="courtsWeek">0</div>
+                    <div class="stat-card-value" id="gamesWeek">0</div>
                     <div class="stat-card-label">
                         <span class="lang-en">This Week</span>
                         <span class="lang-es">Semana</span>
@@ -1620,11 +1521,11 @@ tr.clickable { cursor: pointer; }
                     <div class="stat-card-label">New Subs</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-card-icon pink">😂</div>
-                    <div class="stat-card-value" id="laughsToday">0</div>
+                    <div class="stat-card-icon purple">🏆</div>
+                    <div class="stat-card-value" id="divisionsUnlocked">0</div>
                     <div class="stat-card-label">
-                        <span class="lang-en">Laughs Today</span>
-                        <span class="lang-es">Risas Hoy</span>
+                        <span class="lang-en">Divisions Played</span>
+                        <span class="lang-es">Divisiones</span>
                     </div>
                 </div>
             </div>
@@ -1644,8 +1545,8 @@ tr.clickable { cursor: pointer; }
         <!-- FOOTER -->
         <footer class="admin-footer">
             <div class="footer-brand">
-                <span class="ritnome-tm">Ritnome™</span>
-                <span class="footer-tagline">Rhythm-Based Cognitive Training</span>
+                <span class="gotrotter-tm">GoTrotter™</span>
+                <span class="footer-tagline">The Cognitive Sport</span>
             </div>
             <div class="footer-company">by <a href="https://gostar.digital">GoStar Digital LLC</a> 🇵🇷</div>
             <div class="footer-copyright">© 2025 GoStar Digital LLC. All rights reserved.</div>
@@ -1703,7 +1604,7 @@ tr.clickable { cursor: pointer; }
             </div>
             <p style="text-align:center;font-size:0.85rem;color:var(--muted)" id="trialCreatedInfo"></p>
             <p style="text-align:center;font-size:0.75rem;color:var(--gold);margin-top:10px">
-                ⚠️ Trial users get 60 BPM only. Upgrade unlocks 90 & 120 BPM.
+                ⚠️ Trial users get SLOW speed only. Upgrade unlocks MEDIUM & FAST.
             </p>
         </div>
         <div class="modal-footer">
@@ -1850,11 +1751,11 @@ tr.clickable { cursor: pointer; }
         <div class="modal-body">
             <div class="form-group">
                 <label class="form-label">Title</label>
-                <input type="text" class="form-input" id="notifTitle" placeholder="LaughCourt v2.0 — 5 Workouts!">
+                <input type="text" class="form-input" id="notifTitle" placeholder="GoTrotter v1.0 — Launch!">
             </div>
             <div class="form-group">
                 <label class="form-label">Message</label>
-                <textarea class="form-textarea" id="notifMessage" placeholder="We've added 2 new workouts! Enjoy THE REFLEX and THE RITMO..."></textarea>
+                <textarea class="form-textarea" id="notifMessage" placeholder="Welcome to GoTrotter! The Cognitive Sport with 15 divisions..."></textarea>
             </div>
             <div class="form-row">
                 <div class="form-group">
@@ -1956,8 +1857,8 @@ tr.clickable { cursor: pointer; }
     let activities = [];
     let trials = [];
     let notifications = [];
-    let platformVersion = { version: '2.0.0', versionName: 'LaughCourt 5-Court Edition' };
-    let currentLang = localStorage.getItem('lc-lang') || 'en';
+    let platformVersion = { version: '1.0.0', versionName: 'GoTrotter Launch Edition' };
+    let currentLang = localStorage.getItem('gt-lang') || 'en';
 
     // ==================== INITIALIZATION ====================
     function init() {
@@ -1965,7 +1866,7 @@ tr.clickable { cursor: pointer; }
         setupPinInputs();
         setupEvents();
         
-        const savedToken = sessionStorage.getItem('lc-token');
+        const savedToken = sessionStorage.getItem('gt-token');
         if (savedToken) {
             verifyToken(savedToken);
         }
@@ -1974,7 +1875,7 @@ tr.clickable { cursor: pointer; }
     // ==================== LANGUAGE ====================
     function setLang(lang) {
         currentLang = lang;
-        localStorage.setItem('lc-lang', lang);
+        localStorage.setItem('gt-lang', lang);
         document.body.className = lang;
         document.getElementById('btnEn').className = lang === 'en' ? 'lang-btn active' : 'lang-btn';
         document.getElementById('btnEs').className = lang === 'es' ? 'lang-btn active' : 'lang-btn';
@@ -2012,7 +1913,7 @@ tr.clickable { cursor: pointer; }
         .then(d => {
             if (d.success && d.token) {
                 authToken = d.token;
-                sessionStorage.setItem('lc-token', authToken);
+                sessionStorage.setItem('gt-token', authToken);
                 showDashboard();
             } else {
                 showLoginError();
@@ -2033,10 +1934,10 @@ tr.clickable { cursor: pointer; }
                 authToken = token;
                 showDashboard();
             } else {
-                sessionStorage.removeItem('lc-token');
+                sessionStorage.removeItem('gt-token');
             }
         })
-        .catch(() => sessionStorage.removeItem('lc-token'));
+        .catch(() => sessionStorage.removeItem('gt-token'));
     }
 
     function showLoginError() {
@@ -2054,7 +1955,7 @@ tr.clickable { cursor: pointer; }
 
     function logout() {
         authToken = null;
-        sessionStorage.removeItem('lc-token');
+        sessionStorage.removeItem('gt-token');
         document.getElementById('dashboard').classList.remove('visible');
         document.getElementById('loginScreen').classList.remove('hidden');
         ['pin1', 'pin2', 'pin3', 'pin4'].forEach(id => document.getElementById(id).value = '');
@@ -2156,6 +2057,11 @@ tr.clickable { cursor: pointer; }
         const d = new Date(ts);
         return d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
     }
+    
+    function getDivisionName(level, speed) {
+        const speedNames = { slow: 'S', medium: 'M', fast: 'F' };
+        return `L${level}-${speedNames[speed] || '?'}`;
+    }
 
     // ==================== API ====================
     function api(endpoint, opts = {}) {
@@ -2202,11 +2108,12 @@ tr.clickable { cursor: pointer; }
 
     function updateStats() {
         let total = subscribers.length;
-        let active = 0, totalUsers = 0, totalLaughs = 0;
-        let recallSessions = 0, matchSessions = 0, drillSessions = 0, reflexSessions = 0, ritmoSessions = 0;
-        let recallLaughs = 0, matchLaughs = 0, drillLaughs = 0, reflexLaughs = 0, ritmoLaughs = 0;
-        let bestStreak = 0, mostLaughs = 0;
-        let bestRecallTier = 0, bestMatchTier = 0, bestDrillTier = 0, bestReflexTier = 0, bestRitmoTier = 0;
+        let active = 0, totalUsers = 0, totalGames = 0;
+        let slowGames = 0, medGames = 0, fastGames = 0;
+        let slowPlayers = 0, medPlayers = 0, fastPlayers = 0;
+        let bestStreak = 0;
+        let bestSlowLevel = 0, bestMedLevel = 0, bestFastLevel = 0;
+        let overallBestLevel = 0, overallBestSpeed = '';
 
         subscribers.forEach(s => {
             const qty = s.quantity || 1;
@@ -2214,135 +2121,86 @@ tr.clickable { cursor: pointer; }
                 active++;
                 totalUsers += qty;
             }
-            totalLaughs += s.totalLaughs || 0;
-            if ((s.totalLaughs || 0) > mostLaughs) mostLaughs = s.totalLaughs;
+            
+            totalGames += s.totalGames || 0;
             if ((s.streak || 0) > bestStreak) bestStreak = s.streak;
 
-            // Courts data (new format)
-            if (s.courts) {
-                if (s.courts.therecall) {
-                    recallSessions += s.courts.therecall.sessions || 0;
-                    recallLaughs += s.courts.therecall.laughs || 0;
-                    if ((s.courts.therecall.bestTier || 0) > bestRecallTier) bestRecallTier = s.courts.therecall.bestTier;
+            // Division data
+            if (s.divisions) {
+                if (s.divisions.slow) {
+                    slowGames += s.divisions.slow.games || 0;
+                    if (s.divisions.slow.games > 0) slowPlayers++;
+                    if ((s.divisions.slow.bestLevel || 0) > bestSlowLevel) bestSlowLevel = s.divisions.slow.bestLevel;
                 }
-                if (s.courts.thematch) {
-                    matchSessions += s.courts.thematch.sessions || 0;
-                    matchLaughs += s.courts.thematch.laughs || 0;
-                    if ((s.courts.thematch.bestTier || 0) > bestMatchTier) bestMatchTier = s.courts.thematch.bestTier;
+                if (s.divisions.medium) {
+                    medGames += s.divisions.medium.games || 0;
+                    if (s.divisions.medium.games > 0) medPlayers++;
+                    if ((s.divisions.medium.bestLevel || 0) > bestMedLevel) bestMedLevel = s.divisions.medium.bestLevel;
                 }
-                if (s.courts.thedrill) {
-                    drillSessions += s.courts.thedrill.sessions || 0;
-                    drillLaughs += s.courts.thedrill.laughs || 0;
-                    if ((s.courts.thedrill.bestTier || 0) > bestDrillTier) bestDrillTier = s.courts.thedrill.bestTier;
-                }
-                if (s.courts.thereflex) {
-                    reflexSessions += s.courts.thereflex.sessions || 0;
-                    reflexLaughs += s.courts.thereflex.laughs || 0;
-                    if ((s.courts.thereflex.bestTier || 0) > bestReflexTier) bestReflexTier = s.courts.thereflex.bestTier;
-                }
-                if (s.courts.theritmo) {
-                    ritmoSessions += s.courts.theritmo.sessions || 0;
-                    ritmoLaughs += s.courts.theritmo.laughs || 0;
-                    if ((s.courts.theritmo.bestTier || 0) > bestRitmoTier) bestRitmoTier = s.courts.theritmo.bestTier;
+                if (s.divisions.fast) {
+                    fastGames += s.divisions.fast.games || 0;
+                    if (s.divisions.fast.games > 0) fastPlayers++;
+                    if ((s.divisions.fast.bestLevel || 0) > bestFastLevel) bestFastLevel = s.divisions.fast.bestLevel;
                 }
             }
-
-            // Legacy games data
-            if (s.games) {
-                if (s.games.therecall || s.games.laughtrail) {
-                    const g = s.games.therecall || s.games.laughtrail;
-                    recallSessions += g.sessions || 0;
-                    recallLaughs += g.laughs || 0;
-                    const tier = g.bestTier || g.bestRound || 0;
-                    if (tier > bestRecallTier) bestRecallTier = tier;
-                }
-                if (s.games.thematch) {
-                    matchSessions += s.games.thematch.sessions || 0;
-                    matchLaughs += s.games.thematch.laughs || 0;
-                    if ((s.games.thematch.bestTier || 0) > bestMatchTier) bestMatchTier = s.games.thematch.bestTier;
-                }
-                if (s.games.thedrill) {
-                    drillSessions += s.games.thedrill.sessions || 0;
-                    drillLaughs += s.games.thedrill.laughs || 0;
-                    if ((s.games.thedrill.bestTier || 0) > bestDrillTier) bestDrillTier = s.games.thedrill.bestTier;
-                }
-                if (s.games.thereflex) {
-                    reflexSessions += s.games.thereflex.sessions || 0;
-                    reflexLaughs += s.games.thereflex.laughs || 0;
-                    if ((s.games.thereflex.bestTier || 0) > bestReflexTier) bestReflexTier = s.games.thereflex.bestTier;
-                }
-                if (s.games.theritmo) {
-                    ritmoSessions += s.games.theritmo.sessions || 0;
-                    ritmoLaughs += s.games.theritmo.laughs || 0;
-                    if ((s.games.theritmo.bestTier || 0) > bestRitmoTier) bestRitmoTier = s.games.theritmo.bestTier;
-                }
+            
+            // Track overall best
+            const subBestLevel = s.bestLevel || 0;
+            const subBestSpeed = s.bestSpeed || 'slow';
+            if (subBestLevel > overallBestLevel || (subBestLevel === overallBestLevel && getSpeedRank(subBestSpeed) > getSpeedRank(overallBestSpeed))) {
+                overallBestLevel = subBestLevel;
+                overallBestSpeed = subBestSpeed;
             }
         });
 
         // Overview stats
         document.getElementById('totalSubscribers').textContent = total;
         document.getElementById('totalUsers').textContent = totalUsers;
-        document.getElementById('totalLaughs').textContent = totalLaughs;
+        document.getElementById('totalGames').textContent = totalGames;
 
-        // Court cards - all 5 workouts
-        document.getElementById('recallSessions').textContent = recallSessions;
-        document.getElementById('recallBestTier').textContent = bestRecallTier;
-        document.getElementById('recallLaughs').textContent = recallLaughs;
+        // Division cards
+        document.getElementById('slowGames').textContent = slowGames;
+        document.getElementById('slowBestLevel').textContent = bestSlowLevel;
+        document.getElementById('slowPlayers').textContent = slowPlayers;
 
-        document.getElementById('matchSessions').textContent = matchSessions;
-        document.getElementById('matchBestTier').textContent = bestMatchTier;
-        document.getElementById('matchLaughs').textContent = matchLaughs;
+        document.getElementById('medGames').textContent = medGames;
+        document.getElementById('medBestLevel').textContent = bestMedLevel;
+        document.getElementById('medPlayers').textContent = medPlayers;
 
-        document.getElementById('drillSessions').textContent = drillSessions;
-        document.getElementById('drillBestTier').textContent = bestDrillTier;
-        document.getElementById('drillLaughs').textContent = drillLaughs;
-
-        document.getElementById('reflexSessions').textContent = reflexSessions;
-        document.getElementById('reflexBestTier').textContent = bestReflexTier;
-        document.getElementById('reflexLaughs').textContent = reflexLaughs;
-
-        document.getElementById('ritmoSessions').textContent = ritmoSessions;
-        document.getElementById('ritmoBestTier').textContent = bestRitmoTier;
-        document.getElementById('ritmoLaughs').textContent = ritmoLaughs;
+        document.getElementById('fastGames').textContent = fastGames;
+        document.getElementById('fastBestLevel').textContent = bestFastLevel;
+        document.getElementById('fastPlayers').textContent = fastPlayers;
 
         // Subscriber stats
         document.getElementById('activeCount').textContent = active;
         document.getElementById('totalUsersPaid').textContent = totalUsers;
         document.getElementById('streakLeader').textContent = bestStreak;
-        document.getElementById('laughLeader').textContent = mostLaughs;
+        document.getElementById('bestDivision').textContent = overallBestLevel > 0 ? getDivisionName(overallBestLevel, overallBestSpeed) : '-';
+    }
+    
+    function getSpeedRank(speed) {
+        return { slow: 1, medium: 2, fast: 3 }[speed] || 0;
+    }
+    
+    function getSpeedLabel(speed) {
+        return { slow: '🐢 Slow', medium: '🏃 Med', fast: '🚀 Fast' }[speed] || '-';
     }
 
     function renderSubscribers() {
         const tb = document.getElementById('subscribersTable');
         
         if (!subscribers.length) {
-            tb.innerHTML = '<tr><td colspan="12" style="text-align:center;padding:40px;color:var(--muted)">No subscribers yet</td></tr>';
+            tb.innerHTML = '<tr><td colspan="10" style="text-align:center;padding:40px;color:var(--muted)">No subscribers yet</td></tr>';
             return;
         }
 
         let html = '';
         subscribers.forEach(s => {
-            // Get tier data for all 5 workouts
-            let recall = 0, match = 0, drill = 0, reflex = 0, ritmo = 0;
-
-            if (s.courts) {
-                recall = s.courts.therecall?.bestTier || 0;
-                match = s.courts.thematch?.bestTier || 0;
-                drill = s.courts.thedrill?.bestTier || 0;
-                reflex = s.courts.thereflex?.bestTier || 0;
-                ritmo = s.courts.theritmo?.bestTier || 0;
-            }
-
-            if (s.games) {
-                if (!recall) recall = s.games.therecall?.bestTier || s.games.laughtrail?.bestTier || s.games.laughtrail?.bestRound || 0;
-                if (!match) match = s.games.thematch?.bestTier || 0;
-                if (!drill) drill = s.games.thedrill?.bestTier || 0;
-                if (!reflex) reflex = s.games.thereflex?.bestTier || 0;
-                if (!ritmo) ritmo = s.games.theritmo?.bestTier || 0;
-            }
-
             const qty = s.quantity || 1;
             const qtyBadge = qty > 1 ? `<span class="qty-badge">x${qty}</span>` : '';
+            const bestLevel = s.bestLevel || 0;
+            const bestSpeed = s.bestSpeed || '-';
+            const division = bestLevel > 0 ? getDivisionName(bestLevel, bestSpeed) : '-';
 
             html += `
                 <tr class="clickable" onclick="viewSub('${s.pin}')">
@@ -2350,12 +2208,10 @@ tr.clickable { cursor: pointer; }
                     <td><strong style="color:var(--gold)">${s.pin}</strong></td>
                     <td>${qty}${qtyBadge}</td>
                     <td><span class="badge badge-${s.status}">${s.status}</span></td>
-                    <td>${s.totalLaughs || 0}</td>
-                    <td>T${recall}</td>
-                    <td>T${match}</td>
-                    <td>T${drill}</td>
-                    <td>T${reflex}</td>
-                    <td>T${ritmo}</td>
+                    <td>${s.totalGames || 0}</td>
+                    <td>L${bestLevel}</td>
+                    <td>${getSpeedLabel(bestSpeed)}</td>
+                    <td><strong style="color:var(--gold)">${division}</strong></td>
                     <td>🔥${s.streak || 0}</td>
                     <td>
                         <div class="action-btns">
@@ -2374,27 +2230,15 @@ tr.clickable { cursor: pointer; }
         const s = subscribers.find(x => x.pin === pin);
         if (!s) return;
 
-        // Get data for all 5 workouts
-        let recall = {}, match = {}, drill = {}, reflex = {}, ritmo = {};
-
-        if (s.courts) {
-            recall = s.courts.therecall || {};
-            match = s.courts.thematch || {};
-            drill = s.courts.thedrill || {};
-            reflex = s.courts.thereflex || {};
-            ritmo = s.courts.theritmo || {};
-        }
-
-        if (s.games) {
-            if (!recall.sessions) recall = s.games.therecall || s.games.laughtrail || {};
-            if (!match.sessions) match = s.games.thematch || {};
-            if (!drill.sessions) drill = s.games.thedrill || {};
-            if (!reflex.sessions) reflex = s.games.thereflex || {};
-            if (!ritmo.sessions) ritmo = s.games.theritmo || {};
-        }
-
         const qty = s.quantity || 1;
-        const totalSessions = (recall.sessions || 0) + (match.sessions || 0) + (drill.sessions || 0) + (reflex.sessions || 0) + (ritmo.sessions || 0);
+        const bestLevel = s.bestLevel || 0;
+        const bestSpeed = s.bestSpeed || 'slow';
+        const division = bestLevel > 0 ? getDivisionName(bestLevel, bestSpeed) : '-';
+        
+        // Get division stats
+        const slow = s.divisions?.slow || {};
+        const med = s.divisions?.medium || {};
+        const fast = s.divisions?.fast || {};
 
         let html = `
             <div class="subscriber-detail-header">
@@ -2410,24 +2254,22 @@ tr.clickable { cursor: pointer; }
                     <div class="subscriber-stat-label">Users</div>
                 </div>
                 <div class="subscriber-stat">
-                    <div class="subscriber-stat-value">😂${s.totalLaughs || 0}</div>
-                    <div class="subscriber-stat-label">Laughs</div>
+                    <div class="subscriber-stat-value">🏀${s.totalGames || 0}</div>
+                    <div class="subscriber-stat-label">Games</div>
                 </div>
                 <div class="subscriber-stat">
                     <div class="subscriber-stat-value">🔥${s.streak || 0}</div>
                     <div class="subscriber-stat-label">Streak</div>
                 </div>
                 <div class="subscriber-stat">
-                    <div class="subscriber-stat-value">${totalSessions}</div>
-                    <div class="subscriber-stat-label">Circuits</div>
+                    <div class="subscriber-stat-value" style="font-size:1.4rem">${division}</div>
+                    <div class="subscriber-stat-label">Best Division</div>
                 </div>
             </div>
-            <div class="court-score-row"><div class="court-score-name"><span class="icon">🧠</span> THE RECALL</div><div class="court-score-value">T${recall.bestTier || recall.bestRound || 0}</div></div>
-            <div class="court-score-row"><div class="court-score-name"><span class="icon">🎯</span> THE MATCH</div><div class="court-score-value">T${match.bestTier || 0}</div></div>
-            <div class="court-score-row"><div class="court-score-name"><span class="icon">🏀</span> THE DRILL</div><div class="court-score-value">T${drill.bestTier || 0}</div></div>
-            <div class="court-score-row"><div class="court-score-name"><span class="icon">⚡</span> THE REFLEX</div><div class="court-score-value">T${reflex.bestTier || 0}</div></div>
-            <div class="court-score-row"><div class="court-score-name"><span class="icon">🎵</span> THE RITMO</div><div class="court-score-value">T${ritmo.bestTier || 0}</div></div>
-            <p style="text-align:center;margin-top:20px;font-size:0.8rem;color:var(--muted)">$${qty * 5}/mo subscription • Full Ritnome™ Access</p>
+            <div class="division-score-row"><div class="division-score-name"><span class="icon">🐢</span> SLOW (L1-L5)</div><div class="division-score-value">L${slow.bestLevel || 0} • ${slow.games || 0} games</div></div>
+            <div class="division-score-row"><div class="division-score-name"><span class="icon">🏃</span> MEDIUM (L1-L5)</div><div class="division-score-value">L${med.bestLevel || 0} • ${med.games || 0} games</div></div>
+            <div class="division-score-row"><div class="division-score-name"><span class="icon">🚀</span> FAST (L1-L5)</div><div class="division-score-value">L${fast.bestLevel || 0} • ${fast.games || 0} games</div></div>
+            <p style="text-align:center;margin-top:20px;font-size:0.8rem;color:var(--muted)">$${qty * 5}/mo subscription • All 15 Divisions</p>
         `;
 
         document.getElementById('subscriberModalBody').innerHTML = html;
@@ -2681,9 +2523,6 @@ tr.clickable { cursor: pointer; }
             };
             const icon = typeIcons[n.type] || '📢';
             const isExpired = n.status === 'expired';
-            const extendedInfo = n.extendedTrials && n.trialsExtendedCount > 0 
-                ? `<span class="update-history-badge">+3d → ${n.trialsExtendedCount} trials</span>` 
-                : '';
             
             html += `
                 <div class="notification-card ${isExpired ? 'expired' : ''}">
@@ -2745,7 +2584,7 @@ tr.clickable { cursor: pointer; }
                 type,
                 expiresInDays,
                 extendTrials,
-                extendDays: 3  // Always 3 days
+                extendDays: 3
             }
         }).then(d => {
             if (d.success) {
@@ -2821,39 +2660,32 @@ tr.clickable { cursor: pointer; }
         const todayStart = new Date().setHours(0, 0, 0, 0);
         const weekStart = todayStart - (new Date().getDay() * 86400000);
 
-        let courtsToday = 0, courtsWeek = 0, newSubsWeek = 0, laughsToday = 0;
+        let gamesToday = 0, gamesWeek = 0, newSubsWeek = 0;
+        let divisionsPlayed = new Set();
 
         activities.forEach(a => {
             const ts = new Date(a.timestamp).getTime();
             if (ts >= todayStart) {
-                if (a.type === 'court_session' || a.type === 'game_session') courtsToday++;
-                laughsToday += a.laughs || 0;
+                if (a.type === 'game_session') gamesToday++;
             }
             if (ts >= weekStart) {
-                if (a.type === 'court_session' || a.type === 'game_session') courtsWeek++;
+                if (a.type === 'game_session') gamesWeek++;
                 if (a.type && a.type.includes('subscription_created')) newSubsWeek++;
             }
+            if (a.division) divisionsPlayed.add(a.division);
         });
 
-        document.getElementById('courtsToday').textContent = courtsToday;
-        document.getElementById('courtsWeek').textContent = courtsWeek;
+        document.getElementById('gamesToday').textContent = gamesToday;
+        document.getElementById('gamesWeek').textContent = gamesWeek;
         document.getElementById('newSubsWeek').textContent = newSubsWeek;
-        document.getElementById('laughsToday').textContent = laughsToday;
+        document.getElementById('divisionsUnlocked').textContent = divisionsPlayed.size;
     }
 
     function getActivityIcon(a) {
         if (a.type && a.type.includes('notification')) return { icon: '📢', cls: 'notification' };
         if (a.type && a.type.includes('subscription')) return { icon: '💳', cls: 'subscription' };
         if (a.type && a.type.includes('trial')) return { icon: '🎫', cls: 'trial' };
-        
-        const court = a.court || a.game || '';
-        if (court === 'therecall' || court === 'laughtrail') return { icon: '🧠', cls: 'recall' };
-        if (court === 'thematch') return { icon: '🎯', cls: 'match' };
-        if (court === 'thedrill') return { icon: '🏀', cls: 'drill' };
-        if (court === 'thereflex') return { icon: '⚡', cls: 'reflex' };
-        if (court === 'theritmo') return { icon: '🎵', cls: 'ritmo' };
-        
-        return { icon: '🏀', cls: 'recall' };
+        return { icon: '🏀', cls: 'game' };
     }
 
     function renderActivity() {
@@ -2874,7 +2706,7 @@ tr.clickable { cursor: pointer; }
                         <div class="aggregated-text">
                             ${a.username || a.email ? `<strong>${a.username || a.email}</strong> - ` : ''}
                             ${a.details || a.type || 'Activity'}
-                            ${a.laughs ? ` <span style="color:var(--pink)">😂+${a.laughs}</span>` : ''}
+                            ${a.division ? ` <span style="color:var(--gold)">[${a.division}]</span>` : ''}
                         </div>
                         <div class="aggregated-details">${formatTimeAgo(a.timestamp)}</div>
                     </div>
