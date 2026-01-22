@@ -868,7 +868,7 @@ app.get('/', function(req, res) {
 });
 
 app.get('/coach-admin', function(req, res) {
-    res.sendFile(path.join(__dirname, 'trial-admin.html'));
+    res.sendFile(path.join(__dirname, 'trial-pin.html'));
 });
 
 app.get('/play', function(req, res) {
