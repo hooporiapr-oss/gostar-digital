@@ -194,11 +194,33 @@ body {
     align-items: center;
     gap: 20px;
     transition: all 0.3s;
+    cursor: pointer;
 }
 .player-card:hover {
     border-color: var(--orange);
     transform: translateX(5px);
     box-shadow: 0 10px 30px rgba(255,107,53,0.15);
+}
+.player-card.celebrating {
+    border-color: var(--gold);
+    box-shadow: 0 0 30px rgba(255,215,0,0.4);
+}
+.player-card.celebrating .player-svg {
+    animation: laugherBounce 0.6s ease-in-out;
+}
+.player-card.celebrating .player-laugh {
+    animation: laugherPop 0.6s ease-in-out;
+}
+@keyframes laugherBounce {
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    20% { transform: scale(1.2) rotate(-10deg); }
+    40% { transform: scale(0.9) rotate(10deg); }
+    60% { transform: scale(1.15) rotate(-5deg); }
+    80% { transform: scale(0.95) rotate(5deg); }
+}
+@keyframes laugherPop {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.5); }
 }
 .player-svg {
     width: 90px;
@@ -374,7 +396,7 @@ body.es .lang-en { display: none !important; }
     <div class="roster">
 
         <!-- CURLY -->
-        <div class="player-card" onclick="this.classList.toggle('active')">
+        <div class="player-card">
             <div class="player-svg">
                 <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="50" cy="50" r="45" fill="url(#curlyGrad)"/>
@@ -592,6 +614,17 @@ body.es .lang-en { display: none !important; }
     document.getElementById('btnEn').onclick = function() { setLang('en'); };
     document.getElementById('btnEs').onclick = function() { setLang('es'); };
     setLang(currentLang);
+
+    // Tap to Feel the Joy - Player Card Celebration
+    document.querySelectorAll('.player-card').forEach(function(card) {
+        card.onclick = function() {
+            if (card.classList.contains('celebrating')) return;
+            card.classList.add('celebrating');
+            setTimeout(function() {
+                card.classList.remove('celebrating');
+            }, 600);
+        };
+    });
 })();
 </script>
 
