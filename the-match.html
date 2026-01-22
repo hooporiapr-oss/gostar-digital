@@ -13,7 +13,7 @@
     --teal: #00D9A5;
     --pink: #FF1493;
     --purple: #9D4EDD;
-    --dark: #1A1A1A;
+    --dark: #0a0a0f;
     --card: #111118;
     --hardwood: #C4935A;
     --hardwood-dark: #8B6914;
@@ -37,6 +37,203 @@ body {
     user-select: none;
 }
 
+/* ==================== MINI NAV HEADER ==================== */
+.mini-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 52px;
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 12px;
+    padding-top: env(safe-area-inset-top);
+    z-index: 1000;
+}
+
+.nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 1px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.nav-logo .ball { font-size: 1.1rem; }
+.nav-logo .go { color: var(--gold); }
+.nav-logo .trotter { color: var(--text); }
+
+.nav-tabs {
+    display: flex;
+    gap: 4px;
+}
+.nav-tab {
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    text-decoration: none;
+    color: var(--muted);
+    background: transparent;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+}
+.nav-tab:hover {
+    color: var(--text);
+    background: rgba(255,255,255,0.05);
+}
+.nav-tab.active {
+    color: var(--orange);
+    background: rgba(255,107,53,0.15);
+    border-color: var(--orange);
+}
+.nav-tab.active.teal {
+    color: var(--teal);
+    background: rgba(0,217,165,0.15);
+    border-color: var(--teal);
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Language Toggle in Nav */
+.nav-lang {
+    display: flex;
+    gap: 2px;
+}
+.nav-lang-btn {
+    padding: 6px 8px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    border-radius: 4px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    cursor: pointer;
+    min-width: 28px;
+    min-height: 28px;
+}
+.nav-lang-btn.active {
+    border-color: var(--gold);
+    color: var(--gold);
+}
+
+/* Settings Dropdown */
+.settings-wrapper {
+    position: relative;
+}
+.settings-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+.settings-btn:hover {
+    background: rgba(255,255,255,0.05);
+    color: var(--text);
+}
+.settings-btn.open {
+    background: rgba(255,255,255,0.1);
+    color: var(--gold);
+}
+
+.settings-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: 200px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px;
+    display: none;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+}
+.settings-dropdown.show {
+    display: block;
+}
+
+.settings-section {
+    margin-bottom: 12px;
+}
+.settings-section:last-child {
+    margin-bottom: 0;
+}
+.settings-label {
+    font-size: 0.6rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+}
+.speed-status {
+    display: flex;
+    gap: 6px;
+}
+.speed-chip {
+    flex: 1;
+    padding: 6px 4px;
+    border-radius: 6px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.7rem;
+    text-align: center;
+    background: rgba(255,255,255,0.05);
+    color: var(--muted);
+}
+.speed-chip.unlocked {
+    background: rgba(0,217,165,0.15);
+    color: var(--teal);
+}
+.speed-chip.locked {
+    background: rgba(255,215,0,0.1);
+    color: var(--gold);
+}
+
+.settings-link {
+    display: block;
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    font-family: 'Outfit', sans-serif;
+}
+.settings-link.upgrade {
+    background: linear-gradient(135deg, var(--gold), #FFA500);
+    color: var(--dark);
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+.settings-link.logout {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+}
+.settings-link:hover {
+    opacity: 0.9;
+    transform: scale(0.98);
+}
+
 /* ==================== MOBILE-FIRST PERFECT FIT ==================== */
 .game-container {
     width: 100%;
@@ -45,26 +242,25 @@ body {
     height: 100dvh;
     margin: 0 auto;
     padding: 8px 12px;
-    padding-top: max(8px, env(safe-area-inset-top));
+    padding-top: calc(60px + env(safe-area-inset-top));
     padding-bottom: max(8px, env(safe-area-inset-bottom));
     display: flex;
     flex-direction: column;
     overflow: hidden;
 }
 
-/* ==================== HEADER ==================== */
+/* ==================== HEADER (Now smaller, game-focused) ==================== */
 .header {
     text-align: center;
     padding: 4px 0;
     flex-shrink: 0;
 }
-.logo {
+.game-title {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.6rem;
-    letter-spacing: 2px;
+    font-size: 1.4rem;
+    letter-spacing: 3px;
+    color: var(--orange);
 }
-.logo .go { color: var(--gold); }
-.logo .trotter { color: var(--text); }
 .tagline {
     font-size: 0.55rem;
     color: var(--muted);
@@ -207,9 +403,8 @@ body {
         );
     border-radius: 12px;
     border: 3px solid var(--text);
-    /* PERFECT FIT: Use the smaller of width or available height, but ensure minimum for 44px cells */
-    width: min(100%, calc(100vh - 320px), 350px);
-    height: min(100%, calc(100vh - 320px), 350px);
+    width: min(100%, calc(100vh - 380px), 350px);
+    height: min(100%, calc(100vh - 380px), 350px);
     min-width: 240px;
     min-height: 240px;
     aspect-ratio: 1;
@@ -252,7 +447,6 @@ body {
     background: rgba(255,255,255,0.1);
     border: 3px solid transparent;
     position: relative;
-    /* GUARANTEE 44px minimum touch target */
     min-width: 40px;
     min-height: 40px;
 }
@@ -598,57 +792,14 @@ body {
 }
 .coach-message.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-/* ==================== NAVIGATION ==================== */
-.lang-toggle {
-    position: fixed;
-    top: max(8px, env(safe-area-inset-top));
-    right: 10px;
-    display: flex;
-    gap: 4px;
-    z-index: 100;
-}
-.lang-btn {
-    min-width: 36px;
-    min-height: 36px;
-    padding: 6px 10px;
-    border: 1px solid var(--muted);
-    background: var(--card);
-    color: var(--muted);
-    border-radius: 6px;
-    font-size: 0.7rem;
-    font-weight: 600;
-    cursor: pointer;
-}
-.lang-btn.active { border-color: var(--gold); color: var(--gold); }
-
-.back-btn {
-    position: fixed;
-    top: max(8px, env(safe-area-inset-top));
-    left: 10px;
-    min-width: 44px;
-    min-height: 36px;
-    padding: 8px 14px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    color: var(--muted);
-    font-size: 0.75rem;
-    cursor: pointer;
-    text-decoration: none;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 /* Language visibility */
 body.en .lang-es { display: none !important; }
 body.es .lang-en { display: none !important; }
 
 /* ==================== RESPONSIVE - LARGER SCREENS ==================== */
 @media (min-height: 750px) {
-    .game-container { padding: 12px 16px; }
-    .logo { font-size: 1.8rem; }
+    .game-container { padding-top: calc(64px + env(safe-area-inset-top)); }
+    .game-title { font-size: 1.5rem; }
     .stats-bar { padding: 10px 14px; gap: 15px; }
     .stat-value { font-size: 1.2rem; }
     .stat-label { font-size: 0.55rem; }
@@ -660,9 +811,9 @@ body.es .lang-en { display: none !important; }
 
 /* ==================== RESPONSIVE - SHORT SCREENS ==================== */
 @media (max-height: 650px) {
-    .game-container { padding: 4px 10px; }
+    .game-container { padding: 4px 10px; padding-top: calc(56px + env(safe-area-inset-top)); }
     .header { padding: 2px 0; }
-    .logo { font-size: 1.4rem; }
+    .game-title { font-size: 1.2rem; }
     .tagline { font-size: 0.5rem; }
     .stats-bar { padding: 6px 8px; gap: 10px; margin: 4px 0; }
     .stat-value { font-size: 1rem; }
@@ -707,36 +858,81 @@ body.es .lang-en { display: none !important; }
 
 /* ==================== RESPONSIVE - NARROW SCREENS (320px) ==================== */
 @media (max-width: 350px) {
-    .game-container { padding: 6px 8px; }
+    .game-container { padding: 6px 8px; padding-top: calc(56px + env(safe-area-inset-top)); }
     .stats-bar { gap: 8px; padding: 6px 8px; }
     .stat { min-width: 40px; }
     .stat-value { font-size: 1rem; }
     .selector-btn { font-size: 0.8rem; padding: 6px 2px; }
     .selector-options { gap: 3px; }
+    .nav-tabs { display: none; }
+}
+
+/* Show tabs on slightly larger screens */
+@media (min-width: 380px) {
+    .nav-tabs { display: flex; }
 }
 </style>
 </head>
 <body class="en">
 
-<div class="lang-toggle">
-    <button class="lang-btn active" id="btnEn">EN</button>
-    <button class="lang-btn" id="btnEs">ES</button>
-</div>
-
-<a href="/" class="back-btn">
-    <span class="lang-en">← Hub</span>
-    <span class="lang-es">← Inicio</span>
-</a>
+<!-- ==================== MINI NAV HEADER ==================== -->
+<nav class="mini-nav">
+    <a href="/play" class="nav-logo">
+        <span class="ball">🏀</span>
+        <span class="go">GO</span><span class="trotter">TROTTER</span>
+    </a>
+    
+    <div class="nav-tabs">
+        <a href="/the-match" class="nav-tab active">THE MATCH</a>
+        <a href="/the-sequence" class="nav-tab">THE SEQUENCE</a>
+    </div>
+    
+    <div class="nav-right">
+        <div class="nav-lang">
+            <button class="nav-lang-btn active" id="btnEn">EN</button>
+            <button class="nav-lang-btn" id="btnEs">ES</button>
+        </div>
+        
+        <div class="settings-wrapper">
+            <button class="settings-btn" id="settingsBtn">⚙️</button>
+            <div class="settings-dropdown" id="settingsDropdown">
+                <div class="settings-section">
+                    <div class="settings-label">
+                        <span class="lang-en">Speed Access</span>
+                        <span class="lang-es">Acceso Velocidad</span>
+                    </div>
+                    <div class="speed-status" id="speedStatus">
+                        <span class="speed-chip unlocked">✓ SLOW</span>
+                        <span class="speed-chip locked">🔒 MED</span>
+                        <span class="speed-chip locked">🔒 FAST</span>
+                    </div>
+                </div>
+                <div class="settings-section" id="upgradeSection">
+                    <a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="settings-link upgrade">
+                        <span class="lang-en">🚀 UNLOCK ALL SPEEDS</span>
+                        <span class="lang-es">🚀 DESBLOQUEAR TODO</span>
+                    </a>
+                </div>
+                <div class="settings-section">
+                    <button class="settings-link logout" id="logoutBtn">
+                        <span class="lang-en">← Log Out</span>
+                        <span class="lang-es">← Cerrar Sesión</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
 
 <!-- Emoji Celebration Container -->
 <div class="emoji-container" id="emojiContainer"></div>
 
 <div class="game-container">
     <header class="header">
-        <div class="logo"><span class="go">GO</span><span class="trotter">TROTTER</span></div>
+        <div class="game-title">🎯 THE MATCH</div>
         <div class="tagline">
-            <span class="lang-en">The LaughCourt</span>
-            <span class="lang-es">The LaughCourt</span>
+            <span class="lang-en">Find the matching colors</span>
+            <span class="lang-es">Encuentra los colores iguales</span>
         </div>
     </header>
 
@@ -907,7 +1103,7 @@ body.es .lang-en { display: none !important; }
         var user = null;
         try { user = JSON.parse(localStorage.getItem('gt-user')); } catch(e) {}
         if (!user || !user.pin || user.pin.length < 4) {
-            window.location.replace('/');
+            window.location.replace('/login');
             return;
         }
 
@@ -916,7 +1112,7 @@ body.es .lang-en { display: none !important; }
 
         function validateSession() {
             if (!sessionPin || !sessionToken) {
-                window.location.href = '/';
+                window.location.href = '/login';
                 return;
             }
             fetch('/api/session/validate', {
@@ -932,7 +1128,7 @@ body.es .lang-en { display: none !important; }
                     localStorage.removeItem('gt-speed-access');
                     sessionStorage.removeItem('gt-pin');
                     sessionStorage.removeItem('gt-token');
-                    window.location.href = '/';
+                    window.location.href = '/login';
                 }
             })
             .catch(function(err) {
@@ -945,6 +1141,43 @@ body.es .lang-en { display: none !important; }
     }
     // ==================== END PRODUCTION AUTH & HEARTBEAT ====================
 
+    // ==================== SETTINGS DROPDOWN ====================
+    var settingsBtn = document.getElementById('settingsBtn');
+    var settingsDropdown = document.getElementById('settingsDropdown');
+    
+    settingsBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        settingsBtn.classList.toggle('open');
+        settingsDropdown.classList.toggle('show');
+    });
+    
+    document.addEventListener('click', function(e) {
+        if (!settingsDropdown.contains(e.target) && e.target !== settingsBtn) {
+            settingsBtn.classList.remove('open');
+            settingsDropdown.classList.remove('show');
+        }
+    });
+
+    // ==================== LOGOUT ====================
+    document.getElementById('logoutBtn').addEventListener('click', function() {
+        var sessionPin = sessionStorage.getItem('gt-pin');
+        var sessionToken = sessionStorage.getItem('gt-token');
+        
+        if (sessionPin && sessionToken) {
+            fetch('/api/session/destroy', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ pin: sessionPin, token: sessionToken })
+            }).catch(function() {});
+        }
+        
+        localStorage.removeItem('gt-user');
+        localStorage.removeItem('gt-speed-access');
+        sessionStorage.removeItem('gt-pin');
+        sessionStorage.removeItem('gt-token');
+        window.location.href = '/login';
+    });
+
     // ==================== LANGUAGE ====================
     var currentLang = localStorage.getItem('gotrotter_lang') || 'en';
 
@@ -952,8 +1185,8 @@ body.es .lang-en { display: none !important; }
         currentLang = lang;
         localStorage.setItem('gotrotter_lang', lang);
         document.body.className = lang;
-        document.getElementById('btnEn').className = lang === 'en' ? 'lang-btn active' : 'lang-btn';
-        document.getElementById('btnEs').className = lang === 'es' ? 'lang-btn active' : 'lang-btn';
+        document.getElementById('btnEn').className = lang === 'en' ? 'nav-lang-btn active' : 'nav-lang-btn';
+        document.getElementById('btnEs').className = lang === 'es' ? 'nav-lang-btn active' : 'nav-lang-btn';
         updateDivisionDisplay();
     }
 
@@ -966,6 +1199,25 @@ body.es .lang-en { display: none !important; }
         var storedAccess = localStorage.getItem('gt-speed-access');
         if (storedAccess) speedAccess = JSON.parse(storedAccess);
     } catch(e) {}
+
+    function updateSpeedStatusUI() {
+        var speedStatus = document.getElementById('speedStatus');
+        var upgradeSection = document.getElementById('upgradeSection');
+        
+        if (speedAccess.allSpeeds) {
+            speedStatus.innerHTML = 
+                '<span class="speed-chip unlocked">✓ SLOW</span>' +
+                '<span class="speed-chip unlocked">✓ MED</span>' +
+                '<span class="speed-chip unlocked">✓ FAST</span>';
+            upgradeSection.style.display = 'none';
+        } else {
+            speedStatus.innerHTML = 
+                '<span class="speed-chip unlocked">✓ SLOW</span>' +
+                '<span class="speed-chip locked">🔒 MED</span>' +
+                '<span class="speed-chip locked">🔒 FAST</span>';
+            upgradeSection.style.display = 'block';
+        }
+    }
 
     function initSpeedButtons() {
         var speedBtns = document.querySelectorAll('.speed-btn');
@@ -982,6 +1234,7 @@ body.es .lang-en { display: none !important; }
             speedBtns.forEach(function(b) { b.classList.remove('active'); });
             document.querySelector('.speed-btn[data-speed="slow"]').classList.add('active');
         }
+        updateSpeedStatusUI();
     }
 
     function showUpgradeModal() { document.getElementById('upgradeOverlay').classList.add('show'); }
