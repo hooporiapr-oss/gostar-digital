@@ -95,7 +95,7 @@
 
         /* Header */
         .header {
-            margin-bottom: 40px;
+            margin-bottom: 30px;
         }
         .logo {
             font-family: 'Bebas Neue', sans-serif;
@@ -112,41 +112,72 @@
             text-transform: uppercase;
         }
 
-        /* Login Card */
-        .login-card {
+        /* Cards */
+        .card {
             background: var(--card);
             border: 2px solid var(--border);
             border-radius: 20px;
             padding: 40px 30px;
             margin-bottom: 20px;
+            transition: all 0.3s;
         }
-        .login-card.focused {
+        .card.focused {
             border-color: var(--gold);
             box-shadow: 0 10px 40px rgba(255,215,0,0.1);
         }
+        .card.success {
+            border-color: var(--teal);
+            box-shadow: 0 10px 40px rgba(0,217,165,0.2);
+        }
 
-        .login-icon {
+        /* Screens */
+        .screen { display: none; }
+        .screen.active { display: block; }
+
+        /* Icons */
+        .card-icon {
             font-size: 3rem;
             margin-bottom: 15px;
         }
 
-        .login-title {
+        .card-title {
             font-family: 'Bebas Neue', sans-serif;
             font-size: 1.8rem;
             letter-spacing: 3px;
             margin-bottom: 8px;
         }
 
-        .login-subtitle {
+        .card-subtitle {
             color: var(--muted);
             font-size: 0.9rem;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
+            line-height: 1.5;
         }
 
-        /* PIN Input */
-        .pin-input-container {
-            margin-bottom: 25px;
+        /* Inputs */
+        .input-group {
+            margin-bottom: 20px;
         }
+        .text-input {
+            width: 100%;
+            padding: 16px 20px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            background: var(--darker);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            color: var(--text);
+            outline: none;
+            transition: all 0.3s;
+        }
+        .text-input:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 20px rgba(255,215,0,0.15);
+        }
+        .text-input::placeholder {
+            color: var(--muted);
+        }
+
         .pin-input {
             width: 100%;
             padding: 18px 20px;
@@ -171,12 +202,10 @@
             font-size: 1.2rem;
         }
 
-        /* Login Button */
-        .login-btn {
+        /* Buttons */
+        .btn {
             width: 100%;
             padding: 18px 30px;
-            background: linear-gradient(135deg, var(--gold), var(--orange));
-            color: var(--dark);
             border: none;
             border-radius: 50px;
             font-family: 'Bebas Neue', sans-serif;
@@ -184,116 +213,139 @@
             letter-spacing: 3px;
             cursor: pointer;
             transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--gold), var(--orange));
+            color: var(--dark);
             box-shadow: 0 8px 30px rgba(255,107,53,0.3);
         }
-        .login-btn:hover {
+        .btn-primary:hover {
             transform: translateY(-3px);
             box-shadow: 0 12px 40px rgba(255,107,53,0.4);
         }
-        .login-btn:active {
-            transform: scale(0.98);
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--teal), var(--cyan));
+            color: var(--dark);
+            box-shadow: 0 8px 30px rgba(0,217,165,0.3);
         }
-        .login-btn:disabled {
+        .btn-secondary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(0,217,165,0.4);
+        }
+        .btn-outline {
+            background: transparent;
+            color: var(--text);
+            border: 2px solid var(--border);
+            box-shadow: none;
+        }
+        .btn-outline:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+        .btn:disabled {
             opacity: 0.6;
             cursor: not-allowed;
-            transform: none;
+            transform: none !important;
+        }
+        .btn:active {
+            transform: scale(0.98);
         }
 
-        /* Error Message */
-        .error-message {
-            display: none;
-            background: rgba(255,23,68,0.15);
-            border: 1px solid var(--red);
-            color: var(--red);
+        /* Error/Success Messages */
+        .message {
             padding: 12px 15px;
             border-radius: 10px;
             font-size: 0.85rem;
             margin-bottom: 20px;
-        }
-        .error-message.show {
-            display: block;
-        }
-
-        /* Forgot PIN Section */
-        .forgot-section {
-            margin-top: 25px;
-            padding-top: 25px;
-            border-top: 1px solid var(--border);
-        }
-        .forgot-link {
-            color: var(--muted);
-            font-size: 0.85rem;
-            text-decoration: none;
-            transition: color 0.3s;
-            cursor: pointer;
-        }
-        .forgot-link:hover {
-            color: var(--gold);
-        }
-
-        /* Forgot PIN Form (hidden by default) */
-        .forgot-form {
             display: none;
-            margin-top: 20px;
         }
-        .forgot-form.show {
-            display: block;
+        .message.show { display: block; }
+        .message.error {
+            background: rgba(255,23,68,0.15);
+            border: 1px solid var(--red);
+            color: var(--red);
         }
-        .forgot-form-title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.2rem;
-            letter-spacing: 2px;
-            color: var(--teal);
-            margin-bottom: 15px;
-        }
-        .email-input {
-            width: 100%;
-            padding: 14px 18px;
-            font-family: 'Outfit', sans-serif;
-            font-size: 1rem;
-            background: var(--darker);
-            border: 2px solid var(--border);
-            border-radius: 10px;
-            color: var(--text);
-            outline: none;
-            margin-bottom: 15px;
-            transition: all 0.3s;
-        }
-        .email-input:focus {
-            border-color: var(--teal);
-        }
-        .email-input::placeholder {
-            color: var(--muted);
-        }
-        .forgot-btn {
-            width: 100%;
-            padding: 14px 25px;
-            background: linear-gradient(135deg, var(--teal), var(--cyan));
-            color: var(--dark);
-            border: none;
-            border-radius: 50px;
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.1rem;
-            letter-spacing: 2px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .forgot-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0,217,165,0.3);
-        }
-        .forgot-success {
-            display: none;
+        .message.success {
             background: rgba(0,217,165,0.15);
             border: 1px solid var(--teal);
             color: var(--teal);
-            padding: 12px 15px;
-            border-radius: 10px;
-            font-size: 0.85rem;
-            margin-top: 15px;
         }
-        .forgot-success.show {
-            display: block;
+
+        /* PIN Reveal */
+        .pin-reveal {
+            background: linear-gradient(135deg, rgba(255,215,0,0.1), rgba(255,107,53,0.1));
+            border: 3px solid var(--gold);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            animation: celebrate 0.5s ease-out;
+        }
+        @keyframes celebrate {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .pin-reveal-label {
+            font-size: 0.8rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+        .pin-reveal-value {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3.5rem;
+            letter-spacing: 12px;
+            color: var(--gold);
+            text-shadow: 0 0 30px rgba(255,215,0,0.5);
+        }
+
+        /* Celebration Emojis */
+        .celebration {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            animation: bounce 0.6s ease infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Links */
+        .link {
+            color: var(--muted);
+            font-size: 0.85rem;
+            text-decoration: none;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .link:hover {
+            color: var(--gold);
+        }
+
+        /* Divider */
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 25px 0;
+            color: var(--muted);
+            font-size: 0.75rem;
+        }
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+        .divider span {
+            padding: 0 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
         /* New User Section */
@@ -363,10 +415,8 @@
         }
 
         /* Loading State */
-        .loading .login-btn {
-            pointer-events: none;
-        }
-        .loading .login-btn::after {
+        .loading .btn-primary::after,
+        .loading .btn-secondary::after {
             content: '...';
             animation: dots 1s infinite;
         }
@@ -379,9 +429,11 @@
         /* Responsive */
         @media (max-width: 480px) {
             .logo { font-size: 2.5rem; letter-spacing: 4px; }
-            .login-card { padding: 30px 20px; }
+            .card { padding: 30px 20px; }
             .pin-input { font-size: 1.6rem; letter-spacing: 8px; padding: 15px; }
-            .login-title { font-size: 1.5rem; }
+            .card-title { font-size: 1.5rem; }
+            .pin-reveal-value { font-size: 2.8rem; letter-spacing: 10px; }
+            .btn { font-size: 1.1rem; padding: 16px 25px; }
         }
     </style>
 </head>
@@ -404,81 +456,183 @@
             <div class="tagline">The LaughCourt</div>
         </header>
 
-        <div class="login-card" id="loginCard">
-            <div class="login-icon">🔐</div>
-            <h1 class="login-title">
-                <span class="lang-en">ENTER YOUR PIN</span>
-                <span class="lang-es">INGRESA TU PIN</span>
-            </h1>
-            <p class="login-subtitle">
-                <span class="lang-en">Your PIN was sent when you signed up</span>
-                <span class="lang-es">Tu PIN fue enviado cuando te registraste</span>
-            </p>
+        <!-- ============ SCREEN 1: PIN LOGIN ============ -->
+        <div class="screen active" id="screenLogin">
+            <div class="card" id="loginCard">
+                <div class="card-icon">🔐</div>
+                <h1 class="card-title">
+                    <span class="lang-en">ENTER YOUR PIN</span>
+                    <span class="lang-es">INGRESA TU PIN</span>
+                </h1>
+                <p class="card-subtitle">
+                    <span class="lang-en">Your PIN was sent when you signed up</span>
+                    <span class="lang-es">Tu PIN fue enviado cuando te registraste</span>
+                </p>
 
-            <div class="error-message" id="errorMessage">
-                <span class="lang-en">Invalid PIN. Please try again.</span>
-                <span class="lang-es">PIN inválido. Intenta de nuevo.</span>
-            </div>
-
-            <form id="loginForm">
-                <div class="pin-input-container">
-                    <input 
-                        type="text" 
-                        id="pinInput" 
-                        class="pin-input" 
-                        placeholder="• • • •" 
-                        maxlength="6" 
-                        inputmode="numeric"
-                        pattern="[0-9]*"
-                        autocomplete="off"
-                        required
-                    >
+                <div class="message error" id="loginError">
+                    <span class="lang-en">Invalid PIN. Please try again.</span>
+                    <span class="lang-es">PIN inválido. Intenta de nuevo.</span>
                 </div>
-                <button type="submit" class="login-btn" id="loginBtn">
-                    <span class="lang-en">LOGIN</span>
-                    <span class="lang-es">ENTRAR</span>
-                </button>
-            </form>
 
-            <div class="forgot-section">
-                <a class="forgot-link" id="forgotToggle">
+                <form id="loginForm">
+                    <div class="input-group">
+                        <input 
+                            type="text" 
+                            id="pinInput" 
+                            class="pin-input" 
+                            placeholder="• • • •" 
+                            maxlength="6" 
+                            inputmode="numeric"
+                            pattern="[0-9]*"
+                            autocomplete="off"
+                            required
+                        >
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="loginBtn">
+                        <span class="lang-en">LOGIN</span>
+                        <span class="lang-es">ENTRAR</span>
+                    </button>
+                </form>
+
+                <div class="divider">
+                    <span><span class="lang-en">or</span><span class="lang-es">o</span></span>
+                </div>
+
+                <a class="link" id="forgotLink">
                     <span class="lang-en">🤔 Forgot your PIN?</span>
                     <span class="lang-es">🤔 ¿Olvidaste tu PIN?</span>
                 </a>
+            </div>
 
-                <div class="forgot-form" id="forgotForm">
-                    <div class="forgot-form-title">
-                        <span class="lang-en">RECOVER YOUR PIN</span>
-                        <span class="lang-es">RECUPERA TU PIN</span>
-                    </div>
-                    <input 
-                        type="email" 
-                        id="emailInput" 
-                        class="email-input" 
-                        placeholder="Enter your email"
-                        autocomplete="email"
-                    >
-                    <button type="button" class="forgot-btn" id="forgotBtn">
-                        <span class="lang-en">SEND PIN</span>
-                        <span class="lang-es">ENVIAR PIN</span>
-                    </button>
-                    <div class="forgot-success" id="forgotSuccess">
-                        <span class="lang-en">✅ If this email exists, your PIN has been sent!</span>
-                        <span class="lang-es">✅ Si este correo existe, ¡tu PIN ha sido enviado!</span>
-                    </div>
-                </div>
+            <div class="new-user-section">
+                <p class="new-user-text">
+                    <span class="lang-en">New to GoTrotter?</span>
+                    <span class="lang-es">¿Nuevo en GoTrotter?</span>
+                </p>
+                <a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="trial-btn">
+                    <span class="lang-en">START 7 DAY FREE TRIAL</span>
+                    <span class="lang-es">PRUEBA GRATIS 7 DÍAS</span>
+                </a>
             </div>
         </div>
 
-        <div class="new-user-section">
-            <p class="new-user-text">
-                <span class="lang-en">New to GoTrotter?</span>
-                <span class="lang-es">¿Nuevo en GoTrotter?</span>
-            </p>
-            <a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="trial-btn">
-                <span class="lang-en">START 7 DAY FREE TRIAL</span>
-                <span class="lang-es">PRUEBA GRATIS 7 DÍAS</span>
-            </a>
+        <!-- ============ SCREEN 2: FORGOT PIN (Email Entry) ============ -->
+        <div class="screen" id="screenForgot">
+            <div class="card" id="forgotCard">
+                <div class="card-icon">📧</div>
+                <h1 class="card-title">
+                    <span class="lang-en">RECOVER YOUR PIN</span>
+                    <span class="lang-es">RECUPERA TU PIN</span>
+                </h1>
+                <p class="card-subtitle">
+                    <span class="lang-en">Enter the email you used to sign up</span>
+                    <span class="lang-es">Ingresa el correo que usaste para registrarte</span>
+                </p>
+
+                <div class="message error" id="forgotError">
+                    <span class="lang-en">No account found with this email.</span>
+                    <span class="lang-es">No se encontró cuenta con este correo.</span>
+                </div>
+
+                <form id="forgotForm">
+                    <div class="input-group">
+                        <input 
+                            type="email" 
+                            id="emailInput" 
+                            class="text-input" 
+                            placeholder="your@email.com"
+                            autocomplete="email"
+                            required
+                        >
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="forgotBtn">
+                        <span class="lang-en">FIND MY PIN</span>
+                        <span class="lang-es">BUSCAR MI PIN</span>
+                    </button>
+                </form>
+
+                <div class="divider">
+                    <span><span class="lang-en">or</span><span class="lang-es">o</span></span>
+                </div>
+
+                <a class="link" id="backToLogin">
+                    <span class="lang-en">← Back to PIN login</span>
+                    <span class="lang-es">← Volver al login</span>
+                </a>
+            </div>
+
+            <div class="new-user-section">
+                <p class="new-user-text">
+                    <span class="lang-en">Don't have an account?</span>
+                    <span class="lang-es">¿No tienes cuenta?</span>
+                </p>
+                <a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="trial-btn">
+                    <span class="lang-en">START 7 DAY FREE TRIAL</span>
+                    <span class="lang-es">PRUEBA GRATIS 7 DÍAS</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- ============ SCREEN 3: PIN REVEALED (Success!) ============ -->
+        <div class="screen" id="screenRevealed">
+            <div class="card success" id="revealedCard">
+                <div class="celebration">🎉🏀🎉</div>
+                <h1 class="card-title" style="color: var(--teal);">
+                    <span class="lang-en">WELCOME BACK!</span>
+                    <span class="lang-es">¡BIENVENIDO!</span>
+                </h1>
+                <p class="card-subtitle">
+                    <span class="lang-en">Here's your PIN — you're ready to play!</span>
+                    <span class="lang-es">Aquí está tu PIN — ¡listo para jugar!</span>
+                </p>
+
+                <div class="pin-reveal">
+                    <div class="pin-reveal-label">
+                        <span class="lang-en">YOUR PIN</span>
+                        <span class="lang-es">TU PIN</span>
+                    </div>
+                    <div class="pin-reveal-value" id="revealedPin">----</div>
+                </div>
+
+                <button class="btn btn-secondary" id="playNowBtn">
+                    <span class="lang-en">🏀 PLAY NOW</span>
+                    <span class="lang-es">🏀 JUGAR AHORA</span>
+                </button>
+
+                <div class="divider">
+                    <span><span class="lang-en">or</span><span class="lang-es">o</span></span>
+                </div>
+
+                <a class="link" id="backToLoginFromRevealed">
+                    <span class="lang-en">← Login with a different PIN</span>
+                    <span class="lang-es">← Entrar con otro PIN</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- ============ SCREEN 4: NOT FOUND ============ -->
+        <div class="screen" id="screenNotFound">
+            <div class="card">
+                <div class="card-icon">🤷</div>
+                <h1 class="card-title">
+                    <span class="lang-en">NO ACCOUNT FOUND</span>
+                    <span class="lang-es">CUENTA NO ENCONTRADA</span>
+                </h1>
+                <p class="card-subtitle">
+                    <span class="lang-en">We couldn't find an account with that email. Start fresh with a free trial!</span>
+                    <span class="lang-es">No encontramos una cuenta con ese correo. ¡Comienza con una prueba gratis!</span>
+                </p>
+
+                <a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="btn btn-primary" style="margin-bottom: 20px;">
+                    <span class="lang-en">START 7 DAY FREE TRIAL</span>
+                    <span class="lang-es">PRUEBA GRATIS 7 DÍAS</span>
+                </a>
+
+                <a class="link" id="tryAgainLink">
+                    <span class="lang-en">← Try a different email</span>
+                    <span class="lang-es">← Probar otro correo</span>
+                </a>
+            </div>
         </div>
 
         <footer class="footer">
@@ -506,29 +660,64 @@
                 document.body.className = l;
                 document.getElementById('btnEn').className = l === 'en' ? 'lang-btn active' : 'lang-btn';
                 document.getElementById('btnEs').className = l === 'es' ? 'lang-btn active' : 'lang-btn';
-                // Update placeholder
-                document.getElementById('emailInput').placeholder = l === 'en' ? 'Enter your email' : 'Ingresa tu correo';
             }
 
             document.getElementById('btnEn').addEventListener('click', function() { setLang('en'); });
             document.getElementById('btnEs').addEventListener('click', function() { setLang('es'); });
             setLang(currentLang);
 
+            // ==================== SCREENS ====================
+            function showScreen(screenId) {
+                document.querySelectorAll('.screen').forEach(function(s) {
+                    s.classList.remove('active');
+                });
+                document.getElementById(screenId).classList.add('active');
+            }
+
             // ==================== ELEMENTS ====================
             var loginForm = document.getElementById('loginForm');
             var pinInput = document.getElementById('pinInput');
             var loginBtn = document.getElementById('loginBtn');
             var loginCard = document.getElementById('loginCard');
-            var errorMessage = document.getElementById('errorMessage');
-            var forgotToggle = document.getElementById('forgotToggle');
+            var loginError = document.getElementById('loginError');
+
             var forgotForm = document.getElementById('forgotForm');
-            var forgotBtn = document.getElementById('forgotBtn');
             var emailInput = document.getElementById('emailInput');
-            var forgotSuccess = document.getElementById('forgotSuccess');
+            var forgotBtn = document.getElementById('forgotBtn');
+            var forgotCard = document.getElementById('forgotCard');
+            var forgotError = document.getElementById('forgotError');
+
+            var revealedPin = document.getElementById('revealedPin');
+            var playNowBtn = document.getElementById('playNowBtn');
+
+            // Store recovered data for auto-login
+            var recoveredData = null;
+
+            // ==================== NAVIGATION ====================
+            document.getElementById('forgotLink').addEventListener('click', function() {
+                showScreen('screenForgot');
+                emailInput.focus();
+            });
+
+            document.getElementById('backToLogin').addEventListener('click', function() {
+                showScreen('screenLogin');
+                pinInput.focus();
+            });
+
+            document.getElementById('backToLoginFromRevealed').addEventListener('click', function() {
+                showScreen('screenLogin');
+                pinInput.value = '';
+                pinInput.focus();
+            });
+
+            document.getElementById('tryAgainLink').addEventListener('click', function() {
+                showScreen('screenForgot');
+                emailInput.value = '';
+                emailInput.focus();
+            });
 
             // ==================== PIN INPUT FORMATTING ====================
             pinInput.addEventListener('input', function(e) {
-                // Only allow numbers
                 this.value = this.value.replace(/[^0-9]/g, '');
             });
 
@@ -540,22 +729,29 @@
                 loginCard.classList.remove('focused');
             });
 
+            emailInput.addEventListener('focus', function() {
+                forgotCard.classList.add('focused');
+            });
+
+            emailInput.addEventListener('blur', function() {
+                forgotCard.classList.remove('focused');
+            });
+
             // ==================== LOGIN FORM ====================
             loginForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
                 var pin = pinInput.value.trim();
                 if (pin.length < 4) {
-                    errorMessage.classList.add('show');
+                    loginError.classList.add('show');
                     pinInput.focus();
                     return;
                 }
 
-                errorMessage.classList.remove('show');
+                loginError.classList.remove('show');
                 loginBtn.disabled = true;
                 document.body.classList.add('loading');
 
-                // API call to validate PIN and create session
                 fetch('/api/login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -572,7 +768,8 @@
                         // Redirect to hub
                         window.location.href = '/hub';
                     } else {
-                        errorMessage.classList.add('show');
+                        loginError.textContent = data.error || 'Invalid PIN';
+                        loginError.classList.add('show');
                         pinInput.value = '';
                         pinInput.focus();
                         loginBtn.disabled = false;
@@ -581,27 +778,25 @@
                 })
                 .catch(function(err) {
                     console.error('Login error:', err);
-                    errorMessage.classList.add('show');
+                    loginError.classList.add('show');
                     loginBtn.disabled = false;
                     document.body.classList.remove('loading');
                 });
             });
 
-            // ==================== FORGOT PIN TOGGLE ====================
-            forgotToggle.addEventListener('click', function() {
-                forgotForm.classList.toggle('show');
-                forgotSuccess.classList.remove('show');
-            });
-
-            // ==================== FORGOT PIN SUBMIT ====================
-            forgotBtn.addEventListener('click', function() {
+            // ==================== FORGOT PIN FORM ====================
+            forgotForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
                 var email = emailInput.value.trim();
                 if (!email || !email.includes('@')) {
                     emailInput.focus();
                     return;
                 }
 
+                forgotError.classList.remove('show');
                 forgotBtn.disabled = true;
+                document.body.classList.add('loading');
 
                 fetch('/api/forgot-pin', {
                     method: 'POST',
@@ -610,19 +805,67 @@
                 })
                 .then(function(r) { return r.json(); })
                 .then(function(data) {
-                    // Always show success (security - don't reveal if email exists)
-                    forgotSuccess.classList.add('show');
-                    emailInput.value = '';
                     forgotBtn.disabled = false;
+                    document.body.classList.remove('loading');
+
+                    if (data.found && data.pin) {
+                        // SUCCESS - Show PIN!
+                        recoveredData = data;
+                        revealedPin.textContent = data.pin;
+                        showScreen('screenRevealed');
+                    } else {
+                        // Not found
+                        showScreen('screenNotFound');
+                    }
                 })
                 .catch(function(err) {
                     console.error('Forgot PIN error:', err);
-                    forgotSuccess.classList.add('show');
+                    forgotError.classList.add('show');
                     forgotBtn.disabled = false;
+                    document.body.classList.remove('loading');
                 });
             });
 
-            // ==================== AUTO-FOCUS PIN ====================
+            // ==================== PLAY NOW (Auto-Login) ====================
+            playNowBtn.addEventListener('click', function() {
+                if (!recoveredData || !recoveredData.pin) {
+                    showScreen('screenLogin');
+                    return;
+                }
+
+                playNowBtn.disabled = true;
+                document.body.classList.add('loading');
+
+                // Auto-login with recovered PIN
+                fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ pin: recoveredData.pin })
+                })
+                .then(function(r) { return r.json(); })
+                .then(function(data) {
+                    if (data.success) {
+                        // Store session
+                        localStorage.setItem('gt-user', JSON.stringify({ pin: recoveredData.pin }));
+                        sessionStorage.setItem('gt-pin', recoveredData.pin);
+                        sessionStorage.setItem('gt-token', data.token);
+                        
+                        // GO TO THE GAMES!
+                        window.location.href = '/hub';
+                    } else {
+                        alert(data.error || 'Login failed. Please try again.');
+                        playNowBtn.disabled = false;
+                        document.body.classList.remove('loading');
+                    }
+                })
+                .catch(function(err) {
+                    console.error('Auto-login error:', err);
+                    playNowBtn.disabled = false;
+                    document.body.classList.remove('loading');
+                });
+            });
+
+            // ==================== AUTO-FOCUS ====================
             pinInput.focus();
 
         })();
