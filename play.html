@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Choose Your Workout | GoTrotter - The LaughCourt</title>
+    <meta name="description" content="Choose between THE MATCH and THE SEQUENCE - two memory workouts that sharpen your mind.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #FFD700;
+            --orange: #FF6B35;
+            --teal: #00D9A5;
+            --cyan: #00CED1;
+            --red: #FF1744;
+            --dark: #0a0a0f;
+            --darker: #050508;
+            --card: #111118;
+            --text: #FFFFFF;
+            --muted: #8892a0;
+            --border: rgba(255,255,255,0.08);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--dark);
+            color: var(--text);
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            padding-top: env(safe-area-inset-top, 20px);
+            padding-bottom: env(safe-area-inset-bottom, 20px);
+        }
+
+        body.es .lang-en { display: none !important; }
+        body.en .lang-es { display: none !important; }
+
+        /* Language Toggle */
+        .lang-toggle {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            gap: 4px;
+            background: var(--card);
+            padding: 3px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            z-index: 100;
+        }
+        .lang-btn {
+            padding: 6px 10px;
+            border: none;
+            background: transparent;
+            color: var(--muted);
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.7rem;
+            cursor: pointer;
+            font-family: 'Outfit', sans-serif;
+            transition: all 0.2s;
+        }
+        .lang-btn.active {
+            background: var(--gold);
+            color: var(--dark);
+        }
+
+        /* Main Container */
+        .container {
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        /* Header */
+        .header {
+            margin-bottom: 30px;
+        }
+        .logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.5rem;
+            letter-spacing: 6px;
+            margin-bottom: 5px;
+        }
+        .logo .go { color: var(--gold); }
+        .logo .trotter { color: var(--text); }
+        .tagline {
+            font-size: 0.65rem;
+            color: var(--gold);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .welcome-text {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.8rem;
+            letter-spacing: 3px;
+            margin-bottom: 5px;
+        }
+        .welcome-sub {
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        /* Game Cards Grid */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .game-card {
+            background: var(--card);
+            border: 3px solid var(--border);
+            border-radius: 20px;
+            padding: 30px 15px;
+            text-decoration: none;
+            color: var(--text);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+
+        .game-card.match::before {
+            background: linear-gradient(90deg, var(--gold), var(--orange));
+        }
+
+        .game-card.sequence::before {
+            background: linear-gradient(90deg, var(--teal), var(--cyan));
+        }
+
+        .game-card:hover {
+            transform: translateY(-8px);
+        }
+
+        .game-card.match:hover {
+            border-color: var(--orange);
+            box-shadow: 0 20px 40px rgba(255,107,53,0.25);
+        }
+
+        .game-card.sequence:hover {
+            border-color: var(--teal);
+            box-shadow: 0 20px 40px rgba(0,217,165,0.25);
+        }
+
+        .game-card:active {
+            transform: scale(0.98);
+        }
+
+        .game-icon {
+            font-size: 3rem;
+            margin-bottom: 12px;
+        }
+
+        .game-name {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.4rem;
+            letter-spacing: 3px;
+            margin-bottom: 5px;
+        }
+
+        .game-card.match .game-name { color: var(--orange); }
+        .game-card.sequence .game-name { color: var(--teal); }
+
+        .game-type {
+            font-size: 0.65rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+
+        .game-play-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+        }
+
+        .game-card.match .game-play-btn {
+            background: linear-gradient(135deg, var(--gold), var(--orange));
+            color: var(--dark);
+        }
+
+        .game-card.sequence .game-play-btn {
+            background: linear-gradient(135deg, var(--teal), var(--cyan));
+            color: var(--dark);
+        }
+
+        /* Speed Access Section */
+        .speed-section {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .speed-title {
+            font-size: 0.7rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+        }
+
+        .speed-chips {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .speed-chip {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .speed-chip.unlocked {
+            background: rgba(0,217,165,0.15);
+            color: var(--teal);
+            border: 1px solid var(--teal);
+        }
+
+        .speed-chip.locked {
+            background: rgba(255,255,255,0.05);
+            color: var(--muted);
+            border: 1px solid var(--border);
+        }
+
+        .speed-chip .icon {
+            font-size: 0.75rem;
+        }
+
+        .upgrade-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, var(--gold), var(--orange));
+            color: var(--dark);
+            border-radius: 25px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.95rem;
+            letter-spacing: 2px;
+            text-decoration: none;
+            transition: all 0.3s;
+            box-shadow: 0 5px 20px rgba(255,107,53,0.3);
+        }
+
+        .upgrade-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(255,107,53,0.4);
+        }
+
+        .all-speeds-msg {
+            color: var(--teal);
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        /* Trial Banner */
+        .trial-banner {
+            display: none;
+            background: linear-gradient(135deg, rgba(255,215,0,0.1), rgba(255,107,53,0.1));
+            border: 1px solid var(--gold);
+            border-radius: 12px;
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            font-size: 0.8rem;
+        }
+        .trial-banner.show { display: block; }
+        .trial-banner strong { color: var(--gold); }
+
+        /* Logout */
+        .logout-section {
+            margin-top: 10px;
+        }
+
+        .logout-link {
+            color: var(--muted);
+            font-size: 0.8rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 20px;
+            border: 1px solid var(--border);
+            border-radius: 25px;
+            transition: all 0.3s;
+        }
+
+        .logout-link:hover {
+            border-color: var(--orange);
+            color: var(--orange);
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+        }
+        .footer-logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 3px;
+            margin-bottom: 5px;
+        }
+        .footer-logo .go { color: var(--gold); }
+        .footer-logo .trotter { color: var(--text); }
+        .footer-links {
+            font-size: 0.65rem;
+            margin-bottom: 5px;
+        }
+        .footer-links a {
+            color: var(--muted);
+            text-decoration: none;
+            margin: 0 8px;
+            transition: color 0.3s;
+        }
+        .footer-links a:hover { color: var(--gold); }
+        .footer-company {
+            font-size: 0.6rem;
+            color: var(--muted);
+        }
+        .footer-company a {
+            color: var(--gold);
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 400px) {
+            .logo { font-size: 2rem; letter-spacing: 4px; }
+            .welcome-text { font-size: 1.5rem; }
+            .games-grid { gap: 10px; }
+            .game-card { padding: 25px 12px; }
+            .game-icon { font-size: 2.5rem; }
+            .game-name { font-size: 1.2rem; }
+            .game-play-btn { padding: 8px 16px; font-size: 0.8rem; }
+            .speed-chips { gap: 6px; }
+            .speed-chip { padding: 6px 12px; font-size: 0.75rem; }
+        }
+
+        /* Animation */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .container > * {
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+
+        .header { animation-delay: 0s; }
+        .games-grid { animation-delay: 0.1s; }
+        .speed-section { animation-delay: 0.2s; }
+        .logout-section { animation-delay: 0.3s; }
+    </style>
+</head>
+<body class="en">
+
+    <div class="lang-toggle">
+        <button class="lang-btn active" id="btnEn">EN</button>
+        <button class="lang-btn" id="btnEs">ES</button>
+    </div>
+
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <span class="go">GO</span><span class="trotter">TROTTER</span>
+            </div>
+            <div class="tagline">The LaughCourt</div>
+            <h1 class="welcome-text">
+                <span class="lang-en">🏀 CHOOSE YOUR WORKOUT</span>
+                <span class="lang-es">🏀 ELIGE TU EJERCICIO</span>
+            </h1>
+            <p class="welcome-sub">
+                <span class="lang-en">Two games. Two ways to train your memory.</span>
+                <span class="lang-es">Dos juegos. Dos formas de entrenar tu memoria.</span>
+            </p>
+        </header>
+
+        <!-- Trial Banner (shows for facility trials) -->
+        <div class="trial-banner" id="trialBanner">
+            <span class="lang-en">⚡ <strong>FACILITY TRIAL</strong> — <span id="trialDays">7</span> days left</span>
+            <span class="lang-es">⚡ <strong>PRUEBA DE FACILIDAD</strong> — <span id="trialDaysEs">7</span> días restantes</span>
+        </div>
+
+        <!-- Game Cards -->
+        <div class="games-grid">
+            <a href="/the-match" class="game-card match" id="matchCard">
+                <div class="game-icon">🎯</div>
+                <div class="game-name">THE MATCH</div>
+                <div class="game-type">
+                    <span class="lang-en">Recognition</span>
+                    <span class="lang-es">Reconocimiento</span>
+                </div>
+                <div class="game-play-btn">
+                    <span class="lang-en">PLAY</span>
+                    <span class="lang-es">JUGAR</span>
+                </div>
+            </a>
+
+            <a href="/the-sequence" class="game-card sequence" id="sequenceCard">
+                <div class="game-icon">🔢</div>
+                <div class="game-name">THE SEQUENCE</div>
+                <div class="game-type">
+                    <span class="lang-en">Sequential</span>
+                    <span class="lang-es">Secuencial</span>
+                </div>
+                <div class="game-play-btn">
+                    <span class="lang-en">PLAY</span>
+                    <span class="lang-es">JUGAR</span>
+                </div>
+            </a>
+        </div>
+
+        <!-- Speed Access -->
+        <div class="speed-section">
+            <div class="speed-title">
+                <span class="lang-en">⚡ YOUR SPEEDS</span>
+                <span class="lang-es">⚡ TUS VELOCIDADES</span>
+            </div>
+
+            <div class="speed-chips" id="speedChips">
+                <div class="speed-chip unlocked" id="chipSlow">
+                    <span class="icon">✓</span> SLOW
+                </div>
+                <div class="speed-chip locked" id="chipMed">
+                    <span class="icon">🔒</span> MED
+                </div>
+                <div class="speed-chip locked" id="chipFast">
+                    <span class="icon">🔒</span> FAST
+                </div>
+            </div>
+
+            <div id="upgradeArea">
+                <a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="upgrade-btn" id="upgradeBtn">
+                    <span class="lang-en">🔓 UNLOCK ALL SPEEDS — $5/mo</span>
+                    <span class="lang-es">🔓 DESBLOQUEAR TODO — $5/mes</span>
+                </a>
+            </div>
+
+            <div id="allSpeedsArea" style="display: none;">
+                <div class="all-speeds-msg">
+                    <span>✨</span>
+                    <span class="lang-en">All speeds unlocked!</span>
+                    <span class="lang-es">¡Todas las velocidades desbloqueadas!</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logout -->
+        <div class="logout-section">
+            <a href="#" class="logout-link" id="logoutLink">
+                <span>🚪</span>
+                <span class="lang-en">Logout</span>
+                <span class="lang-es">Salir</span>
+            </a>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-logo">
+                <span class="go">GO</span><span class="trotter">TROTTER</span>
+            </div>
+            <div class="footer-links">
+                <a href="/privacy.html">Privacy Policy</a>
+                <a href="/terms.html">Terms of Use</a>
+            </div>
+            <div class="footer-company">
+                by <a href="https://gostar.digital">GoStar Digital LLC</a> 🇵🇷
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            // ==================== ENVIRONMENT ====================
+            var host = window.location.hostname;
+            var isProduction = (host.indexOf('gotrotter') > -1 || host.indexOf('render') > -1);
+
+            // ==================== AUTH CHECK ====================
+            if (isProduction) {
+                var user = null;
+                try { user = JSON.parse(localStorage.getItem('gt-user')); } catch(e) {}
+                
+                if (!user || !user.pin || user.pin.length < 4) {
+                    window.location.replace('/login');
+                    return;
+                }
+
+                var sessionPin = sessionStorage.getItem('gt-pin');
+                var sessionToken = sessionStorage.getItem('gt-token');
+
+                if (!sessionPin || !sessionToken) {
+                    window.location.replace('/login');
+                    return;
+                }
+
+                // ==================== SESSION HEARTBEAT ====================
+                function validateSession() {
+                    fetch('/api/session/validate', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ pin: sessionPin, token: sessionToken })
+                    })
+                    .then(function(r) { return r.json(); })
+                    .then(function(d) {
+                        if (!d.valid) {
+                            alert(d.message || 'Session ended. Please log in again.');
+                            localStorage.removeItem('gt-user');
+                            localStorage.removeItem('gt-speed-access');
+                            sessionStorage.removeItem('gt-pin');
+                            sessionStorage.removeItem('gt-token');
+                            window.location.href = '/login';
+                        }
+                    })
+                    .catch(function(err) {
+                        console.log('Session validation error:', err);
+                    });
+                }
+
+                validateSession();
+                setInterval(validateSession, 30000);
+
+                // ==================== SPEED ACCESS ====================
+                fetch('/api/user/speed-access/' + user.pin)
+                    .then(function(r) { return r.json(); })
+                    .then(function(data) {
+                        localStorage.setItem('gt-speed-access', JSON.stringify(data));
+                        updateSpeedUI(data);
+                    })
+                    .catch(function(err) {
+                        console.log('Speed access check failed:', err);
+                    });
+
+                // ==================== LOGOUT ====================
+                document.getElementById('logoutLink').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    if (sessionPin && sessionToken) {
+                        fetch('/api/session/destroy', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ pin: sessionPin, token: sessionToken })
+                        }).catch(function(err) { console.log('Session destroy error:', err); });
+                    }
+                    
+                    localStorage.removeItem('gt-user');
+                    localStorage.removeItem('gt-speed-access');
+                    sessionStorage.removeItem('gt-pin');
+                    sessionStorage.removeItem('gt-token');
+                    
+                    window.location.href = '/';
+                });
+            }
+
+            // ==================== LANGUAGE ====================
+            var currentLang = localStorage.getItem('gotrotter_lang') || 'en';
+            
+            function setLang(l) {
+                currentLang = l;
+                localStorage.setItem('gotrotter_lang', l);
+                document.body.className = l;
+                document.getElementById('btnEn').className = l === 'en' ? 'lang-btn active' : 'lang-btn';
+                document.getElementById('btnEs').className = l === 'es' ? 'lang-btn active' : 'lang-btn';
+            }
+
+            document.getElementById('btnEn').addEventListener('click', function() { setLang('en'); });
+            document.getElementById('btnEs').addEventListener('click', function() { setLang('es'); });
+            setLang(currentLang);
+
+            // ==================== SPEED UI ====================
+            function updateSpeedUI(data) {
+                var chipSlow = document.getElementById('chipSlow');
+                var chipMed = document.getElementById('chipMed');
+                var chipFast = document.getElementById('chipFast');
+                var upgradeArea = document.getElementById('upgradeArea');
+                var allSpeedsArea = document.getElementById('allSpeedsArea');
+                var trialBanner = document.getElementById('trialBanner');
+
+                if (data.allSpeeds) {
+                    // Full access - all speeds unlocked
+                    chipSlow.className = 'speed-chip unlocked';
+                    chipSlow.innerHTML = '<span class="icon">✓</span> SLOW';
+                    
+                    chipMed.className = 'speed-chip unlocked';
+                    chipMed.innerHTML = '<span class="icon">✓</span> MED';
+                    
+                    chipFast.className = 'speed-chip unlocked';
+                    chipFast.innerHTML = '<span class="icon">✓</span> FAST';
+                    
+                    upgradeArea.style.display = 'none';
+                    allSpeedsArea.style.display = 'block';
+                    trialBanner.classList.remove('show');
+                } else {
+                    // Limited access - SLOW only
+                    chipSlow.className = 'speed-chip unlocked';
+                    chipSlow.innerHTML = '<span class="icon">✓</span> SLOW';
+                    
+                    chipMed.className = 'speed-chip locked';
+                    chipMed.innerHTML = '<span class="icon">🔒</span> MED';
+                    
+                    chipFast.className = 'speed-chip locked';
+                    chipFast.innerHTML = '<span class="icon">🔒</span> FAST';
+                    
+                    upgradeArea.style.display = 'block';
+                    allSpeedsArea.style.display = 'none';
+
+                    // Show trial banner for facility trials
+                    if (data.userType === 'facility_trial' && data.daysLeft !== undefined) {
+                        document.getElementById('trialDays').textContent = data.daysLeft;
+                        document.getElementById('trialDaysEs').textContent = data.daysLeft;
+                        trialBanner.classList.add('show');
+                    }
+                }
+            }
+
+        })();
+    </script>
+</body>
+</html>
