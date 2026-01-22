@@ -871,6 +871,10 @@ app.get('/trial-pin', function(req, res) {
     res.sendFile(path.join(__dirname, 'trial-pin.html'));
 });
 
+app.get('/how-to-play', function(req, res) {
+    res.sendFile(path.join(__dirname, 'how-to-play.html'));
+});
+
 app.get('/play', function(req, res) {
     res.sendFile(path.join(__dirname, 'gotrotter.html'));
 });
@@ -912,10 +916,11 @@ app.listen(PORT, function() {
     console.log('🔐 Admin Key:', ADMIN_SECRET_KEY ? '✅ Set' : '⚠️ Using default');
     console.log('');
     console.log('🎯 ROUTES:');
-    console.log('   /           → Landing page');
-    console.log('   /hub        → User hub');
-    console.log('   /play       → Game');
-    console.log('   /trial-pin  → Trial PIN Generator');
+    console.log('   /            → Landing page');
+    console.log('   /hub         → User hub');
+    console.log('   /play        → Game');
+    console.log('   /how-to-play → How to play guide');
+    console.log('   /trial-pin   → Trial PIN Generator');
     console.log('');
     console.log('🔧 ADMIN ENDPOINTS (use X-Admin-Key header):');
     console.log('   POST /api/trials/create    → Create trial PIN');
