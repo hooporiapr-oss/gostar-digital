@@ -11,6 +11,7 @@
     --gold: #FFD700;
     --orange: #FF6B00;
     --teal: #00D9A5;
+    --cyan: #00CED1;
     --red: #FF1744;
     --dark: #0a0a0f;
     --darker: #050508;
@@ -132,7 +133,7 @@ body {
 /* ============ SECTIONS ============ */
 .section {
     padding: 100px 20px;
-    max-width: 900px;
+    max-width: 1100px;
     margin: 0 auto;
 }
 
@@ -147,6 +148,16 @@ body {
     text-transform: uppercase;
     letter-spacing: 2px;
     margin-bottom: 20px;
+}
+
+.section-badge.orange {
+    background: rgba(255,107,0,0.15);
+    color: var(--orange);
+}
+
+.section-badge.cyan {
+    background: rgba(0,217,165,0.15);
+    color: var(--teal);
 }
 
 .section-title {
@@ -164,69 +175,241 @@ body {
     margin-bottom: 30px;
 }
 
-/* ============ THE GAME SECTION ============ */
-.game-visual {
-    background: var(--card);
-    border: 1px solid rgba(255,215,0,0.2);
-    border-radius: 24px;
-    padding: 40px;
-    margin: 40px 0;
+/* ============ TWO WORKOUTS SECTION ============ */
+.workouts-intro {
     text-align: center;
+    margin-bottom: 60px;
 }
 
-.game-grid {
+.workouts-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+}
+
+@media (max-width: 900px) {
+    .workouts-grid { grid-template-columns: 1fr; }
+}
+
+.workout-card {
+    background: var(--card);
+    border-radius: 24px;
+    padding: 40px 30px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease;
+}
+
+.workout-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+}
+
+.workout-card.match::before {
+    background: linear-gradient(90deg, var(--gold), var(--orange));
+}
+
+.workout-card.sequence::before {
+    background: linear-gradient(90deg, var(--teal), var(--cyan));
+}
+
+.workout-card:hover {
+    transform: translateY(-10px);
+}
+
+.workout-card.match:hover {
+    box-shadow: 0 25px 50px rgba(255,107,0,0.2);
+}
+
+.workout-card.sequence:hover {
+    box-shadow: 0 25px 50px rgba(0,217,165,0.2);
+}
+
+.workout-icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+}
+
+.workout-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 4px;
+    margin-bottom: 10px;
+}
+
+.workout-card.match .workout-name { color: var(--orange); }
+.workout-card.sequence .workout-name { color: var(--teal); }
+
+.workout-type {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-bottom: 20px;
+}
+
+/* ============ GAME GRIDS ============ */
+.game-grid-5x5 {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    max-width: 220px;
+    margin: 0 auto 25px;
+}
+
+.game-grid-4x4 {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-    max-width: 280px;
-    margin: 0 auto 30px;
+    gap: 10px;
+    max-width: 200px;
+    margin: 0 auto 25px;
 }
 
-.game-cell {
+.grid-cell {
     aspect-ratio: 1;
     background: var(--darker);
-    border: 2px solid var(--muted);
-    border-radius: 12px;
+    border: 2px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.8rem;
+    font-size: 1.2rem;
     transition: all 0.3s;
-    cursor: pointer;
 }
 
-.game-cell:hover {
-    border-color: var(--gold);
-    transform: scale(1.05);
+.grid-cell.center {
+    background: var(--orange);
+    border-color: var(--orange);
 }
 
-.game-cell.highlight {
-    background: var(--gold);
-    border-color: var(--gold);
-    animation: cellPulse 0.6s ease-out;
+.grid-cell.highlight-orange {
+    background: var(--orange);
+    border-color: var(--orange);
+    animation: cellPulseOrange 0.5s ease-out;
 }
 
-@keyframes cellPulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
+.grid-cell.highlight-cyan {
+    background: var(--teal);
+    border-color: var(--teal);
+    animation: cellPulseCyan 0.5s ease-out;
 }
 
-.game-instruction {
-    font-size: 1rem;
+@keyframes cellPulseOrange {
+    0% { transform: scale(1); box-shadow: 0 0 0 rgba(255,107,0,0); }
+    50% { transform: scale(1.1); box-shadow: 0 0 20px rgba(255,107,0,0.5); }
+    100% { transform: scale(1); box-shadow: 0 0 0 rgba(255,107,0,0); }
+}
+
+@keyframes cellPulseCyan {
+    0% { transform: scale(1); box-shadow: 0 0 0 rgba(0,217,165,0); }
+    50% { transform: scale(1.1); box-shadow: 0 0 20px rgba(0,217,165,0.5); }
+    100% { transform: scale(1); box-shadow: 0 0 0 rgba(0,217,165,0); }
+}
+
+.workout-mechanic {
+    font-size: 0.95rem;
     color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 25px;
 }
 
-.game-instruction strong {
-    color: var(--gold);
+.workout-mechanic strong {
+    color: var(--text);
+}
+
+.workout-btn {
+    display: inline-block;
+    padding: 14px 35px;
+    border-radius: 50px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 3px;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.workout-card.match .workout-btn {
+    background: linear-gradient(135deg, var(--gold), var(--orange));
+    color: var(--dark);
+}
+
+.workout-card.sequence .workout-btn {
+    background: linear-gradient(135deg, var(--teal), var(--cyan));
+    color: var(--dark);
+}
+
+.workout-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+/* ============ HOW TO PLAY TABS ============ */
+.tabs-container {
+    margin-top: 50px;
+}
+
+.tabs-header {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 40px;
+}
+
+.tab-btn {
+    padding: 15px 40px;
+    background: var(--card);
+    border: 2px solid transparent;
+    border-radius: 50px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 3px;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.tab-btn:hover {
+    color: var(--text);
+}
+
+.tab-btn.active.match {
+    border-color: var(--orange);
+    color: var(--orange);
+    background: rgba(255,107,0,0.1);
+}
+
+.tab-btn.active.sequence {
+    border-color: var(--teal);
+    color: var(--teal);
+    background: rgba(0,217,165,0.1);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+    animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 /* ============ STEPS ============ */
 .steps {
     display: flex;
     flex-direction: column;
-    gap: 30px;
-    margin: 40px 0;
+    gap: 25px;
+    max-width: 700px;
+    margin: 0 auto;
 }
 
 .step {
@@ -235,42 +418,55 @@ body {
     align-items: flex-start;
     background: var(--card);
     border-radius: 20px;
-    padding: 30px;
+    padding: 25px 30px;
     transition: all 0.3s;
 }
 
 .step:hover {
     transform: translateX(10px);
-    border-left: 3px solid var(--gold);
 }
 
+.step.match:hover { border-left: 3px solid var(--orange); }
+.step.sequence:hover { border-left: 3px solid var(--teal); }
+
 .step-number {
-    width: 60px;
-    height: 60px;
-    background: linear-gradient(135deg, var(--gold), var(--orange));
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     color: var(--dark);
     flex-shrink: 0;
 }
 
+.step.match .step-number {
+    background: linear-gradient(135deg, var(--gold), var(--orange));
+}
+
+.step.sequence .step-number {
+    background: linear-gradient(135deg, var(--teal), var(--cyan));
+}
+
 .step-content h3 {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     letter-spacing: 2px;
     margin-bottom: 8px;
 }
 
+.step.match .step-content h3 { color: var(--orange); }
+.step.sequence .step-content h3 { color: var(--teal); }
+
 .step-content p {
     color: var(--muted);
     line-height: 1.6;
+    font-size: 0.95rem;
 }
 
-/* ============ DIVISIONS ============ */
+/* ============ 15 DIVISIONS ============ */
 .divisions-intro {
     text-align: center;
     margin-bottom: 50px;
@@ -288,6 +484,12 @@ body {
 .divisions-formula .speeds { color: var(--orange); }
 .divisions-formula .equals { color: var(--muted); }
 .divisions-formula .total { color: var(--gold); }
+
+.divisions-note {
+    font-size: 1rem;
+    color: var(--muted);
+    margin-top: 15px;
+}
 
 .speed-cards {
     display: grid;
@@ -347,10 +549,23 @@ body {
 .speed-card.medium .speed-name { color: var(--gold); }
 .speed-card.fast .speed-name { color: var(--red); }
 
-.speed-ms {
-    font-size: 0.9rem;
-    color: var(--muted);
-    margin-bottom: 15px;
+.speed-access {
+    font-size: 0.8rem;
+    padding: 5px 15px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+.speed-card.slow .speed-access {
+    background: rgba(0,217,165,0.15);
+    color: var(--teal);
+}
+
+.speed-card.medium .speed-access,
+.speed-card.fast .speed-access {
+    background: rgba(255,215,0,0.15);
+    color: var(--gold);
 }
 
 .speed-levels {
@@ -455,23 +670,47 @@ body {
     margin-bottom: 40px;
 }
 
+.cta-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
 .cta-btn {
-    display: inline-block;
-    padding: 20px 60px;
-    background: linear-gradient(135deg, var(--gold), var(--orange));
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 20px 50px;
     color: var(--dark);
     text-decoration: none;
     border-radius: 50px;
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     letter-spacing: 4px;
     transition: all 0.3s;
-    box-shadow: 0 10px 40px rgba(255,215,0,0.3);
+}
+
+.cta-btn.match {
+    background: linear-gradient(135deg, var(--gold), var(--orange));
+    box-shadow: 0 10px 40px rgba(255,107,0,0.3);
+}
+
+.cta-btn.sequence {
+    background: linear-gradient(135deg, var(--teal), var(--cyan));
+    box-shadow: 0 10px 40px rgba(0,217,165,0.3);
 }
 
 .cta-btn:hover {
     transform: translateY(-5px);
-    box-shadow: 0 20px 50px rgba(255,215,0,0.4);
+}
+
+.cta-btn.match:hover {
+    box-shadow: 0 20px 50px rgba(255,107,0,0.4);
+}
+
+.cta-btn.sequence:hover {
+    box-shadow: 0 20px 50px rgba(0,217,165,0.4);
 }
 
 /* ============ FOOTER ============ */
@@ -531,7 +770,10 @@ body {
     .step { flex-direction: column; align-items: center; text-align: center; }
     .divisions-formula { font-size: 1.5rem; }
     .cta-title { font-size: 2rem; }
-    .cta-btn { padding: 16px 40px; font-size: 1.2rem; }
+    .cta-btn { padding: 16px 35px; font-size: 1.1rem; }
+    .tabs-header { flex-direction: column; }
+    .tab-btn { width: 100%; }
+    .workout-card { padding: 30px 20px; }
 }
 </style>
 </head>
@@ -546,8 +788,8 @@ body {
         </div>
         <div class="hero-tagline">THE LAUGHCOURT</div>
         <p class="hero-subtitle">
-            Train your brain. Challenge your memory. <br>
-            And don't forget to <strong style="color: var(--gold)">laugh</strong> along the way.
+            Two workouts. One court. Endless brain gains.<br>
+            Train your memory and <strong style="color: var(--gold)">laugh</strong> along the way.
         </p>
     </div>
     <div class="scroll-indicator">
@@ -556,66 +798,164 @@ body {
     </div>
 </section>
 
-<!-- ============ THE GAME ============ -->
+<!-- ============ TWO WORKOUTS ============ -->
 <section class="section fade-in">
-    <span class="section-badge">🧠 The Game</span>
-    <h2 class="section-title">MEMORY MEETS BASKETBALL</h2>
-    <p class="section-text">
-        GoTrotter is a rhythm-based memory game that lights up your brain while putting a smile on your face. Watch the pattern, remember the sequence, tap it back. Simple to learn, endlessly challenging to master.
-    </p>
-    
-    <div class="game-visual">
-        <div class="game-grid" id="demoGrid">
-            <div class="game-cell" data-cell="0">😊</div>
-            <div class="game-cell" data-cell="1">😂</div>
-            <div class="game-cell" data-cell="2">🤣</div>
-            <div class="game-cell" data-cell="3">😄</div>
-            <div class="game-cell" data-cell="4">😁</div>
-            <div class="game-cell" data-cell="5">😆</div>
-            <div class="game-cell" data-cell="6">😃</div>
-            <div class="game-cell" data-cell="7">🙂</div>
-            <div class="game-cell" data-cell="8">😀</div>
-            <div class="game-cell" data-cell="9">😸</div>
-            <div class="game-cell" data-cell="10">😹</div>
-            <div class="game-cell" data-cell="11">🤭</div>
-            <div class="game-cell" data-cell="12">😏</div>
-            <div class="game-cell" data-cell="13">😌</div>
-            <div class="game-cell" data-cell="14">🥳</div>
-            <div class="game-cell" data-cell="15">🎉</div>
-        </div>
-        <p class="game-instruction">
-            <strong>Watch</strong> the cells light up → <strong>Remember</strong> the pattern → <strong>Tap</strong> it back!
+    <div class="workouts-intro">
+        <span class="section-badge">🧠 Two Workouts</span>
+        <h2 class="section-title">CHOOSE YOUR TRAINING</h2>
+        <p class="section-text" style="max-width: 650px; margin: 0 auto;">
+            The LaughCourt offers two distinct memory workouts. Each targets different cognitive skills. Master both to become a complete brain athlete.
         </p>
+    </div>
+    
+    <div class="workouts-grid">
+        <!-- THE MATCH -->
+        <div class="workout-card match">
+            <div class="workout-icon">🎯</div>
+            <div class="workout-name">THE MATCH</div>
+            <div class="workout-type">Recognition Memory</div>
+            
+            <div class="game-grid-5x5" id="matchGrid">
+                <div class="grid-cell"></div>
+                <div class="grid-cell"></div>
+                <div class="grid-cell"></div>
+                <div class="grid-cell"></div>
+                <div class="grid-cell"></div>
+                <div class="grid-cell"></div>
+                <div class="grid-cell"></div>
+                <div class="grid-cell"></div>
+                <div class="grid-cell"></div>
+                <div class="grid-cell"></div>
+                <div class="grid-cell"></div>
+                <div class="grid-cell"></div>
+                <div class="grid-cell center">🎯</div>
+                <div class="grid-cell"></div>
+                <div class="grid-cell"></div>
+                <div class="grid-cell"></div>
+                <div class="grid-cell"></div>
+                <div class="grid-cell"></div>
+                <div class="grid-cell"></div>
+                <div class="grid-cell"></div>
+                <div class="grid-cell"></div>
+                <div class="grid-cell"></div>
+                <div class="grid-cell"></div>
+                <div class="grid-cell"></div>
+                <div class="grid-cell"></div>
+            </div>
+            
+            <p class="workout-mechanic">
+                <strong>5×5 grid</strong> with a center target.<br>
+                Colors flash around the grid.<br>
+                <strong>Tap the cells</strong> that matched the center!
+            </p>
+            
+            <a href="/play" class="workout-btn">PLAY THE MATCH →</a>
+        </div>
+        
+        <!-- THE SEQUENCE -->
+        <div class="workout-card sequence">
+            <div class="workout-icon">🔢</div>
+            <div class="workout-name">THE SEQUENCE</div>
+            <div class="workout-type">Sequential Memory</div>
+            
+            <div class="game-grid-4x4" id="sequenceGrid">
+                <div class="grid-cell">😊</div>
+                <div class="grid-cell">😂</div>
+                <div class="grid-cell">🤣</div>
+                <div class="grid-cell">😄</div>
+                <div class="grid-cell">😁</div>
+                <div class="grid-cell">😆</div>
+                <div class="grid-cell">😃</div>
+                <div class="grid-cell">🙂</div>
+                <div class="grid-cell">😀</div>
+                <div class="grid-cell">😸</div>
+                <div class="grid-cell">😹</div>
+                <div class="grid-cell">🤭</div>
+                <div class="grid-cell">😏</div>
+                <div class="grid-cell">😌</div>
+                <div class="grid-cell">🥳</div>
+                <div class="grid-cell">🎉</div>
+            </div>
+            
+            <p class="workout-mechanic">
+                <strong>4×4 grid</strong> filled with laugh emojis.<br>
+                Watch the pattern light up in order.<br>
+                <strong>Tap it back</strong> in the exact sequence!
+            </p>
+            
+            <a href="/the-sequence" class="workout-btn">PLAY THE SEQUENCE →</a>
+        </div>
     </div>
 </section>
 
-<!-- ============ HOW TO PLAY ============ -->
+<!-- ============ HOW TO PLAY (TABBED) ============ -->
 <section class="section fade-in">
-    <span class="section-badge">📖 How To Play</span>
-    <h2 class="section-title">THREE SIMPLE STEPS</h2>
+    <div style="text-align: center;">
+        <span class="section-badge">📖 How To Play</span>
+        <h2 class="section-title">MASTER THE WORKOUTS</h2>
+    </div>
     
-    <div class="steps">
-        <div class="step">
-            <div class="step-number">1</div>
-            <div class="step-content">
-                <h3>WATCH THE PATTERN</h3>
-                <p>Cells will light up one at a time in a sequence. Focus on which cells light up and in what order. The pattern gets longer as you advance!</p>
+    <div class="tabs-container">
+        <div class="tabs-header">
+            <button class="tab-btn active match" data-tab="match">THE MATCH</button>
+            <button class="tab-btn sequence" data-tab="sequence">THE SEQUENCE</button>
+        </div>
+        
+        <!-- THE MATCH STEPS -->
+        <div class="tab-content active" id="tab-match">
+            <div class="steps">
+                <div class="step match">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>WATCH THE CENTER</h3>
+                        <p>A target color appears in the center cell. This is what you're looking for. Lock it into your memory!</p>
+                    </div>
+                </div>
+                
+                <div class="step match">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>SCAN THE GRID</h3>
+                        <p>Colors flash across the 5×5 grid. Some will match the center, some won't. Track every cell that matches!</p>
+                    </div>
+                </div>
+                
+                <div class="step match">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>TAP THE MATCHES</h3>
+                        <p>After the show ends, tap every cell that matched the center color. The more you get right, the higher you climb!</p>
+                    </div>
+                </div>
             </div>
         </div>
         
-        <div class="step">
-            <div class="step-number">2</div>
-            <div class="step-content">
-                <h3>TAP IT BACK</h3>
-                <p>After the pattern plays, it's your turn! Tap the cells in the exact same order you just saw. Take your time — accuracy beats speed.</p>
-            </div>
-        </div>
-        
-        <div class="step">
-            <div class="step-number">3</div>
-            <div class="step-content">
-                <h3>LEVEL UP & LAUGH</h3>
-                <p>Get it right? The pattern grows longer and you climb the divisions! Make a mistake? No worries — shake it off and try again. Every session builds your memory muscle.</p>
+        <!-- THE SEQUENCE STEPS -->
+        <div class="tab-content" id="tab-sequence">
+            <div class="steps">
+                <div class="step sequence">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>WATCH THE PATTERN</h3>
+                        <p>Cells light up one at a time in a specific order. Pay attention to which cells and what sequence!</p>
+                    </div>
+                </div>
+                
+                <div class="step sequence">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>REMEMBER THE ORDER</h3>
+                        <p>The pattern gets longer as you level up. Use mental tricks — trace paths, group clusters, find patterns within patterns.</p>
+                    </div>
+                </div>
+                
+                <div class="step sequence">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>TAP IT BACK</h3>
+                        <p>Replay the exact sequence by tapping cells in order. One wrong tap and you'll need to try again. Precision matters!</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -626,8 +966,8 @@ body {
     <div class="divisions-intro">
         <span class="section-badge">🏆 15 Divisions</span>
         <h2 class="section-title">YOUR JOURNEY TO MASTERY</h2>
-        <p class="section-text" style="max-width: 600px; margin: 0 auto;">
-            The LaughCourt has 15 divisions waiting for you. Start slow, build confidence, then turn up the heat.
+        <p class="section-text" style="max-width: 650px; margin: 0 auto;">
+            Each workout has 15 divisions. Start slow, build confidence, then turn up the heat.
         </p>
         
         <div class="divisions-formula">
@@ -637,27 +977,29 @@ body {
             <span class="equals"> = </span>
             <span class="total">15 DIVISIONS</span>
         </div>
+        
+        <p class="divisions-note">× 2 workouts = <strong style="color: var(--gold);">30 total divisions</strong> to conquer!</p>
     </div>
     
     <div class="speed-cards">
         <div class="speed-card slow">
             <div class="speed-icon">🐢</div>
             <div class="speed-name">SLOW</div>
-            <div class="speed-ms">2500ms per cell</div>
+            <span class="speed-access">FREE</span>
             <div class="speed-levels">Levels 1-5</div>
         </div>
         
         <div class="speed-card medium">
             <div class="speed-icon">🏃</div>
             <div class="speed-name">MEDIUM</div>
-            <div class="speed-ms">1500ms per cell</div>
+            <span class="speed-access">$5/mo</span>
             <div class="speed-levels">Levels 1-5</div>
         </div>
         
         <div class="speed-card fast">
             <div class="speed-icon">🚀</div>
             <div class="speed-name">FAST</div>
-            <div class="speed-ms">800ms per cell</div>
+            <span class="speed-access">$5/mo</span>
             <div class="speed-levels">Levels 1-5</div>
         </div>
     </div>
@@ -669,7 +1011,7 @@ body {
         <div class="laugh-emojis">😂🎉😂</div>
         <h2 class="celebration-title">LAUGHTER IS THE BEST MEDICINE</h2>
         <p class="celebration-text">
-            Every correct sequence triggers a celebration! Watch the laughing emojis dance across your screen. Because cognitive training should feel like play, not work.
+            Every correct round triggers a celebration! Watch the laughing emojis dance across your screen. Because cognitive training should feel like play, not work.
         </p>
     </div>
 </section>
@@ -702,9 +1044,9 @@ body {
         </div>
         
         <div class="tip-card">
-            <div class="tip-icon">🔥</div>
+            <div class="tip-icon">🔁</div>
             <div class="tip-text">
-                <strong>Build your streak.</strong> Play daily to keep your memory sharp and your streak alive!
+                <strong>Train both workouts.</strong> THE MATCH builds recognition. THE SEQUENCE builds recall. You need both!
             </div>
         </div>
         
@@ -729,7 +1071,10 @@ body {
     <div class="cta-emoji">🏀</div>
     <h2 class="cta-title">READY TO PLAY?</h2>
     <p class="cta-text">Your brain is waiting. The LaughCourt is calling.</p>
-    <a href="/play" class="cta-btn">LET'S GO! 🚀</a>
+    <div class="cta-buttons">
+        <a href="/play" class="cta-btn match">THE MATCH 🎯</a>
+        <a href="/the-sequence" class="cta-btn sequence">THE SEQUENCE 🔢</a>
+    </div>
 </section>
 
 <!-- ============ FOOTER ============ -->
@@ -756,31 +1101,87 @@ function handleScroll() {
 window.addEventListener('scroll', handleScroll);
 window.addEventListener('load', handleScroll);
 
-// ============ DEMO GRID ANIMATION ============
-var demoGrid = document.getElementById('demoGrid');
-var cells = demoGrid.querySelectorAll('.game-cell');
-var demoPattern = [2, 5, 9, 14, 7, 3, 11, 0];
-var demoIndex = 0;
-var demoPlaying = false;
+// ============ TAB SWITCHING ============
+var tabBtns = document.querySelectorAll('.tab-btn');
+tabBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+        var tabId = this.getAttribute('data-tab');
+        
+        // Update buttons
+        tabBtns.forEach(function(b) { 
+            b.classList.remove('active'); 
+        });
+        this.classList.add('active');
+        
+        // Update content
+        document.querySelectorAll('.tab-content').forEach(function(content) {
+            content.classList.remove('active');
+        });
+        document.getElementById('tab-' + tabId).classList.add('active');
+    });
+});
 
-function playDemoPattern() {
-    if (demoPlaying) return;
-    demoPlaying = true;
-    demoIndex = 0;
+// ============ MATCH GRID DEMO ============
+var matchGrid = document.getElementById('matchGrid');
+var matchCells = matchGrid.querySelectorAll('.grid-cell:not(.center)');
+var matchDemoRunning = false;
+
+function playMatchDemo() {
+    if (matchDemoRunning) return;
+    matchDemoRunning = true;
+    
+    var pattern = [1, 5, 8, 16, 21, 3, 11, 19, 23];
+    var index = 0;
     
     function lightNext() {
-        if (demoIndex > 0) {
-            cells[demoPattern[demoIndex - 1]].classList.remove('highlight');
+        if (index > 0 && pattern[index - 1] !== undefined) {
+            var prevCell = matchCells[pattern[index - 1] < 12 ? pattern[index - 1] : pattern[index - 1] - 1];
+            if (prevCell) prevCell.classList.remove('highlight-orange');
         }
         
-        if (demoIndex < demoPattern.length) {
-            cells[demoPattern[demoIndex]].classList.add('highlight');
-            demoIndex++;
-            setTimeout(lightNext, 600);
+        if (index < pattern.length) {
+            var cellIndex = pattern[index] < 12 ? pattern[index] : pattern[index] - 1;
+            if (matchCells[cellIndex]) {
+                matchCells[cellIndex].classList.add('highlight-orange');
+            }
+            index++;
+            setTimeout(lightNext, 400);
         } else {
             setTimeout(function() {
-                cells[demoPattern[demoPattern.length - 1]].classList.remove('highlight');
-                demoPlaying = false;
+                matchCells.forEach(function(c) { c.classList.remove('highlight-orange'); });
+                matchDemoRunning = false;
+            }, 300);
+        }
+    }
+    
+    lightNext();
+}
+
+// ============ SEQUENCE GRID DEMO ============
+var sequenceGrid = document.getElementById('sequenceGrid');
+var sequenceCells = sequenceGrid.querySelectorAll('.grid-cell');
+var sequenceDemoRunning = false;
+
+function playSequenceDemo() {
+    if (sequenceDemoRunning) return;
+    sequenceDemoRunning = true;
+    
+    var pattern = [2, 5, 9, 14, 7, 0, 11, 4];
+    var index = 0;
+    
+    function lightNext() {
+        if (index > 0) {
+            sequenceCells[pattern[index - 1]].classList.remove('highlight-cyan');
+        }
+        
+        if (index < pattern.length) {
+            sequenceCells[pattern[index]].classList.add('highlight-cyan');
+            index++;
+            setTimeout(lightNext, 500);
+        } else {
+            setTimeout(function() {
+                sequenceCells[pattern[pattern.length - 1]].classList.remove('highlight-cyan');
+                sequenceDemoRunning = false;
             }, 400);
         }
     }
@@ -788,33 +1189,33 @@ function playDemoPattern() {
     lightNext();
 }
 
-// Play demo when section is visible
-var demoObserver = new IntersectionObserver(function(entries) {
+// Play demos when cards are visible
+var matchObserver = new IntersectionObserver(function(entries) {
     entries.forEach(function(entry) {
-        if (entry.isIntersecting && !demoPlaying) {
-            setTimeout(playDemoPattern, 500);
+        if (entry.isIntersecting && !matchDemoRunning) {
+            setTimeout(playMatchDemo, 600);
         }
     });
 }, { threshold: 0.5 });
 
-demoObserver.observe(demoGrid);
+var sequenceObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+        if (entry.isIntersecting && !sequenceDemoRunning) {
+            setTimeout(playSequenceDemo, 800);
+        }
+    });
+}, { threshold: 0.5 });
+
+matchObserver.observe(matchGrid);
+sequenceObserver.observe(sequenceGrid);
 
 // Replay on click
-demoGrid.addEventListener('click', function() {
-    if (!demoPlaying) {
-        playDemoPattern();
-    }
+matchGrid.addEventListener('click', function() {
+    if (!matchDemoRunning) playMatchDemo();
 });
 
-// ============ SPEED CARD HOVER SOUNDS (Visual feedback) ============
-var speedCards = document.querySelectorAll('.speed-card');
-speedCards.forEach(function(card) {
-    card.addEventListener('mouseenter', function() {
-        this.style.transform = 'translateY(-10px) scale(1.02)';
-    });
-    card.addEventListener('mouseleave', function() {
-        this.style.transform = '';
-    });
+sequenceGrid.addEventListener('click', function() {
+    if (!sequenceDemoRunning) playSequenceDemo();
 });
 </script>
 
