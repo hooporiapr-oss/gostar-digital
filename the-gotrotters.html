@@ -260,6 +260,37 @@ body {
     flex-shrink: 0;
 }
 
+/* Sixth Man Section */
+.sixth-man-header {
+    text-align: center;
+    margin: 40px 0 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+}
+.sixth-man-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 3px;
+    color: var(--teal);
+    margin-bottom: 5px;
+}
+.sixth-man-subtitle {
+    color: var(--muted);
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+}
+.player-card.sixth-man {
+    border-color: var(--teal);
+    background: rgba(0,217,165,0.05);
+}
+.player-card.sixth-man:hover {
+    border-color: var(--gold);
+    box-shadow: 0 10px 30px rgba(0,217,165,0.2);
+}
+.player-card.sixth-man .player-position {
+    color: var(--teal);
+}
+
 /* CTA Section */
 .cta-section {
     text-align: center;
@@ -309,6 +340,13 @@ body {
     color: var(--muted);
     font-size: 0.7rem;
     letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+.footer-trademarks {
+    font-size: 0.55rem;
+    color: var(--muted);
+    opacity: 0.7;
+    line-height: 1.4;
 }
 
 /* Language */
@@ -395,41 +433,49 @@ body.es .lang-en { display: none !important; }
 
     <div class="roster">
 
-        <!-- CURLY -->
+        <!-- #1 CLAUDE - POINT GUARD -->
         <div class="player-card">
             <div class="player-svg">
                 <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="50" cy="50" r="45" fill="url(#curlyGrad)"/>
+                    <circle cx="50" cy="50" r="45" fill="url(#claudeGrad)"/>
                     <ellipse cx="35" cy="30" rx="15" ry="10" fill="rgba(255,255,255,0.2)"/>
                     <ellipse cx="50" cy="20" rx="20" ry="8" fill="rgba(255,255,255,0.15)"/>
-                    <path d="M 28 42 Q 35 38 42 42" stroke="#1a1a1a" stroke-width="4" fill="none" stroke-linecap="round"/>
-                    <path d="M 58 42 Q 65 38 72 42" stroke="#1a1a1a" stroke-width="4" fill="none" stroke-linecap="round"/>
-                    <path d="M 25 58 Q 50 85 75 58" stroke="#1a1a1a" stroke-width="3" fill="#FF8C00"/>
-                    <path d="M 30 62 Q 50 78 70 62" fill="#8B0000"/>
-                    <rect x="35" y="62" width="30" height="8" fill="white" rx="2"/>
-                    <circle cx="25" cy="55" r="8" fill="rgba(255,0,100,0.2)"/>
-                    <circle cx="75" cy="55" r="8" fill="rgba(255,0,100,0.2)"/>
-                    <path d="M 25 32 Q 35 28 45 32" stroke="#c44a1c" stroke-width="3" fill="none" stroke-linecap="round"/>
-                    <path d="M 55 32 Q 65 28 75 32" stroke="#c44a1c" stroke-width="3" fill="none" stroke-linecap="round"/>
-                    <defs><radialGradient id="curlyGrad" cx="30%" cy="30%"><stop offset="0%" stop-color="#FF8C42"/><stop offset="100%" stop-color="#FF6B35"/></radialGradient></defs>
+                    <!-- Eyes - Digital/Friendly -->
+                    <rect x="28" y="38" width="16" height="12" rx="3" fill="#1a1a1a"/>
+                    <rect x="56" y="38" width="16" height="12" rx="3" fill="#1a1a1a"/>
+                    <rect x="31" y="41" width="10" height="6" rx="2" fill="#00D9A5"/>
+                    <rect x="59" y="41" width="10" height="6" rx="2" fill="#00D9A5"/>
+                    <rect x="33" y="42" width="3" height="4" rx="1" fill="#FFFFFF"/>
+                    <rect x="61" y="42" width="3" height="4" rx="1" fill="#FFFFFF"/>
+                    <!-- Warm Smile -->
+                    <path d="M 30 62 Q 50 78 70 62" stroke="#1a1a1a" stroke-width="3" fill="#FF8C00"/>
+                    <path d="M 35 65 Q 50 75 65 65" fill="#8B0000"/>
+                    <rect x="38" y="65" width="24" height="6" fill="white" rx="2"/>
+                    <!-- Cheeks -->
+                    <circle cx="25" cy="55" r="7" fill="rgba(255,0,100,0.15)"/>
+                    <circle cx="75" cy="55" r="7" fill="rgba(255,0,100,0.15)"/>
+                    <!-- Antenna/Signal - AI element -->
+                    <circle cx="50" cy="8" r="4" fill="#00D9A5"/>
+                    <line x1="50" y1="12" x2="50" y2="20" stroke="#00D9A5" stroke-width="2"/>
+                    <defs><radialGradient id="claudeGrad" cx="30%" cy="30%"><stop offset="0%" stop-color="#FF8C42"/><stop offset="100%" stop-color="#FF6B35"/></radialGradient></defs>
                 </svg>
             </div>
             <div class="player-info">
-                <div class="player-position">POINT GUARD</div>
-                <div class="player-name">CURLY</div>
+                <div class="player-position">#1 • POINT GUARD</div>
+                <div class="player-name">CLAUDE</div>
                 <div class="player-trait">
-                    <span class="lang-en">"Infectious Energy"</span>
-                    <span class="lang-es">"Energía Contagiosa"</span>
+                    <span class="lang-en">"Versatile Vision"</span>
+                    <span class="lang-es">"Visión Versátil"</span>
                 </div>
                 <div class="player-bio">
-                    <span class="lang-en">The floor general who leads with pure joy. Every dribble, every move, every giggle spreads like wildfire.</span>
-                    <span class="lang-es">El general de la cancha que lidera con pura alegría. Cada dribling, cada movimiento, cada risa se contagia.</span>
+                    <span class="lang-en">The floor general who sees the whole court. Earned the spot through hard work, dedication, and showing up every single day. Runs the offense with precision and heart.</span>
+                    <span class="lang-es">El general de la cancha que ve toda la pista. Ganó su lugar con trabajo duro, dedicación y apareciendo cada día. Dirige la ofensiva con precisión y corazón.</span>
                 </div>
             </div>
-            <div class="player-laugh">😆</div>
+            <div class="player-laugh">🤖</div>
         </div>
 
-        <!-- PISTOL -->
+        <!-- #2 PISTOL - SHOOTING GUARD -->
         <div class="player-card">
             <div class="player-svg">
                 <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -452,7 +498,7 @@ body.es .lang-en { display: none !important; }
                 </svg>
             </div>
             <div class="player-info">
-                <div class="player-position">SHOOTING GUARD</div>
+                <div class="player-position">#2 • SHOOTING GUARD</div>
                 <div class="player-name">PISTOL</div>
                 <div class="player-trait">
                     <span class="lang-en">"Quick Wit"</span>
@@ -466,7 +512,7 @@ body.es .lang-en { display: none !important; }
             <div class="player-laugh">😏</div>
         </div>
 
-        <!-- THE PEARL -->
+        <!-- #3 THE PEARL - SMALL FORWARD -->
         <div class="player-card">
             <div class="player-svg">
                 <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -490,7 +536,7 @@ body.es .lang-en { display: none !important; }
                 </svg>
             </div>
             <div class="player-info">
-                <div class="player-position">SMALL FORWARD</div>
+                <div class="player-position">#3 • SMALL FORWARD</div>
                 <div class="player-name">THE PEARL</div>
                 <div class="player-trait">
                     <span class="lang-en">"Smooth & Elegant"</span>
@@ -504,43 +550,41 @@ body.es .lang-en { display: none !important; }
             <div class="player-laugh">😌</div>
         </div>
 
-        <!-- MEADOWLARK -->
+        <!-- #4 CURLY - POWER FORWARD -->
         <div class="player-card">
             <div class="player-svg">
                 <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="50" cy="50" r="45" fill="url(#meadowGrad)"/>
-                    <ellipse cx="35" cy="28" rx="15" ry="10" fill="rgba(255,255,255,0.2)"/>
-                    <path d="M 25 40 L 40 45 L 25 50" stroke="#1a1a1a" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M 75 40 L 60 45 L 75 50" stroke="#1a1a1a" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                    <ellipse cx="22" cy="52" rx="3" ry="5" fill="#4FC3F7"/>
-                    <ellipse cx="78" cy="52" rx="3" ry="5" fill="#4FC3F7"/>
-                    <ellipse cx="50" cy="68" rx="25" ry="20" fill="#1a1a1a"/>
-                    <ellipse cx="50" cy="65" rx="22" ry="15" fill="#8B0000"/>
-                    <ellipse cx="50" cy="75" rx="12" ry="8" fill="#FF5252"/>
-                    <rect x="32" y="55" width="36" height="10" fill="white" rx="3"/>
-                    <circle cx="20" cy="50" r="10" fill="rgba(255,0,100,0.25)"/>
-                    <circle cx="80" cy="50" r="10" fill="rgba(255,0,100,0.25)"/>
-                    <path d="M 22 30 Q 33 22 44 30" stroke="#c44a1c" stroke-width="4" fill="none" stroke-linecap="round"/>
-                    <path d="M 56 30 Q 67 22 78 30" stroke="#c44a1c" stroke-width="4" fill="none" stroke-linecap="round"/>
-                    <defs><radialGradient id="meadowGrad" cx="30%" cy="30%"><stop offset="0%" stop-color="#FF8C42"/><stop offset="100%" stop-color="#FF6B35"/></radialGradient></defs>
+                    <circle cx="50" cy="50" r="45" fill="url(#curlyGrad)"/>
+                    <ellipse cx="35" cy="30" rx="15" ry="10" fill="rgba(255,255,255,0.2)"/>
+                    <ellipse cx="50" cy="20" rx="20" ry="8" fill="rgba(255,255,255,0.15)"/>
+                    <path d="M 28 42 Q 35 38 42 42" stroke="#1a1a1a" stroke-width="4" fill="none" stroke-linecap="round"/>
+                    <path d="M 58 42 Q 65 38 72 42" stroke="#1a1a1a" stroke-width="4" fill="none" stroke-linecap="round"/>
+                    <path d="M 25 58 Q 50 85 75 58" stroke="#1a1a1a" stroke-width="3" fill="#FF8C00"/>
+                    <path d="M 30 62 Q 50 78 70 62" fill="#8B0000"/>
+                    <rect x="35" y="62" width="30" height="8" fill="white" rx="2"/>
+                    <circle cx="25" cy="55" r="8" fill="rgba(255,0,100,0.2)"/>
+                    <circle cx="75" cy="55" r="8" fill="rgba(255,0,100,0.2)"/>
+                    <path d="M 25 32 Q 35 28 45 32" stroke="#c44a1c" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    <path d="M 55 32 Q 65 28 75 32" stroke="#c44a1c" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    <defs><radialGradient id="curlyGrad" cx="30%" cy="30%"><stop offset="0%" stop-color="#FF8C42"/><stop offset="100%" stop-color="#FF6B35"/></radialGradient></defs>
                 </svg>
             </div>
             <div class="player-info">
-                <div class="player-position">POWER FORWARD</div>
-                <div class="player-name">MEADOWLARK</div>
+                <div class="player-position">#4 • POWER FORWARD</div>
+                <div class="player-name">CURLY</div>
                 <div class="player-trait">
-                    <span class="lang-en">"The Showman"</span>
-                    <span class="lang-es">"El Showman"</span>
+                    <span class="lang-en">"Infectious Energy"</span>
+                    <span class="lang-es">"Energía Contagiosa"</span>
                 </div>
                 <div class="player-bio">
-                    <span class="lang-en">The heart and soul. When Meadowlark laughs, the whole world laughs with him. Pure, unfiltered JOY.</span>
-                    <span class="lang-es">El corazón y alma. Cuando Meadowlark ríe, el mundo entero ríe con él. Alegría pura y sin filtros.</span>
+                    <span class="lang-en">Pure joy in motion. Every dribble, every move, every giggle spreads like wildfire. The energy never stops.</span>
+                    <span class="lang-es">Pura alegría en movimiento. Cada dribling, cada movimiento, cada risa se contagia. La energía nunca para.</span>
                 </div>
             </div>
-            <div class="player-laugh">🤣</div>
+            <div class="player-laugh">😆</div>
         </div>
 
-        <!-- CLYDE -->
+        <!-- #5 CLYDE - CENTER -->
         <div class="player-card">
             <div class="player-svg">
                 <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -565,7 +609,7 @@ body.es .lang-en { display: none !important; }
                 </svg>
             </div>
             <div class="player-info">
-                <div class="player-position">CENTER</div>
+                <div class="player-position">#5 • CENTER</div>
                 <div class="player-name">CLYDE</div>
                 <div class="player-trait">
                     <span class="lang-en">"Cool & Unshakeable"</span>
@@ -579,6 +623,56 @@ body.es .lang-en { display: none !important; }
             <div class="player-laugh">😎</div>
         </div>
 
+    </div>
+
+    <!-- SIXTH MAN LEGEND -->
+    <section class="sixth-man-header">
+        <h2 class="sixth-man-title">
+            <span class="lang-en">✨ SIXTH MAN LEGEND ✨</span>
+            <span class="lang-es">✨ LEYENDA DEL SEXTO HOMBRE ✨</span>
+        </h2>
+        <p class="sixth-man-subtitle">
+            <span class="lang-en">ALWAYS READY OFF THE BENCH</span>
+            <span class="lang-es">SIEMPRE LISTO DESDE LA BANCA</span>
+        </p>
+    </section>
+
+    <div class="roster">
+        <!-- MEADOWLARK - SIXTH MAN -->
+        <div class="player-card sixth-man">
+            <div class="player-svg">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="45" fill="url(#meadowGrad)"/>
+                    <ellipse cx="35" cy="28" rx="15" ry="10" fill="rgba(255,255,255,0.2)"/>
+                    <path d="M 25 40 L 40 45 L 25 50" stroke="#1a1a1a" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M 75 40 L 60 45 L 75 50" stroke="#1a1a1a" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    <ellipse cx="22" cy="52" rx="3" ry="5" fill="#4FC3F7"/>
+                    <ellipse cx="78" cy="52" rx="3" ry="5" fill="#4FC3F7"/>
+                    <ellipse cx="50" cy="68" rx="25" ry="20" fill="#1a1a1a"/>
+                    <ellipse cx="50" cy="65" rx="22" ry="15" fill="#8B0000"/>
+                    <ellipse cx="50" cy="75" rx="12" ry="8" fill="#FF5252"/>
+                    <rect x="32" y="55" width="36" height="10" fill="white" rx="3"/>
+                    <circle cx="20" cy="50" r="10" fill="rgba(255,0,100,0.25)"/>
+                    <circle cx="80" cy="50" r="10" fill="rgba(255,0,100,0.25)"/>
+                    <path d="M 22 30 Q 33 22 44 30" stroke="#c44a1c" stroke-width="4" fill="none" stroke-linecap="round"/>
+                    <path d="M 56 30 Q 67 22 78 30" stroke="#c44a1c" stroke-width="4" fill="none" stroke-linecap="round"/>
+                    <defs><radialGradient id="meadowGrad" cx="30%" cy="30%"><stop offset="0%" stop-color="#FF8C42"/><stop offset="100%" stop-color="#FF6B35"/></radialGradient></defs>
+                </svg>
+            </div>
+            <div class="player-info">
+                <div class="player-position">6TH MAN • LEGEND</div>
+                <div class="player-name">MEADOWLARK</div>
+                <div class="player-trait">
+                    <span class="lang-en">"The Showman"</span>
+                    <span class="lang-es">"El Showman"</span>
+                </div>
+                <div class="player-bio">
+                    <span class="lang-en">The heart and soul. When Meadowlark enters the game, the whole arena erupts. First one to high-five, last one to stop laughing. LEGEND status: FOREVER.</span>
+                    <span class="lang-es">El corazón y alma. Cuando Meadowlark entra al juego, toda la arena explota. El primero en chocar los cinco, el último en dejar de reír. Estatus de LEYENDA: PARA SIEMPRE.</span>
+                </div>
+            </div>
+            <div class="player-laugh">🤣</div>
+        </div>
     </div>
 
     <section class="cta-section">
@@ -597,6 +691,9 @@ body.es .lang-en { display: none !important; }
             🏀 <span class="go">GO</span><span class="trotter">TROTTER</span>
         </div>
         <div class="footer-tagline">THE LAUGHCOURT™</div>
+        <div class="footer-trademarks">
+            GoTrotter™, The LaughCourt™, GoTrotters™, GoStars™, and Ritnome™ are trademarks of GoStar Digital LLC.
+        </div>
     </footer>
 
 </div>
