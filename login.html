@@ -202,6 +202,61 @@
             font-size: 1.2rem;
         }
 
+        /* Checkbox Acknowledgement */
+        .acknowledge-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .acknowledge-label {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            cursor: pointer;
+            padding: 12px 15px;
+            background: var(--darker);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+        .acknowledge-label:hover {
+            border-color: rgba(255,215,0,0.3);
+        }
+        .acknowledge-label.checked {
+            border-color: var(--teal);
+            background: rgba(0,217,165,0.05);
+        }
+        .acknowledge-checkbox {
+            width: 22px;
+            height: 22px;
+            min-width: 22px;
+            margin-top: 2px;
+            accent-color: var(--teal);
+            cursor: pointer;
+        }
+        .acknowledge-text {
+            font-size: 0.8rem;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+        .acknowledge-text a {
+            color: var(--gold);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .acknowledge-text a:hover {
+            text-decoration: underline;
+        }
+        .acknowledge-error {
+            color: var(--red);
+            font-size: 0.75rem;
+            margin-top: 8px;
+            display: none;
+            text-align: center;
+        }
+        .acknowledge-error.show {
+            display: block;
+        }
+
         /* Buttons */
         .btn {
             width: 100%;
@@ -224,7 +279,7 @@
             color: var(--dark);
             box-shadow: 0 8px 30px rgba(255,107,53,0.3);
         }
-        .btn-primary:hover {
+        .btn-primary:hover:not(:disabled) {
             transform: translateY(-3px);
             box-shadow: 0 12px 40px rgba(255,107,53,0.4);
         }
@@ -233,7 +288,7 @@
             color: var(--dark);
             box-shadow: 0 8px 30px rgba(0,217,165,0.3);
         }
-        .btn-secondary:hover {
+        .btn-secondary:hover:not(:disabled) {
             transform: translateY(-3px);
             box-shadow: 0 12px 40px rgba(0,217,165,0.4);
         }
@@ -248,11 +303,11 @@
             color: var(--gold);
         }
         .btn:disabled {
-            opacity: 0.6;
+            opacity: 0.5;
             cursor: not-allowed;
             transform: none !important;
         }
-        .btn:active {
+        .btn:active:not(:disabled) {
             transform: scale(0.98);
         }
 
@@ -413,6 +468,13 @@
             color: var(--gold);
             text-decoration: none;
         }
+        .footer-trademarks {
+            font-size: 0.6rem;
+            color: var(--muted);
+            margin-top: 15px;
+            padding: 0 20px;
+            line-height: 1.5;
+        }
 
         /* Loading State */
         .loading .btn-primary::after,
@@ -434,6 +496,8 @@
             .card-title { font-size: 1.5rem; }
             .pin-reveal-value { font-size: 2.8rem; letter-spacing: 10px; }
             .btn { font-size: 1.1rem; padding: 16px 25px; }
+            .acknowledge-text { font-size: 0.75rem; }
+            .acknowledge-checkbox { width: 20px; height: 20px; min-width: 20px; }
         }
     </style>
 </head>
@@ -488,7 +552,22 @@
                             required
                         >
                     </div>
-                    <button type="submit" class="btn btn-primary" id="loginBtn">
+
+                    <div class="acknowledge-group">
+                        <label class="acknowledge-label" id="acknowledgeLabel">
+                            <input type="checkbox" class="acknowledge-checkbox" id="acknowledgeCheckbox">
+                            <span class="acknowledge-text">
+                                <span class="lang-en">I agree to the <a href="/privacy.html" target="_blank">Privacy Policy</a> and <a href="/terms.html" target="_blank">Terms of Use</a></span>
+                                <span class="lang-es">Acepto la <a href="/privacy.html" target="_blank">Política de Privacidad</a> y los <a href="/terms.html" target="_blank">Términos de Uso</a></span>
+                            </span>
+                        </label>
+                        <div class="acknowledge-error" id="acknowledgeError">
+                            <span class="lang-en">⚠️ Please accept the Privacy Policy and Terms of Use to continue</span>
+                            <span class="lang-es">⚠️ Por favor acepta la Política de Privacidad y Términos de Uso para continuar</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" id="loginBtn" disabled>
                         <span class="lang-en">LOGIN</span>
                         <span class="lang-es">ENTRAR</span>
                     </button>
@@ -646,6 +725,9 @@
             <div class="footer-company">
                 by <a href="https://gostar.digital">GoStar Digital LLC</a> 🇵🇷
             </div>
+            <div class="footer-trademarks">
+                GoTrotter™, The LaughCourt™, GoTrotters™, GoStars™, and Ritnome™ are trademarks of GoStar Digital LLC.
+            </div>
         </footer>
     </div>
 
@@ -681,6 +763,10 @@
             var loginCard = document.getElementById('loginCard');
             var loginError = document.getElementById('loginError');
 
+            var acknowledgeCheckbox = document.getElementById('acknowledgeCheckbox');
+            var acknowledgeLabel = document.getElementById('acknowledgeLabel');
+            var acknowledgeError = document.getElementById('acknowledgeError');
+
             var forgotForm = document.getElementById('forgotForm');
             var emailInput = document.getElementById('emailInput');
             var forgotBtn = document.getElementById('forgotBtn');
@@ -692,6 +778,27 @@
 
             // Store recovered data for auto-login
             var recoveredData = null;
+
+            // ==================== ACKNOWLEDGE CHECKBOX ====================
+            function updateLoginButton() {
+                loginBtn.disabled = !acknowledgeCheckbox.checked;
+                acknowledgeError.classList.remove('show');
+                if (acknowledgeCheckbox.checked) {
+                    acknowledgeLabel.classList.add('checked');
+                } else {
+                    acknowledgeLabel.classList.remove('checked');
+                }
+            }
+
+            acknowledgeCheckbox.addEventListener('change', updateLoginButton);
+            
+            // Also toggle when clicking the label area (but not the links)
+            acknowledgeLabel.addEventListener('click', function(e) {
+                // Don't toggle if clicking on a link
+                if (e.target.tagName === 'A') {
+                    return;
+                }
+            });
 
             // ==================== NAVIGATION ====================
             document.getElementById('forgotLink').addEventListener('click', function() {
@@ -741,6 +848,13 @@
             loginForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
+                // Check acknowledgement first
+                if (!acknowledgeCheckbox.checked) {
+                    acknowledgeError.classList.add('show');
+                    acknowledgeLabel.classList.add('focused');
+                    return;
+                }
+
                 var pin = pinInput.value.trim();
                 if (pin.length < 4) {
                     loginError.classList.add('show');
@@ -765,6 +879,9 @@
                         sessionStorage.setItem('gt-pin', pin);
                         sessionStorage.setItem('gt-token', data.token);
                         
+                        // Store that user accepted terms
+                        localStorage.setItem('gt-terms-accepted', new Date().toISOString());
+                        
                         // Redirect to play (choice screen)
                         window.location.href = '/play';
                     } else {
@@ -774,6 +891,7 @@
                         pinInput.focus();
                         loginBtn.disabled = false;
                         document.body.classList.remove('loading');
+                        updateLoginButton();
                     }
                 })
                 .catch(function(err) {
@@ -781,6 +899,7 @@
                     loginError.classList.add('show');
                     loginBtn.disabled = false;
                     document.body.classList.remove('loading');
+                    updateLoginButton();
                 });
             });
 
@@ -850,6 +969,9 @@
                         sessionStorage.setItem('gt-pin', recoveredData.pin);
                         sessionStorage.setItem('gt-token', data.token);
                         
+                        // Store that user accepted terms (via recovery flow)
+                        localStorage.setItem('gt-terms-accepted', new Date().toISOString());
+                        
                         // GO TO THE GAMES!
                         window.location.href = '/play';
                     } else {
@@ -867,6 +989,9 @@
 
             // ==================== AUTO-FOCUS ====================
             pinInput.focus();
+
+            // ==================== INIT ====================
+            updateLoginButton();
 
         })();
     </script>
