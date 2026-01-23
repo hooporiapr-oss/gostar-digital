@@ -453,7 +453,7 @@ body.es .lang-en { display: none !important; }
 
 <div class="game-container">
     <div class="stats-bar">
-        <div class="stat"><div class="stat-value" id="tierDisplay">1</div><div class="stat-label"><span class="lang-en">Tokens</span><span class="lang-es">Fichas</span></div></div>
+        <div class="stat"><div class="stat-value" id="tierDisplay">1</div><div class="stat-label">GoStars</div></div>
         <div class="stat"><div class="stat-value" id="roundDisplay">0/3</div><div class="stat-label"><span class="lang-en">Round</span><span class="lang-es">Ronda</span></div></div>
         <div class="stat"><div class="stat-value" id="streakDisplay">0</div><div class="stat-label">🔥</div></div>
         <div class="stat"><div class="stat-value" id="scoreDisplay">0</div><div class="stat-label"><span class="lang-en">Score</span><span class="lang-es">Puntos</span></div></div>
@@ -501,8 +501,8 @@ body.es .lang-en { display: none !important; }
 
 <div class="overlay" id="tierupOverlay">
     <div class="overlay-card">
-        <div class="overlay-emoji">🪙</div>
-        <h2 class="overlay-title"><span class="lang-en">🪙 TOKEN EARNED!</span><span class="lang-es">🪙 ¡FICHA GANADA!</span></h2>
+        <div class="overlay-emoji">⭐</div>
+        <h2 class="overlay-title"><span class="lang-en">⭐ GOSTAR EARNED!</span><span class="lang-es">⭐ ¡GOSTAR GANADO!</span></h2>
         <p class="overlay-message" id="tierupMessage"></p>
         <button class="overlay-btn" id="tierupBtn"><span class="lang-en">LET'S GO!</span><span class="lang-es">¡VAMOS!</span></button>
     </div>
@@ -628,9 +628,9 @@ body.es .lang-en { display: none !important; }
         else { state.streak = 0; localStorage.setItem('gt-seq-streak', 0); updateStats(); messageText.innerHTML = '<span class="lang-en">WRONG!</span><span class="lang-es">¡ERROR!</span>'; messageText.className = 'message-text error'; setTimeout(resetRound, 1500); }
     }
 
-    function tierUp() { state.tier++; state.roundsCompleted = 0; localStorage.setItem('gt-seq-tier', state.tier); laughCelebration('party'); document.getElementById('tierupMessage').innerHTML = currentLang === 'es' ? '¡Tienes ' + state.tier + ' Fichas!' : 'You have ' + state.tier + ' Tokens!'; tierupOverlay.classList.add('show'); updateStats(); updateDivisionDisplay(); }
-    function maxTier() { state.roundsCompleted = 0; document.getElementById('tierupMessage').innerHTML = currentLang === 'es' ? '¡10 FICHAS - MÁXIMO!' : '10 TOKENS - MASTER!'; document.querySelector('#tierupOverlay .overlay-emoji').textContent = '👑'; tierupOverlay.classList.add('show'); updateStats(); }
-    document.getElementById('tierupBtn').onclick = function() { tierupOverlay.classList.remove('show'); document.querySelector('#tierupOverlay .overlay-emoji').textContent = '🪙'; resetRound(); };
+    function tierUp() { state.tier++; state.roundsCompleted = 0; localStorage.setItem('gt-seq-tier', state.tier); laughCelebration('party'); document.getElementById('tierupMessage').innerHTML = currentLang === 'es' ? '¡Tienes ' + state.tier + ' GoStars!' : 'You have ' + state.tier + ' GoStars!'; tierupOverlay.classList.add('show'); updateStats(); updateDivisionDisplay(); }
+    function maxTier() { state.roundsCompleted = 0; document.getElementById('tierupMessage').innerHTML = currentLang === 'es' ? '¡10 GOSTARS - MÁXIMO!' : '10 GOSTARS - MASTER!'; document.querySelector('#tierupOverlay .overlay-emoji').textContent = '👑'; tierupOverlay.classList.add('show'); updateStats(); }
+    document.getElementById('tierupBtn').onclick = function() { tierupOverlay.classList.remove('show'); document.querySelector('#tierupOverlay .overlay-emoji').textContent = '⭐'; resetRound(); };
 
     function resetRound() { state.cells.forEach(function(c) { c.classList.remove('lit', 'correct', 'wrong', 'player-tap'); }); messageText.innerHTML = '<span>' + (state.roundsCompleted + 1) + '/' + ROUNDS_PER_TIER + '</span>'; messageText.className = 'message-text'; actionBtn.disabled = false; updateStats(); }
 
