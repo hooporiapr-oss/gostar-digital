@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Choose Your Workout | GoTrotter - The LaughCourt</title>
+    <title>Choose Your Workout | LaughCourt</title>
     <meta name="description" content="Choose between THE MATCH and THE SEQUENCE - two memory workouts that sharpen your mind.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -89,8 +89,8 @@
             letter-spacing: 6px;
             margin-bottom: 5px;
         }
-        .logo .go { color: var(--gold); }
-        .logo .trotter { color: var(--text); }
+        .logo .laugh { color: var(--gold); }
+        .logo .court { color: var(--text); }
         .tagline {
             font-size: 0.65rem;
             color: var(--gold);
@@ -333,8 +333,8 @@
             letter-spacing: 3px;
             margin-bottom: 5px;
         }
-        .footer-logo .go { color: var(--gold); }
-        .footer-logo .trotter { color: var(--text); }
+        .footer-logo .laugh { color: var(--gold); }
+        .footer-logo .court { color: var(--text); }
         .footer-links {
             font-size: 0.65rem;
             margin-bottom: 5px;
@@ -402,9 +402,12 @@
     <div class="container">
         <header class="header">
             <div class="logo">
-                <span class="go">GO</span><span class="trotter">TROTTER</span>
+                🏀 <span class="laugh">LAUGH</span><span class="court">COURT</span>
             </div>
-            <div class="tagline">The LaughCourt</div>
+            <div class="tagline">
+                <span class="lang-en">Where Joy Meets The Game</span>
+                <span class="lang-es">Donde La Alegría Se Une Al Juego</span>
+            </div>
             <h1 class="welcome-text">
                 <span class="lang-en">🏀 CHOOSE YOUR WORKOUT</span>
                 <span class="lang-es">🏀 ELIGE TU EJERCICIO</span>
@@ -497,18 +500,25 @@
         <!-- Footer -->
         <footer class="footer">
             <div class="footer-logo">
-                <span class="go">GO</span><span class="trotter">TROTTER</span>
+                🏀 <span class="laugh">LAUGH</span><span class="court">COURT</span>
             </div>
             <div class="footer-links">
-                <a href="/privacy.html">Privacy Policy</a>
-                <a href="/terms.html">Terms of Use</a>
-                <a href="/faq.html">FAQ</a>
+                <a href="/the-starting-five">The Starting Five</a>
+                <a href="/faq">FAQ</a>
+                <a href="/privacy.html">
+                    <span class="lang-en">Privacy Policy</span>
+                    <span class="lang-es">Privacidad</span>
+                </a>
+                <a href="/terms.html">
+                    <span class="lang-en">Terms of Use</span>
+                    <span class="lang-es">Términos</span>
+                </a>
             </div>
             <div class="footer-company">
                 by <a href="https://gostar.digital">GoStar Digital LLC</a> 🇵🇷
             </div>
             <div class="footer-trademarks">
-                GoTrotter™, The LaughCourt™, GoTrotters™, GoStars™, and Ritnome™ are trademarks of GoStar Digital LLC.
+                LaughCourt™, The Starting Five™, GoStars™, and Ritnome™ are trademarks of GoStar Digital LLC.
             </div>
         </footer>
     </div>
@@ -517,20 +527,20 @@
         (function() {
             // ==================== ENVIRONMENT ====================
             var host = window.location.hostname;
-            var isProduction = (host.indexOf('gotrotter') > -1 || host.indexOf('render') > -1);
+            var isProduction = (host.indexOf('laughcourt') > -1 || host.indexOf('render') > -1);
 
             // ==================== AUTH CHECK ====================
             if (isProduction) {
                 var user = null;
-                try { user = JSON.parse(localStorage.getItem('gt-user')); } catch(e) {}
+                try { user = JSON.parse(localStorage.getItem('lc-user')); } catch(e) {}
                 
                 if (!user || !user.pin || user.pin.length < 4) {
                     window.location.replace('/login');
                     return;
                 }
 
-                var sessionPin = sessionStorage.getItem('gt-pin');
-                var sessionToken = sessionStorage.getItem('gt-token');
+                var sessionPin = sessionStorage.getItem('lc-pin');
+                var sessionToken = sessionStorage.getItem('lc-token');
 
                 if (!sessionPin || !sessionToken) {
                     window.location.replace('/login');
@@ -548,10 +558,10 @@
                     .then(function(d) {
                         if (!d.valid) {
                             alert(d.message || 'Session ended. Please log in again.');
-                            localStorage.removeItem('gt-user');
-                            localStorage.removeItem('gt-speed-access');
-                            sessionStorage.removeItem('gt-pin');
-                            sessionStorage.removeItem('gt-token');
+                            localStorage.removeItem('lc-user');
+                            localStorage.removeItem('lc-speed-access');
+                            sessionStorage.removeItem('lc-pin');
+                            sessionStorage.removeItem('lc-token');
                             window.location.href = '/login';
                         }
                     })
@@ -567,7 +577,7 @@
                 fetch('/api/user/speed-access/' + user.pin)
                     .then(function(r) { return r.json(); })
                     .then(function(data) {
-                        localStorage.setItem('gt-speed-access', JSON.stringify(data));
+                        localStorage.setItem('lc-speed-access', JSON.stringify(data));
                         updateSpeedUI(data);
                     })
                     .catch(function(err) {
@@ -586,21 +596,21 @@
                         }).catch(function(err) { console.log('Session destroy error:', err); });
                     }
                     
-                    localStorage.removeItem('gt-user');
-                    localStorage.removeItem('gt-speed-access');
-                    sessionStorage.removeItem('gt-pin');
-                    sessionStorage.removeItem('gt-token');
+                    localStorage.removeItem('lc-user');
+                    localStorage.removeItem('lc-speed-access');
+                    sessionStorage.removeItem('lc-pin');
+                    sessionStorage.removeItem('lc-token');
                     
                     window.location.href = '/';
                 });
             }
 
             // ==================== LANGUAGE ====================
-            var currentLang = localStorage.getItem('gotrotter_lang') || 'en';
+            var currentLang = localStorage.getItem('laughcourt_lang') || 'en';
             
             function setLang(l) {
                 currentLang = l;
-                localStorage.setItem('gotrotter_lang', l);
+                localStorage.setItem('laughcourt_lang', l);
                 document.body.className = l;
                 document.getElementById('btnEn').className = l === 'en' ? 'lang-btn active' : 'lang-btn';
                 document.getElementById('btnEs').className = l === 'es' ? 'lang-btn active' : 'lang-btn';
