@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Login | GoTrotter - The LaughCourt</title>
-    <meta name="description" content="Enter your PIN to access GoTrotter - The LaughCourt memory training platform.">
+    <title>Login | LaughCourt</title>
+    <meta name="description" content="Enter your PIN to access LaughCourt memory training platform.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -103,8 +103,8 @@
             letter-spacing: 6px;
             margin-bottom: 5px;
         }
-        .logo .go { color: var(--gold); }
-        .logo .trotter { color: var(--text); }
+        .logo .laugh { color: var(--gold); }
+        .logo .court { color: var(--text); }
         .tagline {
             font-size: 0.7rem;
             color: var(--gold);
@@ -445,8 +445,8 @@
             letter-spacing: 3px;
             margin-bottom: 8px;
         }
-        .footer-logo .go { color: var(--gold); }
-        .footer-logo .trotter { color: var(--text); }
+        .footer-logo .laugh { color: var(--gold); }
+        .footer-logo .court { color: var(--text); }
         .footer-links {
             margin: 10px 0;
             font-size: 0.7rem;
@@ -515,9 +515,12 @@
     <div class="login-container">
         <header class="header">
             <div class="logo">
-                <span class="go">GO</span><span class="trotter">TROTTER</span>
+                🏀 <span class="laugh">LAUGH</span><span class="court">COURT</span>
             </div>
-            <div class="tagline">The LaughCourt</div>
+            <div class="tagline">
+                <span class="lang-en">Where Joy Meets The Game</span>
+                <span class="lang-es">Donde La Alegría Se Une Al Juego</span>
+            </div>
         </header>
 
         <!-- ============ SCREEN 1: PIN LOGIN ============ -->
@@ -585,8 +588,8 @@
 
             <div class="new-user-section">
                 <p class="new-user-text">
-                    <span class="lang-en">New to GoTrotter?</span>
-                    <span class="lang-es">¿Nuevo en GoTrotter?</span>
+                    <span class="lang-en">New to LaughCourt?</span>
+                    <span class="lang-es">¿Nuevo en LaughCourt?</span>
                 </p>
                 <a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="trial-btn">
                     <span class="lang-en">START 7 DAY FREE TRIAL</span>
@@ -716,19 +719,29 @@
 
         <footer class="footer">
             <div class="footer-logo">
-                <span class="go">GO</span><span class="trotter">TROTTER</span>
+                🏀 <span class="laugh">LAUGH</span><span class="court">COURT</span>
             </div>
             <div class="footer-links">
-                <a href="/how-to-play">How to Play</a>
+                <a href="/how-to-play">
+                    <span class="lang-en">How to Play</span>
+                    <span class="lang-es">Cómo Jugar</span>
+                </a>
+                <a href="/the-starting-five">The Starting Five</a>
                 <a href="/faq">FAQ</a>
-                <a href="/privacy.html">Privacy Policy</a>
-                <a href="/terms.html">Terms of Use</a>
+                <a href="/privacy.html">
+                    <span class="lang-en">Privacy Policy</span>
+                    <span class="lang-es">Privacidad</span>
+                </a>
+                <a href="/terms.html">
+                    <span class="lang-en">Terms of Use</span>
+                    <span class="lang-es">Términos</span>
+                </a>
             </div>
             <div class="footer-company">
                 by <a href="https://gostar.digital">GoStar Digital LLC</a> 🇵🇷
             </div>
             <div class="footer-trademarks">
-                GoTrotter™, The LaughCourt™, GoTrotters™, GoStars™, and Ritnome™ are trademarks of GoStar Digital LLC.
+                LaughCourt™, The Starting Five™, GoStars™, and Ritnome™ are trademarks of GoStar Digital LLC.
             </div>
         </footer>
     </div>
@@ -736,11 +749,11 @@
     <script>
         (function() {
             // ==================== LANGUAGE ====================
-            var currentLang = localStorage.getItem('gotrotter_lang') || 'en';
+            var currentLang = localStorage.getItem('laughcourt_lang') || 'en';
             
             function setLang(l) {
                 currentLang = l;
-                localStorage.setItem('gotrotter_lang', l);
+                localStorage.setItem('laughcourt_lang', l);
                 document.body.className = l;
                 document.getElementById('btnEn').className = l === 'en' ? 'lang-btn active' : 'lang-btn';
                 document.getElementById('btnEs').className = l === 'es' ? 'lang-btn active' : 'lang-btn';
@@ -877,12 +890,12 @@
                 .then(function(data) {
                     if (data.success) {
                         // Store session
-                        localStorage.setItem('gt-user', JSON.stringify({ pin: pin }));
-                        sessionStorage.setItem('gt-pin', pin);
-                        sessionStorage.setItem('gt-token', data.token);
+                        localStorage.setItem('lc-user', JSON.stringify({ pin: pin }));
+                        sessionStorage.setItem('lc-pin', pin);
+                        sessionStorage.setItem('lc-token', data.token);
                         
                         // Store that user accepted terms
-                        localStorage.setItem('gt-terms-accepted', new Date().toISOString());
+                        localStorage.setItem('lc-terms-accepted', new Date().toISOString());
                         
                         // Redirect to play (choice screen)
                         window.location.href = '/play';
@@ -967,12 +980,12 @@
                 .then(function(data) {
                     if (data.success) {
                         // Store session
-                        localStorage.setItem('gt-user', JSON.stringify({ pin: recoveredData.pin }));
-                        sessionStorage.setItem('gt-pin', recoveredData.pin);
-                        sessionStorage.setItem('gt-token', data.token);
+                        localStorage.setItem('lc-user', JSON.stringify({ pin: recoveredData.pin }));
+                        sessionStorage.setItem('lc-pin', recoveredData.pin);
+                        sessionStorage.setItem('lc-token', data.token);
                         
                         // Store that user accepted terms (via recovery flow)
-                        localStorage.setItem('gt-terms-accepted', new Date().toISOString());
+                        localStorage.setItem('lc-terms-accepted', new Date().toISOString());
                         
                         // GO TO THE GAMES!
                         window.location.href = '/play';
