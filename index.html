@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GoTrotter - The LaughCourt | Memory Training That Makes You Smile</title>
+<title>LaughCourt | Memory Training That Makes You Smile</title>
 <meta name="description" content="Match. Sequence. Two fun memory workouts. Free to start. Laugh along the way.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -19,6 +19,8 @@
     --card: #111118;
     --text: #FFFFFF;
     --muted: #8892a0;
+    --border: rgba(255,255,255,0.1);
+    --nav-height: 50px;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -31,6 +33,50 @@ body {
     overflow-x: hidden;
 }
 
+/* ============ MINI NAV ============ */
+.mini-nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    z-index: 1000;
+    height: var(--nav-height);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+}
+
+.nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.nav-logo .ball { font-size: 1rem; }
+.nav-logo .laugh { color: var(--gold); }
+.nav-logo .court { color: var(--text); }
+
+.nav-right { display: flex; align-items: center; gap: 10px; }
+
+.nav-lang { display: flex; gap: 4px; }
+.nav-lang-btn {
+    padding: 5px 10px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    border-radius: 4px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    cursor: pointer;
+    min-width: 32px;
+    min-height: 28px;
+}
+.nav-lang-btn.active { border-color: var(--gold); color: var(--gold); }
+
 /* ============ HERO ============ */
 .hero {
     min-height: 100vh;
@@ -40,6 +86,7 @@ body {
     justify-content: center;
     text-align: center;
     padding: 40px 20px;
+    padding-top: calc(var(--nav-height) + 40px);
     position: relative;
     overflow: hidden;
 }
@@ -95,8 +142,8 @@ body {
     animation: fadeIn 1s ease-out 0.2s both;
 }
 
-.hero-logo .go { color: var(--gold); }
-.hero-logo .trotter { color: var(--text); }
+.hero-logo .laugh { color: var(--gold); }
+.hero-logo .court { color: var(--text); }
 
 .hero-tagline {
     font-family: 'Bebas Neue', sans-serif;
@@ -581,12 +628,11 @@ body {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 1.5rem;
     letter-spacing: 4px;
-    background: linear-gradient(135deg, var(--gold), var(--orange));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
     margin-bottom: 10px;
 }
+
+.footer-logo .laugh { color: var(--gold); }
+.footer-logo .court { color: var(--text); }
 
 .footer-tagline {
     font-size: 0.7rem;
@@ -630,6 +676,10 @@ body {
     line-height: 1.5;
 }
 
+/* ============ LANGUAGE TOGGLE ============ */
+body.en .lang-es { display: none !important; }
+body.es .lang-en { display: none !important; }
+
 /* ============ ANIMATIONS ============ */
 .fade-in {
     opacity: 0;
@@ -655,31 +705,55 @@ body {
 }
 </style>
 </head>
-<body>
+<body class="en">
+
+<!-- ============ MINI NAV ============ -->
+<nav class="mini-nav">
+    <a href="/" class="nav-logo">
+        <span class="ball">🏀</span>
+        <span class="laugh">LAUGH</span><span class="court">COURT</span>
+    </a>
+    <div class="nav-right">
+        <div class="nav-lang">
+            <button class="nav-lang-btn active" id="btnEn">EN</button>
+            <button class="nav-lang-btn" id="btnEs">ES</button>
+        </div>
+    </div>
+</nav>
 
 <!-- ============ HERO ============ -->
 <section class="hero">
     <div class="hero-content">
         <div class="hero-badge">🏀 Match. Sequence.</div>
         <div class="hero-logo">
-            <span class="go">GO</span><span class="trotter">TROTTER</span>
+            <span class="laugh">LAUGH</span><span class="court">COURT</span>
         </div>
-        <div class="hero-tagline">THE LAUGHCOURT</div>
+        <div class="hero-tagline">
+            <span class="lang-en">WHERE JOY MEETS THE GAME</span>
+            <span class="lang-es">DONDE LA ALEGRÍA SE UNE AL JUEGO</span>
+        </div>
         <h1 class="hero-headline">
-            TRAIN YOUR <span class="highlight-orange">MEMORY</span>.<br>
-            LAUGH <span class="highlight-cyan">ALONG</span> THE WAY.
+            <span class="lang-en">TRAIN YOUR <span class="highlight-orange">MEMORY</span>.<br>LAUGH <span class="highlight-cyan">ALONG</span> THE WAY.</span>
+            <span class="lang-es">ENTRENA TU <span class="highlight-orange">MEMORIA</span>.<br>RÍE <span class="highlight-cyan">EN EL CAMINO</span>.</span>
         </h1>
         <p class="hero-sub">
-            Two memory workouts designed to sharpen your mind and put a smile on your face. 
-            Free to start. No equipment needed. Just you and the game.
+            <span class="lang-en">Two memory workouts designed to sharpen your mind and put a smile on your face. Free to start. No equipment needed. Just you and the game.</span>
+            <span class="lang-es">Dos ejercicios de memoria diseñados para agudizar tu mente y ponerte una sonrisa. Gratis para empezar. Sin equipo necesario. Solo tú y el juego.</span>
         </p>
         <div class="hero-cta">
-            <a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="btn btn-primary">7 DAY FREE TRIAL →</a>
-            <a href="/how-to-play" class="btn btn-secondary">HOW IT WORKS</a>
+            <a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="btn btn-primary">
+                <span class="lang-en">7 DAY FREE TRIAL →</span>
+                <span class="lang-es">7 DÍAS GRATIS →</span>
+            </a>
+            <a href="/how-to-play" class="btn btn-secondary">
+                <span class="lang-en">HOW IT WORKS</span>
+                <span class="lang-es">CÓMO FUNCIONA</span>
+            </a>
         </div>
     </div>
     <div class="scroll-hint">
-        <span>See the workouts</span>
+        <span class="lang-en">See the workouts</span>
+        <span class="lang-es">Ver los ejercicios</span>
         <span>↓</span>
     </div>
 </section>
@@ -687,9 +761,18 @@ body {
 <!-- ============ WORKOUTS ============ -->
 <section class="workouts fade-in">
     <div class="section-header">
-        <div class="section-badge">🏀 Two Workouts</div>
-        <h2 class="section-title">PICK YOUR TRAINING</h2>
-        <p class="section-sub">Each targets different memory skills. Master both to complete The LaughCourt.</p>
+        <div class="section-badge">
+            <span class="lang-en">🏀 Two Workouts</span>
+            <span class="lang-es">🏀 Dos Ejercicios</span>
+        </div>
+        <h2 class="section-title">
+            <span class="lang-en">PICK YOUR TRAINING</span>
+            <span class="lang-es">ELIGE TU ENTRENAMIENTO</span>
+        </h2>
+        <p class="section-sub">
+            <span class="lang-en">Each targets different memory skills. Master both to complete The LaughCourt.</span>
+            <span class="lang-es">Cada uno trabaja diferentes habilidades de memoria. Domina ambos para completar The LaughCourt.</span>
+        </p>
     </div>
     
     <div class="workouts-grid">
@@ -697,7 +780,10 @@ body {
         <div class="workout-card match">
             <div class="workout-icon">🎯</div>
             <div class="workout-name">THE MATCH</div>
-            <div class="workout-type">Recognition Memory</div>
+            <div class="workout-type">
+                <span class="lang-en">Recognition Memory</span>
+                <span class="lang-es">Memoria de Reconocimiento</span>
+            </div>
             
             <div class="mini-grid-5x5">
                 <div class="mini-cell"></div>
@@ -728,17 +814,24 @@ body {
             </div>
             
             <p class="workout-desc">
-                Colors flash across a 5×5 grid. Remember which cells matched the center target. Tap them all to advance!
+                <span class="lang-en">Colors flash across a 5×5 grid. Remember which cells matched the center target. Tap them all to advance!</span>
+                <span class="lang-es">Los colores parpadean en una cuadrícula 5×5. Recuerda qué celdas coincidieron con el objetivo central. ¡Toca todas para avanzar!</span>
             </p>
             
-            <a href="/how-to-play" class="workout-btn">PLAY THE MATCH →</a>
+            <a href="/how-to-play" class="workout-btn">
+                <span class="lang-en">PLAY THE MATCH →</span>
+                <span class="lang-es">JUGAR THE MATCH →</span>
+            </a>
         </div>
         
         <!-- THE SEQUENCE -->
         <div class="workout-card sequence">
             <div class="workout-icon">🔢</div>
             <div class="workout-name">THE SEQUENCE</div>
-            <div class="workout-type">Sequential Memory</div>
+            <div class="workout-type">
+                <span class="lang-en">Sequential Memory</span>
+                <span class="lang-es">Memoria Secuencial</span>
+            </div>
             
             <div class="mini-grid-4x4">
                 <div class="mini-cell">😊</div>
@@ -760,10 +853,14 @@ body {
             </div>
             
             <p class="workout-desc">
-                Watch the pattern light up in order. Tap it back in the exact sequence. The longer you go, the harder it gets!
+                <span class="lang-en">Watch the pattern light up in order. Tap it back in the exact sequence. The longer you go, the harder it gets!</span>
+                <span class="lang-es">Mira el patrón iluminarse en orden. Repítelo en la secuencia exacta. ¡Mientras más avances, más difícil se pone!</span>
             </p>
             
-            <a href="/how-to-play" class="workout-btn">PLAY THE SEQUENCE →</a>
+            <a href="/how-to-play" class="workout-btn">
+                <span class="lang-en">PLAY THE SEQUENCE →</span>
+                <span class="lang-es">JUGAR THE SEQUENCE →</span>
+            </a>
         </div>
     </div>
 </section>
@@ -773,40 +870,82 @@ body {
     <div class="props-grid">
         <div class="prop">
             <div class="prop-icon">🆓</div>
-            <div class="prop-title">FREE TO START</div>
-            <p class="prop-text">SLOW speed is always free. No credit card required.</p>
+            <div class="prop-title">
+                <span class="lang-en">FREE TO START</span>
+                <span class="lang-es">GRATIS PARA EMPEZAR</span>
+            </div>
+            <p class="prop-text">
+                <span class="lang-en">SLOW speed is always free. No credit card required.</span>
+                <span class="lang-es">La velocidad LENTA siempre es gratis. Sin tarjeta de crédito.</span>
+            </p>
         </div>
         <div class="prop">
             <div class="prop-icon">📱</div>
-            <div class="prop-title">PLAY ANYWHERE</div>
-            <p class="prop-text">Works on phone, tablet, or desktop. No app download.</p>
+            <div class="prop-title">
+                <span class="lang-en">PLAY ANYWHERE</span>
+                <span class="lang-es">JUEGA DONDE QUIERAS</span>
+            </div>
+            <p class="prop-text">
+                <span class="lang-en">Works on phone, tablet, or desktop. No app download.</span>
+                <span class="lang-es">Funciona en teléfono, tablet o computadora. Sin descargar app.</span>
+            </p>
         </div>
         <div class="prop">
             <div class="prop-icon">🏆</div>
-            <div class="prop-title">30 DIVISIONS</div>
-            <p class="prop-text">5 levels × 3 speeds × 2 workouts. Endless challenge.</p>
+            <div class="prop-title">
+                <span class="lang-en">30 DIVISIONS</span>
+                <span class="lang-es">30 DIVISIONES</span>
+            </div>
+            <p class="prop-text">
+                <span class="lang-en">5 levels × 3 speeds × 2 workouts. Endless challenge.</span>
+                <span class="lang-es">5 niveles × 3 velocidades × 2 ejercicios. Reto sin fin.</span>
+            </p>
         </div>
         <div class="prop">
             <div class="prop-icon">😂</div>
-            <div class="prop-title">FUN FIRST</div>
-            <p class="prop-text">Laugh emojis celebrate every win. Memory training should be joyful.</p>
+            <div class="prop-title">
+                <span class="lang-en">FUN FIRST</span>
+                <span class="lang-es">DIVERSIÓN PRIMERO</span>
+            </div>
+            <p class="prop-text">
+                <span class="lang-en">Laugh emojis celebrate every win. Memory training should be joyful.</span>
+                <span class="lang-es">Emojis de risa celebran cada victoria. Entrenar la memoria debe ser alegre.</span>
+            </p>
         </div>
     </div>
 </section>
 
 <!-- ============ PRICING STRIP ============ -->
 <section class="pricing-strip fade-in">
-    <h2 class="pricing-title">SIMPLE PRICING</h2>
+    <h2 class="pricing-title">
+        <span class="lang-en">SIMPLE PRICING</span>
+        <span class="lang-es">PRECIOS SIMPLES</span>
+    </h2>
     <div class="pricing-options">
         <div class="price-box free">
-            <div class="price-label">SLOW Speed</div>
-            <div class="price-value">FREE</div>
-            <div class="price-note">7 Day Free Trial</div>
+            <div class="price-label">
+                <span class="lang-en">SLOW Speed</span>
+                <span class="lang-es">Velocidad LENTA</span>
+            </div>
+            <div class="price-value">
+                <span class="lang-en">FREE</span>
+                <span class="lang-es">GRATIS</span>
+            </div>
+            <div class="price-note">
+                <span class="lang-en">7 Day Free Trial</span>
+                <span class="lang-es">7 Días de Prueba Gratis</span>
+            </div>
         </div>
         <div class="price-box paid">
-            <div class="price-label">All Speeds</div>
+            <div class="price-label">
+                <span class="lang-en">All Speeds</span>
+                <span class="lang-es">Todas las Velocidades</span>
+            </div>
             <div class="price-value">$5/mo</div>
-            <div class="price-note">MED + FAST unlocked</div>
+            <div class="price-note">
+                <span class="lang-en">MED + FAST unlocked</span>
+                <span class="lang-es">MED + RÁPIDO desbloqueado</span>
+            </div>
         </div>
     </div>
 </section>
@@ -815,33 +954,70 @@ body {
 <section class="final-cta fade-in">
     <div class="final-cta-content">
         <div class="final-emoji">🏀</div>
-        <h2 class="final-title">READY TO TRAIN?</h2>
-        <p class="final-sub">The LaughCourt is calling. Are you ready?</p>
+        <h2 class="final-title">
+            <span class="lang-en">READY TO TRAIN?</span>
+            <span class="lang-es">¿LISTO PARA ENTRENAR?</span>
+        </h2>
+        <p class="final-sub">
+            <span class="lang-en">The LaughCourt is calling. Are you ready?</span>
+            <span class="lang-es">The LaughCourt te está llamando. ¿Estás listo?</span>
+        </p>
         <div class="final-buttons">
             <a href="/how-to-play" class="cta-btn match">THE MATCH 🎯</a>
             <a href="/how-to-play" class="cta-btn sequence">THE SEQUENCE 🔢</a>
         </div>
-        <p class="learn-more">First time? <a href="/how-to-play">Learn how to play →</a></p>
+        <p class="learn-more">
+            <span class="lang-en">First time? <a href="/how-to-play">Learn how to play →</a></span>
+            <span class="lang-es">¿Primera vez? <a href="/how-to-play">Aprende a jugar →</a></span>
+        </p>
     </div>
 </section>
 
 <!-- ============ FOOTER ============ -->
 <footer class="footer">
-    <div class="footer-logo">GoTrotter™</div>
-    <div class="footer-tagline">The LaughCourt</div>
+    <div class="footer-logo">🏀 <span class="laugh">LAUGH</span><span class="court">COURT</span></div>
+    <div class="footer-tagline">
+        <span class="lang-en">Where Joy Meets The Game</span>
+        <span class="lang-es">Donde La Alegría Se Une Al Juego</span>
+    </div>
     <div class="footer-links">
-        <a href="/how-to-play">How to Play</a>
+        <a href="/how-to-play">
+            <span class="lang-en">How to Play</span>
+            <span class="lang-es">Cómo Jugar</span>
+        </a>
+        <a href="/the-starting-five">The Starting Five</a>
         <a href="/faq">FAQ</a>
-        <a href="/privacy.html">Privacy Policy</a>
-        <a href="/terms.html">Terms of Use</a>
+        <a href="/privacy.html">
+            <span class="lang-en">Privacy Policy</span>
+            <span class="lang-es">Política de Privacidad</span>
+        </a>
+        <a href="/terms.html">
+            <span class="lang-en">Terms of Use</span>
+            <span class="lang-es">Términos de Uso</span>
+        </a>
     </div>
     <div class="footer-company">by <a href="https://gostar.digital">GoStar Digital LLC</a> 🇵🇷</div>
     <div class="footer-trademarks">
-        GoTrotter™, The LaughCourt™, GoTrotters™, GoStars™, and Ritnome™ are trademarks of GoStar Digital LLC.
+        LaughCourt™, The Starting Five™, GoStars™, and Ritnome™ are trademarks of GoStar Digital LLC.
     </div>
 </footer>
 
 <script>
+// ============ LANGUAGE TOGGLE ============
+(function() {
+    var currentLang = localStorage.getItem('laughcourt_lang') || 'en';
+    function setLang(lang) {
+        currentLang = lang;
+        localStorage.setItem('laughcourt_lang', lang);
+        document.body.className = lang;
+        document.getElementById('btnEn').className = lang === 'en' ? 'nav-lang-btn active' : 'nav-lang-btn';
+        document.getElementById('btnEs').className = lang === 'es' ? 'nav-lang-btn active' : 'nav-lang-btn';
+    }
+    document.getElementById('btnEn').onclick = function() { setLang('en'); };
+    document.getElementById('btnEs').onclick = function() { setLang('es'); };
+    setLang(currentLang);
+})();
+
 // ============ SCROLL ANIMATIONS ============
 function handleScroll() {
     var elements = document.querySelectorAll('.fade-in');
