@@ -1065,6 +1065,10 @@ app.get('/login', function(req, res) {
     res.sendFile(path.join(__dirname, 'login.html'));
 });
 
+app.get('/faq', function(req, res) {
+    res.sendFile(path.join(__dirname, 'faq.html'));
+});
+
 // ============ HEALTH & VERSION ============
 app.get('/health', function(req, res) {
     res.json({
@@ -1104,6 +1108,7 @@ app.listen(PORT, function() {
     console.log('   /the-match   → THE MATCH game');
     console.log('   /the-sequence → THE SEQUENCE game');
     console.log('   /how-to-play → How to play guide');
+    console.log('   /faq         → FAQ & Help');
     console.log('   /hub         → Legacy user hub');
     console.log('   /trial-pin   → Trial PIN Generator');
     console.log('');
