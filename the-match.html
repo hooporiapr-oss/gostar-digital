@@ -66,9 +66,12 @@ html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background
 .message-text.go{color:var(--teal)}
 .selectors-row{display:flex;gap:6px;margin-bottom:4px;flex-shrink:0}
 .selector-group{flex:1;background:var(--card);border-radius:8px;padding:5px}
+.selector-group.level-group{flex:1.8}
 .selector-label{text-align:center;font-size:0.45rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px}
 .selector-options{display:flex;gap:3px}
+.selector-options.level-options{flex-wrap:wrap;gap:2px}
 .selector-btn{flex:1;min-height:34px;padding:5px 2px;border:2px solid var(--border);background:0;border-radius:6px;color:var(--muted);font-family:'Bebas Neue',sans-serif;font-size:0.85rem;cursor:pointer;position:relative;display:flex;align-items:center;justify-content:center}
+.selector-btn.level-btn{min-height:28px;min-width:28px;flex:0 0 auto;width:calc(20% - 2px);font-size:0.75rem}
 .selector-btn.active{border-color:var(--orange);color:var(--orange);background:rgba(255,107,53,0.1)}
 .selector-btn.locked{opacity:0.5}
 .selector-btn.locked::after{content:'🔒';position:absolute;top:0;right:2px;font-size:0.4rem}
@@ -139,9 +142,9 @@ body.en .lang-es{display:none!important}
 body.es .lang-en{display:none!important}
 
 /* ===== RESPONSIVE ===== */
-@media(min-height:720px){:root{--nav-height:88px}.nav-row-2{height:44px}.stat-value{font-size:1.1rem}.message-text{font-size:0.95rem}.selector-btn{min-height:38px}.court-grid{width:min(100%,calc(100dvh - 340px),320px);height:min(100%,calc(100dvh - 340px),320px)}.action-btn{min-height:50px;font-size:1.35rem}}
-@media(max-height:620px){:root{--nav-height:76px}.nav-row-1{height:40px}.nav-row-2{height:36px}.nav-tab{font-size:0.75rem;padding:6px 8px}.stats-bar{padding:4px 6px;gap:10px}.stat-value{font-size:0.9rem}.message-display{padding:5px;min-height:30px}.message-text{font-size:0.8rem}.selector-btn{min-height:30px;font-size:0.75rem}.court-grid{min-width:180px;min-height:180px;width:min(100%,calc(100dvh - 290px),260px);height:min(100%,calc(100dvh - 290px),260px);gap:3px;padding:6px}.grid-cell{min-width:28px;min-height:28px}.division-display{padding:4px 8px;min-height:30px}.action-btn{min-height:42px;font-size:1.1rem}}
-@media(max-height:540px){:root{--nav-height:68px}.nav-row-1{height:36px}.nav-row-2{height:32px}.nav-logo{font-size:1rem}.nav-tab{font-size:0.7rem}.stats-bar{padding:3px 5px;margin-bottom:3px}.stat-value{font-size:0.8rem}.stat-label{font-size:0.38rem}.message-display{padding:4px;margin-bottom:3px;min-height:26px}.message-text{font-size:0.7rem}.selectors-row{margin-bottom:3px}.selector-group{padding:3px}.selector-label{font-size:0.4rem;margin-bottom:2px}.selector-btn{min-height:26px;font-size:0.65rem}.court-grid{min-width:150px;min-height:150px;gap:2px;padding:5px}.grid-cell{min-width:24px;min-height:24px}.division-display{padding:3px 6px;min-height:26px;margin:3px 0}.division-badge,.matches-counter{font-size:0.75rem}.score-display{font-size:0.9rem}.action-btn{min-height:38px;padding:8px;font-size:1rem}}
+@media(min-height:720px){:root{--nav-height:88px}.nav-row-2{height:44px}.stat-value{font-size:1.1rem}.message-text{font-size:0.95rem}.selector-btn{min-height:38px}.selector-btn.level-btn{min-height:30px}.court-grid{width:min(100%,calc(100dvh - 340px),320px);height:min(100%,calc(100dvh - 340px),320px)}.action-btn{min-height:50px;font-size:1.35rem}}
+@media(max-height:620px){:root{--nav-height:76px}.nav-row-1{height:40px}.nav-row-2{height:36px}.nav-tab{font-size:0.75rem;padding:6px 8px}.stats-bar{padding:4px 6px;gap:10px}.stat-value{font-size:0.9rem}.message-display{padding:5px;min-height:30px}.message-text{font-size:0.8rem}.selector-btn{min-height:30px;font-size:0.75rem}.selector-btn.level-btn{min-height:24px;font-size:0.65rem}.court-grid{min-width:180px;min-height:180px;width:min(100%,calc(100dvh - 290px),260px);height:min(100%,calc(100dvh - 290px),260px);gap:3px;padding:6px}.grid-cell{min-width:28px;min-height:28px}.division-display{padding:4px 8px;min-height:30px}.action-btn{min-height:42px;font-size:1.1rem}}
+@media(max-height:540px){:root{--nav-height:68px}.nav-row-1{height:36px}.nav-row-2{height:32px}.nav-logo{font-size:1rem}.nav-tab{font-size:0.7rem}.stats-bar{padding:3px 5px;margin-bottom:3px}.stat-value{font-size:0.8rem}.stat-label{font-size:0.38rem}.message-display{padding:4px;margin-bottom:3px;min-height:26px}.message-text{font-size:0.7rem}.selectors-row{margin-bottom:3px}.selector-group{padding:3px}.selector-label{font-size:0.4rem;margin-bottom:2px}.selector-btn{min-height:26px;font-size:0.65rem}.selector-btn.level-btn{min-height:22px;font-size:0.55rem}.court-grid{min-width:150px;min-height:150px;gap:2px;padding:5px}.grid-cell{min-width:24px;min-height:24px}.division-display{padding:3px 6px;min-height:26px;margin:3px 0}.division-badge,.matches-counter{font-size:0.75rem}.score-display{font-size:0.9rem}.action-btn{min-height:38px;padding:8px;font-size:1rem}}
 </style>
 </head>
 <body class="en">
@@ -166,20 +169,31 @@ body.es .lang-en{display:none!important}
 <div class="stat"><div class="stat-value" id="streakDisplay">0</div><div class="stat-label">🔥</div></div>
 <div class="stat"><div class="stat-value" id="scoreDisplay">0</div><div class="stat-label"><span class="lang-en">Score</span><span class="lang-es">Puntos</span></div></div>
 </div>
-<div class="message-display"><span class="message-text" id="messageText"><span class="lang-en">Select division & GO!</span><span class="lang-es">¡Selecciona e IR!</span></span></div>
+<div class="message-display"><span class="message-text" id="messageText"><span class="lang-en">Select level & GO!</span><span class="lang-es">¡Selecciona e IR!</span></span></div>
 <div class="selectors-row">
-<div class="selector-group"><div class="selector-label"><span class="lang-en">Level</span><span class="lang-es">Nivel</span></div><div class="selector-options"><button class="selector-btn active" data-level="1">1</button><button class="selector-btn" data-level="2">2</button><button class="selector-btn" data-level="3">3</button><button class="selector-btn" data-level="4">4</button><button class="selector-btn" data-level="5">5</button></div></div>
+<div class="selector-group level-group"><div class="selector-label"><span class="lang-en">Level</span><span class="lang-es">Nivel</span></div><div class="selector-options level-options">
+<button class="selector-btn level-btn active" data-level="1">1</button>
+<button class="selector-btn level-btn" data-level="2">2</button>
+<button class="selector-btn level-btn" data-level="3">3</button>
+<button class="selector-btn level-btn" data-level="4">4</button>
+<button class="selector-btn level-btn" data-level="5">5</button>
+<button class="selector-btn level-btn" data-level="6">6</button>
+<button class="selector-btn level-btn" data-level="7">7</button>
+<button class="selector-btn level-btn" data-level="8">8</button>
+<button class="selector-btn level-btn" data-level="9">9</button>
+<button class="selector-btn level-btn" data-level="10">10</button>
+</div></div>
 <div class="selector-group"><div class="selector-label"><span class="lang-en">Speed</span><span class="lang-es">Velocidad</span></div><div class="selector-options"><button class="selector-btn speed-btn active" data-speed="slow"><span class="lang-en">Slow</span><span class="lang-es">Lento</span></button><button class="selector-btn speed-btn" data-speed="med">Med</button><button class="selector-btn speed-btn" data-speed="fast"><span class="lang-en">Fast</span><span class="lang-es">Rápido</span></button></div></div>
 </div>
 <div class="court-wrapper"><div class="court-grid" id="courtGrid"></div></div>
-<div class="division-display"><div class="division-badge" id="divisionBadge">L1 SLOW</div><div class="matches-counter" id="matchesCounter">0/1</div><div class="score-display" id="totalScore">0</div></div>
+<div class="division-display"><div class="division-badge" id="divisionBadge">L1 SLOW</div><div class="matches-counter" id="matchesCounter">0/5</div><div class="score-display" id="totalScore">0</div></div>
 <button class="action-btn" id="actionBtn"><span class="lang-en">GO</span><span class="lang-es">IR</span></button>
 </div>
 <div class="feedback-overlay" id="feedbackOverlay"><div class="feedback-card"><div class="feedback-emoji" id="feedbackEmoji">🏆</div><h2 class="feedback-title"><span class="lang-en">CIRCUIT COMPLETE!</span><span class="lang-es">¡CIRCUITO!</span></h2><p class="feedback-message" id="feedbackMessage"></p><div class="feedback-stats"><div class="feedback-stat"><div class="feedback-stat-value" id="feedbackScore">0</div><div class="feedback-stat-label"><span class="lang-en">Score</span><span class="lang-es">Puntos</span></div></div><div class="feedback-stat"><div class="feedback-stat-value" id="feedbackStreak">0</div><div class="feedback-stat-label">🔥</div></div></div><button class="feedback-btn primary" id="nextCircuitBtn"><span class="lang-en">NEXT</span><span class="lang-es">SIGUIENTE</span></button><button class="feedback-btn secondary" id="changeDivisionBtn"><span class="lang-en">CHANGE</span><span class="lang-es">CAMBIAR</span></button></div></div>
 <div class="upgrade-overlay" id="upgradeOverlay"><div class="upgrade-card"><div class="upgrade-icon">🔓⚡</div><h2 class="upgrade-title">UNLOCK ALL SPEEDS</h2><div class="upgrade-speed-preview"><span class="upgrade-speed-chip current">✓ Slow</span><span class="upgrade-speed-chip locked">🔒 Med</span><span class="upgrade-speed-chip locked">🔒 Fast</span></div><div class="upgrade-price">$5<span>/mo</span></div><a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="upgrade-btn">UPGRADE 🚀</a><button class="upgrade-close" id="upgradeClose"><span class="lang-en">CONTINUE SLOW</span><span class="lang-es">CONTINUAR</span></button></div></div>
 <div class="coach-message" id="coachMessage"></div>
 <script>
-(function(){var host=window.location.hostname,isProduction=host.indexOf('laughcourt')>-1||host.indexOf('github.io')>-1;if(isProduction){var user=null;try{user=JSON.parse(localStorage.getItem('lc-user'))}catch(e){}if(!user||!user.pin||user.pin.length<4){window.location.replace('/login');return}var sessionPin=sessionStorage.getItem('lc-pin'),sessionToken=sessionStorage.getItem('lc-token');function validateSession(){if(!sessionPin||!sessionToken){window.location.href='/login';return}fetch('/api/session/validate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pin:sessionPin,token:sessionToken})}).then(function(r){return r.json()}).then(function(d){if(!d.valid){localStorage.removeItem('lc-user');localStorage.removeItem('lc-speed-access');sessionStorage.clear();window.location.href='/login'}}).catch(function(){})}validateSession();setInterval(validateSession,30000)}
+(function(){var host=window.location.hostname,isProduction=host.indexOf('laughcourt')>-1||host.indexOf('github.io')>-1||host.indexOf('gostardigital')>-1;if(isProduction){var user=null;try{user=JSON.parse(localStorage.getItem('lc-user'))}catch(e){}if(!user||!user.pin||user.pin.length<4){window.location.replace('/login');return}var sessionPin=sessionStorage.getItem('lc-pin'),sessionToken=sessionStorage.getItem('lc-token');function validateSession(){if(!sessionPin||!sessionToken){window.location.href='/login';return}fetch('/api/session/validate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pin:sessionPin,token:sessionToken})}).then(function(r){return r.json()}).then(function(d){if(!d.valid){localStorage.removeItem('lc-user');localStorage.removeItem('lc-speed-access');sessionStorage.clear();window.location.href='/login'}}).catch(function(){})}validateSession();setInterval(validateSession,30000)}
 var settingsBtn=document.getElementById('settingsBtn'),settingsDropdown=document.getElementById('settingsDropdown');settingsBtn.onclick=function(e){e.stopPropagation();settingsBtn.classList.toggle('open');settingsDropdown.classList.toggle('show')};document.onclick=function(e){if(!settingsDropdown.contains(e.target)){settingsBtn.classList.remove('open');settingsDropdown.classList.remove('show')}};
 document.getElementById('logoutBtn').onclick=function(){var p=sessionStorage.getItem('lc-pin'),t=sessionStorage.getItem('lc-token');if(p&&t)fetch('/api/session/destroy',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pin:p,token:t})}).catch(function(){});localStorage.removeItem('lc-user');localStorage.removeItem('lc-speed-access');sessionStorage.clear();window.location.href='/login'};
 var currentLang=localStorage.getItem('laughcourt_lang')||'en';function setLang(l){currentLang=l;localStorage.setItem('laughcourt_lang',l);document.body.className=l;document.getElementById('btnEn').className=l==='en'?'nav-lang-btn active':'nav-lang-btn';document.getElementById('btnEs').className=l==='es'?'nav-lang-btn active':'nav-lang-btn';updateDivisionDisplay()}document.getElementById('btnEn').onclick=function(){setLang('en')};document.getElementById('btnEs').onclick=function(){setLang('es')};
@@ -187,8 +201,31 @@ var speedAccess={allSpeeds:false};try{var sa=localStorage.getItem('lc-speed-acce
 function updateSpeedStatusUI(){var ss=document.getElementById('speedStatus'),us=document.getElementById('upgradeSection');if(speedAccess.allSpeeds){ss.innerHTML='<span class="speed-chip unlocked">✓ SLOW</span><span class="speed-chip unlocked">✓ MED</span><span class="speed-chip unlocked">✓ FAST</span>';us.style.display='none'}else{ss.innerHTML='<span class="speed-chip unlocked">✓ SLOW</span><span class="speed-chip locked">🔒 MED</span><span class="speed-chip locked">🔒 FAST</span>';us.style.display='block'}}
 function initSpeedButtons(){document.querySelectorAll('.speed-btn').forEach(function(b){if(!speedAccess.allSpeeds&&b.dataset.speed!=='slow')b.classList.add('locked');else b.classList.remove('locked')});if(!speedAccess.allSpeeds){state.speed='slow';document.querySelectorAll('.speed-btn').forEach(function(b){b.classList.remove('active')});document.querySelector('.speed-btn[data-speed="slow"]').classList.add('active')}updateSpeedStatusUI()}
 function showUpgradeModal(){document.getElementById('upgradeOverlay').classList.add('show')}document.getElementById('upgradeClose').onclick=function(){document.getElementById('upgradeOverlay').classList.remove('show')};
-var COLORS=['red','blue','green','yellow','purple','orange','pink','teal'],LEVEL_CONFIG={1:{matches:1,distractors:3},2:{matches:2,distractors:4},3:{matches:3,distractors:5},4:{matches:4,distractors:6},5:{matches:5,distractors:7}},SPEED_CONFIG={slow:2500,med:1500,fast:800},PLAYS_PER_CIRCUIT=5,CENTER_CELL=12,LAUGH_EMOJIS=['😂','😆','🤣','😄','😁','🥳','😊','🎉'],PARTY_EMOJIS=['🥳','🎉','😂','🤣','✨','💫','🌟','🏆'];
-var state={level:parseInt(localStorage.getItem('lc-level'))||1,speed:localStorage.getItem('lc-speed')||'slow',score:parseInt(localStorage.getItem('lc-score'))||0,circuitNum:1,playsCompleted:0,streak:parseInt(localStorage.getItem('lc-streak'))||0,matchesFound:0,matchesNeeded:1,targetColor:'',matchCells:[],isPlaying:false,canTap:false,cells:[]};
+var COLORS=['red','blue','green','yellow','purple','orange','pink','teal'];
+
+// ============ NEW 10-LEVEL SYSTEM ============
+// Level 1 = Old Level 5 (5 matches, 7 distractors)
+// Ramps up from there for REAL challenge
+var LEVEL_CONFIG={
+    1:{matches:5,distractors:7},   // 12 colored cells - Starting challenge
+    2:{matches:5,distractors:8},   // 13 colored cells
+    3:{matches:6,distractors:8},   // 14 colored cells
+    4:{matches:6,distractors:9},   // 15 colored cells
+    5:{matches:7,distractors:9},   // 16 colored cells
+    6:{matches:7,distractors:10},  // 17 colored cells
+    7:{matches:8,distractors:10},  // 18 colored cells
+    8:{matches:8,distractors:11},  // 19 colored cells
+    9:{matches:9,distractors:11},  // 20 colored cells
+    10:{matches:9,distractors:12}  // 21 colored cells - ELITE
+};
+
+var SPEED_CONFIG={slow:2500,med:1500,fast:800},PLAYS_PER_CIRCUIT=5,CENTER_CELL=12,LAUGH_EMOJIS=['😂','😆','🤣','😄','😁','🥳','😊','🎉'],PARTY_EMOJIS=['🥳','🎉','😂','🤣','✨','💫','🌟','🏆'];
+var state={level:parseInt(localStorage.getItem('lc-level'))||1,speed:localStorage.getItem('lc-speed')||'slow',score:parseInt(localStorage.getItem('lc-score'))||0,circuitNum:1,playsCompleted:0,streak:parseInt(localStorage.getItem('lc-streak'))||0,matchesFound:0,matchesNeeded:5,targetColor:'',matchCells:[],isPlaying:false,canTap:false,cells:[]};
+
+// Cap level to 10 max
+if(state.level>10)state.level=10;
+if(state.level<1)state.level=1;
+
 var courtGrid=document.getElementById('courtGrid'),messageText=document.getElementById('messageText'),actionBtn=document.getElementById('actionBtn'),feedbackOverlay=document.getElementById('feedbackOverlay'),coachMessage=document.getElementById('coachMessage'),emojiContainer=document.getElementById('emojiContainer');
 function getCourtCenter(){var r=courtGrid.getBoundingClientRect();return{x:r.left+r.width/2,y:r.top+r.height/2}}
 function createBurstEmoji(e,x,y,t){var el=document.createElement('div');el.className='burst-emoji'+(t?' '+t:'');el.textContent=e;var a=Math.random()*Math.PI*2,d=50+Math.random()*80;el.style.cssText='left:'+x+'px;top:'+y+'px;--tx:'+Math.cos(a)*d+'px;--ty:'+Math.sin(a)*d+'px;--rot:'+(Math.random()-0.5)*720+'deg';emojiContainer.appendChild(el);setTimeout(function(){if(el.parentNode)el.remove()},1500)}
@@ -212,7 +249,7 @@ document.getElementById('changeDivisionBtn').onclick=function(){feedbackOverlay.
 document.querySelectorAll('[data-level]').forEach(function(b){b.onclick=function(){if(state.isPlaying)return;document.querySelectorAll('[data-level]').forEach(function(x){x.classList.remove('active')});b.classList.add('active');state.level=parseInt(b.dataset.level);localStorage.setItem('lc-level',state.level);updateDivisionDisplay()}});
 document.querySelectorAll('.speed-btn').forEach(function(b){b.onclick=function(){if(state.isPlaying)return;if(!speedAccess.allSpeeds&&b.dataset.speed!=='slow'){showUpgradeModal();return}document.querySelectorAll('.speed-btn').forEach(function(x){x.classList.remove('active')});b.classList.add('active');state.speed=b.dataset.speed;localStorage.setItem('lc-speed',state.speed);updateDivisionDisplay()}});
 actionBtn.onclick=startPlay;
-function loadSavedState(){var sl=localStorage.getItem('lc-level');if(sl){state.level=parseInt(sl);document.querySelectorAll('[data-level]').forEach(function(b){b.classList.remove('active')});var lb=document.querySelector('[data-level="'+state.level+'"]');if(lb)lb.classList.add('active')}var ss=localStorage.getItem('lc-speed');if(ss&&(speedAccess.allSpeeds||ss==='slow')){state.speed=ss;document.querySelectorAll('.speed-btn').forEach(function(b){b.classList.remove('active')});var sb=document.querySelector('.speed-btn[data-speed="'+state.speed+'"]');if(sb)sb.classList.add('active')}}
+function loadSavedState(){var sl=localStorage.getItem('lc-level');if(sl){state.level=parseInt(sl);if(state.level>10)state.level=10;if(state.level<1)state.level=1;document.querySelectorAll('[data-level]').forEach(function(b){b.classList.remove('active')});var lb=document.querySelector('[data-level="'+state.level+'"]');if(lb)lb.classList.add('active')}var ss=localStorage.getItem('lc-speed');if(ss&&(speedAccess.allSpeeds||ss==='slow')){state.speed=ss;document.querySelectorAll('.speed-btn').forEach(function(b){b.classList.remove('active')});var sb=document.querySelector('.speed-btn[data-speed="'+state.speed+'"]');if(sb)sb.classList.add('active')}}
 initCourt();initSpeedButtons();loadSavedState();setLang(currentLang);updateDivisionDisplay();updateStats()})();
 </script>
 </body>
