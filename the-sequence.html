@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>THE SEQUENCE | GoTrotter - The LaughCourt</title>
+<title>THE SEQUENCE | LaughCourt - Where Joy Meets The Game</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
@@ -59,8 +59,8 @@ html, body {
     gap: 4px;
 }
 .nav-logo .ball { font-size: 0.95rem; }
-.nav-logo .go { color: var(--gold); }
-.nav-logo .trotter { color: var(--text); }
+.nav-logo .laugh { color: var(--gold); }
+.nav-logo .court { color: var(--text); }
 .nav-right { display: flex; align-items: center; gap: 6px; }
 .nav-lang { display: flex; gap: 2px; }
 .nav-lang-btn {
@@ -415,7 +415,7 @@ body.es .lang-en { display: none !important; }
 
 <nav class="mini-nav">
     <div class="nav-row-1">
-        <a href="/play" class="nav-logo"><span class="ball">🏀</span><span class="go">GO</span><span class="trotter">TROTTER</span></a>
+        <a href="/play" class="nav-logo"><span class="ball">🏀</span> <span class="laugh">LAUGH</span><span class="court">COURT</span></a>
         <div class="nav-right">
             <div class="nav-lang">
                 <button class="nav-lang-btn active" id="btnEn">EN</button>
@@ -445,7 +445,7 @@ body.es .lang-en { display: none !important; }
     <div class="nav-row-2">
         <a href="/the-match" class="nav-tab">🎯 MATCH</a>
         <a href="/the-sequence" class="nav-tab active">🔢 SEQUENCE</a>
-        <a href="/the-gotrotters" class="nav-tab">🧡 TEAM</a>
+        <a href="/the-starting-five" class="nav-tab">🧡 TEAM</a>
     </div>
 </nav>
 
@@ -528,17 +528,17 @@ body.es .lang-en { display: none !important; }
 <script>
 (function() {
     var host = window.location.hostname;
-    var isProduction = (host.indexOf('gotrotter') > -1 || host.indexOf('github.io') > -1);
+    var isProduction = (host.indexOf('laughcourt') > -1 || host.indexOf('github.io') > -1);
 
     if (isProduction) {
         var user = null;
-        try { user = JSON.parse(localStorage.getItem('gt-user')); } catch(e) {}
+        try { user = JSON.parse(localStorage.getItem('lc-user')); } catch(e) {}
         if (!user || !user.pin || user.pin.length < 4) { window.location.replace('/login'); return; }
-        var sessionPin = sessionStorage.getItem('gt-pin'), sessionToken = sessionStorage.getItem('gt-token');
+        var sessionPin = sessionStorage.getItem('lc-pin'), sessionToken = sessionStorage.getItem('lc-token');
         function validateSession() {
             if (!sessionPin || !sessionToken) { window.location.href = '/login'; return; }
             fetch('/api/session/validate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ pin: sessionPin, token: sessionToken }) })
-            .then(function(r) { return r.json(); }).then(function(d) { if (!d.valid) { localStorage.removeItem('gt-user'); localStorage.removeItem('gt-speed-access'); sessionStorage.clear(); window.location.href = '/login'; } }).catch(function() {});
+            .then(function(r) { return r.json(); }).then(function(d) { if (!d.valid) { localStorage.removeItem('lc-user'); localStorage.removeItem('lc-speed-access'); sessionStorage.clear(); window.location.href = '/login'; } }).catch(function() {});
         }
         validateSession(); setInterval(validateSession, 30000);
     }
@@ -548,18 +548,18 @@ body.es .lang-en { display: none !important; }
     document.onclick = function(e) { if (!settingsDropdown.contains(e.target)) { settingsBtn.classList.remove('open'); settingsDropdown.classList.remove('show'); } };
 
     document.getElementById('logoutBtn').onclick = function() {
-        var sp = sessionStorage.getItem('gt-pin'), st = sessionStorage.getItem('gt-token');
+        var sp = sessionStorage.getItem('lc-pin'), st = sessionStorage.getItem('lc-token');
         if (sp && st) fetch('/api/session/destroy', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ pin: sp, token: st }) }).catch(function() {});
-        localStorage.removeItem('gt-user'); localStorage.removeItem('gt-speed-access'); sessionStorage.clear(); window.location.href = '/login';
+        localStorage.removeItem('lc-user'); localStorage.removeItem('lc-speed-access'); sessionStorage.clear(); window.location.href = '/login';
     };
 
-    var currentLang = localStorage.getItem('gotrotter_lang') || 'en';
-    function setLang(lang) { currentLang = lang; localStorage.setItem('gotrotter_lang', lang); document.body.className = lang; document.getElementById('btnEn').className = lang === 'en' ? 'nav-lang-btn active' : 'nav-lang-btn'; document.getElementById('btnEs').className = lang === 'es' ? 'nav-lang-btn active' : 'nav-lang-btn'; updateDivisionDisplay(); }
+    var currentLang = localStorage.getItem('laughcourt_lang') || 'en';
+    function setLang(lang) { currentLang = lang; localStorage.setItem('laughcourt_lang', lang); document.body.className = lang; document.getElementById('btnEn').className = lang === 'en' ? 'nav-lang-btn active' : 'nav-lang-btn'; document.getElementById('btnEs').className = lang === 'es' ? 'nav-lang-btn active' : 'nav-lang-btn'; updateDivisionDisplay(); }
     document.getElementById('btnEn').onclick = function() { setLang('en'); };
     document.getElementById('btnEs').onclick = function() { setLang('es'); };
 
     var speedAccess = { allSpeeds: false };
-    try { var sa = localStorage.getItem('gt-speed-access'); if (sa) speedAccess = JSON.parse(sa); } catch(e) {}
+    try { var sa = localStorage.getItem('lc-speed-access'); if (sa) speedAccess = JSON.parse(sa); } catch(e) {}
 
     function updateSpeedStatusUI() {
         var ss = document.getElementById('speedStatus'), us = document.getElementById('upgradeSection');
@@ -580,7 +580,7 @@ body.es .lang-en { display: none !important; }
     var LAUGH_EMOJIS = ['😂', '😆', '🤣', '😄', '😁', '🥳', '😊', '🎉'], PARTY_EMOJIS = ['🥳', '🎉', '😂', '🤣', '✨', '💫', '🌟', '🏆'];
     var CELL_EMOJIS = ['😊', '😄', '😁', '😆', '🤣', '😂', '🥳', '😃', '😀', '😸', '😹', '🤭', '😏', '😌', '🎉', '✨'];
 
-    var state = { level: parseInt(localStorage.getItem('gt-seq-level')) || 1, speed: localStorage.getItem('gt-seq-speed') || 'slow', tier: parseInt(localStorage.getItem('gt-seq-tier')) || 1, score: parseInt(localStorage.getItem('gt-seq-score')) || 0, streak: parseInt(localStorage.getItem('gt-seq-streak')) || 0, roundsCompleted: 0, sequence: [], playerIndex: 0, isPlaying: false, canTap: false, cells: [] };
+    var state = { level: parseInt(localStorage.getItem('lc-seq-level')) || 1, speed: localStorage.getItem('lc-seq-speed') || 'slow', tier: parseInt(localStorage.getItem('lc-seq-tier')) || 1, score: parseInt(localStorage.getItem('lc-seq-score')) || 0, streak: parseInt(localStorage.getItem('lc-seq-streak')) || 0, roundsCompleted: 0, sequence: [], playerIndex: 0, isPlaying: false, canTap: false, cells: [] };
 
     var courtGrid = document.getElementById('courtGrid'), messageText = document.getElementById('messageText'), actionBtn = document.getElementById('actionBtn'), tierupOverlay = document.getElementById('tierupOverlay'), coachMessage = document.getElementById('coachMessage'), emojiContainer = document.getElementById('emojiContainer');
 
@@ -622,23 +622,23 @@ body.es .lang-en { display: none !important; }
 
     function roundComplete(success) {
         state.isPlaying = false;
-        if (success) { var pts = state.sequence.length * 10 * state.level * (state.speed === 'fast' ? 3 : state.speed === 'med' ? 2 : 1); state.score += pts; state.streak++; state.roundsCompleted++; localStorage.setItem('gt-seq-score', state.score); localStorage.setItem('gt-seq-streak', state.streak);
+        if (success) { var pts = state.sequence.length * 10 * state.level * (state.speed === 'fast' ? 3 : state.speed === 'med' ? 2 : 1); state.score += pts; state.streak++; state.roundsCompleted++; localStorage.setItem('lc-seq-score', state.score); localStorage.setItem('lc-seq-streak', state.streak);
             var intensity = state.streak >= 5 ? 'party' : state.streak >= 3 ? 'big' : 'medium'; var msgs = state.streak >= 5 ? ['🎉 LEGEND!', '🏆 WOW!'] : state.streak >= 3 ? ['😂 FIRE!', '🤣 AMAZING!'] : ['😄 NICE!', '😊 GREAT!']; playSuccess(); laughCelebration(intensity); showCoach(msgs[Math.floor(Math.random() * msgs.length)]); updateStats();
             if (state.roundsCompleted >= ROUNDS_PER_TIER) { setTimeout(function() { state.tier < TOTAL_TIERS ? tierUp() : maxTier(); }, 800); } else setTimeout(resetRound, 1000); }
-        else { state.streak = 0; localStorage.setItem('gt-seq-streak', 0); updateStats(); messageText.innerHTML = '<span class="lang-en">WRONG!</span><span class="lang-es">¡ERROR!</span>'; messageText.className = 'message-text error'; setTimeout(resetRound, 1500); }
+        else { state.streak = 0; localStorage.setItem('lc-seq-streak', 0); updateStats(); messageText.innerHTML = '<span class="lang-en">WRONG!</span><span class="lang-es">¡ERROR!</span>'; messageText.className = 'message-text error'; setTimeout(resetRound, 1500); }
     }
 
-    function tierUp() { state.tier++; state.roundsCompleted = 0; localStorage.setItem('gt-seq-tier', state.tier); laughCelebration('party'); document.getElementById('tierupMessage').innerHTML = currentLang === 'es' ? '¡Tienes ' + state.tier + ' GoStars!' : 'You have ' + state.tier + ' GoStars!'; tierupOverlay.classList.add('show'); updateStats(); updateDivisionDisplay(); }
+    function tierUp() { state.tier++; state.roundsCompleted = 0; localStorage.setItem('lc-seq-tier', state.tier); laughCelebration('party'); document.getElementById('tierupMessage').innerHTML = currentLang === 'es' ? '¡Tienes ' + state.tier + ' GoStars!' : 'You have ' + state.tier + ' GoStars!'; tierupOverlay.classList.add('show'); updateStats(); updateDivisionDisplay(); }
     function maxTier() { state.roundsCompleted = 0; document.getElementById('tierupMessage').innerHTML = currentLang === 'es' ? '¡10 GOSTARS - MÁXIMO!' : '10 GOSTARS - MASTER!'; document.querySelector('#tierupOverlay .overlay-emoji').textContent = '👑'; tierupOverlay.classList.add('show'); updateStats(); }
     document.getElementById('tierupBtn').onclick = function() { tierupOverlay.classList.remove('show'); document.querySelector('#tierupOverlay .overlay-emoji').textContent = '⭐'; resetRound(); };
 
     function resetRound() { state.cells.forEach(function(c) { c.classList.remove('lit', 'correct', 'wrong', 'player-tap'); }); messageText.innerHTML = '<span>' + (state.roundsCompleted + 1) + '/' + ROUNDS_PER_TIER + '</span>'; messageText.className = 'message-text'; actionBtn.disabled = false; updateStats(); }
 
-    document.querySelectorAll('[data-level]').forEach(function(btn) { btn.onclick = function() { if (state.isPlaying) return; document.querySelectorAll('[data-level]').forEach(function(b) { b.classList.remove('active'); }); btn.classList.add('active'); state.level = parseInt(btn.dataset.level); state.tier = 1; state.roundsCompleted = 0; localStorage.setItem('gt-seq-level', state.level); localStorage.setItem('gt-seq-tier', 1); updateDivisionDisplay(); updateStats(); }; });
-    document.querySelectorAll('.speed-btn').forEach(function(btn) { btn.onclick = function() { if (state.isPlaying) return; if (!speedAccess.allSpeeds && btn.dataset.speed !== 'slow') { showUpgrade(); return; } document.querySelectorAll('.speed-btn').forEach(function(b) { b.classList.remove('active'); }); btn.classList.add('active'); state.speed = btn.dataset.speed; state.tier = 1; state.roundsCompleted = 0; localStorage.setItem('gt-seq-speed', state.speed); localStorage.setItem('gt-seq-tier', 1); updateDivisionDisplay(); updateStats(); }; });
+    document.querySelectorAll('[data-level]').forEach(function(btn) { btn.onclick = function() { if (state.isPlaying) return; document.querySelectorAll('[data-level]').forEach(function(b) { b.classList.remove('active'); }); btn.classList.add('active'); state.level = parseInt(btn.dataset.level); state.tier = 1; state.roundsCompleted = 0; localStorage.setItem('lc-seq-level', state.level); localStorage.setItem('lc-seq-tier', 1); updateDivisionDisplay(); updateStats(); }; });
+    document.querySelectorAll('.speed-btn').forEach(function(btn) { btn.onclick = function() { if (state.isPlaying) return; if (!speedAccess.allSpeeds && btn.dataset.speed !== 'slow') { showUpgrade(); return; } document.querySelectorAll('.speed-btn').forEach(function(b) { b.classList.remove('active'); }); btn.classList.add('active'); state.speed = btn.dataset.speed; state.tier = 1; state.roundsCompleted = 0; localStorage.setItem('lc-seq-speed', state.speed); localStorage.setItem('lc-seq-tier', 1); updateDivisionDisplay(); updateStats(); }; });
     actionBtn.onclick = startRound;
 
-    function loadState() { var sl = localStorage.getItem('gt-seq-level'); if (sl) { state.level = parseInt(sl); document.querySelectorAll('[data-level]').forEach(function(b) { b.classList.remove('active'); }); var lb = document.querySelector('[data-level="' + state.level + '"]'); if (lb) lb.classList.add('active'); } var ss = localStorage.getItem('gt-seq-speed'); if (ss && (speedAccess.allSpeeds || ss === 'slow')) { state.speed = ss; document.querySelectorAll('.speed-btn').forEach(function(b) { b.classList.remove('active'); }); var sb = document.querySelector('.speed-btn[data-speed="' + state.speed + '"]'); if (sb) sb.classList.add('active'); } }
+    function loadState() { var sl = localStorage.getItem('lc-seq-level'); if (sl) { state.level = parseInt(sl); document.querySelectorAll('[data-level]').forEach(function(b) { b.classList.remove('active'); }); var lb = document.querySelector('[data-level="' + state.level + '"]'); if (lb) lb.classList.add('active'); } var ss = localStorage.getItem('lc-seq-speed'); if (ss && (speedAccess.allSpeeds || ss === 'slow')) { state.speed = ss; document.querySelectorAll('.speed-btn').forEach(function(b) { b.classList.remove('active'); }); var sb = document.querySelector('.speed-btn[data-speed="' + state.speed + '"]'); if (sb) sb.classList.add('active'); } }
 
     initCourt(); initSpeedButtons(); loadState(); setLang(currentLang); updateDivisionDisplay(); updateStats(); renderTierDots();
 })();
