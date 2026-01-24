@@ -356,36 +356,28 @@ body {
     margin-bottom: 20px;
 }
 
-/* Mini Grid Previews - 5x5 for both */
-.mini-grid-5x5 {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 5px;
-    max-width: 150px;
+/* Court Icon Preview */
+.court-preview {
+    width: 150px;
+    height: 150px;
     margin: 0 auto 20px;
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
 }
 
-.mini-cell {
-    aspect-ratio: 1;
-    background: var(--darker);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.7rem;
+.court-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 
-.mini-cell.lit {
-    background: var(--gold);
-    border-color: var(--gold);
-    box-shadow: 0 0 8px rgba(255,215,0,0.4);
+.court-preview.match-glow {
+    box-shadow: 0 0 30px rgba(255,215,0,0.3);
 }
 
-.mini-cell.seq-lit {
-    background: var(--teal);
-    border-color: var(--teal);
-    box-shadow: 0 0 8px rgba(0,217,165,0.4);
+.court-preview.sequence-glow {
+    box-shadow: 0 0 30px rgba(0,217,165,0.3);
 }
 
 .workout-desc {
@@ -544,9 +536,16 @@ body {
     z-index: 1;
 }
 
-.final-emoji {
-    font-size: 4rem;
-    margin-bottom: 20px;
+.final-icon {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 20px;
+}
+
+.final-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 
 .final-title {
@@ -701,6 +700,8 @@ body.es .lang-en { display: none !important; }
     .btn { padding: 15px 30px; font-size: 1rem; }
     .cta-btn { padding: 16px 35px; font-size: 1.1rem; }
     .workout-card { padding: 30px 20px; }
+    .court-preview { width: 120px; height: 120px; }
+    .final-icon { width: 100px; height: 100px; }
 }
 </style>
 </head>
@@ -784,32 +785,8 @@ body.es .lang-en { display: none !important; }
                 <span class="lang-es">Memoria Espacial</span>
             </div>
             
-            <div class="mini-grid-5x5">
-                <div class="mini-cell">😄</div>
-                <div class="mini-cell lit">😄</div>
-                <div class="mini-cell">😄</div>
-                <div class="mini-cell">😄</div>
-                <div class="mini-cell lit">😄</div>
-                <div class="mini-cell">😄</div>
-                <div class="mini-cell">😄</div>
-                <div class="mini-cell lit">😄</div>
-                <div class="mini-cell">😄</div>
-                <div class="mini-cell">😄</div>
-                <div class="mini-cell lit">😄</div>
-                <div class="mini-cell">😄</div>
-                <div class="mini-cell">😄</div>
-                <div class="mini-cell">😄</div>
-                <div class="mini-cell lit">😄</div>
-                <div class="mini-cell">😄</div>
-                <div class="mini-cell">😄</div>
-                <div class="mini-cell">😄</div>
-                <div class="mini-cell">😄</div>
-                <div class="mini-cell">😄</div>
-                <div class="mini-cell">😄</div>
-                <div class="mini-cell">😄</div>
-                <div class="mini-cell">😄</div>
-                <div class="mini-cell">😄</div>
-                <div class="mini-cell">😄</div>
+            <div class="court-preview match-glow">
+                <img src="/icon.png" alt="LaughCourt">
             </div>
             
             <p class="workout-desc">
@@ -832,32 +809,8 @@ body.es .lang-en { display: none !important; }
                 <span class="lang-es">Memoria Secuencial</span>
             </div>
             
-            <div class="mini-grid-5x5">
-                <div class="mini-cell seq-lit">😄</div>
-                <div class="mini-cell">😄</div>
-                <div class="mini-cell">😄</div>
-                <div class="mini-cell">😄</div>
-                <div class="mini-cell">😄</div>
-                <div class="mini-cell">😄</div>
-                <div class="mini-cell seq-lit">😄</div>
-                <div class="mini-cell">😄</div>
-                <div class="mini-cell">😄</div>
-                <div class="mini-cell">😄</div>
-                <div class="mini-cell">😄</div>
-                <div class="mini-cell">😄</div>
-                <div class="mini-cell">😄</div>
-                <div class="mini-cell seq-lit">😄</div>
-                <div class="mini-cell">😄</div>
-                <div class="mini-cell">😄</div>
-                <div class="mini-cell">😄</div>
-                <div class="mini-cell">😄</div>
-                <div class="mini-cell">😄</div>
-                <div class="mini-cell">😄</div>
-                <div class="mini-cell">😄</div>
-                <div class="mini-cell">😄</div>
-                <div class="mini-cell">😄</div>
-                <div class="mini-cell">😄</div>
-                <div class="mini-cell">😄</div>
+            <div class="court-preview sequence-glow">
+                <img src="/icon.png" alt="LaughCourt">
             </div>
             
             <p class="workout-desc">
@@ -961,7 +914,9 @@ body.es .lang-en { display: none !important; }
 <!-- ============ FINAL CTA ============ -->
 <section class="final-cta fade-in">
     <div class="final-cta-content">
-        <div class="final-emoji">🏀</div>
+        <div class="final-icon">
+            <img src="/icon.png" alt="LaughCourt">
+        </div>
         <h2 class="final-title">
             <span class="lang-en">READY TO TRAIN?</span>
             <span class="lang-es">¿LISTO PARA ENTRENAR?</span>
