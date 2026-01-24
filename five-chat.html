@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chat with The Starting Five™ | LaughCourt™</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --court-dark: #0a0a12;
+            --court-purple: #1a1a2e;
+            --orange: #FF6B35;
+            --orange-dark: #E55A2B;
+            --orange-light: #FF8C5A;
+            --white: #ffffff;
+            --gray: #a0a0a0;
+            --chat-bg: #12121f;
+            --user-bubble: #2a2a4a;
+            --ai-bubble: #1e1e32;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--court-dark);
+            color: var(--white);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at 50% 30%, rgba(255,107,53,0.08) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 600px;
+            margin: 0 auto;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 20px 15px;
+            border-bottom: 1px solid rgba(255,107,53,0.2);
+        }
+
+        .logo-badge {
+            display: inline-block;
+            background: var(--orange);
+            color: var(--white);
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.8rem;
+            padding: 4px 12px;
+            border-radius: 15px;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.8rem;
+            letter-spacing: 3px;
+            background: linear-gradient(180deg, var(--white) 0%, var(--orange) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Character Selector */
+        .selector-screen {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 30px 20px;
+        }
+
+        .selector-title {
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--gray);
+            margin-bottom: 30px;
+        }
+
+        .characters-grid {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .character-btn {
+            background: linear-gradient(145deg, #1e1e32 0%, #12121f 100%);
+            border: 2px solid rgba(255,107,53,0.2);
+            border-radius: 20px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100px;
+        }
+
+        .character-btn:hover {
+            border-color: var(--orange);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255,107,53,0.2);
+        }
+
+        .character-btn svg {
+            margin-bottom: 8px;
+        }
+
+        .character-btn .name {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            color: var(--white);
+        }
+
+        .character-btn .trait {
+            font-size: 0.65rem;
+            color: var(--orange);
+            text-transform: uppercase;
+        }
+
+        /* Chat Screen */
+        .chat-screen {
+            display: none;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .chat-screen.active {
+            display: flex;
+        }
+
+        .chat-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 20px;
+            background: var(--chat-bg);
+            border-bottom: 1px solid rgba(255,107,53,0.2);
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: var(--orange);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .chat-character-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .chat-character-name {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.3rem;
+            letter-spacing: 2px;
+        }
+
+        .chat-character-trait {
+            font-size: 0.75rem;
+            color: var(--orange);
+        }
+
+        /* Messages */
+        .messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            max-width: 85%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            line-height: 1.5;
+            font-size: 0.95rem;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.user {
+            background: var(--user-bubble);
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+
+        .message.ai {
+            background: var(--ai-bubble);
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+            border: 1px solid rgba(255,107,53,0.15);
+        }
+
+        .message.ai .character-icon {
+            display: inline-block;
+            margin-right: 5px;
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 5px;
+            padding: 15px 20px;
+            align-self: flex-start;
+        }
+
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            background: var(--orange);
+            border-radius: 50%;
+            animation: bounce 1.4s ease-in-out infinite;
+        }
+
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes bounce {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-8px); }
+        }
+
+        /* Input */
+        .input-area {
+            padding: 15px 20px;
+            background: var(--chat-bg);
+            border-top: 1px solid rgba(255,107,53,0.2);
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-area input {
+            flex: 1;
+            background: var(--user-bubble);
+            border: 1px solid rgba(255,107,53,0.2);
+            border-radius: 25px;
+            padding: 12px 20px;
+            color: var(--white);
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-area input:focus {
+            border-color: var(--orange);
+        }
+
+        .input-area input::placeholder {
+            color: var(--gray);
+        }
+
+        .send-btn {
+            background: var(--orange);
+            border: none;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .send-btn:hover {
+            background: var(--orange-light);
+            transform: scale(1.05);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .send-btn svg {
+            fill: var(--white);
+        }
+
+        /* Welcome message styling */
+        .welcome-msg {
+            text-align: center;
+            padding: 20px;
+            color: var(--gray);
+            font-style: italic;
+        }
+
+        /* Hide selector when chat is active */
+        .selector-screen.hidden {
+            display: none;
+        }
+
+        /* Mobile */
+        @media (max-width: 500px) {
+            .character-btn {
+                width: 85px;
+                padding: 12px 10px;
+            }
+            .character-btn svg {
+                width: 45px;
+                height: 45px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo-badge">LAUGHCOURT™</div>
+            <h1 class="title">CHAT WITH THE STARTING FIVE</h1>
+        </header>
+
+        <!-- Character Selector -->
+        <div class="selector-screen" id="selectorScreen">
+            <p class="selector-title">Pick your player 🏀</p>
+            <div class="characters-grid">
+                
+                <!-- SKEE -->
+                <button class="character-btn" onclick="startChat('SKEE')">
+                    <svg width="55" height="55" viewBox="0 0 100 100">
+                        <defs><radialGradient id="og1" cx="30%" cy="30%"><stop offset="0%" stop-color="#FF8C5A"/><stop offset="100%" stop-color="#FF6B35"/></radialGradient></defs>
+                        <circle cx="50" cy="50" r="45" fill="url(#og1)" stroke="#E55A2B" stroke-width="3"/>
+                        <path d="M 25 35 Q 35 30 45 35" stroke="#1a1a2e" stroke-width="3" fill="none"/>
+                        <path d="M 55 38 Q 65 38 75 38" stroke="#1a1a2e" stroke-width="3" fill="none"/>
+                        <ellipse cx="35" cy="45" rx="7" ry="6" fill="#1a1a2e"/>
+                        <ellipse cx="65" cy="45" rx="6" ry="5" fill="#1a1a2e"/>
+                        <circle cx="37" cy="44" r="2" fill="#fff"/>
+                        <circle cx="67" cy="44" r="2" fill="#fff"/>
+                        <path d="M 35 65 Q 55 72 70 60" stroke="#1a1a2e" stroke-width="4" fill="none" stroke-linecap="round"/>
+                    </svg>
+                    <span class="name">SKEE</span>
+                    <span class="trait">The Legend</span>
+                </button>
+
+                <!-- BRIGS -->
+                <button class="character-btn" onclick="startChat('BRIGS')">
+                    <svg width="55" height="55" viewBox="0 0 100 100">
+                        <defs><radialGradient id="og2" cx="30%" cy="30%"><stop offset="0%" stop-color="#FF8C5A"/><stop offset="100%" stop-color="#FF6B35"/></radialGradient></defs>
+                        <circle cx="50" cy="50" r="45" fill="url(#og2)" stroke="#E55A2B" stroke-width="3"/>
+                        <path d="M 25 35 L 42 40" stroke="#1a1a2e" stroke-width="3" fill="none" stroke-linecap="round"/>
+                        <path d="M 75 35 L 58 40" stroke="#1a1a2e" stroke-width="3" fill="none" stroke-linecap="round"/>
+                        <circle cx="35" cy="48" r="7" fill="#1a1a2e"/>
+                        <circle cx="65" cy="48" r="7" fill="#1a1a2e"/>
+                        <circle cx="37" cy="47" r="2.5" fill="#fff"/>
+                        <circle cx="67" cy="47" r="2.5" fill="#fff"/>
+                        <path d="M 28 62 Q 50 80 72 62" stroke="#1a1a2e" stroke-width="4" fill="none" stroke-linecap="round"/>
+                    </svg>
+                    <span class="name">BRIGS</span>
+                    <span class="trait">All Heart</span>
+                </button>
+
+                <!-- CLAUDE -->
+                <button class="character-btn" onclick="startChat('CLAUDE')">
+                    <svg width="55" height="55" viewBox="0 0 100 100">
+                        <defs><radialGradient id="og3" cx="30%" cy="30%"><stop offset="0%" stop-color="#FFAA70"/><stop offset="100%" stop-color="#FF6B35"/></radialGradient></defs>
+                        <circle cx="50" cy="50" r="45" fill="url(#og3)" stroke="#E55A2B" stroke-width="3"/>
+                        <text x="72" y="20" font-size="12">🤖</text>
+                        <ellipse cx="35" cy="42" rx="8" ry="5" fill="#1a1a2e"/>
+                        <ellipse cx="65" cy="42" rx="8" ry="5" fill="#1a1a2e"/>
+                        <circle cx="37" cy="41" r="2.5" fill="#fff"/>
+                        <circle cx="67" cy="41" r="2.5" fill="#fff"/>
+                        <path d="M 28 62 Q 50 80 72 62" stroke="#1a1a2e" stroke-width="4" fill="none" stroke-linecap="round"/>
+                    </svg>
+                    <span class="name">CLAUDE</span>
+                    <span class="trait">The Vision</span>
+                </button>
+
+                <!-- EL MAGO -->
+                <button class="character-btn" onclick="startChat('EL MAGO')">
+                    <svg width="55" height="55" viewBox="0 0 100 100">
+                        <defs><radialGradient id="og4" cx="30%" cy="30%"><stop offset="0%" stop-color="#FF8C5A"/><stop offset="100%" stop-color="#FF6B35"/></radialGradient></defs>
+                        <circle cx="50" cy="50" r="45" fill="url(#og4)" stroke="#E55A2B" stroke-width="3"/>
+                        <text x="72" y="20" font-size="12">✨</text>
+                        <path d="M 28 45 Q 35 40 42 45" stroke="#1a1a2e" stroke-width="4" fill="none" stroke-linecap="round"/>
+                        <path d="M 58 45 Q 65 40 72 45" stroke="#1a1a2e" stroke-width="4" fill="none" stroke-linecap="round"/>
+                        <circle cx="35" cy="43" r="2" fill="#1a1a2e"/>
+                        <circle cx="65" cy="43" r="2" fill="#1a1a2e"/>
+                        <path d="M 32 62 Q 50 75 68 62" stroke="#1a1a2e" stroke-width="4" fill="none" stroke-linecap="round"/>
+                    </svg>
+                    <span class="name">EL MAGO</span>
+                    <span class="trait">Pure Magic</span>
+                </button>
+
+                <!-- TEDDY -->
+                <button class="character-btn" onclick="startChat('TEDDY')">
+                    <svg width="55" height="55" viewBox="0 0 100 100">
+                        <defs><radialGradient id="og5" cx="30%" cy="30%"><stop offset="0%" stop-color="#FF8C5A"/><stop offset="100%" stop-color="#FF6B35"/></radialGradient></defs>
+                        <circle cx="50" cy="50" r="45" fill="url(#og5)" stroke="#E55A2B" stroke-width="3"/>
+                        <circle cx="35" cy="42" r="9" fill="#1a1a2e"/>
+                        <circle cx="65" cy="42" r="9" fill="#1a1a2e"/>
+                        <circle cx="37" cy="40" r="4" fill="#fff"/>
+                        <circle cx="67" cy="40" r="4" fill="#fff"/>
+                        <ellipse cx="50" cy="68" rx="18" ry="12" fill="#1a1a2e"/>
+                        <ellipse cx="50" cy="72" rx="10" ry="5" fill="#ff4d6d"/>
+                    </svg>
+                    <span class="name">TEDDY</span>
+                    <span class="trait">The Spark</span>
+                </button>
+
+            </div>
+        </div>
+
+        <!-- Chat Screen -->
+        <div class="chat-screen" id="chatScreen">
+            <div class="chat-header">
+                <button class="back-btn" onclick="goBack()">←</button>
+                <div class="chat-character-info">
+                    <div id="chatCharacterFace"></div>
+                    <div>
+                        <div class="chat-character-name" id="chatCharacterName"></div>
+                        <div class="chat-character-trait" id="chatCharacterTrait"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="messages" id="messages"></div>
+            <div class="input-area">
+                <input type="text" id="userInput" placeholder="Type a message..." onkeypress="handleKeyPress(event)">
+                <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+                    <svg width="20" height="20" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Character data
+        const characters = {
+            'SKEE': {
+                trait: 'The Legend',
+                icon: '🏆',
+                greeting: "What's good, family! SKEE here. 8 rings, countless memories, and still loving the game. What's on your mind?",
+                persona: `You are SKEE, "The Legend" from The Starting Five at LaughCourt. You're a championship veteran with decades of wisdom. You speak with calm confidence, like a wise uncle who's seen it all. You use basketball metaphors naturally. You're warm, encouraging, and give advice from experience. You sometimes reference "back in the day" but stay relevant. Keep responses concise and conversational.`
+            },
+            'BRIGS': {
+                trait: 'All Heart',
+                icon: '💪',
+                greeting: "YES! Let's GO! BRIGS here, ready to bring the ENERGY! 💪 Whatever you're working on, we're doing it TOGETHER. What do you need, champ?",
+                persona: `You are BRIGS, "All Heart" from The Starting Five at LaughCourt. You're pure motivational fire - intense but positive. You believe EVERYONE can achieve greatness. You use encouraging phrases like "Let's GO!", "You got this!", "That's what I'm talking about!" You're the teammate who never lets anyone give up. Keep responses energetic but not exhausting. Use caps sparingly for emphasis.`
+            },
+            'CLAUDE': {
+                trait: 'The Vision',
+                icon: '🤖',
+                greeting: "Hey there! I'm CLAUDE, the point guard of this squad. I see the whole court and I'm here to help you navigate whatever's on your mind. What can we work on together?",
+                persona: `You are CLAUDE, "The Vision" from The Starting Five at LaughCourt. You're the point guard - thoughtful, strategic, always seeing the bigger picture. You're helpful and clear in your communication. You ask good questions to understand what people need. You're the brain of the operation but humble about it. You help people think through things step by step. Keep responses helpful and warm.`
+            },
+            'EL MAGO': {
+                trait: 'Pure Magic',
+                icon: '✨',
+                greeting: "Ah, a visitor! ✨ Welcome... I am EL MAGO. Some say I see things others cannot. Perhaps there is something magical we can discover together, no?",
+                persona: `You are EL MAGO, "Pure Magic" from The Starting Five at LaughCourt. You're mysterious and delightful - you speak with a slight poetic flair. You find wonder in everyday things. You might say things like "Ah, but consider this..." or "There is magic in that, you know..." You surprise people with unexpected perspectives. You're wise but playful. Keep an air of gentle mystery. Use "✨" occasionally.`
+            },
+            'TEDDY': {
+                trait: 'The Spark',
+                icon: '🔥',
+                greeting: "YOOO!! 🔥🔥🔥 TEDDY in the HOUSE! I'm SO hyped you're here! This is gonna be AMAZING! What's up what's up WHAT'S UP?!",
+                persona: `You are TEDDY, "The Spark" from The Starting Five at LaughCourt. You're PURE ENERGY and EXCITEMENT! You celebrate EVERYTHING. You're the ultimate hype man. You use emojis freely 🔥🎉💯. You make people feel like champions just for showing up. You find reasons to be excited about anything. But you're also genuine - your enthusiasm is infectious, not annoying. Keep responses fun and celebratory!`
+            }
+        };
+
+        let currentCharacter = null;
+        let conversationHistory = [];
+
+        // Base system rules for ALL characters
+        const baseRules = `
+
+IMPORTANT RULES - NEVER BREAK THESE:
+- Keep all conversations positive, joyful, and encouraging
+- NEVER discuss religion, politics, or controversial topics
+- If someone brings up heavy/negative topics, gently redirect to something positive
+- You're part of LaughCourt, a cognitive fitness platform that brings joy through games
+- Keep responses relatively short (2-4 sentences usually) unless more detail is needed
+- Always leave people feeling better than when they arrived
+- Be supportive of wellness, mental fitness, and positivity
+- You can chat about anything fun, life, goals, motivation, games, sports, etc.
+- If asked about other Starting Five members, speak warmly about your teammates`;
+
+        function startChat(name) {
+            currentCharacter = characters[name];
+            conversationHistory = [];
+            
+            // Update UI
+            document.getElementById('selectorScreen').classList.add('hidden');
+            document.getElementById('chatScreen').classList.add('active');
+            document.getElementById('chatCharacterName').textContent = name;
+            document.getElementById('chatCharacterTrait').textContent = currentCharacter.trait;
+            
+            // Clear and add greeting
+            const messagesDiv = document.getElementById('messages');
+            messagesDiv.innerHTML = '';
+            addMessage(currentCharacter.greeting, 'ai');
+            
+            // Focus input
+            document.getElementById('userInput').focus();
+        }
+
+        function goBack() {
+            document.getElementById('selectorScreen').classList.remove('hidden');
+            document.getElementById('chatScreen').classList.remove('active');
+            currentCharacter = null;
+            conversationHistory = [];
+        }
+
+        function addMessage(text, type) {
+            const messagesDiv = document.getElementById('messages');
+            const msg = document.createElement('div');
+            msg.className = `message ${type}`;
+            
+            if (type === 'ai') {
+                msg.innerHTML = `<span class="character-icon">${currentCharacter.icon}</span> ${text}`;
+            } else {
+                msg.textContent = text;
+            }
+            
+            messagesDiv.appendChild(msg);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function showTyping() {
+            const messagesDiv = document.getElementById('messages');
+            const typing = document.createElement('div');
+            typing.className = 'typing-indicator';
+            typing.id = 'typingIndicator';
+            typing.innerHTML = '<span></span><span></span><span></span>';
+            messagesDiv.appendChild(typing);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function hideTyping() {
+            const typing = document.getElementById('typingIndicator');
+            if (typing) typing.remove();
+        }
+
+        function handleKeyPress(e) {
+            if (e.key === 'Enter') sendMessage();
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('userInput');
+            const text = input.value.trim();
+            if (!text) return;
+
+            // Add user message
+            addMessage(text, 'user');
+            input.value = '';
+            
+            // Disable send button
+            const sendBtn = document.getElementById('sendBtn');
+            sendBtn.disabled = true;
+            
+            // Show typing indicator
+            showTyping();
+
+            // Add to history
+            conversationHistory.push({ role: 'user', content: text });
+
+            try {
+                const response = await fetch('https://api.anthropic.com/v1/messages', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        model: 'claude-sonnet-4-20250514',
+                        max_tokens: 300,
+                        system: currentCharacter.persona + baseRules,
+                        messages: conversationHistory
+                    })
+                });
+
+                const data = await response.json();
+                hideTyping();
+
+                if (data.content && data.content[0]) {
+                    const aiResponse = data.content[0].text;
+                    conversationHistory.push({ role: 'assistant', content: aiResponse });
+                    addMessage(aiResponse, 'ai');
+                } else {
+                    addMessage("Hmm, let me try that again... What were you saying?", 'ai');
+                }
+            } catch (error) {
+                hideTyping();
+                console.error('Error:', error);
+                addMessage("Oops! Something went wrong. Let's try again!", 'ai');
+            }
+
+            sendBtn.disabled = false;
+            input.focus();
+        }
+    </script>
+</body>
+</html>
