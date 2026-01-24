@@ -185,68 +185,56 @@
             gap: 20px;
         }
 
-        /* THE MATCH Demo Grid - 5x5 */
-        .demo-grid-5x5 {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 6px;
-            width: 100%;
-            max-width: 250px;
-        }
-        .demo-cell {
-            aspect-ratio: 1;
-            background: var(--darker);
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            transition: all 0.3s;
-        }
-        .demo-cell.lit {
-            background: var(--gold);
-            border-color: var(--gold);
-            box-shadow: 0 0 15px rgba(255,215,0,0.4);
-        }
-        .demo-cell.dimmed {
-            background: rgba(255,255,255,0.05);
+        /* Court Icon Demo */
+        .court-demo {
+            width: 200px;
+            height: 200px;
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
         }
 
-        /* THE SEQUENCE Demo Grid - 5x5 */
-        .demo-grid-seq {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 6px;
+        .court-demo img {
             width: 100%;
-            max-width: 250px;
+            height: 100%;
+            object-fit: contain;
         }
-        .demo-cell-seq {
-            aspect-ratio: 1;
-            background: var(--darker);
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            transition: all 0.3s;
+
+        /* THE MATCH Animation - Gold pulse glow */
+        .court-demo.match-anim {
+            animation: matchPulse 2s ease-in-out infinite;
         }
-        .demo-cell-seq.sequence-1 { animation: pulse-seq 3s ease-in-out infinite 0s; }
-        .demo-cell-seq.sequence-2 { animation: pulse-seq 3s ease-in-out infinite 0.8s; }
-        .demo-cell-seq.sequence-3 { animation: pulse-seq 3s ease-in-out infinite 1.6s; }
-        
-        @keyframes pulse-seq {
-            0%, 20%, 100% { 
-                background: var(--darker); 
-                border-color: var(--border);
+
+        @keyframes matchPulse {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(255,215,0,0.3);
+            }
+            50% {
+                box-shadow: 0 0 50px rgba(255,215,0,0.6), 0 0 80px rgba(255,107,53,0.3);
+            }
+        }
+
+        /* THE SEQUENCE Animation - Teal sequential pulse */
+        .court-demo.sequence-anim {
+            animation: sequencePulse 3s ease-in-out infinite;
+        }
+
+        @keyframes sequencePulse {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(0,217,165,0.3);
                 transform: scale(1);
             }
-            10% { 
-                background: var(--gold); 
-                border-color: var(--gold);
-                box-shadow: 0 0 15px rgba(255,215,0,0.5);
-                transform: scale(1.08);
+            25% {
+                box-shadow: 0 0 40px rgba(0,217,165,0.5);
+                transform: scale(1.02);
+            }
+            50% {
+                box-shadow: 0 0 60px rgba(0,217,165,0.7), 0 0 90px rgba(0,206,209,0.3);
+                transform: scale(1.04);
+            }
+            75% {
+                box-shadow: 0 0 40px rgba(0,217,165,0.5);
+                transform: scale(1.02);
             }
         }
 
@@ -494,9 +482,15 @@
             max-width: 600px;
             margin: 0 auto;
         }
-        .final-emoji {
-            font-size: 4rem;
-            margin-bottom: 20px;
+        .final-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+        }
+        .final-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
         .final-logo-text {
             font-family: 'Bebas Neue', sans-serif;
@@ -638,8 +632,8 @@
             .final-title { font-size: 2.2rem; }
             .final-logo-text { font-size: 2.2rem; letter-spacing: 5px; }
             .cta-btn { font-size: 1.1rem; padding: 18px 25px; }
-            .demo-grid-5x5, .demo-grid-seq { max-width: 200px; gap: 4px; }
-            .demo-cell, .demo-cell-seq { font-size: 1rem; }
+            .court-demo { width: 160px; height: 160px; }
+            .final-icon { width: 100px; height: 100px; }
             .divisions-grid-wrapper { padding: 20px 15px; }
             .div-cell { padding: 6px 3px; font-size: 0.5rem; }
         }
@@ -690,32 +684,8 @@
             </div>
 
             <div class="game-demo">
-                <div class="demo-grid-5x5">
-                    <div class="demo-cell dimmed">😄</div>
-                    <div class="demo-cell lit">😄</div>
-                    <div class="demo-cell dimmed">😄</div>
-                    <div class="demo-cell dimmed">😄</div>
-                    <div class="demo-cell lit">😄</div>
-                    <div class="demo-cell dimmed">😄</div>
-                    <div class="demo-cell dimmed">😄</div>
-                    <div class="demo-cell lit">😄</div>
-                    <div class="demo-cell dimmed">😄</div>
-                    <div class="demo-cell dimmed">😄</div>
-                    <div class="demo-cell lit">😄</div>
-                    <div class="demo-cell dimmed">😄</div>
-                    <div class="demo-cell dimmed">😄</div>
-                    <div class="demo-cell dimmed">😄</div>
-                    <div class="demo-cell lit">😄</div>
-                    <div class="demo-cell dimmed">😄</div>
-                    <div class="demo-cell dimmed">😄</div>
-                    <div class="demo-cell dimmed">😄</div>
-                    <div class="demo-cell dimmed">😄</div>
-                    <div class="demo-cell dimmed">😄</div>
-                    <div class="demo-cell dimmed">😄</div>
-                    <div class="demo-cell dimmed">😄</div>
-                    <div class="demo-cell dimmed">😄</div>
-                    <div class="demo-cell dimmed">😄</div>
-                    <div class="demo-cell dimmed">😄</div>
+                <div class="court-demo match-anim">
+                    <img src="/icon.png" alt="LaughCourt">
                 </div>
                 <div class="demo-caption">
                     <span class="lang-en">Cells light up gold - remember their positions!</span>
@@ -780,32 +750,8 @@
             </div>
 
             <div class="game-demo">
-                <div class="demo-grid-seq">
-                    <div class="demo-cell-seq sequence-1">😄</div>
-                    <div class="demo-cell-seq">😄</div>
-                    <div class="demo-cell-seq">😄</div>
-                    <div class="demo-cell-seq">😄</div>
-                    <div class="demo-cell-seq">😄</div>
-                    <div class="demo-cell-seq">😄</div>
-                    <div class="demo-cell-seq sequence-2">😄</div>
-                    <div class="demo-cell-seq">😄</div>
-                    <div class="demo-cell-seq">😄</div>
-                    <div class="demo-cell-seq">😄</div>
-                    <div class="demo-cell-seq">😄</div>
-                    <div class="demo-cell-seq">😄</div>
-                    <div class="demo-cell-seq">😄</div>
-                    <div class="demo-cell-seq sequence-3">😄</div>
-                    <div class="demo-cell-seq">😄</div>
-                    <div class="demo-cell-seq">😄</div>
-                    <div class="demo-cell-seq">😄</div>
-                    <div class="demo-cell-seq">😄</div>
-                    <div class="demo-cell-seq">😄</div>
-                    <div class="demo-cell-seq">😄</div>
-                    <div class="demo-cell-seq">😄</div>
-                    <div class="demo-cell-seq">😄</div>
-                    <div class="demo-cell-seq">😄</div>
-                    <div class="demo-cell-seq">😄</div>
-                    <div class="demo-cell-seq">😄</div>
+                <div class="court-demo sequence-anim">
+                    <img src="/icon.png" alt="LaughCourt">
                 </div>
                 <div class="demo-caption">
                     <span class="lang-en">Watch cells light up one by one, then tap them back in order</span>
@@ -821,8 +767,8 @@
                         <span class="lang-es">OBSERVA</span>
                     </div>
                     <div class="step-desc">
-                        <span class="lang-en">Cells light up ONE BY ONE in a specific order. Level 1 starts with 7, going up to 16+ at Level 10!</span>
-                        <span class="lang-es">Las celdas se iluminan UNA POR UNA en orden específico. ¡Nivel 1 empieza con 7, hasta 16+ en Nivel 10!</span>
+                        <span class="lang-en">Cells light up ONE BY ONE in a specific order. Level 1 starts with 5, going up to 14 at Level 10!</span>
+                        <span class="lang-es">Las celdas se iluminan UNA POR UNA en orden específico. ¡Nivel 1 empieza con 5, hasta 14 en Nivel 10!</span>
                     </div>
                 </div>
                 <div class="step">
@@ -968,7 +914,9 @@
     <!-- ============ FINAL CTA ============ -->
     <section class="final-cta fade-in">
         <div class="container">
-            <div class="final-emoji">🏀</div>
+            <div class="final-icon">
+                <img src="/icon.png" alt="LaughCourt">
+            </div>
             <div class="final-logo-text">
                 <span class="laugh">LAUGH</span><span class="court">COURT</span>
             </div>
