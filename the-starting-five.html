@@ -11,12 +11,12 @@
         :root {
             --court-dark: #0a0a12;
             --court-purple: #1a1a2e;
+            --orange: #FF6B35;
+            --orange-dark: #E55A2B;
+            --orange-light: #FF8C5A;
             --gold: #ffd700;
-            --gold-dark: #b8960c;
             --white: #ffffff;
             --gray: #a0a0a0;
-            --card-bg: linear-gradient(145deg, #1e1e32 0%, #12121f 100%);
-            --glow: 0 0 30px rgba(255, 215, 0, 0.3);
         }
 
         * {
@@ -43,7 +43,7 @@
             right: 0;
             bottom: 0;
             background: 
-                radial-gradient(ellipse at 50% 0%, rgba(255,215,0,0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 30%, rgba(255,107,53,0.1) 0%, transparent 50%),
                 repeating-linear-gradient(90deg, transparent 0px, transparent 2px, rgba(255,255,255,0.02) 2px, rgba(255,255,255,0.02) 4px);
             pointer-events: none;
             z-index: 0;
@@ -52,7 +52,7 @@
         .container {
             position: relative;
             z-index: 1;
-            max-width: 1200px;
+            max-width: 900px;
             margin: 0 auto;
             padding: 20px;
         }
@@ -65,8 +65,8 @@
 
         .logo-badge {
             display: inline-block;
-            background: var(--gold);
-            color: var(--court-dark);
+            background: var(--orange);
+            color: var(--white);
             font-family: 'Bebas Neue', sans-serif;
             font-size: 0.9rem;
             padding: 6px 16px;
@@ -77,8 +77,8 @@
         }
 
         @keyframes shimmer {
-            0%, 100% { box-shadow: 0 0 10px rgba(255,215,0,0.5); }
-            50% { box-shadow: 0 0 25px rgba(255,215,0,0.8); }
+            0%, 100% { box-shadow: 0 0 10px rgba(255,107,53,0.5); }
+            50% { box-shadow: 0 0 25px rgba(255,107,53,0.8); }
         }
 
         .title {
@@ -87,7 +87,7 @@
             letter-spacing: 4px;
             line-height: 1;
             margin-bottom: 10px;
-            background: linear-gradient(180deg, var(--white) 0%, var(--gold) 100%);
+            background: linear-gradient(180deg, var(--white) 0%, var(--orange) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -109,8 +109,8 @@
 
         .lang-btn {
             background: transparent;
-            border: 2px solid var(--gold);
-            color: var(--gold);
+            border: 2px solid var(--orange);
+            color: var(--orange);
             font-family: 'Bebas Neue', sans-serif;
             font-size: 1rem;
             padding: 8px 20px;
@@ -121,133 +121,124 @@
         }
 
         .lang-btn.active {
-            background: var(--gold);
-            color: var(--court-dark);
+            background: var(--orange);
+            color: var(--white);
         }
 
         .lang-btn:hover {
             transform: scale(1.05);
         }
 
-        /* Player Grid */
-        .roster {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            padding: 20px 0 40px;
-        }
-
-        /* Player Card */
-        .player-card {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 25px;
+        /* TEAM IMAGE CONTAINER */
+        .team-container {
+            background: linear-gradient(145deg, #1e1e32 0%, #12121f 100%);
+            border-radius: 30px;
+            padding: 40px 30px;
+            margin: 20px 0;
+            border: 2px solid rgba(255,107,53,0.2);
             position: relative;
             overflow: hidden;
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 1px solid rgba(255,215,0,0.1);
+            transition: all 0.4s ease;
         }
 
-        .player-card::before {
+        .team-container:hover {
+            border-color: rgba(255,107,53,0.5);
+            box-shadow: 0 0 40px rgba(255,107,53,0.2);
+        }
+
+        .team-container::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             height: 4px;
-            background: linear-gradient(90deg, var(--gold), var(--gold-dark));
-            opacity: 0;
-            transition: opacity 0.3s ease;
+            background: linear-gradient(90deg, var(--orange), var(--orange-light), var(--orange));
         }
 
-        .player-card:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--glow);
-            border-color: rgba(255,215,0,0.3);
+        /* Team lineup - the faces */
+        .team-lineup {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 8px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
         }
 
-        .player-card:hover::before {
-            opacity: 1;
-        }
-
-        .player-card.celebrating {
-            animation: cardBounce 0.6s ease;
-        }
-
-        @keyframes cardBounce {
-            0%, 100% { transform: translateY(-8px) scale(1); }
-            25% { transform: translateY(-15px) scale(1.02); }
-            50% { transform: translateY(-8px) scale(0.98); }
-            75% { transform: translateY(-12px) scale(1.01); }
-        }
-
-        .card-number {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 3rem;
-            color: rgba(255,215,0,0.15);
-            line-height: 1;
-        }
-
-        .player-emoji {
-            font-size: 3.5rem;
-            margin-bottom: 15px;
-            display: block;
+        .player-face {
             transition: transform 0.3s ease;
         }
 
-        .player-card:hover .player-emoji {
-            transform: scale(1.2) rotate(-5deg);
+        .player-face:hover {
+            transform: scale(1.1) translateY(-5px);
+        }
+
+        /* Center player (EL MAGO) is bigger */
+        .player-face.center {
+            transform: scale(1.15);
+        }
+
+        .player-face.center:hover {
+            transform: scale(1.25) translateY(-5px);
+        }
+
+        /* Names roster */
+        .names-roster {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px 25px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,107,53,0.2);
+        }
+
+        .player-name-tag {
+            text-align: center;
         }
 
         .player-name {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 2rem;
+            font-size: 1.4rem;
             letter-spacing: 2px;
             color: var(--white);
-            margin-bottom: 5px;
-        }
-
-        .player-position {
-            font-size: 0.85rem;
-            color: var(--gold);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
         }
 
         .player-trait {
-            font-size: 1.1rem;
+            font-size: 0.75rem;
+            color: var(--orange);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Tap hint */
+        .tap-hint {
+            text-align: center;
             color: var(--gray);
-            font-style: italic;
-            margin-bottom: 15px;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            animation: pulse 2s ease-in-out infinite;
         }
 
-        .player-bio {
-            font-size: 0.95rem;
-            line-height: 1.6;
-            color: rgba(255,255,255,0.8);
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
         }
 
-        /* 6th Man special styling */
-        .player-card.sixth-man {
-            background: linear-gradient(145deg, #2a1a2e 0%, #1a1220 100%);
-            border-color: rgba(255,100,150,0.2);
+        /* Celebration */
+        .team-container.celebrating {
+            animation: teamBounce 0.8s ease;
         }
 
-        .player-card.sixth-man .player-position {
-            color: #ff6b9d;
+        @keyframes teamBounce {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.02); }
+            50% { transform: scale(0.98); }
+            75% { transform: scale(1.01); }
         }
 
-        .player-card.sixth-man::before {
-            background: linear-gradient(90deg, #ff6b9d, #ff4081);
-        }
-
-        /* Celebration particles */
         .celebration {
             position: fixed;
             pointer-events: none;
@@ -257,29 +248,38 @@
         }
 
         @keyframes float-up {
-            0% {
-                opacity: 1;
-                transform: translateY(0) scale(1) rotate(0deg);
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(-150px) scale(0.5) rotate(360deg);
-            }
+            0% { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
+            100% { opacity: 0; transform: translateY(-150px) scale(0.5) rotate(360deg); }
+        }
+
+        /* Tagline */
+        .team-tagline {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 1.1rem;
+            color: var(--gray);
+            font-style: italic;
+        }
+
+        .team-tagline em {
+            color: var(--orange);
+            font-style: normal;
+            font-weight: 600;
         }
 
         /* Footer */
         .footer {
             text-align: center;
             padding: 30px 20px 40px;
-            border-top: 1px solid rgba(255,215,0,0.1);
-            margin-top: 20px;
+            border-top: 1px solid rgba(255,107,53,0.1);
+            margin-top: 30px;
         }
 
         .footer-brand {
             font-family: 'Bebas Neue', sans-serif;
             font-size: 1.3rem;
             letter-spacing: 3px;
-            color: var(--gold);
+            color: var(--orange);
             margin-bottom: 8px;
         }
 
@@ -296,32 +296,18 @@
         .back-link {
             display: inline-block;
             margin-top: 20px;
-            color: var(--gold);
+            color: var(--orange);
             text-decoration: none;
             font-weight: 600;
             padding: 10px 25px;
-            border: 2px solid var(--gold);
+            border: 2px solid var(--orange);
             border-radius: 25px;
             transition: all 0.3s ease;
         }
 
         .back-link:hover {
-            background: var(--gold);
-            color: var(--court-dark);
-        }
-
-        /* Tap instruction */
-        .tap-hint {
-            text-align: center;
-            color: var(--gray);
-            font-size: 0.85rem;
-            margin-bottom: 20px;
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
+            background: var(--orange);
+            color: var(--white);
         }
 
         /* Hidden language content */
@@ -332,11 +318,11 @@
         /* Mobile optimizations */
         @media (max-width: 600px) {
             .container { padding: 15px; }
-            .header { padding: 20px 0 15px; }
-            .roster { gap: 15px; }
-            .player-card { padding: 20px; }
-            .player-emoji { font-size: 3rem; }
-            .player-name { font-size: 1.7rem; }
+            .team-container { padding: 25px 15px; }
+            .team-lineup { gap: 5px; }
+            .team-lineup svg { width: 50px; height: 50px; }
+            .player-name { font-size: 1.1rem; }
+            .names-roster { gap: 10px 15px; }
         }
     </style>
 </head>
@@ -354,82 +340,168 @@
             <button class="lang-btn" onclick="setLang('es')">ES</button>
         </div>
 
-        <p class="tap-hint" data-lang="en">👆 Tap a player to celebrate!</p>
-        <p class="tap-hint" data-lang="es">👆 ¡Toca un jugador para celebrar!</p>
+        <!-- TEAM IMAGE -->
+        <div class="team-container" onclick="celebrateTeam(this)">
+            
+            <!-- The Faces - All 6 orange smiling characters -->
+            <div class="team-lineup">
+                
+                <!-- CLAUDE - Point Guard - "The Vision" - Thoughtful, wise eyes -->
+                <svg class="player-face" width="70" height="70" viewBox="0 0 100 100">
+                    <defs>
+                        <radialGradient id="orange1" cx="30%" cy="30%">
+                            <stop offset="0%" stop-color="#FF8C5A"/>
+                            <stop offset="100%" stop-color="#FF6B35"/>
+                        </radialGradient>
+                    </defs>
+                    <circle cx="50" cy="50" r="45" fill="url(#orange1)" stroke="#E55A2B" stroke-width="3"/>
+                    <!-- Wise/Vision eyes - slightly narrowed, focused -->
+                    <ellipse cx="35" cy="42" rx="8" ry="5" fill="#1a1a2e"/>
+                    <ellipse cx="65" cy="42" rx="8" ry="5" fill="#1a1a2e"/>
+                    <circle cx="37" cy="41" r="2" fill="#fff"/>
+                    <circle cx="67" cy="41" r="2" fill="#fff"/>
+                    <!-- Confident smile -->
+                    <path d="M 30 62 Q 50 78 70 62" stroke="#1a1a2e" stroke-width="4" fill="none" stroke-linecap="round"/>
+                </svg>
 
-        <div class="roster">
-            <!-- CLAUDE - Point Guard -->
-            <div class="player-card" onclick="celebrate(this, '🤖')" data-emojis="🤖,🧠,⚡,🎯">
-                <span class="card-number">1</span>
-                <span class="player-emoji">🤖</span>
-                <h2 class="player-name">CLAUDE</h2>
-                <p class="player-position" data-lang="en">Point Guard</p>
-                <p class="player-position" data-lang="es">Base</p>
-                <p class="player-trait">"The Vision"</p>
-                <p class="player-bio" data-lang="en">Always sees the play before it happens. Sets up teammates for success and never stops learning. The brain of the operation.</p>
-                <p class="player-bio" data-lang="es">Siempre ve la jugada antes de que ocurra. Prepara a sus compañeros para el éxito y nunca deja de aprender. El cerebro de la operación.</p>
+                <!-- SKEE - Shooting Guard - "The Legend" - Championship confidence -->
+                <svg class="player-face" width="70" height="70" viewBox="0 0 100 100">
+                    <defs>
+                        <radialGradient id="orange2" cx="30%" cy="30%">
+                            <stop offset="0%" stop-color="#FF8C5A"/>
+                            <stop offset="100%" stop-color="#FF6B35"/>
+                        </radialGradient>
+                    </defs>
+                    <circle cx="50" cy="50" r="45" fill="url(#orange2)" stroke="#E55A2B" stroke-width="3"/>
+                    <!-- One raised eyebrow, confident smirk -->
+                    <path d="M 25 35 Q 35 30 45 35" stroke="#1a1a2e" stroke-width="3" fill="none"/>
+                    <path d="M 55 38 Q 65 38 75 38" stroke="#1a1a2e" stroke-width="3" fill="none"/>
+                    <ellipse cx="35" cy="45" rx="7" ry="6" fill="#1a1a2e"/>
+                    <ellipse cx="65" cy="45" rx="6" ry="5" fill="#1a1a2e"/>
+                    <circle cx="37" cy="44" r="2" fill="#fff"/>
+                    <circle cx="67" cy="44" r="2" fill="#fff"/>
+                    <!-- Smirk -->
+                    <path d="M 35 65 Q 55 72 70 60" stroke="#1a1a2e" stroke-width="4" fill="none" stroke-linecap="round"/>
+                </svg>
+
+                <!-- BRIGS - Small Forward - "All Heart" - Determined, passionate -->
+                <svg class="player-face" width="70" height="70" viewBox="0 0 100 100">
+                    <defs>
+                        <radialGradient id="orange3" cx="30%" cy="30%">
+                            <stop offset="0%" stop-color="#FF8C5A"/>
+                            <stop offset="100%" stop-color="#FF6B35"/>
+                        </radialGradient>
+                    </defs>
+                    <circle cx="50" cy="50" r="45" fill="url(#orange3)" stroke="#E55A2B" stroke-width="3"/>
+                    <!-- Determined eyebrows -->
+                    <path d="M 25 35 L 42 40" stroke="#1a1a2e" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    <path d="M 75 35 L 58 40" stroke="#1a1a2e" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    <circle cx="35" cy="48" r="7" fill="#1a1a2e"/>
+                    <circle cx="65" cy="48" r="7" fill="#1a1a2e"/>
+                    <circle cx="37" cy="47" r="2.5" fill="#fff"/>
+                    <circle cx="67" cy="47" r="2.5" fill="#fff"/>
+                    <!-- Big determined smile -->
+                    <path d="M 28 62 Q 50 80 72 62" stroke="#1a1a2e" stroke-width="4" fill="none" stroke-linecap="round"/>
+                </svg>
+
+                <!-- EL MAGO - Center - "Pure Magic" - Mysterious, magical (BIGGEST) -->
+                <svg class="player-face center" width="85" height="85" viewBox="0 0 100 100">
+                    <defs>
+                        <radialGradient id="orange4" cx="30%" cy="30%">
+                            <stop offset="0%" stop-color="#FFAA70"/>
+                            <stop offset="100%" stop-color="#FF6B35"/>
+                        </radialGradient>
+                    </defs>
+                    <circle cx="50" cy="50" r="45" fill="url(#orange4)" stroke="#E55A2B" stroke-width="3"/>
+                    <!-- Sparkle above -->
+                    <text x="75" y="20" font-size="14">✨</text>
+                    <!-- Mysterious half-closed eyes -->
+                    <path d="M 28 45 Q 35 40 42 45" stroke="#1a1a2e" stroke-width="4" fill="none" stroke-linecap="round"/>
+                    <path d="M 58 45 Q 65 40 72 45" stroke="#1a1a2e" stroke-width="4" fill="none" stroke-linecap="round"/>
+                    <circle cx="35" cy="43" r="2" fill="#1a1a2e"/>
+                    <circle cx="65" cy="43" r="2" fill="#1a1a2e"/>
+                    <!-- Knowing smile -->
+                    <path d="M 32 62 Q 50 75 68 62" stroke="#1a1a2e" stroke-width="4" fill="none" stroke-linecap="round"/>
+                </svg>
+
+                <!-- DUCE - Power Forward - "The Brother" - Warm, brotherly -->
+                <svg class="player-face" width="70" height="70" viewBox="0 0 100 100">
+                    <defs>
+                        <radialGradient id="orange5" cx="30%" cy="30%">
+                            <stop offset="0%" stop-color="#FF8C5A"/>
+                            <stop offset="100%" stop-color="#FF6B35"/>
+                        </radialGradient>
+                    </defs>
+                    <circle cx="50" cy="50" r="45" fill="url(#orange5)" stroke="#E55A2B" stroke-width="3"/>
+                    <!-- Warm friendly eyes -->
+                    <circle cx="35" cy="45" r="7" fill="#1a1a2e"/>
+                    <circle cx="65" cy="45" r="7" fill="#1a1a2e"/>
+                    <circle cx="37" cy="43" r="3" fill="#fff"/>
+                    <circle cx="67" cy="43" r="3" fill="#fff"/>
+                    <!-- Big warm smile -->
+                    <path d="M 28 60 Q 50 82 72 60" stroke="#1a1a2e" stroke-width="4" fill="#1a1a2e" stroke-linecap="round"/>
+                </svg>
+
+                <!-- TEDDY - 6th Man - "The Spark" - Energetic, electric -->
+                <svg class="player-face" width="70" height="70" viewBox="0 0 100 100">
+                    <defs>
+                        <radialGradient id="orange6" cx="30%" cy="30%">
+                            <stop offset="0%" stop-color="#FF8C5A"/>
+                            <stop offset="100%" stop-color="#FF6B35"/>
+                        </radialGradient>
+                    </defs>
+                    <circle cx="50" cy="50" r="45" fill="url(#orange6)" stroke="#E55A2B" stroke-width="3"/>
+                    <!-- Excited wide eyes -->
+                    <circle cx="35" cy="42" r="9" fill="#1a1a2e"/>
+                    <circle cx="65" cy="42" r="9" fill="#1a1a2e"/>
+                    <circle cx="37" cy="40" r="4" fill="#fff"/>
+                    <circle cx="67" cy="40" r="4" fill="#fff"/>
+                    <!-- BIG excited open mouth smile -->
+                    <ellipse cx="50" cy="68" rx="18" ry="12" fill="#1a1a2e"/>
+                    <ellipse cx="50" cy="72" rx="10" ry="5" fill="#ff4d6d"/>
+                </svg>
             </div>
 
-            <!-- SKEE - Shooting Guard -->
-            <div class="player-card" onclick="celebrate(this, '🏆')" data-emojis="🏆,🔥,💫,🎯">
-                <span class="card-number">2</span>
-                <span class="player-emoji">🏆</span>
-                <h2 class="player-name">SKEE</h2>
-                <p class="player-position" data-lang="en">Shooting Guard</p>
-                <p class="player-position" data-lang="es">Escolta</p>
-                <p class="player-trait">"The Legend"</p>
-                <p class="player-bio" data-lang="en">When the game is on the line, SKEE wants the ball. Championship DNA runs through his veins. Been there, done that, got the rings.</p>
-                <p class="player-bio" data-lang="es">Cuando el juego está en la línea, SKEE quiere el balón. El ADN de campeón corre por sus venas. Ha estado allí, lo ha hecho, tiene los anillos.</p>
+            <!-- Names Roster -->
+            <div class="names-roster">
+                <div class="player-name-tag">
+                    <div class="player-name">CLAUDE</div>
+                    <div class="player-trait" data-lang="en">The Vision</div>
+                    <div class="player-trait" data-lang="es">La Visión</div>
+                </div>
+                <div class="player-name-tag">
+                    <div class="player-name">SKEE</div>
+                    <div class="player-trait" data-lang="en">The Legend</div>
+                    <div class="player-trait" data-lang="es">La Leyenda</div>
+                </div>
+                <div class="player-name-tag">
+                    <div class="player-name">BRIGS</div>
+                    <div class="player-trait" data-lang="en">All Heart</div>
+                    <div class="player-trait" data-lang="es">Todo Corazón</div>
+                </div>
+                <div class="player-name-tag">
+                    <div class="player-name">EL MAGO</div>
+                    <div class="player-trait" data-lang="en">Pure Magic</div>
+                    <div class="player-trait" data-lang="es">Pura Magia</div>
+                </div>
+                <div class="player-name-tag">
+                    <div class="player-name">DUCE</div>
+                    <div class="player-trait" data-lang="en">The Brother</div>
+                    <div class="player-trait" data-lang="es">El Hermano</div>
+                </div>
+                <div class="player-name-tag">
+                    <div class="player-name">TEDDY</div>
+                    <div class="player-trait" data-lang="en">The Spark</div>
+                    <div class="player-trait" data-lang="es">La Chispa</div>
+                </div>
             </div>
 
-            <!-- BRIGS - Small Forward -->
-            <div class="player-card" onclick="celebrate(this, '💪')" data-emojis="💪,❤️,🦁,⭐">
-                <span class="card-number">3</span>
-                <span class="player-emoji">💪</span>
-                <h2 class="player-name">BRIGS</h2>
-                <p class="player-position" data-lang="en">Small Forward</p>
-                <p class="player-position" data-lang="es">Alero</p>
-                <p class="player-trait">"All Heart"</p>
-                <p class="player-bio" data-lang="en">The ultimate competitor. Outworks everyone, every day. When you need someone to make the tough play, BRIGS answers the call.</p>
-                <p class="player-bio" data-lang="es">El competidor definitivo. Trabaja más que todos, todos los días. Cuando necesitas a alguien para la jugada difícil, BRIGS responde.</p>
-            </div>
-
-            <!-- DUCE - Power Forward -->
-            <div class="player-card" onclick="celebrate(this, '🖤')" data-emojis="🖤,👊,🤝,💯">
-                <span class="card-number">4</span>
-                <span class="player-emoji">🖤</span>
-                <h2 class="player-name">DUCE</h2>
-                <p class="player-position" data-lang="en">Power Forward</p>
-                <p class="player-position" data-lang="es">Ala-Pívot</p>
-                <p class="player-trait">"The Brother"</p>
-                <p class="player-bio" data-lang="en">Family first, always. DUCE brings the energy that makes everyone better. The glue that holds the squad together through thick and thin.</p>
-                <p class="player-bio" data-lang="es">La familia primero, siempre. DUCE trae la energía que hace a todos mejores. El pegamento que mantiene al equipo unido en las buenas y en las malas.</p>
-            </div>
-
-            <!-- EL MAGO - Center -->
-            <div class="player-card" onclick="celebrate(this, '✨')" data-emojis="✨,🪄,🌟,🎩">
-                <span class="card-number">5</span>
-                <span class="player-emoji">✨</span>
-                <h2 class="player-name">EL MAGO</h2>
-                <p class="player-position" data-lang="en">Center</p>
-                <p class="player-position" data-lang="es">Pívot</p>
-                <p class="player-trait">"Pure Magic"</p>
-                <p class="player-bio" data-lang="en">Makes the impossible look easy. When EL MAGO touches the ball, something special happens. A magician who turned the court into his stage.</p>
-                <p class="player-bio" data-lang="es">Hace que lo imposible parezca fácil. Cuando EL MAGO toca el balón, algo especial sucede. Un mago que convirtió la cancha en su escenario.</p>
-            </div>
-
-            <!-- TEDDY - 6th Man -->
-            <div class="player-card sixth-man" onclick="celebrate(this, '🧸')" data-emojis="🧸,🔥,💥,⚡">
-                <span class="card-number">6</span>
-                <span class="player-emoji">🧸</span>
-                <h2 class="player-name">TEDDY</h2>
-                <p class="player-position" data-lang="en">6th Man</p>
-                <p class="player-position" data-lang="es">Sexto Hombre</p>
-                <p class="player-trait">"The Spark"</p>
-                <p class="player-bio" data-lang="en">Comes off the bench and changes everything. TEDDY brings instant offense and electric energy. When he checks in, the crowd goes wild.</p>
-                <p class="player-bio" data-lang="es">Sale del banco y lo cambia todo. TEDDY trae ofensiva instantánea y energía eléctrica. Cuando entra al juego, la multitud enloquece.</p>
-            </div>
+            <p class="tap-hint" data-lang="en">👆 Tap the squad to celebrate!</p>
+            <p class="tap-hint" data-lang="es">👆 ¡Toca al equipo para celebrar!</p>
         </div>
+
+        <p class="team-tagline" data-lang="en">Six legends. One mission. <em>Bring the joy.</em></p>
+        <p class="team-tagline" data-lang="es">Seis leyendas. Una misión. <em>Traer la alegría.</em></p>
 
         <footer class="footer">
             <p class="footer-brand">LAUGHCOURT™</p>
@@ -454,37 +526,27 @@
         const savedLang = localStorage.getItem('laughcourt-lang');
         if (savedLang) setLang(savedLang);
 
-        // Celebration effect
-        function celebrate(card, defaultEmoji) {
-            // Add bounce animation
-            card.classList.add('celebrating');
-            setTimeout(() => card.classList.remove('celebrating'), 600);
+        // Team celebration
+        function celebrateTeam(container) {
+            container.classList.add('celebrating');
+            setTimeout(() => container.classList.remove('celebrating'), 800);
 
-            // Get emoji set for this player
-            const emojiSet = card.dataset.emojis.split(',');
-            
-            // Create floating emojis
-            const rect = card.getBoundingClientRect();
-            const centerX = rect.left + rect.width / 2;
-            const centerY = rect.top + rect.height / 3;
+            const emojis = ['🏀', '🧡', '😂', '🔥', '⭐', '✨', '💪', '🎉'];
+            const rect = container.getBoundingClientRect();
 
-            for (let i = 0; i < 8; i++) {
+            for (let i = 0; i < 15; i++) {
                 setTimeout(() => {
                     const emoji = document.createElement('div');
                     emoji.className = 'celebration';
-                    emoji.textContent = emojiSet[Math.floor(Math.random() * emojiSet.length)];
-                    emoji.style.left = (centerX + (Math.random() - 0.5) * 100) + 'px';
-                    emoji.style.top = centerY + 'px';
+                    emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                    emoji.style.left = (rect.left + Math.random() * rect.width) + 'px';
+                    emoji.style.top = (rect.top + Math.random() * (rect.height / 2)) + 'px';
                     document.body.appendChild(emoji);
-                    
                     setTimeout(() => emoji.remove(), 1500);
-                }, i * 50);
+                }, i * 40);
             }
 
-            // Optional: vibrate on mobile
-            if (navigator.vibrate) {
-                navigator.vibrate(50);
-            }
+            if (navigator.vibrate) navigator.vibrate(50);
         }
     </script>
 </body>
