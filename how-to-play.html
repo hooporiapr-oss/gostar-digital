@@ -185,7 +185,7 @@
             gap: 20px;
         }
 
-        /* THE MATCH Demo Grid */
+        /* THE MATCH Demo Grid - 5x5 */
         .demo-grid-5x5 {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
@@ -204,56 +204,48 @@
             font-size: 1.2rem;
             transition: all 0.3s;
         }
-        .demo-cell.center {
-            background: var(--orange);
-            border-color: var(--orange);
-            box-shadow: 0 0 15px rgba(255,107,53,0.4);
+        .demo-cell.lit {
+            background: var(--gold);
+            border-color: var(--gold);
+            box-shadow: 0 0 15px rgba(255,215,0,0.4);
         }
-        .demo-cell.match-hint {
-            background: rgba(255,107,53,0.3);
-            border-color: var(--orange);
-        }
-        .demo-cell.wrong-hint {
+        .demo-cell.dimmed {
             background: rgba(255,255,255,0.05);
         }
 
-        /* THE SEQUENCE Demo Grid */
-        .demo-grid-4x4 {
+        /* THE SEQUENCE Demo Grid - 5x5 */
+        .demo-grid-seq {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 6px;
             width: 100%;
-            max-width: 220px;
+            max-width: 250px;
         }
         .demo-cell-seq {
             aspect-ratio: 1;
             background: var(--darker);
             border: 2px solid var(--border);
-            border-radius: 10px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             transition: all 0.3s;
         }
-        .demo-cell-seq.highlight {
-            background: rgba(0,217,165,0.3);
-            border-color: var(--teal);
-            box-shadow: 0 0 15px rgba(0,217,165,0.4);
-        }
-        .demo-cell-seq.sequence-1 { animation: pulse-seq 2s ease-in-out infinite 0s; }
-        .demo-cell-seq.sequence-2 { animation: pulse-seq 2s ease-in-out infinite 0.5s; }
-        .demo-cell-seq.sequence-3 { animation: pulse-seq 2s ease-in-out infinite 1s; }
+        .demo-cell-seq.sequence-1 { animation: pulse-seq 3s ease-in-out infinite 0s; }
+        .demo-cell-seq.sequence-2 { animation: pulse-seq 3s ease-in-out infinite 0.8s; }
+        .demo-cell-seq.sequence-3 { animation: pulse-seq 3s ease-in-out infinite 1.6s; }
         
         @keyframes pulse-seq {
-            0%, 30%, 100% { 
+            0%, 20%, 100% { 
                 background: var(--darker); 
                 border-color: var(--border);
                 transform: scale(1);
             }
-            15% { 
-                background: rgba(0,217,165,0.4); 
-                border-color: var(--teal);
+            10% { 
+                background: var(--gold); 
+                border-color: var(--gold);
+                box-shadow: 0 0 15px rgba(255,215,0,0.5);
                 transform: scale(1.08);
             }
         }
@@ -365,20 +357,21 @@
             border-radius: 20px;
             padding: 30px;
             margin-bottom: 30px;
+            overflow-x: auto;
         }
         .divisions-grid {
             display: grid;
-            grid-template-columns: auto repeat(5, 1fr);
-            gap: 6px;
-            max-width: 400px;
+            grid-template-columns: auto repeat(10, 1fr);
+            gap: 4px;
+            min-width: 500px;
             margin: 0 auto;
         }
         .div-cell {
             background: rgba(255,255,255,0.03);
-            border-radius: 6px;
-            padding: 10px 8px;
+            border-radius: 4px;
+            padding: 8px 4px;
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 0.75rem;
+            font-size: 0.6rem;
             color: var(--muted);
             text-align: center;
             transition: all 0.3s;
@@ -386,12 +379,12 @@
         .div-cell.header {
             background: transparent;
             color: var(--gold);
-            font-size: 0.7rem;
+            font-size: 0.55rem;
         }
         .div-cell.row-header {
             background: transparent;
             text-align: right;
-            padding-right: 12px;
+            padding-right: 8px;
         }
         .div-cell.row-header.slow { color: var(--teal); }
         .div-cell.row-header.med { color: var(--orange); }
@@ -645,12 +638,10 @@
             .final-title { font-size: 2.2rem; }
             .final-logo-text { font-size: 2.2rem; letter-spacing: 5px; }
             .cta-btn { font-size: 1.1rem; padding: 18px 25px; }
-            .demo-grid-5x5 { max-width: 200px; gap: 4px; }
-            .demo-grid-4x4 { max-width: 180px; gap: 6px; }
-            .demo-cell { font-size: 1rem; }
-            .demo-cell-seq { font-size: 1.2rem; }
+            .demo-grid-5x5, .demo-grid-seq { max-width: 200px; gap: 4px; }
+            .demo-cell, .demo-cell-seq { font-size: 1rem; }
             .divisions-grid-wrapper { padding: 20px 15px; }
-            .div-cell { padding: 8px 5px; font-size: 0.65rem; }
+            .div-cell { padding: 6px 3px; font-size: 0.5rem; }
         }
     </style>
 </head>
@@ -693,42 +684,42 @@
                 <div class="game-icon">🎯</div>
                 <h2 class="game-name">THE MATCH</h2>
                 <div class="game-type">
-                    <span class="lang-en">Recognition Memory</span>
-                    <span class="lang-es">Memoria de Reconocimiento</span>
+                    <span class="lang-en">Spatial Memory</span>
+                    <span class="lang-es">Memoria Espacial</span>
                 </div>
             </div>
 
             <div class="game-demo">
                 <div class="demo-grid-5x5">
-                    <div class="demo-cell wrong-hint"></div>
-                    <div class="demo-cell match-hint"></div>
-                    <div class="demo-cell wrong-hint"></div>
-                    <div class="demo-cell wrong-hint"></div>
-                    <div class="demo-cell match-hint"></div>
-                    <div class="demo-cell wrong-hint"></div>
-                    <div class="demo-cell wrong-hint"></div>
-                    <div class="demo-cell match-hint"></div>
-                    <div class="demo-cell wrong-hint"></div>
-                    <div class="demo-cell wrong-hint"></div>
-                    <div class="demo-cell match-hint"></div>
-                    <div class="demo-cell wrong-hint"></div>
-                    <div class="demo-cell center">🎯</div>
-                    <div class="demo-cell wrong-hint"></div>
-                    <div class="demo-cell match-hint"></div>
-                    <div class="demo-cell wrong-hint"></div>
-                    <div class="demo-cell wrong-hint"></div>
-                    <div class="demo-cell match-hint"></div>
-                    <div class="demo-cell wrong-hint"></div>
-                    <div class="demo-cell wrong-hint"></div>
-                    <div class="demo-cell match-hint"></div>
-                    <div class="demo-cell wrong-hint"></div>
-                    <div class="demo-cell wrong-hint"></div>
-                    <div class="demo-cell match-hint"></div>
-                    <div class="demo-cell wrong-hint"></div>
+                    <div class="demo-cell dimmed">😄</div>
+                    <div class="demo-cell lit">😄</div>
+                    <div class="demo-cell dimmed">😄</div>
+                    <div class="demo-cell dimmed">😄</div>
+                    <div class="demo-cell lit">😄</div>
+                    <div class="demo-cell dimmed">😄</div>
+                    <div class="demo-cell dimmed">😄</div>
+                    <div class="demo-cell lit">😄</div>
+                    <div class="demo-cell dimmed">😄</div>
+                    <div class="demo-cell dimmed">😄</div>
+                    <div class="demo-cell lit">😄</div>
+                    <div class="demo-cell dimmed">😄</div>
+                    <div class="demo-cell dimmed">😄</div>
+                    <div class="demo-cell dimmed">😄</div>
+                    <div class="demo-cell lit">😄</div>
+                    <div class="demo-cell dimmed">😄</div>
+                    <div class="demo-cell dimmed">😄</div>
+                    <div class="demo-cell dimmed">😄</div>
+                    <div class="demo-cell dimmed">😄</div>
+                    <div class="demo-cell dimmed">😄</div>
+                    <div class="demo-cell dimmed">😄</div>
+                    <div class="demo-cell dimmed">😄</div>
+                    <div class="demo-cell dimmed">😄</div>
+                    <div class="demo-cell dimmed">😄</div>
+                    <div class="demo-cell dimmed">😄</div>
                 </div>
                 <div class="demo-caption">
-                    <span class="lang-en">The highlighted cells match the center target color</span>
-                    <span class="lang-es">Las celdas resaltadas coinciden con el color del objetivo central</span>
+                    <span class="lang-en">Cells light up gold - remember their positions!</span>
+                    <span class="lang-es">Las celdas se iluminan doradas - ¡recuerda sus posiciones!</span>
                 </div>
             </div>
 
@@ -740,8 +731,8 @@
                         <span class="lang-es">OBSERVA</span>
                     </div>
                     <div class="step-desc">
-                        <span class="lang-en">Colors flash across the 5×5 grid. The center shows your target color.</span>
-                        <span class="lang-es">Los colores aparecen en la cuadrícula 5×5. El centro muestra tu color objetivo.</span>
+                        <span class="lang-en">Cells light up gold simultaneously on the 5×5 court. Level 1 shows 5 cells, Level 10 shows 14!</span>
+                        <span class="lang-es">Las celdas se iluminan doradas simultáneamente en la cancha 5×5. ¡Nivel 1 muestra 5, Nivel 10 muestra 14!</span>
                     </div>
                 </div>
                 <div class="step">
@@ -751,8 +742,8 @@
                         <span class="lang-es">RECUERDA</span>
                     </div>
                     <div class="step-desc">
-                        <span class="lang-en">Memorize which cells matched the target color before they disappear.</span>
-                        <span class="lang-es">Memoriza qué celdas coincidieron con el color objetivo antes de que desaparezcan.</span>
+                        <span class="lang-en">Memorize ALL the lit positions before they disappear. Speed controls how long they stay visible.</span>
+                        <span class="lang-es">Memoriza TODAS las posiciones antes de que desaparezcan. La velocidad controla cuánto tiempo quedan visibles.</span>
                     </div>
                 </div>
                 <div class="step">
@@ -762,16 +753,16 @@
                         <span class="lang-es">TOCA</span>
                     </div>
                     <div class="step-desc">
-                        <span class="lang-en">Tap all the cells that matched. Get them all right to advance!</span>
-                        <span class="lang-es">Toca todas las celdas que coincidieron. ¡Aciértalas todas para avanzar!</span>
+                        <span class="lang-en">Tap all the cells that were lit. Get 2 perfect rounds in a row to level up!</span>
+                        <span class="lang-es">Toca todas las celdas que estaban iluminadas. ¡2 rondas perfectas seguidas para subir de nivel!</span>
                     </div>
                 </div>
             </div>
 
             <div class="skills-trained">
-                <div class="skill-badge"><span>🧠</span> <span class="lang-en">Visual Memory</span><span class="lang-es">Memoria Visual</span></div>
-                <div class="skill-badge"><span>👁️</span> <span class="lang-en">Pattern Recognition</span><span class="lang-es">Reconocimiento de Patrones</span></div>
-                <div class="skill-badge"><span>⚡</span> <span class="lang-en">Quick Recall</span><span class="lang-es">Recuerdo Rápido</span></div>
+                <div class="skill-badge"><span>🧠</span> <span class="lang-en">Spatial Memory</span><span class="lang-es">Memoria Espacial</span></div>
+                <div class="skill-badge"><span>👁️</span> <span class="lang-en">Visual Recall</span><span class="lang-es">Recuerdo Visual</span></div>
+                <div class="skill-badge"><span>⚡</span> <span class="lang-en">Quick Processing</span><span class="lang-es">Procesamiento Rápido</span></div>
             </div>
         </div>
     </section>
@@ -789,27 +780,36 @@
             </div>
 
             <div class="game-demo">
-                <div class="demo-grid-4x4">
-                    <div class="demo-cell-seq sequence-1">😊</div>
-                    <div class="demo-cell-seq">😂</div>
-                    <div class="demo-cell-seq sequence-3">🤣</div>
+                <div class="demo-grid-seq">
+                    <div class="demo-cell-seq sequence-1">😄</div>
                     <div class="demo-cell-seq">😄</div>
-                    <div class="demo-cell-seq">😁</div>
-                    <div class="demo-cell-seq sequence-2">😆</div>
-                    <div class="demo-cell-seq">😃</div>
-                    <div class="demo-cell-seq">🙂</div>
-                    <div class="demo-cell-seq">😀</div>
-                    <div class="demo-cell-seq">😸</div>
-                    <div class="demo-cell-seq">😹</div>
-                    <div class="demo-cell-seq">🤭</div>
-                    <div class="demo-cell-seq">😏</div>
-                    <div class="demo-cell-seq">😌</div>
-                    <div class="demo-cell-seq">🥳</div>
-                    <div class="demo-cell-seq">🎉</div>
+                    <div class="demo-cell-seq">😄</div>
+                    <div class="demo-cell-seq">😄</div>
+                    <div class="demo-cell-seq">😄</div>
+                    <div class="demo-cell-seq">😄</div>
+                    <div class="demo-cell-seq sequence-2">😄</div>
+                    <div class="demo-cell-seq">😄</div>
+                    <div class="demo-cell-seq">😄</div>
+                    <div class="demo-cell-seq">😄</div>
+                    <div class="demo-cell-seq">😄</div>
+                    <div class="demo-cell-seq">😄</div>
+                    <div class="demo-cell-seq">😄</div>
+                    <div class="demo-cell-seq sequence-3">😄</div>
+                    <div class="demo-cell-seq">😄</div>
+                    <div class="demo-cell-seq">😄</div>
+                    <div class="demo-cell-seq">😄</div>
+                    <div class="demo-cell-seq">😄</div>
+                    <div class="demo-cell-seq">😄</div>
+                    <div class="demo-cell-seq">😄</div>
+                    <div class="demo-cell-seq">😄</div>
+                    <div class="demo-cell-seq">😄</div>
+                    <div class="demo-cell-seq">😄</div>
+                    <div class="demo-cell-seq">😄</div>
+                    <div class="demo-cell-seq">😄</div>
                 </div>
                 <div class="demo-caption">
-                    <span class="lang-en">Watch the pattern light up, then tap it back in order</span>
-                    <span class="lang-es">Observa el patrón iluminarse, luego repítelo en orden</span>
+                    <span class="lang-en">Watch cells light up one by one, then tap them back in order</span>
+                    <span class="lang-es">Observa las celdas iluminarse una por una, luego repítelas en orden</span>
                 </div>
             </div>
 
@@ -821,8 +821,8 @@
                         <span class="lang-es">OBSERVA</span>
                     </div>
                     <div class="step-desc">
-                        <span class="lang-en">Laugh emojis light up one by one in a specific pattern.</span>
-                        <span class="lang-es">Los emojis se iluminan uno por uno en un patrón específico.</span>
+                        <span class="lang-en">Cells light up ONE BY ONE in a specific order. Level 1 starts with 7, going up to 16+ at Level 10!</span>
+                        <span class="lang-es">Las celdas se iluminan UNA POR UNA en orden específico. ¡Nivel 1 empieza con 7, hasta 16+ en Nivel 10!</span>
                     </div>
                 </div>
                 <div class="step">
@@ -832,8 +832,8 @@
                         <span class="lang-es">RECUERDA</span>
                     </div>
                     <div class="step-desc">
-                        <span class="lang-en">Keep track of the exact order. The sequence gets longer each round!</span>
-                        <span class="lang-es">Sigue el orden exacto. ¡La secuencia crece cada ronda!</span>
+                        <span class="lang-en">Keep track of the exact ORDER. Earn GoStars by completing 3 perfect rounds!</span>
+                        <span class="lang-es">Sigue el ORDEN exacto. ¡Gana GoStars completando 3 rondas perfectas!</span>
                     </div>
                 </div>
                 <div class="step">
@@ -843,8 +843,8 @@
                         <span class="lang-es">REPITE</span>
                     </div>
                     <div class="step-desc">
-                        <span class="lang-en">Tap the emojis in the same order. Perfect sequences earn GoStars!</span>
-                        <span class="lang-es">Toca los emojis en el mismo orden. ¡Secuencias perfectas ganan GoStars!</span>
+                        <span class="lang-en">Tap the cells in the same order you saw them. One wrong tap and you start over!</span>
+                        <span class="lang-es">Toca las celdas en el mismo orden que las viste. ¡Un error y empiezas de nuevo!</span>
                     </div>
                 </div>
             </div>
@@ -861,12 +861,12 @@
     <section class="divisions-section fade-in">
         <div class="container">
             <h2 class="section-title">
-                <span class="lang-en">🏆 15 DIVISIONS PER WORKOUT</span>
-                <span class="lang-es">🏆 15 DIVISIONES POR EJERCICIO</span>
+                <span class="lang-en">🏆 30 DIVISIONS PER WORKOUT</span>
+                <span class="lang-es">🏆 30 DIVISIONES POR EJERCICIO</span>
             </h2>
             <p class="section-subtitle">
-                <span class="lang-en">5 levels of difficulty × 3 speeds = 15 unique challenges.<br>Find your division. Train at your pace. Level up when ready.</span>
-                <span class="lang-es">5 niveles de dificultad × 3 velocidades = 15 desafíos únicos.<br>Encuentra tu división. Entrena a tu ritmo. Sube de nivel cuando estés listo.</span>
+                <span class="lang-en">10 levels of difficulty × 3 speeds = 30 unique challenges per game.<br>60 total divisions across both workouts!</span>
+                <span class="lang-es">10 niveles de dificultad × 3 velocidades = 30 desafíos únicos por juego.<br>¡60 divisiones en total entre ambos ejercicios!</span>
             </p>
 
             <div class="divisions-grid-wrapper">
@@ -877,6 +877,11 @@
                     <div class="div-cell header">L3</div>
                     <div class="div-cell header">L4</div>
                     <div class="div-cell header">L5</div>
+                    <div class="div-cell header">L6</div>
+                    <div class="div-cell header">L7</div>
+                    <div class="div-cell header">L8</div>
+                    <div class="div-cell header">L9</div>
+                    <div class="div-cell header">L10</div>
                     
                     <div class="div-cell row-header slow">SLOW</div>
                     <div class="div-cell">1-S</div>
@@ -884,6 +889,11 @@
                     <div class="div-cell">3-S</div>
                     <div class="div-cell">4-S</div>
                     <div class="div-cell">5-S</div>
+                    <div class="div-cell">6-S</div>
+                    <div class="div-cell">7-S</div>
+                    <div class="div-cell">8-S</div>
+                    <div class="div-cell">9-S</div>
+                    <div class="div-cell">10-S</div>
                     
                     <div class="div-cell row-header med">MED</div>
                     <div class="div-cell">1-M</div>
@@ -891,6 +901,11 @@
                     <div class="div-cell">3-M</div>
                     <div class="div-cell">4-M</div>
                     <div class="div-cell">5-M</div>
+                    <div class="div-cell">6-M</div>
+                    <div class="div-cell">7-M</div>
+                    <div class="div-cell">8-M</div>
+                    <div class="div-cell">9-M</div>
+                    <div class="div-cell">10-M</div>
                     
                     <div class="div-cell row-header fast">FAST</div>
                     <div class="div-cell">1-F</div>
@@ -898,6 +913,11 @@
                     <div class="div-cell">3-F</div>
                     <div class="div-cell">4-F</div>
                     <div class="div-cell">5-F</div>
+                    <div class="div-cell">6-F</div>
+                    <div class="div-cell">7-F</div>
+                    <div class="div-cell">8-F</div>
+                    <div class="div-cell">9-F</div>
+                    <div class="div-cell">10-F</div>
                 </div>
             </div>
 
