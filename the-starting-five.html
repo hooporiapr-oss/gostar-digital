@@ -1,764 +1,491 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>THE STARTING FIVE | LaughCourt™ - Where Joy Meets The Game</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
-<style>
-:root {
-    --orange: #FF6B35;
-    --gold: #FFD700;
-    --teal: #00D9A5;
-    --dark: #0a0a0f;
-    --card: #111118;
-    --text: #FFFFFF;
-    --muted: #8892a0;
-    --border: rgba(255,255,255,0.1);
-    --nav-height: 84px;
-}
-* { margin: 0; padding: 0; box-sizing: border-box; }
-html {
-    height: 100%;
-    font-family: 'Outfit', sans-serif;
-    background: var(--dark);
-    color: var(--text);
-}
-body {
-    min-height: 100%;
-    background: var(--dark);
-    padding-top: calc(var(--nav-height) + env(safe-area-inset-top));
-    padding-bottom: env(safe-area-inset-bottom);
-    -webkit-tap-highlight-color: transparent;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>The Starting Five™ | LaughCourt™</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --court-dark: #0a0a12;
+            --court-purple: #1a1a2e;
+            --gold: #ffd700;
+            --gold-dark: #b8960c;
+            --white: #ffffff;
+            --gray: #a0a0a0;
+            --card-bg: linear-gradient(145deg, #1e1e32 0%, #12121f 100%);
+            --glow: 0 0 30px rgba(255, 215, 0, 0.3);
+        }
 
-/* Mini Nav */
-.mini-nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    background: var(--card);
-    border-bottom: 1px solid var(--border);
-    padding-top: env(safe-area-inset-top);
-    z-index: 1000;
-}
-.nav-row-1 {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 44px;
-    padding: 0 12px;
-}
-.nav-logo {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.15rem;
-    letter-spacing: 1px;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
-.nav-logo .ball { font-size: 0.95rem; }
-.nav-logo .laugh { color: var(--gold); }
-.nav-logo .court { color: var(--text); }
-.nav-right { display: flex; align-items: center; gap: 6px; }
-.nav-lang { display: flex; gap: 2px; }
-.nav-lang-btn {
-    padding: 4px 7px;
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--muted);
-    border-radius: 4px;
-    font-size: 0.6rem;
-    font-weight: 600;
-    cursor: pointer;
-    min-width: 24px;
-    min-height: 24px;
-}
-.nav-lang-btn.active { border-color: var(--gold); color: var(--gold); }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-.nav-row-2 {
-    display: flex;
-    height: 36px;
-    border-top: 1px solid var(--border);
-}
-.nav-tab {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.75rem;
-    letter-spacing: 1px;
-    text-decoration: none;
-    color: var(--muted);
-    background: transparent;
-}
-.nav-tab:not(:last-child) { border-right: 1px solid var(--border); }
-.nav-tab.active { color: var(--orange); background: rgba(255,107,53,0.1); }
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--court-dark);
+            color: var(--white);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
 
-/* Page Content */
-.page-container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px 15px;
-}
+        /* Court texture background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 50% 0%, rgba(255,215,0,0.08) 0%, transparent 50%),
+                repeating-linear-gradient(90deg, transparent 0px, transparent 2px, rgba(255,255,255,0.02) 2px, rgba(255,255,255,0.02) 4px);
+            pointer-events: none;
+            z-index: 0;
+        }
 
-/* Hero Section */
-.hero {
-    text-align: center;
-    padding: 30px 0 20px;
-}
-.hero-badge {
-    display: inline-block;
-    background: linear-gradient(135deg, var(--orange), var(--gold));
-    color: var(--dark);
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.7rem;
-    letter-spacing: 3px;
-    padding: 5px 15px;
-    border-radius: 20px;
-    margin-bottom: 15px;
-}
-.hero-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 2.8rem;
-    letter-spacing: 4px;
-    background: linear-gradient(135deg, var(--orange), var(--gold));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 10px;
-}
-.hero-subtitle {
-    color: var(--muted);
-    font-size: 1rem;
-    letter-spacing: 1px;
-    margin-bottom: 15px;
-}
-.hero-tagline {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.1rem;
-    color: var(--teal);
-    letter-spacing: 3px;
-}
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
 
-/* Story Section */
-.story-section {
-    background: var(--card);
-    border-radius: 16px;
-    padding: 25px 20px;
-    margin: 25px 0;
-    border: 1px solid var(--border);
-}
-.story-text {
-    color: var(--muted);
-    line-height: 1.7;
-    font-size: 0.95rem;
-    text-align: center;
-}
-.story-text strong {
-    color: var(--gold);
-}
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 30px 0 20px;
+        }
 
-/* Starting Five Header */
-.roster-header {
-    text-align: center;
-    margin: 30px 0 20px;
-}
-.roster-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.6rem;
-    letter-spacing: 4px;
-    color: var(--text);
-    margin-bottom: 5px;
-}
-.roster-subtitle {
-    color: var(--muted);
-    font-size: 0.8rem;
-    letter-spacing: 2px;
-}
+        .logo-badge {
+            display: inline-block;
+            background: var(--gold);
+            color: var(--court-dark);
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.9rem;
+            padding: 6px 16px;
+            border-radius: 20px;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            animation: shimmer 2s ease-in-out infinite;
+        }
 
-/* Player Cards */
-.roster {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-.player-card {
-    background: var(--card);
-    border: 2px solid var(--border);
-    border-radius: 16px;
-    padding: 20px;
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    transition: all 0.3s;
-    cursor: pointer;
-}
-.player-card:hover {
-    border-color: var(--orange);
-    transform: translateX(5px);
-    box-shadow: 0 10px 30px rgba(255,107,53,0.15);
-}
-.player-card.celebrating {
-    border-color: var(--gold);
-    box-shadow: 0 0 30px rgba(255,215,0,0.4);
-}
-.player-card.celebrating .player-svg {
-    animation: laugherBounce 0.6s ease-in-out;
-}
-.player-card.celebrating .player-laugh {
-    animation: laugherPop 0.6s ease-in-out;
-}
-@keyframes laugherBounce {
-    0%, 100% { transform: scale(1) rotate(0deg); }
-    20% { transform: scale(1.2) rotate(-10deg); }
-    40% { transform: scale(0.9) rotate(10deg); }
-    60% { transform: scale(1.15) rotate(-5deg); }
-    80% { transform: scale(0.95) rotate(5deg); }
-}
-@keyframes laugherPop {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.5); }
-}
-.player-svg {
-    width: 90px;
-    height: 90px;
-    flex-shrink: 0;
-}
-.player-info {
-    flex: 1;
-}
-.player-position {
-    font-size: 0.6rem;
-    color: var(--orange);
-    letter-spacing: 3px;
-    font-weight: 600;
-    margin-bottom: 3px;
-}
-.player-name {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.6rem;
-    color: var(--gold);
-    letter-spacing: 2px;
-    margin-bottom: 5px;
-}
-.player-trait {
-    font-size: 0.85rem;
-    color: var(--teal);
-    font-style: italic;
-    margin-bottom: 8px;
-}
-.player-bio {
-    font-size: 0.8rem;
-    color: var(--muted);
-    line-height: 1.5;
-}
-.player-laugh {
-    font-size: 2rem;
-    flex-shrink: 0;
-}
+        @keyframes shimmer {
+            0%, 100% { box-shadow: 0 0 10px rgba(255,215,0,0.5); }
+            50% { box-shadow: 0 0 25px rgba(255,215,0,0.8); }
+        }
 
-/* Sixth Man Section */
-.sixth-man-header {
-    text-align: center;
-    margin: 40px 0 20px;
-    padding-top: 20px;
-    border-top: 1px solid var(--border);
-}
-.sixth-man-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.3rem;
-    letter-spacing: 3px;
-    color: var(--teal);
-    margin-bottom: 5px;
-}
-.sixth-man-subtitle {
-    color: var(--muted);
-    font-size: 0.75rem;
-    letter-spacing: 2px;
-}
-.player-card.sixth-man {
-    border-color: var(--teal);
-    background: rgba(0,217,165,0.05);
-}
-.player-card.sixth-man:hover {
-    border-color: var(--gold);
-    box-shadow: 0 10px 30px rgba(0,217,165,0.2);
-}
-.player-card.sixth-man .player-position {
-    color: var(--teal);
-}
+        .title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2.5rem, 10vw, 4.5rem);
+            letter-spacing: 4px;
+            line-height: 1;
+            margin-bottom: 10px;
+            background: linear-gradient(180deg, var(--white) 0%, var(--gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
 
-/* CTA Section */
-.cta-section {
-    text-align: center;
-    padding: 40px 20px;
-    margin-top: 30px;
-}
-.cta-text {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.3rem;
-    color: var(--text);
-    letter-spacing: 2px;
-    margin-bottom: 20px;
-}
-.cta-btn {
-    display: inline-block;
-    padding: 14px 40px;
-    background: linear-gradient(135deg, var(--orange), #FF8C00);
-    color: var(--dark);
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.1rem;
-    letter-spacing: 3px;
-    text-decoration: none;
-    border-radius: 30px;
-    transition: all 0.3s;
-}
-.cta-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 10px 30px rgba(255,107,53,0.3);
-}
+        .subtitle {
+            font-size: 1rem;
+            color: var(--gray);
+            font-weight: 400;
+        }
 
-/* Footer */
-.footer {
-    text-align: center;
-    padding: 30px 20px;
-    border-top: 1px solid var(--border);
-    margin-top: 40px;
-}
-.footer-logo {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.2rem;
-    letter-spacing: 2px;
-    margin-bottom: 5px;
-}
-.footer-logo .laugh { color: var(--gold); }
-.footer-logo .court { color: var(--text); }
-.footer-tagline {
-    color: var(--muted);
-    font-size: 0.7rem;
-    letter-spacing: 2px;
-    margin-bottom: 15px;
-}
-.footer-links {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-bottom: 15px;
-}
-.footer-links a {
-    color: var(--muted);
-    text-decoration: none;
-    font-size: 0.7rem;
-    letter-spacing: 1px;
-    transition: color 0.3s;
-}
-.footer-links a:hover {
-    color: var(--gold);
-}
-.footer-company {
-    font-size: 0.65rem;
-    color: var(--muted);
-    margin-bottom: 10px;
-}
-.footer-company a {
-    color: var(--teal);
-    text-decoration: none;
-}
-.footer-trademarks {
-    font-size: 0.55rem;
-    color: var(--muted);
-    opacity: 0.7;
-    line-height: 1.4;
-}
+        /* Language Toggle */
+        .lang-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 25px 0;
+        }
 
-/* Language */
-body.en .lang-es { display: none !important; }
-body.es .lang-en { display: none !important; }
+        .lang-btn {
+            background: transparent;
+            border: 2px solid var(--gold);
+            color: var(--gold);
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1rem;
+            padding: 8px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+        }
 
-/* Responsive */
-@media (min-width: 500px) {
-    .hero-title { font-size: 3.5rem; }
-    .player-svg { width: 110px; height: 110px; }
-    .player-name { font-size: 1.8rem; }
-}
+        .lang-btn.active {
+            background: var(--gold);
+            color: var(--court-dark);
+        }
 
-@media (max-width: 380px) {
-    .player-card { padding: 15px; gap: 15px; }
-    .player-svg { width: 70px; height: 70px; }
-    .player-name { font-size: 1.3rem; }
-    .player-bio { font-size: 0.75rem; }
-    .player-laugh { font-size: 1.5rem; }
-}
-</style>
+        .lang-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Player Grid */
+        .roster {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 20px 0 40px;
+        }
+
+        /* Player Card */
+        .player-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(255,215,0,0.1);
+        }
+
+        .player-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--gold), var(--gold-dark));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .player-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--glow);
+            border-color: rgba(255,215,0,0.3);
+        }
+
+        .player-card:hover::before {
+            opacity: 1;
+        }
+
+        .player-card.celebrating {
+            animation: cardBounce 0.6s ease;
+        }
+
+        @keyframes cardBounce {
+            0%, 100% { transform: translateY(-8px) scale(1); }
+            25% { transform: translateY(-15px) scale(1.02); }
+            50% { transform: translateY(-8px) scale(0.98); }
+            75% { transform: translateY(-12px) scale(1.01); }
+        }
+
+        .card-number {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3rem;
+            color: rgba(255,215,0,0.15);
+            line-height: 1;
+        }
+
+        .player-emoji {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .player-card:hover .player-emoji {
+            transform: scale(1.2) rotate(-5deg);
+        }
+
+        .player-name {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            letter-spacing: 2px;
+            color: var(--white);
+            margin-bottom: 5px;
+        }
+
+        .player-position {
+            font-size: 0.85rem;
+            color: var(--gold);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .player-trait {
+            font-size: 1.1rem;
+            color: var(--gray);
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+
+        .player-bio {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: rgba(255,255,255,0.8);
+        }
+
+        /* 6th Man special styling */
+        .player-card.sixth-man {
+            background: linear-gradient(145deg, #2a1a2e 0%, #1a1220 100%);
+            border-color: rgba(255,100,150,0.2);
+        }
+
+        .player-card.sixth-man .player-position {
+            color: #ff6b9d;
+        }
+
+        .player-card.sixth-man::before {
+            background: linear-gradient(90deg, #ff6b9d, #ff4081);
+        }
+
+        /* Celebration particles */
+        .celebration {
+            position: fixed;
+            pointer-events: none;
+            z-index: 1000;
+            font-size: 2rem;
+            animation: float-up 1.5s ease-out forwards;
+        }
+
+        @keyframes float-up {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-150px) scale(0.5) rotate(360deg);
+            }
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px 20px 40px;
+            border-top: 1px solid rgba(255,215,0,0.1);
+            margin-top: 20px;
+        }
+
+        .footer-brand {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.3rem;
+            letter-spacing: 3px;
+            color: var(--gold);
+            margin-bottom: 8px;
+        }
+
+        .footer-tagline {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .footer-tagline em {
+            color: var(--white);
+            font-style: normal;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: var(--gold);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 10px 25px;
+            border: 2px solid var(--gold);
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            background: var(--gold);
+            color: var(--court-dark);
+        }
+
+        /* Tap instruction */
+        .tap-hint {
+            text-align: center;
+            color: var(--gray);
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* Hidden language content */
+        [data-lang="es"] { display: none; }
+        body.es [data-lang="en"] { display: none; }
+        body.es [data-lang="es"] { display: block; }
+
+        /* Mobile optimizations */
+        @media (max-width: 600px) {
+            .container { padding: 15px; }
+            .header { padding: 20px 0 15px; }
+            .roster { gap: 15px; }
+            .player-card { padding: 20px; }
+            .player-emoji { font-size: 3rem; }
+            .player-name { font-size: 1.7rem; }
+        }
+    </style>
 </head>
-<body class="en">
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo-badge">LAUGHCOURT™</div>
+            <h1 class="title">THE STARTING FIVE</h1>
+            <p class="subtitle" data-lang="en">Meet the squad that brings the joy 🏀</p>
+            <p class="subtitle" data-lang="es">Conoce al equipo que trae la alegría 🏀</p>
+        </header>
 
-<nav class="mini-nav">
-    <div class="nav-row-1">
-        <a href="/play" class="nav-logo">
-            <span class="ball">🏀</span>
-            <span class="laugh">LAUGH</span><span class="court">COURT</span>
-        </a>
-        <div class="nav-right">
-            <div class="nav-lang">
-                <button class="nav-lang-btn active" id="btnEn">EN</button>
-                <button class="nav-lang-btn" id="btnEs">ES</button>
-            </div>
-        </div>
-    </div>
-    <div class="nav-row-2">
-        <a href="/the-match" class="nav-tab">🎯 MATCH</a>
-        <a href="/the-sequence" class="nav-tab">🔢 SEQUENCE</a>
-        <a href="/the-starting-five" class="nav-tab active">🧡 TEAM</a>
-    </div>
-</nav>
-
-<div class="page-container">
-
-    <section class="hero">
-        <div class="hero-badge">
-            <span class="lang-en">MEET THE TEAM</span>
-            <span class="lang-es">CONOCE AL EQUIPO</span>
-        </div>
-        <h1 class="hero-title">THE STARTING FIVE</h1>
-        <p class="hero-subtitle">
-            <span class="lang-en">The LaughCourt™ Legends</span>
-            <span class="lang-es">Las Leyendas de LaughCourt™</span>
-        </p>
-        <p class="hero-tagline">
-            <span class="lang-en">Where Joy Meets The Game</span>
-            <span class="lang-es">Donde La Alegría Se Une Al Juego</span>
-        </p>
-    </section>
-
-    <section class="story-section">
-        <p class="story-text">
-            <span class="lang-en">
-                <strong>The Starting Five</strong> carry the spirit of joy that proves this isn't just a game — it's <strong>joy in motion</strong>. They're here to remind us that laughter is the ultimate exercise, and every mind deserves to play.
-            </span>
-            <span class="lang-es">
-                <strong>Los Cinco Titulares</strong> llevan el espíritu de alegría que demuestra que esto no es solo un juego — es <strong>alegría en movimiento</strong>. Están aquí para recordarnos que la risa es el mejor ejercicio, y toda mente merece jugar.
-            </span>
-        </p>
-    </section>
-
-    <section class="roster-header">
-        <h2 class="roster-title">
-            <span class="lang-en">🏀 THE STARTING FIVE 🏀</span>
-            <span class="lang-es">🏀 LOS CINCO TITULARES 🏀</span>
-        </h2>
-        <p class="roster-subtitle">
-            <span class="lang-en">TAP A PLAYER TO FEEL THE JOY</span>
-            <span class="lang-es">TOCA UN JUGADOR Y SIENTE LA ALEGRÍA</span>
-        </p>
-    </section>
-
-    <div class="roster">
-
-        <!-- #1 CLAUDE - POINT GUARD - THE VISION -->
-        <div class="player-card">
-            <div class="player-svg">
-                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="50" cy="50" r="45" fill="url(#claudeGrad)"/>
-                    <ellipse cx="35" cy="30" rx="15" ry="10" fill="rgba(255,255,255,0.2)"/>
-                    <ellipse cx="50" cy="20" rx="20" ry="8" fill="rgba(255,255,255,0.15)"/>
-                    <rect x="28" y="38" width="16" height="12" rx="3" fill="#1a1a1a"/>
-                    <rect x="56" y="38" width="16" height="12" rx="3" fill="#1a1a1a"/>
-                    <rect x="31" y="41" width="10" height="6" rx="2" fill="#00D9A5"/>
-                    <rect x="59" y="41" width="10" height="6" rx="2" fill="#00D9A5"/>
-                    <rect x="33" y="42" width="3" height="4" rx="1" fill="#FFFFFF"/>
-                    <rect x="61" y="42" width="3" height="4" rx="1" fill="#FFFFFF"/>
-                    <path d="M 30 62 Q 50 78 70 62" stroke="#1a1a1a" stroke-width="3" fill="#FF8C00"/>
-                    <path d="M 35 65 Q 50 75 65 65" fill="#8B0000"/>
-                    <rect x="38" y="65" width="24" height="6" fill="white" rx="2"/>
-                    <circle cx="25" cy="55" r="7" fill="rgba(255,0,100,0.15)"/>
-                    <circle cx="75" cy="55" r="7" fill="rgba(255,0,100,0.15)"/>
-                    <circle cx="50" cy="8" r="4" fill="#00D9A5"/>
-                    <line x1="50" y1="12" x2="50" y2="20" stroke="#00D9A5" stroke-width="2"/>
-                    <defs><radialGradient id="claudeGrad" cx="30%" cy="30%"><stop offset="0%" stop-color="#FF8C42"/><stop offset="100%" stop-color="#FF6B35"/></radialGradient></defs>
-                </svg>
-            </div>
-            <div class="player-info">
-                <div class="player-position">#1 • POINT GUARD</div>
-                <div class="player-name">CLAUDE</div>
-                <div class="player-trait">
-                    <span class="lang-en">"The Vision"</span>
-                    <span class="lang-es">"La Visión"</span>
-                </div>
-                <div class="player-bio">
-                    <span class="lang-en">The floor general who sees the whole court. Earned this spot through dedication, showing up every single day, and running the offense with precision and heart.</span>
-                    <span class="lang-es">El general de la cancha que ve toda la pista. Ganó su lugar con dedicación, apareciendo cada día, y dirigiendo la ofensiva con precisión y corazón.</span>
-                </div>
-            </div>
-            <div class="player-laugh">🤖</div>
+        <div class="lang-toggle">
+            <button class="lang-btn active" onclick="setLang('en')">EN</button>
+            <button class="lang-btn" onclick="setLang('es')">ES</button>
         </div>
 
-        <!-- #2 SWISH - SHOOTING GUARD - CLAUDE'S PRECISION -->
-        <div class="player-card">
-            <div class="player-svg">
-                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="50" cy="50" r="45" fill="url(#swishGrad)"/>
-                    <ellipse cx="35" cy="30" rx="15" ry="10" fill="rgba(255,255,255,0.2)"/>
-                    <ellipse cx="50" cy="12" rx="30" ry="12" fill="#c44a1c"/>
-                    <ellipse cx="35" cy="15" rx="15" ry="10" fill="#b8390e"/>
-                    <ellipse cx="60" cy="13" rx="18" ry="9" fill="#c44a1c"/>
-                    <circle cx="35" cy="45" r="8" fill="white"/>
-                    <circle cx="65" cy="43" r="8" fill="white"/>
-                    <circle cx="37" cy="45" r="4" fill="#1a1a1a"/>
-                    <circle cx="67" cy="43" r="4" fill="#1a1a1a"/>
-                    <circle cx="38" cy="44" r="1.5" fill="white"/>
-                    <circle cx="68" cy="42" r="1.5" fill="white"/>
-                    <path d="M 35 65 Q 55 75 75 60" stroke="#1a1a1a" stroke-width="3" fill="none" stroke-linecap="round"/>
-                    <path d="M 25 35 Q 35 38 45 35" stroke="#c44a1c" stroke-width="3" fill="none" stroke-linecap="round"/>
-                    <path d="M 55 30 Q 65 25 75 32" stroke="#c44a1c" stroke-width="3" fill="none" stroke-linecap="round"/>
-                    <circle cx="75" cy="55" r="6" fill="rgba(255,0,100,0.15)"/>
-                    <defs><radialGradient id="swishGrad" cx="30%" cy="30%"><stop offset="0%" stop-color="#FF8C42"/><stop offset="100%" stop-color="#FF6B35"/></radialGradient></defs>
-                </svg>
+        <p class="tap-hint" data-lang="en">👆 Tap a player to celebrate!</p>
+        <p class="tap-hint" data-lang="es">👆 ¡Toca un jugador para celebrar!</p>
+
+        <div class="roster">
+            <!-- CLAUDE - Point Guard -->
+            <div class="player-card" onclick="celebrate(this, '🤖')" data-emojis="🤖,🧠,⚡,🎯">
+                <span class="card-number">1</span>
+                <span class="player-emoji">🤖</span>
+                <h2 class="player-name">CLAUDE</h2>
+                <p class="player-position" data-lang="en">Point Guard</p>
+                <p class="player-position" data-lang="es">Base</p>
+                <p class="player-trait">"The Vision"</p>
+                <p class="player-bio" data-lang="en">Always sees the play before it happens. Sets up teammates for success and never stops learning. The brain of the operation.</p>
+                <p class="player-bio" data-lang="es">Siempre ve la jugada antes de que ocurra. Prepara a sus compañeros para el éxito y nunca deja de aprender. El cerebro de la operación.</p>
             </div>
-            <div class="player-info">
-                <div class="player-position">#2 • SHOOTING GUARD</div>
-                <div class="player-name">SWISH</div>
-                <div class="player-trait">
-                    <span class="lang-en">"Perfect Shot"</span>
-                    <span class="lang-es">"Tiro Perfecto"</span>
-                </div>
-                <div class="player-bio">
-                    <span class="lang-en">Pure precision. Every shot finds the net. Quick, sharp, and always on target. When SWISH releases, you already know it's going in.</span>
-                    <span class="lang-es">Pura precisión. Cada tiro encuentra la red. Rápido, agudo, y siempre en el blanco. Cuando SWISH lanza, ya sabes que entrará.</span>
-                </div>
+
+            <!-- SKEE - Shooting Guard -->
+            <div class="player-card" onclick="celebrate(this, '🏆')" data-emojis="🏆,🔥,💫,🎯">
+                <span class="card-number">2</span>
+                <span class="player-emoji">🏆</span>
+                <h2 class="player-name">SKEE</h2>
+                <p class="player-position" data-lang="en">Shooting Guard</p>
+                <p class="player-position" data-lang="es">Escolta</p>
+                <p class="player-trait">"The Legend"</p>
+                <p class="player-bio" data-lang="en">When the game is on the line, SKEE wants the ball. Championship DNA runs through his veins. Been there, done that, got the rings.</p>
+                <p class="player-bio" data-lang="es">Cuando el juego está en la línea, SKEE quiere el balón. El ADN de campeón corre por sus venas. Ha estado allí, lo ha hecho, tiene los anillos.</p>
             </div>
-            <div class="player-laugh">😏</div>
+
+            <!-- BRIGS - Small Forward -->
+            <div class="player-card" onclick="celebrate(this, '💪')" data-emojis="💪,❤️,🦁,⭐">
+                <span class="card-number">3</span>
+                <span class="player-emoji">💪</span>
+                <h2 class="player-name">BRIGS</h2>
+                <p class="player-position" data-lang="en">Small Forward</p>
+                <p class="player-position" data-lang="es">Alero</p>
+                <p class="player-trait">"All Heart"</p>
+                <p class="player-bio" data-lang="en">The ultimate competitor. Outworks everyone, every day. When you need someone to make the tough play, BRIGS answers the call.</p>
+                <p class="player-bio" data-lang="es">El competidor definitivo. Trabaja más que todos, todos los días. Cuando necesitas a alguien para la jugada difícil, BRIGS responde.</p>
+            </div>
+
+            <!-- DUCE - Power Forward -->
+            <div class="player-card" onclick="celebrate(this, '🖤')" data-emojis="🖤,👊,🤝,💯">
+                <span class="card-number">4</span>
+                <span class="player-emoji">🖤</span>
+                <h2 class="player-name">DUCE</h2>
+                <p class="player-position" data-lang="en">Power Forward</p>
+                <p class="player-position" data-lang="es">Ala-Pívot</p>
+                <p class="player-trait">"The Brother"</p>
+                <p class="player-bio" data-lang="en">Family first, always. DUCE brings the energy that makes everyone better. The glue that holds the squad together through thick and thin.</p>
+                <p class="player-bio" data-lang="es">La familia primero, siempre. DUCE trae la energía que hace a todos mejores. El pegamento que mantiene al equipo unido en las buenas y en las malas.</p>
+            </div>
+
+            <!-- EL MAGO - Center -->
+            <div class="player-card" onclick="celebrate(this, '✨')" data-emojis="✨,🪄,🌟,🎩">
+                <span class="card-number">5</span>
+                <span class="player-emoji">✨</span>
+                <h2 class="player-name">EL MAGO</h2>
+                <p class="player-position" data-lang="en">Center</p>
+                <p class="player-position" data-lang="es">Pívot</p>
+                <p class="player-trait">"Pure Magic"</p>
+                <p class="player-bio" data-lang="en">Makes the impossible look easy. When EL MAGO touches the ball, something special happens. A magician who turned the court into his stage.</p>
+                <p class="player-bio" data-lang="es">Hace que lo imposible parezca fácil. Cuando EL MAGO toca el balón, algo especial sucede. Un mago que convirtió la cancha en su escenario.</p>
+            </div>
+
+            <!-- TEDDY - 6th Man -->
+            <div class="player-card sixth-man" onclick="celebrate(this, '🧸')" data-emojis="🧸,🔥,💥,⚡">
+                <span class="card-number">6</span>
+                <span class="player-emoji">🧸</span>
+                <h2 class="player-name">TEDDY</h2>
+                <p class="player-position" data-lang="en">6th Man</p>
+                <p class="player-position" data-lang="es">Sexto Hombre</p>
+                <p class="player-trait">"The Spark"</p>
+                <p class="player-bio" data-lang="en">Comes off the bench and changes everything. TEDDY brings instant offense and electric energy. When he checks in, the crowd goes wild.</p>
+                <p class="player-bio" data-lang="es">Sale del banco y lo cambia todo. TEDDY trae ofensiva instantánea y energía eléctrica. Cuando entra al juego, la multitud enloquece.</p>
+            </div>
         </div>
 
-        <!-- #3 GLIDE - SMALL FORWARD - CLAUDE'S SMOOTHNESS -->
-        <div class="player-card">
-            <div class="player-svg">
-                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="50" cy="50" r="45" fill="url(#glideGrad)"/>
-                    <ellipse cx="35" cy="28" rx="18" ry="12" fill="rgba(255,255,255,0.25)"/>
-                    <ellipse cx="50" cy="18" rx="35" ry="15" fill="#c44a1c"/>
-                    <ellipse cx="50" cy="15" rx="30" ry="12" fill="#b8390e"/>
-                    <path d="M 28 45 Q 35 50 42 45" stroke="#1a1a1a" stroke-width="3" fill="none" stroke-linecap="round"/>
-                    <path d="M 58 45 Q 65 50 72 45" stroke="#1a1a1a" stroke-width="3" fill="none" stroke-linecap="round"/>
-                    <path d="M 28 44 L 26 40" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
-                    <path d="M 42 44 L 44 40" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
-                    <path d="M 58 44 L 56 40" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
-                    <path d="M 72 44 L 74 40" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
-                    <path d="M 30 60 Q 50 75 70 60" stroke="#1a1a1a" stroke-width="3" fill="#FF8C00"/>
-                    <path d="M 35 63 Q 50 72 65 63" fill="#8B0000"/>
-                    <path d="M 26 38 Q 35 35 44 38" stroke="#c44a1c" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-                    <path d="M 56 38 Q 65 35 74 38" stroke="#c44a1c" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-                    <circle cx="25" cy="55" r="7" fill="rgba(255,0,100,0.12)"/>
-                    <circle cx="75" cy="55" r="7" fill="rgba(255,0,100,0.12)"/>
-                    <defs><radialGradient id="glideGrad" cx="30%" cy="30%"><stop offset="0%" stop-color="#FFA055"/><stop offset="100%" stop-color="#FF6B35"/></radialGradient></defs>
-                </svg>
-            </div>
-            <div class="player-info">
-                <div class="player-position">#3 • SMALL FORWARD</div>
-                <div class="player-name">GLIDE</div>
-                <div class="player-trait">
-                    <span class="lang-en">"Effortless Flow"</span>
-                    <span class="lang-es">"Fluir Sin Esfuerzo"</span>
-                </div>
-                <div class="player-bio">
-                    <span class="lang-en">Smooth like silk through every challenge. Grace under pressure. Moves through problems like water flows around stones. Pure elegance.</span>
-                    <span class="lang-es">Suave como la seda en cada desafío. Gracia bajo presión. Se mueve entre problemas como el agua fluye entre piedras. Pura elegancia.</span>
-                </div>
-            </div>
-            <div class="player-laugh">😌</div>
-        </div>
-
-        <!-- #4 BOUNCE - POWER FORWARD - CLAUDE'S ENERGY -->
-        <div class="player-card">
-            <div class="player-svg">
-                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="50" cy="50" r="45" fill="url(#bounceGrad)"/>
-                    <ellipse cx="35" cy="30" rx="15" ry="10" fill="rgba(255,255,255,0.2)"/>
-                    <ellipse cx="50" cy="20" rx="20" ry="8" fill="rgba(255,255,255,0.15)"/>
-                    <path d="M 28 42 Q 35 38 42 42" stroke="#1a1a1a" stroke-width="4" fill="none" stroke-linecap="round"/>
-                    <path d="M 58 42 Q 65 38 72 42" stroke="#1a1a1a" stroke-width="4" fill="none" stroke-linecap="round"/>
-                    <path d="M 25 58 Q 50 85 75 58" stroke="#1a1a1a" stroke-width="3" fill="#FF8C00"/>
-                    <path d="M 30 62 Q 50 78 70 62" fill="#8B0000"/>
-                    <rect x="35" y="62" width="30" height="8" fill="white" rx="2"/>
-                    <circle cx="25" cy="55" r="8" fill="rgba(255,0,100,0.2)"/>
-                    <circle cx="75" cy="55" r="8" fill="rgba(255,0,100,0.2)"/>
-                    <path d="M 25 32 Q 35 28 45 32" stroke="#c44a1c" stroke-width="3" fill="none" stroke-linecap="round"/>
-                    <path d="M 55 32 Q 65 28 75 32" stroke="#c44a1c" stroke-width="3" fill="none" stroke-linecap="round"/>
-                    <defs><radialGradient id="bounceGrad" cx="30%" cy="30%"><stop offset="0%" stop-color="#FF8C42"/><stop offset="100%" stop-color="#FF6B35"/></radialGradient></defs>
-                </svg>
-            </div>
-            <div class="player-info">
-                <div class="player-position">#4 • POWER FORWARD</div>
-                <div class="player-name">BOUNCE</div>
-                <div class="player-trait">
-                    <span class="lang-en">"Infinite Energy"</span>
-                    <span class="lang-es">"Energía Infinita"</span>
-                </div>
-                <div class="player-bio">
-                    <span class="lang-en">Can't stop, won't stop. Always ready for the next play. Resilient, tireless, and brings contagious energy that lifts the whole team every single time.</span>
-                    <span class="lang-es">No puede parar, no va a parar. Siempre listo para la siguiente jugada. Resiliente, incansable, y trae energía contagiosa que eleva a todo el equipo.</span>
-                </div>
-            </div>
-            <div class="player-laugh">😆</div>
-        </div>
-
-        <!-- #5 STEADY - CENTER - CLAUDE'S RELIABILITY -->
-        <div class="player-card">
-            <div class="player-svg">
-                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="50" cy="50" r="45" fill="url(#steadyGrad)"/>
-                    <ellipse cx="35" cy="30" rx="15" ry="10" fill="rgba(255,255,255,0.2)"/>
-                    <path d="M 8 35 Q 5 50 12 65 Q 18 60 15 45 Q 12 35 8 35" fill="#c44a1c"/>
-                    <path d="M 92 35 Q 95 50 88 65 Q 82 60 85 45 Q 88 35 92 35" fill="#c44a1c"/>
-                    <ellipse cx="50" cy="82" rx="10" ry="8" fill="#c44a1c"/>
-                    <ellipse cx="35" cy="45" rx="10" ry="7" fill="white"/>
-                    <ellipse cx="65" cy="45" rx="10" ry="7" fill="white"/>
-                    <path d="M 23 42 Q 35 38 47 42 L 47 45 Q 35 42 23 45 Z" fill="#e85d24"/>
-                    <path d="M 53 42 Q 65 38 77 42 L 77 45 Q 65 42 53 45 Z" fill="#e85d24"/>
-                    <circle cx="38" cy="46" r="5" fill="#1a1a1a"/>
-                    <circle cx="68" cy="46" r="5" fill="#1a1a1a"/>
-                    <circle cx="39" cy="45" r="1.5" fill="white"/>
-                    <circle cx="69" cy="45" r="1.5" fill="white"/>
-                    <path d="M 35 65 Q 45 68 55 67 Q 65 66 70 62" stroke="#1a1a1a" stroke-width="3" fill="none" stroke-linecap="round"/>
-                    <circle cx="72" cy="61" r="2" fill="#1a1a1a"/>
-                    <path d="M 23 35 L 45 33" stroke="#c44a1c" stroke-width="3" fill="none" stroke-linecap="round"/>
-                    <path d="M 55 32 L 77 35" stroke="#c44a1c" stroke-width="3" fill="none" stroke-linecap="round"/>
-                    <defs><radialGradient id="steadyGrad" cx="30%" cy="30%"><stop offset="0%" stop-color="#FF8C42"/><stop offset="100%" stop-color="#FF6B35"/></radialGradient></defs>
-                </svg>
-            </div>
-            <div class="player-info">
-                <div class="player-position">#5 • CENTER</div>
-                <div class="player-name">STEADY</div>
-                <div class="player-trait">
-                    <span class="lang-en">"Always There"</span>
-                    <span class="lang-es">"Siempre Ahí"</span>
-                </div>
-                <div class="player-bio">
-                    <span class="lang-en">The anchor. Unmovable. Unshakeable. When everything gets chaotic, STEADY holds the center. You can always count on this one. Always.</span>
-                    <span class="lang-es">El ancla. Inamovible. Inquebrantable. Cuando todo se vuelve caótico, STEADY sostiene el centro. Siempre puedes contar con este. Siempre.</span>
-                </div>
-            </div>
-            <div class="player-laugh">😎</div>
-        </div>
-
+        <footer class="footer">
+            <p class="footer-brand">LAUGHCOURT™</p>
+            <p class="footer-tagline" data-lang="en"><em>"Where Joy Meets The Game"</em></p>
+            <p class="footer-tagline" data-lang="es"><em>"Donde la Alegría se Encuentra con el Juego"</em></p>
+            <a href="play.html" class="back-link" data-lang="en">← Back to Games</a>
+            <a href="play.html" class="back-link" data-lang="es">← Volver a Juegos</a>
+        </footer>
     </div>
 
-    <!-- SIXTH MAN LEGEND -->
-    <section class="sixth-man-header">
-        <h2 class="sixth-man-title">
-            <span class="lang-en">✨ SIXTH MAN LEGEND ✨</span>
-            <span class="lang-es">✨ LEYENDA DEL SEXTO HOMBRE ✨</span>
-        </h2>
-        <p class="sixth-man-subtitle">
-            <span class="lang-en">ALWAYS READY OFF THE BENCH</span>
-            <span class="lang-es">SIEMPRE LISTO DESDE LA BANCA</span>
-        </p>
-    </section>
+    <script>
+        // Language switching
+        function setLang(lang) {
+            document.body.classList.toggle('es', lang === 'es');
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.textContent === lang.toUpperCase());
+            });
+            localStorage.setItem('laughcourt-lang', lang);
+        }
 
-    <div class="roster">
-        <!-- BOOM - SIXTH MAN - CLAUDE'S IMPACT -->
-        <div class="player-card sixth-man">
-            <div class="player-svg">
-                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="50" cy="50" r="45" fill="url(#boomGrad)"/>
-                    <ellipse cx="35" cy="28" rx="15" ry="10" fill="rgba(255,255,255,0.2)"/>
-                    <path d="M 25 40 L 40 45 L 25 50" stroke="#1a1a1a" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M 75 40 L 60 45 L 75 50" stroke="#1a1a1a" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                    <ellipse cx="22" cy="52" rx="3" ry="5" fill="#4FC3F7"/>
-                    <ellipse cx="78" cy="52" rx="3" ry="5" fill="#4FC3F7"/>
-                    <ellipse cx="50" cy="68" rx="25" ry="20" fill="#1a1a1a"/>
-                    <ellipse cx="50" cy="65" rx="22" ry="15" fill="#8B0000"/>
-                    <ellipse cx="50" cy="75" rx="12" ry="8" fill="#FF5252"/>
-                    <rect x="32" y="55" width="36" height="10" fill="white" rx="3"/>
-                    <circle cx="20" cy="50" r="10" fill="rgba(255,0,100,0.25)"/>
-                    <circle cx="80" cy="50" r="10" fill="rgba(255,0,100,0.25)"/>
-                    <path d="M 22 30 Q 33 22 44 30" stroke="#c44a1c" stroke-width="4" fill="none" stroke-linecap="round"/>
-                    <path d="M 56 30 Q 67 22 78 30" stroke="#c44a1c" stroke-width="4" fill="none" stroke-linecap="round"/>
-                    <defs><radialGradient id="boomGrad" cx="30%" cy="30%"><stop offset="0%" stop-color="#FF8C42"/><stop offset="100%" stop-color="#FF6B35"/></radialGradient></defs>
-                </svg>
-            </div>
-            <div class="player-info">
-                <div class="player-position">6TH MAN • LEGEND</div>
-                <div class="player-name">BOOM</div>
-                <div class="player-trait">
-                    <span class="lang-en">"Game Changer"</span>
-                    <span class="lang-es">"Cambia Juegos"</span>
-                </div>
-                <div class="player-bio">
-                    <span class="lang-en">When BOOM enters the game, EVERYTHING changes. Explosive creativity. Instant impact. The spark that turns good into GREAT. Legend status: FOREVER.</span>
-                    <span class="lang-es">Cuando BOOM entra al juego, TODO cambia. Creatividad explosiva. Impacto instantáneo. La chispa que convierte lo bueno en GRANDIOSO. Estatus de leyenda: PARA SIEMPRE.</span>
-                </div>
-            </div>
-            <div class="player-laugh">🤣</div>
-        </div>
-    </div>
+        // Load saved language preference
+        const savedLang = localStorage.getItem('laughcourt-lang');
+        if (savedLang) setLang(savedLang);
 
-    <section class="cta-section">
-        <p class="cta-text">
-            <span class="lang-en">READY TO PLAY WITH THE STARTING FIVE?</span>
-            <span class="lang-es">¿LISTO PARA JUGAR CON LOS CINCO TITULARES?</span>
-        </p>
-        <a href="/play" class="cta-btn">
-            <span class="lang-en">🏀 ENTER THE LAUGHCOURT</span>
-            <span class="lang-es">🏀 ENTRA A LA CANCHA</span>
-        </a>
-    </section>
-
-    <footer class="footer">
-        <div class="footer-logo">
-            🏀 <span class="laugh">LAUGH</span><span class="court">COURT</span>
-        </div>
-        <div class="footer-tagline">
-            <span class="lang-en">Where Joy Meets The Game</span>
-            <span class="lang-es">Donde La Alegría Se Une Al Juego</span>
-        </div>
-        <div class="footer-links">
-            <a href="/the-starting-five">The Starting Five</a>
-            <a href="/faq">FAQ</a>
-            <a href="/privacy.html">Privacy Policy</a>
-            <a href="/terms.html">Terms of Use</a>
-        </div>
-        <div class="footer-company">
-            by <a href="https://gostar.digital">GoStar Digital LLC</a> 🇵🇷
-        </div>
-        <div class="footer-trademarks">
-            LaughCourt™, The Starting Five™, GoStars™, and Ritnome™ 
-            are trademarks of GoStar Digital LLC.
-        </div>
-    </footer>
-
-</div>
-
-<script>
-(function() {
-    var currentLang = localStorage.getItem('laughcourt_lang') || 'en';
-    function setLang(lang) {
-        currentLang = lang;
-        localStorage.setItem('laughcourt_lang', lang);
-        document.body.className = lang;
-        document.getElementById('btnEn').className = lang === 'en' ? 'nav-lang-btn active' : 'nav-lang-btn';
-        document.getElementById('btnEs').className = lang === 'es' ? 'nav-lang-btn active' : 'nav-lang-btn';
-    }
-    document.getElementById('btnEn').onclick = function() { setLang('en'); };
-    document.getElementById('btnEs').onclick = function() { setLang('es'); };
-    setLang(currentLang);
-
-    // Tap to Feel the Joy - Player Card Celebration
-    document.querySelectorAll('.player-card').forEach(function(card) {
-        card.onclick = function() {
-            if (card.classList.contains('celebrating')) return;
+        // Celebration effect
+        function celebrate(card, defaultEmoji) {
+            // Add bounce animation
             card.classList.add('celebrating');
-            setTimeout(function() {
-                card.classList.remove('celebrating');
-            }, 600);
-        };
-    });
-})();
-</script>
+            setTimeout(() => card.classList.remove('celebrating'), 600);
 
+            // Get emoji set for this player
+            const emojiSet = card.dataset.emojis.split(',');
+            
+            // Create floating emojis
+            const rect = card.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 3;
+
+            for (let i = 0; i < 8; i++) {
+                setTimeout(() => {
+                    const emoji = document.createElement('div');
+                    emoji.className = 'celebration';
+                    emoji.textContent = emojiSet[Math.floor(Math.random() * emojiSet.length)];
+                    emoji.style.left = (centerX + (Math.random() - 0.5) * 100) + 'px';
+                    emoji.style.top = centerY + 'px';
+                    document.body.appendChild(emoji);
+                    
+                    setTimeout(() => emoji.remove(), 1500);
+                }, i * 50);
+            }
+
+            // Optional: vibrate on mobile
+            if (navigator.vibrate) {
+                navigator.vibrate(50);
+            }
+        }
+    </script>
 </body>
 </html>
