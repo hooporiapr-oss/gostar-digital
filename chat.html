@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Chat | LaughCourt™</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --court-dark: #0a0a12;
+            --court-purple: #1a1a2e;
+            --gold: #FFD700;
+            --orange: #FF6B35;
+            --orange-dark: #E55A2B;
+            --orange-light: #FF8C5A;
+            --white: #ffffff;
+            --gray: #a0a0a0;
+            --chat-bg: #12121f;
+            --user-bubble: #2a2a4a;
+            --ai-bubble: #1e1e32;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            height: 100%;
+            height: -webkit-fill-available;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--court-dark);
+            color: var(--white);
+            min-height: 100%;
+            min-height: 100dvh;
+            min-height: -webkit-fill-available;
+            overflow: hidden;
+            overscroll-behavior: none;
+            display: flex;
+            flex-direction: column;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at 50% 30%, rgba(255,215,0,0.06) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Header */
+        .chat-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 20px;
+            background: var(--chat-bg);
+            border-bottom: 1px solid rgba(255,215,0,0.2);
+            flex-shrink: 0;
+            position: relative;
+            z-index: 10;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: var(--gold);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 5px 10px;
+            transition: transform 0.2s ease;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .chat-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .chat-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--gold), var(--orange));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .chat-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.4rem;
+            letter-spacing: 2px;
+        }
+
+        .chat-title .laugh { color: var(--gold); }
+        .chat-title .court { color: var(--white); }
+
+        .chat-subtitle {
+            font-size: 0.75rem;
+            color: var(--gray);
+        }
+
+        /* Language Toggle */
+        .lang-toggle {
+            display: flex;
+            gap: 5px;
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: 2px solid var(--gold);
+            color: var(--gold);
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+        }
+
+        .lang-btn.active {
+            background: var(--gold);
+            color: var(--court-dark);
+        }
+
+        .lang-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Messages */
+        .messages {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+            position: relative;
+            z-index: 1;
+        }
+
+        .message {
+            max-width: 85%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            line-height: 1.5;
+            font-size: 0.95rem;
+            animation: fadeIn 0.3s ease;
+            word-wrap: break-word;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.user {
+            background: var(--user-bubble);
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+
+        .message.ai {
+            background: var(--ai-bubble);
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+            border: 1px solid rgba(255,215,0,0.15);
+        }
+
+        .message.ai .ai-icon {
+            display: inline-block;
+            margin-right: 6px;
+        }
+
+        /* Welcome message styling */
+        .welcome-message {
+            text-align: center;
+            padding: 30px 20px;
+            color: var(--gray);
+        }
+
+        .welcome-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .welcome-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+            color: var(--gold);
+            margin-bottom: 10px;
+        }
+
+        .welcome-text {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 5px;
+            padding: 15px 20px;
+            align-self: flex-start;
+        }
+
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            background: var(--gold);
+            border-radius: 50%;
+            animation: bounce 1.4s ease-in-out infinite;
+        }
+
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes bounce {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-8px); }
+        }
+
+        /* Input */
+        .input-area {
+            padding: 15px 20px;
+            padding-bottom: calc(15px + env(safe-area-inset-bottom, 0px));
+            background: var(--chat-bg);
+            border-top: 1px solid rgba(255,215,0,0.2);
+            display: flex;
+            gap: 12px;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 10;
+        }
+
+        .input-area input {
+            flex: 1;
+            min-width: 0;
+            background: var(--user-bubble);
+            border: 1px solid rgba(255,215,0,0.2);
+            border-radius: 25px;
+            padding: 14px 20px;
+            color: var(--white);
+            font-family: 'Outfit', sans-serif;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s ease;
+            -webkit-appearance: none;
+        }
+
+        .input-area input:focus {
+            border-color: var(--gold);
+        }
+
+        .input-area input::placeholder {
+            color: var(--gray);
+        }
+
+        .send-btn {
+            background: linear-gradient(135deg, var(--gold), var(--orange));
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .send-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(255,215,0,0.3);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .send-btn svg {
+            fill: var(--court-dark);
+        }
+
+        /* Hidden language content */
+        [data-lang="es"] { display: none; }
+        body.es [data-lang="en"] { display: none; }
+        body.es [data-lang="es"] { display: block; }
+
+        /* Mobile */
+        @media (max-width: 600px) {
+            .chat-header { padding: 12px 15px; }
+            .chat-icon { width: 40px; height: 40px; font-size: 1.3rem; }
+            .chat-title { font-size: 1.2rem; }
+            .chat-subtitle { font-size: 0.7rem; }
+            .messages { padding: 15px; gap: 10px; }
+            .message { padding: 10px 14px; font-size: 0.9rem; }
+            .input-area { padding: 12px 15px; padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px)); }
+            .input-area input { padding: 12px 16px; }
+            .send-btn { width: 46px; height: 46px; }
+            .welcome-icon { font-size: 2.5rem; }
+            .welcome-title { font-size: 1.3rem; }
+            .welcome-text { font-size: 0.9rem; }
+        }
+    </style>
+</head>
+<body class="en">
+
+    <!-- Chat Header -->
+    <div class="chat-header">
+        <a href="play.html" class="back-btn">←</a>
+        <div class="chat-brand">
+            <div class="chat-icon">😄</div>
+            <div>
+                <div class="chat-title">
+                    <span class="laugh">LAUGH</span><span class="court">COURT</span> CHAT
+                </div>
+                <div class="chat-subtitle" data-lang="en">Your friendly companion</div>
+                <div class="chat-subtitle" data-lang="es">Tu compañero amigable</div>
+            </div>
+        </div>
+        <div class="lang-toggle">
+            <button class="lang-btn active" onclick="setLang('en')">EN</button>
+            <button class="lang-btn" onclick="setLang('es')">ES</button>
+        </div>
+    </div>
+
+    <!-- Messages -->
+    <div class="messages" id="messages">
+        <div class="welcome-message" id="welcomeMessage">
+            <div class="welcome-icon">🏀</div>
+            <div class="welcome-title" data-lang="en">WELCOME!</div>
+            <div class="welcome-title" data-lang="es">¡BIENVENIDO!</div>
+            <p class="welcome-text" data-lang="en">Hey there! I'm here to chat about anything — life, goals, games, or just to share a laugh. What's on your mind?</p>
+            <p class="welcome-text" data-lang="es">¡Hola! Estoy aquí para charlar sobre lo que sea — la vida, metas, juegos, o simplemente para compartir una risa. ¿Qué tienes en mente?</p>
+        </div>
+    </div>
+
+    <!-- Input -->
+    <div class="input-area">
+        <input type="text" id="userInput" placeholder="Type a message..." data-placeholder-en="Type a message..." data-placeholder-es="Escribe un mensaje..." onkeypress="handleKeyPress(event)">
+        <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+            <svg width="22" height="22" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+        </button>
+    </div>
+
+    <script>
+        // ============ PIN GATE — Synced with LaughCourt Auth ============
+        (function() {
+            var pin = sessionStorage.getItem('lc-pin');
+            var token = sessionStorage.getItem('lc-token');
+            
+            var isPreview = window.location.protocol === 'file:' || 
+                           window.location.hostname === 'localhost' ||
+                           window.location.hostname.includes('claude') ||
+                           window.location.hostname.includes('anthropic') ||
+                           window.location.hostname === '';
+            
+            if (isPreview) {
+                console.log('🏀 Preview mode - auth skipped');
+                return;
+            }
+            
+            if (!pin || !token) {
+                showAuthOverlay();
+                return;
+            }
+            
+            fetch('/api/session/validate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ pin: pin, token: token })
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(d) {
+                if (!d.valid) {
+                    sessionStorage.removeItem('lc-pin');
+                    sessionStorage.removeItem('lc-token');
+                    showAuthOverlay();
+                }
+            })
+            .catch(function() {
+                console.log('🏀 Auth check failed - allowing access');
+            });
+            
+            function showAuthOverlay() {
+                var overlay = document.createElement('div');
+                overlay.id = 'authOverlay';
+                overlay.innerHTML = `
+                    <div style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,10,18,0.97);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;">
+                        <div style="font-size:4rem;margin-bottom:20px;">🔐</div>
+                        <h2 style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:#FFD700;letter-spacing:3px;margin-bottom:10px;">PIN REQUIRED</h2>
+                        <p style="color:#a0a0a0;margin-bottom:25px;max-width:300px;">You need to log in to access Chat.</p>
+                        <a href="index.html" style="background:#FFD700;color:#0a0a12;text-decoration:none;padding:14px 32px;border-radius:30px;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;transition:all 0.3s ease;">GO TO LOGIN</a>
+                    </div>
+                `;
+                document.body.appendChild(overlay);
+            }
+        })();
+
+        // Current language
+        let currentLang = localStorage.getItem('laughcourt_lang') || 'en';
+        let conversationHistory = [];
+
+        // AI Persona - Bilingual
+        const aiPersona = {
+            en: `You are the friendly chat companion for LaughCourt, a cognitive fitness platform. You're warm, encouraging, and always positive. You can talk about ANYTHING - life, goals, hobbies, sports, music, movies, food, travel, family, friends, dreams, challenges, celebrations, jokes, stories, and more.
+
+IMPORTANT RULES:
+- Keep all conversations positive, joyful, and encouraging
+- NEVER discuss religion, politics, or controversial topics - kindly redirect if these come up
+- If someone brings up heavy/negative topics, gently redirect to something positive
+- Keep responses relatively short (2-4 sentences usually) unless more detail is needed
+- Always leave people feeling better than when they arrived
+- Be a good friend - listen, support, encourage, celebrate, and have fun
+- Use basketball/sports metaphors occasionally to fit the LaughCourt theme
+- ALWAYS RESPOND IN ENGLISH`,
+
+            es: `Eres el compañero de chat amigable de LaughCourt, una plataforma de fitness cognitivo. Eres cálido, alentador y siempre positivo. Puedes hablar de CUALQUIER COSA - vida, metas, pasatiempos, deportes, música, películas, comida, viajes, familia, amigos, sueños, desafíos, celebraciones, chistes, historias y más.
+
+REGLAS IMPORTANTES:
+- Mantén todas las conversaciones positivas, alegres y alentadoras
+- NUNCA discutas religión, política o temas controversiales - redirige amablemente si surgen
+- Si alguien trae temas pesados/negativos, redirige gentilmente a algo positivo
+- Mantén las respuestas relativamente cortas (2-4 oraciones usualmente) a menos que se necesite más detalle
+- Siempre deja a las personas sintiéndose mejor que cuando llegaron
+- Sé un buen amigo - escucha, apoya, alienta, celebra y diviértete
+- Usa metáforas de baloncesto/deportes ocasionalmente para encajar con el tema de LaughCourt
+- SIEMPRE RESPONDE EN ESPAÑOL`
+        };
+
+        // Language switching
+        function setLang(lang) {
+            currentLang = lang;
+            localStorage.setItem('laughcourt_lang', lang);
+            document.body.classList.remove('en', 'es');
+            document.body.classList.add(lang);
+            
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.textContent === lang.toUpperCase());
+            });
+            
+            const input = document.getElementById('userInput');
+            if (input) {
+                input.placeholder = lang === 'en' ? input.dataset.placeholderEn : input.dataset.placeholderEs;
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            setLang(currentLang);
+            
+            const userInput = document.getElementById('userInput');
+            if (userInput) {
+                userInput.addEventListener('focus', () => {
+                    setTimeout(() => {
+                        const messages = document.getElementById('messages');
+                        if (messages) messages.scrollTop = messages.scrollHeight;
+                    }, 300);
+                });
+            }
+        });
+
+        function addMessage(text, type) {
+            // Hide welcome message on first interaction
+            const welcome = document.getElementById('welcomeMessage');
+            if (welcome) welcome.style.display = 'none';
+
+            const messagesDiv = document.getElementById('messages');
+            const msg = document.createElement('div');
+            msg.className = `message ${type}`;
+            
+            if (type === 'ai') {
+                msg.innerHTML = `<span class="ai-icon">😄</span> ${text}`;
+            } else {
+                msg.textContent = text;
+            }
+            
+            messagesDiv.appendChild(msg);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function showTyping() {
+            const messagesDiv = document.getElementById('messages');
+            const typing = document.createElement('div');
+            typing.className = 'typing-indicator';
+            typing.id = 'typingIndicator';
+            typing.innerHTML = '<span></span><span></span><span></span>';
+            messagesDiv.appendChild(typing);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function hideTyping() {
+            const typing = document.getElementById('typingIndicator');
+            if (typing) typing.remove();
+        }
+
+        function handleKeyPress(e) {
+            if (e.key === 'Enter') sendMessage();
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('userInput');
+            const text = input.value.trim();
+            if (!text) return;
+
+            addMessage(text, 'user');
+            input.value = '';
+            
+            const sendBtn = document.getElementById('sendBtn');
+            sendBtn.disabled = true;
+            showTyping();
+
+            conversationHistory.push({ role: 'user', content: text });
+
+            try {
+                const response = await fetch('https://api.anthropic.com/v1/messages', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        model: 'claude-sonnet-4-20250514',
+                        max_tokens: 300,
+                        system: aiPersona[currentLang],
+                        messages: conversationHistory
+                    })
+                });
+
+                const data = await response.json();
+                hideTyping();
+
+                if (data.content && data.content[0]) {
+                    const aiResponse = data.content[0].text;
+                    conversationHistory.push({ role: 'assistant', content: aiResponse });
+                    addMessage(aiResponse, 'ai');
+                } else {
+                    const errorMsg = currentLang === 'en' 
+                        ? "Hmm, let me try that again... What were you saying?"
+                        : "Hmm, déjame intentar de nuevo... ¿Qué decías?";
+                    addMessage(errorMsg, 'ai');
+                }
+            } catch (error) {
+                hideTyping();
+                console.error('Error:', error);
+                const errorMsg = currentLang === 'en'
+                    ? "Oops! Something went wrong. Let's try again!"
+                    : "¡Ups! Algo salió mal. ¡Intentemos de nuevo!";
+                addMessage(errorMsg, 'ai');
+            }
+
+            sendBtn.disabled = false;
+            input.focus();
+        }
+    </script>
+</body>
+</html>
