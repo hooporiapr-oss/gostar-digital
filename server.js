@@ -1151,6 +1151,7 @@ app.get('/success', function(req, res) {
 '        .footer-logo .laugh { color: var(--gold); }\n' +
 '        .footer-company { font-size: 0.7rem; color: var(--muted); }\n' +
 '        .footer-company a { color: var(--gold); text-decoration: none; }\n' +
+'        @keyframes spin { to { transform: rotate(360deg); } }\n' +
 '        @media (max-width: 480px) { .logo { font-size: 2rem; } .card { padding: 30px 20px; } .pin-value { font-size: 2.8rem; letter-spacing: 10px; } .btn { font-size: 1.1rem; padding: 16px 25px; } }\n' +
 '    </style>\n' +
 '</head>\n' +
@@ -1168,7 +1169,7 @@ app.get('/success', function(req, res) {
 
     if (found && pin) {
         html += '' +
-'        <div class="card">\n' +
+'        <div class="card" id="successCard">\n' +
 '            <div class="celebration">🎉🏀🎉</div>\n' +
 '            <h1 class="card-title">\n' +
 '                <span class="lang-en">PAYMENT SUCCESSFUL!</span>\n' +
@@ -1195,16 +1196,55 @@ app.get('/success', function(req, res) {
 '            </div>\n' +
 '        </div>\n';
     } else {
+        // Show loading first, then retry after 2 seconds
         html += '' +
-'        <div class="card error-card">\n' +
-'            <div class="celebration">😕</div>\n' +
-'            <h1 class="card-title">\n' +
-'                <span class="lang-en">SETTING UP...</span>\n' +
-'                <span class="lang-es">CONFIGURANDO...</span>\n' +
+'        <div class="card" id="loadingCard">\n' +
+'            <div class="celebration">⏳</div>\n' +
+'            <h1 class="card-title" style="color:var(--gold)">\n' +
+'                <span class="lang-en">SETTING UP YOUR ACCOUNT...</span>\n' +
+'                <span class="lang-es">CONFIGURANDO TU CUENTA...</span>\n' +
 '            </h1>\n' +
 '            <p class="card-subtitle">\n' +
-'                <span class="lang-en">Your account is being created. Please use "Forgot PIN" with your email to get access.</span>\n' +
-'                <span class="lang-es">Tu cuenta se está creando. Por favor usa "Olvidé mi PIN" con tu correo para obtener acceso.</span>\n' +
+'                <span class="lang-en">Just a moment while we get you ready to play!</span>\n' +
+'                <span class="lang-es">¡Un momento mientras te preparamos para jugar!</span>\n' +
+'            </p>\n' +
+'            <div style="width:50px;height:50px;border:4px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin 1s linear infinite;margin:20px auto"></div>\n' +
+'        </div>\n' +
+'        <div class="card" id="successCard" style="display:none">\n' +
+'            <div class="celebration">🎉🏀🎉</div>\n' +
+'            <h1 class="card-title">\n' +
+'                <span class="lang-en">PAYMENT SUCCESSFUL!</span>\n' +
+'                <span class="lang-es">¡PAGO EXITOSO!</span>\n' +
+'            </h1>\n' +
+'            <p class="card-subtitle">\n' +
+'                <span class="lang-en">Your 7-day free trial has started. Here\'s your PIN!</span>\n' +
+'                <span class="lang-es">Tu prueba gratis de 7 días ha comenzado. ¡Aquí está tu PIN!</span>\n' +
+'            </p>\n' +
+'            <div class="pin-reveal">\n' +
+'                <div class="pin-label">\n' +
+'                    <span class="lang-en">YOUR PIN</span>\n' +
+'                    <span class="lang-es">TU PIN</span>\n' +
+'                </div>\n' +
+'                <div class="pin-value" id="pinValue">----</div>\n' +
+'            </div>\n' +
+'            <button class="btn" id="playBtn">\n' +
+'                <span class="lang-en">🏀 PLAY NOW</span>\n' +
+'                <span class="lang-es">🏀 JUGAR AHORA</span>\n' +
+'            </button>\n' +
+'            <div class="countdown">\n' +
+'                <span class="lang-en">Auto-login in <span id="countEn">5</span> seconds...</span>\n' +
+'                <span class="lang-es">Ingreso automático en <span id="countEs">5</span> segundos...</span>\n' +
+'            </div>\n' +
+'        </div>\n' +
+'        <div class="card error-card" id="errorCard" style="display:none">\n' +
+'            <div class="celebration">😕</div>\n' +
+'            <h1 class="card-title">\n' +
+'                <span class="lang-en">ALMOST THERE!</span>\n' +
+'                <span class="lang-es">¡CASI LISTO!</span>\n' +
+'            </h1>\n' +
+'            <p class="card-subtitle">\n' +
+'                <span class="lang-en">Use "Forgot PIN" with your email to get access.</span>\n' +
+'                <span class="lang-es">Usa "Olvidé mi PIN" con tu correo para obtener acceso.</span>\n' +
 '            </p>\n' +
 '            <a href="/login" class="btn btn-primary">\n' +
 '                <span class="lang-en">GO TO LOGIN</span>\n' +
@@ -1264,6 +1304,95 @@ app.get('/success', function(req, res) {
 '            }\n' +
 '            var playBtn = document.getElementById("playBtn");\n' +
 '            if (playBtn) playBtn.onclick = function() { clearInterval(interval); doLogin(); };\n';
+    } else {
+        // Add retry logic - wait 2 seconds then check again
+        var emailParam = email ? encodeURIComponent(email) : '';
+        html += '' +
+'            var retryCount = 0;\n' +
+'            var maxRetries = 3;\n' +
+'            var pin = null;\n' +
+'            \n' +
+'            function checkForPin() {\n' +
+'                fetch("/api/forgot-pin", {\n' +
+'                    method: "POST",\n' +
+'                    headers: { "Content-Type": "application/json" },\n' +
+'                    body: JSON.stringify({ email: "' + emailParam + '" })\n' +
+'                })\n' +
+'                .then(function(r) { return r.json(); })\n' +
+'                .then(function(data) {\n' +
+'                    if (data.found && data.pin) {\n' +
+'                        pin = data.pin;\n' +
+'                        showSuccess(pin);\n' +
+'                    } else {\n' +
+'                        retryCount++;\n' +
+'                        if (retryCount < maxRetries) {\n' +
+'                            setTimeout(checkForPin, 2000);\n' +
+'                        } else {\n' +
+'                            showError();\n' +
+'                        }\n' +
+'                    }\n' +
+'                })\n' +
+'                .catch(function() {\n' +
+'                    retryCount++;\n' +
+'                    if (retryCount < maxRetries) {\n' +
+'                        setTimeout(checkForPin, 2000);\n' +
+'                    } else {\n' +
+'                        showError();\n' +
+'                    }\n' +
+'                });\n' +
+'            }\n' +
+'            \n' +
+'            function showSuccess(foundPin) {\n' +
+'                document.getElementById("loadingCard").style.display = "none";\n' +
+'                document.getElementById("successCard").style.display = "block";\n' +
+'                document.getElementById("pinValue").textContent = foundPin;\n' +
+'                startCountdown(foundPin);\n' +
+'            }\n' +
+'            \n' +
+'            function showError() {\n' +
+'                document.getElementById("loadingCard").style.display = "none";\n' +
+'                document.getElementById("errorCard").style.display = "block";\n' +
+'            }\n' +
+'            \n' +
+'            function startCountdown(p) {\n' +
+'                var countdown = 5;\n' +
+'                var interval = setInterval(function() {\n' +
+'                    countdown--;\n' +
+'                    var cEn = document.getElementById("countEn");\n' +
+'                    var cEs = document.getElementById("countEs");\n' +
+'                    if (cEn) cEn.textContent = countdown;\n' +
+'                    if (cEs) cEs.textContent = countdown;\n' +
+'                    if (countdown <= 0) { clearInterval(interval); doLogin(p); }\n' +
+'                }, 1000);\n' +
+'                var playBtn = document.getElementById("playBtn");\n' +
+'                if (playBtn) playBtn.onclick = function() { clearInterval(interval); doLogin(p); };\n' +
+'            }\n' +
+'            \n' +
+'            function doLogin(p) {\n' +
+'                var btn = document.getElementById("playBtn");\n' +
+'                if (btn) btn.disabled = true;\n' +
+'                fetch("/api/login", {\n' +
+'                    method: "POST",\n' +
+'                    headers: { "Content-Type": "application/json" },\n' +
+'                    body: JSON.stringify({ pin: p })\n' +
+'                })\n' +
+'                .then(function(r) { return r.json(); })\n' +
+'                .then(function(data) {\n' +
+'                    if (data.success) {\n' +
+'                        localStorage.setItem("lc-user", JSON.stringify({ pin: p }));\n' +
+'                        sessionStorage.setItem("lc-pin", p);\n' +
+'                        sessionStorage.setItem("lc-token", data.token);\n' +
+'                        localStorage.setItem("lc-terms-accepted", new Date().toISOString());\n' +
+'                        window.location.href = "/play";\n' +
+'                    } else {\n' +
+'                        window.location.href = "/login";\n' +
+'                    }\n' +
+'                })\n' +
+'                .catch(function() { window.location.href = "/login"; });\n' +
+'            }\n' +
+'            \n' +
+'            // Start checking after 2 seconds\n' +
+'            setTimeout(checkForPin, 2000);\n';
     }
 
     html += '' +
