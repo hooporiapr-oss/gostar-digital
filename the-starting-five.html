@@ -522,6 +522,46 @@
             fill: var(--white);
         }
 
+        /* Voice/Listen Button */
+        .listen-btn {
+            background: none;
+            border: none;
+            color: var(--orange);
+            cursor: pointer;
+            padding: 4px 8px;
+            margin-left: 8px;
+            font-size: 1.1rem;
+            opacity: 0.7;
+            transition: all 0.2s ease;
+            vertical-align: middle;
+        }
+
+        .listen-btn:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        .listen-btn.speaking {
+            animation: speakPulse 0.8s ease-in-out infinite;
+        }
+
+        @keyframes speakPulse {
+            0%, 100% { opacity: 0.7; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.15); }
+        }
+
+        /* Voice enabled badge */
+        .voice-badge {
+            display: inline-block;
+            background: rgba(255,107,53,0.2);
+            color: var(--orange);
+            font-size: 0.65rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+
         /* Hidden language content */
         [data-lang="es"] { display: none; }
         body.es [data-lang="en"] { display: none; }
@@ -607,16 +647,19 @@
                 </svg>
 
                 <!-- CLAUDE (CENTER) -->
-                <svg class="player-face center" width="80" height="80" viewBox="0 0 100 100" onclick="startChat('CLAUDE')">
-                    <defs><radialGradient id="og3" cx="30%" cy="30%"><stop offset="0%" stop-color="#FFAA70"/><stop offset="100%" stop-color="#FF6B35"/></radialGradient></defs>
-                    <circle cx="50" cy="50" r="45" fill="url(#og3)" stroke="#E55A2B" stroke-width="3"/>
-                    <text x="72" y="20" font-size="12">🤖</text>
-                    <ellipse cx="35" cy="42" rx="8" ry="5" fill="#1a1a2e"/>
-                    <ellipse cx="65" cy="42" rx="8" ry="5" fill="#1a1a2e"/>
-                    <circle cx="37" cy="41" r="2.5" fill="#fff"/>
-                    <circle cx="67" cy="41" r="2.5" fill="#fff"/>
-                    <path d="M 28 62 Q 50 80 72 62" stroke="#1a1a2e" stroke-width="4" fill="none" stroke-linecap="round"/>
-                </svg>
+                <div style="position: relative;">
+                    <svg class="player-face center" width="80" height="80" viewBox="0 0 100 100" onclick="startChat('CLAUDE')">
+                        <defs><radialGradient id="og3" cx="30%" cy="30%"><stop offset="0%" stop-color="#FFAA70"/><stop offset="100%" stop-color="#FF6B35"/></radialGradient></defs>
+                        <circle cx="50" cy="50" r="45" fill="url(#og3)" stroke="#E55A2B" stroke-width="3"/>
+                        <text x="72" y="20" font-size="12">🤖</text>
+                        <ellipse cx="35" cy="42" rx="8" ry="5" fill="#1a1a2e"/>
+                        <ellipse cx="65" cy="42" rx="8" ry="5" fill="#1a1a2e"/>
+                        <circle cx="37" cy="41" r="2.5" fill="#fff"/>
+                        <circle cx="67" cy="41" r="2.5" fill="#fff"/>
+                        <path d="M 28 62 Q 50 80 72 62" stroke="#1a1a2e" stroke-width="4" fill="none" stroke-linecap="round"/>
+                    </svg>
+                    <span style="position:absolute; bottom:-5px; right:5px; font-size:0.9rem;">🔊</span>
+                </div>
 
                 <!-- EL MAGO -->
                 <svg class="player-face" width="65" height="65" viewBox="0 0 100 100" onclick="startChat('EL MAGO')">
@@ -656,7 +699,7 @@
                     <div class="player-trait" data-lang="es">Todo Corazón</div>
                 </div>
                 <div class="player-name-tag" onclick="startChat('CLAUDE')">
-                    <div class="player-name">CLAUDE</div>
+                    <div class="player-name">CLAUDE 🔊</div>
                     <div class="player-trait" data-lang="en">The Vision</div>
                     <div class="player-trait" data-lang="es">La Visión</div>
                 </div>
@@ -788,6 +831,74 @@
 
         let currentCharacter = null;
         let conversationHistory = [];
+        let speechSynth = window.speechSynthesis;
+        let currentUtterance = null;
+
+        // Voice settings for CLAUDE
+        const claudeVoiceSettings = {
+            rate: 0.95,      // Slightly slower, thoughtful
+            pitch: 1.0,      // Natural pitch
+            volume: 1.0
+        };
+
+        // Get best voice for CLAUDE
+        function getClaudeVoice() {
+            const voices = speechSynth.getVoices();
+            // Prefer natural sounding voices
+            const preferred = ['Google US English', 'Samantha', 'Alex', 'Daniel', 'Microsoft David', 'Google UK English Male'];
+            for (let name of preferred) {
+                const voice = voices.find(v => v.name.includes(name));
+                if (voice) return voice;
+            }
+            // Fallback to first English voice
+            return voices.find(v => v.lang.startsWith('en')) || voices[0];
+        }
+
+        // Speak text (CLAUDE only for now)
+        function speakText(text, button) {
+            // Stop any current speech
+            if (speechSynth.speaking) {
+                speechSynth.cancel();
+                document.querySelectorAll('.listen-btn').forEach(btn => btn.classList.remove('speaking'));
+                if (currentUtterance && button.classList.contains('speaking')) {
+                    button.classList.remove('speaking');
+                    return; // Toggle off
+                }
+            }
+
+            // Clean text for speech (remove emojis)
+            const cleanText = text.replace(/[\u{1F600}-\u{1F6FF}|\u{2600}-\u{26FF}|\u{2700}-\u{27BF}|\u{1F900}-\u{1F9FF}|\u{1F1E0}-\u{1F1FF}]/gu, '').trim();
+
+            currentUtterance = new SpeechSynthesisUtterance(cleanText);
+            currentUtterance.voice = getClaudeVoice();
+            currentUtterance.rate = claudeVoiceSettings.rate;
+            currentUtterance.pitch = claudeVoiceSettings.pitch;
+            currentUtterance.volume = claudeVoiceSettings.volume;
+
+            // Adjust for Spanish
+            if (currentLang === 'es') {
+                const voices = speechSynth.getVoices();
+                const spanishVoice = voices.find(v => v.lang.startsWith('es'));
+                if (spanishVoice) currentUtterance.voice = spanishVoice;
+            }
+
+            button.classList.add('speaking');
+
+            currentUtterance.onend = () => {
+                button.classList.remove('speaking');
+            };
+
+            currentUtterance.onerror = () => {
+                button.classList.remove('speaking');
+            };
+
+            speechSynth.speak(currentUtterance);
+        }
+
+        // Load voices (some browsers load async)
+        speechSynth.onvoiceschanged = () => {
+            getClaudeVoice();
+        };
 
         // Base rules - BILINGUAL
         const baseRules = {
@@ -869,7 +980,10 @@ REGLAS IMPORTANTES - NUNCA LAS ROMPAS:
             document.getElementById('teamPage').style.display = 'none';
             document.getElementById('chatScreen').classList.add('active');
             document.getElementById('chatFaceMini').innerHTML = miniFaces[name];
-            document.getElementById('chatCharacterName').textContent = name;
+            
+            // Add voice badge for CLAUDE
+            const voiceBadge = name === 'CLAUDE' ? '<span class="voice-badge">🔊 VOICE</span>' : '';
+            document.getElementById('chatCharacterName').innerHTML = name + voiceBadge;
             document.getElementById('chatCharacterTrait').textContent = currentCharacter.trait[currentLang];
             
             const messagesDiv = document.getElementById('messages');
@@ -880,6 +994,10 @@ REGLAS IMPORTANTES - NUNCA LAS ROMPAS:
         }
 
         function goBack() {
+            // Stop any speaking
+            if (speechSynth.speaking) {
+                speechSynth.cancel();
+            }
             document.getElementById('teamPage').style.display = 'block';
             document.getElementById('chatScreen').classList.remove('active');
             currentCharacter = null;
@@ -892,7 +1010,12 @@ REGLAS IMPORTANTES - NUNCA LAS ROMPAS:
             msg.className = `message ${type}`;
             
             if (type === 'ai') {
-                msg.innerHTML = `<span class="character-icon">${currentCharacter.icon}</span> ${text}`;
+                // Add listen button for CLAUDE
+                const isClaudeChat = currentCharacter && currentCharacter.name === 'CLAUDE';
+                const listenBtn = isClaudeChat 
+                    ? `<button class="listen-btn" onclick="speakText(\`${text.replace(/`/g, "'")}\`, this)" title="Listen">🔊</button>` 
+                    : '';
+                msg.innerHTML = `<span class="character-icon">${currentCharacter.icon}</span> ${text}${listenBtn}`;
             } else {
                 msg.textContent = text;
             }
