@@ -6,13 +6,13 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // ============ PLATFORM VERSION ============
-const PLATFORM_VERSION = '2.1.0';
-const PLATFORM_VERSION_NAME = 'GoTrotter - The LaughCourt';
+const PLATFORM_VERSION = '2.2.0';
+const PLATFORM_VERSION_NAME = 'LaughCourt™ - Where Joy Meets The Game';
 
 // ============ ADMIN SECRET KEY ============
 // Use this for trial PIN management (replaces dashboard)
 // Set in environment: ADMIN_SECRET_KEY=your-super-secret-key-here
-const ADMIN_SECRET_KEY = process.env.ADMIN_SECRET_KEY || 'GoTrotter2026!';
+const ADMIN_SECRET_KEY = process.env.ADMIN_SECRET_KEY || 'LaughCourt2026!';
 
 // ============ SESSION LOCKOUT SYSTEM ============
 const activeSessions = new Map();
@@ -257,7 +257,7 @@ function handleCheckoutComplete(session) {
     if (stripe && session.customer) {
         stripe.customers.update(session.customer, {
             metadata: {
-                gotrotter_pin: pin,
+                laughcourt_pin: pin,
                 plan_type: planType,
                 quantity: String(quantity)
             }
@@ -323,7 +323,7 @@ app.post('/api/stripe/checkout', function(req, res) {
     
     if (!priceId) return res.status(400).json({ error: 'Invalid plan type' });
     
-    var baseUrl = process.env.SITE_URL || 'https://gotrotter.ai';
+    var baseUrl = process.env.SITE_URL || 'https://laughcourt.com';
     
     stripe.checkout.sessions.create({
         mode: 'subscription',
@@ -515,7 +515,7 @@ app.post('/api/forgot-pin', function(req, res) {
             email: foundSubscriber.email,
             status: foundSubscriber.status,
             isActive: isActive,
-            message: isActive ? 'Welcome back, GoTrotter!' : 'Subscription not active. Please renew.'
+            message: isActive ? 'Welcome back to LaughCourt!' : 'Subscription not active. Please renew.'
         });
     }
     
@@ -565,7 +565,7 @@ app.post('/api/subscriber/login', function(req, res) {
             var isActive = subscribers[i].status === 'active' || subscribers[i].status === 'trialing';
             if (!isActive) return res.status(401).json({ error: 'Subscription not active' });
             
-            logActivity('subscriber_login', subscribers[i].email, null, 'GoTrotter logged in');
+            logActivity('subscriber_login', subscribers[i].email, null, 'LaughCourt user logged in');
             return res.json({
                 success: true,
                 email: subscribers[i].email,
@@ -1057,6 +1057,15 @@ app.get('/the-match', function(req, res) {
     res.sendFile(path.join(__dirname, 'the-match.html'));
 });
 
+app.get('/the-starting-five', function(req, res) {
+    res.sendFile(path.join(__dirname, 'the-starting-five.html'));
+});
+
+// Legacy route redirect
+app.get('/the-gotrotters', function(req, res) {
+    res.redirect(301, '/the-starting-five');
+});
+
 app.get('/hub', function(req, res) {
     res.sendFile(path.join(__dirname, 'trotter-hub.html'));
 });
@@ -1082,7 +1091,7 @@ app.get('/api/platform/version', function(req, res) {
     res.json({
         version: PLATFORM_VERSION,
         versionName: PLATFORM_VERSION_NAME,
-        game: 'GOTROTTER',
+        game: 'LAUGHCOURT',
         divisions: 15,
         levels: 5,
         speeds: ['SLOW', 'MED', 'FAST']
@@ -1093,7 +1102,7 @@ app.get('/api/platform/version', function(req, res) {
 app.listen(PORT, function() {
     console.log('');
     console.log('🏀 ========================================');
-    console.log('   GOTROTTER SERVER v' + PLATFORM_VERSION);
+    console.log('   LAUGHCOURT SERVER v' + PLATFORM_VERSION);
     console.log('   ' + PLATFORM_VERSION_NAME);
     console.log('==========================================');
     console.log('');
@@ -1102,15 +1111,16 @@ app.listen(PORT, function() {
     console.log('🔐 Admin Key:', ADMIN_SECRET_KEY ? '✅ Set' : '⚠️ Using default');
     console.log('');
     console.log('🎯 ROUTES:');
-    console.log('   /            → Landing page');
-    console.log('   /login       → PIN Login');
-    console.log('   /play        → Game choice screen (auth required)');
-    console.log('   /the-match   → THE MATCH game');
-    console.log('   /the-sequence → THE SEQUENCE game');
-    console.log('   /how-to-play → How to play guide');
-    console.log('   /faq         → FAQ & Help');
-    console.log('   /hub         → Legacy user hub');
-    console.log('   /trial-pin   → Trial PIN Generator');
+    console.log('   /                 → Landing page');
+    console.log('   /login            → PIN Login');
+    console.log('   /play             → Game choice screen (auth required)');
+    console.log('   /the-match        → THE MATCH game');
+    console.log('   /the-sequence     → THE SEQUENCE game');
+    console.log('   /the-starting-five → Meet the team');
+    console.log('   /how-to-play      → How to play guide');
+    console.log('   /faq              → FAQ & Help');
+    console.log('   /hub              → Legacy user hub');
+    console.log('   /trial-pin        → Trial PIN Generator');
     console.log('');
     console.log('🔧 ADMIN ENDPOINTS (use X-Admin-Key header):');
     console.log('   POST /api/trials/create    → Create trial PIN');
