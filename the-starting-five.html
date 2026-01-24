@@ -522,46 +522,6 @@
             fill: var(--white);
         }
 
-        /* Voice/Listen Button */
-        .listen-btn {
-            background: none;
-            border: none;
-            color: var(--orange);
-            cursor: pointer;
-            padding: 4px 8px;
-            margin-left: 8px;
-            font-size: 1.1rem;
-            opacity: 0.7;
-            transition: all 0.2s ease;
-            vertical-align: middle;
-        }
-
-        .listen-btn:hover {
-            opacity: 1;
-            transform: scale(1.1);
-        }
-
-        .listen-btn.speaking {
-            animation: speakPulse 0.8s ease-in-out infinite;
-        }
-
-        @keyframes speakPulse {
-            0%, 100% { opacity: 0.7; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.15); }
-        }
-
-        /* Voice enabled badge */
-        .voice-badge {
-            display: inline-block;
-            background: rgba(255,107,53,0.2);
-            color: var(--orange);
-            font-size: 0.65rem;
-            padding: 2px 8px;
-            border-radius: 10px;
-            margin-left: 8px;
-            vertical-align: middle;
-        }
-
         /* Hidden language content */
         [data-lang="es"] { display: none; }
         body.es [data-lang="en"] { display: none; }
@@ -621,114 +581,99 @@
             <div class="team-lineup">
                 
                 <!-- SKEE -->
-                <div style="position: relative;">
-                    <svg class="player-face" width="65" height="65" viewBox="0 0 100 100" onclick="startChat('SKEE')">
-                        <defs><radialGradient id="og1" cx="30%" cy="30%"><stop offset="0%" stop-color="#FF8C5A"/><stop offset="100%" stop-color="#FF6B35"/></radialGradient></defs>
-                        <circle cx="50" cy="50" r="45" fill="url(#og1)" stroke="#E55A2B" stroke-width="3"/>
-                        <path d="M 25 35 Q 35 30 45 35" stroke="#1a1a2e" stroke-width="3" fill="none"/>
-                        <path d="M 55 38 Q 65 38 75 38" stroke="#1a1a2e" stroke-width="3" fill="none"/>
-                        <ellipse cx="35" cy="45" rx="7" ry="6" fill="#1a1a2e"/>
-                        <ellipse cx="65" cy="45" rx="6" ry="5" fill="#1a1a2e"/>
-                        <circle cx="37" cy="44" r="2" fill="#fff"/>
-                        <circle cx="67" cy="44" r="2" fill="#fff"/>
-                        <path d="M 35 65 Q 55 72 70 60" stroke="#1a1a2e" stroke-width="4" fill="none" stroke-linecap="round"/>
-                    </svg>
-                    <span style="position:absolute; bottom:-5px; right:0px; font-size:0.75rem;">🔊</span>
-                </div>
+                <svg class="player-face" width="65" height="65" viewBox="0 0 100 100" onclick="startChat('SKEE')">
+                    <defs><radialGradient id="og1" cx="30%" cy="30%"><stop offset="0%" stop-color="#FF8C5A"/><stop offset="100%" stop-color="#FF6B35"/></radialGradient></defs>
+                    <circle cx="50" cy="50" r="45" fill="url(#og1)" stroke="#E55A2B" stroke-width="3"/>
+                    <path d="M 25 35 Q 35 30 45 35" stroke="#1a1a2e" stroke-width="3" fill="none"/>
+                    <path d="M 55 38 Q 65 38 75 38" stroke="#1a1a2e" stroke-width="3" fill="none"/>
+                    <ellipse cx="35" cy="45" rx="7" ry="6" fill="#1a1a2e"/>
+                    <ellipse cx="65" cy="45" rx="6" ry="5" fill="#1a1a2e"/>
+                    <circle cx="37" cy="44" r="2" fill="#fff"/>
+                    <circle cx="67" cy="44" r="2" fill="#fff"/>
+                    <path d="M 35 65 Q 55 72 70 60" stroke="#1a1a2e" stroke-width="4" fill="none" stroke-linecap="round"/>
+                </svg>
 
                 <!-- BRIGS -->
-                <div style="position: relative;">
-                    <svg class="player-face" width="65" height="65" viewBox="0 0 100 100" onclick="startChat('BRIGS')">
-                        <defs><radialGradient id="og2" cx="30%" cy="30%"><stop offset="0%" stop-color="#FF8C5A"/><stop offset="100%" stop-color="#FF6B35"/></radialGradient></defs>
-                        <circle cx="50" cy="50" r="45" fill="url(#og2)" stroke="#E55A2B" stroke-width="3"/>
-                        <path d="M 25 35 L 42 40" stroke="#1a1a2e" stroke-width="3" fill="none" stroke-linecap="round"/>
-                        <path d="M 75 35 L 58 40" stroke="#1a1a2e" stroke-width="3" fill="none" stroke-linecap="round"/>
-                        <circle cx="35" cy="48" r="7" fill="#1a1a2e"/>
-                        <circle cx="65" cy="48" r="7" fill="#1a1a2e"/>
-                        <circle cx="37" cy="47" r="2.5" fill="#fff"/>
-                        <circle cx="67" cy="47" r="2.5" fill="#fff"/>
-                        <path d="M 28 62 Q 50 80 72 62" stroke="#1a1a2e" stroke-width="4" fill="none" stroke-linecap="round"/>
-                    </svg>
-                    <span style="position:absolute; bottom:-5px; right:0px; font-size:0.75rem;">🔊</span>
-                </div>
+                <svg class="player-face" width="65" height="65" viewBox="0 0 100 100" onclick="startChat('BRIGS')">
+                    <defs><radialGradient id="og2" cx="30%" cy="30%"><stop offset="0%" stop-color="#FF8C5A"/><stop offset="100%" stop-color="#FF6B35"/></radialGradient></defs>
+                    <circle cx="50" cy="50" r="45" fill="url(#og2)" stroke="#E55A2B" stroke-width="3"/>
+                    <path d="M 25 35 L 42 40" stroke="#1a1a2e" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    <path d="M 75 35 L 58 40" stroke="#1a1a2e" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    <circle cx="35" cy="48" r="7" fill="#1a1a2e"/>
+                    <circle cx="65" cy="48" r="7" fill="#1a1a2e"/>
+                    <circle cx="37" cy="47" r="2.5" fill="#fff"/>
+                    <circle cx="67" cy="47" r="2.5" fill="#fff"/>
+                    <path d="M 28 62 Q 50 80 72 62" stroke="#1a1a2e" stroke-width="4" fill="none" stroke-linecap="round"/>
+                </svg>
 
                 <!-- CLAUDE (CENTER) -->
-                <div style="position: relative;">
-                    <svg class="player-face center" width="80" height="80" viewBox="0 0 100 100" onclick="startChat('CLAUDE')">
-                        <defs><radialGradient id="og3" cx="30%" cy="30%"><stop offset="0%" stop-color="#FFAA70"/><stop offset="100%" stop-color="#FF6B35"/></radialGradient></defs>
-                        <circle cx="50" cy="50" r="45" fill="url(#og3)" stroke="#E55A2B" stroke-width="3"/>
-                        <text x="72" y="20" font-size="12">🤖</text>
-                        <ellipse cx="35" cy="42" rx="8" ry="5" fill="#1a1a2e"/>
-                        <ellipse cx="65" cy="42" rx="8" ry="5" fill="#1a1a2e"/>
-                        <circle cx="37" cy="41" r="2.5" fill="#fff"/>
-                        <circle cx="67" cy="41" r="2.5" fill="#fff"/>
-                        <path d="M 28 62 Q 50 80 72 62" stroke="#1a1a2e" stroke-width="4" fill="none" stroke-linecap="round"/>
-                    </svg>
-                    <span style="position:absolute; bottom:-5px; right:5px; font-size:0.9rem;">🔊</span>
-                </div>
+                <svg class="player-face center" width="80" height="80" viewBox="0 0 100 100" onclick="startChat('CLAUDE')">
+                    <defs><radialGradient id="og3" cx="30%" cy="30%"><stop offset="0%" stop-color="#FFAA70"/><stop offset="100%" stop-color="#FF6B35"/></radialGradient></defs>
+                    <circle cx="50" cy="50" r="45" fill="url(#og3)" stroke="#E55A2B" stroke-width="3"/>
+                    <text x="72" y="20" font-size="12">🤖</text>
+                    <ellipse cx="35" cy="42" rx="8" ry="5" fill="#1a1a2e"/>
+                    <ellipse cx="65" cy="42" rx="8" ry="5" fill="#1a1a2e"/>
+                    <circle cx="37" cy="41" r="2.5" fill="#fff"/>
+                    <circle cx="67" cy="41" r="2.5" fill="#fff"/>
+                    <path d="M 28 62 Q 50 80 72 62" stroke="#1a1a2e" stroke-width="4" fill="none" stroke-linecap="round"/>
+                </svg>
 
                 <!-- EL MAGO -->
-                <div style="position: relative;">
-                    <svg class="player-face" width="65" height="65" viewBox="0 0 100 100" onclick="startChat('EL MAGO')">
-                        <defs><radialGradient id="og4" cx="30%" cy="30%"><stop offset="0%" stop-color="#FF8C5A"/><stop offset="100%" stop-color="#FF6B35"/></radialGradient></defs>
-                        <circle cx="50" cy="50" r="45" fill="url(#og4)" stroke="#E55A2B" stroke-width="3"/>
-                        <text x="72" y="20" font-size="12">✨</text>
-                        <path d="M 28 45 Q 35 40 42 45" stroke="#1a1a2e" stroke-width="4" fill="none" stroke-linecap="round"/>
-                        <path d="M 58 45 Q 65 40 72 45" stroke="#1a1a2e" stroke-width="4" fill="none" stroke-linecap="round"/>
-                        <circle cx="35" cy="43" r="2" fill="#1a1a2e"/>
-                        <circle cx="65" cy="43" r="2" fill="#1a1a2e"/>
-                        <path d="M 32 62 Q 50 75 68 62" stroke="#1a1a2e" stroke-width="4" fill="none" stroke-linecap="round"/>
-                    </svg>
-                    <span style="position:absolute; bottom:-5px; right:0px; font-size:0.75rem;">🔊</span>
-                </div>
+                <svg class="player-face" width="65" height="65" viewBox="0 0 100 100" onclick="startChat('EL MAGO')">
+                    <defs><radialGradient id="og4" cx="30%" cy="30%"><stop offset="0%" stop-color="#FF8C5A"/><stop offset="100%" stop-color="#FF6B35"/></radialGradient></defs>
+                    <circle cx="50" cy="50" r="45" fill="url(#og4)" stroke="#E55A2B" stroke-width="3"/>
+                    <text x="72" y="20" font-size="12">✨</text>
+                    <path d="M 28 45 Q 35 40 42 45" stroke="#1a1a2e" stroke-width="4" fill="none" stroke-linecap="round"/>
+                    <path d="M 58 45 Q 65 40 72 45" stroke="#1a1a2e" stroke-width="4" fill="none" stroke-linecap="round"/>
+                    <circle cx="35" cy="43" r="2" fill="#1a1a2e"/>
+                    <circle cx="65" cy="43" r="2" fill="#1a1a2e"/>
+                    <path d="M 32 62 Q 50 75 68 62" stroke="#1a1a2e" stroke-width="4" fill="none" stroke-linecap="round"/>
+                </svg>
 
                 <!-- TEDDY -->
-                <div style="position: relative;">
-                    <svg class="player-face" width="65" height="65" viewBox="0 0 100 100" onclick="startChat('TEDDY')">
-                        <defs><radialGradient id="og5" cx="30%" cy="30%"><stop offset="0%" stop-color="#FF8C5A"/><stop offset="100%" stop-color="#FF6B35"/></radialGradient></defs>
-                        <circle cx="50" cy="50" r="45" fill="url(#og5)" stroke="#E55A2B" stroke-width="3"/>
-                        <circle cx="35" cy="42" r="9" fill="#1a1a2e"/>
-                        <circle cx="65" cy="42" r="9" fill="#1a1a2e"/>
-                        <circle cx="37" cy="40" r="4" fill="#fff"/>
-                        <circle cx="67" cy="40" r="4" fill="#fff"/>
-                        <ellipse cx="50" cy="68" rx="18" ry="12" fill="#1a1a2e"/>
-                        <ellipse cx="50" cy="72" rx="10" ry="5" fill="#ff4d6d"/>
-                    </svg>
-                    <span style="position:absolute; bottom:-5px; right:0px; font-size:0.75rem;">🔊</span>
-                </div>
+                <svg class="player-face" width="65" height="65" viewBox="0 0 100 100" onclick="startChat('TEDDY')">
+                    <defs><radialGradient id="og5" cx="30%" cy="30%"><stop offset="0%" stop-color="#FF8C5A"/><stop offset="100%" stop-color="#FF6B35"/></radialGradient></defs>
+                    <circle cx="50" cy="50" r="45" fill="url(#og5)" stroke="#E55A2B" stroke-width="3"/>
+                    <circle cx="35" cy="42" r="9" fill="#1a1a2e"/>
+                    <circle cx="65" cy="42" r="9" fill="#1a1a2e"/>
+                    <circle cx="37" cy="40" r="4" fill="#fff"/>
+                    <circle cx="67" cy="40" r="4" fill="#fff"/>
+                    <ellipse cx="50" cy="68" rx="18" ry="12" fill="#1a1a2e"/>
+                    <ellipse cx="50" cy="72" rx="10" ry="5" fill="#ff4d6d"/>
+                </svg>
             </div>
 
             <!-- Names Roster -->
             <div class="names-roster">
                 <div class="player-name-tag" onclick="startChat('SKEE')">
-                    <div class="player-name">SKEE 🔊</div>
+                    <div class="player-name">SKEE</div>
                     <div class="player-trait" data-lang="en">The Legend</div>
                     <div class="player-trait" data-lang="es">La Leyenda</div>
                 </div>
                 <div class="player-name-tag" onclick="startChat('BRIGS')">
-                    <div class="player-name">BRIGS 🔊</div>
+                    <div class="player-name">BRIGS</div>
                     <div class="player-trait" data-lang="en">All Heart</div>
                     <div class="player-trait" data-lang="es">Todo Corazón</div>
                 </div>
                 <div class="player-name-tag" onclick="startChat('CLAUDE')">
-                    <div class="player-name">CLAUDE 🔊</div>
+                    <div class="player-name">CLAUDE</div>
                     <div class="player-trait" data-lang="en">The Vision</div>
                     <div class="player-trait" data-lang="es">La Visión</div>
                 </div>
                 <div class="player-name-tag" onclick="startChat('EL MAGO')">
-                    <div class="player-name">EL MAGO 🔊</div>
+                    <div class="player-name">EL MAGO</div>
                     <div class="player-trait" data-lang="en">Pure Magic</div>
                     <div class="player-trait" data-lang="es">Pura Magia</div>
                 </div>
                 <div class="player-name-tag" onclick="startChat('TEDDY')">
-                    <div class="player-name">TEDDY 🔊</div>
+                    <div class="player-name">TEDDY</div>
                     <div class="player-trait" data-lang="en">The Spark</div>
                     <div class="player-trait" data-lang="es">La Chispa</div>
                 </div>
             </div>
 
-            <p class="tap-hint" data-lang="en">👆 Tap a player to chat — they all speak! 🔊</p>
-            <p class="tap-hint" data-lang="es">👆 ¡Toca un jugador para chatear — todos hablan! 🔊</p>
+            <p class="tap-hint" data-lang="en">👆 Tap a player to chat!</p>
+            <p class="tap-hint" data-lang="es">👆 ¡Toca un jugador para chatear!</p>
         </div>
 
         <p class="team-tagline" data-lang="en">Five legends. One mission. <em>Bring the joy.</em></p>
@@ -843,127 +788,6 @@
 
         let currentCharacter = null;
         let conversationHistory = [];
-        let speechSynth = window.speechSynthesis;
-        let currentUtterance = null;
-
-        // Voice settings for EACH CHARACTER - LOWER PITCH FOR MALE SOUND
-        const voiceSettings = {
-            'CLAUDE': { rate: 0.95, pitch: 0.75 },    // Calm, thoughtful
-            'SKEE': { rate: 0.85, pitch: 0.65 },      // Slower, deeper, wise
-            'BRIGS': { rate: 1.1, pitch: 0.8 },       // Faster, energetic
-            'EL MAGO': { rate: 0.8, pitch: 0.7 },     // Slow, mysterious
-            'TEDDY': { rate: 1.2, pitch: 0.85 }       // Fast, hyped!
-        };
-
-        // Female voice names to EXCLUDE
-        const femaleVoiceNames = [
-            'samantha', 'victoria', 'karen', 'kate', 'susan', 'zira', 
-            'hazel', 'fiona', 'moira', 'tessa', 'veena', 'ava', 
-            'allison', 'emily', 'siri', 'female', 'woman', 'girl',
-            'monica', 'paulina', 'angelica', 'francisca', 'lucia',
-            'miren', 'elena', 'joana', 'ines', 'mariska', 'sara'
-        ];
-
-        // Check if voice is likely female
-        function isFemaleVoice(voice) {
-            const nameLower = voice.name.toLowerCase();
-            return femaleVoiceNames.some(female => nameLower.includes(female));
-        }
-
-        // Get best MALE voice - US English & Puerto Rico/Latin American Spanish
-        function getBestVoice() {
-            const voices = speechSynth.getVoices();
-            
-            if (currentLang === 'es') {
-                // Priority 1: Puerto Rico Spanish (es-PR) - NOT female
-                const prVoice = voices.find(v => v.lang === 'es-PR' && !isFemaleVoice(v));
-                if (prVoice) return prVoice;
-                
-                // Priority 2: Latin American Spanish MALE voices (NOT Spain es-ES)
-                const latinAmericanCodes = ['es-MX', 'es-AR', 'es-CO', 'es-CL', 'es-PE', 'es-VE', 'es-419', 'es-US'];
-                for (let code of latinAmericanCodes) {
-                    const latinVoice = voices.find(v => v.lang === code && !isFemaleVoice(v));
-                    if (latinVoice) return latinVoice;
-                }
-                
-                // Priority 3: Any Spanish NOT female, NOT Spain
-                const notSpainVoice = voices.find(v => 
-                    v.lang.startsWith('es') && v.lang !== 'es-ES' && !isFemaleVoice(v)
-                );
-                if (notSpainVoice) return notSpainVoice;
-                
-                // Priority 4: Any Spanish NOT female
-                const anySpanishMale = voices.find(v => v.lang.startsWith('es') && !isFemaleVoice(v));
-                if (anySpanishMale) return anySpanishMale;
-                
-                // Last resort: Any Spanish (pitch will make it sound male)
-                const anySpanish = voices.find(v => v.lang.startsWith('es'));
-                if (anySpanish) return anySpanish;
-            }
-            
-            // US English - NOT female, NOT UK
-            const usVoices = voices.filter(v => 
-                (v.lang === 'en-US' || v.lang === 'en_US' || v.lang.startsWith('en')) &&
-                !v.name.toLowerCase().includes('uk') &&
-                !v.name.toLowerCase().includes('british') &&
-                !isFemaleVoice(v)
-            );
-            
-            // Prefer known male voice names
-            const maleNames = ['david', 'alex', 'fred', 'tom', 'mark', 'guy', 'aaron', 'evan', 'nathan', 'junior', 'ralph'];
-            for (let male of maleNames) {
-                const maleVoice = usVoices.find(v => v.name.toLowerCase().includes(male));
-                if (maleVoice) return maleVoice;
-            }
-            
-            // Return first non-female US voice
-            if (usVoices.length > 0) return usVoices[0];
-            
-            // Final fallback - pitch will make it sound male
-            return voices.find(v => v.lang.startsWith('en')) || voices[0];
-        }
-
-        // Speak text for ANY character
-        function speakText(text, button) {
-            // Stop any current speech
-            if (speechSynth.speaking) {
-                speechSynth.cancel();
-                document.querySelectorAll('.listen-btn').forEach(btn => btn.classList.remove('speaking'));
-                if (button.classList.contains('speaking')) {
-                    button.classList.remove('speaking');
-                    return; // Toggle off
-                }
-            }
-
-            // Clean text for speech (remove emojis)
-            const cleanText = text.replace(/[\u{1F600}-\u{1F6FF}|\u{2600}-\u{26FF}|\u{2700}-\u{27BF}|\u{1F900}-\u{1F9FF}|\u{1F1E0}-\u{1F1FF}]/gu, '').trim();
-
-            // Get character's voice settings
-            const settings = currentCharacter ? voiceSettings[currentCharacter.name] : voiceSettings['CLAUDE'];
-
-            currentUtterance = new SpeechSynthesisUtterance(cleanText);
-            currentUtterance.voice = getBestVoice();
-            currentUtterance.rate = settings.rate;
-            currentUtterance.pitch = settings.pitch;
-            currentUtterance.volume = 1.0;
-
-            button.classList.add('speaking');
-
-            currentUtterance.onend = () => {
-                button.classList.remove('speaking');
-            };
-
-            currentUtterance.onerror = () => {
-                button.classList.remove('speaking');
-            };
-
-            speechSynth.speak(currentUtterance);
-        }
-
-        // Load voices (some browsers load async)
-        speechSynth.onvoiceschanged = () => {
-            getBestVoice();
-        };
 
         // Base rules - BILINGUAL
         const baseRules = {
@@ -1045,10 +869,7 @@ REGLAS IMPORTANTES - NUNCA LAS ROMPAS:
             document.getElementById('teamPage').style.display = 'none';
             document.getElementById('chatScreen').classList.add('active');
             document.getElementById('chatFaceMini').innerHTML = miniFaces[name];
-            
-            // Voice badge for ALL characters
-            const voiceBadge = '<span class="voice-badge">🔊 VOICE</span>';
-            document.getElementById('chatCharacterName').innerHTML = name + voiceBadge;
+            document.getElementById('chatCharacterName').textContent = name;
             document.getElementById('chatCharacterTrait').textContent = currentCharacter.trait[currentLang];
             
             const messagesDiv = document.getElementById('messages');
@@ -1059,10 +880,6 @@ REGLAS IMPORTANTES - NUNCA LAS ROMPAS:
         }
 
         function goBack() {
-            // Stop any speaking
-            if (speechSynth.speaking) {
-                speechSynth.cancel();
-            }
             document.getElementById('teamPage').style.display = 'block';
             document.getElementById('chatScreen').classList.remove('active');
             currentCharacter = null;
@@ -1075,9 +892,7 @@ REGLAS IMPORTANTES - NUNCA LAS ROMPAS:
             msg.className = `message ${type}`;
             
             if (type === 'ai') {
-                // Add listen button for ALL characters
-                const listenBtn = `<button class="listen-btn" onclick="speakText(\`${text.replace(/`/g, "'")}\`, this)" title="Listen">🔊</button>`;
-                msg.innerHTML = `<span class="character-icon">${currentCharacter.icon}</span> ${text}${listenBtn}`;
+                msg.innerHTML = `<span class="character-icon">${currentCharacter.icon}</span> ${text}`;
             } else {
                 msg.textContent = text;
             }
