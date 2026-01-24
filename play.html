@@ -299,9 +299,31 @@
         .trial-banner.show { display: block; }
         .trial-banner strong { color: var(--gold); }
 
-        /* Logout */
-        .logout-section {
+        /* Account Section */
+        .account-section {
             margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .account-link {
+            color: var(--gold);
+            font-size: 0.8rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 20px;
+            border: 1px solid var(--gold);
+            border-radius: 25px;
+            transition: all 0.3s;
+        }
+
+        .account-link:hover {
+            background: rgba(255,215,0,0.1);
+            box-shadow: 0 0 15px rgba(255,215,0,0.2);
         }
 
         .logout-link {
@@ -389,7 +411,7 @@
         .header { animation-delay: 0s; }
         .games-grid { animation-delay: 0.1s; }
         .speed-section { animation-delay: 0.2s; }
-        .logout-section { animation-delay: 0.3s; }
+        .account-section { animation-delay: 0.3s; }
     </style>
 </head>
 <body class="en">
@@ -488,8 +510,13 @@
             </div>
         </div>
 
-        <!-- Logout -->
-        <div class="logout-section">
+        <!-- Account Management -->
+        <div class="account-section">
+            <a href="https://billing.stripe.com/p/login/fZu8wQgpyc5c0Qr8e500000" target="_blank" class="account-link" id="manageLink">
+                <span>⚙️</span>
+                <span class="lang-en">Manage Subscription</span>
+                <span class="lang-es">Administrar Suscripción</span>
+            </a>
             <a href="#" class="logout-link" id="logoutLink">
                 <span>🚪</span>
                 <span class="lang-en">Logout</span>
@@ -527,7 +554,7 @@
         (function() {
             // ==================== ENVIRONMENT ====================
             var host = window.location.hostname;
-            var isProduction = (host.indexOf('laughcourt') > -1 || host.indexOf('render') > -1);
+            var isProduction = (host.indexOf('laughcourt') > -1 || host.indexOf('render') > -1 || host.indexOf('gostardigital') > -1);
 
             // ==================== AUTH CHECK ====================
             if (isProduction) {
