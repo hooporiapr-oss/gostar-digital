@@ -855,23 +855,93 @@
             'TEDDY': { rate: 1.2, pitch: 1.1 }       // Fast, hyped!
         };
 
-        // Get best voice for current language
+        // Get best MALE voice - US English & Puerto Rico/Latin American Spanish
         function getBestVoice() {
             const voices = speechSynth.getVoices();
             
             if (currentLang === 'es') {
-                // Spanish voices
-                const spanishVoice = voices.find(v => v.lang.startsWith('es'));
-                if (spanishVoice) return spanishVoice;
+                // Priority 1: Puerto Rico Spanish (es-PR)
+                const prVoice = voices.find(v => v.lang === 'es-PR');
+                if (prVoice) return prVoice;
+                
+                // Priority 2: Latin American Spanish MALE voices (NOT Spain es-ES)
+                const latinAmericanCodes = ['es-MX', 'es-AR', 'es-CO', 'es-CL', 'es-PE', 'es-VE', 'es-419', 'es-US'];
+                for (let code of latinAmericanCodes) {
+                    const latinVoice = voices.find(v => 
+                        v.lang === code && 
+                        (v.name.toLowerCase().includes('male') || 
+                         v.name.includes('Jorge') || 
+                         v.name.includes('Juan') || 
+                         v.name.includes('Diego') || 
+                         v.name.includes('Carlos') ||
+                         v.name.includes('Pablo') ||
+                         v.name.includes('Andrés') ||
+                         !v.name.toLowerCase().includes('female'))
+                    );
+                    if (latinVoice) return latinVoice;
+                }
+                
+                // Priority 3: Any Latin American Spanish (NOT Spain)
+                for (let code of latinAmericanCodes) {
+                    const anyLatin = voices.find(v => v.lang === code);
+                    if (anyLatin) return anyLatin;
+                }
+                
+                // Priority 4: Generic Spanish but NOT es-ES (Spain)
+                const notSpainVoice = voices.find(v => 
+                    v.lang.startsWith('es') && v.lang !== 'es-ES'
+                );
+                if (notSpainVoice) return notSpainVoice;
+                
+                // Last resort: Any Spanish
+                const anySpanish = voices.find(v => v.lang.startsWith('es'));
+                if (anySpanish) return anySpanish;
             }
             
-            // English voices - prefer natural sounding
-            const preferred = ['Google US English', 'Samantha', 'Alex', 'Daniel', 'Microsoft David', 'Google UK English Male'];
-            for (let name of preferred) {
-                const voice = voices.find(v => v.name.includes(name));
+            // US English MALE voices ONLY - NO UK
+            const preferredUSMale = [
+                'Google US English',
+                'Microsoft David',
+                'Microsoft Mark',
+                'Alex',
+                'Fred',
+                'Tom',
+                'Microsoft Guy',
+                'Evan',
+                'Nathan',
+                'Aaron'
+            ];
+            
+            for (let name of preferredUSMale) {
+                const voice = voices.find(v => 
+                    v.name.includes(name) && 
+                    !v.name.toLowerCase().includes('uk') &&
+                    !v.name.toLowerCase().includes('british')
+                );
                 if (voice) return voice;
             }
-            return voices.find(v => v.lang.startsWith('en')) || voices[0];
+            
+            // Find any US English male voice
+            const usMaleVoice = voices.find(v => 
+                (v.lang === 'en-US' || v.lang === 'en_US') && 
+                (v.name.toLowerCase().includes('male') || 
+                 v.name.includes('David') || 
+                 v.name.includes('Alex') ||
+                 v.name.includes('Fred') ||
+                 !v.name.toLowerCase().includes('female'))
+            );
+            if (usMaleVoice) return usMaleVoice;
+            
+            // Fallback to any US English voice (no UK)
+            const usVoice = voices.find(v => 
+                (v.lang === 'en-US' || v.lang === 'en_US') &&
+                !v.name.toLowerCase().includes('uk') &&
+                !v.name.toLowerCase().includes('british')
+            );
+            if (usVoice) return usVoice;
+            
+            // Final fallback
+            return voices.find(v => v.lang.startsWith('en') && !v.name.toLowerCase().includes('uk')) || voices[0];
         }
 
         // Speak text for ANY character
