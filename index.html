@@ -356,20 +356,12 @@ body {
     margin-bottom: 20px;
 }
 
-/* Mini Grid Previews */
+/* Mini Grid Previews - 5x5 for both */
 .mini-grid-5x5 {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 5px;
     max-width: 150px;
-    margin: 0 auto 20px;
-}
-
-.mini-grid-4x4 {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 6px;
-    max-width: 140px;
     margin: 0 auto 20px;
 }
 
@@ -384,9 +376,16 @@ body {
     font-size: 0.7rem;
 }
 
-.mini-cell.center {
-    background: var(--orange);
-    border-color: var(--orange);
+.mini-cell.lit {
+    background: var(--gold);
+    border-color: var(--gold);
+    box-shadow: 0 0 8px rgba(255,215,0,0.4);
+}
+
+.mini-cell.seq-lit {
+    background: var(--teal);
+    border-color: var(--teal);
+    box-shadow: 0 0 8px rgba(0,217,165,0.4);
 }
 
 .workout-desc {
@@ -781,41 +780,41 @@ body.es .lang-en { display: none !important; }
             <div class="workout-icon">🎯</div>
             <div class="workout-name">THE MATCH</div>
             <div class="workout-type">
-                <span class="lang-en">Recognition Memory</span>
-                <span class="lang-es">Memoria de Reconocimiento</span>
+                <span class="lang-en">Spatial Memory</span>
+                <span class="lang-es">Memoria Espacial</span>
             </div>
             
             <div class="mini-grid-5x5">
-                <div class="mini-cell"></div>
-                <div class="mini-cell"></div>
-                <div class="mini-cell"></div>
-                <div class="mini-cell"></div>
-                <div class="mini-cell"></div>
-                <div class="mini-cell"></div>
-                <div class="mini-cell"></div>
-                <div class="mini-cell"></div>
-                <div class="mini-cell"></div>
-                <div class="mini-cell"></div>
-                <div class="mini-cell"></div>
-                <div class="mini-cell"></div>
-                <div class="mini-cell center">🎯</div>
-                <div class="mini-cell"></div>
-                <div class="mini-cell"></div>
-                <div class="mini-cell"></div>
-                <div class="mini-cell"></div>
-                <div class="mini-cell"></div>
-                <div class="mini-cell"></div>
-                <div class="mini-cell"></div>
-                <div class="mini-cell"></div>
-                <div class="mini-cell"></div>
-                <div class="mini-cell"></div>
-                <div class="mini-cell"></div>
-                <div class="mini-cell"></div>
+                <div class="mini-cell">😄</div>
+                <div class="mini-cell lit">😄</div>
+                <div class="mini-cell">😄</div>
+                <div class="mini-cell">😄</div>
+                <div class="mini-cell lit">😄</div>
+                <div class="mini-cell">😄</div>
+                <div class="mini-cell">😄</div>
+                <div class="mini-cell lit">😄</div>
+                <div class="mini-cell">😄</div>
+                <div class="mini-cell">😄</div>
+                <div class="mini-cell lit">😄</div>
+                <div class="mini-cell">😄</div>
+                <div class="mini-cell">😄</div>
+                <div class="mini-cell">😄</div>
+                <div class="mini-cell lit">😄</div>
+                <div class="mini-cell">😄</div>
+                <div class="mini-cell">😄</div>
+                <div class="mini-cell">😄</div>
+                <div class="mini-cell">😄</div>
+                <div class="mini-cell">😄</div>
+                <div class="mini-cell">😄</div>
+                <div class="mini-cell">😄</div>
+                <div class="mini-cell">😄</div>
+                <div class="mini-cell">😄</div>
+                <div class="mini-cell">😄</div>
             </div>
             
             <p class="workout-desc">
-                <span class="lang-en">Colors flash across a 5×5 grid. Remember which cells matched the center target. Tap them all to advance!</span>
-                <span class="lang-es">Los colores parpadean en una cuadrícula 5×5. Recuerda qué celdas coincidieron con el objetivo central. ¡Toca todas para avanzar!</span>
+                <span class="lang-en">Cells light up gold simultaneously on the 5×5 court. Remember their positions and tap them all to advance!</span>
+                <span class="lang-es">Las celdas se iluminan doradas simultáneamente en la cancha 5×5. ¡Recuerda sus posiciones y tócalas todas para avanzar!</span>
             </p>
             
             <a href="/how-to-play" class="workout-btn">
@@ -833,28 +832,37 @@ body.es .lang-en { display: none !important; }
                 <span class="lang-es">Memoria Secuencial</span>
             </div>
             
-            <div class="mini-grid-4x4">
-                <div class="mini-cell">😊</div>
-                <div class="mini-cell">😂</div>
-                <div class="mini-cell">🤣</div>
+            <div class="mini-grid-5x5">
+                <div class="mini-cell seq-lit">😄</div>
                 <div class="mini-cell">😄</div>
-                <div class="mini-cell">😁</div>
-                <div class="mini-cell">😆</div>
-                <div class="mini-cell">😃</div>
-                <div class="mini-cell">🙂</div>
-                <div class="mini-cell">😀</div>
-                <div class="mini-cell">😸</div>
-                <div class="mini-cell">😹</div>
-                <div class="mini-cell">🤭</div>
-                <div class="mini-cell">😏</div>
-                <div class="mini-cell">😌</div>
-                <div class="mini-cell">🥳</div>
-                <div class="mini-cell">🎉</div>
+                <div class="mini-cell">😄</div>
+                <div class="mini-cell">😄</div>
+                <div class="mini-cell">😄</div>
+                <div class="mini-cell">😄</div>
+                <div class="mini-cell seq-lit">😄</div>
+                <div class="mini-cell">😄</div>
+                <div class="mini-cell">😄</div>
+                <div class="mini-cell">😄</div>
+                <div class="mini-cell">😄</div>
+                <div class="mini-cell">😄</div>
+                <div class="mini-cell">😄</div>
+                <div class="mini-cell seq-lit">😄</div>
+                <div class="mini-cell">😄</div>
+                <div class="mini-cell">😄</div>
+                <div class="mini-cell">😄</div>
+                <div class="mini-cell">😄</div>
+                <div class="mini-cell">😄</div>
+                <div class="mini-cell">😄</div>
+                <div class="mini-cell">😄</div>
+                <div class="mini-cell">😄</div>
+                <div class="mini-cell">😄</div>
+                <div class="mini-cell">😄</div>
+                <div class="mini-cell">😄</div>
             </div>
             
             <p class="workout-desc">
-                <span class="lang-en">Watch the pattern light up in order. Tap it back in the exact sequence. The longer you go, the harder it gets!</span>
-                <span class="lang-es">Mira el patrón iluminarse en orden. Repítelo en la secuencia exacta. ¡Mientras más avances, más difícil se pone!</span>
+                <span class="lang-en">Watch the pattern light up one by one. Tap it back in the exact order. The longer you go, the harder it gets!</span>
+                <span class="lang-es">Mira el patrón iluminarse uno por uno. Repítelo en el orden exacto. ¡Mientras más avances, más difícil se pone!</span>
             </p>
             
             <a href="/how-to-play" class="workout-btn">
@@ -893,12 +901,12 @@ body.es .lang-en { display: none !important; }
         <div class="prop">
             <div class="prop-icon">🏆</div>
             <div class="prop-title">
-                <span class="lang-en">30 DIVISIONS</span>
-                <span class="lang-es">30 DIVISIONES</span>
+                <span class="lang-en">60 DIVISIONS</span>
+                <span class="lang-es">60 DIVISIONES</span>
             </div>
             <p class="prop-text">
-                <span class="lang-en">5 levels × 3 speeds × 2 workouts. Endless challenge.</span>
-                <span class="lang-es">5 niveles × 3 velocidades × 2 ejercicios. Reto sin fin.</span>
+                <span class="lang-en">10 levels × 3 speeds × 2 workouts. Endless challenge.</span>
+                <span class="lang-es">10 niveles × 3 velocidades × 2 ejercicios. Reto sin fin.</span>
             </p>
         </div>
         <div class="prop">
