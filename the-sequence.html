@@ -206,8 +206,10 @@ html, body {
     flex-shrink: 0;
 }
 .selector-group { flex: 1; background: var(--card); border-radius: 8px; padding: 4px; }
+.selector-group.level-group { flex: 1.8; }
 .selector-label { text-align: center; font-size: 0.45rem; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 3px; }
 .selector-options { display: flex; gap: 2px; }
+.selector-options.level-options { flex-wrap: wrap; gap: 2px; }
 .selector-btn {
     flex: 1;
     min-height: 32px;
@@ -223,6 +225,13 @@ html, body {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+.selector-btn.level-btn {
+    min-height: 26px;
+    min-width: 26px;
+    flex: 0 0 auto;
+    width: calc(20% - 2px);
+    font-size: 0.7rem;
 }
 .selector-btn.active { border-color: var(--teal); color: var(--teal); background: rgba(0,217,165,0.1); }
 .selector-btn.locked { opacity: 0.5; }
@@ -394,6 +403,7 @@ body.es .lang-en { display: none !important; }
     .nav-row-2 { height: 40px; }
     .court-grid { width: min(100%, calc(100vh - 320px), 280px); height: min(100%, calc(100vh - 320px), 280px); }
     .action-btn { min-height: 50px; font-size: 1.35rem; }
+    .selector-btn.level-btn { min-height: 28px; }
 }
 @media (max-height: 600px) {
     :root { --nav-height: 76px; }
@@ -402,12 +412,14 @@ body.es .lang-en { display: none !important; }
     .court-grid { min-width: 140px; min-height: 140px; }
     .grid-cell { min-width: 26px; min-height: 26px; font-size: 1.1rem; }
     .action-btn { min-height: 40px; font-size: 1.1rem; }
+    .selector-btn.level-btn { min-height: 22px; font-size: 0.6rem; }
 }
 @media (max-height: 520px) {
     :root { --nav-height: 66px; }
     .nav-row-1 { height: 36px; }
     .nav-row-2 { height: 28px; }
     .action-btn { min-height: 36px; font-size: 1rem; }
+    .selector-btn.level-btn { min-height: 20px; font-size: 0.55rem; }
 }
 </style>
 </head>
@@ -460,18 +472,23 @@ body.es .lang-en { display: none !important; }
     </div>
 
     <div class="message-display">
-        <span class="message-text" id="messageText"><span class="lang-en">Select division & GO!</span><span class="lang-es">¡Selecciona e IR!</span></span>
+        <span class="message-text" id="messageText"><span class="lang-en">Select level & GO!</span><span class="lang-es">¡Selecciona e IR!</span></span>
     </div>
 
     <div class="selectors-row">
-        <div class="selector-group">
+        <div class="selector-group level-group">
             <div class="selector-label"><span class="lang-en">Level</span><span class="lang-es">Nivel</span></div>
-            <div class="selector-options">
-                <button class="selector-btn active" data-level="1">1</button>
-                <button class="selector-btn" data-level="2">2</button>
-                <button class="selector-btn" data-level="3">3</button>
-                <button class="selector-btn" data-level="4">4</button>
-                <button class="selector-btn" data-level="5">5</button>
+            <div class="selector-options level-options">
+                <button class="selector-btn level-btn active" data-level="1">1</button>
+                <button class="selector-btn level-btn" data-level="2">2</button>
+                <button class="selector-btn level-btn" data-level="3">3</button>
+                <button class="selector-btn level-btn" data-level="4">4</button>
+                <button class="selector-btn level-btn" data-level="5">5</button>
+                <button class="selector-btn level-btn" data-level="6">6</button>
+                <button class="selector-btn level-btn" data-level="7">7</button>
+                <button class="selector-btn level-btn" data-level="8">8</button>
+                <button class="selector-btn level-btn" data-level="9">9</button>
+                <button class="selector-btn level-btn" data-level="10">10</button>
             </div>
         </div>
         <div class="selector-group">
@@ -492,7 +509,7 @@ body.es .lang-en { display: none !important; }
 
     <div class="division-display">
         <div class="division-badge" id="divisionBadge">L1 SLOW</div>
-        <div class="sequence-counter" id="sequenceCounter">SEQ: 3</div>
+        <div class="sequence-counter" id="sequenceCounter">SEQ: 7</div>
         <div class="score-display" id="totalScore">0</div>
     </div>
 
@@ -528,7 +545,7 @@ body.es .lang-en { display: none !important; }
 <script>
 (function() {
     var host = window.location.hostname;
-    var isProduction = (host.indexOf('laughcourt') > -1 || host.indexOf('github.io') > -1);
+    var isProduction = (host.indexOf('laughcourt') > -1 || host.indexOf('github.io') > -1 || host.indexOf('gostardigital') > -1);
 
     if (isProduction) {
         var user = null;
@@ -575,12 +592,33 @@ body.es .lang-en { display: none !important; }
     document.getElementById('upgradeClose').onclick = function() { document.getElementById('upgradeOverlay').classList.remove('show'); };
 
     var TOTAL_CELLS = 16, ROUNDS_PER_TIER = 3, TOTAL_TIERS = 10;
-    var LEVEL_BASE = { 1: 3, 2: 4, 3: 5, 4: 6, 5: 7 };
+    
+    // ============ NEW 10-LEVEL SYSTEM ============
+    // Level 1 = Old Level 5 (7 cells in sequence)
+    // Ramps up from there for REAL challenge
+    // Level 10 = 16 cells = ENTIRE GRID!
+    var LEVEL_BASE = {
+        1: 7,    // Starting challenge (was old L5)
+        2: 8,
+        3: 9,
+        4: 10,
+        5: 11,
+        6: 12,
+        7: 13,
+        8: 14,
+        9: 15,
+        10: 16   // ELITE - Remember the ENTIRE grid sequence!
+    };
+    
     var SPEED_CFG = { slow: { show: 800, gap: 300 }, med: { show: 500, gap: 200 }, fast: { show: 300, gap: 150 } };
     var LAUGH_EMOJIS = ['😂', '😆', '🤣', '😄', '😁', '🥳', '😊', '🎉'], PARTY_EMOJIS = ['🥳', '🎉', '😂', '🤣', '✨', '💫', '🌟', '🏆'];
     var CELL_EMOJIS = ['😊', '😄', '😁', '😆', '🤣', '😂', '🥳', '😃', '😀', '😸', '😹', '🤭', '😏', '😌', '🎉', '✨'];
 
     var state = { level: parseInt(localStorage.getItem('lc-seq-level')) || 1, speed: localStorage.getItem('lc-seq-speed') || 'slow', tier: parseInt(localStorage.getItem('lc-seq-tier')) || 1, score: parseInt(localStorage.getItem('lc-seq-score')) || 0, streak: parseInt(localStorage.getItem('lc-seq-streak')) || 0, roundsCompleted: 0, sequence: [], playerIndex: 0, isPlaying: false, canTap: false, cells: [] };
+
+    // Cap level to 10 max
+    if (state.level > 10) state.level = 10;
+    if (state.level < 1) state.level = 1;
 
     var courtGrid = document.getElementById('courtGrid'), messageText = document.getElementById('messageText'), actionBtn = document.getElementById('actionBtn'), tierupOverlay = document.getElementById('tierupOverlay'), coachMessage = document.getElementById('coachMessage'), emojiContainer = document.getElementById('emojiContainer');
 
@@ -597,7 +635,15 @@ body.es .lang-en { display: none !important; }
 
     function initCourt() { courtGrid.innerHTML = ''; state.cells = []; for (var i = 0; i < TOTAL_CELLS; i++) { var cell = document.createElement('div'); cell.className = 'grid-cell'; cell.dataset.index = i; cell.textContent = CELL_EMOJIS[i]; cell.onclick = function() { handleTap(parseInt(this.dataset.index)); }; courtGrid.appendChild(cell); state.cells.push(cell); } }
     function renderTierDots() { var c = document.getElementById('tierDots'); c.innerHTML = ''; for (var i = 1; i <= TOTAL_TIERS; i++) { var d = document.createElement('div'); d.className = 'tier-dot' + (i < state.tier ? ' completed' : '') + (i === state.tier ? ' current' : ''); c.appendChild(d); } }
-    function getSeqLen() { return LEVEL_BASE[state.level] + (state.tier - 1); }
+    
+    function getSeqLen() { 
+        var base = LEVEL_BASE[state.level] || 7;
+        var tierBonus = state.tier - 1;
+        var total = base + tierBonus;
+        // Cap at 16 (entire grid)
+        return Math.min(total, 16);
+    }
+    
     function updateDivisionDisplay() { var sp = state.speed.toUpperCase(); if (currentLang === 'es') sp = state.speed === 'slow' ? 'LENTO' : state.speed === 'med' ? 'MEDIO' : 'RÁPIDO'; document.getElementById('divisionBadge').textContent = 'L' + state.level + ' ' + sp; document.getElementById('sequenceCounter').textContent = 'SEQ: ' + getSeqLen(); }
     function updateStats() { document.getElementById('tierDisplay').textContent = state.tier; document.getElementById('roundDisplay').textContent = state.roundsCompleted + '/' + ROUNDS_PER_TIER; document.getElementById('streakDisplay').textContent = state.streak; document.getElementById('scoreDisplay').textContent = state.score; document.getElementById('totalScore').textContent = state.score; renderTierDots(); }
     function showCoach(msg) { coachMessage.textContent = msg; coachMessage.classList.add('show'); setTimeout(function() { coachMessage.classList.remove('show'); }, 2000); }
@@ -634,11 +680,11 @@ body.es .lang-en { display: none !important; }
 
     function resetRound() { state.cells.forEach(function(c) { c.classList.remove('lit', 'correct', 'wrong', 'player-tap'); }); messageText.innerHTML = '<span>' + (state.roundsCompleted + 1) + '/' + ROUNDS_PER_TIER + '</span>'; messageText.className = 'message-text'; actionBtn.disabled = false; updateStats(); }
 
-    document.querySelectorAll('[data-level]').forEach(function(btn) { btn.onclick = function() { if (state.isPlaying) return; document.querySelectorAll('[data-level]').forEach(function(b) { b.classList.remove('active'); }); btn.classList.add('active'); state.level = parseInt(btn.dataset.level); state.tier = 1; state.roundsCompleted = 0; localStorage.setItem('lc-seq-level', state.level); localStorage.setItem('lc-seq-tier', 1); updateDivisionDisplay(); updateStats(); }; });
+    document.querySelectorAll('[data-level]').forEach(function(btn) { btn.onclick = function() { if (state.isPlaying) return; document.querySelectorAll('[data-level]').forEach(function(b) { b.classList.remove('active'); }); btn.classList.add('active'); state.level = parseInt(btn.dataset.level); if (state.level > 10) state.level = 10; if (state.level < 1) state.level = 1; state.tier = 1; state.roundsCompleted = 0; localStorage.setItem('lc-seq-level', state.level); localStorage.setItem('lc-seq-tier', 1); updateDivisionDisplay(); updateStats(); }; });
     document.querySelectorAll('.speed-btn').forEach(function(btn) { btn.onclick = function() { if (state.isPlaying) return; if (!speedAccess.allSpeeds && btn.dataset.speed !== 'slow') { showUpgrade(); return; } document.querySelectorAll('.speed-btn').forEach(function(b) { b.classList.remove('active'); }); btn.classList.add('active'); state.speed = btn.dataset.speed; state.tier = 1; state.roundsCompleted = 0; localStorage.setItem('lc-seq-speed', state.speed); localStorage.setItem('lc-seq-tier', 1); updateDivisionDisplay(); updateStats(); }; });
     actionBtn.onclick = startRound;
 
-    function loadState() { var sl = localStorage.getItem('lc-seq-level'); if (sl) { state.level = parseInt(sl); document.querySelectorAll('[data-level]').forEach(function(b) { b.classList.remove('active'); }); var lb = document.querySelector('[data-level="' + state.level + '"]'); if (lb) lb.classList.add('active'); } var ss = localStorage.getItem('lc-seq-speed'); if (ss && (speedAccess.allSpeeds || ss === 'slow')) { state.speed = ss; document.querySelectorAll('.speed-btn').forEach(function(b) { b.classList.remove('active'); }); var sb = document.querySelector('.speed-btn[data-speed="' + state.speed + '"]'); if (sb) sb.classList.add('active'); } }
+    function loadState() { var sl = localStorage.getItem('lc-seq-level'); if (sl) { state.level = parseInt(sl); if (state.level > 10) state.level = 10; if (state.level < 1) state.level = 1; document.querySelectorAll('[data-level]').forEach(function(b) { b.classList.remove('active'); }); var lb = document.querySelector('[data-level="' + state.level + '"]'); if (lb) lb.classList.add('active'); } var ss = localStorage.getItem('lc-seq-speed'); if (ss && (speedAccess.allSpeeds || ss === 'slow')) { state.speed = ss; document.querySelectorAll('.speed-btn').forEach(function(b) { b.classList.remove('active'); }); var sb = document.querySelector('.speed-btn[data-speed="' + state.speed + '"]'); if (sb) sb.classList.add('active'); } }
 
     initCourt(); initSpeedButtons(); loadState(); setLang(currentLang); updateDivisionDisplay(); updateStats(); renderTierDots();
 })();
