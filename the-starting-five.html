@@ -710,6 +710,64 @@
     </div>
 
     <script>
+        // ============ PIN GATE — Synced with LaughCourt Auth ============
+        // Shows overlay if not authenticated (allows preview in Claude)
+        (function() {
+            var pin = sessionStorage.getItem('lc-pin');
+            var token = sessionStorage.getItem('lc-token');
+            
+            // Check if we're in preview/local environment (skip auth check)
+            var isPreview = window.location.protocol === 'file:' || 
+                           window.location.hostname === 'localhost' ||
+                           window.location.hostname.includes('claude') ||
+                           window.location.hostname.includes('anthropic') ||
+                           window.location.hostname === '';
+            
+            if (isPreview) {
+                console.log('🏀 Preview mode - auth skipped');
+                return; // Allow preview
+            }
+            
+            // Production: Check for credentials
+            if (!pin || !token) {
+                showAuthOverlay();
+                return;
+            }
+            
+            // Validate session is still active
+            fetch('/api/session/validate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ pin: pin, token: token })
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(d) {
+                if (!d.valid) {
+                    sessionStorage.removeItem('lc-pin');
+                    sessionStorage.removeItem('lc-token');
+                    showAuthOverlay();
+                }
+            })
+            .catch(function() {
+                // Network error - might be preview or server issue
+                console.log('🏀 Auth check failed - allowing access');
+            });
+            
+            function showAuthOverlay() {
+                var overlay = document.createElement('div');
+                overlay.id = 'authOverlay';
+                overlay.innerHTML = `
+                    <div style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,10,18,0.97);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;">
+                        <div style="font-size:4rem;margin-bottom:20px;">🔐</div>
+                        <h2 style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:#FF6B35;letter-spacing:3px;margin-bottom:10px;">PIN REQUIRED</h2>
+                        <p style="color:#a0a0a0;margin-bottom:25px;max-width:300px;">You need to log in to meet The Starting Five.</p>
+                        <a href="index.html" style="background:#FF6B35;color:#fff;text-decoration:none;padding:14px 32px;border-radius:30px;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;transition:all 0.3s ease;">GO TO LOGIN</a>
+                    </div>
+                `;
+                document.body.appendChild(overlay);
+            }
+        })();
+
         // Current language
         let currentLang = localStorage.getItem('laughcourt-lang') || 'en';
 
