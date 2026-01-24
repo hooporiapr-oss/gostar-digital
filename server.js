@@ -1078,6 +1078,471 @@ app.get('/faq', function(req, res) {
     res.sendFile(path.join(__dirname, 'faq.html'));
 });
 
+// ============ SUCCESS PAGE (Post-Stripe Payment) ============
+app.get('/success', function(req, res) {
+    var email = req.query.email;
+    var sessionId = req.query.session_id;
+    
+    var pin = null;
+    var userEmail = null;
+    var status = null;
+    var found = false;
+    
+    // Look up by email if provided
+    if (email) {
+        email = email.toLowerCase().trim();
+        var subscribers = readJSON(SUBSCRIBERS_FILE);
+        
+        for (var i = 0; i < subscribers.length; i++) {
+            if (subscribers[i].email && subscribers[i].email.toLowerCase() === email) {
+                pin = subscribers[i].pin;
+                userEmail = subscribers[i].email;
+                status = subscribers[i].status;
+                found = true;
+                console.log('✅ Success page - Found PIN for:', email);
+                logActivity('success_page', email, null, 'Post-payment success page viewed');
+                break;
+            }
+        }
+    }
+    
+    // Render success page with embedded data
+    var html = '<!DOCTYPE html>\n' +
+'<html lang="en">\n' +
+'<head>\n' +
+'    <meta charset="UTF-8">\n' +
+'    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">\n' +
+'    <title>Welcome! | LaughCourt</title>\n' +
+'    <link rel="preconnect" href="https://fonts.googleapis.com">\n' +
+'    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">\n' +
+'    <style>\n' +
+'        :root { --gold: #FFD700; --orange: #FF6B35; --teal: #00D9A5; --dark: #0a0a0f; --card: #111118; --text: #FFFFFF; --muted: #8892a0; --border: rgba(255,255,255,0.08); }\n' +
+'        * { margin: 0; padding: 0; box-sizing: border-box; }\n' +
+'        body { font-family: "Outfit", sans-serif; background: var(--dark); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }\n' +
+'        body.es .lang-en { display: none !important; }\n' +
+'        body.en .lang-es { display: none !important; }\n' +
+'        .lang-toggle { position: fixed; top: 15px; right: 15px; display: flex; gap: 4px; background: var(--card); padding: 3px; border-radius: 8px; border: 1px solid var(--border); }\n' +
+'        .lang-btn { padding: 6px 10px; border: none; background: transparent; color: var(--muted); border-radius: 6px; font-weight: 600; font-size: 0.7rem; cursor: pointer; font-family: "Outfit", sans-serif; transition: all 0.2s; }\n' +
+'        .lang-btn.active { background: var(--gold); color: var(--dark); }\n' +
+'        .container { width: 100%; max-width: 400px; text-align: center; }\n' +
+'        .logo { font-family: "Bebas Neue", sans-serif; font-size: 2.5rem; letter-spacing: 4px; margin-bottom: 5px; }\n' +
+'        .logo .laugh { color: var(--gold); }\n' +
+'        .logo .court { color: var(--text); }\n' +
+'        .tagline { font-size: 0.7rem; color: var(--gold); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 30px; }\n' +
+'        .card { background: var(--card); border: 2px solid var(--teal); border-radius: 20px; padding: 40px 30px; box-shadow: 0 10px 40px rgba(0,217,165,0.2); }\n' +
+'        .celebration { font-size: 2.5rem; margin-bottom: 15px; animation: bounce 0.6s ease infinite; }\n' +
+'        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }\n' +
+'        .card-title { font-family: "Bebas Neue", sans-serif; font-size: 1.8rem; letter-spacing: 3px; margin-bottom: 8px; color: var(--teal); }\n' +
+'        .card-subtitle { color: var(--muted); font-size: 0.9rem; margin-bottom: 25px; line-height: 1.5; }\n' +
+'        .pin-reveal { background: linear-gradient(135deg, rgba(255,215,0,0.1), rgba(255,107,53,0.1)); border: 3px solid var(--gold); border-radius: 16px; padding: 25px; margin-bottom: 25px; animation: celebrate 0.5s ease-out; }\n' +
+'        @keyframes celebrate { 0% { transform: scale(0.8); opacity: 0; } 50% { transform: scale(1.05); } 100% { transform: scale(1); opacity: 1; } }\n' +
+'        .pin-label { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }\n' +
+'        .pin-value { font-family: "Bebas Neue", sans-serif; font-size: 3.5rem; letter-spacing: 12px; color: var(--gold); text-shadow: 0 0 30px rgba(255,215,0,0.5); }\n' +
+'        .btn { width: 100%; padding: 18px 30px; border: none; border-radius: 50px; font-family: "Bebas Neue", sans-serif; font-size: 1.3rem; letter-spacing: 3px; cursor: pointer; transition: all 0.3s; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 10px; background: linear-gradient(135deg, var(--teal), #00CED1); color: var(--dark); box-shadow: 0 8px 30px rgba(0,217,165,0.3); }\n' +
+'        .btn:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,217,165,0.4); }\n' +
+'        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }\n' +
+'        .countdown { font-size: 0.85rem; color: var(--muted); margin-top: 15px; }\n' +
+'        .countdown span { color: var(--teal); font-weight: 700; }\n' +
+'        .error-card { border-color: #FF1744; }\n' +
+'        .error-card .card-title { color: #FF1744; }\n' +
+'        .btn-primary { background: linear-gradient(135deg, var(--gold), var(--orange)); box-shadow: 0 8px 30px rgba(255,107,53,0.3); }\n' +
+'        .footer { margin-top: 40px; text-align: center; }\n' +
+'        .footer-logo { font-family: "Bebas Neue", sans-serif; font-size: 1.2rem; letter-spacing: 3px; margin-bottom: 8px; }\n' +
+'        .footer-logo .laugh { color: var(--gold); }\n' +
+'        .footer-company { font-size: 0.7rem; color: var(--muted); }\n' +
+'        .footer-company a { color: var(--gold); text-decoration: none; }\n' +
+'        @media (max-width: 480px) { .logo { font-size: 2rem; } .card { padding: 30px 20px; } .pin-value { font-size: 2.8rem; letter-spacing: 10px; } .btn { font-size: 1.1rem; padding: 16px 25px; } }\n' +
+'    </style>\n' +
+'</head>\n' +
+'<body class="en">\n' +
+'    <div class="lang-toggle">\n' +
+'        <button class="lang-btn active" id="btnEn">EN</button>\n' +
+'        <button class="lang-btn" id="btnEs">ES</button>\n' +
+'    </div>\n' +
+'    <div class="container">\n' +
+'        <div class="logo">🏀 <span class="laugh">LAUGH</span><span class="court">COURT</span></div>\n' +
+'        <div class="tagline">\n' +
+'            <span class="lang-en">Where Joy Meets The Game</span>\n' +
+'            <span class="lang-es">Donde La Alegría Se Une Al Juego</span>\n' +
+'        </div>\n';
+
+    if (found && pin) {
+        html += '' +
+'        <div class="card">\n' +
+'            <div class="celebration">🎉🏀🎉</div>\n' +
+'            <h1 class="card-title">\n' +
+'                <span class="lang-en">PAYMENT SUCCESSFUL!</span>\n' +
+'                <span class="lang-es">¡PAGO EXITOSO!</span>\n' +
+'            </h1>\n' +
+'            <p class="card-subtitle">\n' +
+'                <span class="lang-en">Your 7-day free trial has started. Here\'s your PIN!</span>\n' +
+'                <span class="lang-es">Tu prueba gratis de 7 días ha comenzado. ¡Aquí está tu PIN!</span>\n' +
+'            </p>\n' +
+'            <div class="pin-reveal">\n' +
+'                <div class="pin-label">\n' +
+'                    <span class="lang-en">YOUR PIN</span>\n' +
+'                    <span class="lang-es">TU PIN</span>\n' +
+'                </div>\n' +
+'                <div class="pin-value">' + pin + '</div>\n' +
+'            </div>\n' +
+'            <button class="btn" id="playBtn">\n' +
+'                <span class="lang-en">🏀 PLAY NOW</span>\n' +
+'                <span class="lang-es">🏀 JUGAR AHORA</span>\n' +
+'            </button>\n' +
+'            <div class="countdown">\n' +
+'                <span class="lang-en">Auto-login in <span id="countEn">5</span> seconds...</span>\n' +
+'                <span class="lang-es">Ingreso automático en <span id="countEs">5</span> segundos...</span>\n' +
+'            </div>\n' +
+'        </div>\n';
+    } else {
+        html += '' +
+'        <div class="card error-card">\n' +
+'            <div class="celebration">😕</div>\n' +
+'            <h1 class="card-title">\n' +
+'                <span class="lang-en">SETTING UP...</span>\n' +
+'                <span class="lang-es">CONFIGURANDO...</span>\n' +
+'            </h1>\n' +
+'            <p class="card-subtitle">\n' +
+'                <span class="lang-en">Your account is being created. Please use "Forgot PIN" with your email to get access.</span>\n' +
+'                <span class="lang-es">Tu cuenta se está creando. Por favor usa "Olvidé mi PIN" con tu correo para obtener acceso.</span>\n' +
+'            </p>\n' +
+'            <a href="/login" class="btn btn-primary">\n' +
+'                <span class="lang-en">GO TO LOGIN</span>\n' +
+'                <span class="lang-es">IR A LOGIN</span>\n' +
+'            </a>\n' +
+'        </div>\n';
+    }
+
+    html += '' +
+'        <footer class="footer">\n' +
+'            <div class="footer-logo">🏀 <span class="laugh">LAUGH</span><span class="court">COURT</span></div>\n' +
+'            <div class="footer-company">by <a href="https://gostar.digital">GoStar Digital LLC</a> 🇵🇷</div>\n' +
+'        </footer>\n' +
+'    </div>\n' +
+'    <script>\n' +
+'        (function() {\n' +
+'            var lang = localStorage.getItem("laughcourt_lang") || "en";\n' +
+'            document.body.className = lang;\n' +
+'            document.getElementById("btnEn").className = lang === "en" ? "lang-btn active" : "lang-btn";\n' +
+'            document.getElementById("btnEs").className = lang === "es" ? "lang-btn active" : "lang-btn";\n' +
+'            document.getElementById("btnEn").onclick = function() { localStorage.setItem("laughcourt_lang", "en"); document.body.className = "en"; this.className = "lang-btn active"; document.getElementById("btnEs").className = "lang-btn"; };\n' +
+'            document.getElementById("btnEs").onclick = function() { localStorage.setItem("laughcourt_lang", "es"); document.body.className = "es"; this.className = "lang-btn active"; document.getElementById("btnEn").className = "lang-btn"; };\n';
+
+    if (found && pin) {
+        html += '' +
+'            var pin = "' + pin + '";\n' +
+'            var countdown = 5;\n' +
+'            var interval = setInterval(function() {\n' +
+'                countdown--;\n' +
+'                var cEn = document.getElementById("countEn");\n' +
+'                var cEs = document.getElementById("countEs");\n' +
+'                if (cEn) cEn.textContent = countdown;\n' +
+'                if (cEs) cEs.textContent = countdown;\n' +
+'                if (countdown <= 0) { clearInterval(interval); doLogin(); }\n' +
+'            }, 1000);\n' +
+'            function doLogin() {\n' +
+'                var btn = document.getElementById("playBtn");\n' +
+'                if (btn) btn.disabled = true;\n' +
+'                fetch("/api/login", {\n' +
+'                    method: "POST",\n' +
+'                    headers: { "Content-Type": "application/json" },\n' +
+'                    body: JSON.stringify({ pin: pin })\n' +
+'                })\n' +
+'                .then(function(r) { return r.json(); })\n' +
+'                .then(function(data) {\n' +
+'                    if (data.success) {\n' +
+'                        localStorage.setItem("lc-user", JSON.stringify({ pin: pin }));\n' +
+'                        sessionStorage.setItem("lc-pin", pin);\n' +
+'                        sessionStorage.setItem("lc-token", data.token);\n' +
+'                        localStorage.setItem("lc-terms-accepted", new Date().toISOString());\n' +
+'                        window.location.href = "/play";\n' +
+'                    } else {\n' +
+'                        window.location.href = "/login";\n' +
+'                    }\n' +
+'                })\n' +
+'                .catch(function() { window.location.href = "/login"; });\n' +
+'            }\n' +
+'            var playBtn = document.getElementById("playBtn");\n' +
+'            if (playBtn) playBtn.onclick = function() { clearInterval(interval); doLogin(); };\n';
+    }
+
+    html += '' +
+'        })();\n' +
+'    </script>\n' +
+'</body>\n' +
+'</html>';
+
+    res.send(html);
+});
+
+// ============ SUCCESS PAGE (Post-Stripe Payment) ============
+app.get('/success', function(req, res) {
+    var email = req.query.email;
+    var sessionId = req.query.session_id;
+    
+    var pin = null;
+    var status = null;
+    var found = false;
+    
+    // Look up by email
+    if (email) {
+        email = email.toLowerCase().trim();
+        var subscribers = readJSON(SUBSCRIBERS_FILE);
+        
+        for (var i = 0; i < subscribers.length; i++) {
+            if (subscribers[i].email && subscribers[i].email.toLowerCase() === email) {
+                pin = subscribers[i].pin;
+                status = subscribers[i].status;
+                found = true;
+                console.log('✅ Success page - Found PIN for:', email);
+                break;
+            }
+        }
+    }
+    
+    // Render success page with PIN embedded
+    var html = '<!DOCTYPE html>\n' +
+'<html lang="en">\n' +
+'<head>\n' +
+'    <meta charset="UTF-8">\n' +
+'    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">\n' +
+'    <title>Welcome! | LaughCourt</title>\n' +
+'    <link rel="preconnect" href="https://fonts.googleapis.com">\n' +
+'    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">\n' +
+'    <style>\n' +
+'        :root{--gold:#FFD700;--orange:#FF6B35;--teal:#00D9A5;--dark:#0a0a0f;--card:#111118;--text:#FFF;--muted:#8892a0;--border:rgba(255,255,255,0.08)}\n' +
+'        *{margin:0;padding:0;box-sizing:border-box}\n' +
+'        body{font-family:"Outfit",sans-serif;background:var(--dark);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}\n' +
+'        .container{width:100%;max-width:400px;text-align:center}\n' +
+'        .logo{font-family:"Bebas Neue",sans-serif;font-size:2.5rem;letter-spacing:5px;margin-bottom:5px}\n' +
+'        .logo .laugh{color:var(--gold)}\n' +
+'        .logo .court{color:var(--text)}\n' +
+'        .tagline{font-size:0.7rem;color:var(--gold);letter-spacing:3px;text-transform:uppercase;margin-bottom:30px}\n' +
+'        .card{background:var(--card);border:2px solid var(--teal);border-radius:20px;padding:40px 30px;box-shadow:0 10px 40px rgba(0,217,165,0.2)}\n' +
+'        .celebration{font-size:2.5rem;margin-bottom:15px;animation:bounce 0.6s ease infinite}\n' +
+'        @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}\n' +
+'        .card-title{font-family:"Bebas Neue",sans-serif;font-size:1.8rem;letter-spacing:3px;margin-bottom:8px;color:var(--teal)}\n' +
+'        .card-subtitle{color:var(--muted);font-size:0.9rem;margin-bottom:25px;line-height:1.5}\n' +
+'        .pin-reveal{background:linear-gradient(135deg,rgba(255,215,0,0.1),rgba(255,107,53,0.1));border:3px solid var(--gold);border-radius:16px;padding:25px;margin-bottom:25px;animation:celebrate 0.5s ease-out}\n' +
+'        @keyframes celebrate{0%{transform:scale(0.8);opacity:0}50%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}\n' +
+'        .pin-label{font-size:0.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:10px}\n' +
+'        .pin-value{font-family:"Bebas Neue",sans-serif;font-size:3.5rem;letter-spacing:12px;color:var(--gold);text-shadow:0 0 30px rgba(255,215,0,0.5)}\n' +
+'        .btn{width:100%;padding:18px 30px;border:none;border-radius:50px;font-family:"Bebas Neue",sans-serif;font-size:1.3rem;letter-spacing:3px;cursor:pointer;background:linear-gradient(135deg,var(--teal),#00B894);color:var(--dark);box-shadow:0 8px 30px rgba(0,217,165,0.3);transition:all 0.3s;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}\n' +
+'        .btn:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,217,165,0.4)}\n' +
+'        .btn:disabled{opacity:0.5;cursor:not-allowed;transform:none!important}\n' +
+'        .countdown{font-size:0.85rem;color:var(--muted);margin-top:15px}\n' +
+'        .countdown span{color:var(--teal);font-weight:700}\n' +
+'        .error-card{border-color:var(--orange)}\n' +
+'        .error-title{color:var(--orange)}\n' +
+'        .btn-login{background:linear-gradient(135deg,var(--gold),var(--orange));box-shadow:0 8px 30px rgba(255,107,53,0.3)}\n' +
+'        .btn-login:hover{box-shadow:0 12px 40px rgba(255,107,53,0.4)}\n' +
+'        .footer{margin-top:40px;font-size:0.7rem;color:var(--muted)}\n' +
+'        .footer a{color:var(--gold);text-decoration:none}\n' +
+'        .loading{display:none}\n' +
+'        .loading.show{display:block}\n' +
+'        .spinner{width:50px;height:50px;border:4px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 20px}\n' +
+'        @keyframes spin{to{transform:rotate(360deg)}}\n' +
+'    </style>\n' +
+'</head>\n' +
+'<body>\n' +
+'    <div class="container">\n' +
+'        <div class="logo">🏀 <span class="laugh">LAUGH</span><span class="court">COURT</span></div>\n' +
+'        <div class="tagline">Where Joy Meets The Game</div>\n';
+
+    if (found && pin) {
+        // SUCCESS - Show PIN
+        html += '        <div class="card">\n' +
+'            <div class="celebration">🎉🏀🎉</div>\n' +
+'            <h1 class="card-title">PAYMENT SUCCESSFUL!</h1>\n' +
+'            <p class="card-subtitle">Your 7-day free trial has started. Here\'s your PIN!</p>\n' +
+'            <div class="pin-reveal">\n' +
+'                <div class="pin-label">YOUR PIN</div>\n' +
+'                <div class="pin-value">' + pin + '</div>\n' +
+'            </div>\n' +
+'            <button class="btn" id="playBtn">🏀 PLAY NOW</button>\n' +
+'            <div class="countdown">Auto-login in <span id="countdown">5</span> seconds...</div>\n' +
+'        </div>\n' +
+'        <script>\n' +
+'            var pin = "' + pin + '";\n' +
+'            var countdownTime = 5;\n' +
+'            var countdownEl = document.getElementById("countdown");\n' +
+'            var playBtn = document.getElementById("playBtn");\n' +
+'            \n' +
+'            function autoLogin() {\n' +
+'                playBtn.disabled = true;\n' +
+'                fetch("/api/login", {\n' +
+'                    method: "POST",\n' +
+'                    headers: { "Content-Type": "application/json" },\n' +
+'                    body: JSON.stringify({ pin: pin })\n' +
+'                })\n' +
+'                .then(function(r) { return r.json(); })\n' +
+'                .then(function(data) {\n' +
+'                    if (data.success) {\n' +
+'                        localStorage.setItem("lc-user", JSON.stringify({ pin: pin }));\n' +
+'                        sessionStorage.setItem("lc-pin", pin);\n' +
+'                        sessionStorage.setItem("lc-token", data.token);\n' +
+'                        localStorage.setItem("lc-terms-accepted", new Date().toISOString());\n' +
+'                        window.location.href = "/play";\n' +
+'                    } else {\n' +
+'                        window.location.href = "/login";\n' +
+'                    }\n' +
+'                })\n' +
+'                .catch(function() { window.location.href = "/login"; });\n' +
+'            }\n' +
+'            \n' +
+'            var interval = setInterval(function() {\n' +
+'                countdownTime--;\n' +
+'                countdownEl.textContent = countdownTime;\n' +
+'                if (countdownTime <= 0) {\n' +
+'                    clearInterval(interval);\n' +
+'                    autoLogin();\n' +
+'                }\n' +
+'            }, 1000);\n' +
+'            \n' +
+'            playBtn.onclick = function() {\n' +
+'                clearInterval(interval);\n' +
+'                autoLogin();\n' +
+'            };\n' +
+'        </script>\n';
+    } else {
+        // ERROR - No PIN found
+        html += '        <div class="card error-card">\n' +
+'            <div class="celebration">😕</div>\n' +
+'            <h1 class="card-title error-title">ALMOST THERE!</h1>\n' +
+'            <p class="card-subtitle">We\'re still processing your account. Please log in with your email to get your PIN.</p>\n' +
+'            <a href="/login" class="btn btn-login">GO TO LOGIN</a>\n' +
+'        </div>\n';
+    }
+
+    html += '        <div class="footer">by <a href="https://gostar.digital">GoStar Digital LLC</a> 🇵🇷</div>\n' +
+'    </div>\n' +
+'</body>\n' +
+'</html>';
+
+    res.send(html);
+});
+
+// ============================================================
+// POST-PAYMENT SUCCESS PAGE (Server-rendered)
+// ============================================================
+app.get('/success', function(req, res) {
+    var email = req.query.email;
+    var sessionId = req.query.session_id;
+    
+    var pin = null;
+    var status = null;
+    var found = false;
+    
+    // Look up by email
+    if (email) {
+        email = email.toLowerCase().trim();
+        var subscribers = readJSON(SUBSCRIBERS_FILE);
+        
+        for (var i = 0; i < subscribers.length; i++) {
+            if (subscribers[i].email && subscribers[i].email.toLowerCase() === email) {
+                pin = subscribers[i].pin;
+                status = subscribers[i].status;
+                found = true;
+                console.log('✅ Success page - PIN found for:', email);
+                logActivity('success_page', email, null, 'Post-payment success page viewed');
+                break;
+            }
+        }
+    }
+    
+    // Render inline HTML
+    var html = '<!DOCTYPE html><html lang="en"><head>';
+    html += '<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">';
+    html += '<title>Welcome! | LaughCourt</title>';
+    html += '<link rel="preconnect" href="https://fonts.googleapis.com">';
+    html += '<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">';
+    html += '<style>';
+    html += ':root{--gold:#FFD700;--orange:#FF6B35;--teal:#00D9A5;--cyan:#00CED1;--dark:#0a0a0f;--card:#111118;--text:#FFFFFF;--muted:#8892a0;--border:rgba(255,255,255,0.08)}';
+    html += '*{margin:0;padding:0;box-sizing:border-box}';
+    html += 'body{font-family:"Outfit",sans-serif;background:var(--dark);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}';
+    html += '.container{width:100%;max-width:400px;text-align:center}';
+    html += '.logo{font-family:"Bebas Neue",sans-serif;font-size:2.5rem;letter-spacing:4px;margin-bottom:5px}';
+    html += '.logo .laugh{color:var(--gold)}.logo .court{color:var(--text)}';
+    html += '.tagline{font-size:0.7rem;color:var(--gold);letter-spacing:3px;text-transform:uppercase;margin-bottom:30px}';
+    html += '.card{background:var(--card);border:2px solid var(--teal);border-radius:20px;padding:40px 30px;box-shadow:0 10px 40px rgba(0,217,165,0.2)}';
+    html += '.celebration{font-size:2.5rem;margin-bottom:15px;animation:bounce 0.6s ease infinite}';
+    html += '@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}';
+    html += '.card-title{font-family:"Bebas Neue",sans-serif;font-size:1.8rem;letter-spacing:3px;margin-bottom:8px;color:var(--teal)}';
+    html += '.card-subtitle{color:var(--muted);font-size:0.9rem;margin-bottom:25px;line-height:1.5}';
+    html += '.pin-reveal{background:linear-gradient(135deg,rgba(255,215,0,0.1),rgba(255,107,53,0.1));border:3px solid var(--gold);border-radius:16px;padding:25px;margin-bottom:25px;animation:celebrate 0.5s ease-out}';
+    html += '@keyframes celebrate{0%{transform:scale(0.8);opacity:0}50%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}';
+    html += '.pin-label{font-size:0.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:10px}';
+    html += '.pin-value{font-family:"Bebas Neue",sans-serif;font-size:3.5rem;letter-spacing:12px;color:var(--gold);text-shadow:0 0 30px rgba(255,215,0,0.5)}';
+    html += '.btn{width:100%;padding:18px 30px;border:none;border-radius:50px;font-family:"Bebas Neue",sans-serif;font-size:1.3rem;letter-spacing:3px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(135deg,var(--teal),var(--cyan));color:var(--dark);box-shadow:0 8px 30px rgba(0,217,165,0.3);transition:all 0.3s}';
+    html += '.btn:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,217,165,0.4)}';
+    html += '.btn:disabled{opacity:0.5;cursor:not-allowed;transform:none!important}';
+    html += '.countdown{font-size:0.85rem;color:var(--muted);margin-top:15px}.countdown span{color:var(--teal);font-weight:700}';
+    html += '.error-card{border-color:var(--orange)}';
+    html += '.btn-primary{background:linear-gradient(135deg,var(--gold),var(--orange));box-shadow:0 8px 30px rgba(255,107,53,0.3)}';
+    html += '.btn-primary:hover{box-shadow:0 12px 40px rgba(255,107,53,0.4)}';
+    html += '.footer{margin-top:40px;font-size:0.7rem;color:var(--muted)}.footer a{color:var(--gold);text-decoration:none}';
+    html += '@media(max-width:480px){.logo{font-size:2rem}.card{padding:30px 20px}.pin-value{font-size:2.8rem;letter-spacing:10px}.btn{font-size:1.1rem;padding:16px 25px}}';
+    html += '</style></head><body>';
+    html += '<div class="container">';
+    html += '<div class="logo">🏀 <span class="laugh">LAUGH</span><span class="court">COURT</span></div>';
+    html += '<div class="tagline">Where Joy Meets The Game</div>';
+    
+    if (found && pin) {
+        // SUCCESS - Show PIN
+        html += '<div class="card">';
+        html += '<div class="celebration">🎉🏀🎉</div>';
+        html += '<h1 class="card-title">PAYMENT SUCCESSFUL!</h1>';
+        html += '<p class="card-subtitle">Your 7-day free trial has started. Here\'s your PIN!</p>';
+        html += '<div class="pin-reveal">';
+        html += '<div class="pin-label">YOUR PIN</div>';
+        html += '<div class="pin-value">' + pin + '</div>';
+        html += '</div>';
+        html += '<button class="btn" id="playBtn" onclick="autoLogin()">🏀 PLAY NOW</button>';
+        html += '<div class="countdown">Auto-login in <span id="countdown">5</span> seconds...</div>';
+        html += '</div>';
+        
+        // Auto-login script
+        html += '<script>';
+        html += 'var pin="' + pin + '";';
+        html += 'var countdownTime=5;';
+        html += 'var countdownInterval=setInterval(function(){';
+        html += 'countdownTime--;';
+        html += 'document.getElementById("countdown").textContent=countdownTime;';
+        html += 'if(countdownTime<=0){clearInterval(countdownInterval);autoLogin();}';
+        html += '},1000);';
+        html += 'function autoLogin(){';
+        html += 'document.getElementById("playBtn").disabled=true;';
+        html += 'clearInterval(countdownInterval);';
+        html += 'fetch("/api/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({pin:pin})})';
+        html += '.then(function(r){return r.json();})';
+        html += '.then(function(data){';
+        html += 'if(data.success){';
+        html += 'localStorage.setItem("lc-user",JSON.stringify({pin:pin}));';
+        html += 'sessionStorage.setItem("lc-pin",pin);';
+        html += 'sessionStorage.setItem("lc-token",data.token);';
+        html += 'localStorage.setItem("lc-terms-accepted",new Date().toISOString());';
+        html += 'window.location.href="/play";';
+        html += '}else{window.location.href="/login";}';
+        html += '}).catch(function(){window.location.href="/login";});';
+        html += '}';
+        html += '<\/script>';
+    } else {
+        // ERROR - PIN not found (webhook may not have fired yet)
+        html += '<div class="card error-card">';
+        html += '<div class="celebration">⏳</div>';
+        html += '<h1 class="card-title" style="color:var(--orange)">SETTING UP...</h1>';
+        html += '<p class="card-subtitle">Your payment is being processed. Click below to get your PIN using your email.</p>';
+        html += '<a href="/login" class="btn btn-primary">GO TO LOGIN</a>';
+        html += '<p style="margin-top:15px;font-size:0.8rem;color:var(--muted)">Use "Forgot PIN" with your payment email</p>';
+        html += '</div>';
+    }
+    
+    html += '<div class="footer">by <a href="https://gostar.digital">GoStar Digital LLC</a> 🇵🇷</div>';
+    html += '</div></body></html>';
+    
+    res.send(html);
+});
+
 // ============ HEALTH & VERSION ============
 app.get('/health', function(req, res) {
     res.json({
@@ -1113,6 +1578,7 @@ app.listen(PORT, function() {
     console.log('🎯 ROUTES:');
     console.log('   /                 → Landing page');
     console.log('   /login            → PIN Login');
+    console.log('   /success          → Post-payment success');
     console.log('   /play             → Game choice screen (auth required)');
     console.log('   /the-match        → THE MATCH game');
     console.log('   /the-sequence     → THE SEQUENCE game');
