@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LaughCourt | Memory Training That Makes You Smile</title>
-<meta name="description" content="Match. Sequence. Two fun memory workouts. Free to start. Laugh along the way.">
+<meta name="description" content="Cognitive fitness for seniors, rehab centers, and anyone who wants to stay sharp. Two fun memory workouts. 7-day free trial. $5/month.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -60,7 +60,7 @@ body {
 .nav-logo .laugh { color: var(--gold); }
 .nav-logo .court { color: var(--text); }
 
-.nav-right { display: flex; align-items: center; gap: 10px; }
+.nav-right { display: flex; align-items: center; gap: 15px; }
 
 .nav-lang { display: flex; gap: 4px; }
 .nav-lang-btn {
@@ -76,6 +76,23 @@ body {
     min-height: 28px;
 }
 .nav-lang-btn.active { border-color: var(--gold); color: var(--gold); }
+
+.nav-login {
+    padding: 6px 16px;
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-decoration: none;
+    letter-spacing: 1px;
+    transition: all 0.3s;
+}
+.nav-login:hover {
+    background: var(--gold);
+    color: var(--dark);
+}
 
 /* ============ HERO ============ */
 .hero {
@@ -220,6 +237,22 @@ body {
 .btn-secondary:hover {
     border-color: var(--gold);
     color: var(--gold);
+}
+
+.hero-login {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: var(--muted);
+    animation: fadeIn 1s ease-out 1.2s both;
+}
+
+.hero-login a {
+    color: var(--gold);
+    text-decoration: none;
+}
+
+.hero-login a:hover {
+    text-decoration: underline;
 }
 
 .scroll-hint {
@@ -459,9 +492,9 @@ body {
     line-height: 1.5;
 }
 
-/* ============ PRICING STRIP ============ */
-.pricing-strip {
-    padding: 60px 20px;
+/* ============ PRICING SECTION ============ */
+.pricing-section {
+    padding: 80px 20px;
     text-align: center;
     border-top: 1px solid rgba(255,255,255,0.05);
     border-bottom: 1px solid rgba(255,255,255,0.05);
@@ -469,46 +502,127 @@ body {
 
 .pricing-title {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 2rem;
+    font-size: 2.5rem;
     letter-spacing: 4px;
+    margin-bottom: 15px;
+}
+
+.pricing-sub {
+    color: var(--muted);
+    font-size: 1rem;
+    margin-bottom: 40px;
+}
+
+.pricing-card {
+    background: var(--card);
+    border: 2px solid var(--gold);
+    border-radius: 24px;
+    padding: 40px;
+    max-width: 400px;
+    margin: 0 auto 30px;
+    box-shadow: 0 10px 40px rgba(255,215,0,0.1);
+}
+
+.pricing-trial {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 3px;
+    color: var(--teal);
+    margin-bottom: 10px;
+}
+
+.pricing-then {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+}
+
+.pricing-amount {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 4rem;
+    letter-spacing: 2px;
+    color: var(--gold);
+    line-height: 1;
+}
+
+.pricing-period {
+    font-size: 1.2rem;
+    color: var(--muted);
+    margin-bottom: 25px;
+}
+
+.pricing-features {
+    list-style: none;
+    text-align: left;
     margin-bottom: 30px;
 }
 
-.pricing-options {
+.pricing-features li {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    font-size: 0.95rem;
     display: flex;
-    justify-content: center;
-    gap: 40px;
-    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
 }
 
-.price-box {
-    background: var(--card);
-    border-radius: 16px;
-    padding: 25px 40px;
-    min-width: 200px;
+.pricing-features li:last-child {
+    border-bottom: none;
 }
 
-.price-label {
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: var(--muted);
-    margin-bottom: 8px;
+.pricing-features .check {
+    color: var(--teal);
+    font-size: 1.1rem;
 }
 
-.price-value {
+.pricing-cta {
+    display: inline-block;
+    width: 100%;
+    padding: 18px 40px;
+    background: linear-gradient(135deg, var(--gold), var(--orange));
+    color: var(--dark);
+    border-radius: 50px;
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 2.5rem;
-    letter-spacing: 2px;
+    font-size: 1.2rem;
+    letter-spacing: 3px;
+    text-decoration: none;
+    transition: all 0.3s;
+    box-shadow: 0 10px 40px rgba(255,107,0,0.3);
 }
 
-.price-box.free .price-value { color: var(--teal); }
-.price-box.paid .price-value { color: var(--gold); }
+.pricing-cta:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 50px rgba(255,107,0,0.4);
+}
 
-.price-note {
-    font-size: 0.85rem;
+/* ============ FACILITIES CALLOUT ============ */
+.facilities-callout {
+    background: rgba(0,217,165,0.1);
+    border: 1px solid var(--teal);
+    border-radius: 16px;
+    padding: 25px 30px;
+    max-width: 500px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.facilities-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 2px;
+    color: var(--teal);
+    margin-bottom: 10px;
+}
+
+.facilities-text {
     color: var(--muted);
-    margin-top: 5px;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.facilities-text strong {
+    color: var(--text);
 }
 
 /* ============ FINAL CTA ============ */
@@ -702,6 +816,9 @@ body.es .lang-en { display: none !important; }
     .workout-card { padding: 30px 20px; }
     .court-preview { width: 120px; height: 120px; }
     .final-icon { width: 100px; height: 100px; }
+    .pricing-amount { font-size: 3rem; }
+    .pricing-card { padding: 30px 20px; }
+    .nav-login { padding: 5px 12px; font-size: 0.65rem; }
 }
 </style>
 </head>
@@ -718,13 +835,20 @@ body.es .lang-en { display: none !important; }
             <button class="nav-lang-btn active" id="btnEn">EN</button>
             <button class="nav-lang-btn" id="btnEs">ES</button>
         </div>
+        <a href="/login" class="nav-login">
+            <span class="lang-en">LOGIN</span>
+            <span class="lang-es">ENTRAR</span>
+        </a>
     </div>
 </nav>
 
 <!-- ============ HERO ============ -->
 <section class="hero">
     <div class="hero-content">
-        <div class="hero-badge">🏀 Match. Sequence.</div>
+        <div class="hero-badge">
+            <span class="lang-en">🏀 Cognitive Fitness for Seniors & Beyond</span>
+            <span class="lang-es">🏀 Fitness Cognitivo para Mayores y Más</span>
+        </div>
         <div class="hero-logo">
             <span class="laugh">LAUGH</span><span class="court">COURT</span>
         </div>
@@ -737,19 +861,23 @@ body.es .lang-en { display: none !important; }
             <span class="lang-es">ENTRENA TU <span class="highlight-orange">MEMORIA</span>.<br>RÍE <span class="highlight-cyan">EN EL CAMINO</span>.</span>
         </h1>
         <p class="hero-sub">
-            <span class="lang-en">Two memory workouts designed to sharpen your mind and put a smile on your face. Free to start. No equipment needed. Just you and the game.</span>
-            <span class="lang-es">Dos ejercicios de memoria diseñados para agudizar tu mente y ponerte una sonrisa. Gratis para empezar. Sin equipo necesario. Solo tú y el juego.</span>
+            <span class="lang-en">Two memory workouts designed to sharpen your mind and put a smile on your face. Perfect for seniors, rehab centers, memory care, and anyone who wants to stay sharp.</span>
+            <span class="lang-es">Dos ejercicios de memoria diseñados para agudizar tu mente y ponerte una sonrisa. Perfecto para mayores, centros de rehabilitación, cuidado de memoria, y cualquiera que quiera mantenerse agudo.</span>
         </p>
         <div class="hero-cta">
             <a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="btn btn-primary">
-                <span class="lang-en">7 DAY FREE TRIAL →</span>
-                <span class="lang-es">7 DÍAS GRATIS →</span>
+                <span class="lang-en">START 7-DAY FREE TRIAL →</span>
+                <span class="lang-es">COMENZAR 7 DÍAS GRATIS →</span>
             </a>
             <a href="/how-to-play" class="btn btn-secondary">
                 <span class="lang-en">HOW IT WORKS</span>
                 <span class="lang-es">CÓMO FUNCIONA</span>
             </a>
         </div>
+        <p class="hero-login">
+            <span class="lang-en">Already a member? <a href="/login">Login here</a></span>
+            <span class="lang-es">¿Ya eres miembro? <a href="/login">Entra aquí</a></span>
+        </p>
     </div>
     <div class="scroll-hint">
         <span class="lang-en">See the workouts</span>
@@ -795,8 +923,8 @@ body.es .lang-en { display: none !important; }
             </p>
             
             <a href="/how-to-play" class="workout-btn">
-                <span class="lang-en">PLAY THE MATCH →</span>
-                <span class="lang-es">JUGAR THE MATCH →</span>
+                <span class="lang-en">LEARN MORE →</span>
+                <span class="lang-es">SABER MÁS →</span>
             </a>
         </div>
         
@@ -819,8 +947,8 @@ body.es .lang-en { display: none !important; }
             </p>
             
             <a href="/how-to-play" class="workout-btn">
-                <span class="lang-en">PLAY THE SEQUENCE →</span>
-                <span class="lang-es">JUGAR THE SEQUENCE →</span>
+                <span class="lang-en">LEARN MORE →</span>
+                <span class="lang-es">SABER MÁS →</span>
             </a>
         </div>
     </div>
@@ -830,14 +958,14 @@ body.es .lang-en { display: none !important; }
 <section class="value-props fade-in">
     <div class="props-grid">
         <div class="prop">
-            <div class="prop-icon">🆓</div>
+            <div class="prop-icon">🧠</div>
             <div class="prop-title">
-                <span class="lang-en">FREE TO START</span>
-                <span class="lang-es">GRATIS PARA EMPEZAR</span>
+                <span class="lang-en">STAY SHARP</span>
+                <span class="lang-es">MANTENTE AGUDO</span>
             </div>
             <p class="prop-text">
-                <span class="lang-en">SLOW speed is always free. No credit card required.</span>
-                <span class="lang-es">La velocidad LENTA siempre es gratis. Sin tarjeta de crédito.</span>
+                <span class="lang-en">Cognitive training designed for seniors and memory care.</span>
+                <span class="lang-es">Entrenamiento cognitivo diseñado para mayores y cuidado de memoria.</span>
             </p>
         </div>
         <div class="prop">
@@ -865,49 +993,87 @@ body.es .lang-en { display: none !important; }
         <div class="prop">
             <div class="prop-icon">😂</div>
             <div class="prop-title">
-                <span class="lang-en">FUN FIRST</span>
-                <span class="lang-es">DIVERSIÓN PRIMERO</span>
+                <span class="lang-en">JOY FIRST</span>
+                <span class="lang-es">ALEGRÍA PRIMERO</span>
             </div>
             <p class="prop-text">
-                <span class="lang-en">Laugh emojis celebrate every win. Memory training should be joyful.</span>
-                <span class="lang-es">Emojis de risa celebran cada victoria. Entrenar la memoria debe ser alegre.</span>
+                <span class="lang-en">Laugh emojis celebrate every win. Training should be joyful.</span>
+                <span class="lang-es">Emojis de risa celebran cada victoria. El entrenamiento debe ser alegre.</span>
             </p>
         </div>
     </div>
 </section>
 
-<!-- ============ PRICING STRIP ============ -->
-<section class="pricing-strip fade-in">
+<!-- ============ PRICING SECTION ============ -->
+<section class="pricing-section fade-in">
     <h2 class="pricing-title">
         <span class="lang-en">SIMPLE PRICING</span>
-        <span class="lang-es">PRECIOS SIMPLES</span>
+        <span class="lang-es">PRECIO SIMPLE</span>
     </h2>
-    <div class="pricing-options">
-        <div class="price-box free">
-            <div class="price-label">
-                <span class="lang-en">SLOW Speed</span>
-                <span class="lang-es">Velocidad LENTA</span>
-            </div>
-            <div class="price-value">
-                <span class="lang-en">FREE</span>
-                <span class="lang-es">GRATIS</span>
-            </div>
-            <div class="price-note">
-                <span class="lang-en">7 Day Free Trial</span>
-                <span class="lang-es">7 Días de Prueba Gratis</span>
-            </div>
+    <p class="pricing-sub">
+        <span class="lang-en">One plan. Full access. Cancel anytime.</span>
+        <span class="lang-es">Un plan. Acceso completo. Cancela cuando quieras.</span>
+    </p>
+    
+    <div class="pricing-card">
+        <div class="pricing-trial">
+            <span class="lang-en">7-DAY FREE TRIAL</span>
+            <span class="lang-es">7 DÍAS DE PRUEBA GRATIS</span>
         </div>
-        <div class="price-box paid">
-            <div class="price-label">
-                <span class="lang-en">All Speeds</span>
-                <span class="lang-es">Todas las Velocidades</span>
-            </div>
-            <div class="price-value">$5/mo</div>
-            <div class="price-note">
-                <span class="lang-en">MED + FAST unlocked</span>
-                <span class="lang-es">MED + RÁPIDO desbloqueado</span>
-            </div>
+        <div class="pricing-then">
+            <span class="lang-en">then</span>
+            <span class="lang-es">después</span>
         </div>
+        <div class="pricing-amount">$5</div>
+        <div class="pricing-period">
+            <span class="lang-en">per month</span>
+            <span class="lang-es">por mes</span>
+        </div>
+        
+        <ul class="pricing-features">
+            <li>
+                <span class="check">✓</span>
+                <span class="lang-en">All 3 speeds (SLOW, MED, FAST)</span>
+                <span class="lang-es">Las 3 velocidades (LENTO, MED, RÁPIDO)</span>
+            </li>
+            <li>
+                <span class="check">✓</span>
+                <span class="lang-en">Both games (THE MATCH + THE SEQUENCE)</span>
+                <span class="lang-es">Ambos juegos (THE MATCH + THE SEQUENCE)</span>
+            </li>
+            <li>
+                <span class="check">✓</span>
+                <span class="lang-en">60 divisions of gameplay</span>
+                <span class="lang-es">60 divisiones de juego</span>
+            </li>
+            <li>
+                <span class="check">✓</span>
+                <span class="lang-en">Progress tracking & achievements</span>
+                <span class="lang-es">Seguimiento de progreso y logros</span>
+            </li>
+            <li>
+                <span class="check">✓</span>
+                <span class="lang-en">Cancel anytime</span>
+                <span class="lang-es">Cancela cuando quieras</span>
+            </li>
+        </ul>
+        
+        <a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="pricing-cta">
+            <span class="lang-en">START FREE TRIAL →</span>
+            <span class="lang-es">COMENZAR PRUEBA GRATIS →</span>
+        </a>
+    </div>
+    
+    <!-- Facilities Callout -->
+    <div class="facilities-callout">
+        <div class="facilities-title">
+            <span class="lang-en">🏥 FACILITIES & GROUPS</span>
+            <span class="lang-es">🏥 FACILIDADES Y GRUPOS</span>
+        </div>
+        <p class="facilities-text">
+            <span class="lang-en">Need multiple seats? Purchase the quantity you need at checkout. <strong>One PIN, multiple devices.</strong> Perfect for rehab centers, nursing homes, and memory care facilities.</span>
+            <span class="lang-es">¿Necesitas múltiples asientos? Compra la cantidad que necesites al pagar. <strong>Un PIN, múltiples dispositivos.</strong> Perfecto para centros de rehabilitación, hogares de ancianos y facilidades de cuidado de memoria.</span>
+        </p>
     </div>
 </section>
 
@@ -922,12 +1088,14 @@ body.es .lang-en { display: none !important; }
             <span class="lang-es">¿LISTO PARA ENTRENAR?</span>
         </h2>
         <p class="final-sub">
-            <span class="lang-en">The LaughCourt is calling. Are you ready?</span>
-            <span class="lang-es">The LaughCourt te está llamando. ¿Estás listo?</span>
+            <span class="lang-en">Start your 7-day free trial. No risk. All reward.</span>
+            <span class="lang-es">Comienza tu prueba gratis de 7 días. Sin riesgo. Todo recompensa.</span>
         </p>
         <div class="final-buttons">
-            <a href="/how-to-play" class="cta-btn match">THE MATCH 🎯</a>
-            <a href="/how-to-play" class="cta-btn sequence">THE SEQUENCE 🔢</a>
+            <a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="cta-btn match">
+                <span class="lang-en">START FREE TRIAL →</span>
+                <span class="lang-es">COMENZAR GRATIS →</span>
+            </a>
         </div>
         <p class="learn-more">
             <span class="lang-en">First time? <a href="/how-to-play">Learn how to play →</a></span>
@@ -948,7 +1116,10 @@ body.es .lang-en { display: none !important; }
             <span class="lang-en">How to Play</span>
             <span class="lang-es">Cómo Jugar</span>
         </a>
-        
+        <a href="/login">
+            <span class="lang-en">Login</span>
+            <span class="lang-es">Entrar</span>
+        </a>
         <a href="/faq">FAQ</a>
         <a href="/privacy.html">
             <span class="lang-en">Privacy Policy</span>
@@ -961,7 +1132,7 @@ body.es .lang-en { display: none !important; }
     </div>
     <div class="footer-company">by <a href="https://gostar.digital">GoStar Digital LLC</a> 🇵🇷</div>
     <div class="footer-trademarks">
-        LaughCourt™, GoStars™, and Ritnome™ are trademarks of GoStar Digital LLC.
+        LaughCourt™, The Starting Five™, GoStars™, and Ritnome™ are trademarks of GoStar Digital LLC.
     </div>
 </footer>
 
