@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>How to Play | LaughCourt</title>
-    <meta name="description" content="Learn how to play THE MATCH and THE SEQUENCE - two fun memory workouts that sharpen your mind and make you smile.">
+    <meta name="description" content="Learn how to play THE MATCH and THE SEQUENCE - two fun memory workouts designed for seniors and anyone who wants to stay sharp.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -20,6 +20,7 @@
             --text: #FFFFFF;
             --muted: #8892a0;
             --border: rgba(255,255,255,0.08);
+            --nav-height: 50px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -35,57 +36,70 @@
         body.es .lang-en { display: none !important; }
         body.en .lang-es { display: none !important; }
 
-        /* Language Toggle */
-        .lang-toggle {
+        /* ============ MINI NAV ============ */
+        .mini-nav {
             position: fixed;
-            top: 15px;
-            right: 15px;
-            display: flex;
-            gap: 4px;
+            top: 0; left: 0; right: 0;
             background: var(--card);
-            padding: 3px;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-            z-index: 100;
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            height: var(--nav-height);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
         }
-        .lang-btn {
-            padding: 6px 10px;
-            border: none;
+
+        .nav-logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .nav-logo .ball { font-size: 1rem; }
+        .nav-logo .laugh { color: var(--gold); }
+        .nav-logo .court { color: var(--text); }
+
+        .nav-right { display: flex; align-items: center; gap: 15px; }
+
+        .nav-lang { display: flex; gap: 4px; }
+        .nav-lang-btn {
+            padding: 5px 10px;
+            border: 1px solid var(--border);
             background: transparent;
             color: var(--muted);
-            border-radius: 6px;
+            border-radius: 4px;
+            font-size: 0.65rem;
             font-weight: 600;
-            font-size: 0.7rem;
             cursor: pointer;
-            font-family: 'Outfit', sans-serif;
-            transition: all 0.2s;
+            min-width: 32px;
+            min-height: 28px;
         }
-        .lang-btn.active {
+        .nav-lang-btn.active { border-color: var(--gold); color: var(--gold); }
+
+        .nav-login {
+            padding: 6px 16px;
+            background: transparent;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-decoration: none;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+        }
+        .nav-login:hover {
             background: var(--gold);
             color: var(--dark);
         }
 
-        /* Back Link */
-        .back-link {
-            position: fixed;
-            top: 15px;
-            left: 15px;
-            color: var(--muted);
-            text-decoration: none;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            transition: color 0.3s;
-            z-index: 100;
-        }
-        .back-link:hover {
-            color: var(--gold);
-        }
-
         /* ============ HERO ============ */
         .hero {
-            padding: 100px 20px 60px;
+            padding: calc(var(--nav-height) + 60px) 20px 60px;
             text-align: center;
             position: relative;
             overflow: hidden;
@@ -108,20 +122,17 @@
             max-width: 600px;
             margin: 0 auto;
         }
-        .hero-logo {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 2.5rem;
-            letter-spacing: 6px;
-            margin-bottom: 5px;
-        }
-        .hero-logo .laugh { color: var(--gold); }
-        .hero-logo .court { color: var(--text); }
-        .hero-tagline {
-            font-size: 0.7rem;
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255,215,0,0.15);
             color: var(--gold);
-            letter-spacing: 3px;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 700;
             text-transform: uppercase;
-            margin-bottom: 30px;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
         }
         .hero-title {
             font-family: 'Bebas Neue', sans-serif;
@@ -386,76 +397,124 @@
         .divisions-note {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 25px;
             flex-wrap: wrap;
             font-size: 0.8rem;
         }
         .divisions-note span {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
         .dot {
             width: 10px;
             height: 10px;
             border-radius: 50%;
         }
-        .dot.free { background: var(--teal); }
-        .dot.paid { background: var(--orange); }
+        .dot.trial { background: var(--teal); }
+        .dot.subscriber { background: var(--gold); }
 
-        /* ============ PRICING STRIP ============ */
-        .pricing-strip {
-            padding: 50px 20px;
+        /* ============ PRICING SECTION ============ */
+        .pricing-section {
+            padding: 60px 20px;
             background: var(--darker);
             text-align: center;
         }
-        .pricing-strip .container {
-            max-width: 600px;
+        .pricing-section .container {
+            max-width: 400px;
             margin: 0 auto;
         }
         .pricing-title {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.8rem;
+            font-size: 2rem;
             letter-spacing: 3px;
-            margin-bottom: 25px;
+            margin-bottom: 10px;
         }
-        .pricing-boxes {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-        .price-box {
-            background: var(--card);
-            border: 2px solid var(--border);
-            border-radius: 16px;
-            padding: 25px 35px;
-            min-width: 180px;
-            transition: all 0.3s;
-        }
-        .price-box:hover {
-            transform: translateY(-5px);
-        }
-        .price-box.free { border-color: var(--teal); }
-        .price-box.paid { border-color: var(--gold); }
-        .price-label {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+        .pricing-sub {
             color: var(--muted);
+            font-size: 0.9rem;
+            margin-bottom: 30px;
+        }
+
+        .pricing-card {
+            background: var(--card);
+            border: 2px solid var(--gold);
+            border-radius: 24px;
+            padding: 35px 30px;
+            box-shadow: 0 10px 40px rgba(255,215,0,0.1);
+        }
+
+        .pricing-trial {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.4rem;
+            letter-spacing: 3px;
+            color: var(--teal);
             margin-bottom: 8px;
         }
-        .price-value {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 2.2rem;
-            letter-spacing: 2px;
-        }
-        .price-box.free .price-value { color: var(--teal); }
-        .price-box.paid .price-value { color: var(--gold); }
-        .price-note {
-            font-size: 0.8rem;
+
+        .pricing-then {
             color: var(--muted);
-            margin-top: 5px;
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+        }
+
+        .pricing-amount {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3.5rem;
+            letter-spacing: 2px;
+            color: var(--gold);
+            line-height: 1;
+        }
+
+        .pricing-period {
+            font-size: 1.1rem;
+            color: var(--muted);
+            margin-bottom: 20px;
+        }
+
+        .pricing-features {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 25px;
+        }
+
+        .pricing-features li {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+            color: var(--text);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pricing-features li:last-child {
+            border-bottom: none;
+        }
+
+        .pricing-features .check {
+            color: var(--teal);
+            font-size: 1rem;
+        }
+
+        .pricing-cta {
+            display: inline-block;
+            width: 100%;
+            padding: 16px 35px;
+            background: linear-gradient(135deg, var(--gold), var(--orange));
+            color: var(--dark);
+            border-radius: 50px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.1rem;
+            letter-spacing: 3px;
+            text-decoration: none;
+            transition: all 0.3s;
+            box-shadow: 0 10px 40px rgba(255,107,0,0.3);
+        }
+
+        .pricing-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(255,107,0,0.4);
         }
 
         /* ============ FINAL CTA ============ */
@@ -492,14 +551,6 @@
             height: 100%;
             object-fit: contain;
         }
-        .final-logo-text {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 3rem;
-            letter-spacing: 8px;
-            margin-bottom: 20px;
-        }
-        .final-logo-text .laugh { color: var(--gold); }
-        .final-logo-text .court { color: var(--text); }
         .final-title {
             font-family: 'Bebas Neue', sans-serif;
             font-size: 3rem;
@@ -624,41 +675,48 @@
 
         /* ============ RESPONSIVE ============ */
         @media (max-width: 600px) {
-            .hero { padding: 80px 20px 50px; }
-            .hero-logo { font-size: 2rem; }
+            .hero { padding: calc(var(--nav-height) + 40px) 20px 50px; }
             .hero-title { font-size: 2.2rem; }
             .game-name { font-size: 2rem; }
             .section-title { font-size: 1.8rem; }
             .final-title { font-size: 2.2rem; }
-            .final-logo-text { font-size: 2.2rem; letter-spacing: 5px; }
             .cta-btn { font-size: 1.1rem; padding: 18px 25px; }
             .court-demo { width: 160px; height: 160px; }
             .final-icon { width: 100px; height: 100px; }
             .divisions-grid-wrapper { padding: 20px 15px; }
             .div-cell { padding: 6px 3px; font-size: 0.5rem; }
+            .pricing-amount { font-size: 3rem; }
+            .pricing-card { padding: 25px 20px; }
+            .nav-login { padding: 5px 12px; font-size: 0.65rem; }
         }
     </style>
 </head>
 <body class="en">
 
-    <div class="lang-toggle">
-        <button class="lang-btn active" id="btnEn">EN</button>
-        <button class="lang-btn" id="btnEs">ES</button>
-    </div>
-
-    <a href="/" class="back-link">
-        ← <span class="lang-en">Home</span><span class="lang-es">Inicio</span>
-    </a>
+    <!-- ============ MINI NAV ============ -->
+    <nav class="mini-nav">
+        <a href="/" class="nav-logo">
+            <span class="ball">🏀</span>
+            <span class="laugh">LAUGH</span><span class="court">COURT</span>
+        </a>
+        <div class="nav-right">
+            <div class="nav-lang">
+                <button class="nav-lang-btn active" id="btnEn">EN</button>
+                <button class="nav-lang-btn" id="btnEs">ES</button>
+            </div>
+            <a href="/login" class="nav-login">
+                <span class="lang-en">LOGIN</span>
+                <span class="lang-es">ENTRAR</span>
+            </a>
+        </div>
+    </nav>
 
     <!-- ============ HERO ============ -->
     <section class="hero">
         <div class="hero-content">
-            <div class="hero-logo">
-                🏀 <span class="laugh">LAUGH</span><span class="court">COURT</span>
-            </div>
-            <div class="hero-tagline">
-                <span class="lang-en">Where Joy Meets The Game</span>
-                <span class="lang-es">Donde La Alegría Se Une Al Juego</span>
+            <div class="hero-badge">
+                <span class="lang-en">🏀 Cognitive Fitness Training</span>
+                <span class="lang-es">🏀 Entrenamiento de Fitness Cognitivo</span>
             </div>
             <h1 class="hero-title">
                 <span class="lang-en">HOW TO PLAY</span>
@@ -868,45 +926,66 @@
             </div>
 
             <div class="divisions-note">
-                <span><div class="dot free"></div> <span class="lang-en">SLOW = 7 Day Free Trial</span><span class="lang-es">LENTO = Prueba Gratis 7 Días</span></span>
-                <span><div class="dot paid"></div> <span class="lang-en">SLOW + MED + FAST = $5/month</span><span class="lang-es">LENTO + MED + RÁPIDO = $5/mes</span></span>
+                <span><div class="dot trial"></div> <span class="lang-en">7-Day Trial: SLOW only</span><span class="lang-es">Prueba 7 días: Solo LENTO</span></span>
+                <span><div class="dot subscriber"></div> <span class="lang-en">Subscriber: All speeds</span><span class="lang-es">Suscriptor: Todas las velocidades</span></span>
             </div>
         </div>
     </section>
 
-    <!-- ============ PRICING STRIP ============ -->
-    <section class="pricing-strip fade-in">
+    <!-- ============ PRICING SECTION ============ -->
+    <section class="pricing-section fade-in">
         <div class="container">
             <h2 class="pricing-title">
                 <span class="lang-en">SIMPLE PRICING</span>
                 <span class="lang-es">PRECIO SIMPLE</span>
             </h2>
-            <div class="pricing-boxes">
-                <div class="price-box free">
-                    <div class="price-label">
-                        <span class="lang-en">SLOW Speed</span>
-                        <span class="lang-es">Velocidad LENTA</span>
-                    </div>
-                    <div class="price-value">
-                        <span class="lang-en">FREE</span>
-                        <span class="lang-es">GRATIS</span>
-                    </div>
-                    <div class="price-note">
-                        <span class="lang-en">7 Day Free Trial</span>
-                        <span class="lang-es">Prueba Gratis 7 Días</span>
-                    </div>
+            <p class="pricing-sub">
+                <span class="lang-en">One plan. Full access. Cancel anytime.</span>
+                <span class="lang-es">Un plan. Acceso completo. Cancela cuando quieras.</span>
+            </p>
+            
+            <div class="pricing-card">
+                <div class="pricing-trial">
+                    <span class="lang-en">7-DAY FREE TRIAL</span>
+                    <span class="lang-es">7 DÍAS DE PRUEBA GRATIS</span>
                 </div>
-                <div class="price-box paid">
-                    <div class="price-label">
-                        <span class="lang-en">All Speeds</span>
-                        <span class="lang-es">Todas las Velocidades</span>
-                    </div>
-                    <div class="price-value">$5/<span class="lang-en">mo</span><span class="lang-es">mes</span></div>
-                    <div class="price-note">
-                        <span class="lang-en">MED + FAST unlocked</span>
-                        <span class="lang-es">MED + RÁPIDO desbloqueados</span>
-                    </div>
+                <div class="pricing-then">
+                    <span class="lang-en">then</span>
+                    <span class="lang-es">después</span>
                 </div>
+                <div class="pricing-amount">$5</div>
+                <div class="pricing-period">
+                    <span class="lang-en">per month</span>
+                    <span class="lang-es">por mes</span>
+                </div>
+                
+                <ul class="pricing-features">
+                    <li>
+                        <span class="check">✓</span>
+                        <span class="lang-en">All 3 speeds (SLOW, MED, FAST)</span>
+                        <span class="lang-es">Las 3 velocidades (LENTO, MED, RÁPIDO)</span>
+                    </li>
+                    <li>
+                        <span class="check">✓</span>
+                        <span class="lang-en">Both games included</span>
+                        <span class="lang-es">Ambos juegos incluidos</span>
+                    </li>
+                    <li>
+                        <span class="check">✓</span>
+                        <span class="lang-en">60 divisions of gameplay</span>
+                        <span class="lang-es">60 divisiones de juego</span>
+                    </li>
+                    <li>
+                        <span class="check">✓</span>
+                        <span class="lang-en">Cancel anytime</span>
+                        <span class="lang-es">Cancela cuando quieras</span>
+                    </li>
+                </ul>
+                
+                <a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="pricing-cta">
+                    <span class="lang-en">START FREE TRIAL →</span>
+                    <span class="lang-es">COMENZAR GRATIS →</span>
+                </a>
             </div>
         </div>
     </section>
@@ -916,9 +995,6 @@
         <div class="container">
             <div class="final-icon">
                 <img src="/icon.png" alt="LaughCourt">
-            </div>
-            <div class="final-logo-text">
-                <span class="laugh">LAUGH</span><span class="court">COURT</span>
             </div>
             <h2 class="final-title">
                 <span class="lang-en">READY TO PLAY?</span>
@@ -931,18 +1007,18 @@
 
             <div class="cta-buttons">
                 <a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="cta-btn primary">
-                    <span class="lang-en">🆕 START 7 DAY FREE TRIAL</span>
-                    <span class="lang-es">🆕 PRUEBA GRATIS 7 DÍAS</span>
+                    <span class="lang-en">🆕 START FREE TRIAL</span>
+                    <span class="lang-es">🆕 COMENZAR GRATIS</span>
                 </a>
                 <a href="/login" class="cta-btn secondary">
-                    <span class="lang-en">🔑 I HAVE A PIN</span>
-                    <span class="lang-es">🔑 TENGO UN PIN</span>
+                    <span class="lang-en">🔑 ALREADY HAVE A PIN</span>
+                    <span class="lang-es">🔑 YA TENGO UN PIN</span>
                 </a>
             </div>
 
             <p class="cta-note">
-                <span class="lang-en">Questions? <a href="https://laughcourt.com">Visit LaughCourt.com</a></span>
-                <span class="lang-es">¿Preguntas? <a href="https://laughcourt.com">Visita LaughCourt.com</a></span>
+                <span class="lang-en">Questions? <a href="/faq">Visit our FAQ</a></span>
+                <span class="lang-es">¿Preguntas? <a href="/faq">Visita nuestro FAQ</a></span>
             </p>
         </div>
     </section>
@@ -957,7 +1033,14 @@
             <span class="lang-es">Donde La Alegría Se Une Al Juego</span>
         </div>
         <div class="footer-links">
-            
+            <a href="/">
+                <span class="lang-en">Home</span>
+                <span class="lang-es">Inicio</span>
+            </a>
+            <a href="/login">
+                <span class="lang-en">Login</span>
+                <span class="lang-es">Entrar</span>
+            </a>
             <a href="/faq">FAQ</a>
             <a href="/privacy.html">
                 <span class="lang-en">Privacy Policy</span>
@@ -972,7 +1055,7 @@
             by <a href="https://gostar.digital">GoStar Digital LLC</a> 🇵🇷
         </div>
         <div class="footer-trademarks">
-            LaughCourt™, GoStars™, and Ritnome™ are trademarks of GoStar Digital LLC.
+            LaughCourt™, The Starting Five™, GoStars™, and Ritnome™ are trademarks of GoStar Digital LLC.
         </div>
     </footer>
 
@@ -985,8 +1068,8 @@
                 currentLang = l;
                 localStorage.setItem('laughcourt_lang', l);
                 document.body.className = l;
-                document.getElementById('btnEn').className = l === 'en' ? 'lang-btn active' : 'lang-btn';
-                document.getElementById('btnEs').className = l === 'es' ? 'lang-btn active' : 'lang-btn';
+                document.getElementById('btnEn').className = l === 'en' ? 'nav-lang-btn active' : 'nav-lang-btn';
+                document.getElementById('btnEs').className = l === 'es' ? 'nav-lang-btn active' : 'nav-lang-btn';
             }
 
             document.getElementById('btnEn').addEventListener('click', function() { setLang('en'); });
