@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>THE COMBO CHALLENGE | LaughCourt - Where Joy Meets The Game</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+    --orange: #FF6B35;
+    --gold: #FFD700;
+    --teal: #00D9A5;
+    --pink: #FF1493;
+    --purple: #9B59B6;
+    --dark: #0a0a0f;
+    --card: #111118;
+    --text: #FFFFFF;
+    --muted: #8892a0;
+    --border: rgba(255,255,255,0.1);
+    --nav-height: 84px;
+    --flash-color: #FFD700;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background:var(--dark);color:var(--text);touch-action:manipulation;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
+
+.mini-nav{position:fixed;top:0;left:0;right:0;background:var(--card);border-bottom:1px solid var(--border);padding-top:env(safe-area-inset-top);z-index:1000}
+.nav-row-1{display:flex;align-items:center;justify-content:space-between;height:44px;padding:0 12px}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:1px;text-decoration:none;display:flex;align-items:center;gap:5px}
+.nav-logo .ball{font-size:1rem}
+.nav-logo .laugh{color:var(--gold)}
+.nav-logo .court{color:var(--text)}
+.nav-right{display:flex;align-items:center;gap:6px}
+.nav-lang{display:flex;gap:2px}
+.nav-lang-btn{padding:5px 8px;border:1px solid var(--border);background:0;color:var(--muted);border-radius:4px;font-size:0.6rem;font-weight:600;cursor:pointer;min-width:28px;min-height:28px}
+.nav-lang-btn.active{border-color:var(--gold);color:var(--gold)}
+.settings-wrapper{position:relative}
+.settings-btn{width:32px;height:32px;border-radius:6px;background:0;border:1px solid var(--border);color:var(--muted);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.settings-btn.open{background:rgba(255,255,255,0.1);color:var(--gold)}
+.settings-dropdown{position:absolute;top:calc(100% + 6px);right:0;width:175px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px;display:none;box-shadow:0 10px 40px rgba(0,0,0,0.5)}
+.settings-dropdown.show{display:block}
+.settings-section{margin-bottom:10px}
+.settings-section:last-child{margin-bottom:0}
+.settings-label{font-size:0.5rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.speed-status{display:flex;gap:4px}
+.speed-chip{flex:1;padding:4px 2px;border-radius:4px;font-family:'Bebas Neue',sans-serif;font-size:0.55rem;text-align:center;background:rgba(255,255,255,0.05);color:var(--muted)}
+.speed-chip.unlocked{background:rgba(0,217,165,0.15);color:var(--teal)}
+.speed-chip.locked{background:rgba(255,215,0,0.1);color:var(--gold)}
+.settings-link{display:block;width:100%;padding:8px;border-radius:6px;font-size:0.7rem;text-decoration:none;text-align:center;cursor:pointer;border:none;font-family:'Outfit',sans-serif}
+.settings-link.upgrade{background:linear-gradient(135deg,var(--gold),#FFA500);color:var(--dark);font-weight:600;margin-bottom:6px}
+.settings-link.logout{background:0;border:1px solid var(--border);color:var(--muted)}
+.nav-row-2{display:flex;align-items:center;justify-content:center;height:40px;padding:0 10px;gap:6px;border-top:1px solid var(--border)}
+.nav-tab{flex:1;max-width:100px;padding:7px 6px;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:0.7rem;letter-spacing:1px;text-decoration:none;text-align:center;color:var(--muted);background:0;border:1px solid var(--border);transition:all 0.2s}
+.nav-tab.active{color:var(--gold);background:rgba(255,215,0,0.12);border-color:var(--gold)}
+.nav-tab.match-tab.active{color:var(--orange);background:rgba(255,107,53,0.12);border-color:var(--orange)}
+.nav-tab.seq-tab.active{color:var(--teal);background:rgba(0,217,165,0.12);border-color:var(--teal)}
+
+.game-container{width:100%;max-width:420px;height:100dvh;margin:0 auto;padding:5px 10px;padding-top:calc(var(--nav-height) + env(safe-area-inset-top) + 4px);padding-bottom:max(5px,env(safe-area-inset-bottom));display:flex;flex-direction:column;overflow:hidden}
+
+/* ORDER SELECTION SCREEN */
+.order-select-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:15px;text-align:center}
+.order-select-screen.hidden{display:none}
+.order-title{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:3px;color:var(--gold);margin-bottom:5px}
+.order-subtitle{font-size:0.8rem;color:var(--muted);margin-bottom:10px}
+.order-btn{width:100%;max-width:260px;padding:20px;border:3px solid var(--border);background:var(--card);border-radius:14px;cursor:pointer;transition:all 0.2s}
+.order-btn:active{transform:scale(0.98)}
+.order-btn.selected{border-color:var(--gold);background:rgba(255,215,0,0.1)}
+.order-btn-icon{font-size:2rem;margin-bottom:8px}
+.order-btn-title{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:2px;color:var(--text);margin-bottom:4px}
+.order-btn-desc{font-size:0.7rem;color:var(--muted)}
+.order-btn.match-first .order-btn-title{color:var(--orange)}
+.order-btn.seq-first .order-btn-title{color:var(--teal)}
+.order-btn.match-first.selected{border-color:var(--orange);background:rgba(255,107,53,0.1)}
+.order-btn.seq-first.selected{border-color:var(--teal);background:rgba(0,217,165,0.1)}
+
+/* GAME SCREEN */
+.game-screen{display:none;flex-direction:column;flex:1}
+.game-screen.active{display:flex}
+
+.stats-bar{display:flex;justify-content:center;gap:12px;padding:5px 8px;background:var(--card);border-radius:8px;margin-bottom:4px;flex-shrink:0}
+.stat{text-align:center;min-width:40px}
+.stat-value{font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--gold);line-height:1}
+.stat-label{font-size:0.42rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px}
+
+.combo-progress{display:flex;gap:6px;padding:6px 8px;background:var(--card);border-radius:8px;margin-bottom:4px;flex-shrink:0}
+.combo-game-status{flex:1;padding:8px;border-radius:8px;border:2px solid var(--border);text-align:center;transition:all 0.3s}
+.combo-game-status.active{border-color:var(--gold);background:rgba(255,215,0,0.1)}
+.combo-game-status.done{border-color:var(--teal);background:rgba(0,217,165,0.15)}
+.combo-game-status.locked{opacity:0.5}
+.combo-game-label{font-family:'Bebas Neue',sans-serif;font-size:0.7rem;letter-spacing:1px;margin-bottom:4px}
+.combo-game-status.match-status .combo-game-label{color:var(--orange)}
+.combo-game-status.seq-status .combo-game-label{color:var(--teal)}
+.combo-game-status.done .combo-game-label{color:var(--teal)}
+.combo-game-stars{display:flex;justify-content:center;gap:4px}
+.combo-star{font-size:0.9rem;opacity:0.3}
+.combo-star.earned{opacity:1}
+.combo-game-status.done .combo-star{opacity:1}
+
+.message-display{background:var(--card);border:2px solid var(--gold);border-radius:8px;padding:7px;margin-bottom:4px;text-align:center;flex-shrink:0;min-height:36px;display:flex;align-items:center;justify-content:center}
+.message-display.match-mode{border-color:var(--orange)}
+.message-display.seq-mode{border-color:var(--teal)}
+.message-text{font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:2px;color:var(--text)}
+.message-text.watch{color:var(--gold)}
+.message-text.go{color:var(--teal)}
+.message-text.perfect{color:var(--teal)}
+.message-text.miss{color:var(--pink)}
+.message-text.error{color:var(--pink)}
+
+.selectors-row{display:flex;gap:6px;margin-bottom:4px;flex-shrink:0}
+.selector-group{flex:1;background:var(--card);border-radius:8px;padding:5px}
+.selector-group.level-group{flex:1.8}
+.selector-label{text-align:center;font-size:0.45rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px}
+.selector-options{display:flex;gap:3px}
+.selector-options.level-options{flex-wrap:wrap;gap:2px}
+.selector-btn{flex:1;min-height:34px;padding:5px 2px;border:2px solid var(--border);background:0;border-radius:6px;color:var(--muted);font-family:'Bebas Neue',sans-serif;font-size:0.85rem;cursor:pointer;position:relative;display:flex;align-items:center;justify-content:center}
+.selector-btn.level-btn{min-height:28px;min-width:28px;flex:0 0 auto;width:calc(20% - 2px);font-size:0.75rem}
+.selector-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(255,215,0,0.1)}
+.selector-btn.locked{opacity:0.5}
+.selector-btn.locked::after{content:'🔒';position:absolute;top:0;right:2px;font-size:0.4rem}
+.selector-btn.disabled-during-game{pointer-events:none;opacity:0.4}
+
+.progression-display{display:flex;justify-content:center;align-items:center;gap:10px;padding:6px;background:var(--card);border-radius:8px;margin-bottom:4px;flex-shrink:0}
+.progression-label{font-family:'Bebas Neue',sans-serif;font-size:0.7rem;color:var(--muted);letter-spacing:1px}
+.progression-stars{display:flex;gap:6px}
+.progression-star{font-size:1.3rem;opacity:0.25;transition:all 0.3s}
+.progression-star.earned{opacity:1;transform:scale(1.15);filter:drop-shadow(0 0 4px var(--gold))}
+
+.court-wrapper{flex:1;display:flex;align-items:center;justify-content:center;min-height:0;overflow:hidden}
+.court-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:8px;background-color:#1a1a24;background-image:url('/icon.png');background-size:85%;background-position:center;background-repeat:no-repeat;border-radius:16px;border:3px solid var(--gold);width:min(100%,calc(100dvh - 370px),300px);height:min(100%,calc(100dvh - 370px),300px);min-width:200px;min-height:200px;aspect-ratio:1;position:relative;transition:border-color 0.3s}
+.court-grid.match-mode{border-color:var(--orange)}
+.court-grid.seq-mode{border-color:var(--teal)}
+.court-grid::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(10,10,15,0.6);border-radius:13px;pointer-events:none;z-index:0}
+
+.grid-cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:6px;cursor:pointer;background:rgba(255,255,255,0.08);border:2px solid rgba(255,255,255,0.2);min-width:32px;min-height:32px;transition:all 0.15s;position:relative;z-index:1}
+.grid-cell:active:not(.disabled){transform:scale(0.95)}
+.grid-cell.lit{background:var(--flash-color)!important;border-color:var(--flash-color)!important;box-shadow:0 0 20px var(--flash-color);transform:scale(1.05)}
+.grid-cell.selected{background:rgba(255,255,255,0.25)!important;border-color:rgba(255,255,255,0.5)!important}
+.grid-cell.correct{background:var(--teal)!important;border-color:var(--teal)!important;box-shadow:0 0 15px var(--teal)}
+.grid-cell.wrong{background:var(--pink)!important;border-color:var(--pink)!important;box-shadow:0 0 15px var(--pink)}
+.grid-cell.missed{border:3px dashed var(--flash-color)!important;background:rgba(255,255,255,0.1)!important}
+.grid-cell.player-tap{background:rgba(255,255,255,0.3)!important;border-color:rgba(255,255,255,0.5)!important;box-shadow:0 0 12px rgba(255,255,255,0.4)}
+.grid-cell.disabled{pointer-events:none}
+@keyframes correctPulse{50%{transform:scale(1.15)}}
+@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.grid-cell.correct{animation:correctPulse 0.4s}
+.grid-cell.wrong{animation:shake 0.4s}
+
+.division-display{display:flex;justify-content:space-between;align-items:center;padding:5px 10px;background:var(--card);border-radius:8px;margin:4px 0;flex-shrink:0;min-height:34px}
+.division-badge{font-family:'Bebas Neue',sans-serif;font-size:0.85rem;letter-spacing:2px;color:var(--gold)}
+.taps-counter{font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--teal)}
+.score-display{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;color:var(--gold)}
+
+.action-btn{width:100%;min-height:46px;padding:11px;border:none;border-radius:10px;font-family:'Bebas Neue',sans-serif;font-size:1.25rem;letter-spacing:4px;cursor:pointer;background:linear-gradient(135deg,var(--gold),#FFA500);color:var(--dark);flex-shrink:0}
+.action-btn:disabled{opacity:0.5;cursor:not-allowed}
+
+.emoji-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;overflow:hidden}
+.burst-emoji{position:absolute;font-size:1.6rem;animation:emojiBurst 1.2s ease-out forwards;pointer-events:none}
+@keyframes emojiBurst{0%{opacity:1;transform:translate(-50%,-50%) scale(0.3)}20%{opacity:1;transform:translate(-50%,-50%) scale(1.2)}100%{opacity:0;transform:translate(var(--tx),var(--ty)) scale(0.8) rotate(var(--rot))}}
+.burst-emoji.big{font-size:2.2rem}
+.burst-emoji.party{font-size:1.8rem;animation-duration:2s}
+.court-grid.joy-pulse{animation:joyPulse 0.5s ease-out}
+@keyframes joyPulse{0%{box-shadow:0 0 0 0 rgba(255,215,0,0.7)}50%{box-shadow:0 0 25px 8px rgba(255,215,0,0.5)}100%{box-shadow:none}}
+
+.overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.92);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
+.overlay.show{display:flex}
+.overlay-card{background:var(--card);border:2px solid var(--gold);border-radius:14px;padding:20px;text-align:center;max-width:280px;width:100%}
+.overlay-emoji{font-size:2.5rem;margin-bottom:8px}
+.overlay-title{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:2px;margin-bottom:6px;color:var(--gold)}
+.overlay-message{color:var(--muted);margin-bottom:12px;font-size:0.85rem}
+.overlay-btn{min-height:44px;padding:12px 24px;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:2px;cursor:pointer;margin:4px;background:linear-gradient(135deg,var(--gold),#FFA500);color:var(--dark)}
+.overlay-btn.secondary{background:0;border:1px solid var(--muted);color:var(--muted)}
+.upgrade-speed-preview{display:flex;justify-content:center;gap:5px;margin-bottom:10px}
+.upgrade-speed-chip{padding:5px 8px;border-radius:6px;font-family:'Bebas Neue',sans-serif;font-size:0.75rem}
+.upgrade-speed-chip.current{background:rgba(0,217,165,0.2);color:var(--teal);border:1px solid var(--teal)}
+.upgrade-speed-chip.locked{background:rgba(255,215,0,0.15);color:var(--gold);border:1px solid var(--gold)}
+.upgrade-price{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:var(--gold);margin-bottom:4px}
+.upgrade-price span{font-size:0.75rem;color:var(--muted)}
+
+.coach-message{position:fixed;bottom:70px;left:50%;transform:translateX(-50%) translateY(100px);background:linear-gradient(135deg,var(--gold),#FFA500);color:var(--dark);padding:8px 16px;border-radius:14px;font-weight:700;font-size:0.85rem;opacity:0;transition:all 0.3s;z-index:50}
+.coach-message.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+body.en .lang-es{display:none!important}
+body.es .lang-en{display:none!important}
+
+@media(min-height:720px){:root{--nav-height:88px}.nav-row-2{height:44px}.stat-value{font-size:1.1rem}.message-text{font-size:0.95rem}.selector-btn{min-height:38px}.selector-btn.level-btn{min-height:30px}.court-grid{width:min(100%,calc(100dvh - 380px),320px);height:min(100%,calc(100dvh - 380px),320px)}.action-btn{min-height:50px;font-size:1.35rem}}
+@media(max-height:620px){:root{--nav-height:76px}.nav-row-1{height:40px}.nav-row-2{height:36px}.nav-tab{font-size:0.65rem;padding:6px 4px}.stats-bar{padding:4px 6px;gap:10px}.stat-value{font-size:0.9rem}.combo-progress{padding:4px 6px;gap:4px}.combo-game-status{padding:6px}.combo-game-label{font-size:0.6rem}.combo-star{font-size:0.75rem}.message-display{padding:5px;min-height:30px}.message-text{font-size:0.8rem}.selector-btn{min-height:30px;font-size:0.75rem}.selector-btn.level-btn{min-height:24px;font-size:0.65rem}.court-grid{min-width:180px;min-height:180px;width:min(100%,calc(100dvh - 320px),260px);height:min(100%,calc(100dvh - 320px),260px);gap:3px;padding:6px}.grid-cell{min-width:28px;min-height:28px}.division-display{padding:4px 8px;min-height:30px}.action-btn{min-height:42px;font-size:1.1rem}.progression-star{font-size:1.1rem}.order-title{font-size:1.2rem}.order-btn{padding:15px}.order-btn-icon{font-size:1.5rem}.order-btn-title{font-size:1rem}}
+@media(max-height:540px){:root{--nav-height:68px}.nav-row-1{height:36px}.nav-row-2{height:32px}.nav-logo{font-size:1rem}.nav-tab{font-size:0.6rem}.stats-bar{padding:3px 5px;margin-bottom:3px}.stat-value{font-size:0.8rem}.stat-label{font-size:0.38rem}.combo-progress{padding:3px 5px;margin-bottom:3px}.combo-game-status{padding:4px}.combo-game-label{font-size:0.55rem;margin-bottom:2px}.combo-star{font-size:0.65rem}.message-display{padding:4px;margin-bottom:3px;min-height:26px}.message-text{font-size:0.7rem}.selectors-row{margin-bottom:3px}.selector-group{padding:3px}.selector-label{font-size:0.4rem;margin-bottom:2px}.selector-btn{min-height:26px;font-size:0.65rem}.selector-btn.level-btn{min-height:22px;font-size:0.55rem}.court-grid{min-width:150px;min-height:150px;gap:2px;padding:5px}.grid-cell{min-width:24px;min-height:24px}.division-display{padding:3px 6px;min-height:26px;margin:3px 0}.division-badge,.taps-counter{font-size:0.75rem}.score-display{font-size:0.9rem}.action-btn{min-height:38px;padding:8px;font-size:1rem}.progression-display{padding:4px}.progression-star{font-size:1rem}.order-title{font-size:1rem}.order-subtitle{font-size:0.7rem}.order-btn{padding:12px}.order-btn-icon{font-size:1.2rem;margin-bottom:4px}.order-btn-title{font-size:0.9rem}.order-btn-desc{font-size:0.6rem}}
+</style>
+</head>
+<body class="en">
+<nav class="mini-nav">
+<div class="nav-row-1">
+<a href="/play" class="nav-logo"><span class="ball">🏀</span> <span class="laugh">LAUGH</span><span class="court">COURT</span></a>
+<div class="nav-right">
+<div class="nav-lang"><button class="nav-lang-btn active" id="btnEn">EN</button><button class="nav-lang-btn" id="btnEs">ES</button></div>
+<div class="settings-wrapper"><button class="settings-btn" id="settingsBtn">⚙️</button>
+<div class="settings-dropdown" id="settingsDropdown">
+<div class="settings-section"><div class="settings-label"><span class="lang-en">Speed Access</span><span class="lang-es">Velocidad</span></div><div class="speed-status" id="speedStatus"><span class="speed-chip unlocked">✓ SLOW</span><span class="speed-chip locked">🔒 MED</span><span class="speed-chip locked">🔒 FAST</span></div></div>
+<div class="settings-section" id="upgradeSection"><a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="settings-link upgrade">🚀 UNLOCK ALL</a></div>
+<div class="settings-section"><button class="settings-link logout" id="logoutBtn">← <span class="lang-en">Log Out</span><span class="lang-es">Salir</span></button></div>
+</div></div></div></div>
+<div class="nav-row-2">
+<a href="/the-match" class="nav-tab match-tab">🎯 MATCH</a>
+<a href="/the-sequence" class="nav-tab seq-tab">🔢 SEQ</a>
+<a href="/the-combo" class="nav-tab active">🏆 COMBO</a>
+</div>
+</nav>
+<div class="emoji-container" id="emojiContainer"></div>
+<div class="game-container">
+
+<!-- ORDER SELECTION SCREEN -->
+<div class="order-select-screen" id="orderScreen">
+<div class="order-title"><span class="lang-en">🏆 THE COMBO CHALLENGE</span><span class="lang-es">🏆 EL RETO COMBO</span></div>
+<div class="order-subtitle"><span class="lang-en">Choose your play order</span><span class="lang-es">Elige tu orden de juego</span></div>
+<div class="selectors-row" style="max-width:280px;margin-bottom:15px">
+<div class="selector-group level-group"><div class="selector-label"><span class="lang-en">Level</span><span class="lang-es">Nivel</span></div><div class="selector-options level-options">
+<button class="selector-btn level-btn active" data-level="1">1</button>
+<button class="selector-btn level-btn" data-level="2">2</button>
+<button class="selector-btn level-btn" data-level="3">3</button>
+<button class="selector-btn level-btn" data-level="4">4</button>
+<button class="selector-btn level-btn" data-level="5">5</button>
+<button class="selector-btn level-btn" data-level="6">6</button>
+<button class="selector-btn level-btn" data-level="7">7</button>
+<button class="selector-btn level-btn" data-level="8">8</button>
+<button class="selector-btn level-btn" data-level="9">9</button>
+<button class="selector-btn level-btn" data-level="10">10</button>
+</div></div>
+<div class="selector-group"><div class="selector-label"><span class="lang-en">Speed</span><span class="lang-es">Velocidad</span></div><div class="selector-options"><button class="selector-btn speed-btn active" data-speed="slow"><span class="lang-en">Slow</span><span class="lang-es">Lento</span></button><button class="selector-btn speed-btn" data-speed="med">Med</button><button class="selector-btn speed-btn" data-speed="fast"><span class="lang-en">Fast</span><span class="lang-es">Rápido</span></button></div></div>
+</div>
+<button class="order-btn match-first" id="orderMatchFirst">
+<div class="order-btn-icon">🎯 → 🔢</div>
+<div class="order-btn-title">MATCH <span class="lang-en">FIRST</span><span class="lang-es">PRIMERO</span></div>
+<div class="order-btn-desc"><span class="lang-en">Find cells, then repeat sequence</span><span class="lang-es">Encuentra celdas, luego repite secuencia</span></div>
+</button>
+<button class="order-btn seq-first" id="orderSeqFirst">
+<div class="order-btn-icon">🔢 → 🎯</div>
+<div class="order-btn-title">SEQUENCE <span class="lang-en">FIRST</span><span class="lang-es">PRIMERO</span></div>
+<div class="order-btn-desc"><span class="lang-en">Repeat sequence, then find cells</span><span class="lang-es">Repite secuencia, luego encuentra celdas</span></div>
+</button>
+</div>
+
+<!-- GAME SCREEN -->
+<div class="game-screen" id="gameScreen">
+<div class="stats-bar">
+<div class="stat"><div class="stat-value" id="levelDisplay">1</div><div class="stat-label"><span class="lang-en">Level</span><span class="lang-es">Nivel</span></div></div>
+<div class="stat"><div class="stat-value" id="roundDisplay">0</div><div class="stat-label"><span class="lang-en">Round</span><span class="lang-es">Ronda</span></div></div>
+<div class="stat"><div class="stat-value" id="streakDisplay">0</div><div class="stat-label">🔥</div></div>
+<div class="stat"><div class="stat-value" id="scoreDisplay">0</div><div class="stat-label"><span class="lang-en">Score</span><span class="lang-es">Puntos</span></div></div>
+</div>
+
+<div class="combo-progress">
+<div class="combo-game-status match-status" id="matchStatus">
+<div class="combo-game-label">🎯 MATCH</div>
+<div class="combo-game-stars"><span class="combo-star" id="matchStar1">⭐</span><span class="combo-star" id="matchStar2">⭐</span></div>
+</div>
+<div class="combo-game-status seq-status" id="seqStatus">
+<div class="combo-game-label">🔢 SEQUENCE</div>
+<div class="combo-game-stars"><span class="combo-star" id="seqStar1">⭐</span><span class="combo-star" id="seqStar2">⭐</span></div>
+</div>
+</div>
+
+<div class="message-display" id="messageDisplay"><span class="message-text" id="messageText"><span class="lang-en">TAP GO!</span><span class="lang-es">¡PULSA IR!</span></span></div>
+
+<div class="court-wrapper"><div class="court-grid" id="courtGrid"></div></div>
+
+<div class="division-display">
+<div class="division-badge" id="divisionBadge">L1 SLOW</div>
+<div class="taps-counter" id="tapsCounter">0/5</div>
+<div class="score-display" id="totalScore">0</div>
+</div>
+
+<button class="action-btn" id="actionBtn"><span class="lang-en">GO</span><span class="lang-es">IR</span></button>
+</div>
+</div>
+
+<!-- LEVEL UP OVERLAY -->
+<div class="overlay" id="levelUpOverlay">
+<div class="overlay-card">
+<div class="overlay-emoji">🏆</div>
+<h2 class="overlay-title"><span class="lang-en">LEVEL COMPLETE!</span><span class="lang-es">¡NIVEL COMPLETO!</span></h2>
+<p class="overlay-message" id="levelUpMessage"></p>
+<button class="overlay-btn" id="levelUpBtn"><span class="lang-en">NEXT LEVEL!</span><span class="lang-es">¡SIGUIENTE!</span></button>
+</div>
+</div>
+
+<!-- GAME SWITCH OVERLAY -->
+<div class="overlay" id="switchOverlay">
+<div class="overlay-card">
+<div class="overlay-emoji" id="switchEmoji">✅</div>
+<h2 class="overlay-title" id="switchTitle">MATCH COMPLETE!</h2>
+<p class="overlay-message" id="switchMessage">Now complete SEQUENCE!</p>
+<button class="overlay-btn" id="switchBtn"><span class="lang-en">LET'S GO!</span><span class="lang-es">¡VAMOS!</span></button>
+</div>
+</div>
+
+<!-- UPGRADE OVERLAY -->
+<div class="overlay" id="upgradeOverlay">
+<div class="overlay-card">
+<div class="overlay-emoji">🔓⚡</div>
+<h2 class="overlay-title">UNLOCK ALL SPEEDS</h2>
+<div class="upgrade-speed-preview">
+<span class="upgrade-speed-chip current">✓ Slow</span>
+<span class="upgrade-speed-chip locked">🔒 Med</span>
+<span class="upgrade-speed-chip locked">🔒 Fast</span>
+</div>
+<div class="upgrade-price">$5<span>/mo</span></div>
+<a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="overlay-btn" style="display:block;text-decoration:none;margin-bottom:6px;">UPGRADE 🚀</a>
+<button class="overlay-btn secondary" id="upgradeClose"><span class="lang-en">CONTINUE SLOW</span><span class="lang-es">CONTINUAR</span></button>
+</div>
+</div>
+
+<div class="coach-message" id="coachMessage"></div>
+
+<script>
+(function(){
+    // ===== AUTH CHECK =====
+    var host = window.location.hostname;
+    var isProduction = host.indexOf('laughcourt') > -1 || host.indexOf('github.io') > -1 || host.indexOf('gostardigital') > -1;
+    
+    if (isProduction) {
+        var user = null;
+        try { user = JSON.parse(localStorage.getItem('lc-user')); } catch(e) {}
+        if (!user || !user.pin || user.pin.length < 4) { window.location.replace('/login'); return; }
+        var sessionPin = sessionStorage.getItem('lc-pin'), sessionToken = sessionStorage.getItem('lc-token');
+        function validateSession() {
+            if (!sessionPin || !sessionToken) { window.location.href = '/login'; return; }
+            fetch('/api/session/validate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ pin: sessionPin, token: sessionToken }) })
+            .then(function(r) { return r.json(); })
+            .then(function(d) { if (!d.valid) { localStorage.removeItem('lc-user'); localStorage.removeItem('lc-speed-access'); sessionStorage.clear(); window.location.href = '/login'; } })
+            .catch(function() {});
+        }
+        validateSession();
+        setInterval(validateSession, 30000);
+    }
+
+    // ===== SETTINGS DROPDOWN =====
+    var settingsBtn = document.getElementById('settingsBtn'), settingsDropdown = document.getElementById('settingsDropdown');
+    settingsBtn.onclick = function(e) { e.stopPropagation(); settingsBtn.classList.toggle('open'); settingsDropdown.classList.toggle('show'); };
+    document.onclick = function(e) { if (!settingsDropdown.contains(e.target)) { settingsBtn.classList.remove('open'); settingsDropdown.classList.remove('show'); } };
+
+    document.getElementById('logoutBtn').onclick = function() {
+        var p = sessionStorage.getItem('lc-pin'), t = sessionStorage.getItem('lc-token');
+        if (p && t) fetch('/api/session/destroy', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ pin: p, token: t }) }).catch(function() {});
+        localStorage.removeItem('lc-user'); localStorage.removeItem('lc-speed-access'); sessionStorage.clear(); window.location.href = '/login';
+    };
+
+    // ===== LANGUAGE =====
+    var currentLang = localStorage.getItem('laughcourt_lang') || 'en';
+    function setLang(l) {
+        currentLang = l;
+        localStorage.setItem('laughcourt_lang', l);
+        document.body.className = l;
+        document.getElementById('btnEn').className = l === 'en' ? 'nav-lang-btn active' : 'nav-lang-btn';
+        document.getElementById('btnEs').className = l === 'es' ? 'nav-lang-btn active' : 'nav-lang-btn';
+        updateDivisionDisplay();
+    }
+    document.getElementById('btnEn').onclick = function() { setLang('en'); };
+    document.getElementById('btnEs').onclick = function() { setLang('es'); };
+
+    // ===== SPEED ACCESS =====
+    var speedAccess = { allSpeeds: false };
+    try { var sa = localStorage.getItem('lc-speed-access'); if (sa) speedAccess = JSON.parse(sa); } catch(e) {}
+
+    function updateSpeedStatusUI() {
+        var ss = document.getElementById('speedStatus'), us = document.getElementById('upgradeSection');
+        if (speedAccess.allSpeeds) {
+            ss.innerHTML = '<span class="speed-chip unlocked">✓ SLOW</span><span class="speed-chip unlocked">✓ MED</span><span class="speed-chip unlocked">✓ FAST</span>';
+            us.style.display = 'none';
+        } else {
+            ss.innerHTML = '<span class="speed-chip unlocked">✓ SLOW</span><span class="speed-chip locked">🔒 MED</span><span class="speed-chip locked">🔒 FAST</span>';
+            us.style.display = 'block';
+        }
+    }
+
+    function initSpeedButtons() {
+        document.querySelectorAll('.speed-btn').forEach(function(b) {
+            if (!speedAccess.allSpeeds && b.dataset.speed !== 'slow') b.classList.add('locked');
+            else b.classList.remove('locked');
+        });
+        if (!speedAccess.allSpeeds) {
+            state.speed = 'slow';
+            document.querySelectorAll('.speed-btn').forEach(function(b) { b.classList.remove('active'); });
+            document.querySelector('.speed-btn[data-speed="slow"]').classList.add('active');
+        }
+        updateSpeedStatusUI();
+    }
+
+    function showUpgradeModal() { document.getElementById('upgradeOverlay').classList.add('show'); }
+    document.getElementById('upgradeClose').onclick = function() { document.getElementById('upgradeOverlay').classList.remove('show'); };
+
+    // ===== GAME CONFIG =====
+    var TOTAL_CELLS = 25;
+    function getCellCount(level) { return level + 4; } // L1=5, L2=6... L10=14
+    
+    var MATCH_SPEED_CONFIG = { slow: 2500, med: 1500, fast: 800 };
+    var SEQ_SPEED_CONFIG = { slow: { show: 800, gap: 300 }, med: { show: 500, gap: 200 }, fast: { show: 300, gap: 150 } };
+    
+    var LAUGH_EMOJIS = ['😂','😆','🤣','😄','😁','🥳','😊','🎉'];
+    var PARTY_EMOJIS = ['🥳','🎉','😂','🤣','✨','💫','🌟','🏆'];
+
+    var FLASH_COLORS = ['#FFD700', '#00D9A5', '#FF6B35', '#FF1493'];
+    var colorIndex = 0;
+
+    function getNextColor() {
+        var color = FLASH_COLORS[colorIndex];
+        colorIndex = (colorIndex + 1) % FLASH_COLORS.length;
+        return color;
+    }
+
+    function setFlashColor(color) {
+        document.documentElement.style.setProperty('--flash-color', color);
+    }
+
+    // ===== STATE =====
+    var state = {
+        level: parseInt(localStorage.getItem('lc-combo-level')) || 1,
+        speed: localStorage.getItem('lc-combo-speed') || 'slow',
+        score: parseInt(localStorage.getItem('lc-combo-score')) || 0,
+        streak: parseInt(localStorage.getItem('lc-combo-streak')) || 0,
+        round: 0,
+        
+        // Combo specific
+        playOrder: null, // 'match-first' or 'seq-first'
+        currentGame: null, // 'match' or 'sequence'
+        matchPerfects: 0,
+        seqPerfects: 0,
+        matchDone: false,
+        seqDone: false,
+        gameStarted: false,
+        
+        // Game state
+        targetCells: [],
+        selectedCells: [],
+        sequence: [],
+        playerIndex: 0,
+        isPlaying: false,
+        canTap: false,
+        cells: [],
+        currentColor: FLASH_COLORS[0]
+    };
+
+    if (state.level > 10) state.level = 10;
+    if (state.level < 1) state.level = 1;
+
+    // DOM elements
+    var orderScreen = document.getElementById('orderScreen');
+    var gameScreen = document.getElementById('gameScreen');
+    var courtGrid = document.getElementById('courtGrid');
+    var messageText = document.getElementById('messageText');
+    var messageDisplay = document.getElementById('messageDisplay');
+    var actionBtn = document.getElementById('actionBtn');
+    var coachMessage = document.getElementById('coachMessage');
+    var emojiContainer = document.getElementById('emojiContainer');
+
+    // ===== AUDIO =====
+    var audioCtx = null;
+    function getAudioContext() {
+        if (!audioCtx) try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) {}
+        return audioCtx;
+    }
+
+    function playTone(freq, dur) {
+        var c = getAudioContext();
+        if (!c) return;
+        try {
+            if (c.state === 'suspended') c.resume();
+            var o = c.createOscillator(), g = c.createGain();
+            o.type = 'sine';
+            o.frequency.value = freq;
+            o.connect(g);
+            g.connect(c.destination);
+            g.gain.setValueAtTime(0.25, c.currentTime);
+            g.gain.exponentialRampToValueAtTime(0.01, c.currentTime + dur);
+            o.start();
+            o.stop(c.currentTime + dur + 0.05);
+        } catch(e) {}
+    }
+
+    var NOTES = [262,277,294,311,330,349,370,392,415,440,466,494,523,554,587,622,659,698,740,784,831,880,932,988,1047];
+    function playNote(idx) { playTone(NOTES[idx % 25], 0.2); }
+    function playFlashSound() { playTone(660, 0.15); }
+    function playTapSound() { playTone(440, 0.1); }
+    function playCorrectSound() { [523, 659, 784].forEach(function(f, i) { setTimeout(function() { playTone(f, 0.12); }, i * 80); }); }
+    function playWrongSound() { playTone(200, 0.3); }
+
+    // ===== CELEBRATIONS =====
+    function getCourtCenter() {
+        var r = courtGrid.getBoundingClientRect();
+        return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+    }
+
+    function createBurstEmoji(e, x, y, t) {
+        var el = document.createElement('div');
+        el.className = 'burst-emoji' + (t ? ' ' + t : '');
+        el.textContent = e;
+        var a = Math.random() * Math.PI * 2, d = 50 + Math.random() * 80;
+        el.style.cssText = 'left:' + x + 'px;top:' + y + 'px;--tx:' + Math.cos(a) * d + 'px;--ty:' + Math.sin(a) * d + 'px;--rot:' + (Math.random() - 0.5) * 720 + 'deg';
+        emojiContainer.appendChild(el);
+        setTimeout(function() { if (el.parentNode) el.remove(); }, 1500);
+    }
+
+    function laughCelebration(intensity) {
+        var c = getCourtCenter();
+        var n = intensity === 'party' ? 8 : intensity === 'big' ? 5 : intensity === 'medium' ? 3 : 2;
+        var em = intensity === 'party' ? PARTY_EMOJIS : LAUGH_EMOJIS;
+        var t = intensity === 'party' ? 'party' : intensity === 'big' ? 'big' : '';
+        for (var j = 0; j < n; j++) {
+            (function(idx) {
+                setTimeout(function() {
+                    createBurstEmoji(em[Math.floor(Math.random() * em.length)], c.x + (Math.random() - 0.5) * 20, c.y + (Math.random() - 0.5) * 20, t);
+                }, idx * 35);
+            })(j);
+        }
+        courtGrid.classList.add('joy-pulse');
+        setTimeout(function() { courtGrid.classList.remove('joy-pulse'); }, 500);
+    }
+
+    function showCoach(m) {
+        coachMessage.textContent = m;
+        coachMessage.classList.add('show');
+        setTimeout(function() { coachMessage.classList.remove('show'); }, 2000);
+    }
+
+    // ===== INIT COURT =====
+    function initCourt() {
+        courtGrid.innerHTML = '';
+        state.cells = [];
+        for (var i = 0; i < TOTAL_CELLS; i++) {
+            var cell = document.createElement('div');
+            cell.className = 'grid-cell';
+            cell.dataset.index = i;
+            cell.onclick = function() { handleCellTap(parseInt(this.dataset.index)); };
+            courtGrid.appendChild(cell);
+            state.cells.push(cell);
+        }
+    }
+
+    function shuffleArray(a) {
+        for (var i = a.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1)), t = a[i];
+            a[i] = a[j];
+            a[j] = t;
+        }
+    }
+
+    // ===== UI UPDATES =====
+    function updateDivisionDisplay() {
+        var sp = state.speed.toUpperCase();
+        if (currentLang === 'es') sp = state.speed === 'slow' ? 'LENTO' : state.speed === 'med' ? 'MEDIO' : 'RÁPIDO';
+        document.getElementById('divisionBadge').textContent = 'L' + state.level + ' ' + sp;
+        updateTapsCounter();
+    }
+
+    function updateTapsCounter() {
+        var needed = getCellCount(state.level);
+        if (state.currentGame === 'match') {
+            var current = state.selectedCells.length;
+            document.getElementById('tapsCounter').textContent = current + '/' + needed;
+        } else {
+            document.getElementById('tapsCounter').textContent = 'SEQ: ' + needed;
+        }
+    }
+
+    function updateStats() {
+        document.getElementById('levelDisplay').textContent = state.level;
+        document.getElementById('roundDisplay').textContent = state.round;
+        document.getElementById('streakDisplay').textContent = state.streak;
+        document.getElementById('scoreDisplay').textContent = state.score;
+        document.getElementById('totalScore').textContent = state.score;
+    }
+
+    function updateComboProgress() {
+        var matchStatus = document.getElementById('matchStatus');
+        var seqStatus = document.getElementById('seqStatus');
+        
+        // Match stars
+        document.getElementById('matchStar1').className = state.matchPerfects >= 1 || state.matchDone ? 'combo-star earned' : 'combo-star';
+        document.getElementById('matchStar2').className = state.matchPerfects >= 2 || state.matchDone ? 'combo-star earned' : 'combo-star';
+        
+        // Sequence stars
+        document.getElementById('seqStar1').className = state.seqPerfects >= 1 || state.seqDone ? 'combo-star earned' : 'combo-star';
+        document.getElementById('seqStar2').className = state.seqPerfects >= 2 || state.seqDone ? 'combo-star earned' : 'combo-star';
+        
+        // Status classes
+        matchStatus.classList.remove('active', 'done', 'locked');
+        seqStatus.classList.remove('active', 'done', 'locked');
+        
+        if (state.matchDone) {
+            matchStatus.classList.add('done');
+        } else if (state.currentGame === 'match') {
+            matchStatus.classList.add('active');
+        } else {
+            matchStatus.classList.add('locked');
+        }
+        
+        if (state.seqDone) {
+            seqStatus.classList.add('done');
+        } else if (state.currentGame === 'sequence') {
+            seqStatus.classList.add('active');
+        } else {
+            seqStatus.classList.add('locked');
+        }
+        
+        // Update court and message border color
+        courtGrid.classList.remove('match-mode', 'seq-mode');
+        messageDisplay.classList.remove('match-mode', 'seq-mode');
+        if (state.currentGame === 'match') {
+            courtGrid.classList.add('match-mode');
+            messageDisplay.classList.add('match-mode');
+        } else if (state.currentGame === 'sequence') {
+            courtGrid.classList.add('seq-mode');
+            messageDisplay.classList.add('seq-mode');
+        }
+    }
+
+    // ===== ORDER SELECTION =====
+    document.getElementById('orderMatchFirst').onclick = function() {
+        document.querySelectorAll('.order-btn').forEach(function(b) { b.classList.remove('selected'); });
+        this.classList.add('selected');
+        startCombo('match-first');
+    };
+
+    document.getElementById('orderSeqFirst').onclick = function() {
+        document.querySelectorAll('.order-btn').forEach(function(b) { b.classList.remove('selected'); });
+        this.classList.add('selected');
+        startCombo('seq-first');
+    };
+
+    function startCombo(order) {
+        state.playOrder = order;
+        state.gameStarted = true;
+        state.matchPerfects = 0;
+        state.seqPerfects = 0;
+        state.matchDone = false;
+        state.seqDone = false;
+        
+        // Set first game based on order
+        state.currentGame = order === 'match-first' ? 'match' : 'sequence';
+        
+        // Save state
+        localStorage.setItem('lc-combo-order', order);
+        localStorage.setItem('lc-combo-level', state.level);
+        localStorage.setItem('lc-combo-speed', state.speed);
+        
+        // Switch screens
+        orderScreen.classList.add('hidden');
+        gameScreen.classList.add('active');
+        
+        updateComboProgress();
+        updateDivisionDisplay();
+        updateStats();
+    }
+
+    // ===== GAME START =====
+    function startRound() {
+        if (state.isPlaying) return;
+        
+        state.currentColor = getNextColor();
+        setFlashColor(state.currentColor);
+        
+        state.isPlaying = true;
+        state.canTap = false;
+        state.round++;
+        updateStats();
+        actionBtn.disabled = true;
+
+        // Reset cells
+        state.cells.forEach(function(c) {
+            c.className = 'grid-cell';
+        });
+
+        if (state.currentGame === 'match') {
+            startMatchRound();
+        } else {
+            startSequenceRound();
+        }
+    }
+
+    // ===== MATCH GAME =====
+    function startMatchRound() {
+        state.selectedCells = [];
+        updateTapsCounter();
+
+        var needed = getCellCount(state.level);
+        var available = [];
+        for (var i = 0; i < TOTAL_CELLS; i++) available.push(i);
+        shuffleArray(available);
+        state.targetCells = available.slice(0, needed);
+
+        messageText.innerHTML = '<span class="lang-en">WATCH...</span><span class="lang-es">MIRA...</span>';
+        messageText.className = 'message-text watch';
+
+        setTimeout(function() {
+            playFlashSound();
+            state.targetCells.forEach(function(i) {
+                state.cells[i].classList.add('lit');
+            });
+
+            setTimeout(function() {
+                state.targetCells.forEach(function(i) {
+                    state.cells[i].classList.remove('lit');
+                });
+
+                messageText.innerHTML = '<span class="lang-en">FIND THEM!</span><span class="lang-es">¡ENCUÉNTRALOS!</span>';
+                messageText.className = 'message-text go';
+                state.canTap = true;
+            }, MATCH_SPEED_CONFIG[state.speed]);
+        }, 500);
+    }
+
+    // ===== SEQUENCE GAME =====
+    function startSequenceRound() {
+        state.playerIndex = 0;
+        
+        var needed = getCellCount(state.level);
+        var available = [];
+        for (var i = 0; i < TOTAL_CELLS; i++) available.push(i);
+        shuffleArray(available);
+        state.sequence = available.slice(0, needed);
+
+        updateTapsCounter();
+
+        messageText.innerHTML = '<span class="lang-en">WATCH...</span><span class="lang-es">MIRA...</span>';
+        messageText.className = 'message-text watch';
+
+        setTimeout(function() {
+            playSequence(function() {
+                messageText.innerHTML = '<span class="lang-en">YOUR TURN!</span><span class="lang-es">¡TU TURNO!</span>';
+                messageText.className = 'message-text go';
+                state.canTap = true;
+            });
+        }, 500);
+    }
+
+    function playSequence(cb) {
+        var cfg = SEQ_SPEED_CONFIG[state.speed];
+        var i = 0;
+        function next() {
+            if (i > 0) state.cells[state.sequence[i - 1]].classList.remove('lit');
+            if (i < state.sequence.length) {
+                state.cells[state.sequence[i]].classList.add('lit');
+                playNote(state.sequence[i]);
+                i++;
+                setTimeout(next, cfg.show + cfg.gap);
+            } else {
+                setTimeout(cb, 300);
+            }
+        }
+        next();
+    }
+
+    // ===== CELL TAP HANDLER =====
+    function handleCellTap(index) {
+        if (!state.canTap || !state.isPlaying) return;
+
+        if (state.currentGame === 'match') {
+            handleMatchTap(index);
+        } else {
+            handleSequenceTap(index);
+        }
+    }
+
+    function handleMatchTap(index) {
+        var cell = state.cells[index];
+        
+        if (cell.classList.contains('selected')) {
+            cell.classList.remove('selected');
+            var idx = state.selectedCells.indexOf(index);
+            if (idx > -1) state.selectedCells.splice(idx, 1);
+            updateTapsCounter();
+            return;
+        }
+
+        playTapSound();
+        cell.classList.add('selected');
+        state.selectedCells.push(index);
+        updateTapsCounter();
+
+        var needed = getCellCount(state.level);
+        if (state.selectedCells.length >= needed) {
+            state.canTap = false;
+            setTimeout(revealMatchResults, 300);
+        }
+    }
+
+    function handleSequenceTap(index) {
+        var cell = state.cells[index];
+        cell.classList.add('player-tap');
+        playNote(index);
+        setTimeout(function() { cell.classList.remove('player-tap'); }, 200);
+
+        if (index === state.sequence[state.playerIndex]) {
+            cell.classList.add('correct');
+            state.playerIndex++;
+            if (state.playerIndex > 2) laughCelebration('small');
+            if (state.playerIndex >= state.sequence.length) {
+                state.canTap = false;
+                roundComplete(true);
+            }
+        } else {
+            cell.classList.add('wrong');
+            playWrongSound();
+            state.canTap = false;
+            setTimeout(function() {
+                state.sequence.forEach(function(i) { state.cells[i].classList.add('correct'); });
+            }, 400);
+            setTimeout(function() { roundComplete(false); }, 1500);
+        }
+    }
+
+    function revealMatchResults() {
+        var correct = 0;
+        var needed = getCellCount(state.level);
+
+        state.selectedCells.forEach(function(i) {
+            if (state.targetCells.indexOf(i) !== -1) {
+                state.cells[i].classList.remove('selected');
+                state.cells[i].classList.add('correct');
+                correct++;
+            } else {
+                state.cells[i].classList.remove('selected');
+                state.cells[i].classList.add('wrong');
+            }
+        });
+
+        state.targetCells.forEach(function(i) {
+            if (state.selectedCells.indexOf(i) === -1) {
+                state.cells[i].classList.add('missed');
+            }
+        });
+
+        var isPerfect = correct === needed;
+        roundComplete(isPerfect);
+    }
+
+    // ===== ROUND COMPLETE =====
+    function roundComplete(success) {
+        state.isPlaying = false;
+
+        if (success) {
+            var needed = getCellCount(state.level);
+            var pts = needed * 10 * state.level * (state.speed === 'fast' ? 3 : state.speed === 'med' ? 2 : 1);
+            state.score += pts;
+            state.streak++;
+            
+            localStorage.setItem('lc-combo-score', state.score);
+            localStorage.setItem('lc-combo-streak', state.streak);
+
+            // Update perfects for current game
+            if (state.currentGame === 'match') {
+                state.matchPerfects++;
+            } else {
+                state.seqPerfects++;
+            }
+
+            updateComboProgress();
+            updateStats();
+
+            var intensity = state.streak >= 5 ? 'party' : state.streak >= 3 ? 'big' : 'medium';
+            playCorrectSound();
+            laughCelebration(intensity);
+
+            var msgs = state.streak >= 5 ? ['🎉 LEGEND!', '🏆 WOW!'] : state.streak >= 3 ? ['😂 FIRE!', '🤣 AMAZING!'] : ['😄 NICE!', '😊 GREAT!'];
+            showCoach(msgs[Math.floor(Math.random() * msgs.length)]);
+
+            messageText.innerHTML = '<span class="lang-en">PERFECT!</span><span class="lang-es">¡PERFECTO!</span>';
+            messageText.className = 'message-text perfect';
+
+            // Check if current game is complete (2 perfects)
+            if (state.currentGame === 'match' && state.matchPerfects >= 2) {
+                state.matchDone = true;
+                setTimeout(checkComboProgress, 1000);
+            } else if (state.currentGame === 'sequence' && state.seqPerfects >= 2) {
+                state.seqDone = true;
+                setTimeout(checkComboProgress, 1000);
+            } else {
+                setTimeout(finishRound, 1500);
+            }
+        } else {
+            // Reset perfects for current game
+            if (state.currentGame === 'match') {
+                state.matchPerfects = 0;
+            } else {
+                state.seqPerfects = 0;
+            }
+            
+            state.streak = 0;
+            localStorage.setItem('lc-combo-streak', 0);
+
+            updateComboProgress();
+            updateStats();
+
+            messageText.innerHTML = '<span class="lang-en">MISS!</span><span class="lang-es">¡FALLASTE!</span>';
+            messageText.className = 'message-text miss';
+
+            setTimeout(finishRound, 2000);
+        }
+    }
+
+    function checkComboProgress() {
+        updateComboProgress();
+        
+        // Both games complete?
+        if (state.matchDone && state.seqDone) {
+            // LEVEL COMPLETE!
+            if (state.level < 10) {
+                showLevelUpOverlay();
+            } else {
+                // L10 COMPLETE - THE ULTIMATE!
+                showCoach('👑 COMBO MASTER!');
+                laughCelebration('party');
+                setTimeout(function() {
+                    resetLevel();
+                }, 2000);
+            }
+        } else {
+            // Switch to other game
+            showSwitchOverlay();
+        }
+    }
+
+    function showSwitchOverlay() {
+        var nextGame = state.currentGame === 'match' ? 'sequence' : 'match';
+        var completedGame = state.currentGame === 'match' ? 'MATCH' : 'SEQUENCE';
+        var nextGameName = nextGame === 'match' ? 'MATCH' : 'SEQUENCE';
+        
+        document.getElementById('switchEmoji').textContent = state.currentGame === 'match' ? '🎯✅' : '🔢✅';
+        document.getElementById('switchTitle').innerHTML = currentLang === 'es' 
+            ? '¡' + completedGame + ' COMPLETO!' 
+            : completedGame + ' COMPLETE!';
+        document.getElementById('switchMessage').innerHTML = currentLang === 'es'
+            ? '¡Ahora completa ' + nextGameName + '!'
+            : 'Now complete ' + nextGameName + '!';
+        
+        document.getElementById('switchOverlay').classList.add('show');
+    }
+
+    document.getElementById('switchBtn').onclick = function() {
+        document.getElementById('switchOverlay').classList.remove('show');
+        
+        // Switch game
+        state.currentGame = state.currentGame === 'match' ? 'sequence' : 'match';
+        updateComboProgress();
+        updateTapsCounter();
+        finishRound();
+    };
+
+    function showLevelUpOverlay() {
+        laughCelebration('party');
+        
+        document.getElementById('levelUpMessage').innerHTML = currentLang === 'es'
+            ? '¡Nivel ' + state.level + ' CONQUISTADO! Avanzando a Nivel ' + (state.level + 1)
+            : 'Level ' + state.level + ' CONQUERED! Advancing to Level ' + (state.level + 1);
+        
+        document.getElementById('levelUpOverlay').classList.add('show');
+    }
+
+    document.getElementById('levelUpBtn').onclick = function() {
+        document.getElementById('levelUpOverlay').classList.remove('show');
+        
+        state.level++;
+        if (state.level > 10) state.level = 10;
+        localStorage.setItem('lc-combo-level', state.level);
+        
+        // Reset for new level
+        state.matchPerfects = 0;
+        state.seqPerfects = 0;
+        state.matchDone = false;
+        state.seqDone = false;
+        state.currentGame = state.playOrder === 'match-first' ? 'match' : 'sequence';
+        
+        updateComboProgress();
+        updateDivisionDisplay();
+        updateStats();
+        finishRound();
+    };
+
+    function resetLevel() {
+        state.matchPerfects = 0;
+        state.seqPerfects = 0;
+        state.matchDone = false;
+        state.seqDone = false;
+        state.currentGame = state.playOrder === 'match-first' ? 'match' : 'sequence';
+        
+        updateComboProgress();
+        finishRound();
+    }
+
+    function finishRound() {
+        state.isPlaying = false;
+        messageText.innerHTML = '<span class="lang-en">TAP GO!</span><span class="lang-es">¡PULSA IR!</span>';
+        messageText.className = 'message-text';
+        actionBtn.disabled = false;
+        updateTapsCounter();
+    }
+
+    // ===== SELECTORS (Order Screen) =====
+    document.querySelectorAll('[data-level]').forEach(function(b) {
+        b.onclick = function() {
+            if (state.gameStarted) return;
+            document.querySelectorAll('[data-level]').forEach(function(x) { x.classList.remove('active'); });
+            b.classList.add('active');
+            state.level = parseInt(b.dataset.level);
+            localStorage.setItem('lc-combo-level', state.level);
+        };
+    });
+
+    document.querySelectorAll('.speed-btn').forEach(function(b) {
+        b.onclick = function() {
+            if (state.gameStarted) return;
+            if (!speedAccess.allSpeeds && b.dataset.speed !== 'slow') {
+                showUpgradeModal();
+                return;
+            }
+            document.querySelectorAll('.speed-btn').forEach(function(x) { x.classList.remove('active'); });
+            b.classList.add('active');
+            state.speed = b.dataset.speed;
+            localStorage.setItem('lc-combo-speed', state.speed);
+        };
+    });
+
+    actionBtn.onclick = startRound;
+
+    // ===== LOAD SAVED STATE =====
+    function loadSavedState() {
+        var sl = localStorage.getItem('lc-combo-level');
+        if (sl) {
+            state.level = parseInt(sl);
+            if (state.level > 10) state.level = 10;
+            if (state.level < 1) state.level = 1;
+            document.querySelectorAll('[data-level]').forEach(function(b) { b.classList.remove('active'); });
+            var lb = document.querySelector('[data-level="' + state.level + '"]');
+            if (lb) lb.classList.add('active');
+        }
+        var ss = localStorage.getItem('lc-combo-speed');
+        if (ss && (speedAccess.allSpeeds || ss === 'slow')) {
+            state.speed = ss;
+            document.querySelectorAll('.speed-btn').forEach(function(b) { b.classList.remove('active'); });
+            var sb = document.querySelector('.speed-btn[data-speed="' + state.speed + '"]');
+            if (sb) sb.classList.add('active');
+        }
+    }
+
+    // ===== INIT =====
+    initCourt();
+    initSpeedButtons();
+    loadSavedState();
+    setLang(currentLang);
+    updateDivisionDisplay();
+    updateStats();
+})();
+</script>
+</body>
+</html>
