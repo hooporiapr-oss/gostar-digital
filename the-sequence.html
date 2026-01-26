@@ -48,9 +48,11 @@ html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background
 .settings-link{display:block;width:100%;padding:8px;border-radius:6px;font-size:0.7rem;text-decoration:none;text-align:center;cursor:pointer;border:none;font-family:'Outfit',sans-serif}
 .settings-link.upgrade{background:linear-gradient(135deg,var(--gold),#FFA500);color:var(--dark);font-weight:600;margin-bottom:6px}
 .settings-link.logout{background:0;border:1px solid var(--border);color:var(--muted)}
-.nav-row-2{display:flex;align-items:center;justify-content:center;height:40px;padding:0 10px;gap:8px;border-top:1px solid var(--border)}
-.nav-tab{flex:1;max-width:140px;padding:7px 10px;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:0.8rem;letter-spacing:1px;text-decoration:none;text-align:center;color:var(--muted);background:0;border:1px solid var(--border);transition:all 0.2s}
+.nav-row-2{display:flex;align-items:center;justify-content:center;height:40px;padding:0 10px;gap:6px;border-top:1px solid var(--border)}
+.nav-tab{flex:1;max-width:100px;padding:7px 6px;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:0.7rem;letter-spacing:1px;text-decoration:none;text-align:center;color:var(--muted);background:0;border:1px solid var(--border);transition:all 0.2s}
 .nav-tab.active{color:var(--teal);background:rgba(0,217,165,0.12);border-color:var(--teal)}
+.nav-tab.match-tab.active{color:var(--orange);background:rgba(255,107,53,0.12);border-color:var(--orange)}
+.nav-tab.combo-tab.active{color:var(--gold);background:rgba(255,215,0,0.12);border-color:var(--gold)}
 
 .game-container{width:100%;max-width:420px;height:100dvh;margin:0 auto;padding:5px 10px;padding-top:calc(var(--nav-height) + env(safe-area-inset-top) + 4px);padding-bottom:max(5px,env(safe-area-inset-bottom));display:flex;flex-direction:column;overflow:hidden}
 .stats-bar{display:flex;justify-content:center;gap:12px;padding:5px 8px;background:var(--card);border-radius:8px;margin-bottom:4px;flex-shrink:0}
@@ -147,7 +149,7 @@ body.es .lang-en{display:none!important}
 <div class="settings-section" id="upgradeSection"><a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="settings-link upgrade">🚀 UNLOCK ALL</a></div>
 <div class="settings-section"><button class="settings-link logout" id="logoutBtn">← <span class="lang-en">Log Out</span><span class="lang-es">Salir</span></button></div>
 </div></div></div></div>
-<div class="nav-row-2"><a href="/the-match" class="nav-tab">🎯 MATCH</a><a href="/the-sequence" class="nav-tab active">🔢 SEQUENCE</a></div>
+<div class="nav-row-2"><a href="/the-match" class="nav-tab match-tab">🎯 MATCH</a><a href="/the-sequence" class="nav-tab active">🔢 SEQ</a><a href="/the-combo" class="nav-tab combo-tab">🏆 COMBO</a></div> ```  ---  **Both files will now have:** ``` 🎯 MATCH | 🔢 SEQ | 🏆 COMBO
 </nav>
 <div class="emoji-container" id="emojiContainer"></div>
 <div class="game-container">
