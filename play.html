@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Choose Your Workout | LaughCourt</title>
-    <meta name="description" content="Choose between THE MATCH, THE SEQUENCE, and THE COMBO CHALLENGE - memory workouts that sharpen your mind.">
+    <meta name="description" content="Choose between THE MATCH, THE SEQUENCE, THE REFLEX, and THE COMBO CHALLENGE - memory workouts that sharpen your mind.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -43,7 +43,6 @@
         body.es .lang-en { display: none !important; }
         body.en .lang-es { display: none !important; }
 
-        /* Language Toggle */
         .lang-toggle {
             position: fixed;
             top: 15px;
@@ -73,17 +72,13 @@
             color: var(--dark);
         }
 
-        /* Main Container */
         .container {
             width: 100%;
             max-width: 500px;
             text-align: center;
         }
 
-        /* Header */
-        .header {
-            margin-bottom: 25px;
-        }
+        .header { margin-bottom: 20px; }
         .logo {
             font-family: 'Bebas Neue', sans-serif;
             font-size: 2.5rem;
@@ -97,9 +92,8 @@
             color: var(--gold);
             letter-spacing: 3px;
             text-transform: uppercase;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
-
         .welcome-text {
             font-family: 'Bebas Neue', sans-serif;
             font-size: 1.8rem;
@@ -111,7 +105,6 @@
             font-size: 0.85rem;
         }
 
-        /* Section Labels */
         .section-label {
             font-family: 'Bebas Neue', sans-serif;
             font-size: 0.85rem;
@@ -122,113 +115,76 @@
             padding-left: 5px;
         }
 
-        /* Game Cards Grid */
         .games-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 12px;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         .game-card {
             background: var(--card);
             border: 3px solid var(--border);
             border-radius: 20px;
-            padding: 25px 12px;
+            padding: 20px 12px;
             text-decoration: none;
             color: var(--text);
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
         }
-
         .game-card::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
+            top: 0; left: 0; right: 0;
             height: 4px;
         }
-
-        .game-card.match::before {
-            background: linear-gradient(90deg, var(--gold), var(--orange));
-        }
-
-        .game-card.sequence::before {
-            background: linear-gradient(90deg, var(--teal), var(--cyan));
-        }
-
-        .game-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .game-card.match:hover {
-            border-color: var(--orange);
-            box-shadow: 0 15px 30px rgba(255,107,53,0.25);
-        }
-
-        .game-card.sequence:hover {
-            border-color: var(--teal);
-            box-shadow: 0 15px 30px rgba(0,217,165,0.25);
-        }
-
-        .game-card:active {
-            transform: scale(0.98);
-        }
-
-        .game-icon {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-
-        .game-name {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.3rem;
-            letter-spacing: 2px;
-            margin-bottom: 4px;
-        }
-
+        .game-card.match::before { background: linear-gradient(90deg, var(--gold), var(--orange)); }
+        .game-card.sequence::before { background: linear-gradient(90deg, var(--teal), var(--cyan)); }
+        .game-card:hover { transform: translateY(-5px); }
+        .game-card.match:hover { border-color: var(--orange); box-shadow: 0 15px 30px rgba(255,107,53,0.25); }
+        .game-card.sequence:hover { border-color: var(--teal); box-shadow: 0 15px 30px rgba(0,217,165,0.25); }
+        .game-card:active { transform: scale(0.98); }
+        .game-icon { font-size: 2.2rem; margin-bottom: 8px; }
+        .game-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 2px; margin-bottom: 4px; }
         .game-card.match .game-name { color: var(--orange); }
         .game-card.sequence .game-name { color: var(--teal); }
+        .game-type { font-size: 0.6rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+        .game-play-btn { display: inline-block; padding: 8px 16px; border-radius: 25px; font-family: 'Bebas Neue', sans-serif; font-size: 0.8rem; letter-spacing: 2px; }
+        .game-card.match .game-play-btn { background: linear-gradient(135deg, var(--gold), var(--orange)); color: var(--dark); }
+        .game-card.sequence .game-play-btn { background: linear-gradient(135deg, var(--teal), var(--cyan)); color: var(--dark); }
 
-        .game-type {
-            font-size: 0.6rem;
-            color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 12px;
+        .reflex-section { margin-bottom: 12px; }
+        .reflex-card {
+            background: var(--card);
+            border: 3px solid var(--purple);
+            border-radius: 20px;
+            padding: 20px;
+            text-decoration: none;
+            color: var(--text);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 18px;
         }
+        .reflex-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--purple), #8E44AD); }
+        .reflex-card:hover { transform: translateY(-5px); border-color: var(--purple); box-shadow: 0 15px 40px rgba(155,89,182,0.3); }
+        .reflex-card:active { transform: scale(0.98); }
+        .reflex-icon { font-size: 2.8rem; flex-shrink: 0; }
+        .reflex-content { flex: 1; text-align: left; }
+        .reflex-badge { display: inline-block; background: linear-gradient(135deg, var(--purple), #8E44AD); color: var(--text); font-size: 0.5rem; font-weight: 700; letter-spacing: 1px; padding: 3px 8px; border-radius: 10px; margin-bottom: 6px; }
+        .reflex-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 3px; color: var(--purple); margin-bottom: 4px; }
+        .reflex-desc { font-size: 0.7rem; color: var(--muted); margin-bottom: 10px; }
+        .reflex-play-btn { display: inline-block; padding: 10px 22px; border-radius: 25px; font-family: 'Bebas Neue', sans-serif; font-size: 0.85rem; letter-spacing: 2px; background: linear-gradient(135deg, var(--purple), #8E44AD); color: var(--text); }
 
-        .game-play-btn {
-            display: inline-block;
-            padding: 8px 18px;
-            border-radius: 25px;
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 0.85rem;
-            letter-spacing: 2px;
-        }
-
-        .game-card.match .game-play-btn {
-            background: linear-gradient(135deg, var(--gold), var(--orange));
-            color: var(--dark);
-        }
-
-        .game-card.sequence .game-play-btn {
-            background: linear-gradient(135deg, var(--teal), var(--cyan));
-            color: var(--dark);
-        }
-
-        /* THE COMBO CHALLENGE - Featured Card */
-        .challenge-section {
-            margin-bottom: 20px;
-        }
-
+        .challenge-section { margin-bottom: 15px; }
         .combo-card {
             background: var(--card);
             border: 3px solid var(--gold);
             border-radius: 20px;
-            padding: 25px 20px;
+            padding: 20px;
             text-decoration: none;
             color: var(--text);
             transition: all 0.3s ease;
@@ -236,292 +192,70 @@
             overflow: hidden;
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 18px;
         }
+        .combo-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--gold), var(--orange), var(--teal)); }
+        .combo-card::after { content: '🏆'; position: absolute; top: 10px; right: 15px; font-size: 1.2rem; opacity: 0.3; }
+        .combo-card:hover { transform: translateY(-5px); border-color: var(--gold); box-shadow: 0 15px 40px rgba(255,215,0,0.3); }
+        .combo-card:active { transform: scale(0.98); }
+        .combo-icon { font-size: 2.8rem; flex-shrink: 0; }
+        .combo-content { flex: 1; text-align: left; }
+        .combo-badge { display: inline-block; background: linear-gradient(135deg, var(--gold), var(--orange)); color: var(--dark); font-size: 0.5rem; font-weight: 700; letter-spacing: 1px; padding: 3px 8px; border-radius: 10px; margin-bottom: 6px; }
+        .combo-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 3px; color: var(--gold); margin-bottom: 4px; }
+        .combo-desc { font-size: 0.7rem; color: var(--muted); margin-bottom: 10px; }
+        .combo-play-btn { display: inline-block; padding: 10px 22px; border-radius: 25px; font-family: 'Bebas Neue', sans-serif; font-size: 0.85rem; letter-spacing: 2px; background: linear-gradient(135deg, var(--gold), var(--orange)); color: var(--dark); }
 
-        .combo-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--gold), var(--orange), var(--teal));
-        }
+        .speed-section { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 15px; margin-bottom: 15px; }
+        .speed-title { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
+        .speed-chips { display: flex; justify-content: center; gap: 8px; margin-bottom: 12px; }
+        .speed-chip { padding: 6px 14px; border-radius: 20px; font-family: 'Bebas Neue', sans-serif; font-size: 0.8rem; letter-spacing: 2px; display: flex; align-items: center; gap: 5px; }
+        .speed-chip.unlocked { background: rgba(0,217,165,0.15); color: var(--teal); border: 1px solid var(--teal); }
+        .speed-chip.locked { background: rgba(255,255,255,0.05); color: var(--muted); border: 1px solid var(--border); }
+        .speed-chip .icon { font-size: 0.7rem; }
+        .upgrade-btn { display: inline-block; padding: 10px 25px; background: linear-gradient(135deg, var(--gold), var(--orange)); color: var(--dark); border-radius: 25px; font-family: 'Bebas Neue', sans-serif; font-size: 0.9rem; letter-spacing: 2px; text-decoration: none; transition: all 0.3s; box-shadow: 0 5px 20px rgba(255,107,53,0.3); }
+        .upgrade-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(255,107,53,0.4); }
+        .all-speeds-msg { color: var(--teal); font-size: 0.8rem; display: flex; align-items: center; justify-content: center; gap: 8px; }
 
-        .combo-card::after {
-            content: '🏆';
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 1.2rem;
-            opacity: 0.3;
-        }
-
-        .combo-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--gold);
-            box-shadow: 0 15px 40px rgba(255,215,0,0.3);
-        }
-
-        .combo-card:active {
-            transform: scale(0.98);
-        }
-
-        .combo-icon {
-            font-size: 3rem;
-            flex-shrink: 0;
-        }
-
-        .combo-content {
-            flex: 1;
-            text-align: left;
-        }
-
-        .combo-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, var(--gold), var(--orange));
-            color: var(--dark);
-            font-size: 0.5rem;
-            font-weight: 700;
-            letter-spacing: 1px;
-            padding: 3px 8px;
-            border-radius: 10px;
-            margin-bottom: 6px;
-        }
-
-        .combo-name {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.5rem;
-            letter-spacing: 3px;
-            color: var(--gold);
-            margin-bottom: 4px;
-        }
-
-        .combo-desc {
-            font-size: 0.7rem;
-            color: var(--muted);
-            margin-bottom: 10px;
-        }
-
-        .combo-play-btn {
-            display: inline-block;
-            padding: 10px 25px;
-            border-radius: 25px;
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 0.9rem;
-            letter-spacing: 2px;
-            background: linear-gradient(135deg, var(--gold), var(--orange));
-            color: var(--dark);
-        }
-
-        /* Speed Access Section */
-        .speed-section {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 18px;
-            margin-bottom: 18px;
-        }
-
-        .speed-title {
-            font-size: 0.65rem;
-            color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-        }
-
-        .speed-chips {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin-bottom: 12px;
-        }
-
-        .speed-chip {
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 0.8rem;
-            letter-spacing: 2px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .speed-chip.unlocked {
-            background: rgba(0,217,165,0.15);
-            color: var(--teal);
-            border: 1px solid var(--teal);
-        }
-
-        .speed-chip.locked {
-            background: rgba(255,255,255,0.05);
-            color: var(--muted);
-            border: 1px solid var(--border);
-        }
-
-        .speed-chip .icon {
-            font-size: 0.7rem;
-        }
-
-        .upgrade-btn {
-            display: inline-block;
-            padding: 10px 25px;
-            background: linear-gradient(135deg, var(--gold), var(--orange));
-            color: var(--dark);
-            border-radius: 25px;
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 0.9rem;
-            letter-spacing: 2px;
-            text-decoration: none;
-            transition: all 0.3s;
-            box-shadow: 0 5px 20px rgba(255,107,53,0.3);
-        }
-
-        .upgrade-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 30px rgba(255,107,53,0.4);
-        }
-
-        .all-speeds-msg {
-            color: var(--teal);
-            font-size: 0.8rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        /* Trial Banner */
-        .trial-banner {
-            display: none;
-            background: linear-gradient(135deg, rgba(255,215,0,0.1), rgba(255,107,53,0.1));
-            border: 1px solid var(--gold);
-            border-radius: 12px;
-            padding: 10px 15px;
-            margin-bottom: 15px;
-            font-size: 0.75rem;
-        }
+        .trial-banner { display: none; background: linear-gradient(135deg, rgba(255,215,0,0.1), rgba(255,107,53,0.1)); border: 1px solid var(--gold); border-radius: 12px; padding: 10px 15px; margin-bottom: 15px; font-size: 0.75rem; }
         .trial-banner.show { display: block; }
         .trial-banner strong { color: var(--gold); }
 
-        /* Account Section */
-        .account-section {
-            margin-top: 8px;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-        }
+        .account-section { margin-top: 8px; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+        .account-link { color: var(--gold); font-size: 0.75rem; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; padding: 8px 16px; border: 1px solid var(--gold); border-radius: 25px; transition: all 0.3s; }
+        .account-link:hover { background: rgba(255,215,0,0.1); box-shadow: 0 0 15px rgba(255,215,0,0.2); }
+        .logout-link { color: var(--muted); font-size: 0.75rem; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; padding: 8px 16px; border: 1px solid var(--border); border-radius: 25px; transition: all 0.3s; }
+        .logout-link:hover { border-color: var(--orange); color: var(--orange); }
 
-        .account-link {
-            color: var(--gold);
-            font-size: 0.75rem;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            padding: 8px 16px;
-            border: 1px solid var(--gold);
-            border-radius: 25px;
-            transition: all 0.3s;
-        }
-
-        .account-link:hover {
-            background: rgba(255,215,0,0.1);
-            box-shadow: 0 0 15px rgba(255,215,0,0.2);
-        }
-
-        .logout-link {
-            color: var(--muted);
-            font-size: 0.75rem;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            padding: 8px 16px;
-            border: 1px solid var(--border);
-            border-radius: 25px;
-            transition: all 0.3s;
-        }
-
-        .logout-link:hover {
-            border-color: var(--orange);
-            color: var(--orange);
-        }
-
-        /* Footer */
-        .footer {
-            margin-top: 25px;
-            text-align: center;
-        }
-        .footer-logo {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1rem;
-            letter-spacing: 3px;
-            margin-bottom: 5px;
-        }
+        .footer { margin-top: 20px; text-align: center; }
+        .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 3px; margin-bottom: 5px; }
         .footer-logo .laugh { color: var(--gold); }
         .footer-logo .court { color: var(--text); }
-        .footer-links {
-            font-size: 0.6rem;
-            margin-bottom: 5px;
-        }
-        .footer-links a {
-            color: var(--muted);
-            text-decoration: none;
-            margin: 0 6px;
-            transition: color 0.3s;
-        }
+        .footer-links { font-size: 0.6rem; margin-bottom: 5px; }
+        .footer-links a { color: var(--muted); text-decoration: none; margin: 0 6px; transition: color 0.3s; }
         .footer-links a:hover { color: var(--gold); }
-        .footer-company {
-            font-size: 0.55rem;
-            color: var(--muted);
-        }
-        .footer-company a {
-            color: var(--gold);
-            text-decoration: none;
-        }
-        .footer-trademarks {
-            font-size: 0.5rem;
-            color: var(--muted);
-            margin-top: 8px;
-            padding: 0 10px;
-            line-height: 1.4;
-            opacity: 0.7;
-        }
+        .footer-company { font-size: 0.55rem; color: var(--muted); }
+        .footer-company a { color: var(--gold); text-decoration: none; }
+        .footer-trademarks { font-size: 0.5rem; color: var(--muted); margin-top: 8px; padding: 0 10px; line-height: 1.4; opacity: 0.7; }
 
-        /* Responsive */
         @media (max-width: 400px) {
             .logo { font-size: 2rem; letter-spacing: 4px; }
             .welcome-text { font-size: 1.5rem; }
             .games-grid { gap: 10px; }
-            .game-card { padding: 20px 10px; }
-            .game-icon { font-size: 2rem; }
-            .game-name { font-size: 1.1rem; }
+            .game-card { padding: 15px 10px; }
+            .game-icon { font-size: 1.8rem; }
+            .game-name { font-size: 1rem; }
             .game-play-btn { padding: 7px 14px; font-size: 0.75rem; }
-            .speed-chips { gap: 5px; }
-            .speed-chip { padding: 5px 10px; font-size: 0.7rem; }
-            .combo-card { padding: 20px 15px; gap: 15px; }
-            .combo-icon { font-size: 2.5rem; }
-            .combo-name { font-size: 1.3rem; }
-            .combo-play-btn { padding: 8px 20px; font-size: 0.8rem; }
+            .reflex-card, .combo-card { padding: 15px; gap: 12px; }
+            .reflex-icon, .combo-icon { font-size: 2.2rem; }
+            .reflex-name, .combo-name { font-size: 1.2rem; }
+            .reflex-play-btn, .combo-play-btn { padding: 8px 18px; font-size: 0.8rem; }
         }
 
-        /* Animation */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .container > * {
-            animation: fadeInUp 0.5s ease-out forwards;
-        }
-
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .container > * { animation: fadeInUp 0.5s ease-out forwards; }
         .header { animation-delay: 0s; }
         .games-grid { animation-delay: 0.1s; }
+        .reflex-section { animation-delay: 0.12s; }
         .challenge-section { animation-delay: 0.15s; }
         .speed-section { animation-delay: 0.2s; }
         .account-section { animation-delay: 0.25s; }
@@ -536,9 +270,7 @@
 
     <div class="container">
         <header class="header">
-            <div class="logo">
-                🏀 <span class="laugh">LAUGH</span><span class="court">COURT</span>
-            </div>
+            <div class="logo">🏀 <span class="laugh">LAUGH</span><span class="court">COURT</span></div>
             <div class="tagline">
                 <span class="lang-en">Where Joy Meets The Game</span>
                 <span class="lang-es">Donde La Alegría Se Une Al Juego</span>
@@ -548,236 +280,147 @@
                 <span class="lang-es">🏀 ELIGE TU EJERCICIO</span>
             </h1>
             <p class="welcome-sub">
-                <span class="lang-en">Practice your skills or take THE CHALLENGE</span>
-                <span class="lang-es">Practica tus habilidades o acepta EL RETO</span>
+                <span class="lang-en">Train your brain or take THE CHALLENGE</span>
+                <span class="lang-es">Entrena tu cerebro o acepta EL RETO</span>
             </p>
         </header>
 
-        <!-- Trial Banner (shows for facility trials) -->
         <div class="trial-banner" id="trialBanner">
             <span class="lang-en">⚡ <strong>FACILITY TRIAL</strong> — <span id="trialDays">7</span> days left</span>
             <span class="lang-es">⚡ <strong>PRUEBA DE FACILIDAD</strong> — <span id="trialDaysEs">7</span> días restantes</span>
         </div>
 
-        <!-- Practice Games -->
         <div class="section-label">
-            <span class="lang-en">⚡ PRACTICE</span>
-            <span class="lang-es">⚡ PRÁCTICA</span>
+            <span class="lang-en">⚡ PRACTICE — PATTERN MEMORY</span>
+            <span class="lang-es">⚡ PRÁCTICA — MEMORIA DE PATRONES</span>
         </div>
         <div class="games-grid">
-            <a href="/the-match" class="game-card match" id="matchCard">
+            <a href="/the-match" class="game-card match">
                 <div class="game-icon">🎯</div>
                 <div class="game-name">THE MATCH</div>
-                <div class="game-type">
-                    <span class="lang-en">Find the cells</span>
-                    <span class="lang-es">Encuentra las celdas</span>
-                </div>
-                <div class="game-play-btn">
-                    <span class="lang-en">PLAY</span>
-                    <span class="lang-es">JUGAR</span>
-                </div>
+                <div class="game-type"><span class="lang-en">Find the cells</span><span class="lang-es">Encuentra las celdas</span></div>
+                <div class="game-play-btn"><span class="lang-en">PLAY</span><span class="lang-es">JUGAR</span></div>
             </a>
-
-            <a href="/the-sequence" class="game-card sequence" id="sequenceCard">
+            <a href="/the-sequence" class="game-card sequence">
                 <div class="game-icon">🔢</div>
                 <div class="game-name">THE SEQUENCE</div>
-                <div class="game-type">
-                    <span class="lang-en">Repeat the order</span>
-                    <span class="lang-es">Repite el orden</span>
-                </div>
-                <div class="game-play-btn">
-                    <span class="lang-en">PLAY</span>
-                    <span class="lang-es">JUGAR</span>
+                <div class="game-type"><span class="lang-en">Repeat the order</span><span class="lang-es">Repite el orden</span></div>
+                <div class="game-play-btn"><span class="lang-en">PLAY</span><span class="lang-es">JUGAR</span></div>
+            </a>
+        </div>
+
+        <div class="reflex-section">
+            <div class="section-label">
+                <span class="lang-en">⚡ PRACTICE — REACTION TIME</span>
+                <span class="lang-es">⚡ PRÁCTICA — TIEMPO DE REACCIÓN</span>
+            </div>
+            <a href="/the-reflex" class="reflex-card">
+                <div class="reflex-icon">⚡</div>
+                <div class="reflex-content">
+                    <div class="reflex-badge"><span class="lang-en">PURE SPEED</span><span class="lang-es">VELOCIDAD PURA</span></div>
+                    <div class="reflex-name">THE REFLEX</div>
+                    <div class="reflex-desc"><span class="lang-en">Tap before it disappears. No memory — just REACT!</span><span class="lang-es">Toca antes de que desaparezca. Sin memoria — ¡solo REACCIONA!</span></div>
+                    <div class="reflex-play-btn"><span class="lang-en">PLAY</span><span class="lang-es">JUGAR</span></div>
                 </div>
             </a>
         </div>
 
-        <!-- THE COMBO CHALLENGE -->
         <div class="challenge-section">
             <div class="section-label">
                 <span class="lang-en">🏆 THE CHALLENGE</span>
                 <span class="lang-es">🏆 EL RETO</span>
             </div>
-            <a href="/the-combo" class="combo-card" id="comboCard">
+            <a href="/the-combo" class="combo-card">
                 <div class="combo-icon">🏆</div>
                 <div class="combo-content">
-                    <div class="combo-badge">
-                        <span class="lang-en">ULTIMATE TEST</span>
-                        <span class="lang-es">PRUEBA FINAL</span>
-                    </div>
+                    <div class="combo-badge"><span class="lang-en">ULTIMATE TEST</span><span class="lang-es">PRUEBA FINAL</span></div>
                     <div class="combo-name">THE COMBO CHALLENGE</div>
-                    <div class="combo-desc">
-                        <span class="lang-en">Master BOTH games to advance. Are you ready?</span>
-                        <span class="lang-es">Domina AMBOS juegos para avanzar. ¿Estás listo?</span>
-                    </div>
-                    <div class="combo-play-btn">
-                        <span class="lang-en">ACCEPT CHALLENGE</span>
-                        <span class="lang-es">ACEPTAR RETO</span>
-                    </div>
+                    <div class="combo-desc"><span class="lang-en">Master BOTH games to advance. Are you ready?</span><span class="lang-es">Domina AMBOS juegos para avanzar. ¿Estás listo?</span></div>
+                    <div class="combo-play-btn"><span class="lang-en">ACCEPT CHALLENGE</span><span class="lang-es">ACEPTAR RETO</span></div>
                 </div>
             </a>
         </div>
 
-        <!-- Speed Access -->
         <div class="speed-section">
-            <div class="speed-title">
-                <span class="lang-en">⚡ YOUR SPEEDS</span>
-                <span class="lang-es">⚡ TUS VELOCIDADES</span>
-            </div>
-
+            <div class="speed-title"><span class="lang-en">⚡ YOUR SPEEDS</span><span class="lang-es">⚡ TUS VELOCIDADES</span></div>
             <div class="speed-chips" id="speedChips">
-                <div class="speed-chip unlocked" id="chipSlow">
-                    <span class="icon">✓</span> SLOW
-                </div>
-                <div class="speed-chip locked" id="chipMed">
-                    <span class="icon">🔒</span> MED
-                </div>
-                <div class="speed-chip locked" id="chipFast">
-                    <span class="icon">🔒</span> FAST
-                </div>
+                <div class="speed-chip unlocked" id="chipSlow"><span class="icon">✓</span> SLOW</div>
+                <div class="speed-chip locked" id="chipMed"><span class="icon">🔒</span> MED</div>
+                <div class="speed-chip locked" id="chipFast"><span class="icon">🔒</span> FAST</div>
             </div>
-
             <div id="upgradeArea">
-                <a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="upgrade-btn" id="upgradeBtn">
+                <a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="upgrade-btn">
                     <span class="lang-en">🔓 UNLOCK ALL SPEEDS — $5/mo</span>
                     <span class="lang-es">🔓 DESBLOQUEAR TODO — $5/mes</span>
                 </a>
             </div>
-
             <div id="allSpeedsArea" style="display: none;">
-                <div class="all-speeds-msg">
-                    <span>✨</span>
-                    <span class="lang-en">All speeds unlocked!</span>
-                    <span class="lang-es">¡Todas las velocidades desbloqueadas!</span>
-                </div>
+                <div class="all-speeds-msg"><span>✨</span><span class="lang-en">All speeds unlocked!</span><span class="lang-es">¡Todas las velocidades desbloqueadas!</span></div>
             </div>
         </div>
 
-        <!-- Account Management -->
         <div class="account-section">
-            <a href="https://billing.stripe.com/p/login/fZu8wQgpyc5c0Qr8e500000" target="_blank" class="account-link" id="manageLink">
-                <span>⚙️</span>
-                <span class="lang-en">Manage Subscription</span>
-                <span class="lang-es">Administrar Suscripción</span>
-            </a>
-            <a href="#" class="logout-link" id="logoutLink">
-                <span>🚪</span>
-                <span class="lang-en">Logout</span>
-                <span class="lang-es">Salir</span>
-            </a>
+            <a href="https://billing.stripe.com/p/login/fZu8wQgpyc5c0Qr8e500000" target="_blank" class="account-link"><span>⚙️</span><span class="lang-en">Manage Subscription</span><span class="lang-es">Administrar Suscripción</span></a>
+            <a href="#" class="logout-link" id="logoutLink"><span>🚪</span><span class="lang-en">Logout</span><span class="lang-es">Salir</span></a>
         </div>
 
-        <!-- Footer -->
         <footer class="footer">
-            <div class="footer-logo">
-                🏀 <span class="laugh">LAUGH</span><span class="court">COURT</span>
-            </div>
+            <div class="footer-logo">🏀 <span class="laugh">LAUGH</span><span class="court">COURT</span></div>
             <div class="footer-links">
                 <a href="/the-starting-five">The Starting Five</a>
                 <a href="/faq">FAQ</a>
-                <a href="/privacy.html">
-                    <span class="lang-en">Privacy</span>
-                    <span class="lang-es">Privacidad</span>
-                </a>
-                <a href="/terms.html">
-                    <span class="lang-en">Terms</span>
-                    <span class="lang-es">Términos</span>
-                </a>
+                <a href="/privacy.html"><span class="lang-en">Privacy</span><span class="lang-es">Privacidad</span></a>
+                <a href="/terms.html"><span class="lang-en">Terms</span><span class="lang-es">Términos</span></a>
             </div>
-            <div class="footer-company">
-                by <a href="https://gostar.digital">GoStar Digital LLC</a> 🇵🇷
-            </div>
-            <div class="footer-trademarks">
-                LaughCourt™, The Starting Five™, GoStars™, and Ritnome™ are trademarks of GoStar Digital LLC.
-            </div>
+            <div class="footer-company">by <a href="https://gostar.digital">GoStar Digital LLC</a> 🇵🇷</div>
+            <div class="footer-trademarks">LaughCourt™, The Starting Five™, GoStars™, and Ritnome™ are trademarks of GoStar Digital LLC.</div>
         </footer>
     </div>
 
     <script>
         (function() {
-            // ==================== ENVIRONMENT ====================
             var host = window.location.hostname;
             var isProduction = (host.indexOf('laughcourt') > -1 || host.indexOf('render') > -1 || host.indexOf('gostardigital') > -1);
 
-            // ==================== AUTH CHECK ====================
             if (isProduction) {
                 var user = null;
                 try { user = JSON.parse(localStorage.getItem('lc-user')); } catch(e) {}
-                
-                if (!user || !user.pin || user.pin.length < 4) {
-                    window.location.replace('/login');
-                    return;
-                }
+                if (!user || !user.pin || user.pin.length < 4) { window.location.replace('/login'); return; }
 
                 var sessionPin = sessionStorage.getItem('lc-pin');
                 var sessionToken = sessionStorage.getItem('lc-token');
+                if (!sessionPin || !sessionToken) { window.location.replace('/login'); return; }
 
-                if (!sessionPin || !sessionToken) {
-                    window.location.replace('/login');
-                    return;
-                }
-
-                // ==================== SESSION HEARTBEAT ====================
                 function validateSession() {
-                    fetch('/api/session/validate', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ pin: sessionPin, token: sessionToken })
-                    })
+                    fetch('/api/session/validate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ pin: sessionPin, token: sessionToken }) })
                     .then(function(r) { return r.json(); })
                     .then(function(d) {
                         if (!d.valid) {
                             alert(d.message || 'Session ended. Please log in again.');
-                            localStorage.removeItem('lc-user');
-                            localStorage.removeItem('lc-speed-access');
-                            sessionStorage.removeItem('lc-pin');
-                            sessionStorage.removeItem('lc-token');
+                            localStorage.removeItem('lc-user'); localStorage.removeItem('lc-speed-access'); sessionStorage.clear();
                             window.location.href = '/login';
                         }
-                    })
-                    .catch(function(err) {
-                        console.log('Session validation error:', err);
-                    });
+                    }).catch(function() {});
                 }
-
                 validateSession();
                 setInterval(validateSession, 30000);
 
-                // ==================== SPEED ACCESS ====================
                 fetch('/api/user/speed-access/' + user.pin)
                     .then(function(r) { return r.json(); })
-                    .then(function(data) {
-                        localStorage.setItem('lc-speed-access', JSON.stringify(data));
-                        updateSpeedUI(data);
-                    })
-                    .catch(function(err) {
-                        console.log('Speed access check failed:', err);
-                    });
+                    .then(function(data) { localStorage.setItem('lc-speed-access', JSON.stringify(data)); updateSpeedUI(data); })
+                    .catch(function() {});
 
-                // ==================== LOGOUT ====================
                 document.getElementById('logoutLink').addEventListener('click', function(e) {
                     e.preventDefault();
-                    
                     if (sessionPin && sessionToken) {
-                        fetch('/api/session/destroy', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ pin: sessionPin, token: sessionToken })
-                        }).catch(function(err) { console.log('Session destroy error:', err); });
+                        fetch('/api/session/destroy', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ pin: sessionPin, token: sessionToken }) }).catch(function() {});
                     }
-                    
-                    localStorage.removeItem('lc-user');
-                    localStorage.removeItem('lc-speed-access');
-                    sessionStorage.removeItem('lc-pin');
-                    sessionStorage.removeItem('lc-token');
-                    
+                    localStorage.removeItem('lc-user'); localStorage.removeItem('lc-speed-access'); sessionStorage.clear();
                     window.location.href = '/';
                 });
             }
 
-            // ==================== LANGUAGE ====================
             var currentLang = localStorage.getItem('laughcourt_lang') || 'en';
-            
             function setLang(l) {
                 currentLang = l;
                 localStorage.setItem('laughcourt_lang', l);
@@ -785,49 +428,23 @@
                 document.getElementById('btnEn').className = l === 'en' ? 'lang-btn active' : 'lang-btn';
                 document.getElementById('btnEs').className = l === 'es' ? 'lang-btn active' : 'lang-btn';
             }
-
             document.getElementById('btnEn').addEventListener('click', function() { setLang('en'); });
             document.getElementById('btnEs').addEventListener('click', function() { setLang('es'); });
             setLang(currentLang);
 
-            // ==================== SPEED UI ====================
             function updateSpeedUI(data) {
-                var chipSlow = document.getElementById('chipSlow');
-                var chipMed = document.getElementById('chipMed');
-                var chipFast = document.getElementById('chipFast');
-                var upgradeArea = document.getElementById('upgradeArea');
-                var allSpeedsArea = document.getElementById('allSpeedsArea');
-                var trialBanner = document.getElementById('trialBanner');
-
+                var chipSlow = document.getElementById('chipSlow'), chipMed = document.getElementById('chipMed'), chipFast = document.getElementById('chipFast');
+                var upgradeArea = document.getElementById('upgradeArea'), allSpeedsArea = document.getElementById('allSpeedsArea'), trialBanner = document.getElementById('trialBanner');
                 if (data.allSpeeds) {
-                    // Full access - all speeds unlocked
-                    chipSlow.className = 'speed-chip unlocked';
-                    chipSlow.innerHTML = '<span class="icon">✓</span> SLOW';
-                    
-                    chipMed.className = 'speed-chip unlocked';
-                    chipMed.innerHTML = '<span class="icon">✓</span> MED';
-                    
-                    chipFast.className = 'speed-chip unlocked';
-                    chipFast.innerHTML = '<span class="icon">✓</span> FAST';
-                    
-                    upgradeArea.style.display = 'none';
-                    allSpeedsArea.style.display = 'block';
-                    trialBanner.classList.remove('show');
+                    chipSlow.className = 'speed-chip unlocked'; chipSlow.innerHTML = '<span class="icon">✓</span> SLOW';
+                    chipMed.className = 'speed-chip unlocked'; chipMed.innerHTML = '<span class="icon">✓</span> MED';
+                    chipFast.className = 'speed-chip unlocked'; chipFast.innerHTML = '<span class="icon">✓</span> FAST';
+                    upgradeArea.style.display = 'none'; allSpeedsArea.style.display = 'block'; trialBanner.classList.remove('show');
                 } else {
-                    // Limited access - SLOW only
-                    chipSlow.className = 'speed-chip unlocked';
-                    chipSlow.innerHTML = '<span class="icon">✓</span> SLOW';
-                    
-                    chipMed.className = 'speed-chip locked';
-                    chipMed.innerHTML = '<span class="icon">🔒</span> MED';
-                    
-                    chipFast.className = 'speed-chip locked';
-                    chipFast.innerHTML = '<span class="icon">🔒</span> FAST';
-                    
-                    upgradeArea.style.display = 'block';
-                    allSpeedsArea.style.display = 'none';
-
-                    // Show trial banner for facility trials
+                    chipSlow.className = 'speed-chip unlocked'; chipSlow.innerHTML = '<span class="icon">✓</span> SLOW';
+                    chipMed.className = 'speed-chip locked'; chipMed.innerHTML = '<span class="icon">🔒</span> MED';
+                    chipFast.className = 'speed-chip locked'; chipFast.innerHTML = '<span class="icon">🔒</span> FAST';
+                    upgradeArea.style.display = 'block'; allSpeedsArea.style.display = 'none';
                     if (data.userType === 'facility_trial' && data.daysLeft !== undefined) {
                         document.getElementById('trialDays').textContent = data.daysLeft;
                         document.getElementById('trialDaysEs').textContent = data.daysLeft;
@@ -835,7 +452,6 @@
                     }
                 }
             }
-
         })();
     </script>
 </body>
