@@ -190,7 +190,7 @@ html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background
 .coach-message{position:fixed;bottom:70px;left:50%;transform:translateX(-50%) translateY(100px);background:linear-gradient(135deg,var(--purple),var(--purple-light));color:var(--text);padding:8px 16px;border-radius:14px;font-weight:700;font-size:0.85rem;opacity:0;transition:all 0.3s;z-index:50}
 .coach-message.show{transform:translateX(-50%) translateY(0);opacity:1}
 
-.timer-bar{width:100%;height:6px;background:var(--border);border-radius:3px;margin-bottom:4px;overflow:hidden;flex-shrink:0}
+.timer-bar{display:none}
 .timer-fill{height:100%;background:linear-gradient(90deg,var(--purple),var(--pink));border-radius:3px;transition:width linear}
 
 body.en .lang-es{display:none!important}
@@ -251,6 +251,7 @@ body.es .lang-en{display:none!important}
 <span class="progression-star" id="star2">⭐</span>
 </div>
 </div>
+<div class="timer-bar"><div class="timer-fill" id="timerFill" style="width:100%"></div></div>
 <div class="court-wrapper"><div class="court-grid" id="courtGrid"></div></div>
 <div class="division-display"><div class="division-badge" id="divisionBadge">L1 SLOW</div><div class="taps-counter" id="tapsCounter">0/5</div><div class="score-display" id="totalScore">0</div></div>
 <button class="action-btn" id="actionBtn"><span class="lang-en">GO</span><span class="lang-es">IR</span></button>
