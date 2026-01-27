@@ -58,7 +58,9 @@ html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background
 .nav-tab.reflex-tab.active{color:var(--purple);background:rgba(155,89,182,0.12);border-color:var(--purple)}
 
 /* FOCUS MODE BUTTON */
-.focus-btn{position:fixed;top:calc(env(safe-area-inset-top, 0px) + 6px);right:100px;width:36px;height:36px;border-radius:10px;background:var(--card);border:2px solid var(--purple);color:var(--purple);font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:1001;transition:all 0.3s ease}
+.focus-btn{width:32px;height:32px;border-radius:6px;background:0;border:1px solid var(--border);color:var(--muted);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.focus-btn:hover{background:rgba(255,255,255,0.1);color:var(--purple)}
+.focus-btn.active{background:rgba(155,89,182,0.2);border-color:var(--purple);color:var(--purple)}
 .focus-btn:hover{background:rgba(155,89,182,0.2)}
 .focus-btn.active{background:var(--purple);color:var(--dark)}
 
@@ -231,12 +233,12 @@ body.es .lang-en{display:none!important}
 <a href="/play" class="nav-logo"><span class="ball">🏀</span> <span class="laugh">LAUGH</span><span class="court">COURT</span></a>
 <div class="nav-right">
 <div class="nav-lang"><button class="nav-lang-btn active" id="btnEn">EN</button><button class="nav-lang-btn" id="btnEs">ES</button></div>
-<button class="focus-btn" id="focusBtn" title="Focus Mode">⛶</button><div class="settings-wrapper"><button class="settings-btn" id="settingsBtn">⚙️</button>
+<div class="settings-wrapper"><button class="settings-btn" id="settingsBtn">⚙️</button>
 <div class="settings-dropdown" id="settingsDropdown">
 <div class="settings-section"><div class="settings-label"><span class="lang-en">Speed Access</span><span class="lang-es">Velocidad</span></div><div class="speed-status" id="speedStatus"><span class="speed-chip unlocked">✓ SLOW</span><span class="speed-chip locked">🔒 MED</span><span class="speed-chip locked">🔒 FAST</span></div></div>
 <div class="settings-section" id="upgradeSection"><a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="settings-link upgrade">🚀 UNLOCK ALL</a></div>
 <div class="settings-section"><button class="settings-link logout" id="logoutBtn">← <span class="lang-en">Log Out</span><span class="lang-es">Salir</span></button></div>
-</div></div></div></div>
+</div></div><button class="focus-btn" id="focusBtn" title="Focus Mode">⛶</button></div></div>
 <div class="nav-row-2">
 <a href="/the-match" class="nav-tab match-tab">🎯 MATCH</a>
 <a href="/the-sequence" class="nav-tab seq-tab">🔢 SEQ</a>
