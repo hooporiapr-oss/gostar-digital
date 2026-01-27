@@ -24,7 +24,7 @@
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background:var(--dark);color:var(--text);touch-action:manipulation;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
 
-.mini-nav{position:fixed;top:0;left:0;right:0;background:var(--card);border-bottom:1px solid var(--border);padding-top:env(safe-area-inset-top);z-index:1000}
+.mini-nav{position:fixed;top:0;left:0;right:0;background:var(--card);border-bottom:1px solid var(--border);padding-top:env(safe-area-inset-top);z-index:1000;transition:transform 0.3s ease}
 .nav-row-1{display:flex;align-items:center;justify-content:space-between;height:44px;padding:0 12px}
 .nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:1px;text-decoration:none;display:flex;align-items:center;gap:5px}
 .nav-logo .ball{font-size:1rem}
@@ -56,7 +56,26 @@ html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background
 .nav-tab.seq-tab.active{color:var(--teal);background:rgba(0,217,165,0.12);border-color:var(--teal)}
 .nav-tab.reflex-tab.active{color:var(--purple);background:rgba(155,89,182,0.12);border-color:var(--purple)}
 
-.game-container{width:100%;max-width:420px;height:100dvh;margin:0 auto;padding:5px 10px;padding-top:calc(var(--nav-height) + env(safe-area-inset-top) + 4px);padding-bottom:max(5px,env(safe-area-inset-bottom));display:flex;flex-direction:column;overflow:hidden}
+/* FOCUS MODE BUTTON */
+.focus-btn{position:fixed;top:calc(env(safe-area-inset-top, 0px) + 6px);right:12px;width:32px;height:32px;border-radius:6px;background:var(--card);border:1px solid var(--border);color:var(--muted);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:1001;transition:all 0.2s}
+.focus-btn:active{transform:scale(0.95)}
+.focus-btn.active{background:rgba(255,215,0,0.3);border-color:var(--gold);color:var(--gold)}
+
+/* FOCUS MODE STYLES */
+body.focus-mode .mini-nav{transform:translateY(-100%)}
+body.focus-mode .game-container{padding-top:calc(env(safe-area-inset-top) + 60px)}
+body.focus-mode .stats-bar{display:none}
+body.focus-mode .combo-progress{display:none}
+body.focus-mode .message-display{display:none}
+body.focus-mode .selectors-row{display:none}
+body.focus-mode .division-display{display:none}
+body.focus-mode .court-wrapper{flex:1;position:relative;z-index:10}
+body.focus-mode .court-grid{width:min(95vw, calc(100dvh - 200px));height:min(95vw, calc(100dvh - 200px));max-width:500px;max-height:500px;position:relative;z-index:20}
+body.focus-mode .action-btn{position:fixed;bottom:calc(env(safe-area-inset-bottom, 10px) + 15px);left:15px;right:15px;z-index:100}
+body.focus-mode .coach-message{bottom:120px}
+body.focus-mode .order-select-screen{padding-top:20px}
+
+.game-container{width:100%;max-width:420px;height:100dvh;margin:0 auto;padding:5px 10px;padding-top:calc(var(--nav-height) + env(safe-area-inset-top) + 4px);padding-bottom:max(5px,env(safe-area-inset-bottom));display:flex;flex-direction:column;overflow:hidden;transition:padding 0.3s ease}
 
 /* ORDER SELECTION SCREEN */
 .order-select-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:15px;text-align:center}
@@ -120,14 +139,8 @@ html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background
 .selector-btn.locked::after{content:'🔒';position:absolute;top:0;right:2px;font-size:0.4rem}
 .selector-btn.disabled-during-game{pointer-events:none;opacity:0.4}
 
-.progression-display{display:flex;justify-content:center;align-items:center;gap:10px;padding:6px;background:var(--card);border-radius:8px;margin-bottom:4px;flex-shrink:0}
-.progression-label{font-family:'Bebas Neue',sans-serif;font-size:0.7rem;color:var(--muted);letter-spacing:1px}
-.progression-stars{display:flex;gap:6px}
-.progression-star{font-size:1.3rem;opacity:0.25;transition:all 0.3s}
-.progression-star.earned{opacity:1;transform:scale(1.15);filter:drop-shadow(0 0 4px var(--gold))}
-
-.court-wrapper{flex:1;display:flex;align-items:center;justify-content:center;min-height:0;overflow:hidden}
-.court-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:8px;background-color:#1a1a24;background-image:url('/icon.png');background-size:85%;background-position:center;background-repeat:no-repeat;border-radius:16px;border:3px solid var(--gold);width:min(100%,calc(100dvh - 370px),300px);height:min(100%,calc(100dvh - 370px),300px);min-width:200px;min-height:200px;aspect-ratio:1;position:relative;transition:border-color 0.3s}
+.court-wrapper{flex:1;display:flex;align-items:center;justify-content:center;min-height:0;overflow:hidden;transition:all 0.3s ease}
+.court-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:8px;background-color:#1a1a24;background-image:url('/icon.png');background-size:85%;background-position:center;background-repeat:no-repeat;border-radius:16px;border:3px solid var(--gold);width:min(100%,calc(100dvh - 370px),300px);height:min(100%,calc(100dvh - 370px),300px);min-width:200px;min-height:200px;aspect-ratio:1;position:relative;transition:all 0.3s ease}
 .court-grid.match-mode{border-color:var(--orange)}
 .court-grid.seq-mode{border-color:var(--teal)}
 .court-grid::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(10,10,15,0.6);border-radius:13px;pointer-events:none;z-index:0}
@@ -151,7 +164,7 @@ html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background
 .taps-counter{font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--teal)}
 .score-display{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;color:var(--gold)}
 
-.action-btn{width:100%;min-height:46px;padding:11px;border:none;border-radius:10px;font-family:'Bebas Neue',sans-serif;font-size:1.25rem;letter-spacing:4px;cursor:pointer;background:linear-gradient(135deg,var(--gold),#FFA500);color:var(--dark);flex-shrink:0}
+.action-btn{width:100%;min-height:46px;padding:11px;border:none;border-radius:10px;font-family:'Bebas Neue',sans-serif;font-size:1.25rem;letter-spacing:4px;cursor:pointer;background:linear-gradient(135deg,var(--gold),#FFA500);color:var(--dark);flex-shrink:0;transition:all 0.3s ease}
 .action-btn:disabled{opacity:0.5;cursor:not-allowed}
 
 .emoji-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;overflow:hidden}
@@ -162,7 +175,7 @@ html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background
 .court-grid.joy-pulse{animation:joyPulse 0.5s ease-out}
 @keyframes joyPulse{0%{box-shadow:0 0 0 0 rgba(255,215,0,0.7)}50%{box-shadow:0 0 25px 8px rgba(255,215,0,0.5)}100%{box-shadow:none}}
 
-.overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.92);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
+.overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.92);display:none;align-items:center;justify-content:center;z-index:1100;padding:20px}
 .overlay.show{display:flex}
 .overlay-card{background:var(--card);border:2px solid var(--gold);border-radius:14px;padding:20px;text-align:center;max-width:280px;width:100%}
 .overlay-emoji{font-size:2.5rem;margin-bottom:8px}
@@ -184,11 +197,15 @@ body.en .lang-es{display:none!important}
 body.es .lang-en{display:none!important}
 
 @media(min-height:720px){:root{--nav-height:88px}.nav-row-2{height:44px}.stat-value{font-size:1.1rem}.message-text{font-size:0.95rem}.selector-btn{min-height:38px}.selector-btn.level-btn{min-height:30px}.court-grid{width:min(100%,calc(100dvh - 380px),320px);height:min(100%,calc(100dvh - 380px),320px)}.action-btn{min-height:50px;font-size:1.35rem}}
-@media(max-height:620px){:root{--nav-height:76px}.nav-row-1{height:40px}.nav-row-2{height:36px}.nav-tab{font-size:0.65rem;padding:6px 4px}.stats-bar{padding:4px 6px;gap:10px}.stat-value{font-size:0.9rem}.combo-progress{padding:4px 6px;gap:4px}.combo-game-status{padding:6px}.combo-game-label{font-size:0.6rem}.combo-star{font-size:0.75rem}.message-display{padding:5px;min-height:30px}.message-text{font-size:0.8rem}.selector-btn{min-height:30px;font-size:0.75rem}.selector-btn.level-btn{min-height:24px;font-size:0.65rem}.court-grid{min-width:180px;min-height:180px;width:min(100%,calc(100dvh - 320px),260px);height:min(100%,calc(100dvh - 320px),260px);gap:3px;padding:6px}.grid-cell{min-width:28px;min-height:28px}.division-display{padding:4px 8px;min-height:30px}.action-btn{min-height:42px;font-size:1.1rem}.progression-star{font-size:1.1rem}.order-title{font-size:1.2rem}.order-btn{padding:15px}.order-btn-icon{font-size:1.5rem}.order-btn-title{font-size:1rem}}
-@media(max-height:540px){:root{--nav-height:68px}.nav-row-1{height:36px}.nav-row-2{height:32px}.nav-logo{font-size:1rem}.nav-tab{font-size:0.6rem}.stats-bar{padding:3px 5px;margin-bottom:3px}.stat-value{font-size:0.8rem}.stat-label{font-size:0.38rem}.combo-progress{padding:3px 5px;margin-bottom:3px}.combo-game-status{padding:4px}.combo-game-label{font-size:0.55rem;margin-bottom:2px}.combo-star{font-size:0.65rem}.message-display{padding:4px;margin-bottom:3px;min-height:26px}.message-text{font-size:0.7rem}.selectors-row{margin-bottom:3px}.selector-group{padding:3px}.selector-label{font-size:0.4rem;margin-bottom:2px}.selector-btn{min-height:26px;font-size:0.65rem}.selector-btn.level-btn{min-height:22px;font-size:0.55rem}.court-grid{min-width:150px;min-height:150px;gap:2px;padding:5px}.grid-cell{min-width:24px;min-height:24px}.division-display{padding:3px 6px;min-height:26px;margin:3px 0}.division-badge,.taps-counter{font-size:0.75rem}.score-display{font-size:0.9rem}.action-btn{min-height:38px;padding:8px;font-size:1rem}.progression-display{padding:4px}.progression-star{font-size:1rem}.order-title{font-size:1rem}.order-subtitle{font-size:0.7rem}.order-btn{padding:12px}.order-btn-icon{font-size:1.2rem;margin-bottom:4px}.order-btn-title{font-size:0.9rem}.order-btn-desc{font-size:0.6rem}}
+@media(max-height:620px){:root{--nav-height:76px}.nav-row-1{height:40px}.nav-row-2{height:36px}.nav-tab{font-size:0.65rem;padding:6px 4px}.stats-bar{padding:4px 6px;gap:10px}.stat-value{font-size:0.9rem}.combo-progress{padding:4px 6px;gap:4px}.combo-game-status{padding:6px}.combo-game-label{font-size:0.6rem}.combo-star{font-size:0.75rem}.message-display{padding:5px;min-height:30px}.message-text{font-size:0.8rem}.selector-btn{min-height:30px;font-size:0.75rem}.selector-btn.level-btn{min-height:24px;font-size:0.65rem}.court-grid{min-width:180px;min-height:180px;width:min(100%,calc(100dvh - 320px),260px);height:min(100%,calc(100dvh - 320px),260px);gap:3px;padding:6px}.grid-cell{min-width:28px;min-height:28px}.division-display{padding:4px 8px;min-height:30px}.action-btn{min-height:42px;font-size:1.1rem}.order-title{font-size:1.2rem}.order-btn{padding:15px}.order-btn-icon{font-size:1.5rem}.order-btn-title{font-size:1rem}}
+@media(max-height:540px){:root{--nav-height:68px}.nav-row-1{height:36px}.nav-row-2{height:32px}.nav-logo{font-size:1rem}.nav-tab{font-size:0.6rem}.stats-bar{padding:3px 5px;margin-bottom:3px}.stat-value{font-size:0.8rem}.stat-label{font-size:0.38rem}.combo-progress{padding:3px 5px;margin-bottom:3px}.combo-game-status{padding:4px}.combo-game-label{font-size:0.55rem;margin-bottom:2px}.combo-star{font-size:0.65rem}.message-display{padding:4px;margin-bottom:3px;min-height:26px}.message-text{font-size:0.7rem}.selectors-row{margin-bottom:3px}.selector-group{padding:3px}.selector-label{font-size:0.4rem;margin-bottom:2px}.selector-btn{min-height:26px;font-size:0.65rem}.selector-btn.level-btn{min-height:22px;font-size:0.55rem}.court-grid{min-width:150px;min-height:150px;gap:2px;padding:5px}.grid-cell{min-width:24px;min-height:24px}.division-display{padding:3px 6px;min-height:26px;margin:3px 0}.division-badge,.taps-counter{font-size:0.75rem}.score-display{font-size:0.9rem}.action-btn{min-height:38px;padding:8px;font-size:1rem}.order-title{font-size:1rem}.order-subtitle{font-size:0.7rem}.order-btn{padding:12px}.order-btn-icon{font-size:1.2rem;margin-bottom:4px}.order-btn-title{font-size:0.9rem}.order-btn-desc{font-size:0.6rem}}
 </style>
 </head>
 <body class="en">
+
+<!-- FOCUS BUTTON - Outside nav so it stays visible -->
+<button class="focus-btn" id="focusBtn" title="Focus Mode">⛶</button>
+
 <nav class="mini-nav">
 <div class="nav-row-1">
 <a href="/play" class="nav-logo"><span class="ball">🏀</span> <span class="laugh">LAUGH</span><span class="court">COURT</span></a>
@@ -207,7 +224,9 @@ body.es .lang-en{display:none!important}
 <a href="/the-reflex" class="nav-tab reflex-tab">⚡ REFLEX</a>
 </div>
 </nav>
+
 <div class="emoji-container" id="emojiContainer"></div>
+
 <div class="game-container">
 
 <!-- ORDER SELECTION SCREEN -->
@@ -315,6 +334,29 @@ body.es .lang-en{display:none!important}
 
 <script>
 (function(){
+    // ===== FOCUS MODE =====
+    var focusBtn = document.getElementById('focusBtn');
+    var isFocusMode = localStorage.getItem('lc-focus-mode') === 'true';
+    
+    function toggleFocusMode() {
+        isFocusMode = !isFocusMode;
+        localStorage.setItem('lc-focus-mode', isFocusMode);
+        applyFocusMode();
+    }
+    
+    function applyFocusMode() {
+        if (isFocusMode) {
+            document.body.classList.add('focus-mode');
+            focusBtn.classList.add('active');
+        } else {
+            document.body.classList.remove('focus-mode');
+            focusBtn.classList.remove('active');
+        }
+    }
+    
+    focusBtn.onclick = toggleFocusMode;
+    applyFocusMode();
+
     // ===== AUTH CHECK =====
     var host = window.location.hostname;
     var isProduction = host.indexOf('laughcourt') > -1 || host.indexOf('github.io') > -1 || host.indexOf('gostardigital') > -1;
@@ -338,7 +380,7 @@ body.es .lang-en{display:none!important}
     // ===== SETTINGS DROPDOWN =====
     var settingsBtn = document.getElementById('settingsBtn'), settingsDropdown = document.getElementById('settingsDropdown');
     settingsBtn.onclick = function(e) { e.stopPropagation(); settingsBtn.classList.toggle('open'); settingsDropdown.classList.toggle('show'); };
-    document.onclick = function(e) { if (!settingsDropdown.contains(e.target)) { settingsBtn.classList.remove('open'); settingsDropdown.classList.remove('show'); } };
+    document.onclick = function(e) { if (!settingsDropdown.contains(e.target) && e.target !== focusBtn) { settingsBtn.classList.remove('open'); settingsDropdown.classList.remove('show'); } };
 
     document.getElementById('logoutBtn').onclick = function() {
         var p = sessionStorage.getItem('lc-pin'), t = sessionStorage.getItem('lc-token');
@@ -351,7 +393,7 @@ body.es .lang-en{display:none!important}
     function setLang(l) {
         currentLang = l;
         localStorage.setItem('laughcourt_lang', l);
-        document.body.className = l;
+        document.body.className = l + (isFocusMode ? ' focus-mode' : '');
         document.getElementById('btnEn').className = l === 'en' ? 'nav-lang-btn active' : 'nav-lang-btn';
         document.getElementById('btnEs').className = l === 'es' ? 'nav-lang-btn active' : 'nav-lang-btn';
         updateDivisionDisplay();
@@ -392,26 +434,18 @@ body.es .lang-en{display:none!important}
 
     // ===== GAME CONFIG =====
     var TOTAL_CELLS = 25;
-    function getCellCount(level) { return level + 4; } // L1=5, L2=6... L10=14
+    function getCellCount(level) { return level + 4; }
     
     var MATCH_SPEED_CONFIG = { slow: 2500, med: 1500, fast: 800 };
     var SEQ_SPEED_CONFIG = { slow: { show: 800, gap: 300 }, med: { show: 500, gap: 200 }, fast: { show: 300, gap: 150 } };
     
     var LAUGH_EMOJIS = ['😂','😆','🤣','😄','😁','🥳','😊','🎉'];
     var PARTY_EMOJIS = ['🥳','🎉','😂','🤣','✨','💫','🌟','🏆'];
-
     var FLASH_COLORS = ['#FFD700', '#00D9A5', '#FF6B35', '#FF1493'];
     var colorIndex = 0;
 
-    function getNextColor() {
-        var color = FLASH_COLORS[colorIndex];
-        colorIndex = (colorIndex + 1) % FLASH_COLORS.length;
-        return color;
-    }
-
-    function setFlashColor(color) {
-        document.documentElement.style.setProperty('--flash-color', color);
-    }
+    function getNextColor() { var color = FLASH_COLORS[colorIndex]; colorIndex = (colorIndex + 1) % FLASH_COLORS.length; return color; }
+    function setFlashColor(color) { document.documentElement.style.setProperty('--flash-color', color); }
 
     // ===== STATE =====
     var state = {
@@ -420,17 +454,13 @@ body.es .lang-en{display:none!important}
         score: parseInt(localStorage.getItem('lc-combo-score')) || 0,
         streak: parseInt(localStorage.getItem('lc-combo-streak')) || 0,
         round: 0,
-        
-        // Combo specific
-        playOrder: null, // 'match-first' or 'seq-first'
-        currentGame: null, // 'match' or 'sequence'
+        playOrder: null,
+        currentGame: null,
         matchPerfects: 0,
         seqPerfects: 0,
         matchDone: false,
         seqDone: false,
         gameStarted: false,
-        
-        // Game state
         targetCells: [],
         selectedCells: [],
         sequence: [],
@@ -444,7 +474,6 @@ body.es .lang-en{display:none!important}
     if (state.level > 10) state.level = 10;
     if (state.level < 1) state.level = 1;
 
-    // DOM elements
     var orderScreen = document.getElementById('orderScreen');
     var gameScreen = document.getElementById('gameScreen');
     var courtGrid = document.getElementById('courtGrid');
@@ -456,25 +485,18 @@ body.es .lang-en{display:none!important}
 
     // ===== AUDIO =====
     var audioCtx = null;
-    function getAudioContext() {
-        if (!audioCtx) try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) {}
-        return audioCtx;
-    }
+    function getAudioContext() { if (!audioCtx) try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) {} return audioCtx; }
 
     function playTone(freq, dur) {
-        var c = getAudioContext();
-        if (!c) return;
+        var c = getAudioContext(); if (!c) return;
         try {
             if (c.state === 'suspended') c.resume();
             var o = c.createOscillator(), g = c.createGain();
-            o.type = 'sine';
-            o.frequency.value = freq;
-            o.connect(g);
-            g.connect(c.destination);
+            o.type = 'sine'; o.frequency.value = freq;
+            o.connect(g); g.connect(c.destination);
             g.gain.setValueAtTime(0.25, c.currentTime);
             g.gain.exponentialRampToValueAtTime(0.01, c.currentTime + dur);
-            o.start();
-            o.stop(c.currentTime + dur + 0.05);
+            o.start(); o.stop(c.currentTime + dur + 0.05);
         } catch(e) {}
     }
 
@@ -486,10 +508,7 @@ body.es .lang-en{display:none!important}
     function playWrongSound() { playTone(200, 0.3); }
 
     // ===== CELEBRATIONS =====
-    function getCourtCenter() {
-        var r = courtGrid.getBoundingClientRect();
-        return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
-    }
+    function getCourtCenter() { var r = courtGrid.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; }
 
     function createBurstEmoji(e, x, y, t) {
         var el = document.createElement('div');
@@ -537,13 +556,7 @@ body.es .lang-en{display:none!important}
         }
     }
 
-    function shuffleArray(a) {
-        for (var i = a.length - 1; i > 0; i--) {
-            var j = Math.floor(Math.random() * (i + 1)), t = a[i];
-            a[i] = a[j];
-            a[j] = t;
-        }
-    }
+    function shuffleArray(a) { for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; } }
 
     // ===== UI UPDATES =====
     function updateDivisionDisplay() {
@@ -575,35 +588,22 @@ body.es .lang-en{display:none!important}
         var matchStatus = document.getElementById('matchStatus');
         var seqStatus = document.getElementById('seqStatus');
         
-        // Match stars
         document.getElementById('matchStar1').className = state.matchPerfects >= 1 || state.matchDone ? 'combo-star earned' : 'combo-star';
         document.getElementById('matchStar2').className = state.matchPerfects >= 2 || state.matchDone ? 'combo-star earned' : 'combo-star';
-        
-        // Sequence stars
         document.getElementById('seqStar1').className = state.seqPerfects >= 1 || state.seqDone ? 'combo-star earned' : 'combo-star';
         document.getElementById('seqStar2').className = state.seqPerfects >= 2 || state.seqDone ? 'combo-star earned' : 'combo-star';
         
-        // Status classes
         matchStatus.classList.remove('active', 'done', 'locked');
         seqStatus.classList.remove('active', 'done', 'locked');
         
-        if (state.matchDone) {
-            matchStatus.classList.add('done');
-        } else if (state.currentGame === 'match') {
-            matchStatus.classList.add('active');
-        } else {
-            matchStatus.classList.add('locked');
-        }
+        if (state.matchDone) { matchStatus.classList.add('done'); }
+        else if (state.currentGame === 'match') { matchStatus.classList.add('active'); }
+        else { matchStatus.classList.add('locked'); }
         
-        if (state.seqDone) {
-            seqStatus.classList.add('done');
-        } else if (state.currentGame === 'sequence') {
-            seqStatus.classList.add('active');
-        } else {
-            seqStatus.classList.add('locked');
-        }
+        if (state.seqDone) { seqStatus.classList.add('done'); }
+        else if (state.currentGame === 'sequence') { seqStatus.classList.add('active'); }
+        else { seqStatus.classList.add('locked'); }
         
-        // Update court and message border color
         courtGrid.classList.remove('match-mode', 'seq-mode');
         messageDisplay.classList.remove('match-mode', 'seq-mode');
         if (state.currentGame === 'match') {
@@ -635,16 +635,12 @@ body.es .lang-en{display:none!important}
         state.seqPerfects = 0;
         state.matchDone = false;
         state.seqDone = false;
-        
-        // Set first game based on order
         state.currentGame = order === 'match-first' ? 'match' : 'sequence';
         
-        // Save state
         localStorage.setItem('lc-combo-order', order);
         localStorage.setItem('lc-combo-level', state.level);
         localStorage.setItem('lc-combo-speed', state.speed);
         
-        // Switch screens
         orderScreen.classList.add('hidden');
         gameScreen.classList.add('active');
         
@@ -666,16 +662,10 @@ body.es .lang-en{display:none!important}
         updateStats();
         actionBtn.disabled = true;
 
-        // Reset cells
-        state.cells.forEach(function(c) {
-            c.className = 'grid-cell';
-        });
+        state.cells.forEach(function(c) { c.className = 'grid-cell'; });
 
-        if (state.currentGame === 'match') {
-            startMatchRound();
-        } else {
-            startSequenceRound();
-        }
+        if (state.currentGame === 'match') { startMatchRound(); }
+        else { startSequenceRound(); }
     }
 
     // ===== MATCH GAME =====
@@ -694,15 +684,10 @@ body.es .lang-en{display:none!important}
 
         setTimeout(function() {
             playFlashSound();
-            state.targetCells.forEach(function(i) {
-                state.cells[i].classList.add('lit');
-            });
+            state.targetCells.forEach(function(i) { state.cells[i].classList.add('lit'); });
 
             setTimeout(function() {
-                state.targetCells.forEach(function(i) {
-                    state.cells[i].classList.remove('lit');
-                });
-
+                state.targetCells.forEach(function(i) { state.cells[i].classList.remove('lit'); });
                 messageText.innerHTML = '<span class="lang-en">FIND THEM!</span><span class="lang-es">¡ENCUÉNTRALOS!</span>';
                 messageText.className = 'message-text go';
                 state.canTap = true;
@@ -744,9 +729,7 @@ body.es .lang-en{display:none!important}
                 playNote(state.sequence[i]);
                 i++;
                 setTimeout(next, cfg.show + cfg.gap);
-            } else {
-                setTimeout(cb, 300);
-            }
+            } else { setTimeout(cb, 300); }
         }
         next();
     }
@@ -754,12 +737,8 @@ body.es .lang-en{display:none!important}
     // ===== CELL TAP HANDLER =====
     function handleCellTap(index) {
         if (!state.canTap || !state.isPlaying) return;
-
-        if (state.currentGame === 'match') {
-            handleMatchTap(index);
-        } else {
-            handleSequenceTap(index);
-        }
+        if (state.currentGame === 'match') { handleMatchTap(index); }
+        else { handleSequenceTap(index); }
     }
 
     function handleMatchTap(index) {
@@ -803,9 +782,7 @@ body.es .lang-en{display:none!important}
             cell.classList.add('wrong');
             playWrongSound();
             state.canTap = false;
-            setTimeout(function() {
-                state.sequence.forEach(function(i) { state.cells[i].classList.add('correct'); });
-            }, 400);
+            setTimeout(function() { state.sequence.forEach(function(i) { state.cells[i].classList.add('correct'); }); }, 400);
             setTimeout(function() { roundComplete(false); }, 1500);
         }
     }
@@ -826,9 +803,7 @@ body.es .lang-en{display:none!important}
         });
 
         state.targetCells.forEach(function(i) {
-            if (state.selectedCells.indexOf(i) === -1) {
-                state.cells[i].classList.add('missed');
-            }
+            if (state.selectedCells.indexOf(i) === -1) { state.cells[i].classList.add('missed'); }
         });
 
         var isPerfect = correct === needed;
@@ -848,12 +823,8 @@ body.es .lang-en{display:none!important}
             localStorage.setItem('lc-combo-score', state.score);
             localStorage.setItem('lc-combo-streak', state.streak);
 
-            // Update perfects for current game
-            if (state.currentGame === 'match') {
-                state.matchPerfects++;
-            } else {
-                state.seqPerfects++;
-            }
+            if (state.currentGame === 'match') { state.matchPerfects++; }
+            else { state.seqPerfects++; }
 
             updateComboProgress();
             updateStats();
@@ -868,7 +839,6 @@ body.es .lang-en{display:none!important}
             messageText.innerHTML = '<span class="lang-en">PERFECT!</span><span class="lang-es">¡PERFECTO!</span>';
             messageText.className = 'message-text perfect';
 
-            // Check if current game is complete (2 perfects)
             if (state.currentGame === 'match' && state.matchPerfects >= 2) {
                 state.matchDone = true;
                 setTimeout(checkComboProgress, 1000);
@@ -879,12 +849,8 @@ body.es .lang-en{display:none!important}
                 setTimeout(finishRound, 1500);
             }
         } else {
-            // Reset perfects for current game
-            if (state.currentGame === 'match') {
-                state.matchPerfects = 0;
-            } else {
-                state.seqPerfects = 0;
-            }
+            if (state.currentGame === 'match') { state.matchPerfects = 0; }
+            else { state.seqPerfects = 0; }
             
             state.streak = 0;
             localStorage.setItem('lc-combo-streak', 0);
@@ -902,23 +868,14 @@ body.es .lang-en{display:none!important}
     function checkComboProgress() {
         updateComboProgress();
         
-        // Both games complete?
         if (state.matchDone && state.seqDone) {
-            // LEVEL COMPLETE!
-            if (state.level < 10) {
-                showLevelUpOverlay();
-            } else {
-                // L10 COMPLETE - THE ULTIMATE!
+            if (state.level < 10) { showLevelUpOverlay(); }
+            else {
                 showCoach('👑 COMBO MASTER!');
                 laughCelebration('party');
-                setTimeout(function() {
-                    resetLevel();
-                }, 2000);
+                setTimeout(function() { resetLevel(); }, 2000);
             }
-        } else {
-            // Switch to other game
-            showSwitchOverlay();
-        }
+        } else { showSwitchOverlay(); }
     }
 
     function showSwitchOverlay() {
@@ -927,20 +884,14 @@ body.es .lang-en{display:none!important}
         var nextGameName = nextGame === 'match' ? 'MATCH' : 'SEQUENCE';
         
         document.getElementById('switchEmoji').textContent = state.currentGame === 'match' ? '🎯✅' : '🔢✅';
-        document.getElementById('switchTitle').innerHTML = currentLang === 'es' 
-            ? '¡' + completedGame + ' COMPLETO!' 
-            : completedGame + ' COMPLETE!';
-        document.getElementById('switchMessage').innerHTML = currentLang === 'es'
-            ? '¡Ahora completa ' + nextGameName + '!'
-            : 'Now complete ' + nextGameName + '!';
+        document.getElementById('switchTitle').innerHTML = currentLang === 'es' ? '¡' + completedGame + ' COMPLETO!' : completedGame + ' COMPLETE!';
+        document.getElementById('switchMessage').innerHTML = currentLang === 'es' ? '¡Ahora completa ' + nextGameName + '!' : 'Now complete ' + nextGameName + '!';
         
         document.getElementById('switchOverlay').classList.add('show');
     }
 
     document.getElementById('switchBtn').onclick = function() {
         document.getElementById('switchOverlay').classList.remove('show');
-        
-        // Switch game
         state.currentGame = state.currentGame === 'match' ? 'sequence' : 'match';
         updateComboProgress();
         updateTapsCounter();
@@ -949,22 +900,18 @@ body.es .lang-en{display:none!important}
 
     function showLevelUpOverlay() {
         laughCelebration('party');
-        
         document.getElementById('levelUpMessage').innerHTML = currentLang === 'es'
             ? '¡Nivel ' + state.level + ' CONQUISTADO! Avanzando a Nivel ' + (state.level + 1)
             : 'Level ' + state.level + ' CONQUERED! Advancing to Level ' + (state.level + 1);
-        
         document.getElementById('levelUpOverlay').classList.add('show');
     }
 
     document.getElementById('levelUpBtn').onclick = function() {
         document.getElementById('levelUpOverlay').classList.remove('show');
-        
         state.level++;
         if (state.level > 10) state.level = 10;
         localStorage.setItem('lc-combo-level', state.level);
         
-        // Reset for new level
         state.matchPerfects = 0;
         state.seqPerfects = 0;
         state.matchDone = false;
@@ -983,7 +930,6 @@ body.es .lang-en{display:none!important}
         state.matchDone = false;
         state.seqDone = false;
         state.currentGame = state.playOrder === 'match-first' ? 'match' : 'sequence';
-        
         updateComboProgress();
         finishRound();
     }
@@ -996,7 +942,7 @@ body.es .lang-en{display:none!important}
         updateTapsCounter();
     }
 
-    // ===== SELECTORS (Order Screen) =====
+    // ===== SELECTORS =====
     document.querySelectorAll('[data-level]').forEach(function(b) {
         b.onclick = function() {
             if (state.gameStarted) return;
@@ -1010,10 +956,7 @@ body.es .lang-en{display:none!important}
     document.querySelectorAll('.speed-btn').forEach(function(b) {
         b.onclick = function() {
             if (state.gameStarted) return;
-            if (!speedAccess.allSpeeds && b.dataset.speed !== 'slow') {
-                showUpgradeModal();
-                return;
-            }
+            if (!speedAccess.allSpeeds && b.dataset.speed !== 'slow') { showUpgradeModal(); return; }
             document.querySelectorAll('.speed-btn').forEach(function(x) { x.classList.remove('active'); });
             b.classList.add('active');
             state.speed = b.dataset.speed;
