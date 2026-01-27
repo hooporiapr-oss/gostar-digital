@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Choose Your Workout | LaughCourt</title>
-    <meta name="description" content="Choose between THE MATCH, THE SEQUENCE, THE REFLEX, and THE COMBO CHALLENGE - memory workouts that sharpen your mind.">
+    <meta name="description" content="Choose between THE REACTION, THE MATCH, THE SEQUENCE, and THE REACTION CHALLENGE - memory workouts that sharpen your mind.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -115,6 +115,33 @@
             padding-left: 5px;
         }
 
+        /* REACTION SECTION - NOW FIRST */
+        .reaction-section { margin-bottom: 12px; }
+        .reaction-card {
+            background: var(--card);
+            border: 3px solid var(--purple);
+            border-radius: 20px;
+            padding: 20px;
+            text-decoration: none;
+            color: var(--text);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+        .reaction-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--purple), #8E44AD); }
+        .reaction-card:hover { transform: translateY(-5px); border-color: var(--purple); box-shadow: 0 15px 40px rgba(155,89,182,0.3); }
+        .reaction-card:active { transform: scale(0.98); }
+        .reaction-icon { font-size: 2.8rem; flex-shrink: 0; }
+        .reaction-content { flex: 1; text-align: left; }
+        .reaction-badge { display: inline-block; background: linear-gradient(135deg, var(--purple), #8E44AD); color: var(--text); font-size: 0.5rem; font-weight: 700; letter-spacing: 1px; padding: 3px 8px; border-radius: 10px; margin-bottom: 6px; }
+        .reaction-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 3px; color: var(--purple); margin-bottom: 4px; }
+        .reaction-desc { font-size: 0.7rem; color: var(--muted); margin-bottom: 10px; }
+        .reaction-play-btn { display: inline-block; padding: 10px 22px; border-radius: 25px; font-family: 'Bebas Neue', sans-serif; font-size: 0.85rem; letter-spacing: 2px; background: linear-gradient(135deg, var(--purple), #8E44AD); color: var(--text); }
+
+        /* PATTERN MEMORY GAMES */
         .games-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -154,31 +181,7 @@
         .game-card.match .game-play-btn { background: linear-gradient(135deg, var(--gold), var(--orange)); color: var(--dark); }
         .game-card.sequence .game-play-btn { background: linear-gradient(135deg, var(--teal), var(--cyan)); color: var(--dark); }
 
-        .reflex-section { margin-bottom: 12px; }
-        .reflex-card {
-            background: var(--card);
-            border: 3px solid var(--purple);
-            border-radius: 20px;
-            padding: 20px;
-            text-decoration: none;
-            color: var(--text);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            gap: 18px;
-        }
-        .reflex-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--purple), #8E44AD); }
-        .reflex-card:hover { transform: translateY(-5px); border-color: var(--purple); box-shadow: 0 15px 40px rgba(155,89,182,0.3); }
-        .reflex-card:active { transform: scale(0.98); }
-        .reflex-icon { font-size: 2.8rem; flex-shrink: 0; }
-        .reflex-content { flex: 1; text-align: left; }
-        .reflex-badge { display: inline-block; background: linear-gradient(135deg, var(--purple), #8E44AD); color: var(--text); font-size: 0.5rem; font-weight: 700; letter-spacing: 1px; padding: 3px 8px; border-radius: 10px; margin-bottom: 6px; }
-        .reflex-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 3px; color: var(--purple); margin-bottom: 4px; }
-        .reflex-desc { font-size: 0.7rem; color: var(--muted); margin-bottom: 10px; }
-        .reflex-play-btn { display: inline-block; padding: 10px 22px; border-radius: 25px; font-family: 'Bebas Neue', sans-serif; font-size: 0.85rem; letter-spacing: 2px; background: linear-gradient(135deg, var(--purple), #8E44AD); color: var(--text); }
-
+        /* CHALLENGE SECTION */
         .challenge-section { margin-bottom: 15px; }
         .combo-card {
             background: var(--card);
@@ -245,20 +248,20 @@
             .game-icon { font-size: 1.8rem; }
             .game-name { font-size: 1rem; }
             .game-play-btn { padding: 7px 14px; font-size: 0.75rem; }
-            .reflex-card, .combo-card { padding: 15px; gap: 12px; }
-            .reflex-icon, .combo-icon { font-size: 2.2rem; }
-            .reflex-name, .combo-name { font-size: 1.2rem; }
-            .reflex-play-btn, .combo-play-btn { padding: 8px 18px; font-size: 0.8rem; }
+            .reaction-card, .combo-card { padding: 15px; gap: 12px; }
+            .reaction-icon, .combo-icon { font-size: 2.2rem; }
+            .reaction-name, .combo-name { font-size: 1.2rem; }
+            .reaction-play-btn, .combo-play-btn { padding: 8px 18px; font-size: 0.8rem; }
         }
 
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .container > * { animation: fadeInUp 0.5s ease-out forwards; }
         .header { animation-delay: 0s; }
-        .games-grid { animation-delay: 0.1s; }
-        .reflex-section { animation-delay: 0.12s; }
-        .challenge-section { animation-delay: 0.15s; }
-        .speed-section { animation-delay: 0.2s; }
-        .account-section { animation-delay: 0.25s; }
+        .reaction-section { animation-delay: 0.1s; }
+        .games-grid { animation-delay: 0.15s; }
+        .challenge-section { animation-delay: 0.2s; }
+        .speed-section { animation-delay: 0.25s; }
+        .account-section { animation-delay: 0.3s; }
     </style>
 </head>
 <body class="en">
@@ -290,9 +293,27 @@
             <span class="lang-es">⚡ <strong>PRUEBA DE FACILIDAD</strong> — <span id="trialDaysEs">7</span> días restantes</span>
         </div>
 
+        <!-- REACTION WORKOUT - NOW FIRST -->
+        <div class="reaction-section">
+            <div class="section-label">
+                <span class="lang-en">⚡ WORKOUT — REACTION TIME</span>
+                <span class="lang-es">⚡ EJERCICIO — TIEMPO DE REACCIÓN</span>
+            </div>
+            <a href="/the-reflex" class="reaction-card">
+                <div class="reaction-icon">⚡</div>
+                <div class="reaction-content">
+                    <div class="reaction-badge"><span class="lang-en">PURE SPEED</span><span class="lang-es">VELOCIDAD PURA</span></div>
+                    <div class="reaction-name">THE REACTION</div>
+                    <div class="reaction-desc"><span class="lang-en">Tap before it disappears. No memory — just REACT!</span><span class="lang-es">Toca antes de que desaparezca. Sin memoria — ¡solo REACCIONA!</span></div>
+                    <div class="reaction-play-btn"><span class="lang-en">PLAY</span><span class="lang-es">JUGAR</span></div>
+                </div>
+            </a>
+        </div>
+
+        <!-- PATTERN MEMORY WORKOUTS -->
         <div class="section-label">
-            <span class="lang-en">⚡ WORKOUT — PATTERN MEMORY</span>
-<span class="lang-es">⚡ EJERCICIO — MEMORIA DE PATRONES</span>
+            <span class="lang-en">🧠 WORKOUT — PATTERN MEMORY</span>
+            <span class="lang-es">🧠 EJERCICIO — MEMORIA DE PATRONES</span>
         </div>
         <div class="games-grid">
             <a href="/the-match" class="game-card match">
@@ -309,22 +330,7 @@
             </a>
         </div>
 
-        <div class="reflex-section">
-            <div class="section-label">
-                <span class="lang-en">⚡ WORKOUT — REACTION TIME</span>
-<span class="lang-es">⚡ EJERCICIO — TIEMPO DE REACCIÓN</span>
-            </div>
-            <a href="/the-reflex" class="reflex-card">
-                <div class="reflex-icon">⚡</div>
-                <div class="reflex-content">
-                    <div class="reflex-badge"><span class="lang-en">PURE SPEED</span><span class="lang-es">VELOCIDAD PURA</span></div>
-                    <div class="reflex-name">THE REFLEX</div>
-                    <div class="reflex-desc"><span class="lang-en">Tap before it disappears. No memory — just REACT!</span><span class="lang-es">Toca antes de que desaparezca. Sin memoria — ¡solo REACCIONA!</span></div>
-                    <div class="reflex-play-btn"><span class="lang-en">PLAY</span><span class="lang-es">JUGAR</span></div>
-                </div>
-            </a>
-        </div>
-
+        <!-- THE CHALLENGE -->
         <div class="challenge-section">
             <div class="section-label">
                 <span class="lang-en">🏆 THE CHALLENGE</span>
@@ -334,8 +340,8 @@
                 <div class="combo-icon">🏆</div>
                 <div class="combo-content">
                     <div class="combo-badge"><span class="lang-en">ULTIMATE TEST</span><span class="lang-es">PRUEBA FINAL</span></div>
-                    <div class="combo-name">THE COMBO CHALLENGE</div>
-                    <div class="combo-desc"><span class="lang-en">Master BOTH Pattern Memory Workouts. Are you ready?</span><span class="lang-es">Domina AMBOS Ejercicios de Memoria. ¿Estás listo?</span></div>
+                    <div class="combo-name">THE REACTION CHALLENGE</div>
+                    <div class="combo-desc"><span class="lang-en">React fast, then prove your memory. Are you ready?</span><span class="lang-es">Reacciona rápido, luego demuestra tu memoria. ¿Estás listo?</span></div>
                     <div class="combo-play-btn"><span class="lang-en">ACCEPT CHALLENGE</span><span class="lang-es">ACEPTAR RETO</span></div>
                 </div>
             </a>
