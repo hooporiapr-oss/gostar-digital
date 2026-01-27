@@ -655,6 +655,7 @@ app.get('/the-sequence', function(req, res) { res.sendFile(path.join(__dirname, 
 app.get('/play', function(req, res) { res.sendFile(path.join(__dirname, 'play.html')); });
 app.get('/the-match', function(req, res) { res.sendFile(path.join(__dirname, 'the-match.html')); });
 app.get('/the-combo', function(req, res) { res.sendFile(path.join(__dirname, 'the-combo.html')); });
+app.get('/the-reflex', function(req, res) { res.sendFile(path.join(__dirname, 'the-reflex.html')); });
 app.get('/the-starting-five', function(req, res) { res.sendFile(path.join(__dirname, 'the-starting-five.html')); });
 app.get('/the-gotrotters', function(req, res) { res.redirect(301, '/the-starting-five'); });
 app.get('/hub', function(req, res) { res.sendFile(path.join(__dirname, 'trotter-hub.html')); });
