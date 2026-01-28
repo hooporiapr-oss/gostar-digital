@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LaughCourt | Memory Workouts That Make You Smile</title>
-<meta name="description" content="Pattern and space memory workouts for everyone who wants to stay sharp. Two fun games. 7-day free trial. $5/month.">
+<title>LaughCourt | React. Match. Sequence. The Challenge.</title>
+<meta name="description" content="Reaction time and memory workouts that make you smile. THE REACTION, THE MATCH, THE SEQUENCE, and THE REACTION CHALLENGE. 7-day free trial. $5/month.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -13,7 +13,9 @@
     --orange: #FF6B35;
     --teal: #00D9A5;
     --cyan: #00CED1;
-    --red: #FF1744;
+    --purple: #9B59B6;
+    --fire: #FF4500;
+    --pink: #FF1493;
     --dark: #0a0a0f;
     --darker: #050508;
     --card: #111118;
@@ -32,6 +34,9 @@ body {
     min-height: 100vh;
     overflow-x: hidden;
 }
+
+body.en .lang-es { display: none !important; }
+body.es .lang-en { display: none !important; }
 
 /* ============ MINI NAV ============ */
 .mini-nav {
@@ -116,14 +121,15 @@ body {
     width: 200%;
     height: 200%;
     background: 
-        radial-gradient(circle at 30% 30%, rgba(255,107,0,0.1) 0%, transparent 40%),
-        radial-gradient(circle at 70% 70%, rgba(0,217,165,0.1) 0%, transparent 40%);
-    animation: heroPulse 10s ease-in-out infinite;
+        radial-gradient(circle at 20% 30%, rgba(155,89,182,0.12) 0%, transparent 35%),
+        radial-gradient(circle at 80% 70%, rgba(0,217,165,0.1) 0%, transparent 35%),
+        radial-gradient(circle at 50% 50%, rgba(255,107,0,0.08) 0%, transparent 40%);
+    animation: heroPulse 12s ease-in-out infinite;
 }
 
 @keyframes heroPulse {
     0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.6; }
-    50% { transform: scale(1.1) rotate(5deg); opacity: 0.9; }
+    50% { transform: scale(1.1) rotate(3deg); opacity: 0.9; }
 }
 
 .hero-content {
@@ -134,8 +140,8 @@ body {
 
 .hero-badge {
     display: inline-block;
-    background: rgba(255,215,0,0.15);
-    color: var(--gold);
+    background: rgba(155,89,182,0.2);
+    color: var(--purple);
     padding: 8px 20px;
     border-radius: 30px;
     font-size: 0.75rem;
@@ -185,8 +191,9 @@ body {
     animation: fadeIn 1s ease-out 0.6s both;
 }
 
+.hero-headline .highlight-purple { color: var(--purple); }
 .hero-headline .highlight-orange { color: var(--orange); }
-.hero-headline .highlight-cyan { color: var(--teal); }
+.hero-headline .highlight-teal { color: var(--teal); }
 
 .hero-sub {
     font-size: 1.15rem;
@@ -228,17 +235,6 @@ body {
     box-shadow: 0 15px 50px rgba(255,107,0,0.4);
 }
 
-.btn-secondary {
-    background: transparent;
-    color: var(--text);
-    border: 2px solid rgba(255,255,255,0.2);
-}
-
-.btn-secondary:hover {
-    border-color: var(--gold);
-    color: var(--gold);
-}
-
 .hero-login {
     margin-top: 20px;
     font-size: 0.9rem;
@@ -278,16 +274,26 @@ body {
     50% { transform: translateY(8px); }
 }
 
-/* ============ WORKOUTS SECTION ============ */
-.workouts {
-    padding: 100px 20px;
-    max-width: 1000px;
+/* ============ SECTION STYLES ============ */
+.section {
+    padding: 80px 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.section.alt-bg {
+    background: var(--darker);
+    max-width: 100%;
+}
+
+.section.alt-bg .section-inner {
+    max-width: 1100px;
     margin: 0 auto;
 }
 
 .section-header {
     text-align: center;
-    margin-bottom: 60px;
+    margin-bottom: 50px;
 }
 
 .section-badge {
@@ -305,7 +311,7 @@ body {
 
 .section-title {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 3rem;
+    font-size: 2.8rem;
     letter-spacing: 4px;
     margin-bottom: 15px;
 }
@@ -313,14 +319,16 @@ body {
 .section-sub {
     color: var(--muted);
     font-size: 1.1rem;
-    max-width: 500px;
+    max-width: 600px;
     margin: 0 auto;
+    line-height: 1.6;
 }
 
+/* ============ WORKOUTS GRID ============ */
 .workouts-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 30px;
+    gap: 25px;
 }
 
 @media (max-width: 800px) {
@@ -329,12 +337,13 @@ body {
 
 .workout-card {
     background: var(--card);
-    border-radius: 24px;
-    padding: 40px 30px;
+    border-radius: 20px;
+    padding: 35px 25px;
     text-align: center;
     position: relative;
     overflow: hidden;
     transition: all 0.4s ease;
+    border: 2px solid transparent;
 }
 
 .workout-card::before {
@@ -343,121 +352,180 @@ body {
     top: 0;
     left: 0;
     right: 0;
-    height: 5px;
+    height: 4px;
 }
 
-.workout-card.match::before {
-    background: linear-gradient(90deg, var(--gold), var(--orange));
-}
+.workout-card.reaction::before { background: linear-gradient(90deg, var(--purple), #8E44AD); }
+.workout-card.match::before { background: linear-gradient(90deg, var(--gold), var(--orange)); }
+.workout-card.sequence::before { background: linear-gradient(90deg, var(--teal), var(--cyan)); }
+.workout-card.challenge::before { background: linear-gradient(90deg, var(--gold), var(--fire), var(--teal)); }
 
-.workout-card.sequence::before {
-    background: linear-gradient(90deg, var(--teal), var(--cyan));
-}
+.workout-card:hover { transform: translateY(-8px); }
+.workout-card.reaction:hover { border-color: var(--purple); box-shadow: 0 20px 50px rgba(155,89,182,0.25); }
+.workout-card.match:hover { border-color: var(--orange); box-shadow: 0 20px 50px rgba(255,107,53,0.25); }
+.workout-card.sequence:hover { border-color: var(--teal); box-shadow: 0 20px 50px rgba(0,217,165,0.25); }
+.workout-card.challenge:hover { border-color: var(--gold); box-shadow: 0 20px 50px rgba(255,215,0,0.25); }
 
-.workout-card:hover {
-    transform: translateY(-10px);
-}
-
-.workout-card.match:hover {
-    box-shadow: 0 25px 50px rgba(255,107,0,0.2);
-}
-
-.workout-card.sequence:hover {
-    box-shadow: 0 25px 50px rgba(0,217,165,0.2);
-}
-
-.workout-icon {
-    font-size: 3.5rem;
-    margin-bottom: 15px;
-}
+.workout-icon { font-size: 3rem; margin-bottom: 12px; }
 
 .workout-name {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 2rem;
-    letter-spacing: 4px;
-    margin-bottom: 8px;
+    font-size: 1.8rem;
+    letter-spacing: 3px;
+    margin-bottom: 5px;
 }
 
+.workout-card.reaction .workout-name { color: var(--purple); }
 .workout-card.match .workout-name { color: var(--orange); }
 .workout-card.sequence .workout-name { color: var(--teal); }
+.workout-card.challenge .workout-name { color: var(--gold); }
 
 .workout-type {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 2px;
     color: var(--muted);
-    margin-bottom: 20px;
-}
-
-/* Court Icon Preview */
-.court-preview {
-    width: 150px;
-    height: 150px;
-    margin: 0 auto 20px;
-    position: relative;
-    border-radius: 12px;
-    overflow: hidden;
-}
-
-.court-preview img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
-
-.court-preview.match-glow {
-    box-shadow: 0 0 30px rgba(255,215,0,0.3);
-}
-
-.court-preview.sequence-glow {
-    box-shadow: 0 0 30px rgba(0,217,165,0.3);
+    margin-bottom: 15px;
 }
 
 .workout-desc {
     color: var(--muted);
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     line-height: 1.6;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
+    min-height: 50px;
 }
 
-.workout-btn {
+.workout-badge {
     display: inline-block;
-    padding: 14px 35px;
-    border-radius: 50px;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.1rem;
-    letter-spacing: 3px;
-    text-decoration: none;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.workout-card.reaction .workout-badge { background: rgba(155,89,182,0.2); color: var(--purple); }
+.workout-card.match .workout-badge { background: rgba(255,107,53,0.2); color: var(--orange); }
+.workout-card.sequence .workout-badge { background: rgba(0,217,165,0.2); color: var(--teal); }
+.workout-card.challenge .workout-badge { background: rgba(255,215,0,0.2); color: var(--gold); }
+
+/* ============ HOW IT WORKS ============ */
+.how-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin-top: 40px;
+}
+
+@media (max-width: 700px) {
+    .how-grid { grid-template-columns: 1fr; gap: 20px; }
+}
+
+.how-step {
+    text-align: center;
+    padding: 30px 20px;
+    background: var(--card);
+    border-radius: 16px;
+    border: 1px solid var(--border);
     transition: all 0.3s;
 }
 
-.workout-card.match .workout-btn {
+.how-step:hover {
+    border-color: var(--gold);
+    transform: translateY(-5px);
+}
+
+.how-number {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
     background: linear-gradient(135deg, var(--gold), var(--orange));
     color: var(--dark);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 15px;
 }
 
-.workout-card.sequence .workout-btn {
-    background: linear-gradient(135deg, var(--teal), var(--cyan));
-    color: var(--dark);
+.how-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    color: var(--gold);
 }
 
-.workout-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+.how-text {
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.5;
 }
+
+/* ============ UNIQUE FEATURE ============ */
+.unique-section {
+    text-align: center;
+    padding: 60px 20px;
+    background: linear-gradient(135deg, rgba(155,89,182,0.1), rgba(0,217,165,0.05));
+    border-top: 1px solid var(--purple);
+    border-bottom: 1px solid var(--teal);
+}
+
+.unique-inner {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.unique-badge {
+    display: inline-block;
+    background: rgba(155,89,182,0.25);
+    color: var(--purple);
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+}
+
+.unique-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.2rem;
+    letter-spacing: 3px;
+    margin-bottom: 15px;
+}
+
+.unique-desc {
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.7;
+    margin-bottom: 25px;
+}
+
+.unique-flow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+}
+
+.unique-flow .step-react { color: var(--purple); }
+.unique-flow .step-match { color: var(--orange); }
+.unique-flow .step-seq { color: var(--teal); }
+.unique-flow .arrow { color: var(--muted); }
 
 /* ============ VALUE PROPS ============ */
-.value-props {
-    padding: 80px 20px;
-    background: var(--darker);
-}
-
 .props-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 30px;
-    max-width: 1000px;
-    margin: 0 auto;
+    gap: 25px;
 }
 
 @media (max-width: 800px) {
@@ -470,17 +538,23 @@ body {
 
 .prop {
     text-align: center;
-    padding: 30px 20px;
+    padding: 25px 15px;
+    background: var(--card);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    transition: all 0.3s;
 }
 
-.prop-icon {
-    font-size: 2.5rem;
-    margin-bottom: 15px;
+.prop:hover {
+    border-color: var(--gold);
+    transform: translateY(-5px);
 }
+
+.prop-icon { font-size: 2.2rem; margin-bottom: 12px; }
 
 .prop-title {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     letter-spacing: 2px;
     margin-bottom: 8px;
     color: var(--gold);
@@ -488,39 +562,61 @@ body {
 
 .prop-text {
     color: var(--muted);
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+/* ============ WHO ITS FOR ============ */
+.audience-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+}
+
+@media (max-width: 700px) {
+    .audience-grid { grid-template-columns: 1fr; }
+}
+
+.audience-card {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 30px 20px;
+    text-align: center;
+    border: 1px solid var(--border);
+    transition: all 0.3s;
+}
+
+.audience-card:hover {
+    border-color: var(--teal);
+    transform: translateY(-5px);
+}
+
+.audience-icon { font-size: 2.5rem; margin-bottom: 15px; }
+
+.audience-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    color: var(--teal);
+}
+
+.audience-text {
+    color: var(--muted);
     font-size: 0.9rem;
     line-height: 1.5;
 }
 
-/* ============ PRICING SECTION ============ */
-.pricing-section {
-    padding: 80px 20px;
-    text-align: center;
-    border-top: 1px solid rgba(255,255,255,0.05);
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-}
-
-.pricing-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 2.5rem;
-    letter-spacing: 4px;
-    margin-bottom: 15px;
-}
-
-.pricing-sub {
-    color: var(--muted);
-    font-size: 1rem;
-    margin-bottom: 40px;
-}
-
+/* ============ PRICING ============ */
 .pricing-card {
     background: var(--card);
     border: 2px solid var(--gold);
     border-radius: 24px;
     padding: 40px;
-    max-width: 400px;
+    max-width: 420px;
     margin: 0 auto 30px;
     box-shadow: 0 10px 40px rgba(255,215,0,0.1);
+    text-align: center;
 }
 
 .pricing-trial {
@@ -567,9 +663,7 @@ body {
     gap: 10px;
 }
 
-.pricing-features li:last-child {
-    border-bottom: none;
-}
+.pricing-features li:last-child { border-bottom: none; }
 
 .pricing-features .check {
     color: var(--teal);
@@ -596,7 +690,7 @@ body {
     box-shadow: 0 15px 50px rgba(255,107,0,0.4);
 }
 
-/* ============ FACILITIES CALLOUT ============ */
+/* Facilities Callout */
 .facilities-callout {
     background: rgba(0,217,165,0.1);
     border: 1px solid var(--teal);
@@ -609,7 +703,7 @@ body {
 
 .facilities-title {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     letter-spacing: 2px;
     color: var(--teal);
     margin-bottom: 10px;
@@ -617,13 +711,11 @@ body {
 
 .facilities-text {
     color: var(--muted);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     line-height: 1.5;
 }
 
-.facilities-text strong {
-    color: var(--text);
-}
+.facilities-text strong { color: var(--text); }
 
 /* ============ FINAL CTA ============ */
 .final-cta {
@@ -648,6 +740,8 @@ body {
 .final-cta-content {
     position: relative;
     z-index: 1;
+    max-width: 600px;
+    margin: 0 auto;
 }
 
 .final-icon {
@@ -677,57 +771,59 @@ body {
 
 .final-buttons {
     display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-    margin-bottom: 30px;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 350px;
+    margin: 0 auto 30px;
 }
 
 .cta-btn {
-    display: inline-flex;
+    display: flex;
     align-items: center;
+    justify-content: center;
     gap: 10px;
-    padding: 20px 45px;
-    color: var(--dark);
-    text-decoration: none;
+    padding: 20px 30px;
     border-radius: 50px;
     font-family: 'Bebas Neue', sans-serif;
     font-size: 1.2rem;
     letter-spacing: 3px;
+    text-decoration: none;
     transition: all 0.3s;
 }
 
-.cta-btn.match {
+.cta-btn.primary {
     background: linear-gradient(135deg, var(--gold), var(--orange));
-    box-shadow: 0 10px 40px rgba(255,107,0,0.3);
+    color: var(--dark);
+    box-shadow: 0 10px 40px rgba(255,107,53,0.3);
 }
 
-.cta-btn.sequence {
-    background: linear-gradient(135deg, var(--teal), var(--cyan));
-    box-shadow: 0 10px 40px rgba(0,217,165,0.3);
-}
-
-.cta-btn:hover {
+.cta-btn.primary:hover {
     transform: translateY(-5px);
+    box-shadow: 0 15px 50px rgba(255,107,53,0.4);
 }
 
-.cta-btn.match:hover { box-shadow: 0 20px 50px rgba(255,107,0,0.4); }
-.cta-btn.sequence:hover { box-shadow: 0 20px 50px rgba(0,217,165,0.4); }
+.cta-btn.secondary {
+    background: transparent;
+    color: var(--text);
+    border: 2px solid rgba(255,255,255,0.2);
+}
 
-.learn-more {
+.cta-btn.secondary:hover {
+    border-color: var(--teal);
+    color: var(--teal);
+}
+
+.final-note {
     color: var(--muted);
-    font-size: 0.95rem;
+    font-size: 0.9rem;
 }
 
-.learn-more a {
+.final-note a {
     color: var(--gold);
     text-decoration: none;
-    transition: color 0.3s;
 }
 
-.learn-more a:hover {
-    color: var(--text);
-}
+.final-note a:hover { text-decoration: underline; }
 
 /* ============ FOOTER ============ */
 .footer {
@@ -740,32 +836,22 @@ body {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 1.5rem;
     letter-spacing: 4px;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
 
 .footer-logo .laugh { color: var(--gold); }
 .footer-logo .court { color: var(--text); }
 
 .footer-tagline {
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     letter-spacing: 3px;
-    color: var(--muted);
-    text-transform: uppercase;
-}
-
-.footer-company {
-    font-size: 0.75rem;
-    color: var(--muted);
-    margin-top: 15px;
-}
-
-.footer-company a {
     color: var(--gold);
-    text-decoration: none;
+    text-transform: uppercase;
+    margin-bottom: 15px;
 }
 
 .footer-links {
-    margin-top: 15px;
+    margin-bottom: 10px;
     font-size: 0.75rem;
 }
 
@@ -776,8 +862,16 @@ body {
     transition: color 0.3s;
 }
 
-.footer-links a:hover {
+.footer-links a:hover { color: var(--gold); }
+
+.footer-company {
+    font-size: 0.75rem;
+    color: var(--muted);
+}
+
+.footer-company a {
     color: var(--gold);
+    text-decoration: none;
 }
 
 .footer-trademarks {
@@ -786,11 +880,8 @@ body {
     margin-top: 15px;
     padding: 0 20px;
     line-height: 1.5;
+    opacity: 0.7;
 }
-
-/* ============ LANGUAGE TOGGLE ============ */
-body.en .lang-es { display: none !important; }
-body.es .lang-en { display: none !important; }
 
 /* ============ ANIMATIONS ============ */
 .fade-in {
@@ -812,13 +903,13 @@ body.es .lang-en { display: none !important; }
     .section-title { font-size: 2rem; }
     .final-title { font-size: 2rem; }
     .btn { padding: 15px 30px; font-size: 1rem; }
-    .cta-btn { padding: 16px 35px; font-size: 1.1rem; }
-    .workout-card { padding: 30px 20px; }
-    .court-preview { width: 120px; height: 120px; }
+    .cta-btn { padding: 16px 25px; font-size: 1rem; }
+    .workout-card { padding: 25px 20px; }
     .final-icon { width: 100px; height: 100px; }
     .pricing-amount { font-size: 3rem; }
     .pricing-card { padding: 30px 20px; }
     .nav-login { padding: 5px 12px; font-size: 0.65rem; }
+    .unique-flow { font-size: 0.9rem; }
 }
 </style>
 </head>
@@ -846,8 +937,8 @@ body.es .lang-en { display: none !important; }
 <section class="hero">
     <div class="hero-content">
         <div class="hero-badge">
-            <span class="lang-en">🏀 Pattern & Space Workouts</span>
-            <span class="lang-es">🏀 Ejercicios de Patrón y Espacio</span>
+            <span class="lang-en">⚡ Reaction + Memory Workouts</span>
+            <span class="lang-es">⚡ Ejercicios de Reacción + Memoria</span>
         </div>
         <div class="hero-logo">
             <span class="laugh">LAUGH</span><span class="court">COURT</span>
@@ -857,21 +948,17 @@ body.es .lang-en { display: none !important; }
             <span class="lang-es">DONDE LA ALEGRÍA SE UNE AL JUEGO</span>
         </div>
         <h1 class="hero-headline">
-            <span class="lang-en">WORKOUT YOUR <span class="highlight-orange">MEMORY</span>.<br>LAUGH <span class="highlight-cyan">ALONG</span> THE WAY.</span>
-            <span class="lang-es">EJERCITA TU <span class="highlight-orange">MEMORIA</span>.<br>RÍE <span class="highlight-cyan">EN EL CAMINO</span>.</span>
+            <span class="lang-en"><span class="highlight-purple">REACT</span>. <span class="highlight-orange">MATCH</span>. <span class="highlight-teal">SEQUENCE</span>.<br>THE CHALLENGE.</span>
+            <span class="lang-es"><span class="highlight-purple">REACCIONA</span>. <span class="highlight-orange">MATCH</span>. <span class="highlight-teal">SECUENCIA</span>.<br>EL RETO.</span>
         </h1>
         <p class="hero-sub">
-            <span class="lang-en">Two memory workouts designed to sharpen your mind and put a smile on your face. Perfect for everyone who wants to stay sharp.</span>
-            <span class="lang-es">Dos ejercicios de memoria diseñados para agudizar tu mente y ponerte una sonrisa. Perfecto para todos los que quieran mantenerse agudos.</span>
+            <span class="lang-en">Reaction time and memory workouts that sharpen your mind and make you smile. Perfect for everyone who wants to stay sharp.</span>
+            <span class="lang-es">Ejercicios de tiempo de reacción y memoria que agudizan tu mente y te hacen sonreír. Perfecto para todos los que quieran mantenerse agudos.</span>
         </p>
         <div class="hero-cta">
             <a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="btn btn-primary">
                 <span class="lang-en">START 7-DAY FREE TRIAL →</span>
                 <span class="lang-es">COMENZAR 7 DÍAS GRATIS →</span>
-            </a>
-            <a href="/how-to-play" class="btn btn-secondary">
-                <span class="lang-en">HOW IT WORKS</span>
-                <span class="lang-es">CÓMO FUNCIONA</span>
             </a>
         </div>
         <p class="hero-login">
@@ -887,23 +974,41 @@ body.es .lang-en { display: none !important; }
 </section>
 
 <!-- ============ WORKOUTS ============ -->
-<section class="workouts fade-in">
+<section class="section fade-in">
     <div class="section-header">
         <div class="section-badge">
-            <span class="lang-en">🏀 Two Workouts</span>
-            <span class="lang-es">🏀 Dos Ejercicios</span>
+            <span class="lang-en">🏀 The Workouts</span>
+            <span class="lang-es">🏀 Los Ejercicios</span>
         </div>
         <h2 class="section-title">
-            <span class="lang-en">PICK YOUR WORKOUT</span>
+            <span class="lang-en">CHOOSE YOUR WORKOUT</span>
             <span class="lang-es">ELIGE TU EJERCICIO</span>
         </h2>
         <p class="section-sub">
-            <span class="lang-en">Each targets different memory skills. Master both to complete The LaughCourt.</span>
-            <span class="lang-es">Cada uno trabaja diferentes habilidades de memoria. Domina ambos para completar The LaughCourt.</span>
+            <span class="lang-en">Three workouts that train different skills. One challenge that combines them all.</span>
+            <span class="lang-es">Tres ejercicios que entrenan diferentes habilidades. Un reto que los combina todos.</span>
         </p>
     </div>
     
     <div class="workouts-grid">
+        <!-- THE REACTION -->
+        <div class="workout-card reaction">
+            <div class="workout-icon">⚡</div>
+            <div class="workout-name">THE REACTION</div>
+            <div class="workout-type">
+                <span class="lang-en">Reaction Time</span>
+                <span class="lang-es">Tiempo de Reacción</span>
+            </div>
+            <p class="workout-desc">
+                <span class="lang-en">Tap cells before they disappear. After each perfect round, see a memory flash — training your brain without even trying.</span>
+                <span class="lang-es">Toca las celdas antes de que desaparezcan. Después de cada ronda perfecta, ve un flash de memoria — entrenando tu cerebro sin darte cuenta.</span>
+            </p>
+            <div class="workout-badge">
+                <span class="lang-en">⚡ PURE SPEED + MEMORY FLASH</span>
+                <span class="lang-es">⚡ VELOCIDAD PURA + FLASH DE MEMORIA</span>
+            </div>
+        </div>
+        
         <!-- THE MATCH -->
         <div class="workout-card match">
             <div class="workout-icon">🎯</div>
@@ -912,20 +1017,14 @@ body.es .lang-en { display: none !important; }
                 <span class="lang-en">Spatial Memory</span>
                 <span class="lang-es">Memoria Espacial</span>
             </div>
-            
-            <div class="court-preview match-glow">
-                <img src="/icon.png" alt="LaughCourt">
-            </div>
-            
             <p class="workout-desc">
-                <span class="lang-en">Cells light up gold simultaneously on the 5×5 court. Remember their positions and tap them all to advance!</span>
-                <span class="lang-es">Las celdas se iluminan doradas simultáneamente en la cancha 5×5. ¡Recuerda sus posiciones y tócalas todas para avanzar!</span>
+                <span class="lang-en">Cells light up simultaneously. Remember their positions and tap them all. Find every cell to advance!</span>
+                <span class="lang-es">Las celdas se iluminan simultáneamente. Recuerda sus posiciones y tócalas todas. ¡Encuentra cada celda para avanzar!</span>
             </p>
-            
-            <a href="/how-to-play" class="workout-btn">
-                <span class="lang-en">LEARN MORE →</span>
-                <span class="lang-es">SABER MÁS →</span>
-            </a>
+            <div class="workout-badge">
+                <span class="lang-en">🎯 FIND ALL THE CELLS</span>
+                <span class="lang-es">🎯 ENCUENTRA TODAS LAS CELDAS</span>
+            </div>
         </div>
         
         <!-- THE SEQUENCE -->
@@ -936,26 +1035,128 @@ body.es .lang-en { display: none !important; }
                 <span class="lang-en">Sequential Memory</span>
                 <span class="lang-es">Memoria Secuencial</span>
             </div>
-            
-            <div class="court-preview sequence-glow">
-                <img src="/icon.png" alt="LaughCourt">
-            </div>
-            
             <p class="workout-desc">
-                <span class="lang-en">Watch the pattern light up one by one. Tap it back in the exact order. The longer you go, the harder it gets!</span>
-                <span class="lang-es">Mira el patrón iluminarse uno por uno. Repítelo en el orden exacto. ¡Mientras más avances, más difícil se pone!</span>
+                <span class="lang-en">Watch cells light up one by one. Tap them back in the exact order. The longer the chain, the bigger the challenge!</span>
+                <span class="lang-es">Mira las celdas iluminarse una por una. Repítelas en el orden exacto. ¡Mientras más larga la cadena, mayor el reto!</span>
             </p>
-            
-            <a href="/how-to-play" class="workout-btn">
-                <span class="lang-en">LEARN MORE →</span>
-                <span class="lang-es">SABER MÁS →</span>
-            </a>
+            <div class="workout-badge">
+                <span class="lang-en">🔢 REPEAT THE ORDER</span>
+                <span class="lang-es">🔢 REPITE EL ORDEN</span>
+            </div>
+        </div>
+        
+        <!-- THE REACTION CHALLENGE -->
+        <div class="workout-card challenge">
+            <div class="workout-icon">🏆</div>
+            <div class="workout-name">THE REACTION CHALLENGE</div>
+            <div class="workout-type">
+                <span class="lang-en">Ultimate Test</span>
+                <span class="lang-es">Prueba Final</span>
+            </div>
+            <p class="workout-desc">
+                <span class="lang-en">React fast, then prove your memory. Two phases: REACT → RECALL. Can you become a Champion?</span>
+                <span class="lang-es">Reacciona rápido, luego demuestra tu memoria. Dos fases: REACCIONA → RECUERDA. ¿Puedes ser Campeón?</span>
+            </p>
+            <div class="workout-badge">
+                <span class="lang-en">🏆 REACT + REMEMBER = CHAMPION</span>
+                <span class="lang-es">🏆 REACCIONA + RECUERDA = CAMPEÓN</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ UNIQUE FEATURE ============ -->
+<section class="unique-section fade-in">
+    <div class="unique-inner">
+        <div class="unique-badge">
+            <span class="lang-en">✨ Only on LaughCourt</span>
+            <span class="lang-es">✨ Solo en LaughCourt</span>
+        </div>
+        <h2 class="unique-title">
+            <span class="lang-en">THE REACTION TRAINS YOUR MEMORY — AUTOMATICALLY</span>
+            <span class="lang-es">THE REACTION ENTRENA TU MEMORIA — AUTOMÁTICAMENTE</span>
+        </h2>
+        <p class="unique-desc">
+            <span class="lang-en">After every perfect reaction round, you see a brief memory flash: first all cells at once (MATCH), then in order (SEQUENCE). Your brain naturally asks "Could I remember those?" — and discovers what needs practice.</span>
+            <span class="lang-es">Después de cada ronda de reacción perfecta, ves un flash de memoria: primero todas las celdas a la vez (MATCH), luego en orden (SECUENCIA). Tu cerebro naturalmente pregunta "¿Podría recordar esas?" — y descubre qué necesita práctica.</span>
+        </p>
+        <div class="unique-flow">
+            <span class="step-react">⚡ REACT</span>
+            <span class="arrow">→</span>
+            <span class="step-match">🎯 MATCH FLASH</span>
+            <span class="arrow">→</span>
+            <span class="step-seq">🔢 SEQUENCE FLASH</span>
+            <span class="arrow">→</span>
+            <span class="step-react">⬆️ LEVEL UP</span>
+        </div>
+    </div>
+</section>
+
+<!-- ============ HOW IT WORKS ============ -->
+<section class="section alt-bg fade-in">
+    <div class="section-inner">
+        <div class="section-header">
+            <div class="section-badge">
+                <span class="lang-en">🎯 Simple Rules</span>
+                <span class="lang-es">🎯 Reglas Simples</span>
+            </div>
+            <h2 class="section-title">
+                <span class="lang-en">HOW IT WORKS</span>
+                <span class="lang-es">CÓMO FUNCIONA</span>
+            </h2>
+            <p class="section-sub">
+                <span class="lang-en">Every workout follows the same simple pattern. Master the basics, then increase the challenge.</span>
+                <span class="lang-es">Cada ejercicio sigue el mismo patrón simple. Domina lo básico, luego aumenta el reto.</span>
+            </p>
+        </div>
+        
+        <div class="how-grid">
+            <div class="how-step">
+                <div class="how-number">1</div>
+                <div class="how-title">
+                    <span class="lang-en">WATCH</span>
+                    <span class="lang-es">OBSERVA</span>
+                </div>
+                <p class="how-text">
+                    <span class="lang-en">Cells light up on the 5×5 court. Pay attention to where and when.</span>
+                    <span class="lang-es">Las celdas se iluminan en la cancha 5×5. Presta atención a dónde y cuándo.</span>
+                </p>
+            </div>
+            <div class="how-step">
+                <div class="how-number">2</div>
+                <div class="how-title">
+                    <span class="lang-en">REMEMBER</span>
+                    <span class="lang-es">RECUERDA</span>
+                </div>
+                <p class="how-text">
+                    <span class="lang-en">Keep track of positions (MATCH), order (SEQUENCE), or react in time (REACTION).</span>
+                    <span class="lang-es">Recuerda posiciones (MATCH), orden (SECUENCIA), o reacciona a tiempo (REACCIÓN).</span>
+                </p>
+            </div>
+            <div class="how-step">
+                <div class="how-number">3</div>
+                <div class="how-title">
+                    <span class="lang-en">TAP & LEVEL UP</span>
+                    <span class="lang-es">TOCA Y SUBE</span>
+                </div>
+                <p class="how-text">
+                    <span class="lang-en">Get 2 perfect rounds to level up. 10 levels × 3 speeds = endless challenge.</span>
+                    <span class="lang-es">Logra 2 rondas perfectas para subir. 10 niveles × 3 velocidades = reto infinito.</span>
+                </p>
+            </div>
         </div>
     </div>
 </section>
 
 <!-- ============ VALUE PROPS ============ -->
-<section class="value-props fade-in">
+<section class="section fade-in">
+    <div class="section-header">
+        <h2 class="section-title">
+            <span class="lang-en">WHY LAUGHCOURT?</span>
+            <span class="lang-es">¿POR QUÉ LAUGHCOURT?</span>
+        </h2>
+    </div>
+    
     <div class="props-grid">
         <div class="prop">
             <div class="prop-icon">🧠</div>
@@ -964,8 +1165,8 @@ body.es .lang-en { display: none !important; }
                 <span class="lang-es">MANTENTE AGUDO</span>
             </div>
             <p class="prop-text">
-                <span class="lang-en">Pattern and space workouts for everyone who wants to stay sharp.</span>
-                <span class="lang-es">Ejercicios de patrón y espacio para todos los que quieran mantenerse agudos.</span>
+                <span class="lang-en">Reaction + Memory workouts that challenge your brain daily.</span>
+                <span class="lang-es">Ejercicios de Reacción + Memoria que retan tu cerebro diariamente.</span>
             </p>
         </div>
         <div class="prop">
@@ -975,19 +1176,19 @@ body.es .lang-en { display: none !important; }
                 <span class="lang-es">JUEGA DONDE QUIERAS</span>
             </div>
             <p class="prop-text">
-                <span class="lang-en">Works on phone, tablet, or desktop. No app download.</span>
-                <span class="lang-es">Funciona en teléfono, tablet o computadora. Sin descargar app.</span>
+                <span class="lang-en">Phone, tablet, or desktop. No app download needed.</span>
+                <span class="lang-es">Teléfono, tablet o computadora. Sin descargar app.</span>
             </p>
         </div>
         <div class="prop">
             <div class="prop-icon">🏆</div>
             <div class="prop-title">
-                <span class="lang-en">60 DIVISIONS</span>
-                <span class="lang-es">60 DIVISIONES</span>
+                <span class="lang-en">90 DIVISIONS</span>
+                <span class="lang-es">90 DIVISIONES</span>
             </div>
             <p class="prop-text">
-                <span class="lang-en">10 levels × 3 speeds × 2 workouts. Endless challenge.</span>
-                <span class="lang-es">10 niveles × 3 velocidades × 2 ejercicios. Reto sin fin.</span>
+                <span class="lang-en">10 levels × 3 speeds × 3 workouts. Plus THE CHALLENGE.</span>
+                <span class="lang-es">10 niveles × 3 velocidades × 3 ejercicios. Más EL RETO.</span>
             </p>
         </div>
         <div class="prop">
@@ -997,23 +1198,77 @@ body.es .lang-en { display: none !important; }
                 <span class="lang-es">ALEGRÍA PRIMERO</span>
             </div>
             <p class="prop-text">
-                <span class="lang-en">Laugh emojis celebrate every win. Workouts should be joyful.</span>
-                <span class="lang-es">Emojis de risa celebran cada victoria. Los ejercicios deben ser alegres.</span>
+                <span class="lang-en">Laugh emojis celebrate every win. Workouts should be fun!</span>
+                <span class="lang-es">Emojis de risa celebran cada victoria. ¡Los ejercicios deben ser divertidos!</span>
             </p>
         </div>
     </div>
 </section>
 
-<!-- ============ PRICING SECTION ============ -->
-<section class="pricing-section fade-in">
-    <h2 class="pricing-title">
-        <span class="lang-en">SIMPLE PRICING</span>
-        <span class="lang-es">PRECIO SIMPLE</span>
-    </h2>
-    <p class="pricing-sub">
-        <span class="lang-en">One plan. Full access. Cancel anytime.</span>
-        <span class="lang-es">Un plan. Acceso completo. Cancela cuando quieras.</span>
-    </p>
+<!-- ============ WHO IT'S FOR ============ -->
+<section class="section alt-bg fade-in">
+    <div class="section-inner">
+        <div class="section-header">
+            <div class="section-badge">
+                <span class="lang-en">👥 For Everyone</span>
+                <span class="lang-es">👥 Para Todos</span>
+            </div>
+            <h2 class="section-title">
+                <span class="lang-en">WHO IT'S FOR</span>
+                <span class="lang-es">PARA QUIÉN ES</span>
+            </h2>
+        </div>
+        
+        <div class="audience-grid">
+            <div class="audience-card">
+                <div class="audience-icon">👴👵</div>
+                <div class="audience-title">
+                    <span class="lang-en">SENIORS</span>
+                    <span class="lang-es">ADULTOS MAYORES</span>
+                </div>
+                <p class="audience-text">
+                    <span class="lang-en">Keep your mind sharp with fun, daily workouts. Simple to learn, rewarding to master.</span>
+                    <span class="lang-es">Mantén tu mente aguda con ejercicios divertidos. Fácil de aprender, gratificante de dominar.</span>
+                </p>
+            </div>
+            <div class="audience-card">
+                <div class="audience-icon">🏥</div>
+                <div class="audience-title">
+                    <span class="lang-en">REHAB FACILITIES</span>
+                    <span class="lang-es">CENTROS DE REHABILITACIÓN</span>
+                </div>
+                <p class="audience-text">
+                    <span class="lang-en">Cognitive engagement for residents. One PIN works on multiple devices. Bilingual EN/ES.</span>
+                    <span class="lang-es">Estimulación cognitiva para residentes. Un PIN funciona en múltiples dispositivos. Bilingüe EN/ES.</span>
+                </p>
+            </div>
+            <div class="audience-card">
+                <div class="audience-icon">🎮</div>
+                <div class="audience-title">
+                    <span class="lang-en">EVERYONE</span>
+                    <span class="lang-es">TODOS</span>
+                </div>
+                <p class="audience-text">
+                    <span class="lang-en">Anyone who wants to train their reaction time and memory while having fun.</span>
+                    <span class="lang-es">Cualquiera que quiera entrenar su tiempo de reacción y memoria mientras se divierte.</span>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ PRICING ============ -->
+<section class="section fade-in">
+    <div class="section-header">
+        <h2 class="section-title">
+            <span class="lang-en">SIMPLE PRICING</span>
+            <span class="lang-es">PRECIO SIMPLE</span>
+        </h2>
+        <p class="section-sub">
+            <span class="lang-en">One plan. Full access. Cancel anytime.</span>
+            <span class="lang-es">Un plan. Acceso completo. Cancela cuando quieras.</span>
+        </p>
+    </div>
     
     <div class="pricing-card">
         <div class="pricing-trial">
@@ -1038,18 +1293,18 @@ body.es .lang-en { display: none !important; }
             </li>
             <li>
                 <span class="check">✓</span>
-                <span class="lang-en">Both games (THE MATCH + THE SEQUENCE)</span>
-                <span class="lang-es">Ambos juegos (THE MATCH + THE SEQUENCE)</span>
+                <span class="lang-en">All workouts + THE CHALLENGE</span>
+                <span class="lang-es">Todos los ejercicios + EL RETO</span>
             </li>
             <li>
                 <span class="check">✓</span>
-                <span class="lang-en">60 divisions of gameplay</span>
-                <span class="lang-es">60 divisiones de juego</span>
+                <span class="lang-en">90+ divisions of gameplay</span>
+                <span class="lang-es">90+ divisiones de juego</span>
             </li>
             <li>
                 <span class="check">✓</span>
-                <span class="lang-en">Progress tracking & achievements</span>
-                <span class="lang-es">Seguimiento de progreso y logros</span>
+                <span class="lang-en">Progress tracking</span>
+                <span class="lang-es">Seguimiento de progreso</span>
             </li>
             <li>
                 <span class="check">✓</span>
@@ -1060,19 +1315,18 @@ body.es .lang-en { display: none !important; }
         
         <a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="pricing-cta">
             <span class="lang-en">START FREE TRIAL →</span>
-            <span class="lang-es">COMENZAR PRUEBA GRATIS →</span>
+            <span class="lang-es">COMENZAR GRATIS →</span>
         </a>
     </div>
     
-    <!-- Facilities Callout -->
     <div class="facilities-callout">
         <div class="facilities-title">
             <span class="lang-en">🏥 FACILITIES & GROUPS</span>
             <span class="lang-es">🏥 FACILIDADES Y GRUPOS</span>
         </div>
         <p class="facilities-text">
-            <span class="lang-en">Need multiple seats? Purchase the quantity you need at checkout. <strong>One PIN, multiple devices.</strong> Perfect for groups and facilities.</span>
-            <span class="lang-es">¿Necesitas múltiples asientos? Compra la cantidad que necesites al pagar. <strong>Un PIN, múltiples dispositivos.</strong> Perfecto para grupos y facilidades.</span>
+            <span class="lang-en">Need multiple seats? Purchase the quantity you need at checkout. <strong>One PIN, multiple devices.</strong></span>
+            <span class="lang-es">¿Necesitas múltiples asientos? Compra la cantidad que necesites. <strong>Un PIN, múltiples dispositivos.</strong></span>
         </p>
     </div>
 </section>
@@ -1088,18 +1342,22 @@ body.es .lang-en { display: none !important; }
             <span class="lang-es">¿LISTO PARA EJERCITAR?</span>
         </h2>
         <p class="final-sub">
-            <span class="lang-en">Start your 7-day free trial. No risk. All reward.</span>
-            <span class="lang-es">Comienza tu prueba gratis de 7 días. Sin riesgo. Todo recompensa.</span>
+            <span class="lang-en">Step onto The LaughCourt. Your brain will thank you.</span>
+            <span class="lang-es">Entra a The LaughCourt. Tu cerebro te lo agradecerá.</span>
         </p>
         <div class="final-buttons">
-            <a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="cta-btn match">
-                <span class="lang-en">START FREE TRIAL →</span>
-                <span class="lang-es">COMENZAR GRATIS →</span>
+            <a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="cta-btn primary">
+                <span class="lang-en">🆕 START FREE TRIAL</span>
+                <span class="lang-es">🆕 COMENZAR GRATIS</span>
+            </a>
+            <a href="/login" class="cta-btn secondary">
+                <span class="lang-en">🔑 ALREADY HAVE A PIN</span>
+                <span class="lang-es">🔑 YA TENGO UN PIN</span>
             </a>
         </div>
-        <p class="learn-more">
-            <span class="lang-en">First time? <a href="/how-to-play">Learn how to play →</a></span>
-            <span class="lang-es">¿Primera vez? <a href="/how-to-play">Aprende a jugar →</a></span>
+        <p class="final-note">
+            <span class="lang-en">Questions? <a href="/faq">Visit our FAQ</a></span>
+            <span class="lang-es">¿Preguntas? <a href="/faq">Visita nuestro FAQ</a></span>
         </p>
     </div>
 </section>
@@ -1112,23 +1370,11 @@ body.es .lang-en { display: none !important; }
         <span class="lang-es">Donde La Alegría Se Une Al Juego</span>
     </div>
     <div class="footer-links">
-        <a href="/how-to-play">
-            <span class="lang-en">How to Play</span>
-            <span class="lang-es">Cómo Jugar</span>
-        </a>
-        <a href="/login">
-            <span class="lang-en">Login</span>
-            <span class="lang-es">Entrar</span>
-        </a>
+        <a href="/the-starting-five">The Starting Five</a>
+        <a href="/login"><span class="lang-en">Login</span><span class="lang-es">Entrar</span></a>
         <a href="/faq">FAQ</a>
-        <a href="/privacy.html">
-            <span class="lang-en">Privacy Policy</span>
-            <span class="lang-es">Política de Privacidad</span>
-        </a>
-        <a href="/terms.html">
-            <span class="lang-en">Terms of Use</span>
-            <span class="lang-es">Términos de Uso</span>
-        </a>
+        <a href="/privacy.html"><span class="lang-en">Privacy</span><span class="lang-es">Privacidad</span></a>
+        <a href="/terms.html"><span class="lang-en">Terms</span><span class="lang-es">Términos</span></a>
     </div>
     <div class="footer-company">by <a href="https://gostar.digital">GoStar Digital LLC</a> 🇵🇷</div>
     <div class="footer-trademarks">
@@ -1137,7 +1383,6 @@ body.es .lang-en { display: none !important; }
 </footer>
 
 <script>
-// ============ LANGUAGE TOGGLE ============
 (function() {
     var currentLang = localStorage.getItem('laughcourt_lang') || 'en';
     function setLang(lang) {
@@ -1150,23 +1395,21 @@ body.es .lang-en { display: none !important; }
     document.getElementById('btnEn').onclick = function() { setLang('en'); };
     document.getElementById('btnEs').onclick = function() { setLang('es'); };
     setLang(currentLang);
-})();
 
-// ============ SCROLL ANIMATIONS ============
-function handleScroll() {
-    var elements = document.querySelectorAll('.fade-in');
-    for (var i = 0; i < elements.length; i++) {
-        var el = elements[i];
-        var rect = el.getBoundingClientRect();
-        var windowHeight = window.innerHeight;
-        if (rect.top < windowHeight * 0.85) {
-            el.classList.add('visible');
+    function handleScroll() {
+        var elements = document.querySelectorAll('.fade-in');
+        for (var i = 0; i < elements.length; i++) {
+            var el = elements[i];
+            var rect = el.getBoundingClientRect();
+            if (rect.top < window.innerHeight * 0.85) {
+                el.classList.add('visible');
+            }
         }
     }
-}
 
-window.addEventListener('scroll', handleScroll);
-window.addEventListener('load', handleScroll);
+    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('load', handleScroll);
+})();
 </script>
 
 </body>
