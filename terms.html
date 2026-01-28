@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--gold:#FFD700;--orange:#FF6B35;--teal:#00D9A5;--cyan:#00CED1;--red:#FF1744;--dark:#0a0a0f;--darker:#050508;--card:#111118;--text:#FFFFFF;--muted:#8892a0;--border:rgba(255,255,255,0.08)}
+:root{--gold:#FFD700;--orange:#FF6B35;--teal:#00D9A5;--cyan:#00CED1;--purple:#9B59B6;--red:#FF1744;--dark:#0a0a0f;--darker:#050508;--card:#111118;--text:#FFFFFF;--muted:#8892a0;--border:rgba(255,255,255,0.08)}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Outfit',sans-serif;background:var(--dark);color:var(--text);line-height:1.7}
 body.es .lang-en{display:none !important}
@@ -40,10 +40,11 @@ a{color:var(--gold);text-decoration:none}
 a:hover{color:var(--teal)}
 .highlight{background:rgba(255,215,0,0.1);border-left:4px solid var(--gold);padding:20px;border-radius:0 12px 12px 0;margin:20px 0}
 .highlight p{margin:0;color:var(--text)}
+.highlight.purple{background:rgba(155,89,182,0.1);border-left-color:var(--purple)}
 .pricing-summary{background:rgba(0,217,165,0.1);border:1px solid rgba(0,217,165,0.2);border-radius:16px;padding:25px;margin:20px 0}
 .pricing-summary h3{color:var(--teal);margin-top:0}
 .gostar{color:var(--gold);font-weight:700}
-.starting-five{color:var(--orange);font-weight:700}
+.workout-name{color:var(--purple);font-weight:600}
 
 .footer{padding:50px 20px 30px;background:var(--darker);text-align:center;border-top:1px solid rgba(255,255,255,0.05)}
 .footer-brand{margin-bottom:15px}
@@ -55,7 +56,6 @@ a:hover{color:var(--teal)}
 .footer-links a{color:var(--muted);text-decoration:none;font-size:0.9rem;transition:color 0.3s}
 .footer-links a:hover{color:var(--gold)}
 .footer-company{font-size:0.8rem;color:var(--muted);margin:10px 0}
-.footer-company a{color:var(--gold);text-decoration:none}
 .footer-copy{font-size:0.75rem;color:var(--muted);margin-bottom:10px}
 .trademark-notice{font-size:0.65rem;color:var(--muted);max-width:600px;margin:0 auto;opacity:0.7}
 
@@ -95,28 +95,38 @@ a:hover{color:var(--teal)}
     <div class="content-card">
         <!-- ENGLISH -->
         <div class="lang-en">
-            <p>Welcome to LaughCourt! These Terms of Use ("Terms") govern your use of the LaughCourt™ cognitive training platform, operated by GoStar Digital LLC ("we", "our", or "us"). By using our platform, you agree to these Terms.</p>
+            <p>Welcome to LaughCourt! These Terms of Use ("Terms") govern your use of the LaughCourt™ reaction and memory workout platform, operated by GoStar Digital LLC ("we", "our", or "us"). By using our platform, you agree to these Terms.</p>
             
             <div class="highlight">
-                <p>😂 <strong>Simple Terms:</strong> Use LaughCourt to train your memory, earn <span class="gostar">GoStars</span>, and have fun laughing. Don't misuse it. Pay for your subscription. We'll provide a great platform.</p>
+                <p>😂 <strong>Simple Terms:</strong> Use LaughCourt to train your reaction time and memory, earn <span class="gostar">GoStars</span>, and have fun. Don't misuse it. Pay for your subscription. We'll provide a great platform.</p>
             </div>
 
             <h2>1. ACCEPTANCE OF TERMS</h2>
             <p>By accessing or using LaughCourt, you agree to be bound by these Terms and our <a href="privacy.html">Privacy Policy</a>. If you are using the platform on behalf of a facility or organization (such as a rehabilitation center or nursing home), you represent that you have authority to bind that entity to these Terms.</p>
 
             <h2>2. DESCRIPTION OF SERVICE</h2>
-            <p>LaughCourt is a cognitive training platform that provides:</p>
+            <p>LaughCourt is a reaction and memory workout platform that provides:</p>
             <ul>
-                <li><strong>2 Cognitive Workouts:</strong> THE MATCH (spatial memory on 5×5 grid — cells light up simultaneously, remember their positions) and THE SEQUENCE (sequential memory on 5×5 grid — cells light up one by one, repeat in order)</li>
+                <li><strong>4 Workouts:</strong>
+                    <ul>
+                        <li><span class="workout-name">THE REACTION</span> ⚡ — Reaction time training with automatic memory flash preview</li>
+                        <li><span class="workout-name">THE MATCH</span> 🎯 — Spatial memory on 5×5 grid (cells light up simultaneously, remember their positions)</li>
+                        <li><span class="workout-name">THE SEQUENCE</span> 🔢 — Sequential memory on 5×5 grid (cells light up one by one, repeat in order)</li>
+                        <li><span class="workout-name">THE REACTION CHALLENGE</span> 🏆 — Ultimate test combining reaction + memory recall</li>
+                    </ul>
+                </li>
                 <li><strong>10-<span class="gostar">GoStar</span> Achievement System:</strong> Earn GoStars through perfect gameplay, progressing from 1 to 10 GoStars</li>
                 <li><strong>10 Difficulty Levels:</strong> Level 1 through Level 10 with increasing challenge</li>
-                <li><strong>3 Speed Settings:</strong> SLOW (free), MED, and FAST for subscribers</li>
+                <li><strong>3 Speed Settings:</strong> SLOW (trial), MED, and FAST for subscribers</li>
                 <li>Individual subscription plans ($5/month)</li>
                 <li>Facility trial programs for rehabilitation centers and nursing homes</li>
                 <li>Progress tracking and workout analytics</li>
                 <li>Bilingual support (English/Spanish)</li>
-                
             </ul>
+            
+            <div class="highlight purple">
+                <p>✨ <strong>Unique Feature:</strong> THE REACTION automatically shows memory flash previews after perfect rounds — training your memory while you practice reaction time. Only on LaughCourt!</p>
+            </div>
 
             <h2>3. ACCOUNT REGISTRATION</h2>
             <p><strong>Individual Subscribers:</strong> Register with your email address via Stripe checkout. You will receive a unique 4-digit PIN for platform access.</p>
@@ -130,19 +140,20 @@ a:hover{color:var(--teal)}
                 <h3>🏀 INDIVIDUAL SUBSCRIPTION</h3>
                 <ul>
                     <li><strong>Price:</strong> $5/month</li>
-                    <li>Full access to both LaughCourt workouts (THE MATCH & THE SEQUENCE)</li>
+                    <li>Full access to all 4 LaughCourt workouts (<span class="workout-name">THE REACTION</span>, <span class="workout-name">THE MATCH</span>, <span class="workout-name">THE SEQUENCE</span>, <span class="workout-name">THE REACTION CHALLENGE</span>)</li>
                     <li>All 3 speed settings (SLOW, MED, FAST)</li>
                     <li>All 10 difficulty levels</li>
+                    <li>90+ divisions to master</li>
                     <li>10-<span class="gostar">GoStar</span> achievement system</li>
                     <li>Bilingual support (EN/ES)</li>
                     <li>Cancel anytime</li>
                 </ul>
-                <h3>🏥 FACILITY TRIALS (Rehabilitación y Risas)</h3>
+                <h3>🏥 FACILITY TRIALS</h3>
                 <ul>
                     <li>Available for rehabilitation centers and nursing homes</li>
-                    <li>Limited-time trial period (typically 7-14 days)</li>
+                    <li>7-day free trial period</li>
                     <li>Training limited to SLOW speed during trial</li>
-                    <li>User limits apply per facility</li>
+                    <li>Multiple seats with one shared PIN</li>
                     <li>Contact us for facility pricing after trial</li>
                 </ul>
             </div>
@@ -150,19 +161,19 @@ a:hover{color:var(--teal)}
             <h2>5. GOSTAR ACHIEVEMENT SYSTEM</h2>
             <p>LaughCourt features a unique <span class="gostar">GoStar</span>-based achievement system:</p>
             <ul>
-                <li><strong>Earning GoStars:</strong> Complete perfect sequences or matches to earn GoStars</li>
+                <li><strong>Earning GoStars:</strong> Complete perfect rounds to earn GoStars</li>
                 <li><strong>GoStar Progression:</strong> Progress from 1 GoStar to 10 GoStars (Master level)</li>
-                <li><strong>Separate Progress:</strong> Earn GoStars independently in THE MATCH and THE SEQUENCE</li>
+                <li><strong>Separate Progress:</strong> Earn GoStars independently in each workout</li>
             </ul>
-            <p>GoStars represent real achievement — they are earned through skill, not given freely. This is cognitive training that challenges you.</p>
+            <p>GoStars represent real achievement — they are earned through skill, not given freely. This is training that challenges you.</p>
 
             <h2>6. FACILITY TRIAL TERMS</h2>
             <p>For facilities participating in trial programs:</p>
             <ul>
                 <li>Trials are provided at no cost for evaluation purposes</li>
-                <li>Trials include access to both workouts at <strong>SLOW speed only</strong></li>
+                <li>Trials include access to all workouts at <strong>SLOW speed only</strong></li>
                 <li>MED and FAST speeds require a paid subscription</li>
-                <li>User limits are set per facility (typically up to 50 users)</li>
+                <li>Multiple users can share one facility PIN</li>
                 <li>Trial periods may be extended at our discretion</li>
                 <li>Facilities may receive bonus trial days during platform updates</li>
                 <li>Data from trial sessions may be used in aggregate for platform improvement</li>
@@ -179,7 +190,7 @@ a:hover{color:var(--teal)}
             <p><strong>Failed Payments:</strong> If payment fails, we will attempt to charge your card again. After multiple failed attempts, your subscription may be suspended.</p>
 
             <h2>8. CANCELLATION & REFUNDS</h2>
-            <p><strong>How to Cancel:</strong> You may cancel your subscription at any time through the Stripe customer portal or by contacting support.</p>
+            <p><strong>How to Cancel:</strong> You may cancel your subscription at any time by contacting support@gostar.digital.</p>
             <p><strong>Effect of Cancellation:</strong> Access continues until the end of your current billing period. No partial refunds for unused time.</p>
             <p><strong>Refund Policy:</strong> We generally do not provide refunds for subscription fees. However, if you experience technical issues preventing platform use, contact us and we will review your case.</p>
             <p><strong>Data After Cancellation:</strong> Your data is retained for 30 days after cancellation, then permanently deleted.</p>
@@ -198,7 +209,7 @@ a:hover{color:var(--teal)}
             </ul>
 
             <h2>10. INTELLECTUAL PROPERTY</h2>
-            <p>LaughCourt, including all content, features, the <span class="gostar">GoStar</span> achievement system, the workout types (THE MATCH, THE SEQUENCE), Ritnome™ technology, and related branding are owned by GoStar Digital LLC. You may not copy, modify, or distribute our intellectual property without written permission.</p>
+            <p>LaughCourt, including all content, features, the <span class="gostar">GoStar</span> achievement system, the workout types (<span class="workout-name">THE REACTION</span>, <span class="workout-name">THE MATCH</span>, <span class="workout-name">THE SEQUENCE</span>, <span class="workout-name">THE REACTION CHALLENGE</span>), the automatic memory flash feature, Ritnome™ technology, and related branding are owned by GoStar Digital LLC. You may not copy, modify, or distribute our intellectual property without written permission.</p>
             <p>"LaughCourt™", "GoStars™", and "Ritnome™" are trademarks of GoStar Digital LLC.</p>
 
             <h2>11. DISCLAIMER OF WARRANTIES</h2>
@@ -208,7 +219,7 @@ a:hover{color:var(--teal)}
                 <li>The platform will produce specific cognitive outcomes</li>
                 <li>All features will be available at all times</li>
             </ul>
-            <p><strong>LaughCourt is a cognitive training platform designed for entertainment and general brain wellness. It is NOT a medical device and is not intended to diagnose, treat, cure, or prevent any medical condition. Consult a healthcare professional for medical advice.</strong></p>
+            <p><strong>LaughCourt is a reaction and memory workout platform designed for entertainment and general brain wellness. It is NOT a medical device and is not intended to diagnose, treat, cure, or prevent any medical condition. Consult a healthcare professional for medical advice.</strong></p>
 
             <h2>12. LIMITATION OF LIABILITY</h2>
             <p>To the maximum extent permitted by law, GoStar Digital LLC shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of LaughCourt. Our total liability shall not exceed the amount you paid for your subscription in the 12 months preceding the claim.</p>
@@ -243,32 +254,42 @@ a:hover{color:var(--teal)}
 
         <!-- SPANISH -->
         <div class="lang-es">
-            <p>¡Bienvenido a LaughCourt (Rehabilitación y Risas)! Estos Términos de Uso ("Términos") rigen su uso de la plataforma de entrenamiento cognitivo LaughCourt™, operada por GoStar Digital LLC ("nosotros", "nuestro"). Al usar nuestra plataforma, acepta estos Términos.</p>
+            <p>¡Bienvenido a LaughCourt! Estos Términos de Uso ("Términos") rigen su uso de la plataforma de ejercicios de reacción y memoria LaughCourt™, operada por GoStar Digital LLC ("nosotros", "nuestro"). Al usar nuestra plataforma, acepta estos Términos.</p>
             
             <div class="highlight">
-                <p>😂 <strong>Términos Simples:</strong> Use LaughCourt para entrenar su memoria, ganar <span class="gostar">GoStars</span> y divertirse riendo. No lo use mal. Pague su suscripción. Nosotros proveeremos una gran plataforma.</p>
+                <p>😂 <strong>Términos Simples:</strong> Use LaughCourt para entrenar su tiempo de reacción y memoria, ganar <span class="gostar">GoStars</span> y divertirse. No lo use mal. Pague su suscripción. Nosotros proveeremos una gran plataforma.</p>
             </div>
 
             <h2>1. ACEPTACIÓN DE TÉRMINOS</h2>
             <p>Al acceder o usar LaughCourt, acepta estar sujeto a estos Términos y nuestra <a href="privacy.html">Política de Privacidad</a>. Si usa la plataforma en nombre de una instalación u organización (como un centro de rehabilitación u hogar de ancianos), representa que tiene autoridad para vincular esa entidad a estos Términos.</p>
 
             <h2>2. DESCRIPCIÓN DEL SERVICIO</h2>
-            <p>LaughCourt es una plataforma de entrenamiento cognitivo que proporciona:</p>
+            <p>LaughCourt es una plataforma de ejercicios de reacción y memoria que proporciona:</p>
             <ul>
-                <li><strong>2 Entrenamientos Cognitivos:</strong> THE MATCH (memoria espacial en cuadrícula 5×5 — las celdas se iluminan simultáneamente, recuerda sus posiciones) y THE SEQUENCE (memoria secuencial en cuadrícula 5×5 — las celdas se iluminan una por una, repite en orden)</li>
+                <li><strong>4 Ejercicios:</strong>
+                    <ul>
+                        <li><span class="workout-name">THE REACTION</span> ⚡ — Entrenamiento de tiempo de reacción con vista previa automática de memoria</li>
+                        <li><span class="workout-name">THE MATCH</span> 🎯 — Memoria espacial en cuadrícula 5×5 (las celdas se iluminan simultáneamente, recuerda sus posiciones)</li>
+                        <li><span class="workout-name">THE SEQUENCE</span> 🔢 — Memoria secuencial en cuadrícula 5×5 (las celdas se iluminan una por una, repite en orden)</li>
+                        <li><span class="workout-name">THE REACTION CHALLENGE</span> 🏆 — Prueba final combinando reacción + recuerdo de memoria</li>
+                    </ul>
+                </li>
                 <li><strong>Sistema de Logros de 10 <span class="gostar">GoStars</span>:</strong> Gane GoStars a través del juego perfecto, progresando de 1 a 10 GoStars</li>
                 <li><strong>10 Niveles de Dificultad:</strong> Nivel 1 al Nivel 10 con desafío creciente</li>
-                <li><strong>3 Configuraciones de Velocidad:</strong> LENTO (gratis), MEDIO y RÁPIDO para suscriptores</li>
+                <li><strong>3 Configuraciones de Velocidad:</strong> LENTO (prueba), MEDIO y RÁPIDO para suscriptores</li>
                 <li>Planes de suscripción individual ($5/mes)</li>
                 <li>Programas de prueba para instalaciones de rehabilitación y hogares de ancianos</li>
-                <li>Seguimiento de progreso y análisis de entrenamientos</li>
+                <li>Seguimiento de progreso y análisis de ejercicios</li>
                 <li>Soporte bilingüe (Inglés/Español)</li>
-                
             </ul>
+            
+            <div class="highlight purple">
+                <p>✨ <strong>Función Única:</strong> THE REACTION muestra automáticamente vistas previas de memoria después de rondas perfectas — entrenando tu memoria mientras practicas tiempo de reacción. ¡Solo en LaughCourt!</p>
+            </div>
 
             <h2>3. REGISTRO DE CUENTA</h2>
             <p><strong>Suscriptores Individuales:</strong> Regístrese con su correo electrónico a través del checkout de Stripe. Recibirá un PIN único de 4 dígitos para acceder a la plataforma.</p>
-            <p><strong>Usuarios de Prueba de Instalaciones:</strong> Se registran a través del administrador de su instalación. Cada instalación recibe un PIN compartido para su período de prueba con límites de usuarios.</p>
+            <p><strong>Usuarios de Prueba de Instalaciones:</strong> Se registran a través del administrador de su instalación. Cada instalación recibe un PIN compartido para su período de prueba.</p>
             <p>Usted es responsable de mantener la confidencialidad de su PIN y de todas las actividades bajo su cuenta.</p>
 
             <h2>4. PLANES DE SUSCRIPCIÓN Y PRECIOS</h2>
@@ -278,19 +299,20 @@ a:hover{color:var(--teal)}
                 <h3>🏀 SUSCRIPCIÓN INDIVIDUAL</h3>
                 <ul>
                     <li><strong>Precio:</strong> $5/mes</li>
-                    <li>Acceso completo a ambos entrenamientos de LaughCourt (THE MATCH y THE SEQUENCE)</li>
+                    <li>Acceso completo a los 4 ejercicios de LaughCourt (<span class="workout-name">THE REACTION</span>, <span class="workout-name">THE MATCH</span>, <span class="workout-name">THE SEQUENCE</span>, <span class="workout-name">THE REACTION CHALLENGE</span>)</li>
                     <li>Las 3 configuraciones de velocidad (LENTO, MEDIO, RÁPIDO)</li>
                     <li>Los 10 niveles de dificultad</li>
+                    <li>Más de 90 divisiones para dominar</li>
                     <li>Sistema de logros de 10 <span class="gostar">GoStars</span></li>
                     <li>Soporte bilingüe (EN/ES)</li>
                     <li>Cancele cuando quiera</li>
                 </ul>
-                <h3>🏥 PRUEBAS PARA INSTALACIONES (Rehabilitación y Risas)</h3>
+                <h3>🏥 PRUEBAS PARA INSTALACIONES</h3>
                 <ul>
                     <li>Disponible para centros de rehabilitación y hogares de ancianos</li>
-                    <li>Período de prueba por tiempo limitado (típicamente 7-14 días)</li>
+                    <li>Período de prueba gratis de 7 días</li>
                     <li>Entrenamiento limitado a velocidad LENTA durante la prueba</li>
-                    <li>Límites de usuarios aplican por instalación</li>
+                    <li>Múltiples asientos con un PIN compartido</li>
                     <li>Contáctenos para precios de instalación después de la prueba</li>
                 </ul>
             </div>
@@ -298,19 +320,19 @@ a:hover{color:var(--teal)}
             <h2>5. SISTEMA DE LOGROS GOSTAR</h2>
             <p>LaughCourt presenta un sistema de logros único basado en <span class="gostar">GoStars</span>:</p>
             <ul>
-                <li><strong>Ganar GoStars:</strong> Complete secuencias o coincidencias perfectas para ganar GoStars</li>
+                <li><strong>Ganar GoStars:</strong> Complete rondas perfectas para ganar GoStars</li>
                 <li><strong>Progresión de GoStars:</strong> Progrese de 1 GoStar a 10 GoStars (nivel Maestro)</li>
-                <li><strong>Progreso Separado:</strong> Gane GoStars independientemente en THE MATCH y THE SEQUENCE</li>
+                <li><strong>Progreso Separado:</strong> Gane GoStars independientemente en cada ejercicio</li>
             </ul>
-            <p>Los GoStars representan logros reales — se ganan con habilidad, no se regalan. Este es un entrenamiento cognitivo que te desafía.</p>
+            <p>Los GoStars representan logros reales — se ganan con habilidad, no se regalan. Este es un entrenamiento que te desafía.</p>
 
             <h2>6. TÉRMINOS DE PRUEBA PARA INSTALACIONES</h2>
             <p>Para instalaciones participando en programas de prueba:</p>
             <ul>
                 <li>Las pruebas se proporcionan sin costo para propósitos de evaluación</li>
-                <li>Las pruebas incluyen acceso a ambos entrenamientos a <strong>velocidad LENTA solamente</strong></li>
+                <li>Las pruebas incluyen acceso a todos los ejercicios a <strong>velocidad LENTA solamente</strong></li>
                 <li>Las velocidades MEDIA y RÁPIDA requieren una suscripción de pago</li>
-                <li>Los límites de usuarios se establecen por instalación (típicamente hasta 50 usuarios)</li>
+                <li>Múltiples usuarios pueden compartir un PIN de instalación</li>
                 <li>Los períodos de prueba pueden extenderse a nuestra discreción</li>
                 <li>Las instalaciones pueden recibir días de prueba adicionales durante actualizaciones de la plataforma</li>
                 <li>Los datos de las sesiones de prueba pueden usarse en forma agregada para mejorar la plataforma</li>
@@ -327,7 +349,7 @@ a:hover{color:var(--teal)}
             <p><strong>Pagos Fallidos:</strong> Si el pago falla, intentaremos cargar su tarjeta nuevamente. Después de múltiples intentos fallidos, su suscripción puede ser suspendida.</p>
 
             <h2>8. CANCELACIÓN Y REEMBOLSOS</h2>
-            <p><strong>Cómo Cancelar:</strong> Puede cancelar su suscripción en cualquier momento a través del portal de clientes de Stripe o contactando a soporte.</p>
+            <p><strong>Cómo Cancelar:</strong> Puede cancelar su suscripción en cualquier momento contactando a support@gostar.digital.</p>
             <p><strong>Efecto de la Cancelación:</strong> El acceso continúa hasta el final de su período de facturación actual. No hay reembolsos parciales por tiempo no utilizado.</p>
             <p><strong>Política de Reembolso:</strong> Generalmente no proporcionamos reembolsos por tarifas de suscripción. Sin embargo, si experimenta problemas técnicos que impidan el uso de la plataforma, contáctenos y revisaremos su caso.</p>
             <p><strong>Datos Después de la Cancelación:</strong> Sus datos se retienen por 30 días después de la cancelación, luego se eliminan permanentemente.</p>
@@ -346,7 +368,7 @@ a:hover{color:var(--teal)}
             </ul>
 
             <h2>10. PROPIEDAD INTELECTUAL</h2>
-            <p>LaughCourt, incluyendo todo el contenido, características, el sistema de logros <span class="gostar">GoStar</span>, los tipos de entrenamiento (THE MATCH, THE SEQUENCE), tecnología Ritnome™, y la marca relacionada son propiedad de GoStar Digital LLC. No puede copiar, modificar o distribuir nuestra propiedad intelectual sin permiso escrito.</p>
+            <p>LaughCourt, incluyendo todo el contenido, características, el sistema de logros <span class="gostar">GoStar</span>, los tipos de ejercicios (<span class="workout-name">THE REACTION</span>, <span class="workout-name">THE MATCH</span>, <span class="workout-name">THE SEQUENCE</span>, <span class="workout-name">THE REACTION CHALLENGE</span>), la función de flash de memoria automático, tecnología Ritnome™, y la marca relacionada son propiedad de GoStar Digital LLC. No puede copiar, modificar o distribuir nuestra propiedad intelectual sin permiso escrito.</p>
             <p>"LaughCourt™", "GoStars™", y "Ritnome™" son marcas registradas de GoStar Digital LLC.</p>
 
             <h2>11. DESCARGO DE GARANTÍAS</h2>
@@ -356,13 +378,13 @@ a:hover{color:var(--teal)}
                 <li>La plataforma producirá resultados cognitivos específicos</li>
                 <li>Todas las características estarán disponibles en todo momento</li>
             </ul>
-            <p><strong>LaughCourt es una plataforma de entrenamiento cognitivo diseñada para entretenimiento y bienestar cerebral general. NO es un dispositivo médico y no está destinado a diagnosticar, tratar, curar o prevenir ninguna condición médica. Consulte a un profesional de la salud para obtener consejos médicos.</strong></p>
+            <p><strong>LaughCourt es una plataforma de ejercicios de reacción y memoria diseñada para entretenimiento y bienestar cerebral general. NO es un dispositivo médico y no está destinado a diagnosticar, tratar, curar o prevenir ninguna condición médica. Consulte a un profesional de la salud para obtener consejos médicos.</strong></p>
 
             <h2>12. LIMITACIÓN DE RESPONSABILIDAD</h2>
             <p>En la máxima medida permitida por la ley, GoStar Digital LLC no será responsable por daños indirectos, incidentales, especiales o consecuentes derivados de su uso de LaughCourt. Nuestra responsabilidad total no excederá el monto que pagó por su suscripción en los 12 meses anteriores a la reclamación.</p>
 
             <h2>13. MAYORES Y ACCESIBILIDAD</h2>
-            <p>LaughCourt (Rehabilitación y Risas) está diseñado pensando en personas mayores y pacientes de rehabilitación:</p>
+            <p>LaughCourt está diseñado pensando en personas mayores y pacientes de rehabilitación:</p>
             <ul>
                 <li>Inicio de sesión simple basado en PIN (sin contraseñas complejas)</li>
                 <li>Botones grandes y visuales claros</li>
@@ -402,7 +424,7 @@ a:hover{color:var(--teal)}
         </span>
     </div>
     <div class="footer-links">
-        
+        <a href="/login"><span class="lang-en">Login</span><span class="lang-es">Entrar</span></a>
         <a href="/faq">FAQ</a>
         <a href="/privacy.html"><span class="lang-en">Privacy Policy</span><span class="lang-es">Privacidad</span></a>
         <a href="/terms.html"><span class="lang-en">Terms of Use</span><span class="lang-es">Términos</span></a>
@@ -410,7 +432,7 @@ a:hover{color:var(--teal)}
     <div class="footer-company">
         <span class="lang-en">by</span>
         <span class="lang-es">por</span>
-        <a href="https://gostar.digital"> GoStar Digital LLC</a> 🇵🇷
+        GoStar Digital LLC 🇵🇷
     </div>
     <p class="footer-copy">© 2026 GoStar Digital LLC. All rights reserved.</p>
     <p class="trademark-notice">
