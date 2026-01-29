@@ -106,6 +106,8 @@ body.focus-mode .coach-message{bottom:120px}
 .grid-cell.player-tap{background:rgba(255,255,255,0.3)!important;border-color:rgba(255,255,255,0.5)!important;box-shadow:0 0 12px rgba(255,255,255,0.4)}
 .grid-cell.correct{background:var(--teal)!important;border-color:var(--teal)!important;box-shadow:0 0 15px var(--teal);animation:correctPulse 0.4s}
 .grid-cell.wrong{background:var(--pink)!important;border-color:var(--pink)!important;box-shadow:0 0 15px var(--pink);animation:shake 0.4s}
+.grid-cell .cell-num{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--text);opacity:0;transition:opacity 0.15s;text-shadow:0 2px 4px rgba(0,0,0,0.5)}
+.grid-cell.lit .cell-num,.grid-cell.show-num .cell-num{opacity:1}
 @keyframes correctPulse{50%{transform:scale(1.15)}}
 @keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
 
@@ -146,9 +148,9 @@ body.focus-mode .coach-message{bottom:120px}
 body.en .lang-es{display:none!important}
 body.es .lang-en{display:none!important}
 
-@media(min-height:720px){.court-grid{width:min(100%,calc(100dvh - 300px),340px);height:min(100%,calc(100dvh - 300px),340px)}.stat-value{font-size:1.1rem}.message-text{font-size:0.95rem}.selector-btn{min-height:38px}.selector-btn.level-btn{min-height:30px}.action-btn{min-height:50px;font-size:1.35rem}}
-@media(max-height:620px){.stat-value{font-size:0.9rem}.message-display{padding:5px;min-height:30px}.message-text{font-size:0.8rem}.selector-btn{min-height:30px;font-size:0.75rem}.selector-btn.level-btn{min-height:24px;font-size:0.65rem}.court-grid{min-width:180px;min-height:180px;width:min(100%,calc(100dvh - 260px),280px);height:min(100%,calc(100dvh - 260px),280px);gap:3px;padding:6px}.grid-cell{min-width:28px;min-height:28px}.division-display{padding:4px 8px;min-height:30px}.action-btn{min-height:42px;font-size:1.1rem}}
-@media(max-height:540px){.nav-row{height:44px}.stats-bar{padding:3px 5px;margin-bottom:3px}.stat-value{font-size:0.8rem}.stat-label{font-size:0.38rem}.message-display{padding:4px;margin-bottom:3px;min-height:26px}.message-text{font-size:0.7rem}.selectors-row{margin-bottom:3px}.selector-group{padding:3px}.selector-label{font-size:0.4rem;margin-bottom:2px}.selector-btn{min-height:26px;font-size:0.65rem}.selector-btn.level-btn{min-height:22px;font-size:0.55rem}.court-grid{min-width:150px;min-height:150px;gap:2px;padding:5px}.grid-cell{min-width:24px;min-height:24px}.division-display{padding:3px 6px;min-height:26px;margin:3px 0}.division-badge,.sequence-counter{font-size:0.75rem}.score-display{font-size:0.9rem}.action-btn{min-height:38px;padding:8px;font-size:1rem}}
+@media(min-height:720px){.court-grid{width:min(100%,calc(100dvh - 300px),340px);height:min(100%,calc(100dvh - 300px),340px)}.stat-value{font-size:1.1rem}.message-text{font-size:0.95rem}.selector-btn{min-height:38px}.selector-btn.level-btn{min-height:30px}.action-btn{min-height:50px;font-size:1.35rem}.grid-cell .cell-num{font-size:1.6rem}}
+@media(max-height:620px){.stat-value{font-size:0.9rem}.message-display{padding:5px;min-height:30px}.message-text{font-size:0.8rem}.selector-btn{min-height:30px;font-size:0.75rem}.selector-btn.level-btn{min-height:24px;font-size:0.65rem}.court-grid{min-width:180px;min-height:180px;width:min(100%,calc(100dvh - 260px),280px);height:min(100%,calc(100dvh - 260px),280px);gap:3px;padding:6px}.grid-cell{min-width:28px;min-height:28px}.grid-cell .cell-num{font-size:1.2rem}.division-display{padding:4px 8px;min-height:30px}.action-btn{min-height:42px;font-size:1.1rem}}
+@media(max-height:540px){.nav-row{height:44px}.stats-bar{padding:3px 5px;margin-bottom:3px}.stat-value{font-size:0.8rem}.stat-label{font-size:0.38rem}.message-display{padding:4px;margin-bottom:3px;min-height:26px}.message-text{font-size:0.7rem}.selectors-row{margin-bottom:3px}.selector-group{padding:3px}.selector-label{font-size:0.4rem;margin-bottom:2px}.selector-btn{min-height:26px;font-size:0.65rem}.selector-btn.level-btn{min-height:22px;font-size:0.55rem}.court-grid{min-width:150px;min-height:150px;gap:2px;padding:5px}.grid-cell{min-width:24px;min-height:24px}.grid-cell .cell-num{font-size:1rem}.division-display{padding:3px 6px;min-height:26px;margin:3px 0}.division-badge,.sequence-counter{font-size:0.75rem}.score-display{font-size:0.9rem}.action-btn{min-height:38px;padding:8px;font-size:1rem}}
 </style>
 </head>
 <body class="en">
@@ -198,7 +200,7 @@ body.es .lang-en{display:none!important}
 </div>
 <div class="tier-display" id="tierDots"></div>
 <div class="court-wrapper"><div class="court-grid" id="courtGrid"></div></div>
-<div class="division-display"><div class="division-badge" id="divisionBadge">L1 SLOW</div><div class="sequence-counter" id="sequenceCounter">SEQ: 7</div><div class="score-display" id="totalScore">0</div></div>
+<div class="division-display"><div class="division-badge" id="divisionBadge">L1 SLOW</div><div class="sequence-counter" id="sequenceCounter">SEQ: 5</div><div class="score-display" id="totalScore">0</div></div>
 <button class="action-btn" id="actionBtn"><span class="lang-en">GO</span><span class="lang-es">IR</span></button>
 </div>
 
@@ -265,10 +267,10 @@ body.es .lang-en{display:none!important}
     };
 
     // ===== LANGUAGE =====
-    var currentLang = localStorage.getItem('laughcourt_lang') || 'en';
+    var currentLang = localStorage.getItem('lc-lang') || 'en';
     function setLang(lang) {
         currentLang = lang;
-        localStorage.setItem('laughcourt_lang', lang);
+        localStorage.setItem('lc-lang', lang);
         document.body.className = lang + (isFocusMode ? ' focus-mode' : '');
         document.getElementById('btnEn').className = lang === 'en' ? 'nav-lang-btn active' : 'nav-lang-btn';
         document.getElementById('btnEs').className = lang === 'es' ? 'nav-lang-btn active' : 'nav-lang-btn';
@@ -407,6 +409,7 @@ body.es .lang-en{display:none!important}
             var cell = document.createElement('div');
             cell.className = 'grid-cell';
             cell.dataset.index = i;
+            cell.innerHTML = '<span class="cell-num"></span>';
             cell.onclick = function() { handleTap(parseInt(this.dataset.index)); };
             courtGrid.appendChild(cell);
             state.cells.push(cell);
@@ -424,7 +427,7 @@ body.es .lang-en{display:none!important}
     }
 
     function getSeqLen() {
-        var base = LEVEL_BASE[state.level] || 7;
+        var base = LEVEL_BASE[state.level] || 5;
         var tierBonus = state.tier - 1;
         return Math.min(base + tierBonus, 25);
     }
@@ -462,9 +465,13 @@ body.es .lang-en{display:none!important}
         var cfg = SPEED_CFG[state.speed];
         var i = 0;
         function next() {
-            if (i > 0) state.cells[state.sequence[i - 1]].classList.remove('lit');
+            if (i > 0) {
+                state.cells[state.sequence[i - 1]].classList.remove('lit');
+            }
             if (i < state.sequence.length) {
-                state.cells[state.sequence[i]].classList.add('lit');
+                var cell = state.cells[state.sequence[i]];
+                cell.classList.add('lit');
+                cell.querySelector('.cell-num').textContent = i + 1;
                 playNote(state.sequence[i]);
                 i++;
                 setTimeout(next, cfg.show + cfg.gap);
@@ -483,7 +490,10 @@ body.es .lang-en{display:none!important}
         state.canTap = false;
         state.playerIndex = 0;
         actionBtn.disabled = true;
-        state.cells.forEach(function(c) { c.classList.remove('lit', 'correct', 'wrong', 'player-tap'); });
+        state.cells.forEach(function(c) { 
+            c.classList.remove('lit', 'correct', 'wrong', 'player-tap', 'show-num'); 
+            c.querySelector('.cell-num').textContent = '';
+        });
         state.sequence = generateSequence();
         messageText.innerHTML = '<span class="lang-en">WATCH...</span><span class="lang-es">MIRA...</span>';
         messageText.className = 'message-text watch';
@@ -503,7 +513,8 @@ body.es .lang-en{display:none!important}
         playNote(idx);
         setTimeout(function() { cell.classList.remove('player-tap'); }, 200);
         if (idx === state.sequence[state.playerIndex]) {
-            cell.classList.add('correct');
+            cell.classList.add('correct', 'show-num');
+            cell.querySelector('.cell-num').textContent = state.playerIndex + 1;
             state.playerIndex++;
             if (state.playerIndex > 2) laughCelebration('small');
             if (state.playerIndex >= state.sequence.length) {
@@ -514,7 +525,12 @@ body.es .lang-en{display:none!important}
             cell.classList.add('wrong');
             playError();
             state.canTap = false;
-            setTimeout(function() { state.sequence.forEach(function(i) { state.cells[i].classList.add('correct'); }); }, 400);
+            setTimeout(function() { 
+                state.sequence.forEach(function(i, num) { 
+                    state.cells[i].classList.add('correct', 'show-num'); 
+                    state.cells[i].querySelector('.cell-num').textContent = num + 1;
+                }); 
+            }, 400);
             setTimeout(function() { roundComplete(false); }, 1500);
         }
     }
@@ -575,7 +591,10 @@ body.es .lang-en{display:none!important}
     };
 
     function resetRound() {
-        state.cells.forEach(function(c) { c.classList.remove('lit', 'correct', 'wrong', 'player-tap'); });
+        state.cells.forEach(function(c) { 
+            c.classList.remove('lit', 'correct', 'wrong', 'player-tap', 'show-num');
+            c.querySelector('.cell-num').textContent = '';
+        });
         messageText.innerHTML = '<span>' + (state.roundsCompleted + 1) + '/' + ROUNDS_PER_TIER + '</span>';
         messageText.className = 'message-text';
         actionBtn.disabled = false;
