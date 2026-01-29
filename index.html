@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LaughCourt | React. Match. Sequence. The Challenge.</title>
-<meta name="description" content="Reaction time and memory workouts that make you smile. THE REACTION, THE MATCH, THE SEQUENCE, and THE REACTION CHALLENGE. 7-day free trial. $5/month.">
+<title>LaughCourt | Pattern & Space Memory Workouts</title>
+<meta name="description" content="Memory workouts that sharpen your mind and make you smile. THE MATCH and THE SEQUENCE. 7-day free trial. $5/month.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -13,9 +13,6 @@
     --orange: #FF6B35;
     --teal: #00D9A5;
     --cyan: #00CED1;
-    --purple: #9B59B6;
-    --fire: #FF4500;
-    --pink: #FF1493;
     --dark: #0a0a0f;
     --darker: #050508;
     --card: #111118;
@@ -121,9 +118,8 @@ body.es .lang-en { display: none !important; }
     width: 200%;
     height: 200%;
     background: 
-        radial-gradient(circle at 20% 30%, rgba(155,89,182,0.12) 0%, transparent 35%),
-        radial-gradient(circle at 80% 70%, rgba(0,217,165,0.1) 0%, transparent 35%),
-        radial-gradient(circle at 50% 50%, rgba(255,107,0,0.08) 0%, transparent 40%);
+        radial-gradient(circle at 30% 40%, rgba(255,107,53,0.12) 0%, transparent 35%),
+        radial-gradient(circle at 70% 60%, rgba(0,217,165,0.12) 0%, transparent 35%);
     animation: heroPulse 12s ease-in-out infinite;
 }
 
@@ -140,8 +136,8 @@ body.es .lang-en { display: none !important; }
 
 .hero-badge {
     display: inline-block;
-    background: rgba(155,89,182,0.2);
-    color: var(--purple);
+    background: rgba(255,215,0,0.2);
+    color: var(--gold);
     padding: 8px 20px;
     border-radius: 30px;
     font-size: 0.75rem;
@@ -191,7 +187,6 @@ body.es .lang-en { display: none !important; }
     animation: fadeIn 1s ease-out 0.6s both;
 }
 
-.hero-headline .highlight-purple { color: var(--purple); }
 .hero-headline .highlight-orange { color: var(--orange); }
 .hero-headline .highlight-teal { color: var(--teal); }
 
@@ -277,7 +272,7 @@ body.es .lang-en { display: none !important; }
 /* ============ SECTION STYLES ============ */
 .section {
     padding: 80px 20px;
-    max-width: 1100px;
+    max-width: 900px;
     margin: 0 auto;
 }
 
@@ -287,7 +282,7 @@ body.es .lang-en { display: none !important; }
 }
 
 .section.alt-bg .section-inner {
-    max-width: 1100px;
+    max-width: 900px;
     margin: 0 auto;
 }
 
@@ -324,21 +319,21 @@ body.es .lang-en { display: none !important; }
     line-height: 1.6;
 }
 
-/* ============ WORKOUTS GRID ============ */
+/* ============ WORKOUTS GRID - 2 GAMES ============ */
 .workouts-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 25px;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 650px) {
     .workouts-grid { grid-template-columns: 1fr; }
 }
 
 .workout-card {
     background: var(--card);
     border-radius: 20px;
-    padding: 35px 25px;
+    padding: 40px 30px;
     text-align: center;
     position: relative;
     overflow: hidden;
@@ -355,66 +350,57 @@ body.es .lang-en { display: none !important; }
     height: 4px;
 }
 
-.workout-card.reaction::before { background: linear-gradient(90deg, var(--purple), #8E44AD); }
 .workout-card.match::before { background: linear-gradient(90deg, var(--gold), var(--orange)); }
 .workout-card.sequence::before { background: linear-gradient(90deg, var(--teal), var(--cyan)); }
-.workout-card.challenge::before { background: linear-gradient(90deg, var(--gold), var(--fire), var(--teal)); }
 
 .workout-card:hover { transform: translateY(-8px); }
-.workout-card.reaction:hover { border-color: var(--purple); box-shadow: 0 20px 50px rgba(155,89,182,0.25); }
 .workout-card.match:hover { border-color: var(--orange); box-shadow: 0 20px 50px rgba(255,107,53,0.25); }
 .workout-card.sequence:hover { border-color: var(--teal); box-shadow: 0 20px 50px rgba(0,217,165,0.25); }
-.workout-card.challenge:hover { border-color: var(--gold); box-shadow: 0 20px 50px rgba(255,215,0,0.25); }
 
-.workout-icon { font-size: 3rem; margin-bottom: 12px; }
+.workout-icon { font-size: 3.5rem; margin-bottom: 15px; }
 
 .workout-name {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.8rem;
+    font-size: 2rem;
     letter-spacing: 3px;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
 }
 
-.workout-card.reaction .workout-name { color: var(--purple); }
 .workout-card.match .workout-name { color: var(--orange); }
 .workout-card.sequence .workout-name { color: var(--teal); }
-.workout-card.challenge .workout-name { color: var(--gold); }
 
 .workout-type {
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 2px;
     color: var(--muted);
-    margin-bottom: 15px;
+    margin-bottom: 18px;
 }
 
 .workout-desc {
     color: var(--muted);
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     line-height: 1.6;
     margin-bottom: 20px;
-    min-height: 50px;
 }
 
 .workout-badge {
     display: inline-block;
-    padding: 6px 14px;
+    padding: 8px 16px;
     border-radius: 20px;
-    font-size: 0.65rem;
+    font-size: 0.7rem;
     font-weight: 700;
     letter-spacing: 1px;
 }
 
-.workout-card.reaction .workout-badge { background: rgba(155,89,182,0.2); color: var(--purple); }
 .workout-card.match .workout-badge { background: rgba(255,107,53,0.2); color: var(--orange); }
 .workout-card.sequence .workout-badge { background: rgba(0,217,165,0.2); color: var(--teal); }
-.workout-card.challenge .workout-badge { background: rgba(255,215,0,0.2); color: var(--gold); }
 
 /* ============ HOW IT WORKS ============ */
 .how-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 30px;
+    gap: 25px;
     margin-top: 40px;
 }
 
@@ -464,68 +450,11 @@ body.es .lang-en { display: none !important; }
     line-height: 1.5;
 }
 
-/* ============ UNIQUE FEATURE ============ */
-.unique-section {
-    text-align: center;
-    padding: 60px 20px;
-    background: linear-gradient(135deg, rgba(155,89,182,0.1), rgba(0,217,165,0.05));
-    border-top: 1px solid var(--purple);
-    border-bottom: 1px solid var(--teal);
-}
-
-.unique-inner {
-    max-width: 700px;
-    margin: 0 auto;
-}
-
-.unique-badge {
-    display: inline-block;
-    background: rgba(155,89,182,0.25);
-    color: var(--purple);
-    padding: 8px 20px;
-    border-radius: 30px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 20px;
-}
-
-.unique-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 2.2rem;
-    letter-spacing: 3px;
-    margin-bottom: 15px;
-}
-
-.unique-desc {
-    color: var(--muted);
-    font-size: 1rem;
-    line-height: 1.7;
-    margin-bottom: 25px;
-}
-
-.unique-flow {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
-    flex-wrap: wrap;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.1rem;
-    letter-spacing: 2px;
-}
-
-.unique-flow .step-react { color: var(--purple); }
-.unique-flow .step-match { color: var(--orange); }
-.unique-flow .step-seq { color: var(--teal); }
-.unique-flow .arrow { color: var(--muted); }
-
 /* ============ VALUE PROPS ============ */
 .props-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 25px;
+    gap: 20px;
 }
 
 @media (max-width: 800px) {
@@ -550,11 +479,11 @@ body.es .lang-en { display: none !important; }
     transform: translateY(-5px);
 }
 
-.prop-icon { font-size: 2.2rem; margin-bottom: 12px; }
+.prop-icon { font-size: 2rem; margin-bottom: 12px; }
 
 .prop-title {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.1rem;
+    font-size: 1rem;
     letter-spacing: 2px;
     margin-bottom: 8px;
     color: var(--gold);
@@ -562,7 +491,7 @@ body.es .lang-en { display: none !important; }
 
 .prop-text {
     color: var(--muted);
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     line-height: 1.5;
 }
 
@@ -904,12 +833,11 @@ body.es .lang-en { display: none !important; }
     .final-title { font-size: 2rem; }
     .btn { padding: 15px 30px; font-size: 1rem; }
     .cta-btn { padding: 16px 25px; font-size: 1rem; }
-    .workout-card { padding: 25px 20px; }
+    .workout-card { padding: 30px 20px; }
     .final-icon { width: 100px; height: 100px; }
     .pricing-amount { font-size: 3rem; }
     .pricing-card { padding: 30px 20px; }
     .nav-login { padding: 5px 12px; font-size: 0.65rem; }
-    .unique-flow { font-size: 0.9rem; }
 }
 </style>
 </head>
@@ -937,8 +865,8 @@ body.es .lang-en { display: none !important; }
 <section class="hero">
     <div class="hero-content">
         <div class="hero-badge">
-            <span class="lang-en">⚡ Reaction + Memory Workouts</span>
-            <span class="lang-es">⚡ Ejercicios de Reacción + Memoria</span>
+            <span class="lang-en">🧠 Pattern & Space Memory Workouts</span>
+            <span class="lang-es">🧠 Ejercicios de Memoria de Patrones y Espacio</span>
         </div>
         <div class="hero-logo">
             <span class="laugh">LAUGH</span><span class="court">COURT</span>
@@ -948,12 +876,12 @@ body.es .lang-en { display: none !important; }
             <span class="lang-es">DONDE LA ALEGRÍA SE UNE AL JUEGO</span>
         </div>
         <h1 class="hero-headline">
-            <span class="lang-en"><span class="highlight-purple">REACT</span>. <span class="highlight-orange">MATCH</span>. <span class="highlight-teal">SEQUENCE</span>.<br>THE CHALLENGE.</span>
-            <span class="lang-es"><span class="highlight-purple">REACCIONA</span>. <span class="highlight-orange">MATCH</span>. <span class="highlight-teal">SECUENCIA</span>.<br>EL RETO.</span>
+            <span class="lang-en"><span class="highlight-orange">MATCH</span> THE PATTERN.<br><span class="highlight-teal">SEQUENCE</span> THE ORDER.</span>
+            <span class="lang-es"><span class="highlight-orange">MATCH</span> EL PATRÓN.<br><span class="highlight-teal">SECUENCIA</span> EL ORDEN.</span>
         </h1>
         <p class="hero-sub">
-            <span class="lang-en">Reaction time and memory workouts that sharpen your mind and make you smile. Perfect for everyone who wants to stay sharp.</span>
-            <span class="lang-es">Ejercicios de tiempo de reacción y memoria que agudizan tu mente y te hacen sonreír. Perfecto para todos los que quieran mantenerse agudos.</span>
+            <span class="lang-en">Two memory workouts that sharpen your mind and make you smile. Simple to learn. Endless challenge. Perfect for everyone.</span>
+            <span class="lang-es">Dos ejercicios de memoria que agudizan tu mente y te hacen sonreír. Fácil de aprender. Reto infinito. Perfecto para todos.</span>
         </p>
         <div class="hero-cta">
             <a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="btn btn-primary">
@@ -977,53 +905,35 @@ body.es .lang-en { display: none !important; }
 <section class="section fade-in">
     <div class="section-header">
         <div class="section-badge">
-            <span class="lang-en">🏀 The Workouts</span>
-            <span class="lang-es">🏀 Los Ejercicios</span>
+            <span class="lang-en">🏀 Two Workouts</span>
+            <span class="lang-es">🏀 Dos Ejercicios</span>
         </div>
         <h2 class="section-title">
             <span class="lang-en">CHOOSE YOUR WORKOUT</span>
             <span class="lang-es">ELIGE TU EJERCICIO</span>
         </h2>
         <p class="section-sub">
-            <span class="lang-en">Three workouts that train different skills. One challenge that combines them all.</span>
-            <span class="lang-es">Tres ejercicios que entrenan diferentes habilidades. Un reto que los combina todos.</span>
+            <span class="lang-en">Two games. Two types of memory. 60 divisions of challenge.</span>
+            <span class="lang-es">Dos juegos. Dos tipos de memoria. 60 divisiones de reto.</span>
         </p>
     </div>
     
     <div class="workouts-grid">
-        <!-- THE REACTION -->
-        <div class="workout-card reaction">
-            <div class="workout-icon">⚡</div>
-            <div class="workout-name">THE REACTION</div>
-            <div class="workout-type">
-                <span class="lang-en">Reaction Time</span>
-                <span class="lang-es">Tiempo de Reacción</span>
-            </div>
-            <p class="workout-desc">
-                <span class="lang-en">Tap cells before they disappear. After each perfect round, see a memory flash — training your brain without even trying.</span>
-                <span class="lang-es">Toca las celdas antes de que desaparezcan. Después de cada ronda perfecta, ve un flash de memoria — entrenando tu cerebro sin darte cuenta.</span>
-            </p>
-            <div class="workout-badge">
-                <span class="lang-en">⚡ PURE SPEED + MEMORY FLASH</span>
-                <span class="lang-es">⚡ VELOCIDAD PURA + FLASH DE MEMORIA</span>
-            </div>
-        </div>
-        
         <!-- THE MATCH -->
         <div class="workout-card match">
-            <div class="workout-icon">🎯</div>
+            <div class="workout-icon">🧠</div>
             <div class="workout-name">THE MATCH</div>
             <div class="workout-type">
                 <span class="lang-en">Spatial Memory</span>
                 <span class="lang-es">Memoria Espacial</span>
             </div>
             <p class="workout-desc">
-                <span class="lang-en">Cells light up simultaneously. Remember their positions and tap them all. Find every cell to advance!</span>
-                <span class="lang-es">Las celdas se iluminan simultáneamente. Recuerda sus posiciones y tócalas todas. ¡Encuentra cada celda para avanzar!</span>
+                <span class="lang-en">Numbered cells flash simultaneously. Memorize their positions, then tap them back in order. Where were they?</span>
+                <span class="lang-es">Celdas numeradas se iluminan simultáneamente. Memoriza sus posiciones, luego tócalas en orden. ¿Dónde estaban?</span>
             </p>
             <div class="workout-badge">
-                <span class="lang-en">🎯 FIND ALL THE CELLS</span>
-                <span class="lang-es">🎯 ENCUENTRA TODAS LAS CELDAS</span>
+                <span class="lang-en">🧠 MEMORIZE POSITIONS</span>
+                <span class="lang-es">🧠 MEMORIZA POSICIONES</span>
             </div>
         </div>
         
@@ -1036,58 +946,13 @@ body.es .lang-en { display: none !important; }
                 <span class="lang-es">Memoria Secuencial</span>
             </div>
             <p class="workout-desc">
-                <span class="lang-en">Watch cells light up one by one. Tap them back in the exact order. The longer the chain, the bigger the challenge!</span>
-                <span class="lang-es">Mira las celdas iluminarse una por una. Repítelas en el orden exacto. ¡Mientras más larga la cadena, mayor el reto!</span>
+                <span class="lang-en">Watch cells light up one by one with numbers. Tap them back in the exact order. The longer the chain, the bigger the challenge!</span>
+                <span class="lang-es">Mira las celdas iluminarse una por una con números. Repítelas en el orden exacto. ¡Mientras más larga la cadena, mayor el reto!</span>
             </p>
             <div class="workout-badge">
                 <span class="lang-en">🔢 REPEAT THE ORDER</span>
                 <span class="lang-es">🔢 REPITE EL ORDEN</span>
             </div>
-        </div>
-        
-        <!-- THE REACTION CHALLENGE -->
-        <div class="workout-card challenge">
-            <div class="workout-icon">🏆</div>
-            <div class="workout-name">THE REACTION CHALLENGE</div>
-            <div class="workout-type">
-                <span class="lang-en">Ultimate Test</span>
-                <span class="lang-es">Prueba Final</span>
-            </div>
-            <p class="workout-desc">
-                <span class="lang-en">React fast, then prove your memory. Two phases: REACT → RECALL. Can you become a Champion?</span>
-                <span class="lang-es">Reacciona rápido, luego demuestra tu memoria. Dos fases: REACCIONA → RECUERDA. ¿Puedes ser Campeón?</span>
-            </p>
-            <div class="workout-badge">
-                <span class="lang-en">🏆 REACT + REMEMBER = CHAMPION</span>
-                <span class="lang-es">🏆 REACCIONA + RECUERDA = CAMPEÓN</span>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ============ UNIQUE FEATURE ============ -->
-<section class="unique-section fade-in">
-    <div class="unique-inner">
-        <div class="unique-badge">
-            <span class="lang-en">✨ Only on LaughCourt</span>
-            <span class="lang-es">✨ Solo en LaughCourt</span>
-        </div>
-        <h2 class="unique-title">
-            <span class="lang-en">THE REACTION TRAINS YOUR MEMORY — AUTOMATICALLY</span>
-            <span class="lang-es">THE REACTION ENTRENA TU MEMORIA — AUTOMÁTICAMENTE</span>
-        </h2>
-        <p class="unique-desc">
-            <span class="lang-en">After every perfect reaction round, you see a brief memory flash: first all cells at once (MATCH), then in order (SEQUENCE). Your brain naturally asks "Could I remember those?" — and discovers what needs practice.</span>
-            <span class="lang-es">Después de cada ronda de reacción perfecta, ves un flash de memoria: primero todas las celdas a la vez (MATCH), luego en orden (SECUENCIA). Tu cerebro naturalmente pregunta "¿Podría recordar esas?" — y descubre qué necesita práctica.</span>
-        </p>
-        <div class="unique-flow">
-            <span class="step-react">⚡ REACT</span>
-            <span class="arrow">→</span>
-            <span class="step-match">🎯 MATCH FLASH</span>
-            <span class="arrow">→</span>
-            <span class="step-seq">🔢 SEQUENCE FLASH</span>
-            <span class="arrow">→</span>
-            <span class="step-react">⬆️ LEVEL UP</span>
         </div>
     </div>
 </section>
@@ -1104,10 +969,6 @@ body.es .lang-en { display: none !important; }
                 <span class="lang-en">HOW IT WORKS</span>
                 <span class="lang-es">CÓMO FUNCIONA</span>
             </h2>
-            <p class="section-sub">
-                <span class="lang-en">Every workout follows the same simple pattern. Master the basics, then increase the challenge.</span>
-                <span class="lang-es">Cada ejercicio sigue el mismo patrón simple. Domina lo básico, luego aumenta el reto.</span>
-            </p>
         </div>
         
         <div class="how-grid">
@@ -1118,8 +979,8 @@ body.es .lang-en { display: none !important; }
                     <span class="lang-es">OBSERVA</span>
                 </div>
                 <p class="how-text">
-                    <span class="lang-en">Cells light up on the 5×5 court. Pay attention to where and when.</span>
-                    <span class="lang-es">Las celdas se iluminan en la cancha 5×5. Presta atención a dónde y cuándo.</span>
+                    <span class="lang-en">Numbered cells light up on the 5×5 court. Pay attention to where and when.</span>
+                    <span class="lang-es">Celdas numeradas se iluminan en la cancha 5×5. Presta atención a dónde y cuándo.</span>
                 </p>
             </div>
             <div class="how-step">
@@ -1129,8 +990,8 @@ body.es .lang-en { display: none !important; }
                     <span class="lang-es">RECUERDA</span>
                 </div>
                 <p class="how-text">
-                    <span class="lang-en">Keep track of positions (MATCH), order (SEQUENCE), or react in time (REACTION).</span>
-                    <span class="lang-es">Recuerda posiciones (MATCH), orden (SECUENCIA), o reacciona a tiempo (REACCIÓN).</span>
+                    <span class="lang-en">Track positions (MATCH) or order (SEQUENCE). Numbers help you keep count.</span>
+                    <span class="lang-es">Recuerda posiciones (MATCH) u orden (SECUENCIA). Los números te ayudan a contar.</span>
                 </p>
             </div>
             <div class="how-step">
@@ -1140,8 +1001,8 @@ body.es .lang-en { display: none !important; }
                     <span class="lang-es">TOCA Y SUBE</span>
                 </div>
                 <p class="how-text">
-                    <span class="lang-en">Get 2 perfect rounds to level up. 10 levels × 3 speeds = endless challenge.</span>
-                    <span class="lang-es">Logra 2 rondas perfectas para subir. 10 niveles × 3 velocidades = reto infinito.</span>
+                    <span class="lang-en">Win 3 rounds to earn a GoStar. 10 levels × 3 speeds = endless challenge.</span>
+                    <span class="lang-es">Gana 3 rondas para ganar un GoStar. 10 niveles × 3 velocidades = reto infinito.</span>
                 </p>
             </div>
         </div>
@@ -1165,30 +1026,30 @@ body.es .lang-en { display: none !important; }
                 <span class="lang-es">MANTENTE AGUDO</span>
             </div>
             <p class="prop-text">
-                <span class="lang-en">Reaction + Memory workouts that challenge your brain daily.</span>
-                <span class="lang-es">Ejercicios de Reacción + Memoria que retan tu cerebro diariamente.</span>
+                <span class="lang-en">Memory workouts that challenge your brain daily.</span>
+                <span class="lang-es">Ejercicios que retan tu cerebro diariamente.</span>
             </p>
         </div>
         <div class="prop">
             <div class="prop-icon">📱</div>
             <div class="prop-title">
                 <span class="lang-en">PLAY ANYWHERE</span>
-                <span class="lang-es">JUEGA DONDE QUIERAS</span>
+                <span class="lang-es">JUEGA DONDE SEA</span>
             </div>
             <p class="prop-text">
-                <span class="lang-en">Phone, tablet, or desktop. No app download needed.</span>
-                <span class="lang-es">Teléfono, tablet o computadora. Sin descargar app.</span>
+                <span class="lang-en">Phone, tablet, or desktop. No app needed.</span>
+                <span class="lang-es">Teléfono, tablet o PC. Sin descargar app.</span>
             </p>
         </div>
         <div class="prop">
             <div class="prop-icon">🏆</div>
             <div class="prop-title">
-                <span class="lang-en">90 DIVISIONS</span>
-                <span class="lang-es">90 DIVISIONES</span>
+                <span class="lang-en">60 DIVISIONS</span>
+                <span class="lang-es">60 DIVISIONES</span>
             </div>
             <p class="prop-text">
-                <span class="lang-en">10 levels × 3 speeds × 3 workouts. Plus THE CHALLENGE.</span>
-                <span class="lang-es">10 niveles × 3 velocidades × 3 ejercicios. Más EL RETO.</span>
+                <span class="lang-en">10 levels × 3 speeds × 2 games.</span>
+                <span class="lang-es">10 niveles × 3 velocidades × 2 juegos.</span>
             </p>
         </div>
         <div class="prop">
@@ -1198,8 +1059,8 @@ body.es .lang-en { display: none !important; }
                 <span class="lang-es">ALEGRÍA PRIMERO</span>
             </div>
             <p class="prop-text">
-                <span class="lang-en">Laugh emojis celebrate every win. Workouts should be fun!</span>
-                <span class="lang-es">Emojis de risa celebran cada victoria. ¡Los ejercicios deben ser divertidos!</span>
+                <span class="lang-en">Emojis celebrate every win. Workouts should be fun!</span>
+                <span class="lang-es">Emojis celebran cada victoria. ¡Debe ser divertido!</span>
             </p>
         </div>
     </div>
@@ -1235,11 +1096,11 @@ body.es .lang-en { display: none !important; }
                 <div class="audience-icon">🏥</div>
                 <div class="audience-title">
                     <span class="lang-en">REHAB FACILITIES</span>
-                    <span class="lang-es">CENTROS DE REHABILITACIÓN</span>
+                    <span class="lang-es">CENTROS DE REHAB</span>
                 </div>
                 <p class="audience-text">
                     <span class="lang-en">Cognitive engagement for residents. One PIN works on multiple devices. Bilingual EN/ES.</span>
-                    <span class="lang-es">Estimulación cognitiva para residentes. Un PIN funciona en múltiples dispositivos. Bilingüe EN/ES.</span>
+                    <span class="lang-es">Estimulación cognitiva para residentes. Un PIN en múltiples dispositivos. Bilingüe EN/ES.</span>
                 </p>
             </div>
             <div class="audience-card">
@@ -1249,8 +1110,8 @@ body.es .lang-en { display: none !important; }
                     <span class="lang-es">TODOS</span>
                 </div>
                 <p class="audience-text">
-                    <span class="lang-en">Anyone who wants to train their reaction time and memory while having fun.</span>
-                    <span class="lang-es">Cualquiera que quiera entrenar su tiempo de reacción y memoria mientras se divierte.</span>
+                    <span class="lang-en">Anyone who wants to train their memory while having fun.</span>
+                    <span class="lang-es">Cualquiera que quiera entrenar su memoria mientras se divierte.</span>
                 </p>
             </div>
         </div>
@@ -1293,18 +1154,18 @@ body.es .lang-en { display: none !important; }
             </li>
             <li>
                 <span class="check">✓</span>
-                <span class="lang-en">All workouts + THE CHALLENGE</span>
-                <span class="lang-es">Todos los ejercicios + EL RETO</span>
+                <span class="lang-en">Both workouts: MATCH + SEQUENCE</span>
+                <span class="lang-es">Ambos ejercicios: MATCH + SECUENCIA</span>
             </li>
             <li>
                 <span class="check">✓</span>
-                <span class="lang-en">90+ divisions of gameplay</span>
-                <span class="lang-es">90+ divisiones de juego</span>
+                <span class="lang-en">60 divisions of gameplay</span>
+                <span class="lang-es">60 divisiones de juego</span>
             </li>
             <li>
                 <span class="check">✓</span>
-                <span class="lang-en">Progress tracking</span>
-                <span class="lang-es">Seguimiento de progreso</span>
+                <span class="lang-en">Progress tracking with GoStars</span>
+                <span class="lang-es">Seguimiento con GoStars</span>
             </li>
             <li>
                 <span class="check">✓</span>
@@ -1377,16 +1238,16 @@ body.es .lang-en { display: none !important; }
     </div>
     <div class="footer-company">by GoStar Digital LLC 🇵🇷</div>
     <div class="footer-trademarks">
-        LaughCourt™, The Starting Five™, GoStars™, and Ritnome™ are trademarks of GoStar Digital LLC.
+        LaughCourt™, GoStars™, and Ritnome™ are trademarks of GoStar Digital LLC.
     </div>
 </footer>
 
 <script>
 (function() {
-    var currentLang = localStorage.getItem('laughcourt_lang') || 'en';
+    var currentLang = localStorage.getItem('lc-lang') || 'en';
     function setLang(lang) {
         currentLang = lang;
-        localStorage.setItem('laughcourt_lang', lang);
+        localStorage.setItem('lc-lang', lang);
         document.body.className = lang;
         document.getElementById('btnEn').className = lang === 'en' ? 'nav-lang-btn active' : 'nav-lang-btn';
         document.getElementById('btnEs').className = lang === 'es' ? 'nav-lang-btn active' : 'nav-lang-btn';
