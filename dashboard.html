@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Choose Your Workout | LaughCourt</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+    --gold: #FFD700;
+    --orange: #FF6B35;
+    --teal: #00D9A5;
+    --purple: #9B59B6;
+    --dark: #0a0a0f;
+    --darker: #050508;
+    --card: #111118;
+    --text: #FFFFFF;
+    --muted: #8892a0;
+    --border: rgba(255,255,255,0.08);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--dark);
+    color: var(--text);
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-x: hidden;
+}
+
+body.es .lang-en { display: none !important; }
+body.en .lang-es { display: none !important; }
+
+/* ============ HEADER ============ */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background: var(--darker);
+    border-bottom: 1px solid var(--border);
+}
+
+.logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 3px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.logo .laugh { color: var(--gold); }
+.logo .court { color: var(--text); }
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.lang-toggle {
+    display: flex;
+    gap: 3px;
+    background: var(--card);
+    padding: 3px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+}
+.lang-btn {
+    padding: 5px 10px;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    border-radius: 5px;
+    font-weight: 600;
+    font-size: 0.7rem;
+    cursor: pointer;
+    font-family: 'Outfit', sans-serif;
+    transition: all 0.2s;
+}
+.lang-btn.active {
+    background: var(--gold);
+    color: var(--dark);
+}
+
+.logout-btn {
+    padding: 8px 15px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-family: 'Outfit', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.logout-btn:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+}
+
+/* ============ MAIN ============ */
+.main {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 30px 20px 40px;
+}
+
+.page-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 3px;
+    text-align: center;
+    margin-bottom: 25px;
+    color: var(--gold);
+}
+
+/* ============ WORKOUT GRID ============ */
+.workout-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.workout-card {
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    padding: 25px 15px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: block;
+}
+
+.workout-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.workout-card.reaction {
+    border-color: rgba(155, 89, 182, 0.3);
+}
+.workout-card.reaction:hover {
+    border-color: var(--purple);
+    box-shadow: 0 10px 30px rgba(155, 89, 182, 0.2);
+}
+
+.workout-card.match {
+    border-color: rgba(255, 107, 53, 0.3);
+}
+.workout-card.match:hover {
+    border-color: var(--orange);
+    box-shadow: 0 10px 30px rgba(255, 107, 53, 0.2);
+}
+
+.workout-card.sequence {
+    border-color: rgba(0, 217, 165, 0.3);
+}
+.workout-card.sequence:hover {
+    border-color: var(--teal);
+    box-shadow: 0 10px 30px rgba(0, 217, 165, 0.2);
+}
+
+.workout-card.challenge {
+    border-color: rgba(255, 215, 0, 0.3);
+}
+.workout-card.challenge:hover {
+    border-color: var(--gold);
+    box-shadow: 0 10px 30px rgba(255, 215, 0, 0.2);
+}
+
+.workout-icon {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.workout-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 2px;
+    color: var(--text);
+    margin-bottom: 5px;
+}
+
+.workout-card.reaction .workout-name { color: var(--purple); }
+.workout-card.match .workout-name { color: var(--orange); }
+.workout-card.sequence .workout-name { color: var(--teal); }
+.workout-card.challenge .workout-name { color: var(--gold); }
+
+.workout-desc {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-bottom: 12px;
+    line-height: 1.4;
+}
+
+.workout-level {
+    display: inline-block;
+    padding: 5px 12px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 1px;
+}
+
+/* ============ PROGRESS SECTION ============ */
+.progress-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.progress-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-bottom: 10px;
+}
+
+.gostars-display {
+    font-size: 1.8rem;
+    letter-spacing: 3px;
+    margin-bottom: 5px;
+}
+
+.gostars-label {
+    font-size: 0.85rem;
+    color: var(--gold);
+    font-weight: 600;
+}
+
+/* ============ SPEED SELECTOR ============ */
+.speed-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.speed-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-bottom: 15px;
+}
+
+.speed-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.speed-btn {
+    padding: 12px 25px;
+    border: 2px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    border-radius: 10px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.speed-btn:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+}
+
+.speed-btn.active {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--dark);
+}
+
+.speed-btn.locked {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.speed-btn.locked:hover {
+    border-color: var(--border);
+    color: var(--muted);
+}
+
+/* ============ TRIAL BANNER ============ */
+.trial-banner {
+    background: linear-gradient(135deg, rgba(255,215,0,0.1), rgba(255,107,53,0.1));
+    border: 1px solid rgba(255,215,0,0.2);
+    border-radius: 12px;
+    padding: 15px 20px;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.trial-text {
+    font-size: 0.85rem;
+    color: var(--text);
+    margin-bottom: 8px;
+}
+
+.trial-days {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    color: var(--gold);
+    letter-spacing: 2px;
+}
+
+.upgrade-link {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 20px;
+    background: var(--gold);
+    color: var(--dark);
+    text-decoration: none;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    transition: all 0.2s;
+}
+
+.upgrade-link:hover {
+    transform: scale(1.05);
+}
+
+/* ============ FOOTER NAV ============ */
+.footer-nav {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding-top: 10px;
+}
+
+.footer-link {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.8rem;
+    transition: color 0.2s;
+}
+
+.footer-link:hover {
+    color: var(--gold);
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 400px) {
+    .workout-grid {
+        gap: 10px;
+    }
+    .workout-card {
+        padding: 20px 10px;
+    }
+    .workout-icon {
+        font-size: 2rem;
+    }
+    .workout-name {
+        font-size: 1.1rem;
+    }
+    .speed-btn {
+        padding: 10px 18px;
+        font-size: 0.9rem;
+    }
+}
+</style>
+</head>
+<body class="en">
+
+<!-- ============ HEADER ============ -->
+<header class="header">
+    <div class="logo">
+        🏀 <span class="laugh">LAUGH</span><span class="court">COURT</span>
+    </div>
+    <div class="header-right">
+        <div class="lang-toggle">
+            <button class="lang-btn active" id="btnEn">EN</button>
+            <button class="lang-btn" id="btnEs">ES</button>
+        </div>
+        <button class="logout-btn" onclick="logout()">
+            <span class="lang-en">LOGOUT</span>
+            <span class="lang-es">SALIR</span>
+        </button>
+    </div>
+</header>
+
+<!-- ============ MAIN ============ -->
+<main class="main">
+    <h1 class="page-title">
+        <span class="lang-en">CHOOSE YOUR WORKOUT</span>
+        <span class="lang-es">ELIGE TU EJERCICIO</span>
+    </h1>
+
+    <!-- Trial Banner (shown for trial users) -->
+    <div class="trial-banner" id="trialBanner" style="display: none;">
+        <p class="trial-text">
+            <span class="lang-en">🎉 You're on a free trial!</span>
+            <span class="lang-es">🎉 ¡Estás en prueba gratis!</span>
+        </p>
+        <p class="trial-days" id="trialDays">5 DAYS LEFT</p>
+        <a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="upgrade-link">
+            <span class="lang-en">UPGRADE → $5/mo</span>
+            <span class="lang-es">MEJORAR → $5/mes</span>
+        </a>
+    </div>
+
+    <!-- Workout Grid -->
+    <div class="workout-grid">
+        <!-- THE REACTION -->
+        <a href="/the-reaction.html" class="workout-card reaction">
+            <span class="workout-icon">⚡</span>
+            <div class="workout-name">THE REACTION</div>
+            <p class="workout-desc">
+                <span class="lang-en">Speed + Memory Flash</span>
+                <span class="lang-es">Velocidad + Flash de Memoria</span>
+            </p>
+            <span class="workout-level" id="reactionLevel">L1-SLOW</span>
+        </a>
+
+        <!-- THE MATCH -->
+        <a href="/the-match.html" class="workout-card match">
+            <span class="workout-icon">🎯</span>
+            <div class="workout-name">THE MATCH</div>
+            <p class="workout-desc">
+                <span class="lang-en">Find All The Cells</span>
+                <span class="lang-es">Encuentra Todas Las Celdas</span>
+            </p>
+            <span class="workout-level" id="matchLevel">L1-SLOW</span>
+        </a>
+
+        <!-- THE SEQUENCE -->
+        <a href="/the-sequence.html" class="workout-card sequence">
+            <span class="workout-icon">🔢</span>
+            <div class="workout-name">THE SEQUENCE</div>
+            <p class="workout-desc">
+                <span class="lang-en">Repeat The Order</span>
+                <span class="lang-es">Repite El Orden</span>
+            </p>
+            <span class="workout-level" id="sequenceLevel">L1-SLOW</span>
+        </a>
+
+        <!-- THE REACTION CHALLENGE -->
+        <a href="/the-challenge.html" class="workout-card challenge">
+            <span class="workout-icon">🏆</span>
+            <div class="workout-name">THE CHALLENGE</div>
+            <p class="workout-desc">
+                <span class="lang-en">React + Remember</span>
+                <span class="lang-es">Reacciona + Recuerda</span>
+            </p>
+            <span class="workout-level" id="challengeLevel">L1-SLOW</span>
+        </a>
+    </div>
+
+    <!-- Progress Section -->
+    <div class="progress-section">
+        <p class="progress-title">
+            <span class="lang-en">YOUR PROGRESS</span>
+            <span class="lang-es">TU PROGRESO</span>
+        </p>
+        <div class="gostars-display" id="gostarsDisplay">⭐⭐⭐☆☆☆☆☆☆☆</div>
+        <p class="gostars-label"><span id="gostarCount">3</span> <span class="lang-en">GoStars Earned</span><span class="lang-es">GoStars Ganados</span></p>
+    </div>
+
+    <!-- Speed Selector -->
+    <div class="speed-section">
+        <p class="speed-title">
+            <span class="lang-en">SELECT SPEED</span>
+            <span class="lang-es">SELECCIONAR VELOCIDAD</span>
+        </p>
+        <div class="speed-buttons">
+            <button class="speed-btn active" data-speed="slow" id="speedSlow">SLOW</button>
+            <button class="speed-btn" data-speed="med" id="speedMed">MED</button>
+            <button class="speed-btn" data-speed="fast" id="speedFast">FAST</button>
+        </div>
+    </div>
+
+    <!-- Footer Links -->
+    <nav class="footer-nav">
+        <a href="/faq" class="footer-link">FAQ</a>
+        <a href="/privacy.html" class="footer-link">
+            <span class="lang-en">Privacy</span>
+            <span class="lang-es">Privacidad</span>
+        </a>
+        <a href="/terms.html" class="footer-link">
+            <span class="lang-en">Terms</span>
+            <span class="lang-es">Términos</span>
+        </a>
+    </nav>
+</main>
+
+<script>
+(function() {
+    // ==================== LANGUAGE ====================
+    var currentLang = localStorage.getItem('laughcourt_lang') || 'en';
+    
+    function setLang(lang) {
+        currentLang = lang;
+        localStorage.setItem('laughcourt_lang', lang);
+        document.body.className = lang;
+        document.getElementById('btnEn').className = lang === 'en' ? 'lang-btn active' : 'lang-btn';
+        document.getElementById('btnEs').className = lang === 'es' ? 'lang-btn active' : 'lang-btn';
+    }
+
+    document.getElementById('btnEn').addEventListener('click', function() { setLang('en'); });
+    document.getElementById('btnEs').addEventListener('click', function() { setLang('es'); });
+    setLang(currentLang);
+
+    // ==================== SPEED SELECTOR ====================
+    var currentSpeed = localStorage.getItem('laughcourt_speed') || 'slow';
+    var speedBtns = document.querySelectorAll('.speed-btn');
+    
+    function setSpeed(speed) {
+        // Check if user has access (for trial users, only slow)
+        var isTrial = localStorage.getItem('laughcourt_trial') === 'true';
+        if (isTrial && speed !== 'slow') {
+            alert(currentLang === 'en' ? 
+                'Upgrade to $5/month to unlock MED and FAST speeds!' : 
+                '¡Mejora a $5/mes para desbloquear velocidades MEDIA y RÁPIDA!');
+            return;
+        }
+        
+        currentSpeed = speed;
+        localStorage.setItem('laughcourt_speed', speed);
+        
+        speedBtns.forEach(function(btn) {
+            btn.classList.remove('active');
+            if (btn.dataset.speed === speed) {
+                btn.classList.add('active');
+            }
+        });
+        
+        updateLevelDisplays();
+    }
+
+    speedBtns.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            setSpeed(btn.dataset.speed);
+        });
+    });
+
+    // Set initial speed
+    setSpeed(currentSpeed);
+
+    // ==================== TRIAL STATUS ====================
+    var isTrial = localStorage.getItem('laughcourt_trial') === 'true';
+    var trialBanner = document.getElementById('trialBanner');
+    
+    if (isTrial) {
+        trialBanner.style.display = 'block';
+        // Lock MED and FAST buttons
+        document.getElementById('speedMed').classList.add('locked');
+        document.getElementById('speedFast').classList.add('locked');
+        
+        // Show trial days (placeholder - would come from server)
+        var trialDays = localStorage.getItem('laughcourt_trial_days') || '7';
+        document.getElementById('trialDays').textContent = trialDays + (currentLang === 'en' ? ' DAYS LEFT' : ' DÍAS RESTANTES');
+    }
+
+    // ==================== LEVEL DISPLAYS ====================
+    function updateLevelDisplays() {
+        var speedLabel = currentSpeed.toUpperCase();
+        
+        // Get saved levels or default to 1
+        var reactionLvl = localStorage.getItem('laughcourt_reaction_level') || '1';
+        var matchLvl = localStorage.getItem('laughcourt_match_level') || '1';
+        var sequenceLvl = localStorage.getItem('laughcourt_sequence_level') || '1';
+        var challengeLvl = localStorage.getItem('laughcourt_challenge_level') || '1';
+        
+        document.getElementById('reactionLevel').textContent = 'L' + reactionLvl + '-' + speedLabel;
+        document.getElementById('matchLevel').textContent = 'L' + matchLvl + '-' + speedLabel;
+        document.getElementById('sequenceLevel').textContent = 'L' + sequenceLvl + '-' + speedLabel;
+        document.getElementById('challengeLevel').textContent = 'L' + challengeLvl + '-' + speedLabel;
+    }
+    
+    updateLevelDisplays();
+
+    // ==================== GOSTARS ====================
+    function updateGoStars() {
+        var totalGoStars = parseInt(localStorage.getItem('laughcourt_gostars') || '0');
+        var display = '';
+        for (var i = 0; i < 10; i++) {
+            display += i < totalGoStars ? '⭐' : '☆';
+        }
+        document.getElementById('gostarsDisplay').textContent = display;
+        document.getElementById('gostarCount').textContent = totalGoStars;
+    }
+    
+    updateGoStars();
+
+    // ==================== LOGOUT ====================
+    window.logout = function() {
+        if (confirm(currentLang === 'en' ? 'Are you sure you want to logout?' : '¿Seguro que quieres salir?')) {
+            // Clear session data
+            localStorage.removeItem('laughcourt_session');
+            localStorage.removeItem('laughcourt_pin');
+            window.location.href = '/login';
+        }
+    };
+
+})();
+</script>
+</body>
+</html>
