@@ -7,499 +7,331 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-:root {
-    --purple: #9B59B6;
-    --gold: #FFD700;
-    --teal: #00D9A5;
-    --pink: #FF1493;
-    --dark: #0a0a0f;
-    --card: #111118;
-    --text: #FFFFFF;
-    --muted: #8892a0;
-    --border: rgba(255,255,255,0.1);
-}
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background:var(--dark);color:var(--text);touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none}
+:root{--purple:#9B59B6;--gold:#FFD700;--teal:#00D9A5;--pink:#FF1493;--dark:#0a0a0f;--card:#12121a;--text:#FFF;--muted:#888}
+html{height:100%}
+body{min-height:100%;height:100dvh;font-family:'Outfit',sans-serif;background:var(--dark);color:var(--text);overflow:hidden;touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none;display:flex;flex-direction:column}
 
-.nav{position:fixed;top:0;left:0;right:0;background:var(--card);border-bottom:1px solid var(--border);padding-top:env(safe-area-inset-top);z-index:1000;height:calc(50px + env(safe-area-inset-top))}
-.nav-row{display:flex;align-items:center;justify-content:space-between;height:50px;padding:0 15px}
-.back-btn{padding:8px 14px;background:0;border:1px solid var(--border);color:var(--muted);border-radius:8px;font-size:0.75rem;font-weight:600;text-decoration:none}
-.nav-title{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:2px;color:var(--gold)}
+.nav{flex-shrink:0;background:var(--card);padding:12px 16px;padding-top:calc(12px + env(safe-area-inset-top));display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.1)}
+.back{padding:8px 14px;background:0;border:1px solid rgba(255,255,255,0.2);color:var(--muted);border-radius:8px;font-size:0.8rem;font-weight:600;text-decoration:none}
+.title{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:2px;color:var(--gold)}
 
-.game-box{width:100%;max-width:420px;height:100dvh;margin:0 auto;padding:8px 12px;padding-top:calc(58px + env(safe-area-inset-top));padding-bottom:env(safe-area-inset-bottom);display:flex;flex-direction:column}
+.main{flex:1;display:flex;flex-direction:column;padding:10px;padding-bottom:calc(10px + env(safe-area-inset-bottom));overflow:hidden;max-width:400px;width:100%;margin:0 auto}
 
-.stats{display:flex;justify-content:center;gap:20px;padding:8px;background:var(--card);border-radius:10px;margin-bottom:6px}
-.stat{text-align:center}
-.stat-val{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--gold)}
-.stat-lbl{font-size:0.4rem;color:var(--muted);text-transform:uppercase}
+.row{display:flex;gap:8px;margin-bottom:8px}
+.box{flex:1;background:var(--card);border-radius:10px;padding:10px;text-align:center}
+.box-val{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--gold)}
+.box-lbl{font-size:0.5rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
 
-.phases{display:flex;align-items:center;justify-content:center;gap:12px;padding:10px;background:var(--card);border-radius:10px;margin-bottom:6px}
-.phase{font-size:0.75rem;font-family:'Bebas Neue',sans-serif;padding:8px 16px;border-radius:8px;opacity:0.3}
-.phase.on{opacity:1}
-.phase.done{opacity:0.7}
-.phase.react{background:rgba(155,89,182,0.2);color:var(--purple)}
-.phase.react.on{background:rgba(155,89,182,0.5)}
-.phase.recall{background:rgba(0,217,165,0.2);color:var(--teal)}
-.phase.recall.on{background:rgba(0,217,165,0.5)}
-.arrow{color:var(--muted);font-size:0.6rem}
+.phases{display:flex;align-items:center;justify-content:center;gap:10px;background:var(--card);border-radius:10px;padding:12px;margin-bottom:8px}
+.ph{font-family:'Bebas Neue',sans-serif;font-size:0.8rem;letter-spacing:1px;padding:8px 16px;border-radius:8px;opacity:0.3}
+.ph.on{opacity:1}
+.ph.done{opacity:0.7}
+.ph.react{background:rgba(155,89,182,0.15);color:var(--purple)}
+.ph.react.on{background:rgba(155,89,182,0.4)}
+.ph.recall{background:rgba(0,217,165,0.15);color:var(--teal)}
+.ph.recall.on{background:rgba(0,217,165,0.4)}
+.ph-arrow{color:var(--muted);font-size:0.7rem}
 
-.msg{background:var(--card);border:2px solid var(--gold);border-radius:10px;padding:10px;margin-bottom:6px;text-align:center;min-height:44px;display:flex;align-items:center;justify-content:center}
+.msg{background:var(--card);border:2px solid var(--gold);border-radius:10px;padding:12px;text-align:center;margin-bottom:8px;transition:border-color 0.2s}
 .msg.react{border-color:var(--purple)}
 .msg.recall{border-color:var(--teal)}
-.msg-txt{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px}
+.msg-txt{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px}
 
-.court-wrap{flex:1;display:flex;align-items:center;justify-content:center;min-height:0}
-.court{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;padding:10px;background:#1a1a24;border-radius:16px;border:3px solid var(--gold);width:min(100%,calc(100dvh - 280px),330px);height:min(100%,calc(100dvh - 280px),330px);min-width:220px;min-height:220px;aspect-ratio:1;box-shadow:0 0 20px rgba(255,215,0,0.2)}
-.court.react{border-color:var(--purple);box-shadow:0 0 25px rgba(155,89,182,0.3)}
-.court.recall{border-color:var(--teal);box-shadow:0 0 25px rgba(0,217,165,0.3)}
+.court-area{flex:1;display:flex;align-items:center;justify-content:center;padding:5px;min-height:0}
+.court{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;padding:12px;background:#16161f;border-radius:16px;border:3px solid var(--gold);width:100%;max-width:320px;aspect-ratio:1;transition:border-color 0.2s,box-shadow 0.2s}
+.court.react{border-color:var(--purple);box-shadow:0 0 30px rgba(155,89,182,0.25)}
+.court.recall{border-color:var(--teal);box-shadow:0 0 30px rgba(0,217,165,0.25)}
 
-.cell{aspect-ratio:1;border-radius:8px;cursor:pointer;background:rgba(255,255,255,0.08);border:2px solid rgba(255,255,255,0.2)}
-.cell:active{transform:scale(0.95)}
-.cell.lit{background:var(--purple)!important;border-color:var(--purple)!important;box-shadow:0 0 20px var(--purple);transform:scale(1.05)}
+.cell{aspect-ratio:1;border-radius:8px;background:rgba(255,255,255,0.06);border:2px solid rgba(255,255,255,0.15);cursor:pointer;transition:all 0.1s}
+.cell:active{transform:scale(0.92)}
+.cell.lit{background:var(--purple)!important;border-color:var(--purple)!important;box-shadow:0 0 20px var(--purple);transform:scale(1.08)}
 .cell.ok{background:var(--teal)!important;border-color:var(--teal)!important;box-shadow:0 0 15px var(--teal)}
 .cell.bad{background:var(--pink)!important;border-color:var(--pink)!important;box-shadow:0 0 15px var(--pink)}
 
-.info{display:flex;justify-content:space-between;padding:8px 12px;background:var(--card);border-radius:10px;margin:6px 0}
-.info-txt{font-family:'Bebas Neue',sans-serif;font-size:0.9rem;color:var(--gold)}
+.bottom{display:flex;gap:8px;align-items:center;margin-top:8px;margin-bottom:8px}
+.bottom-box{flex:1;background:var(--card);border-radius:10px;padding:10px;text-align:center}
+.bottom-txt{font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--gold)}
 
-.btn{width:100%;min-height:54px;padding:14px;border:none;border-radius:12px;font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:4px;cursor:pointer;background:linear-gradient(135deg,var(--gold),#FFA500);color:#000}
+.btn{width:100%;padding:18px;border:none;border-radius:12px;font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:4px;cursor:pointer;background:linear-gradient(135deg,var(--gold),#FFA500);color:#000;transition:opacity 0.2s}
+.btn:active{opacity:0.9;transform:scale(0.98)}
 .btn:disabled{opacity:0.4}
-.btn.recall-btn{background:linear-gradient(135deg,var(--teal),#00B890);color:#000}
+.btn.recall{background:linear-gradient(135deg,var(--teal),#00C896)}
 
-.emojis{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999}
-.emo{position:absolute;font-size:1.8rem;animation:pop 1.2s ease-out forwards}
-@keyframes pop{0%{opacity:1;transform:translate(-50%,-50%) scale(0.3)}20%{transform:translate(-50%,-50%) scale(1.2)}100%{opacity:0;transform:translate(var(--x),var(--y)) scale(0.6)}}
+.emos{position:fixed;inset:0;pointer-events:none;z-index:99}
+.emo{position:absolute;font-size:2rem;animation:burst 1s ease-out forwards}
+@keyframes burst{0%{opacity:1;transform:translate(-50%,-50%) scale(0.5)}25%{transform:translate(-50%,-50%) scale(1.3)}100%{opacity:0;transform:translate(var(--x),var(--y)) scale(0.7)}}
 
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.92);display:none;align-items:center;justify-content:center;z-index:1100}
-.overlay.show{display:flex}
-.ocard{background:var(--card);border:2px solid var(--gold);border-radius:16px;padding:24px;text-align:center;max-width:280px}
-.ocard h2{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--gold);margin:10px 0}
-.ocard p{color:var(--muted);margin-bottom:15px}
-.ocard button{padding:14px 28px;border:none;border-radius:10px;font-family:'Bebas Neue',sans-serif;font-size:1rem;cursor:pointer;background:linear-gradient(135deg,var(--gold),#FFA500);color:#000}
+.over{position:fixed;inset:0;background:rgba(0,0,0,0.9);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
+.over.show{display:flex}
+.card{background:var(--card);border:2px solid var(--gold);border-radius:16px;padding:28px;text-align:center;max-width:280px;width:100%}
+.card h2{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:var(--gold);margin:12px 0}
+.card p{color:var(--muted);margin-bottom:18px;font-size:0.95rem}
+.card button{padding:16px 32px;border:none;border-radius:10px;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;cursor:pointer;background:linear-gradient(135deg,var(--gold),#FFA500);color:#000}
 
-.coach{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(100px);background:linear-gradient(135deg,var(--gold),#FFA500);color:#000;padding:10px 20px;border-radius:14px;font-weight:700;font-size:0.9rem;opacity:0;transition:all 0.3s;z-index:50}
-.coach.show{transform:translateX(-50%) translateY(0);opacity:1}
+.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(80px);background:linear-gradient(135deg,var(--gold),#FFA500);color:#000;padding:12px 24px;border-radius:30px;font-weight:700;font-size:0.95rem;opacity:0;transition:all 0.3s;z-index:50}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
 </style>
 </head>
 <body>
 
-<nav class="nav"><div class="nav-row">
-<a href="/dashboard.html" class="back-btn">← BACK</a>
-<div class="nav-title">🏆 THE CHALLENGE</div>
-<div></div>
-</div></nav>
+<nav class="nav">
+<a href="/dashboard.html" class="back">← BACK</a>
+<div class="title">🏆 THE CHALLENGE</div>
+<div style="width:70px"></div>
+</nav>
 
-<div class="emojis" id="emojis"></div>
+<div class="emos" id="emos"></div>
 
-<div class="game-box">
-<div class="stats">
-<div class="stat"><div class="stat-val" id="sLevel">1</div><div class="stat-lbl">LEVEL</div></div>
-<div class="stat"><div class="stat-val" id="sStreak">0</div><div class="stat-lbl">🔥</div></div>
-<div class="stat"><div class="stat-val" id="sScore">0</div><div class="stat-lbl">SCORE</div></div>
+<div class="main">
+<div class="row">
+<div class="box"><div class="box-val" id="vLevel">1</div><div class="box-lbl">Level</div></div>
+<div class="box"><div class="box-val" id="vStreak">0</div><div class="box-lbl">🔥 Streak</div></div>
+<div class="box"><div class="box-val" id="vScore">0</div><div class="box-lbl">Score</div></div>
 </div>
 
 <div class="phases">
-<span class="phase react" id="phReact">⚡ REACT</span>
-<span class="arrow">→</span>
-<span class="phase recall" id="phRecall">🔢 RECALL</span>
+<span class="ph react" id="phReact">⚡ REACT</span>
+<span class="ph-arrow">→</span>
+<span class="ph recall" id="phRecall">🔢 RECALL</span>
 </div>
 
-<div class="msg" id="msgBox"><span class="msg-txt" id="msgTxt">TAP GO TO START!</span></div>
+<div class="msg" id="msg"><span class="msg-txt" id="msgTxt">TAP GO TO START!</span></div>
 
-<div class="court-wrap"><div class="court" id="court"></div></div>
-
-<div class="info">
-<span class="info-txt" id="iLevel">L1 D3</span>
-<span class="info-txt" id="iCount">0/5</span>
-<span class="info-txt" id="iScore">0</span>
+<div class="court-area">
+<div class="court" id="court"></div>
 </div>
 
-<button class="btn" id="btn">GO</button>
+<div class="bottom">
+<div class="bottom-box"><span class="bottom-txt" id="vDiv">L1 D3</span></div>
+<div class="bottom-box"><span class="bottom-txt" id="vTaps">0/5</span></div>
+<div class="bottom-box"><span class="bottom-txt" id="vPts">0</span></div>
 </div>
 
-<div class="overlay" id="winOverlay">
-<div class="ocard">
-<div style="font-size:2.5rem">⬆️</div>
+<button class="btn" id="btn" data-action="go">GO</button>
+</div>
+
+<div class="over" id="overWin">
+<div class="card">
+<div style="font-size:3rem">⬆️</div>
 <h2>LEVEL UP!</h2>
-<p id="winMsg">Level 2</p>
-<button id="winBtn">CONTINUE</button>
+<p id="winTxt">Now Level 2!</p>
+<button onclick="closeWin()">CONTINUE</button>
 </div>
 </div>
 
-<div class="overlay" id="champOverlay">
-<div class="ocard">
-<div style="font-size:2.5rem">👑</div>
+<div class="over" id="overChamp">
+<div class="card">
+<div style="font-size:3rem">👑</div>
 <h2>CHAMPION!</h2>
-<p id="champMsg">You conquered!</p>
-<button id="champBtn">LEGENDARY!</button>
+<p id="champTxt">You conquered!</p>
+<button onclick="closeChamp()">LEGENDARY!</button>
 </div>
 </div>
 
-<div class="coach" id="coach"></div>
+<div class="toast" id="toast"></div>
 
 <script>
-(function(){
-    var CELLS = 25;
-    var SPEEDS = {slow:1200, med:800, fast:500};
-    var EMOJIS = ['😂','🤣','😄','🥳','🏆','👑','🔥','⚡'];
-    
-    var level = parseInt(localStorage.getItem('lc-challenge-level')) || 1;
-    if(level > 10) level = 10;
-    if(level < 1) level = 1;
-    
-    var score = 0;
-    var streak = 0;
-    var phase = 'idle';
-    var seq = [];
-    var seqIdx = 0;
-    var curCell = -1;
-    var taps = 0;
-    var total = 0;
-    var canTap = false;
-    var timer = null;
-    var timerStart = 0;
-    var cells = [];
-    
-    var court = document.getElementById('court');
-    var msgTxt = document.getElementById('msgTxt');
-    var msgBox = document.getElementById('msgBox');
-    var btn = document.getElementById('btn');
-    var coach = document.getElementById('coach');
-    var emojis = document.getElementById('emojis');
-    
-    function getSpeed(){ return level <= 3 ? 'slow' : level <= 6 ? 'med' : 'fast'; }
-    function getDiv(){ return level <= 3 ? 'D3' : level <= 6 ? 'D2' : 'D1'; }
-    function getTotal(){ return level + 4; }
-    
-    // Audio
-    var actx = null;
-    function beep(f,d){
-        if(!actx) try{ actx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){return;}
-        try{
-            if(actx.state==='suspended') actx.resume();
-            var o=actx.createOscillator(), g=actx.createGain();
-            o.frequency.value=f; o.connect(g); g.connect(actx.destination);
-            g.gain.setValueAtTime(0.2,actx.currentTime);
-            g.gain.exponentialRampToValueAtTime(0.01,actx.currentTime+d);
-            o.start(); o.stop(actx.currentTime+d);
-        }catch(e){}
-    }
-    
-    // Emojis
-    function burst(n){
-        var r = court.getBoundingClientRect();
-        var cx = r.left + r.width/2, cy = r.top + r.height/2;
-        for(var i=0; i<n; i++){
-            (function(i){
-                setTimeout(function(){
-                    var e = document.createElement('div');
-                    e.className = 'emo';
-                    e.textContent = EMOJIS[Math.floor(Math.random()*EMOJIS.length)];
-                    var a = Math.random()*Math.PI*2, d = 60+Math.random()*60;
-                    e.style.cssText = 'left:'+cx+'px;top:'+cy+'px;--x:'+(Math.cos(a)*d)+'px;--y:'+(Math.sin(a)*d)+'px';
-                    emojis.appendChild(e);
-                    setTimeout(function(){ e.remove(); }, 1500);
-                }, i*50);
-            })(i);
-        }
-    }
-    
-    function showCoach(m){
-        coach.textContent = m;
-        coach.classList.add('show');
-        setTimeout(function(){ coach.classList.remove('show'); }, 2000);
-    }
-    
-    // Build grid
-    function buildGrid(){
-        court.innerHTML = '';
-        cells = [];
-        for(var i=0; i<CELLS; i++){
-            var c = document.createElement('div');
-            c.className = 'cell';
-            c.setAttribute('data-i', i);
-            court.appendChild(c);
-            cells.push(c);
-        }
-        court.onclick = function(e){
-            if(!e.target.classList.contains('cell')) return;
-            var idx = parseInt(e.target.getAttribute('data-i'));
-            tap(idx);
-        };
-    }
-    
-    function clearCells(){
-        for(var i=0; i<cells.length; i++) cells[i].className = 'cell';
-    }
-    
-    function updateUI(){
-        document.getElementById('sLevel').textContent = level;
-        document.getElementById('sStreak').textContent = streak;
-        document.getElementById('sScore').textContent = score;
-        document.getElementById('iLevel').textContent = 'L'+level+' '+getDiv();
-        document.getElementById('iScore').textContent = score;
-        
-        var pr = document.getElementById('phReact');
-        var pc = document.getElementById('phRecall');
-        pr.className = 'phase react';
-        pc.className = 'phase recall';
-        court.className = 'court';
-        msgBox.className = 'msg';
-        
-        if(phase === 'react'){
-            pr.classList.add('on');
-            court.classList.add('react');
-            msgBox.classList.add('react');
-        } else if(phase === 'recall'){
-            pr.classList.add('done');
-            pc.classList.add('on');
-            court.classList.add('recall');
-            msgBox.classList.add('recall');
-        }
-    }
-    
-    // BUTTON CLICK
-    btn.onclick = function(){
-        if(phase === 'idle'){
-            startReact();
-        } else if(phase === 'wait'){
-            startRecall();
-        }
-    };
-    
-    // START REACT
-    function startReact(){
-        phase = 'react';
-        score = 0;
-        seq = [];
-        seqIdx = 0;
-        curCell = -1;
-        taps = 0;
-        total = getTotal();
-        canTap = false;
-        
-        btn.disabled = true;
-        btn.className = 'btn';
-        btn.textContent = '...';
-        clearCells();
-        updateUI();
-        document.getElementById('iCount').textContent = '0/'+total;
-        
-        msgTxt.textContent = 'GET READY...';
-        
-        setTimeout(function(){
-            msgTxt.textContent = '⚡ REACT!';
-            flash();
-        }, 800);
-    }
-    
-    // FLASH
-    function flash(){
-        if(phase !== 'react') return;
-        
-        if(curCell >= 0) cells[curCell].classList.remove('lit');
-        
-        var next;
-        do { next = Math.floor(Math.random()*CELLS); } while(next === curCell);
-        
-        curCell = next;
-        seq.push(next);
-        cells[next].classList.add('lit');
-        canTap = true;
-        
-        beep(880, 0.12);
-        
-        timerStart = Date.now();
-        timer = setTimeout(function(){
-            if(canTap && phase === 'react'){
-                canTap = false;
-                fail('TOO SLOW!');
-            }
-        }, SPEEDS[getSpeed()]);
-    }
-    
-    // START RECALL
-    function startRecall(){
-        phase = 'recall';
-        seqIdx = 0;
-        canTap = true;
-        
-        clearCells();
-        btn.disabled = true;
-        btn.className = 'btn';
-        btn.textContent = '...';
-        
-        updateUI();
-        document.getElementById('iCount').textContent = '0/'+seq.length;
-        msgTxt.textContent = '🔢 RECALL THE ORDER!';
-    }
-    
-    // TAP
-    function tap(idx){
-        if(!canTap) return;
-        
-        var cell = cells[idx];
-        
-        // REACT
-        if(phase === 'react'){
-            clearTimeout(timer);
-            canTap = false;
-            
-            if(idx === curCell){
-                beep(660, 0.1);
-                cell.classList.remove('lit');
-                cell.classList.add('ok');
-                taps++;
-                
-                var rt = Date.now() - timerStart;
-                var bonus = Math.floor((1 - rt/SPEEDS[getSpeed()]) * 10);
-                score += 15 + bonus;
-                
-                document.getElementById('iCount').textContent = taps+'/'+total;
-                document.getElementById('sScore').textContent = score;
-                document.getElementById('iScore').textContent = score;
-                
-                if(taps % 3 === 0) burst(3);
-                
-                if(taps >= total){
-                    // REACT DONE!
-                    reactDone();
-                } else {
-                    setTimeout(function(){
-                        cell.classList.remove('ok');
-                        flash();
-                    }, 150);
-                }
-            } else {
-                cell.classList.add('bad');
-                fail('WRONG CELL!');
-            }
-            return;
-        }
-        
-        // RECALL
-        if(phase === 'recall'){
-            var expected = seq[seqIdx];
-            
-            if(idx === expected){
-                beep(660, 0.1);
-                cell.classList.add('ok');
-                seqIdx++;
-                score += 20;
-                
-                document.getElementById('iCount').textContent = seqIdx+'/'+seq.length;
-                document.getElementById('sScore').textContent = score;
-                document.getElementById('iScore').textContent = score;
-                
-                if(seqIdx >= seq.length){
-                    canTap = false;
-                    win();
-                }
-            } else {
-                cell.classList.add('bad');
-                cells[expected].classList.add('lit');
-                canTap = false;
-                fail('WRONG ORDER!');
-            }
-        }
-    }
-    
-    // REACT DONE - show recall button
-    function reactDone(){
-        phase = 'wait';
-        canTap = false;
-        
-        beep(784, 0.15);
-        burst(5);
-        showCoach('⚡ REACT DONE!');
-        
-        msgTxt.textContent = '✓ NOW RECALL!';
-        
-        // Show RECALL button
-        btn.disabled = false;
-        btn.className = 'btn recall-btn';
-        btn.textContent = '🔢 RECALL →';
-    }
-    
-    // WIN
-    function win(){
-        phase = 'idle';
-        streak++;
-        
-        beep(523, 0.1);
-        setTimeout(function(){ beep(659, 0.1); }, 80);
-        setTimeout(function(){ beep(784, 0.1); }, 160);
-        setTimeout(function(){ beep(1047, 0.15); }, 240);
-        
-        burst(12);
-        msgTxt.textContent = '🏆 CHALLENGE COMPLETE!';
-        showCoach(streak >= 5 ? '👑 LEGEND!' : streak >= 3 ? '🔥 AMAZING!' : '🏆 GREAT!');
-        
-        level++;
-        localStorage.setItem('lc-challenge-level', level);
-        
-        if(level > 10){
-            level = 10;
-            localStorage.setItem('lc-challenge-champion', 'true');
+var CELLS = 25;
+var SPEED = {slow:1200, med:800, fast:500};
+var EMO = ['😂','🤣','😄','🥳','🏆','👑','🔥','⚡'];
+
+var level = parseInt(localStorage.getItem('lc-challenge-level')) || 1;
+if(level<1) level=1; if(level>10) level=10;
+
+var score=0, streak=0, seq=[], seqIdx=0, curCell=-1, taps=0, total=0, canTap=false, tmr=null, tmrStart=0, cells=[];
+
+var court = document.getElementById('court');
+var msgTxt = document.getElementById('msgTxt');
+var msg = document.getElementById('msg');
+var btn = document.getElementById('btn');
+
+function spd(){ return level<=3?'slow':level<=6?'med':'fast'; }
+function div(){ return level<=3?'D3':level<=6?'D2':'D1'; }
+function cnt(){ return level+4; }
+
+// Audio
+var ac=null;
+function tone(f,d){
+    if(!ac) try{ac=new(window.AudioContext||window.webkitAudioContext)()}catch(e){return}
+    try{
+        if(ac.state==='suspended')ac.resume();
+        var o=ac.createOscillator(),g=ac.createGain();
+        o.frequency.value=f;o.connect(g);g.connect(ac.destination);
+        g.gain.setValueAtTime(0.2,ac.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.01,ac.currentTime+d);
+        o.start();o.stop(ac.currentTime+d);
+    }catch(e){}
+}
+
+// Emojis
+function pop(n){
+    var r=court.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
+    for(var i=0;i<n;i++){
+        (function(i){
             setTimeout(function(){
-                document.getElementById('champMsg').textContent = 'Score: '+score;
-                document.getElementById('champOverlay').classList.add('show');
-            }, 1200);
-        } else {
-            setTimeout(function(){
-                document.getElementById('winMsg').textContent = 'Now Level '+level+'!';
-                document.getElementById('winOverlay').classList.add('show');
-            }, 1200);
-        }
+                var e=document.createElement('div');e.className='emo';
+                e.textContent=EMO[Math.floor(Math.random()*EMO.length)];
+                var a=Math.random()*Math.PI*2,d=60+Math.random()*50;
+                e.style.cssText='left:'+cx+'px;top:'+cy+'px;--x:'+(Math.cos(a)*d)+'px;--y:'+(Math.sin(a)*d)+'px';
+                document.getElementById('emos').appendChild(e);
+                setTimeout(function(){e.remove()},1200);
+            },i*60);
+        })(i);
+    }
+}
+
+function toast(m){
+    var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');
+    setTimeout(function(){t.classList.remove('show')},2000);
+}
+
+// Build
+function build(){
+    court.innerHTML='';cells=[];
+    for(var i=0;i<CELLS;i++){
+        var c=document.createElement('div');c.className='cell';c.setAttribute('data-i',i);
+        court.appendChild(c);cells.push(c);
+    }
+}
+
+function clear(){for(var i=0;i<cells.length;i++)cells[i].className='cell';}
+
+function ui(){
+    document.getElementById('vLevel').textContent=level;
+    document.getElementById('vStreak').textContent=streak;
+    document.getElementById('vScore').textContent=score;
+    document.getElementById('vDiv').textContent='L'+level+' '+div();
+    document.getElementById('vPts').textContent=score;
+}
+
+function setPhase(p){
+    var pr=document.getElementById('phReact'),pc=document.getElementById('phRecall');
+    pr.className='ph react';pc.className='ph recall';
+    court.className='court';msg.className='msg';
+    if(p==='react'){pr.classList.add('on');court.classList.add('react');msg.classList.add('react');}
+    else if(p==='recall'){pr.classList.add('done');pc.classList.add('on');court.classList.add('recall');msg.classList.add('recall');}
+}
+
+// BUTTON
+btn.addEventListener('click', function(){
+    var action = btn.getAttribute('data-action');
+    if(action === 'go') startReact();
+    else if(action === 'recall') startRecall();
+});
+
+// Court tap
+court.addEventListener('click', function(e){
+    if(!e.target.classList.contains('cell')) return;
+    if(!canTap) return;
+    var idx = parseInt(e.target.getAttribute('data-i'));
+    handleTap(idx);
+});
+
+// START REACT
+function startReact(){
+    score=0;seq=[];seqIdx=0;curCell=-1;taps=0;total=cnt();canTap=false;
+    btn.disabled=true;btn.textContent='...';btn.setAttribute('data-action','none');
+    clear();ui();setPhase('react');
+    document.getElementById('vTaps').textContent='0/'+total;
+    msgTxt.textContent='GET READY...';
+    setTimeout(function(){msgTxt.textContent='⚡ REACT!';flash();},700);
+}
+
+// FLASH
+function flash(){
+    if(curCell>=0) cells[curCell].classList.remove('lit');
+    var next;do{next=Math.floor(Math.random()*CELLS)}while(next===curCell);
+    curCell=next;seq.push(next);cells[next].classList.add('lit');canTap=true;
+    tone(880,0.1);tmrStart=Date.now();
+    tmr=setTimeout(function(){if(canTap){canTap=false;fail('TOO SLOW!');}},SPEED[spd()]);
+}
+
+// START RECALL
+function startRecall(){
+    seqIdx=0;canTap=true;clear();
+    btn.disabled=true;btn.textContent='...';btn.setAttribute('data-action','none');
+    setPhase('recall');
+    document.getElementById('vTaps').textContent='0/'+seq.length;
+    msgTxt.textContent='🔢 TAP THE ORDER!';
+}
+
+// HANDLE TAP
+function handleTap(idx){
+    var cell=cells[idx];
+    
+    // REACT
+    if(btn.getAttribute('data-action')==='none' && document.getElementById('phReact').classList.contains('on')){
+        clearTimeout(tmr);canTap=false;
+        if(idx===curCell){
+            tone(660,0.08);cell.classList.remove('lit');cell.classList.add('ok');taps++;
+            var rt=Date.now()-tmrStart,bonus=Math.floor((1-rt/SPEED[spd()])*10);
+            score+=15+bonus;
+            document.getElementById('vTaps').textContent=taps+'/'+total;
+            document.getElementById('vScore').textContent=score;
+            document.getElementById('vPts').textContent=score;
+            if(taps%3===0)pop(3);
+            if(taps>=total){reactDone();}
+            else{setTimeout(function(){cell.classList.remove('ok');flash();},120);}
+        }else{cell.classList.add('bad');fail('WRONG CELL!');}
+        return;
     }
     
-    // FAIL
-    function fail(msg){
-        clearTimeout(timer);
-        beep(200, 0.25);
-        
-        if(curCell >= 0 && phase === 'react'){
-            cells[curCell].classList.remove('lit');
-            cells[curCell].classList.add('bad');
-        }
-        
-        phase = 'idle';
-        streak = 0;
-        canTap = false;
-        msgTxt.textContent = msg;
-        
-        setTimeout(reset, 1200);
+    // RECALL
+    if(document.getElementById('phRecall').classList.contains('on')){
+        var exp=seq[seqIdx];
+        if(idx===exp){
+            tone(660,0.08);cell.classList.add('ok');seqIdx++;score+=20;
+            document.getElementById('vTaps').textContent=seqIdx+'/'+seq.length;
+            document.getElementById('vScore').textContent=score;
+            document.getElementById('vPts').textContent=score;
+            if(seqIdx>=seq.length){canTap=false;win();}
+        }else{cell.classList.add('bad');cells[exp].classList.add('lit');canTap=false;fail('WRONG ORDER!');}
     }
-    
-    // RESET
-    function reset(){
-        phase = 'idle';
-        curCell = -1;
-        clearCells();
-        updateUI();
-        msgTxt.textContent = 'TAP GO!';
-        btn.disabled = false;
-        btn.className = 'btn';
-        btn.textContent = 'GO';
+}
+
+// REACT DONE
+function reactDone(){
+    canTap=false;tone(784,0.12);pop(5);toast('⚡ REACT DONE!');
+    msgTxt.textContent='✓ NOW RECALL!';
+    btn.disabled=false;btn.className='btn recall';btn.textContent='🔢 RECALL →';btn.setAttribute('data-action','recall');
+}
+
+// WIN
+function win(){
+    streak++;tone(523,0.1);
+    setTimeout(function(){tone(659,0.1)},70);
+    setTimeout(function(){tone(784,0.1)},140);
+    setTimeout(function(){tone(1047,0.12)},210);
+    pop(10);msgTxt.textContent='🏆 COMPLETE!';
+    toast(streak>=5?'👑 LEGEND!':streak>=3?'🔥 AMAZING!':'🏆 GREAT!');
+    level++;localStorage.setItem('lc-challenge-level',level);
+    if(level>10){level=10;localStorage.setItem('lc-challenge-champion','true');
+        setTimeout(function(){document.getElementById('champTxt').textContent='Score: '+score;document.getElementById('overChamp').classList.add('show');},1000);
+    }else{
+        setTimeout(function(){document.getElementById('winTxt').textContent='Now Level '+level+'!';document.getElementById('overWin').classList.add('show');},1000);
     }
-    
-    // Overlays
-    document.getElementById('winBtn').onclick = function(){
-        document.getElementById('winOverlay').classList.remove('show');
-        reset();
-    };
-    
-    document.getElementById('champBtn').onclick = function(){
-        document.getElementById('champOverlay').classList.remove('show');
-        level = 1;
-        localStorage.setItem('lc-challenge-level', 1);
-        reset();
-    };
-    
-    // Init
-    buildGrid();
-    updateUI();
-})();
+}
+
+// FAIL
+function fail(m){
+    clearTimeout(tmr);tone(200,0.2);
+    if(curCell>=0){cells[curCell].classList.remove('lit');cells[curCell].classList.add('bad');}
+    streak=0;canTap=false;msgTxt.textContent=m;
+    setTimeout(reset,1000);
+}
+
+// RESET
+function reset(){
+    curCell=-1;clear();ui();setPhase('');
+    msgTxt.textContent='TAP GO!';msg.className='msg';court.className='court';
+    btn.disabled=false;btn.className='btn';btn.textContent='GO';btn.setAttribute('data-action','go');
+}
+
+function closeWin(){document.getElementById('overWin').classList.remove('show');reset();}
+function closeChamp(){document.getElementById('overChamp').classList.remove('show');level=1;localStorage.setItem('lc-challenge-level',1);reset();}
+
+build();ui();
 </script>
 </body>
 </html>
