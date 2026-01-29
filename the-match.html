@@ -616,8 +616,28 @@ body.es .lang-en{display:none!important}
         state.tier++;
         state.roundsCompleted = 0;
         localStorage.setItem('lc-match-tier', state.tier);
+        
+        // Auto-advance to next level if not at max
+        var oldLevel = state.level;
+        if (state.level < 10) {
+            state.level++;
+            localStorage.setItem('lc-match-level', state.level);
+            // Update level selector UI
+            document.querySelectorAll('[data-level]').forEach(function(b) { b.classList.remove('active'); });
+            var newLevelBtn = document.querySelector('[data-level="' + state.level + '"]');
+            if (newLevelBtn) newLevelBtn.classList.add('active');
+        }
+        
         laughCelebration('party');
-        document.getElementById('tierupMessage').innerHTML = currentLang === 'es' ? '¡Tienes ' + state.tier + ' GoStars!' : 'You have ' + state.tier + ' GoStars!';
+        
+        // Show message with level advance info
+        var msgEn = 'You earned GoStar ' + state.tier + '!';
+        var msgEs = '¡Ganaste GoStar ' + state.tier + '!';
+        if (state.level > oldLevel) {
+            msgEn += ' Now Level ' + state.level + ' (' + getCellCount() + ' cells)';
+            msgEs += ' Ahora Nivel ' + state.level + ' (' + getCellCount() + ' celdas)';
+        }
+        document.getElementById('tierupMessage').innerHTML = currentLang === 'es' ? msgEs : msgEn;
         tierupOverlay.classList.add('show');
         updateStats();
         updateDivisionDisplay();
@@ -625,10 +645,23 @@ body.es .lang-en{display:none!important}
 
     function maxTier() {
         state.roundsCompleted = 0;
-        document.getElementById('tierupMessage').innerHTML = currentLang === 'es' ? '¡10 GOSTARS - MÁXIMO!' : '10 GOSTARS - MASTER!';
+        
+        // Ensure at max level too
+        if (state.level < 10) {
+            state.level = 10;
+            localStorage.setItem('lc-match-level', state.level);
+            document.querySelectorAll('[data-level]').forEach(function(b) { b.classList.remove('active'); });
+            var maxLevelBtn = document.querySelector('[data-level="10"]');
+            if (maxLevelBtn) maxLevelBtn.classList.add('active');
+        }
+        
+        var msgEn = '🏆 10 GOSTARS - MASTER! 🏆';
+        var msgEs = '🏆 10 GOSTARS - ¡MAESTRO! 🏆';
+        document.getElementById('tierupMessage').innerHTML = currentLang === 'es' ? msgEs : msgEn;
         document.querySelector('#tierupOverlay .overlay-emoji').textContent = '👑';
         tierupOverlay.classList.add('show');
         updateStats();
+        updateDivisionDisplay();
     }
 
     document.getElementById('tierupBtn').onclick = function() {
