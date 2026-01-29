@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Choose Your Workout | LaughCourt</title>
-    <meta name="description" content="Choose between THE REACTION, THE MATCH, THE SEQUENCE, and THE REACTION CHALLENGE - memory workouts that sharpen your mind.">
+    <meta name="description" content="Choose between THE MATCH and THE SEQUENCE - memory workouts that sharpen your mind.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -13,8 +13,6 @@
             --orange: #FF6B35;
             --teal: #00D9A5;
             --cyan: #00CED1;
-            --red: #FF1744;
-            --purple: #9B59B6;
             --dark: #0a0a0f;
             --darker: #050508;
             --card: #111118;
@@ -78,7 +76,7 @@
             text-align: center;
         }
 
-        .header { margin-bottom: 20px; }
+        .header { margin-bottom: 25px; }
         .logo {
             font-family: 'Bebas Neue', sans-serif;
             font-size: 2.5rem;
@@ -92,7 +90,7 @@
             color: var(--gold);
             letter-spacing: 3px;
             text-transform: uppercase;
-            margin-bottom: 12px;
+            margin-bottom: 15px;
         }
         .welcome-text {
             font-family: 'Bebas Neue', sans-serif;
@@ -110,50 +108,24 @@
             font-size: 0.85rem;
             letter-spacing: 3px;
             color: var(--muted);
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             text-align: left;
             padding-left: 5px;
         }
 
-        /* REACTION SECTION - NOW FIRST */
-        .reaction-section { margin-bottom: 12px; }
-        .reaction-card {
-            background: var(--card);
-            border: 3px solid var(--purple);
-            border-radius: 20px;
-            padding: 20px;
-            text-decoration: none;
-            color: var(--text);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            gap: 18px;
-        }
-        .reaction-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--purple), #8E44AD); }
-        .reaction-card:hover { transform: translateY(-5px); border-color: var(--purple); box-shadow: 0 15px 40px rgba(155,89,182,0.3); }
-        .reaction-card:active { transform: scale(0.98); }
-        .reaction-icon { font-size: 2.8rem; flex-shrink: 0; }
-        .reaction-content { flex: 1; text-align: left; }
-        .reaction-badge { display: inline-block; background: linear-gradient(135deg, var(--purple), #8E44AD); color: var(--text); font-size: 0.5rem; font-weight: 700; letter-spacing: 1px; padding: 3px 8px; border-radius: 10px; margin-bottom: 6px; }
-        .reaction-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 3px; color: var(--purple); margin-bottom: 4px; }
-        .reaction-desc { font-size: 0.7rem; color: var(--muted); margin-bottom: 10px; }
-        .reaction-play-btn { display: inline-block; padding: 10px 22px; border-radius: 25px; font-family: 'Bebas Neue', sans-serif; font-size: 0.85rem; letter-spacing: 2px; background: linear-gradient(135deg, var(--purple), #8E44AD); color: var(--text); }
-
-        /* PATTERN MEMORY GAMES */
+        /* GAME CARDS - LARGER FOR 2 GAMES */
         .games-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-bottom: 12px;
+            gap: 15px;
+            margin-bottom: 20px;
         }
 
         .game-card {
             background: var(--card);
             border: 3px solid var(--border);
             border-radius: 20px;
-            padding: 20px 12px;
+            padding: 25px 15px;
             text-decoration: none;
             color: var(--text);
             transition: all 0.3s ease;
@@ -172,41 +144,14 @@
         .game-card.match:hover { border-color: var(--orange); box-shadow: 0 15px 30px rgba(255,107,53,0.25); }
         .game-card.sequence:hover { border-color: var(--teal); box-shadow: 0 15px 30px rgba(0,217,165,0.25); }
         .game-card:active { transform: scale(0.98); }
-        .game-icon { font-size: 2.2rem; margin-bottom: 8px; }
-        .game-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 2px; margin-bottom: 4px; }
+        .game-icon { font-size: 2.8rem; margin-bottom: 10px; }
+        .game-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px; margin-bottom: 6px; }
         .game-card.match .game-name { color: var(--orange); }
         .game-card.sequence .game-name { color: var(--teal); }
-        .game-type { font-size: 0.6rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
-        .game-play-btn { display: inline-block; padding: 8px 16px; border-radius: 25px; font-family: 'Bebas Neue', sans-serif; font-size: 0.8rem; letter-spacing: 2px; }
+        .game-type { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; line-height: 1.4; }
+        .game-play-btn { display: inline-block; padding: 10px 20px; border-radius: 25px; font-family: 'Bebas Neue', sans-serif; font-size: 0.9rem; letter-spacing: 2px; }
         .game-card.match .game-play-btn { background: linear-gradient(135deg, var(--gold), var(--orange)); color: var(--dark); }
         .game-card.sequence .game-play-btn { background: linear-gradient(135deg, var(--teal), var(--cyan)); color: var(--dark); }
-
-        /* CHALLENGE SECTION */
-        .challenge-section { margin-bottom: 15px; }
-        .combo-card {
-            background: var(--card);
-            border: 3px solid var(--gold);
-            border-radius: 20px;
-            padding: 20px;
-            text-decoration: none;
-            color: var(--text);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            gap: 18px;
-        }
-        .combo-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--gold), var(--orange), var(--teal)); }
-        .combo-card::after { content: '🏆'; position: absolute; top: 10px; right: 15px; font-size: 1.2rem; opacity: 0.3; }
-        .combo-card:hover { transform: translateY(-5px); border-color: var(--gold); box-shadow: 0 15px 40px rgba(255,215,0,0.3); }
-        .combo-card:active { transform: scale(0.98); }
-        .combo-icon { font-size: 2.8rem; flex-shrink: 0; }
-        .combo-content { flex: 1; text-align: left; }
-        .combo-badge { display: inline-block; background: linear-gradient(135deg, var(--gold), var(--orange)); color: var(--dark); font-size: 0.5rem; font-weight: 700; letter-spacing: 1px; padding: 3px 8px; border-radius: 10px; margin-bottom: 6px; }
-        .combo-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 3px; color: var(--gold); margin-bottom: 4px; }
-        .combo-desc { font-size: 0.7rem; color: var(--muted); margin-bottom: 10px; }
-        .combo-play-btn { display: inline-block; padding: 10px 22px; border-radius: 25px; font-family: 'Bebas Neue', sans-serif; font-size: 0.85rem; letter-spacing: 2px; background: linear-gradient(135deg, var(--gold), var(--orange)); color: var(--dark); }
 
         .speed-section { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 15px; margin-bottom: 15px; }
         .speed-title { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
@@ -244,24 +189,18 @@
             .logo { font-size: 2rem; letter-spacing: 4px; }
             .welcome-text { font-size: 1.5rem; }
             .games-grid { gap: 10px; }
-            .game-card { padding: 15px 10px; }
-            .game-icon { font-size: 1.8rem; }
-            .game-name { font-size: 1rem; }
-            .game-play-btn { padding: 7px 14px; font-size: 0.75rem; }
-            .reaction-card, .combo-card { padding: 15px; gap: 12px; }
-            .reaction-icon, .combo-icon { font-size: 2.2rem; }
-            .reaction-name, .combo-name { font-size: 1.2rem; }
-            .reaction-play-btn, .combo-play-btn { padding: 8px 18px; font-size: 0.8rem; }
+            .game-card { padding: 20px 12px; }
+            .game-icon { font-size: 2.2rem; }
+            .game-name { font-size: 1.2rem; }
+            .game-play-btn { padding: 8px 16px; font-size: 0.8rem; }
         }
 
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .container > * { animation: fadeInUp 0.5s ease-out forwards; }
         .header { animation-delay: 0s; }
-        .reaction-section { animation-delay: 0.1s; }
-        .games-grid { animation-delay: 0.15s; }
-        .challenge-section { animation-delay: 0.2s; }
-        .speed-section { animation-delay: 0.25s; }
-        .account-section { animation-delay: 0.3s; }
+        .games-grid { animation-delay: 0.1s; }
+        .speed-section { animation-delay: 0.15s; }
+        .account-section { animation-delay: 0.2s; }
     </style>
 </head>
 <body class="en">
@@ -283,8 +222,8 @@
                 <span class="lang-es">🏀 ELIGE TU EJERCICIO</span>
             </h1>
             <p class="welcome-sub">
-                <span class="lang-en">React. Match. Sequence. The Challenge.</span>
-                <span class="lang-es">Reacciona. Match. Secuencia. El Reto.</span>
+                <span class="lang-en">Pattern & Space Memory Workouts</span>
+                <span class="lang-es">Ejercicios de Memoria de Patrones y Espacio</span>
             </p>
         </header>
 
@@ -293,57 +232,23 @@
             <span class="lang-es">⚡ <strong>PRUEBA DE FACILIDAD</strong> — <span id="trialDaysEs">7</span> días restantes</span>
         </div>
 
-        <!-- REACTION WORKOUT - NOW FIRST -->
-        <div class="reaction-section">
-            <div class="section-label">
-                <span class="lang-en">⚡ WORKOUT — REACTION TIME</span>
-                <span class="lang-es">⚡ EJERCICIO — TIEMPO DE REACCIÓN</span>
-            </div>
-            <a href="/the-reaction.html" class="reaction-card">
-                <div class="reaction-icon">⚡</div>
-                <div class="reaction-content">
-                    <div class="reaction-badge"><span class="lang-en">PURE SPEED</span><span class="lang-es">VELOCIDAD PURA</span></div>
-                    <div class="reaction-name">THE REACTION</div>
-                    <div class="reaction-desc"><span class="lang-en">Tap before it disappears. No memory — just REACT!</span><span class="lang-es">Toca antes de que desaparezca. Sin memoria — ¡solo REACCIONA!</span></div>
-                    <div class="reaction-play-btn"><span class="lang-en">PLAY</span><span class="lang-es">JUGAR</span></div>
-                </div>
-            </a>
-        </div>
-
-        <!-- PATTERN MEMORY WORKOUTS -->
+        <!-- TWO MEMORY WORKOUTS -->
         <div class="section-label">
-            <span class="lang-en">🧠 WORKOUT — PATTERN MEMORY</span>
-            <span class="lang-es">🧠 EJERCICIO — MEMORIA DE PATRONES</span>
+            <span class="lang-en">🧠 MEMORY WORKOUTS</span>
+            <span class="lang-es">🧠 EJERCICIOS DE MEMORIA</span>
         </div>
         <div class="games-grid">
             <a href="/the-match.html" class="game-card match">
-                <div class="game-icon">🎯</div>
+                <div class="game-icon">🧠</div>
                 <div class="game-name">THE MATCH</div>
-                <div class="game-type"><span class="lang-en">Find the cells</span><span class="lang-es">Encuentra las celdas</span></div>
+                <div class="game-type"><span class="lang-en">Memorize positions<br>Tap in order</span><span class="lang-es">Memoriza posiciones<br>Toca en orden</span></div>
                 <div class="game-play-btn"><span class="lang-en">PLAY</span><span class="lang-es">JUGAR</span></div>
             </a>
             <a href="/the-sequence.html" class="game-card sequence">
                 <div class="game-icon">🔢</div>
                 <div class="game-name">THE SEQUENCE</div>
-                <div class="game-type"><span class="lang-en">Repeat the order</span><span class="lang-es">Repite el orden</span></div>
+                <div class="game-type"><span class="lang-en">Watch the sequence<br>Repeat it back</span><span class="lang-es">Observa la secuencia<br>Repítela</span></div>
                 <div class="game-play-btn"><span class="lang-en">PLAY</span><span class="lang-es">JUGAR</span></div>
-            </a>
-        </div>
-
-        <!-- THE CHALLENGE -->
-        <div class="challenge-section">
-            <div class="section-label">
-                <span class="lang-en">🏆 THE CHALLENGE</span>
-                <span class="lang-es">🏆 EL RETO</span>
-            </div>
-            <a href="/the-challenge.html" class="combo-card">
-                <div class="combo-icon">🏆</div>
-                <div class="combo-content">
-                    <div class="combo-badge"><span class="lang-en">ULTIMATE TEST</span><span class="lang-es">PRUEBA FINAL</span></div>
-                    <div class="combo-name">THE REACTION CHALLENGE</div>
-                    <div class="combo-desc"><span class="lang-en">React fast, then prove your memory. Are you ready?</span><span class="lang-es">Reacciona rápido, luego demuestra tu memoria. ¿Estás listo?</span></div>
-                    <div class="combo-play-btn"><span class="lang-en">ACCEPT CHALLENGE</span><span class="lang-es">ACEPTAR RETO</span></div>
-                </div>
             </a>
         </div>
 
@@ -373,13 +278,12 @@
         <footer class="footer">
             <div class="footer-logo">🏀 <span class="laugh">LAUGH</span><span class="court">COURT</span></div>
             <div class="footer-links">
-                <a href="/the-starting-five">The Starting Five</a>
                 <a href="/faq">FAQ</a>
                 <a href="/privacy.html"><span class="lang-en">Privacy</span><span class="lang-es">Privacidad</span></a>
                 <a href="/terms.html"><span class="lang-en">Terms</span><span class="lang-es">Términos</span></a>
             </div>
-            <div class="footer-company">by <a href="https://gostar.digital">GoStar Digital LLC</a> 🇵🇷</div>
-            <div class="footer-trademarks">LaughCourt™, The Starting Five™, GoStars™, and Ritnome™ are trademarks of GoStar Digital LLC.</div>
+            <div class="footer-company">by GoStar Digital LLC 🇵🇷</div>
+            <div class="footer-trademarks">LaughCourt™, GoStars™, and Ritnome™ are trademarks of GoStar Digital LLC.</div>
         </footer>
     </div>
 
@@ -426,10 +330,10 @@
                 });
             }
 
-            var currentLang = localStorage.getItem('laughcourt_lang') || 'en';
+            var currentLang = localStorage.getItem('lc-lang') || 'en';
             function setLang(l) {
                 currentLang = l;
-                localStorage.setItem('laughcourt_lang', l);
+                localStorage.setItem('lc-lang', l);
                 document.body.className = l;
                 document.getElementById('btnEn').className = l === 'en' ? 'lang-btn active' : 'lang-btn';
                 document.getElementById('btnEs').className = l === 'es' ? 'lang-btn active' : 'lang-btn';
