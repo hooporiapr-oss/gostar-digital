@@ -3,866 +3,482 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>THE CHALLENGE | LaughCourt - Where Joy Meets The Game</title>
+<title>THE CHALLENGE | LaughCourt</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-:root {
-    --orange: #FF6B35;
-    --gold: #FFD700;
-    --teal: #00D9A5;
-    --pink: #FF1493;
-    --purple: #9B59B6;
-    --fire: #FF4500;
-    --dark: #0a0a0f;
-    --card: #111118;
-    --text: #FFFFFF;
-    --muted: #8892a0;
-    --border: rgba(255,255,255,0.1);
-    --nav-height: 50px;
-}
+:root{--orange:#FF6B35;--gold:#FFD700;--teal:#00D9A5;--pink:#FF1493;--purple:#9B59B6;--fire:#FF4500;--dark:#0a0a0f;--card:#111118;--text:#FFF;--muted:#8892a0;--border:rgba(255,255,255,0.1)}
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background:var(--dark);color:var(--text);touch-action:manipulation;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
-
-.mini-nav{position:fixed;top:0;left:0;right:0;background:var(--card);border-bottom:1px solid var(--border);padding-top:env(safe-area-inset-top);z-index:1000;transition:transform 0.3s ease}
-.nav-row{display:flex;align-items:center;justify-content:space-between;height:50px;padding:0 12px}
-.back-btn{display:flex;align-items:center;gap:6px;padding:8px 12px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:8px;font-family:'Outfit',sans-serif;font-size:0.75rem;font-weight:600;cursor:pointer;text-decoration:none;transition:all 0.2s}
-.back-btn:hover,.back-btn:active{border-color:var(--gold);color:var(--gold)}
-.nav-title{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;color:var(--gold);display:flex;align-items:center;gap:6px}
-.nav-right{display:flex;align-items:center;gap:6px}
-.nav-lang{display:flex;gap:2px}
-.nav-lang-btn{padding:5px 8px;border:1px solid var(--border);background:0;color:var(--muted);border-radius:4px;font-size:0.6rem;font-weight:600;cursor:pointer;min-width:28px;min-height:28px}
-.nav-lang-btn.active{border-color:var(--gold);color:var(--gold)}
-.settings-wrapper{position:relative}
-.settings-btn{width:32px;height:32px;border-radius:6px;background:0;border:1px solid var(--border);color:var(--muted);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.settings-btn.open{background:rgba(255,255,255,0.1);color:var(--gold)}
-.settings-dropdown{position:absolute;top:calc(100% + 6px);right:0;width:175px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px;display:none;box-shadow:0 10px 40px rgba(0,0,0,0.5)}
-.settings-dropdown.show{display:block}
-.settings-section{margin-bottom:10px}
-.settings-section:last-child{margin-bottom:0}
-.settings-label{font-size:0.5rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
-.speed-status{display:flex;gap:4px}
-.speed-chip{flex:1;padding:4px 2px;border-radius:4px;font-family:'Bebas Neue',sans-serif;font-size:0.55rem;text-align:center;background:rgba(255,255,255,0.05);color:var(--muted)}
-.speed-chip.unlocked{background:rgba(255,215,0,0.15);color:var(--gold)}
-.settings-link{display:block;width:100%;padding:8px;border-radius:6px;font-size:0.7rem;text-decoration:none;text-align:center;cursor:pointer;border:none;font-family:'Outfit',sans-serif}
-.settings-link.upgrade{background:linear-gradient(135deg,var(--gold),#FFA500);color:var(--dark);font-weight:600;margin-bottom:6px}
-.settings-link.logout{background:0;border:1px solid var(--border);color:var(--muted)}
-
-.focus-btn{position:fixed;top:calc(env(safe-area-inset-top, 0px) + 6px);right:12px;width:32px;height:32px;border-radius:6px;background:var(--card);border:1px solid var(--border);color:var(--muted);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:1001;transition:all 0.2s}
-.focus-btn:active{transform:scale(0.95)}
-.focus-btn.active{background:rgba(255,215,0,0.3);border-color:var(--gold);color:var(--gold)}
-
-body.focus-mode .mini-nav{transform:translateY(-100%)}
-body.focus-mode .game-container{padding-top:calc(env(safe-area-inset-top) + 60px)}
-body.focus-mode .stats-bar{display:none}
-body.focus-mode .challenge-progress{display:none}
-body.focus-mode .phase-display{display:none}
-body.focus-mode .message-display{display:none}
-body.focus-mode .division-display{display:none}
-body.focus-mode .court-wrapper{flex:1}
-body.focus-mode .court-grid{width:min(95vw, calc(100dvh - 200px));height:min(95vw, calc(100dvh - 200px));max-width:500px;max-height:500px}
-body.focus-mode .action-btn{position:fixed;bottom:calc(env(safe-area-inset-bottom, 10px) + 15px);left:15px;right:15px;z-index:100}
-body.focus-mode .coach-message{bottom:120px}
-
-.game-container{width:100%;max-width:420px;height:100dvh;margin:0 auto;padding:5px 10px;padding-top:calc(var(--nav-height) + env(safe-area-inset-top) + 8px);padding-bottom:max(5px,env(safe-area-inset-bottom));display:flex;flex-direction:column;overflow:hidden;transition:padding 0.3s ease}
-
-.stats-bar{display:flex;justify-content:center;gap:12px;padding:5px 8px;background:var(--card);border-radius:8px;margin-bottom:4px;flex-shrink:0}
-.stat{text-align:center;min-width:40px}
-.stat-value{font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--gold);line-height:1}
-.stat-label{font-size:0.42rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px}
-
-.challenge-progress{display:flex;flex-direction:column;gap:3px;padding:6px 8px;background:var(--card);border-radius:8px;margin-bottom:4px;flex-shrink:0;border:1px solid var(--gold)}
-.challenge-type-label{text-align:center;font-family:'Bebas Neue',sans-serif;font-size:0.65rem;letter-spacing:1px;color:var(--gold);margin-bottom:2px}
-.tier-row{display:flex;justify-content:space-between;align-items:center}
-.tier-label{font-family:'Bebas Neue',sans-serif;font-size:0.55rem;letter-spacing:1px;width:34px}
-.tier-label.d3{color:var(--teal)}
-.tier-label.d2{color:var(--gold)}
-.tier-label.d1{color:var(--fire)}
-.tier-levels{display:flex;gap:3px;flex:1;justify-content:center}
-.tier-level{width:18px;height:18px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:0.5rem;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--muted)}
-.tier-level.completed{background:var(--gold);border-color:var(--gold);color:var(--dark)}
-.tier-level.current{background:var(--gold);border-color:var(--gold);color:var(--dark);animation:currentPulse 1s infinite}
-.tier-level.locked{opacity:0.3}
-@keyframes currentPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
-.tier-status{width:22px;text-align:center;font-size:0.7rem}
-
-.phase-display{display:flex;align-items:center;justify-content:center;gap:6px;padding:5px;background:var(--card);border-radius:8px;margin-bottom:4px;flex-shrink:0}
-.phase-indicator{font-size:0.6rem;font-family:'Bebas Neue',sans-serif;letter-spacing:1px;padding:4px 8px;border-radius:6px;opacity:0.4}
-.phase-indicator.active{opacity:1}
-.phase-indicator.complete{opacity:1}
-.phase-indicator.react-phase{background:rgba(155,89,182,0.2);color:var(--purple)}
-.phase-indicator.react-phase.active{background:rgba(155,89,182,0.4)}
-.phase-indicator.react-phase.complete{background:rgba(155,89,182,0.5)}
-.phase-indicator.sequence-phase{background:rgba(0,217,165,0.2);color:var(--teal)}
-.phase-indicator.sequence-phase.active{background:rgba(0,217,165,0.4)}
-.phase-indicator.sequence-phase.complete{background:rgba(0,217,165,0.5)}
-.phase-indicator.match-phase{background:rgba(255,107,53,0.2);color:var(--orange)}
-.phase-indicator.match-phase.active{background:rgba(255,107,53,0.4)}
-.phase-indicator.match-phase.complete{background:rgba(255,107,53,0.5)}
-.phase-arrow{color:var(--muted);font-size:0.6rem}
-
-.message-display{background:var(--card);border:2px solid var(--gold);border-radius:8px;padding:6px;margin-bottom:4px;text-align:center;flex-shrink:0;min-height:34px;display:flex;align-items:center;justify-content:center;transition:border-color 0.3s}
-.message-display.react-mode{border-color:var(--purple)}
-.message-display.sequence-mode{border-color:var(--teal)}
-.message-display.match-mode{border-color:var(--orange)}
-.message-text{font-family:'Bebas Neue',sans-serif;font-size:0.85rem;letter-spacing:2px;color:var(--text)}
-.message-text.watch{color:var(--gold)}
-.message-text.go{color:var(--teal)}
-.message-text.perfect{color:var(--teal)}
-.message-text.miss{color:var(--pink)}
-
-.court-wrapper{flex:1;display:flex;align-items:center;justify-content:center;min-height:0;overflow:hidden;transition:all 0.3s ease}
-.court-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:8px;background-color:#1a1a24;background-image:url('/icon.png');background-size:85%;background-position:center;background-repeat:no-repeat;border-radius:16px;border:3px solid var(--gold);width:min(100%,calc(100dvh - 340px),320px);height:min(100%,calc(100dvh - 340px),320px);min-width:200px;min-height:200px;aspect-ratio:1;position:relative;transition:all 0.3s ease;box-shadow:0 0 25px rgba(255,215,0,0.3)}
-.court-grid.react-mode{border-color:var(--purple);box-shadow:0 0 25px rgba(155,89,182,0.3)}
-.court-grid.sequence-mode{border-color:var(--teal);box-shadow:0 0 25px rgba(0,217,165,0.3)}
-.court-grid.match-mode{border-color:var(--orange);box-shadow:0 0 25px rgba(255,107,53,0.3)}
-.court-grid::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(10,10,15,0.6);border-radius:13px;pointer-events:none;z-index:0}
-
-.grid-cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:6px;cursor:pointer;background:rgba(255,255,255,0.08);border:2px solid rgba(255,255,255,0.2);min-width:32px;min-height:32px;transition:all 0.15s;position:relative;z-index:1}
-.grid-cell:active{transform:scale(0.95)}
-.grid-cell.lit{background:var(--purple)!important;border-color:var(--purple)!important;box-shadow:0 0 20px var(--purple);transform:scale(1.05)}
-.grid-cell.correct{background:var(--teal)!important;border-color:var(--teal)!important;box-shadow:0 0 15px var(--teal)}
-.grid-cell.wrong{background:var(--pink)!important;border-color:var(--pink)!important;box-shadow:0 0 15px var(--pink)}
-.grid-cell.found{background:var(--orange)!important;border-color:var(--orange)!important;box-shadow:0 0 10px var(--orange)}
-@keyframes correctPulse{50%{transform:scale(1.15)}}
-@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
-.grid-cell.correct{animation:correctPulse 0.4s}
-.grid-cell.wrong{animation:shake 0.4s}
-
-.division-display{display:flex;justify-content:space-between;align-items:center;padding:5px 10px;background:var(--card);border-radius:8px;margin:4px 0;flex-shrink:0;min-height:32px}
-.division-badge{font-family:'Bebas Neue',sans-serif;font-size:0.8rem;letter-spacing:2px;color:var(--gold)}
-.taps-counter{font-family:'Bebas Neue',sans-serif;font-size:0.95rem;color:var(--gold)}
-.score-display{font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--gold)}
-
-.action-btn{width:100%;min-height:46px;padding:11px;border:none;border-radius:10px;font-family:'Bebas Neue',sans-serif;font-size:1.25rem;letter-spacing:4px;cursor:pointer;background:linear-gradient(135deg,var(--gold),#FFA500);color:var(--dark);flex-shrink:0;transition:all 0.3s ease;position:relative;z-index:100}
-.action-btn:disabled{opacity:0.5;cursor:not-allowed}
-
-.emoji-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;overflow:hidden}
-.burst-emoji{position:absolute;font-size:1.6rem;animation:emojiBurst 1.2s ease-out forwards;pointer-events:none}
-@keyframes emojiBurst{0%{opacity:1;transform:translate(-50%,-50%) scale(0.3)}20%{opacity:1;transform:translate(-50%,-50%) scale(1.2)}100%{opacity:0;transform:translate(var(--tx),var(--ty)) scale(0.8) rotate(var(--rot))}}
-.burst-emoji.big{font-size:2.2rem}
-.court-grid.joy-pulse{animation:joyPulse 0.5s ease-out}
-@keyframes joyPulse{0%{box-shadow:0 0 0 0 rgba(255,215,0,0.7)}50%{box-shadow:0 0 25px 8px rgba(255,215,0,0.5)}100%{box-shadow:0 0 25px rgba(255,215,0,0.3)}}
-
-.overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.92);display:none;align-items:center;justify-content:center;z-index:1100;padding:20px}
+html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background:var(--dark);color:var(--text);touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none}
+.nav{position:fixed;top:0;left:0;right:0;background:var(--card);border-bottom:1px solid var(--border);padding:env(safe-area-inset-top) 12px 0;z-index:1000;height:calc(50px + env(safe-area-inset-top))}
+.nav-row{display:flex;align-items:center;justify-content:space-between;height:50px}
+.back-btn{padding:8px 12px;background:0;border:1px solid var(--border);color:var(--muted);border-radius:8px;font-size:0.75rem;font-weight:600;text-decoration:none}
+.nav-title{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;color:var(--gold)}
+.game-box{width:100%;max-width:420px;height:100dvh;margin:0 auto;padding:8px;padding-top:calc(58px + env(safe-area-inset-top));padding-bottom:env(safe-area-inset-bottom);display:flex;flex-direction:column}
+.stats{display:flex;justify-content:center;gap:15px;padding:6px;background:var(--card);border-radius:8px;margin-bottom:5px}
+.stat{text-align:center}
+.stat-val{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:var(--gold)}
+.stat-lbl{font-size:0.4rem;color:var(--muted);text-transform:uppercase}
+.phases{display:flex;align-items:center;justify-content:center;gap:8px;padding:6px;background:var(--card);border-radius:8px;margin-bottom:5px}
+.ph{font-size:0.6rem;font-family:'Bebas Neue',sans-serif;padding:5px 10px;border-radius:6px;opacity:0.3}
+.ph.on{opacity:1}
+.ph.done{opacity:0.8}
+.ph-react{background:rgba(155,89,182,0.3);color:var(--purple)}
+.ph-react.on{background:rgba(155,89,182,0.6)}
+.ph-seq{background:rgba(0,217,165,0.3);color:var(--teal)}
+.ph-seq.on{background:rgba(0,217,165,0.6)}
+.ph-match{background:rgba(255,107,53,0.3);color:var(--orange)}
+.ph-match.on{background:rgba(255,107,53,0.6)}
+.arrow{color:var(--muted);font-size:0.5rem}
+.msg{background:var(--card);border:2px solid var(--gold);border-radius:8px;padding:8px;text-align:center;margin-bottom:5px;min-height:38px;display:flex;align-items:center;justify-content:center;transition:border-color 0.2s}
+.msg.react{border-color:var(--purple)}
+.msg.seq{border-color:var(--teal)}
+.msg.match{border-color:var(--orange)}
+.msg-txt{font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:2px}
+.court-wrap{flex:1;display:flex;align-items:center;justify-content:center;min-height:0}
+.court{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:8px;background:#1a1a24;border-radius:16px;border:3px solid var(--gold);width:min(100%,calc(100dvh - 300px),320px);height:min(100%,calc(100dvh - 300px),320px);min-width:200px;min-height:200px;aspect-ratio:1;transition:border-color 0.2s,box-shadow 0.2s;box-shadow:0 0 20px rgba(255,215,0,0.2)}
+.court.react{border-color:var(--purple);box-shadow:0 0 20px rgba(155,89,182,0.3)}
+.court.seq{border-color:var(--teal);box-shadow:0 0 20px rgba(0,217,165,0.3)}
+.court.match{border-color:var(--orange);box-shadow:0 0 20px rgba(255,107,53,0.3)}
+.cell{aspect-ratio:1;border-radius:6px;cursor:pointer;background:rgba(255,255,255,0.08);border:2px solid rgba(255,255,255,0.2);transition:all 0.1s}
+.cell:active{transform:scale(0.95)}
+.cell.lit{background:var(--purple)!important;border-color:var(--purple)!important;box-shadow:0 0 15px var(--purple);transform:scale(1.05)}
+.cell.ok{background:var(--teal)!important;border-color:var(--teal)!important;box-shadow:0 0 12px var(--teal)}
+.cell.bad{background:var(--pink)!important;border-color:var(--pink)!important;box-shadow:0 0 12px var(--pink)}
+.cell.found{background:var(--orange)!important;border-color:var(--orange)!important;box-shadow:0 0 12px var(--orange)}
+.info{display:flex;justify-content:space-between;padding:6px 10px;background:var(--card);border-radius:8px;margin:5px 0}
+.info-txt{font-family:'Bebas Neue',sans-serif;font-size:0.85rem;color:var(--gold)}
+.go-btn{width:100%;min-height:48px;padding:12px;border:none;border-radius:10px;font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:4px;cursor:pointer;background:linear-gradient(135deg,var(--gold),#FFA500);color:var(--dark)}
+.go-btn:disabled{opacity:0.5}
+.emojis{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999}
+.emo{position:absolute;font-size:1.8rem;animation:pop 1s ease-out forwards}
+@keyframes pop{0%{opacity:1;transform:translate(-50%,-50%) scale(0.5)}30%{transform:translate(-50%,-50%) scale(1.2)}100%{opacity:0;transform:translate(var(--x),var(--y)) scale(0.6)}}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.9);display:none;align-items:center;justify-content:center;z-index:1100}
 .overlay.show{display:flex}
-.overlay-card{background:var(--card);border:2px solid var(--gold);border-radius:14px;padding:20px;text-align:center;max-width:280px;width:100%}
-.overlay-card.tier{border-color:var(--fire)}
-.overlay-card.champion{border-color:var(--gold);background:linear-gradient(135deg,rgba(255,215,0,0.1),rgba(255,69,0,0.1))}
-.overlay-emoji{font-size:2.5rem;margin-bottom:8px}
-.overlay-title{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:2px;margin-bottom:6px;color:var(--gold)}
-.overlay-card.tier .overlay-title{color:var(--fire)}
-.overlay-message{color:var(--muted);margin-bottom:12px;font-size:0.85rem}
-.overlay-btn{min-height:44px;padding:12px 24px;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:2px;cursor:pointer;margin:4px;background:linear-gradient(135deg,var(--gold),#FFA500);color:var(--dark)}
-
-.coach-message{position:fixed;bottom:70px;left:50%;transform:translateX(-50%) translateY(100px);background:linear-gradient(135deg,var(--gold),#FFA500);color:var(--dark);padding:8px 16px;border-radius:14px;font-weight:700;font-size:0.85rem;opacity:0;transition:all 0.3s;z-index:50}
-.coach-message.show{transform:translateX(-50%) translateY(0);opacity:1}
-
-body.en .lang-es{display:none!important}
-body.es .lang-en{display:none!important}
-
-@media(min-height:720px){.court-grid{width:min(100%,calc(100dvh - 340px),340px);height:min(100%,calc(100dvh - 340px),340px)}.stat-value{font-size:1.1rem}.message-text{font-size:0.95rem}.action-btn{min-height:50px;font-size:1.35rem}}
-@media(max-height:620px){.stat-value{font-size:0.9rem}.challenge-progress{padding:4px 6px}.tier-level{width:16px;height:16px;font-size:0.45rem}.tier-label{font-size:0.5rem;width:30px}.phase-display{padding:4px;gap:4px}.phase-indicator{font-size:0.5rem;padding:3px 6px}.message-display{padding:5px;min-height:30px}.message-text{font-size:0.75rem}.court-grid{min-width:180px;min-height:180px;width:min(100%,calc(100dvh - 300px),280px);height:min(100%,calc(100dvh - 300px),280px);gap:3px;padding:6px}.grid-cell{min-width:28px;min-height:28px}.division-display{padding:4px 8px;min-height:28px}.action-btn{min-height:42px;font-size:1.1rem}}
-@media(max-height:540px){.nav-row{height:44px}.stats-bar{padding:3px 5px;margin-bottom:3px}.stat-value{font-size:0.8rem}.stat-label{font-size:0.38rem}.challenge-progress{padding:3px 5px;margin-bottom:3px}.tier-row{margin-bottom:1px}.tier-level{width:14px;height:14px;font-size:0.4rem}.tier-label{font-size:0.45rem;width:26px}.tier-status{font-size:0.6rem;width:18px}.phase-display{padding:3px;margin-bottom:3px}.phase-indicator{font-size:0.45rem;padding:2px 4px}.message-display{padding:4px;margin-bottom:3px;min-height:24px}.message-text{font-size:0.65rem}.court-grid{min-width:150px;min-height:150px;gap:2px;padding:5px}.grid-cell{min-width:24px;min-height:24px}.division-display{padding:3px 6px;min-height:24px;margin:3px 0}.division-badge,.taps-counter{font-size:0.7rem}.score-display{font-size:0.85rem}.action-btn{min-height:38px;padding:8px;font-size:1rem}}
+.ocard{background:var(--card);border:2px solid var(--gold);border-radius:14px;padding:24px;text-align:center;max-width:280px}
+.ocard h2{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--gold);margin:10px 0}
+.ocard p{color:var(--muted);margin-bottom:15px}
+.ocard button{padding:12px 24px;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:1rem;cursor:pointer;background:linear-gradient(135deg,var(--gold),#FFA500);color:var(--dark)}
 </style>
 </head>
-<body class="en">
+<body>
 
-<button class="focus-btn" id="focusBtn" title="Focus Mode">⛶</button>
-
-<nav class="mini-nav">
-<div class="nav-row">
-<a href="/play.html" class="back-btn">← <span class="lang-en">BACK</span><span class="lang-es">VOLVER</span></a>
+<nav class="nav"><div class="nav-row">
+<a href="/play.html" class="back-btn">← BACK</a>
 <div class="nav-title">🏆 THE CHALLENGE</div>
-<div class="nav-right">
-<div class="nav-lang"><button class="nav-lang-btn active" id="btnEn">EN</button><button class="nav-lang-btn" id="btnEs">ES</button></div>
-<div class="settings-wrapper"><button class="settings-btn" id="settingsBtn">⚙️</button>
-<div class="settings-dropdown" id="settingsDropdown">
-<div class="settings-section"><div class="settings-label"><span class="lang-en">Division Access</span><span class="lang-es">Acceso</span></div><div class="speed-status"><span class="speed-chip unlocked">✓ D3</span><span class="speed-chip unlocked">✓ D2</span><span class="speed-chip unlocked">✓ D1</span></div></div>
-<div class="settings-section"><button class="settings-link logout" id="logoutBtn">← <span class="lang-en">Log Out</span><span class="lang-es">Salir</span></button></div>
-</div></div></div></div>
-</nav>
+<div></div>
+</div></nav>
 
-<div class="emoji-container" id="emojiContainer"></div>
+<div class="emojis" id="emojis"></div>
 
-<div class="game-container">
-<div class="stats-bar">
-<div class="stat"><div class="stat-value" id="levelDisplay">1</div><div class="stat-label"><span class="lang-en">Level</span><span class="lang-es">Nivel</span></div></div>
-<div class="stat"><div class="stat-value" id="streakDisplay">0</div><div class="stat-label">🔥</div></div>
-<div class="stat"><div class="stat-value" id="scoreDisplay">0</div><div class="stat-label"><span class="lang-en">Score</span><span class="lang-es">Puntos</span></div></div>
+<div class="game-box">
+<div class="stats">
+<div class="stat"><div class="stat-val" id="sLevel">1</div><div class="stat-lbl">LEVEL</div></div>
+<div class="stat"><div class="stat-val" id="sStreak">0</div><div class="stat-lbl">🔥</div></div>
+<div class="stat"><div class="stat-val" id="sScore">0</div><div class="stat-lbl">SCORE</div></div>
 </div>
 
-<div class="challenge-progress">
-<div class="challenge-type-label">🏆 TRIPLE THREAT</div>
-<div class="tier-row">
-<div class="tier-label d3">🥉 D3</div>
-<div class="tier-levels" id="d3Levels"></div>
-<div class="tier-status" id="d3Status">⬜</div>
-</div>
-<div class="tier-row">
-<div class="tier-label d2">🥈 D2</div>
-<div class="tier-levels" id="d2Levels"></div>
-<div class="tier-status" id="d2Status">🔒</div>
-</div>
-<div class="tier-row">
-<div class="tier-label d1">🥇 D1</div>
-<div class="tier-levels" id="d1Levels"></div>
-<div class="tier-status" id="d1Status">🔒</div>
-</div>
+<div class="phases">
+<span class="ph ph-react on" id="phReact">⚡ REACT</span>
+<span class="arrow">→</span>
+<span class="ph ph-seq" id="phSeq">🔢 ORDER</span>
+<span class="arrow">→</span>
+<span class="ph ph-match" id="phMatch">🎯 FIND</span>
 </div>
 
-<div class="phase-display">
-<span class="phase-indicator react-phase active" id="reactPhase">⚡ REACT</span>
-<span class="phase-arrow">→</span>
-<span class="phase-indicator sequence-phase" id="sequencePhase">🔢 ORDER</span>
-<span class="phase-arrow">→</span>
-<span class="phase-indicator match-phase" id="matchPhase">🎯 FIND</span>
+<div class="msg" id="msgBox"><span class="msg-txt" id="msgTxt">TAP GO TO START!</span></div>
+
+<div class="court-wrap"><div class="court" id="court"></div></div>
+
+<div class="info">
+<span class="info-txt" id="iDiv">L1 D3</span>
+<span class="info-txt" id="iCount">0/5</span>
+<span class="info-txt" id="iScore">0</span>
 </div>
 
-<div class="message-display react-mode" id="messageDisplay"><span class="message-text" id="messageText"><span class="lang-en">TAP GO TO START!</span><span class="lang-es">¡PULSA IR!</span></span></div>
-
-<div class="court-wrapper"><div class="court-grid" id="courtGrid"></div></div>
-
-<div class="division-display">
-<div class="division-badge" id="divisionBadge">L1 D3</div>
-<div class="taps-counter" id="tapsCounter">0/5</div>
-<div class="score-display" id="totalScore">0</div>
+<button class="go-btn" id="goBtn">GO</button>
 </div>
 
-<button class="action-btn" id="actionBtn"><span class="lang-en">GO</span><span class="lang-es">IR</span></button>
-</div>
-
-<div class="overlay" id="levelUpOverlay">
-<div class="overlay-card">
-<div class="overlay-emoji">⬆️</div>
-<h2 class="overlay-title"><span class="lang-en">LEVEL UP!</span><span class="lang-es">¡SUBISTE!</span></h2>
-<p class="overlay-message" id="levelUpMessage"></p>
-<button class="overlay-btn" id="levelUpBtn"><span class="lang-en">CONTINUE</span><span class="lang-es">CONTINUAR</span></button>
+<div class="overlay" id="winOverlay">
+<div class="ocard">
+<div style="font-size:2.5rem">⬆️</div>
+<h2>LEVEL UP!</h2>
+<p id="winMsg">Advancing to Level 2</p>
+<button id="winBtn">CONTINUE</button>
 </div>
 </div>
 
-<div class="overlay" id="tierUpOverlay">
-<div class="overlay-card tier">
-<div class="overlay-emoji" id="tierUpEmoji">🥈</div>
-<h2 class="overlay-title" id="tierUpTitle">DIVISION 2!</h2>
-<p class="overlay-message" id="tierUpMessage"></p>
-<button class="overlay-btn" id="tierUpBtn"><span class="lang-en">LET'S GO!</span><span class="lang-es">¡VAMOS!</span></button>
+<div class="overlay" id="champOverlay">
+<div class="ocard">
+<div style="font-size:2.5rem">👑</div>
+<h2>CHAMPION!</h2>
+<p id="champMsg">You conquered!</p>
+<button id="champBtn">LEGENDARY!</button>
 </div>
 </div>
-
-<div class="overlay" id="championOverlay">
-<div class="overlay-card champion">
-<div class="overlay-emoji">👑</div>
-<h2 class="overlay-title">CHAMPION!</h2>
-<p class="overlay-message" id="championMessage"></p>
-<button class="overlay-btn" id="championBtn"><span class="lang-en">LEGENDARY!</span><span class="lang-es">¡LEGENDARIO!</span></button>
-</div>
-</div>
-
-<div class="coach-message" id="coachMessage"></div>
 
 <script>
-(function(){
-    // Focus Mode
-    var focusBtn = document.getElementById('focusBtn');
-    var isFocusMode = localStorage.getItem('lc-focus-mode') === 'true';
-    function applyFocusMode() {
-        document.body.classList.toggle('focus-mode', isFocusMode);
-        focusBtn.classList.toggle('active', isFocusMode);
-    }
-    focusBtn.onclick = function() {
-        isFocusMode = !isFocusMode;
-        localStorage.setItem('lc-focus-mode', isFocusMode);
-        applyFocusMode();
-    };
-    applyFocusMode();
+var G = {
+    phase: 'idle',
+    level: parseInt(localStorage.getItem('lc-challenge-level')) || 1,
+    score: 0,
+    streak: 0,
+    seq: [],
+    seqIdx: 0,
+    found: [],
+    curCell: -1,
+    taps: 0,
+    total: 0,
+    canTap: false,
+    timer: null,
+    cells: []
+};
 
-    // Auth
-    var host = window.location.hostname;
-    var isProduction = host.indexOf('laughcourt') > -1 || host.indexOf('github.io') > -1 || host.indexOf('gostardigital') > -1;
-    if (isProduction) {
-        var user = null;
-        try { user = JSON.parse(localStorage.getItem('lc-user')); } catch(e) {}
-        if (!user || !user.pin || user.pin.length < 4) { window.location.replace('/login'); return; }
-        var sessionPin = sessionStorage.getItem('lc-pin');
-        var sessionToken = sessionStorage.getItem('lc-token');
-        function validateSession() {
-            if (!sessionPin || !sessionToken) { window.location.href = '/login'; return; }
-            fetch('/api/session/validate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ pin: sessionPin, token: sessionToken }) })
-            .then(function(r) { return r.json(); })
-            .then(function(d) { if (!d.valid) { localStorage.removeItem('lc-user'); localStorage.removeItem('lc-speed-access'); sessionStorage.clear(); window.location.href = '/login'; } })
-            .catch(function() {});
+var court = document.getElementById('court');
+var msgBox = document.getElementById('msgBox');
+var msgTxt = document.getElementById('msgTxt');
+var goBtn = document.getElementById('goBtn');
+var emojis = document.getElementById('emojis');
+
+var SPEEDS = {slow:1200, med:800, fast:500};
+var EMOS = ['😂','🤣','😄','🥳','🏆','👑','🔥','⚡','💎'];
+
+function getSpeed(){ return G.level <= 3 ? 'slow' : G.level <= 6 ? 'med' : 'fast'; }
+function getDiv(){ return G.level <= 3 ? 'D3' : G.level <= 6 ? 'D2' : 'D1'; }
+function getTotal(){ return G.level + 4; }
+
+// Audio
+var actx = null;
+function beep(f,d){
+    if(!actx) try{ actx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){return;}
+    try{
+        if(actx.state==='suspended') actx.resume();
+        var o=actx.createOscillator(), g=actx.createGain();
+        o.frequency.value=f; o.connect(g); g.connect(actx.destination);
+        g.gain.setValueAtTime(0.2,actx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.01,actx.currentTime+d);
+        o.start(); o.stop(actx.currentTime+d);
+    }catch(e){}
+}
+
+// Emojis
+function burst(n){
+    var r = court.getBoundingClientRect();
+    var cx = r.left + r.width/2, cy = r.top + r.height/2;
+    for(var i=0; i<n; i++){
+        (function(i){
+            window.setTimeout(function(){
+                var e = document.createElement('div');
+                e.className = 'emo';
+                e.textContent = EMOS[Math.floor(Math.random()*EMOS.length)];
+                var a = Math.random()*Math.PI*2, d = 50+Math.random()*70;
+                e.style.cssText = 'left:'+cx+'px;top:'+cy+'px;--x:'+(Math.cos(a)*d)+'px;--y:'+(Math.sin(a)*d)+'px';
+                emojis.appendChild(e);
+                window.setTimeout(function(){ e.remove(); }, 1200);
+            }, i*40);
+        })(i);
+    }
+}
+
+// Build grid
+function buildGrid(){
+    court.innerHTML = '';
+    G.cells = [];
+    for(var i=0; i<25; i++){
+        var c = document.createElement('div');
+        c.className = 'cell';
+        (function(idx){
+            c.onclick = function(){ tap(idx); };
+        })(i);
+        court.appendChild(c);
+        G.cells.push(c);
+    }
+}
+
+function clearCells(){
+    G.cells.forEach(function(c){ c.className = 'cell'; });
+}
+
+function updateUI(){
+    document.getElementById('sLevel').textContent = G.level;
+    document.getElementById('sStreak').textContent = G.streak;
+    document.getElementById('sScore').textContent = G.score;
+    document.getElementById('iDiv').textContent = 'L'+G.level+' '+getDiv();
+    document.getElementById('iScore').textContent = G.score;
+    
+    // Phases
+    var pr = document.getElementById('phReact');
+    var ps = document.getElementById('phSeq');
+    var pm = document.getElementById('phMatch');
+    pr.className = 'ph ph-react' + (G.phase==='react'?' on':G.phase==='sequence'||G.phase==='match'?' done':'');
+    ps.className = 'ph ph-seq' + (G.phase==='sequence'?' on':G.phase==='match'?' done':'');
+    pm.className = 'ph ph-match' + (G.phase==='match'?' on':'');
+    
+    // Colors
+    court.className = 'court' + (G.phase==='react'?' react':G.phase==='sequence'?' seq':G.phase==='match'?' match':'');
+    msgBox.className = 'msg' + (G.phase==='react'?' react':G.phase==='sequence'?' seq':G.phase==='match'?' match':'');
+}
+
+function setMsg(t){ msgTxt.textContent = t; }
+
+// ========== GAME FLOW ==========
+
+function startGame(){
+    if(G.phase !== 'idle') return;
+    
+    G.score = 0;
+    G.seq = [];
+    G.seqIdx = 0;
+    G.found = [];
+    G.curCell = -1;
+    G.taps = 0;
+    G.total = getTotal();
+    G.canTap = false;
+    
+    goBtn.disabled = true;
+    clearCells();
+    
+    G.phase = 'react';
+    updateUI();
+    document.getElementById('iCount').textContent = '0/'+G.total;
+    
+    setMsg('GET READY...');
+    
+    window.setTimeout(function(){
+        setMsg('⚡ REACT!');
+        flashNext();
+    }, 800);
+}
+
+function flashNext(){
+    if(G.phase !== 'react') return;
+    
+    if(G.curCell >= 0) G.cells[G.curCell].classList.remove('lit');
+    
+    var next;
+    do { next = Math.floor(Math.random()*25); } while(next === G.curCell);
+    
+    G.curCell = next;
+    G.seq.push(next);
+    G.cells[next].classList.add('lit');
+    G.canTap = true;
+    
+    beep(880, 0.12);
+    
+    var spd = SPEEDS[getSpeed()];
+    G.timer = window.setTimeout(function(){
+        if(G.canTap && G.phase === 'react'){
+            G.canTap = false;
+            fail('TOO SLOW!');
         }
-        validateSession();
-        setInterval(validateSession, 30000);
-    }
+    }, spd);
+}
 
-    // Settings
-    var settingsBtn = document.getElementById('settingsBtn');
-    var settingsDropdown = document.getElementById('settingsDropdown');
-    settingsBtn.onclick = function(e) { e.stopPropagation(); settingsBtn.classList.toggle('open'); settingsDropdown.classList.toggle('show'); };
-    document.addEventListener('click', function(e) { if (!settingsDropdown.contains(e.target) && e.target !== settingsBtn) { settingsBtn.classList.remove('open'); settingsDropdown.classList.remove('show'); } });
-    document.getElementById('logoutBtn').onclick = function() {
-        var p = sessionStorage.getItem('lc-pin'), t = sessionStorage.getItem('lc-token');
-        if (p && t) fetch('/api/session/destroy', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ pin: p, token: t }) }).catch(function() {});
-        localStorage.removeItem('lc-user'); localStorage.removeItem('lc-speed-access'); sessionStorage.clear(); window.location.href = '/login';
-    };
-
-    // Language
-    var currentLang = localStorage.getItem('laughcourt_lang') || 'en';
-    function setLang(l) {
-        currentLang = l;
-        localStorage.setItem('laughcourt_lang', l);
-        document.body.className = l + (isFocusMode ? ' focus-mode' : '');
-        document.getElementById('btnEn').className = l === 'en' ? 'nav-lang-btn active' : 'nav-lang-btn';
-        document.getElementById('btnEs').className = l === 'es' ? 'nav-lang-btn active' : 'nav-lang-btn';
-    }
-    document.getElementById('btnEn').onclick = function() { setLang('en'); };
-    document.getElementById('btnEs').onclick = function() { setLang('es'); };
-
-    // Config
-    var TOTAL_CELLS = 25;
-    var SPEED_CONFIG = { slow: 1200, med: 800, fast: 500 };
-    var LAUGH_EMOJIS = ['😂','😆','🤣','😄','😁','🥳','😊','🏆'];
-    var CHAMPION_EMOJIS = ['👑','🏆','🔥','⚡','💎','🌟','✨','🎯'];
-
-    function getCellCount(level) { return level + 4; }
-    function getChallengeSpeed(level) { return level <= 3 ? 'slow' : level <= 6 ? 'med' : 'fast'; }
-    function getTierForLevel(level) { return level <= 3 ? 'slow' : level <= 6 ? 'med' : 'fast'; }
-    function getDivisionName(speed) { return speed === 'slow' ? 'D3' : speed === 'med' ? 'D2' : 'D1'; }
-
-    // State
-    var state = {
-        phase: 'react',
-        level: parseInt(localStorage.getItem('lc-challenge-level')) || 1,
-        speed: 'slow',
-        score: 0,
-        streak: 0,
-        isChampion: localStorage.getItem('lc-challenge-champion') === 'true',
-        reactionSequence: [],
-        sequenceIndex: 0,
-        matchFound: [],
-        currentTap: 0,
-        totalTaps: 5,
-        isPlaying: false,
-        canTap: false,
-        cells: [],
-        currentCell: -1,
-        timer: null,
-        timerStart: 0
-    };
-
-    var courtGrid = document.getElementById('courtGrid');
-    var messageText = document.getElementById('messageText');
-    var messageDisplay = document.getElementById('messageDisplay');
-    var actionBtn = document.getElementById('actionBtn');
-    var coachMessage = document.getElementById('coachMessage');
-    var emojiContainer = document.getElementById('emojiContainer');
-
-    // Audio
-    var audioCtx = null;
-    function getAudioContext() {
-        if (!audioCtx) try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) {}
-        return audioCtx;
-    }
-    function playTone(freq, dur) {
-        var c = getAudioContext();
-        if (!c) return;
-        try {
-            if (c.state === 'suspended') c.resume();
-            var o = c.createOscillator(), g = c.createGain();
-            o.type = 'sine';
-            o.frequency.value = freq;
-            o.connect(g);
-            g.connect(c.destination);
-            g.gain.setValueAtTime(0.25, c.currentTime);
-            g.gain.exponentialRampToValueAtTime(0.01, c.currentTime + dur);
-            o.start();
-            o.stop(c.currentTime + dur + 0.05);
-        } catch(e) {}
-    }
-    function playBeep() { playTone(880, 0.15); }
-    function playTap() { playTone(660, 0.1); }
-    function playCorrect() { [523, 659, 784].forEach(function(f, i) { setTimeout(function() { playTone(f, 0.12); }, i * 80); }); }
-    function playLevelUp() { [523, 659, 784, 1047].forEach(function(f, i) { setTimeout(function() { playTone(f, 0.2); }, i * 100); }); }
-    function playWrong() { playTone(200, 0.3); }
-    function playPhaseComplete() { [659, 784].forEach(function(f, i) { setTimeout(function() { playTone(f, 0.15); }, i * 100); }); }
-
-    // Celebrations
-    function getCourtCenter() {
-        var r = courtGrid.getBoundingClientRect();
-        return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
-    }
-    function createEmoji(emoji, x, y, big) {
-        var el = document.createElement('div');
-        el.className = 'burst-emoji' + (big ? ' big' : '');
-        el.textContent = emoji;
-        var a = Math.random() * Math.PI * 2;
-        var d = 50 + Math.random() * 80;
-        el.style.cssText = 'left:' + x + 'px;top:' + y + 'px;--tx:' + Math.cos(a) * d + 'px;--ty:' + Math.sin(a) * d + 'px;--rot:' + (Math.random() - 0.5) * 720 + 'deg';
-        emojiContainer.appendChild(el);
-        setTimeout(function() { if (el.parentNode) el.remove(); }, 1500);
-    }
-    function celebrate(count, useChampion) {
-        var c = getCourtCenter();
-        var emojis = useChampion ? CHAMPION_EMOJIS : LAUGH_EMOJIS;
-        for (var i = 0; i < count; i++) {
-            (function(idx) {
-                setTimeout(function() {
-                    createEmoji(emojis[Math.floor(Math.random() * emojis.length)], c.x + (Math.random() - 0.5) * 30, c.y + (Math.random() - 0.5) * 30, useChampion);
-                }, idx * 40);
-            })(i);
-        }
-        courtGrid.classList.add('joy-pulse');
-        setTimeout(function() { courtGrid.classList.remove('joy-pulse'); }, 500);
-    }
-    function showCoach(m) {
-        coachMessage.textContent = m;
-        coachMessage.classList.add('show');
-        setTimeout(function() { coachMessage.classList.remove('show'); }, 2000);
-    }
-
-    // Init Court
-    function initCourt() {
-        courtGrid.innerHTML = '';
-        state.cells = [];
-        for (var i = 0; i < TOTAL_CELLS; i++) {
-            var cell = document.createElement('div');
-            cell.className = 'grid-cell';
-            cell.dataset.index = i;
-            (function(index) {
-                cell.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    handleCellTap(index);
-                });
-            })(i);
-            courtGrid.appendChild(cell);
-            state.cells.push(cell);
-        }
-    }
-
-    // UI Updates
-    function updatePhaseDisplay() {
-        var rp = document.getElementById('reactPhase');
-        var sp = document.getElementById('sequencePhase');
-        var mp = document.getElementById('matchPhase');
+function tap(idx){
+    if(!G.canTap) return;
+    
+    var cell = G.cells[idx];
+    
+    // === REACT ===
+    if(G.phase === 'react'){
+        window.clearTimeout(G.timer);
+        G.canTap = false;
         
-        rp.className = 'phase-indicator react-phase';
-        sp.className = 'phase-indicator sequence-phase';
-        mp.className = 'phase-indicator match-phase';
-        
-        if (state.phase === 'react') {
-            rp.classList.add('active');
-        } else if (state.phase === 'sequence') {
-            rp.classList.add('complete');
-            sp.classList.add('active');
-        } else if (state.phase === 'match') {
-            rp.classList.add('complete');
-            sp.classList.add('complete');
-            mp.classList.add('active');
-        }
-        
-        courtGrid.className = 'court-grid';
-        messageDisplay.className = 'message-display';
-        
-        if (state.phase === 'react') {
-            courtGrid.classList.add('react-mode');
-            messageDisplay.classList.add('react-mode');
-        } else if (state.phase === 'sequence') {
-            courtGrid.classList.add('sequence-mode');
-            messageDisplay.classList.add('sequence-mode');
-        } else if (state.phase === 'match') {
-            courtGrid.classList.add('match-mode');
-            messageDisplay.classList.add('match-mode');
-        }
-    }
-
-    function updateProgressBar() {
-        var level = state.level;
-        
-        var d3Html = '';
-        for (var i = 1; i <= 3; i++) {
-            var cls = 'tier-level';
-            if (i < level) cls += ' completed';
-            else if (i === level) cls += ' current';
-            d3Html += '<div class="' + cls + '">' + i + '</div>';
-        }
-        document.getElementById('d3Levels').innerHTML = d3Html;
-        document.getElementById('d3Status').textContent = level > 3 ? '✅' : '⬜';
-        
-        var d2Html = '';
-        for (var j = 4; j <= 6; j++) {
-            var cls2 = 'tier-level';
-            if (j < level) cls2 += ' completed';
-            else if (j === level) cls2 += ' current';
-            else if (level < 4) cls2 += ' locked';
-            d2Html += '<div class="' + cls2 + '">' + j + '</div>';
-        }
-        document.getElementById('d2Levels').innerHTML = d2Html;
-        document.getElementById('d2Status').textContent = level > 6 ? '✅' : level >= 4 ? '⬜' : '🔒';
-        
-        var d1Html = '';
-        for (var k = 7; k <= 10; k++) {
-            var cls3 = 'tier-level';
-            if (k < level) cls3 += ' completed';
-            else if (k === level) cls3 += ' current';
-            else if (level < 7) cls3 += ' locked';
-            d1Html += '<div class="' + cls3 + '">' + k + '</div>';
-        }
-        document.getElementById('d1Levels').innerHTML = d1Html;
-        document.getElementById('d1Status').textContent = state.isChampion ? '👑' : level >= 7 ? '⬜' : '🔒';
-    }
-
-    function updateDisplay() {
-        state.speed = getChallengeSpeed(state.level);
-        document.getElementById('levelDisplay').textContent = state.level;
-        document.getElementById('streakDisplay').textContent = state.streak;
-        document.getElementById('scoreDisplay').textContent = state.score;
-        document.getElementById('totalScore').textContent = state.score;
-        document.getElementById('divisionBadge').textContent = 'L' + state.level + ' ' + getDivisionName(state.speed);
-        updateProgressBar();
-        updatePhaseDisplay();
-    }
-
-    // Start Round
-    function startRound() {
-        if (state.isPlaying) return;
-        
-        state.speed = getChallengeSpeed(state.level);
-        state.totalTaps = getCellCount(state.level);
-        state.currentTap = 0;
-        state.phase = 'react';
-        state.reactionSequence = [];
-        state.sequenceIndex = 0;
-        state.matchFound = [];
-        state.isPlaying = true;
-        state.canTap = false;
-        
-        actionBtn.disabled = true;
-        state.cells.forEach(function(c) { c.className = 'grid-cell'; });
-        document.getElementById('tapsCounter').textContent = '0/' + state.totalTaps;
-        updatePhaseDisplay();
-        
-        messageText.innerHTML = '<span class="lang-en">GET READY...</span><span class="lang-es">PREPÁRATE...</span>';
-        messageText.className = 'message-text watch';
-        
-        setTimeout(function() {
-            messageText.innerHTML = '<span class="lang-en">⚡ REACT!</span><span class="lang-es">⚡ ¡REACCIONA!</span>';
-            messageText.className = 'message-text go';
-            flashNextCell();
-        }, 800);
-        
-        updateDisplay();
-    }
-
-    function flashNextCell() {
-        if (!state.isPlaying || state.phase !== 'react') return;
-        
-        if (state.currentCell >= 0) {
-            state.cells[state.currentCell].classList.remove('lit');
-        }
-        
-        var newCell;
-        do { newCell = Math.floor(Math.random() * TOTAL_CELLS); } while (newCell === state.currentCell);
-        
-        state.currentCell = newCell;
-        state.reactionSequence.push(newCell);
-        state.cells[state.currentCell].classList.add('lit');
-        state.canTap = true;
-        
-        playBeep();
-        
-        var duration = SPEED_CONFIG[state.speed];
-        state.timerStart = Date.now();
-        
-        state.timer = setTimeout(function() {
-            if (state.canTap && state.isPlaying && state.phase === 'react') {
-                state.canTap = false;
-                failRound('TOO SLOW!', '¡MUY LENTO!');
-            }
-        }, duration);
-    }
-
-    // Handle Tap
-    function handleCellTap(index) {
-        if (!state.canTap || !state.isPlaying) return;
-        
-        var cell = state.cells[index];
-        
-        // REACT PHASE
-        if (state.phase === 'react') {
-            clearTimeout(state.timer);
-            state.canTap = false;
+        if(idx === G.curCell){
+            beep(660, 0.1);
+            cell.classList.remove('lit');
+            cell.classList.add('ok');
+            G.taps++;
+            G.score += 15;
             
-            if (index === state.currentCell) {
-                playTap();
-                cell.classList.remove('lit');
-                cell.classList.add('correct');
-                state.currentTap++;
+            document.getElementById('iCount').textContent = G.taps+'/'+G.total;
+            document.getElementById('sScore').textContent = G.score;
+            document.getElementById('iScore').textContent = G.score;
+            
+            if(G.taps % 3 === 0) burst(3);
+            
+            if(G.taps >= G.total){
+                // REACT DONE -> SEQUENCE
+                beep(659, 0.12);
+                window.setTimeout(function(){ beep(784, 0.12); }, 80);
+                burst(5);
+                setMsg('✓ REACT DONE!');
                 
-                var reactionTime = Date.now() - state.timerStart;
-                var maxTime = SPEED_CONFIG[state.speed];
-                var timeBonus = Math.floor((1 - reactionTime / maxTime) * 10);
-                state.score += 10 + timeBonus;
-                
-                document.getElementById('tapsCounter').textContent = state.currentTap + '/' + state.totalTaps;
-                document.getElementById('scoreDisplay').textContent = state.score;
-                document.getElementById('totalScore').textContent = state.score;
-                
-                if (state.currentTap % 3 === 0) celebrate(3);
-                
-                if (state.currentTap >= state.totalTaps) {
-                    // REACT COMPLETE - transition to SEQUENCE
-                    transitionToSequence();
-                } else {
-                    setTimeout(function() {
-                        cell.classList.remove('correct');
-                        flashNextCell();
-                    }, 200);
-                }
+                // TRANSITION TO SEQUENCE
+                window.setTimeout(goToSequence, 1200);
             } else {
-                cell.classList.add('wrong');
-                failRound('WRONG CELL!', '¡CELDA INCORRECTA!');
+                window.setTimeout(function(){
+                    cell.classList.remove('ok');
+                    flashNext();
+                }, 180);
             }
-            return;
-        }
-        
-        // SEQUENCE PHASE
-        if (state.phase === 'sequence') {
-            var expectedCell = state.reactionSequence[state.sequenceIndex];
-            
-            if (index === expectedCell) {
-                playTap();
-                cell.classList.add('correct');
-                state.sequenceIndex++;
-                state.score += 15;
-                
-                document.getElementById('tapsCounter').textContent = state.sequenceIndex + '/' + state.reactionSequence.length;
-                document.getElementById('scoreDisplay').textContent = state.score;
-                document.getElementById('totalScore').textContent = state.score;
-                
-                if (state.sequenceIndex >= state.reactionSequence.length) {
-                    // SEQUENCE COMPLETE - transition to MATCH
-                    state.canTap = false;
-                    transitionToMatch();
-                }
-            } else {
-                cell.classList.add('wrong');
-                state.cells[expectedCell].classList.add('lit');
-                state.canTap = false;
-                failRound('WRONG ORDER!', '¡ORDEN INCORRECTO!');
-            }
-            return;
-        }
-        
-        // MATCH PHASE
-        if (state.phase === 'match') {
-            var isInSequence = state.reactionSequence.indexOf(index) !== -1;
-            var alreadyFound = state.matchFound.indexOf(index) !== -1;
-            
-            if (isInSequence && !alreadyFound) {
-                playTap();
-                cell.classList.add('found');
-                state.matchFound.push(index);
-                state.score += 15;
-                
-                document.getElementById('tapsCounter').textContent = state.matchFound.length + '/' + state.reactionSequence.length;
-                document.getElementById('scoreDisplay').textContent = state.score;
-                document.getElementById('totalScore').textContent = state.score;
-                
-                if (state.matchFound.length >= state.reactionSequence.length) {
-                    // MATCH COMPLETE - LEVEL DONE!
-                    state.canTap = false;
-                    levelComplete();
-                }
-            } else if (!isInSequence) {
-                cell.classList.add('wrong');
-                state.canTap = false;
-                failRound('WRONG CELL!', '¡CELDA INCORRECTA!');
-            }
-        }
-    }
-
-    // PHASE TRANSITIONS - Fixed!
-    function transitionToSequence() {
-        clearTimeout(state.timer);
-        state.canTap = false;
-        
-        playPhaseComplete();
-        celebrate(4);
-        showCoach('⚡ REACT DONE!');
-        
-        messageText.innerHTML = '<span class="lang-en">✓ NOW RECALL ORDER...</span><span class="lang-es">✓ AHORA RECUERDA EL ORDEN...</span>';
-        messageText.className = 'message-text perfect';
-        
-        setTimeout(function() {
-            // Clear cells
-            state.cells.forEach(function(c) { c.className = 'grid-cell'; });
-            
-            // Switch to sequence phase
-            state.phase = 'sequence';
-            state.sequenceIndex = 0;
-            state.isPlaying = true; // Ensure still playing
-            
-            updatePhaseDisplay();
-            
-            document.getElementById('tapsCounter').textContent = '0/' + state.reactionSequence.length;
-            messageText.innerHTML = '<span class="lang-en">🔢 TAP IN ORDER!</span><span class="lang-es">🔢 ¡TOCA EN ORDEN!</span>';
-            messageText.className = 'message-text go';
-            
-            // Enable tapping
-            state.canTap = true;
-        }, 1500);
-    }
-
-    function transitionToMatch() {
-        playPhaseComplete();
-        celebrate(5);
-        showCoach('🔢 ORDER DONE!');
-        
-        messageText.innerHTML = '<span class="lang-en">✓ NOW FIND ALL...</span><span class="lang-es">✓ AHORA ENCUENTRA TODAS...</span>';
-        messageText.className = 'message-text perfect';
-        
-        setTimeout(function() {
-            // Clear cells
-            state.cells.forEach(function(c) { c.className = 'grid-cell'; });
-            
-            // Switch to match phase
-            state.phase = 'match';
-            state.matchFound = [];
-            state.isPlaying = true; // Ensure still playing
-            
-            updatePhaseDisplay();
-            
-            document.getElementById('tapsCounter').textContent = '0/' + state.reactionSequence.length;
-            messageText.innerHTML = '<span class="lang-en">🎯 FIND ALL ' + state.reactionSequence.length + '!</span><span class="lang-es">🎯 ¡ENCUENTRA LAS ' + state.reactionSequence.length + '!</span>';
-            messageText.className = 'message-text go';
-            
-            // Enable tapping
-            state.canTap = true;
-        }, 1500);
-    }
-
-    function levelComplete() {
-        state.isPlaying = false;
-        
-        playCorrect();
-        state.streak++;
-        celebrate(10, true);
-        
-        messageText.innerHTML = '<span class="lang-en">🏆 TRIPLE THREAT COMPLETE!</span><span class="lang-es">🏆 ¡TRIPLE AMENAZA COMPLETA!</span>';
-        messageText.className = 'message-text perfect';
-        
-        showCoach(state.streak >= 5 ? '🏆 LEGEND!' : state.streak >= 3 ? '🔥 AMAZING!' : '😄 NICE!');
-        
-        var oldTier = getTierForLevel(state.level);
-        state.level++;
-        localStorage.setItem('lc-challenge-level', state.level);
-        
-        if (state.level > 10) {
-            state.isChampion = true;
-            localStorage.setItem('lc-challenge-champion', 'true');
-            setTimeout(showChampionOverlay, 1500);
         } else {
-            var newTier = getTierForLevel(state.level);
-            if (newTier !== oldTier) {
-                setTimeout(function() { showTierUpOverlay(newTier); }, 1500);
-            } else {
-                setTimeout(showLevelUpOverlay, 1500);
+            cell.classList.add('bad');
+            fail('WRONG CELL!');
+        }
+        return;
+    }
+    
+    // === SEQUENCE ===
+    if(G.phase === 'sequence'){
+        var expect = G.seq[G.seqIdx];
+        
+        if(idx === expect){
+            beep(660, 0.1);
+            cell.classList.add('ok');
+            G.seqIdx++;
+            G.score += 20;
+            
+            document.getElementById('iCount').textContent = G.seqIdx+'/'+G.seq.length;
+            document.getElementById('sScore').textContent = G.score;
+            document.getElementById('iScore').textContent = G.score;
+            
+            if(G.seqIdx >= G.seq.length){
+                // SEQUENCE DONE -> MATCH
+                G.canTap = false;
+                beep(659, 0.12);
+                window.setTimeout(function(){ beep(784, 0.12); }, 80);
+                burst(5);
+                setMsg('✓ ORDER DONE!');
+                
+                // TRANSITION TO MATCH
+                window.setTimeout(goToMatch, 1200);
             }
+        } else {
+            cell.classList.add('bad');
+            G.cells[expect].classList.add('lit');
+            G.canTap = false;
+            fail('WRONG ORDER!');
         }
-    }
-
-    function failRound(msgEn, msgEs) {
-        state.isPlaying = false;
-        state.canTap = false;
-        clearTimeout(state.timer);
-        playWrong();
-        
-        if (state.currentCell >= 0 && state.phase === 'react') {
-            state.cells[state.currentCell].classList.remove('lit');
-            state.cells[state.currentCell].classList.add('wrong');
-        }
-        
-        state.streak = 0;
-        
-        messageText.innerHTML = '<span class="lang-en">' + msgEn + '</span><span class="lang-es">' + msgEs + '</span>';
-        messageText.className = 'message-text miss';
-        
-        setTimeout(finishRound, 1500);
-    }
-
-    function finishRound() {
-        state.isPlaying = false;
-        state.currentCell = -1;
-        state.phase = 'react';
-        state.cells.forEach(function(c) { c.className = 'grid-cell'; });
-        
-        updatePhaseDisplay();
-        
-        messageText.innerHTML = '<span class="lang-en">TAP GO!</span><span class="lang-es">¡PULSA IR!</span>';
-        messageText.className = 'message-text';
-        actionBtn.innerHTML = '<span class="lang-en">GO</span><span class="lang-es">IR</span>';
-        actionBtn.disabled = false;
-        
-        updateDisplay();
-    }
-
-    // Overlays
-    function showLevelUpOverlay() {
-        playLevelUp();
-        celebrate(6);
-        document.getElementById('levelUpMessage').innerHTML = currentLang === 'es' ? 'Avanzando a Nivel ' + state.level : 'Advancing to Level ' + state.level;
-        document.getElementById('levelUpOverlay').classList.add('show');
+        return;
     }
     
-    document.getElementById('levelUpBtn').onclick = function() {
-        document.getElementById('levelUpOverlay').classList.remove('show');
-        finishRound();
-    };
-
-    function showTierUpOverlay(tier) {
-        playLevelUp();
-        celebrate(10, true);
-        if (tier === 'med') {
-            document.getElementById('tierUpEmoji').textContent = '🥈';
-            document.getElementById('tierUpTitle').textContent = currentLang === 'es' ? '¡DIVISIÓN 2!' : 'DIVISION 2!';
-            document.getElementById('tierUpMessage').innerHTML = currentLang === 'es' ? '¡Ganaste D2! Más rápido.' : 'You earned D2! Faster now.';
-        } else if (tier === 'fast') {
-            document.getElementById('tierUpEmoji').textContent = '🥇';
-            document.getElementById('tierUpTitle').textContent = currentLang === 'es' ? '¡DIVISIÓN 1!' : 'DIVISION 1!';
-            document.getElementById('tierUpMessage').innerHTML = currentLang === 'es' ? '¡Final Four! Élite.' : 'Final Four! Elite.';
+    // === MATCH ===
+    if(G.phase === 'match'){
+        var inSeq = G.seq.indexOf(idx) !== -1;
+        var already = G.found.indexOf(idx) !== -1;
+        
+        if(inSeq && !already){
+            beep(660, 0.1);
+            cell.classList.add('found');
+            G.found.push(idx);
+            G.score += 20;
+            
+            document.getElementById('iCount').textContent = G.found.length+'/'+G.seq.length;
+            document.getElementById('sScore').textContent = G.score;
+            document.getElementById('iScore').textContent = G.score;
+            
+            if(G.found.length >= G.seq.length){
+                // ALL DONE!
+                G.canTap = false;
+                win();
+            }
+        } else if(!inSeq){
+            cell.classList.add('bad');
+            G.canTap = false;
+            fail('WRONG CELL!');
         }
-        document.getElementById('tierUpOverlay').classList.add('show');
+    }
+}
+
+// TRANSITION FUNCTIONS
+function goToSequence(){
+    clearCells();
+    G.phase = 'sequence';
+    G.seqIdx = 0;
+    G.canTap = true;
+    
+    updateUI();
+    document.getElementById('iCount').textContent = '0/'+G.seq.length;
+    setMsg('🔢 TAP IN ORDER!');
+}
+
+function goToMatch(){
+    clearCells();
+    G.phase = 'match';
+    G.found = [];
+    G.canTap = true;
+    
+    updateUI();
+    document.getElementById('iCount').textContent = '0/'+G.seq.length;
+    setMsg('🎯 FIND ALL '+G.seq.length+'!');
+}
+
+function win(){
+    G.phase = 'idle';
+    G.streak++;
+    burst(12);
+    
+    beep(523, 0.12);
+    window.setTimeout(function(){ beep(659, 0.12); }, 80);
+    window.setTimeout(function(){ beep(784, 0.12); }, 160);
+    window.setTimeout(function(){ beep(1047, 0.15); }, 240);
+    
+    setMsg('🏆 TRIPLE THREAT COMPLETE!');
+    
+    G.level++;
+    localStorage.setItem('lc-challenge-level', G.level);
+    
+    if(G.level > 10){
+        localStorage.setItem('lc-challenge-champion', 'true');
+        window.setTimeout(function(){
+            document.getElementById('champMsg').textContent = 'Score: '+G.score;
+            document.getElementById('champOverlay').classList.add('show');
+        }, 1200);
+    } else {
+        window.setTimeout(function(){
+            document.getElementById('winMsg').textContent = 'Advancing to Level '+G.level;
+            document.getElementById('winOverlay').classList.add('show');
+        }, 1200);
+    }
+}
+
+function fail(msg){
+    window.clearTimeout(G.timer);
+    beep(200, 0.25);
+    
+    if(G.curCell >= 0 && G.phase === 'react'){
+        G.cells[G.curCell].classList.remove('lit');
+        G.cells[G.curCell].classList.add('bad');
     }
     
-    document.getElementById('tierUpBtn').onclick = function() {
-        document.getElementById('tierUpOverlay').classList.remove('show');
-        finishRound();
-    };
-
-    function showChampionOverlay() {
-        playLevelUp();
-        celebrate(15, true);
-        document.getElementById('championMessage').innerHTML = currentLang === 'es' ? '¡Conquistaste el Triple Threat con ' + state.score + ' puntos!' : 'You conquered Triple Threat with ' + state.score + ' points!';
-        document.getElementById('championOverlay').classList.add('show');
-    }
+    G.phase = 'idle';
+    G.streak = 0;
+    G.canTap = false;
     
-    document.getElementById('championBtn').onclick = function() {
-        document.getElementById('championOverlay').classList.remove('show');
-        state.level = 1;
-        localStorage.setItem('lc-challenge-level', 1);
-        finishRound();
-    };
+    setMsg(msg);
+    
+    window.setTimeout(reset, 1200);
+}
 
-    actionBtn.onclick = startRound;
+function reset(){
+    G.phase = 'idle';
+    G.curCell = -1;
+    clearCells();
+    updateUI();
+    setMsg('TAP GO!');
+    goBtn.disabled = false;
+}
 
-    // Init
-    initCourt();
-    setLang(currentLang);
-    updateDisplay();
-})();
+// Overlay buttons
+document.getElementById('winBtn').onclick = function(){
+    document.getElementById('winOverlay').classList.remove('show');
+    reset();
+};
+
+document.getElementById('champBtn').onclick = function(){
+    document.getElementById('champOverlay').classList.remove('show');
+    G.level = 1;
+    localStorage.setItem('lc-challenge-level', 1);
+    reset();
+};
+
+// GO button
+goBtn.onclick = startGame;
+
+// Init
+buildGrid();
+updateUI();
 </script>
 </body>
 </html>
