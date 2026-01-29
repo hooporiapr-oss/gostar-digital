@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--orange:#FF6B35;--gold:#FFD700;--teal:#00D9A5;--pink:#FF1493;--purple:#9B59B6;--fire:#FF4500;--dark:#0a0a0f;--card:#111118;--text:#FFF;--muted:#8892a0;--border:rgba(255,255,255,0.1)}
+:root{--orange:#FF6B35;--gold:#FFD700;--teal:#00D9A5;--pink:#FF1493;--purple:#9B59B6;--dark:#0a0a0f;--card:#111118;--text:#FFF;--muted:#8892a0;--border:rgba(255,255,255,0.1)}
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background:var(--dark);color:var(--text);touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none}
 .nav{position:fixed;top:0;left:0;right:0;background:var(--card);border-bottom:1px solid var(--border);padding:env(safe-area-inset-top) 12px 0;z-index:1000;height:calc(50px + env(safe-area-inset-top))}
@@ -30,30 +30,29 @@ html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background
 .ph-match{background:rgba(255,107,53,0.3);color:var(--orange)}
 .ph-match.on{background:rgba(255,107,53,0.6)}
 .arrow{color:var(--muted);font-size:0.5rem}
-.msg{background:var(--card);border:2px solid var(--gold);border-radius:8px;padding:8px;text-align:center;margin-bottom:5px;min-height:38px;display:flex;align-items:center;justify-content:center;transition:border-color 0.2s}
+.msg{background:var(--card);border:2px solid var(--gold);border-radius:8px;padding:8px;text-align:center;margin-bottom:5px;min-height:38px;display:flex;align-items:center;justify-content:center}
 .msg.react{border-color:var(--purple)}
 .msg.seq{border-color:var(--teal)}
 .msg.match{border-color:var(--orange)}
 .msg-txt{font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:2px}
 .court-wrap{flex:1;display:flex;align-items:center;justify-content:center;min-height:0}
-.court{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:8px;background:#1a1a24;border-radius:16px;border:3px solid var(--gold);width:min(100%,calc(100dvh - 300px),320px);height:min(100%,calc(100dvh - 300px),320px);min-width:200px;min-height:200px;aspect-ratio:1;transition:border-color 0.2s,box-shadow 0.2s;box-shadow:0 0 20px rgba(255,215,0,0.2)}
+.court{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:8px;background:#1a1a24;border-radius:16px;border:3px solid var(--gold);width:min(100%,calc(100dvh - 300px),320px);height:min(100%,calc(100dvh - 300px),320px);min-width:200px;min-height:200px;aspect-ratio:1;box-shadow:0 0 20px rgba(255,215,0,0.2)}
 .court.react{border-color:var(--purple);box-shadow:0 0 20px rgba(155,89,182,0.3)}
 .court.seq{border-color:var(--teal);box-shadow:0 0 20px rgba(0,217,165,0.3)}
 .court.match{border-color:var(--orange);box-shadow:0 0 20px rgba(255,107,53,0.3)}
-.cell{aspect-ratio:1;border-radius:6px;cursor:pointer;background:rgba(255,255,255,0.08);border:2px solid rgba(255,255,255,0.2);transition:all 0.1s}
+.cell{aspect-ratio:1;border-radius:6px;cursor:pointer;background:rgba(255,255,255,0.08);border:2px solid rgba(255,255,255,0.2)}
 .cell:active{transform:scale(0.95)}
 .cell.lit{background:var(--purple)!important;border-color:var(--purple)!important;box-shadow:0 0 15px var(--purple);transform:scale(1.05)}
-.cell.ok{background:var(--teal)!important;border-color:var(--teal)!important;box-shadow:0 0 12px var(--teal)}
-.cell.bad{background:var(--pink)!important;border-color:var(--pink)!important;box-shadow:0 0 12px var(--pink)}
-.cell.found{background:var(--orange)!important;border-color:var(--orange)!important;box-shadow:0 0 12px var(--orange)}
+.cell.ok{background:var(--teal)!important;border-color:var(--teal)!important}
+.cell.bad{background:var(--pink)!important;border-color:var(--pink)!important}
+.cell.found{background:var(--orange)!important;border-color:var(--orange)!important}
 .info{display:flex;justify-content:space-between;padding:6px 10px;background:var(--card);border-radius:8px;margin:5px 0}
 .info-txt{font-family:'Bebas Neue',sans-serif;font-size:0.85rem;color:var(--gold)}
-.go-btn{width:100%;min-height:48px;padding:12px;border:none;border-radius:10px;font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:4px;cursor:pointer;background:linear-gradient(135deg,var(--gold),#FFA500);color:var(--dark)}
-.go-btn:disabled{opacity:0.5}
-.go-btn.next{background:linear-gradient(135deg,var(--teal),#00B890)}
-.emojis{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999}
-.emo{position:absolute;font-size:1.8rem;animation:pop 1s ease-out forwards}
-@keyframes pop{0%{opacity:1;transform:translate(-50%,-50%) scale(0.5)}30%{transform:translate(-50%,-50%) scale(1.2)}100%{opacity:0;transform:translate(var(--x),var(--y)) scale(0.6)}}
+.go-btn{width:100%;min-height:52px;padding:14px;border:none;border-radius:10px;font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:3px;cursor:pointer;background:linear-gradient(135deg,var(--gold),#FFA500);color:var(--dark)}
+.go-btn.seq-btn{background:linear-gradient(135deg,var(--teal),#00B890)}
+.go-btn.match-btn{background:linear-gradient(135deg,var(--orange),#FF5500)}
+.go-btn:disabled{opacity:0.4;cursor:not-allowed}
+.debug{position:fixed;bottom:10px;left:10px;background:rgba(0,0,0,0.8);color:lime;padding:5px 10px;font-size:12px;font-family:monospace;z-index:9999;border-radius:4px}
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,0.9);display:none;align-items:center;justify-content:center;z-index:1100}
 .overlay.show{display:flex}
 .ocard{background:var(--card);border:2px solid var(--gold);border-radius:14px;padding:24px;text-align:center;max-width:280px}
@@ -70,8 +69,6 @@ html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background
 <div></div>
 </div></nav>
 
-<div class="emojis" id="emojis"></div>
-
 <div class="game-box">
 <div class="stats">
 <div class="stat"><div class="stat-val" id="sLevel">1</div><div class="stat-lbl">LEVEL</div></div>
@@ -80,7 +77,7 @@ html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background
 </div>
 
 <div class="phases">
-<span class="ph ph-react on" id="phReact">⚡ REACT</span>
+<span class="ph ph-react" id="phReact">⚡ REACT</span>
 <span class="arrow">→</span>
 <span class="ph ph-seq" id="phSeq">🔢 ORDER</span>
 <span class="arrow">→</span>
@@ -97,8 +94,10 @@ html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background
 <span class="info-txt" id="iScore">0</span>
 </div>
 
-<button class="go-btn" id="goBtn">GO</button>
+<button class="go-btn" id="goBtn" data-action="start">GO</button>
 </div>
+
+<div id="debug" class="debug">Ready</div>
 
 <div class="overlay" id="winOverlay">
 <div class="ocard">
@@ -119,34 +118,32 @@ html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background
 </div>
 
 <script>
-var G = {
-    phase: 'idle',
-    level: parseInt(localStorage.getItem('lc-challenge-level')) || 1,
-    score: 0,
-    streak: 0,
-    seq: [],
-    seqIdx: 0,
-    found: [],
-    curCell: -1,
-    taps: 0,
-    total: 0,
-    canTap: false,
-    timer: null,
-    cells: []
-};
+// GLOBALS
+var level = parseInt(localStorage.getItem('lc-challenge-level')) || 1;
+var score = 0;
+var streak = 0;
+var seq = [];
+var seqIdx = 0;
+var found = [];
+var curCell = -1;
+var taps = 0;
+var total = 0;
+var canTap = false;
+var timer = null;
+var cells = [];
 
 var court = document.getElementById('court');
-var msgBox = document.getElementById('msgBox');
 var msgTxt = document.getElementById('msgTxt');
+var msgBox = document.getElementById('msgBox');
 var goBtn = document.getElementById('goBtn');
-var emojis = document.getElementById('emojis');
+var debug = document.getElementById('debug');
 
 var SPEEDS = {slow:1200, med:800, fast:500};
-var EMOS = ['😂','🤣','😄','🥳','🏆','👑','🔥','⚡','💎'];
 
-function getSpeed(){ return G.level <= 3 ? 'slow' : G.level <= 6 ? 'med' : 'fast'; }
-function getDiv(){ return G.level <= 3 ? 'D3' : G.level <= 6 ? 'D2' : 'D1'; }
-function getTotal(){ return G.level + 4; }
+function log(s){ debug.textContent = s; }
+function getSpeed(){ return level <= 3 ? 'slow' : level <= 6 ? 'med' : 'fast'; }
+function getDiv(){ return level <= 3 ? 'D3' : level <= 6 ? 'D2' : 'D1'; }
+function getTotal(){ return level + 4; }
 
 // Audio
 var actx = null;
@@ -156,168 +153,200 @@ function beep(f,d){
         if(actx.state==='suspended') actx.resume();
         var o=actx.createOscillator(), g=actx.createGain();
         o.frequency.value=f; o.connect(g); g.connect(actx.destination);
-        g.gain.setValueAtTime(0.2,actx.currentTime);
+        g.gain.setValueAtTime(0.15,actx.currentTime);
         g.gain.exponentialRampToValueAtTime(0.01,actx.currentTime+d);
         o.start(); o.stop(actx.currentTime+d);
     }catch(e){}
 }
 
-// Emojis
-function burst(n){
-    var r = court.getBoundingClientRect();
-    var cx = r.left + r.width/2, cy = r.top + r.height/2;
-    for(var i=0; i<n; i++){
-        (function(i){
-            setTimeout(function(){
-                var e = document.createElement('div');
-                e.className = 'emo';
-                e.textContent = EMOS[Math.floor(Math.random()*EMOS.length)];
-                var a = Math.random()*Math.PI*2, d = 50+Math.random()*70;
-                e.style.cssText = 'left:'+cx+'px;top:'+cy+'px;--x:'+(Math.cos(a)*d)+'px;--y:'+(Math.sin(a)*d)+'px';
-                emojis.appendChild(e);
-                setTimeout(function(){ e.remove(); }, 1200);
-            }, i*40);
-        })(i);
-    }
-}
-
 // Build grid
 function buildGrid(){
     court.innerHTML = '';
-    G.cells = [];
+    cells = [];
     for(var i=0; i<25; i++){
         var c = document.createElement('div');
         c.className = 'cell';
-        (function(idx){
-            c.onclick = function(){ tap(idx); };
-        })(i);
+        c.setAttribute('data-idx', i);
         court.appendChild(c);
-        G.cells.push(c);
+        cells.push(c);
     }
 }
+
+// Cell tap via event delegation
+court.addEventListener('click', function(e){
+    var cell = e.target;
+    if(!cell.classList.contains('cell')) return;
+    var idx = parseInt(cell.getAttribute('data-idx'));
+    handleTap(idx);
+});
 
 function clearCells(){
-    G.cells.forEach(function(c){ c.className = 'cell'; });
-}
-
-function updateUI(){
-    document.getElementById('sLevel').textContent = G.level;
-    document.getElementById('sStreak').textContent = G.streak;
-    document.getElementById('sScore').textContent = G.score;
-    document.getElementById('iDiv').textContent = 'L'+G.level+' '+getDiv();
-    document.getElementById('iScore').textContent = G.score;
-    
-    var pr = document.getElementById('phReact');
-    var ps = document.getElementById('phSeq');
-    var pm = document.getElementById('phMatch');
-    pr.className = 'ph ph-react' + (G.phase==='react'||G.phase==='wait-seq'?' on':G.phase==='sequence'||G.phase==='wait-match'||G.phase==='match'?' done':'');
-    ps.className = 'ph ph-seq' + (G.phase==='sequence'||G.phase==='wait-match'?' on':G.phase==='match'?' done':'');
-    pm.className = 'ph ph-match' + (G.phase==='match'?' on':'');
-    
-    court.className = 'court' + (G.phase==='react'||G.phase==='wait-seq'?' react':G.phase==='sequence'||G.phase==='wait-match'?' seq':G.phase==='match'?' match':'');
-    msgBox.className = 'msg' + (G.phase==='react'||G.phase==='wait-seq'?' react':G.phase==='sequence'||G.phase==='wait-match'?' seq':G.phase==='match'?' match':'');
-}
-
-function setMsg(t){ msgTxt.textContent = t; }
-
-// ========== BUTTON HANDLER ==========
-goBtn.onclick = function(){
-    if(G.phase === 'idle'){
-        startGame();
-    } else if(G.phase === 'wait-seq'){
-        goToSequence();
-    } else if(G.phase === 'wait-match'){
-        goToMatch();
+    for(var i=0; i<cells.length; i++){
+        cells[i].className = 'cell';
     }
-};
+}
 
-// ========== GAME FLOW ==========
+function updateStats(){
+    document.getElementById('sLevel').textContent = level;
+    document.getElementById('sStreak').textContent = streak;
+    document.getElementById('sScore').textContent = score;
+    document.getElementById('iDiv').textContent = 'L'+level+' '+getDiv();
+    document.getElementById('iScore').textContent = score;
+}
 
-function startGame(){
-    G.score = 0;
-    G.seq = [];
-    G.seqIdx = 0;
-    G.found = [];
-    G.curCell = -1;
-    G.taps = 0;
-    G.total = getTotal();
-    G.canTap = false;
+// ========== BUTTON CLICK ==========
+goBtn.addEventListener('click', function(){
+    var action = goBtn.getAttribute('data-action');
+    log('Button: ' + action);
+    
+    if(action === 'start'){
+        startReact();
+    } else if(action === 'sequence'){
+        startSequence();
+    } else if(action === 'match'){
+        startMatch();
+    }
+});
+
+// ========== PHASE 1: REACT ==========
+function startReact(){
+    log('Starting REACT');
+    score = 0;
+    seq = [];
+    seqIdx = 0;
+    found = [];
+    curCell = -1;
+    taps = 0;
+    total = getTotal();
+    canTap = false;
     
     goBtn.disabled = true;
     goBtn.className = 'go-btn';
+    goBtn.textContent = '...';
+    goBtn.setAttribute('data-action', 'none');
+    
     clearCells();
+    updateStats();
     
-    G.phase = 'react';
-    updateUI();
-    document.getElementById('iCount').textContent = '0/'+G.total;
+    document.getElementById('phReact').className = 'ph ph-react on';
+    document.getElementById('phSeq').className = 'ph ph-seq';
+    document.getElementById('phMatch').className = 'ph ph-match';
+    court.className = 'court react';
+    msgBox.className = 'msg react';
     
-    setMsg('GET READY...');
+    document.getElementById('iCount').textContent = '0/'+total;
+    msgTxt.textContent = 'GET READY...';
     
     setTimeout(function(){
-        setMsg('⚡ REACT!');
+        msgTxt.textContent = '⚡ REACT!';
         flashNext();
     }, 800);
 }
 
 function flashNext(){
-    if(G.phase !== 'react') return;
+    log('Flash ' + (taps+1) + '/' + total);
     
-    if(G.curCell >= 0) G.cells[G.curCell].classList.remove('lit');
+    if(curCell >= 0) cells[curCell].classList.remove('lit');
     
     var next;
-    do { next = Math.floor(Math.random()*25); } while(next === G.curCell);
+    do { next = Math.floor(Math.random()*25); } while(next === curCell);
     
-    G.curCell = next;
-    G.seq.push(next);
-    G.cells[next].classList.add('lit');
-    G.canTap = true;
+    curCell = next;
+    seq.push(next);
+    cells[next].classList.add('lit');
+    canTap = true;
     
     beep(880, 0.12);
     
     var spd = SPEEDS[getSpeed()];
-    G.timer = setTimeout(function(){
-        if(G.canTap && G.phase === 'react'){
-            G.canTap = false;
+    timer = setTimeout(function(){
+        if(canTap){
+            canTap = false;
             fail('TOO SLOW!');
         }
     }, spd);
 }
 
-function tap(idx){
-    if(!G.canTap) return;
+// ========== PHASE 2: SEQUENCE ==========
+function startSequence(){
+    log('Starting SEQUENCE');
     
-    var cell = G.cells[idx];
+    clearCells();
+    seqIdx = 0;
+    canTap = true;
     
-    // === REACT ===
-    if(G.phase === 'react'){
-        clearTimeout(G.timer);
-        G.canTap = false;
+    goBtn.disabled = true;
+    goBtn.className = 'go-btn';
+    goBtn.textContent = '...';
+    goBtn.setAttribute('data-action', 'none');
+    
+    document.getElementById('phReact').className = 'ph ph-react done';
+    document.getElementById('phSeq').className = 'ph ph-seq on';
+    document.getElementById('phMatch').className = 'ph ph-match';
+    court.className = 'court seq';
+    msgBox.className = 'msg seq';
+    
+    document.getElementById('iCount').textContent = '0/'+seq.length;
+    msgTxt.textContent = '🔢 TAP IN ORDER!';
+}
+
+// ========== PHASE 3: MATCH ==========
+function startMatch(){
+    log('Starting MATCH');
+    
+    clearCells();
+    found = [];
+    canTap = true;
+    
+    goBtn.disabled = true;
+    goBtn.className = 'go-btn';
+    goBtn.textContent = '...';
+    goBtn.setAttribute('data-action', 'none');
+    
+    document.getElementById('phReact').className = 'ph ph-react done';
+    document.getElementById('phSeq').className = 'ph ph-seq done';
+    document.getElementById('phMatch').className = 'ph ph-match on';
+    court.className = 'court match';
+    msgBox.className = 'msg match';
+    
+    document.getElementById('iCount').textContent = '0/'+seq.length;
+    msgTxt.textContent = '🎯 FIND ALL '+seq.length+'!';
+}
+
+// ========== HANDLE TAP ==========
+function handleTap(idx){
+    if(!canTap) return;
+    
+    var cell = cells[idx];
+    var action = goBtn.getAttribute('data-action');
+    
+    // REACT PHASE
+    if(action === 'none' && document.getElementById('phReact').classList.contains('on')){
+        clearTimeout(timer);
+        canTap = false;
         
-        if(idx === G.curCell){
+        if(idx === curCell){
+            log('Correct tap ' + (taps+1));
             beep(660, 0.1);
             cell.classList.remove('lit');
             cell.classList.add('ok');
-            G.taps++;
-            G.score += 15;
+            taps++;
+            score += 15;
             
-            document.getElementById('iCount').textContent = G.taps+'/'+G.total;
-            document.getElementById('sScore').textContent = G.score;
-            document.getElementById('iScore').textContent = G.score;
+            document.getElementById('iCount').textContent = taps+'/'+total;
+            updateStats();
             
-            if(G.taps % 3 === 0) burst(3);
-            
-            if(G.taps >= G.total){
-                // REACT DONE -> wait for button tap
-                beep(659, 0.12);
-                setTimeout(function(){ beep(784, 0.12); }, 80);
-                burst(5);
+            if(taps >= total){
+                // REACT COMPLETE!
+                log('REACT DONE - show seq button');
+                beep(784, 0.15);
+                msgTxt.textContent = '✓ REACT DONE!';
                 
-                G.phase = 'wait-seq';
-                setMsg('✓ REACT DONE!');
+                // Show SEQUENCE button
                 goBtn.disabled = false;
-                goBtn.className = 'go-btn next';
+                goBtn.className = 'go-btn seq-btn';
                 goBtn.textContent = '🔢 SEQUENCE →';
-                updateUI();
+                goBtn.setAttribute('data-action', 'sequence');
             } else {
                 setTimeout(function(){
                     cell.classList.remove('ok');
@@ -331,155 +360,132 @@ function tap(idx){
         return;
     }
     
-    // === SEQUENCE ===
-    if(G.phase === 'sequence'){
-        var expect = G.seq[G.seqIdx];
+    // SEQUENCE PHASE
+    if(document.getElementById('phSeq').classList.contains('on')){
+        var expect = seq[seqIdx];
         
         if(idx === expect){
+            log('Seq correct ' + (seqIdx+1));
             beep(660, 0.1);
             cell.classList.add('ok');
-            G.seqIdx++;
-            G.score += 20;
+            seqIdx++;
+            score += 20;
             
-            document.getElementById('iCount').textContent = G.seqIdx+'/'+G.seq.length;
-            document.getElementById('sScore').textContent = G.score;
-            document.getElementById('iScore').textContent = G.score;
+            document.getElementById('iCount').textContent = seqIdx+'/'+seq.length;
+            updateStats();
             
-            if(G.seqIdx >= G.seq.length){
-                // SEQUENCE DONE -> wait for button tap
-                G.canTap = false;
-                beep(659, 0.12);
-                setTimeout(function(){ beep(784, 0.12); }, 80);
-                burst(5);
+            if(seqIdx >= seq.length){
+                // SEQUENCE COMPLETE!
+                log('SEQ DONE - show match button');
+                canTap = false;
+                beep(784, 0.15);
+                msgTxt.textContent = '✓ ORDER DONE!';
                 
-                G.phase = 'wait-match';
-                setMsg('✓ ORDER DONE!');
+                // Show MATCH button
                 goBtn.disabled = false;
-                goBtn.className = 'go-btn next';
+                goBtn.className = 'go-btn match-btn';
                 goBtn.textContent = '🎯 FIND ALL →';
-                updateUI();
+                goBtn.setAttribute('data-action', 'match');
             }
         } else {
             cell.classList.add('bad');
-            G.cells[expect].classList.add('lit');
-            G.canTap = false;
+            cells[expect].classList.add('lit');
+            canTap = false;
             fail('WRONG ORDER!');
         }
         return;
     }
     
-    // === MATCH ===
-    if(G.phase === 'match'){
-        var inSeq = G.seq.indexOf(idx) !== -1;
-        var already = G.found.indexOf(idx) !== -1;
+    // MATCH PHASE
+    if(document.getElementById('phMatch').classList.contains('on')){
+        var inSeq = seq.indexOf(idx) !== -1;
+        var already = found.indexOf(idx) !== -1;
         
         if(inSeq && !already){
+            log('Found ' + (found.length+1));
             beep(660, 0.1);
             cell.classList.add('found');
-            G.found.push(idx);
-            G.score += 20;
+            found.push(idx);
+            score += 20;
             
-            document.getElementById('iCount').textContent = G.found.length+'/'+G.seq.length;
-            document.getElementById('sScore').textContent = G.score;
-            document.getElementById('iScore').textContent = G.score;
+            document.getElementById('iCount').textContent = found.length+'/'+seq.length;
+            updateStats();
             
-            if(G.found.length >= G.seq.length){
-                G.canTap = false;
+            if(found.length >= seq.length){
+                // ALL DONE!
+                canTap = false;
                 win();
             }
         } else if(!inSeq){
             cell.classList.add('bad');
-            G.canTap = false;
+            canTap = false;
             fail('WRONG CELL!');
         }
     }
 }
 
-// TRANSITION FUNCTIONS
-function goToSequence(){
-    clearCells();
-    G.phase = 'sequence';
-    G.seqIdx = 0;
-    G.canTap = true;
-    
-    goBtn.disabled = true;
-    goBtn.className = 'go-btn';
-    
-    updateUI();
-    document.getElementById('iCount').textContent = '0/'+G.seq.length;
-    setMsg('🔢 TAP IN ORDER!');
-}
-
-function goToMatch(){
-    clearCells();
-    G.phase = 'match';
-    G.found = [];
-    G.canTap = true;
-    
-    goBtn.disabled = true;
-    goBtn.className = 'go-btn';
-    
-    updateUI();
-    document.getElementById('iCount').textContent = '0/'+G.seq.length;
-    setMsg('🎯 FIND ALL '+G.seq.length+'!');
-}
-
 function win(){
-    G.phase = 'idle';
-    G.streak++;
-    burst(12);
+    log('WIN!');
+    streak++;
     
-    beep(523, 0.12);
-    setTimeout(function(){ beep(659, 0.12); }, 80);
-    setTimeout(function(){ beep(784, 0.12); }, 160);
+    beep(523, 0.1);
+    setTimeout(function(){ beep(659, 0.1); }, 80);
+    setTimeout(function(){ beep(784, 0.1); }, 160);
     setTimeout(function(){ beep(1047, 0.15); }, 240);
     
-    setMsg('🏆 TRIPLE THREAT COMPLETE!');
+    msgTxt.textContent = '🏆 TRIPLE THREAT!';
     
-    G.level++;
-    localStorage.setItem('lc-challenge-level', G.level);
+    level++;
+    localStorage.setItem('lc-challenge-level', level);
     
-    if(G.level > 10){
+    if(level > 10){
         localStorage.setItem('lc-challenge-champion', 'true');
         setTimeout(function(){
-            document.getElementById('champMsg').textContent = 'Score: '+G.score;
+            document.getElementById('champMsg').textContent = 'Score: '+score;
             document.getElementById('champOverlay').classList.add('show');
-        }, 1200);
+        }, 1000);
     } else {
         setTimeout(function(){
-            document.getElementById('winMsg').textContent = 'Advancing to Level '+G.level;
+            document.getElementById('winMsg').textContent = 'Advancing to Level '+level;
             document.getElementById('winOverlay').classList.add('show');
-        }, 1200);
+        }, 1000);
     }
 }
 
 function fail(msg){
-    clearTimeout(G.timer);
+    log('FAIL: ' + msg);
+    clearTimeout(timer);
     beep(200, 0.25);
     
-    if(G.curCell >= 0 && G.phase === 'react'){
-        G.cells[G.curCell].classList.remove('lit');
-        G.cells[G.curCell].classList.add('bad');
+    if(curCell >= 0){
+        cells[curCell].classList.remove('lit');
+        cells[curCell].classList.add('bad');
     }
     
-    G.phase = 'idle';
-    G.streak = 0;
-    G.canTap = false;
-    
-    setMsg(msg);
+    streak = 0;
+    canTap = false;
+    msgTxt.textContent = msg;
     
     setTimeout(reset, 1200);
 }
 
 function reset(){
-    G.phase = 'idle';
-    G.curCell = -1;
+    log('Reset');
+    curCell = -1;
     clearCells();
-    updateUI();
-    setMsg('TAP GO!');
+    updateStats();
+    
+    document.getElementById('phReact').className = 'ph ph-react';
+    document.getElementById('phSeq').className = 'ph ph-seq';
+    document.getElementById('phMatch').className = 'ph ph-match';
+    court.className = 'court';
+    msgBox.className = 'msg';
+    
+    msgTxt.textContent = 'TAP GO!';
     goBtn.disabled = false;
     goBtn.className = 'go-btn';
     goBtn.textContent = 'GO';
+    goBtn.setAttribute('data-action', 'start');
 }
 
 // Overlay buttons
@@ -490,14 +496,15 @@ document.getElementById('winBtn').onclick = function(){
 
 document.getElementById('champBtn').onclick = function(){
     document.getElementById('champOverlay').classList.remove('show');
-    G.level = 1;
+    level = 1;
     localStorage.setItem('lc-challenge-level', 1);
     reset();
 };
 
 // Init
 buildGrid();
-updateUI();
+updateStats();
+log('Ready');
 </script>
 </body>
 </html>
