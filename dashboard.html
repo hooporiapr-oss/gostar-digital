@@ -12,7 +12,6 @@
     --gold: #FFD700;
     --orange: #FF6B35;
     --teal: #00D9A5;
-    --purple: #9B59B6;
     --dark: #0a0a0f;
     --darker: #050508;
     --card: #111118;
@@ -115,11 +114,18 @@ body.en .lang-es { display: none !important; }
     font-size: 2rem;
     letter-spacing: 3px;
     text-align: center;
-    margin-bottom: 25px;
+    margin-bottom: 8px;
     color: var(--gold);
 }
 
-/* ============ WORKOUT GRID ============ */
+.page-subtitle {
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 25px;
+}
+
+/* ============ WORKOUT GRID - 2 CARDS ============ */
 .workout-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -131,7 +137,7 @@ body.en .lang-es { display: none !important; }
     background: var(--card);
     border: 2px solid var(--border);
     border-radius: 16px;
-    padding: 25px 15px;
+    padding: 30px 15px;
     text-align: center;
     cursor: pointer;
     transition: all 0.3s;
@@ -142,14 +148,6 @@ body.en .lang-es { display: none !important; }
 .workout-card:hover {
     transform: translateY(-3px);
     box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-}
-
-.workout-card.reaction {
-    border-color: rgba(155, 89, 182, 0.3);
-}
-.workout-card.reaction:hover {
-    border-color: var(--purple);
-    box-shadow: 0 10px 30px rgba(155, 89, 182, 0.2);
 }
 
 .workout-card.match {
@@ -168,46 +166,36 @@ body.en .lang-es { display: none !important; }
     box-shadow: 0 10px 30px rgba(0, 217, 165, 0.2);
 }
 
-.workout-card.challenge {
-    border-color: rgba(255, 215, 0, 0.3);
-}
-.workout-card.challenge:hover {
-    border-color: var(--gold);
-    box-shadow: 0 10px 30px rgba(255, 215, 0, 0.2);
-}
-
 .workout-icon {
-    font-size: 2.5rem;
-    margin-bottom: 10px;
+    font-size: 3rem;
+    margin-bottom: 12px;
     display: block;
 }
 
 .workout-name {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.3rem;
+    font-size: 1.5rem;
     letter-spacing: 2px;
     color: var(--text);
-    margin-bottom: 5px;
+    margin-bottom: 8px;
 }
 
-.workout-card.reaction .workout-name { color: var(--purple); }
 .workout-card.match .workout-name { color: var(--orange); }
 .workout-card.sequence .workout-name { color: var(--teal); }
-.workout-card.challenge .workout-name { color: var(--gold); }
 
 .workout-desc {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     color: var(--muted);
-    margin-bottom: 12px;
+    margin-bottom: 15px;
     line-height: 1.4;
 }
 
 .workout-level {
     display: inline-block;
-    padding: 5px 12px;
+    padding: 6px 14px;
     background: rgba(255,255,255,0.05);
     border-radius: 20px;
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     font-weight: 600;
     color: var(--text);
     letter-spacing: 1px;
@@ -366,13 +354,13 @@ body.en .lang-es { display: none !important; }
         gap: 10px;
     }
     .workout-card {
-        padding: 20px 10px;
+        padding: 25px 10px;
     }
     .workout-icon {
-        font-size: 2rem;
+        font-size: 2.5rem;
     }
     .workout-name {
-        font-size: 1.1rem;
+        font-size: 1.3rem;
     }
     .speed-btn {
         padding: 10px 18px;
@@ -406,6 +394,10 @@ body.en .lang-es { display: none !important; }
         <span class="lang-en">CHOOSE YOUR WORKOUT</span>
         <span class="lang-es">ELIGE TU EJERCICIO</span>
     </h1>
+    <p class="page-subtitle">
+        <span class="lang-en">Pattern & Space Memory Workouts</span>
+        <span class="lang-es">Ejercicios de Memoria de Patrones y Espacio</span>
+    </p>
 
     <!-- Trial Banner (shown for trial users) -->
     <div class="trial-banner" id="trialBanner" style="display: none;">
@@ -420,26 +412,15 @@ body.en .lang-es { display: none !important; }
         </a>
     </div>
 
-    <!-- Workout Grid -->
+    <!-- Workout Grid - 2 GAMES ONLY -->
     <div class="workout-grid">
-        <!-- THE REACTION -->
-        <a href="/the-reaction.html" class="workout-card reaction">
-            <span class="workout-icon">⚡</span>
-            <div class="workout-name">THE REACTION</div>
-            <p class="workout-desc">
-                <span class="lang-en">Speed + Memory Flash</span>
-                <span class="lang-es">Velocidad + Flash de Memoria</span>
-            </p>
-            <span class="workout-level" id="reactionLevel">L1-SLOW</span>
-        </a>
-
         <!-- THE MATCH -->
         <a href="/the-match.html" class="workout-card match">
-            <span class="workout-icon">🎯</span>
+            <span class="workout-icon">🧠</span>
             <div class="workout-name">THE MATCH</div>
             <p class="workout-desc">
-                <span class="lang-en">Find All The Cells</span>
-                <span class="lang-es">Encuentra Todas Las Celdas</span>
+                <span class="lang-en">Memorize positions<br>Tap in order</span>
+                <span class="lang-es">Memoriza posiciones<br>Toca en orden</span>
             </p>
             <span class="workout-level" id="matchLevel">L1-SLOW</span>
         </a>
@@ -449,21 +430,10 @@ body.en .lang-es { display: none !important; }
             <span class="workout-icon">🔢</span>
             <div class="workout-name">THE SEQUENCE</div>
             <p class="workout-desc">
-                <span class="lang-en">Repeat The Order</span>
-                <span class="lang-es">Repite El Orden</span>
+                <span class="lang-en">Watch the sequence<br>Repeat it back</span>
+                <span class="lang-es">Observa la secuencia<br>Repítela</span>
             </p>
             <span class="workout-level" id="sequenceLevel">L1-SLOW</span>
-        </a>
-
-        <!-- THE REACTION CHALLENGE -->
-        <a href="/the-challenge.html" class="workout-card challenge">
-            <span class="workout-icon">🏆</span>
-            <div class="workout-name">THE CHALLENGE</div>
-            <p class="workout-desc">
-                <span class="lang-en">React + Remember</span>
-                <span class="lang-es">Reacciona + Recuerda</span>
-            </p>
-            <span class="workout-level" id="challengeLevel">L1-SLOW</span>
         </a>
     </div>
 
@@ -507,11 +477,11 @@ body.en .lang-es { display: none !important; }
 <script>
 (function() {
     // ==================== LANGUAGE ====================
-    var currentLang = localStorage.getItem('laughcourt_lang') || 'en';
+    var currentLang = localStorage.getItem('lc-lang') || 'en';
     
     function setLang(lang) {
         currentLang = lang;
-        localStorage.setItem('laughcourt_lang', lang);
+        localStorage.setItem('lc-lang', lang);
         document.body.className = lang;
         document.getElementById('btnEn').className = lang === 'en' ? 'lang-btn active' : 'lang-btn';
         document.getElementById('btnEs').className = lang === 'es' ? 'lang-btn active' : 'lang-btn';
@@ -522,12 +492,12 @@ body.en .lang-es { display: none !important; }
     setLang(currentLang);
 
     // ==================== SPEED SELECTOR ====================
-    var currentSpeed = localStorage.getItem('laughcourt_speed') || 'slow';
+    var currentSpeed = localStorage.getItem('lc-speed') || 'slow';
     var speedBtns = document.querySelectorAll('.speed-btn');
     
     function setSpeed(speed) {
         // Check if user has access (for trial users, only slow)
-        var isTrial = localStorage.getItem('laughcourt_trial') === 'true';
+        var isTrial = localStorage.getItem('lc-trial') === 'true';
         if (isTrial && speed !== 'slow') {
             alert(currentLang === 'en' ? 
                 'Upgrade to $5/month to unlock MED and FAST speeds!' : 
@@ -536,7 +506,7 @@ body.en .lang-es { display: none !important; }
         }
         
         currentSpeed = speed;
-        localStorage.setItem('laughcourt_speed', speed);
+        localStorage.setItem('lc-speed', speed);
         
         speedBtns.forEach(function(btn) {
             btn.classList.remove('active');
@@ -558,7 +528,7 @@ body.en .lang-es { display: none !important; }
     setSpeed(currentSpeed);
 
     // ==================== TRIAL STATUS ====================
-    var isTrial = localStorage.getItem('laughcourt_trial') === 'true';
+    var isTrial = localStorage.getItem('lc-trial') === 'true';
     var trialBanner = document.getElementById('trialBanner');
     
     if (isTrial) {
@@ -568,7 +538,7 @@ body.en .lang-es { display: none !important; }
         document.getElementById('speedFast').classList.add('locked');
         
         // Show trial days (placeholder - would come from server)
-        var trialDays = localStorage.getItem('laughcourt_trial_days') || '7';
+        var trialDays = localStorage.getItem('lc-trial-days') || '7';
         document.getElementById('trialDays').textContent = trialDays + (currentLang === 'en' ? ' DAYS LEFT' : ' DÍAS RESTANTES');
     }
 
@@ -577,22 +547,22 @@ body.en .lang-es { display: none !important; }
         var speedLabel = currentSpeed.toUpperCase();
         
         // Get saved levels or default to 1
-        var reactionLvl = localStorage.getItem('laughcourt_reaction_level') || '1';
-        var matchLvl = localStorage.getItem('laughcourt_match_level') || '1';
-        var sequenceLvl = localStorage.getItem('laughcourt_sequence_level') || '1';
-        var challengeLvl = localStorage.getItem('laughcourt_challenge_level') || '1';
+        var matchLvl = localStorage.getItem('lc-match-level') || '1';
+        var sequenceLvl = localStorage.getItem('lc-seq-level') || '1';
         
-        document.getElementById('reactionLevel').textContent = 'L' + reactionLvl + '-' + speedLabel;
         document.getElementById('matchLevel').textContent = 'L' + matchLvl + '-' + speedLabel;
         document.getElementById('sequenceLevel').textContent = 'L' + sequenceLvl + '-' + speedLabel;
-        document.getElementById('challengeLevel').textContent = 'L' + challengeLvl + '-' + speedLabel;
     }
     
     updateLevelDisplays();
 
     // ==================== GOSTARS ====================
     function updateGoStars() {
-        var totalGoStars = parseInt(localStorage.getItem('laughcourt_gostars') || '0');
+        // Combine GoStars from both games
+        var matchTier = parseInt(localStorage.getItem('lc-match-tier') || '1');
+        var seqTier = parseInt(localStorage.getItem('lc-seq-tier') || '1');
+        var totalGoStars = Math.max(matchTier, seqTier); // Show highest tier
+        
         var display = '';
         for (var i = 0; i < 10; i++) {
             display += i < totalGoStars ? '⭐' : '☆';
@@ -607,8 +577,9 @@ body.en .lang-es { display: none !important; }
     window.logout = function() {
         if (confirm(currentLang === 'en' ? 'Are you sure you want to logout?' : '¿Seguro que quieres salir?')) {
             // Clear session data
-            localStorage.removeItem('laughcourt_session');
-            localStorage.removeItem('laughcourt_pin');
+            localStorage.removeItem('lc-user');
+            localStorage.removeItem('lc-speed-access');
+            sessionStorage.clear();
             window.location.href = '/login';
         }
     };
