@@ -52,9 +52,13 @@ html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background
 .settings-link.logout{background:0;border:1px solid var(--muted);color:var(--muted)}
 
 /* FOCUS MODE BUTTON */
-.focus-btn{position:fixed;top:calc(env(safe-area-inset-top, 0px) + 6px);right:12px;width:32px;height:32px;border-radius:6px;background:var(--card);border:1px solid var(--border);color:var(--muted);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:1001;transition:all 0.2s}
+.focus-btn{position:fixed;top:calc(env(safe-area-inset-top, 0px) + 58px);right:12px;width:32px;height:32px;border-radius:6px;background:var(--card);border:1px solid var(--border);color:var(--muted);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:999;transition:all 0.2s}
 .focus-btn:active{transform:scale(0.95)}
 .focus-btn.active{background:rgba(255,107,53,0.3);border-color:var(--orange);color:var(--orange)}
+
+/* REFRESH BUTTON - Always visible for freeze recovery */
+.refresh-btn{position:fixed;top:calc(env(safe-area-inset-top, 0px) + 58px);right:50px;width:32px;height:32px;border-radius:6px;background:var(--card);border:1px solid var(--border);color:var(--muted);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:999;transition:all 0.2s}
+.refresh-btn:active{transform:scale(0.95);background:rgba(0,217,165,0.2);border-color:var(--teal);color:var(--teal)}
 
 /* FOCUS MODE STYLES */
 body.focus-mode .mini-nav{transform:translateY(-100%)}
@@ -68,6 +72,7 @@ body.focus-mode .court-wrapper{flex:1;position:relative;z-index:10}
 body.focus-mode .court-grid{width:min(95vw, calc(100dvh - 200px));height:min(95vw, calc(100dvh - 200px));max-width:500px;max-height:500px;position:relative;z-index:20}
 body.focus-mode .action-btn{position:fixed;bottom:calc(env(safe-area-inset-bottom, 10px) + 15px);left:15px;right:15px;z-index:100}
 body.focus-mode .coach-message{bottom:120px}
+body.focus-mode .focus-btn,body.focus-mode .refresh-btn{top:calc(env(safe-area-inset-top, 0px) + 10px)}
 
 .game-container{width:100%;max-width:420px;height:100dvh;margin:0 auto;padding:5px 10px;padding-top:calc(var(--nav-height) + env(safe-area-inset-top) + 8px);padding-bottom:max(5px,env(safe-area-inset-bottom));display:flex;flex-direction:column;overflow:hidden;transition:padding 0.3s ease}
 .stats-bar{display:flex;justify-content:center;gap:12px;padding:5px 8px;background:var(--card);border-radius:8px;margin-bottom:4px;flex-shrink:0}
@@ -155,6 +160,9 @@ body.es .lang-en{display:none!important}
 </style>
 </head>
 <body class="en">
+
+<!-- REFRESH BUTTON - Tap to recover from freeze -->
+<button class="refresh-btn" id="refreshBtn" title="Reset Round">🔄</button>
 
 <!-- FOCUS BUTTON -->
 <button class="focus-btn" id="focusBtn" title="Focus Mode">⛶</button>
@@ -336,6 +344,47 @@ body.es .lang-en{display:none!important}
         gameTimeouts = [];
     }
 
+    // ===== REFRESH/RECOVERY BUTTON =====
+    var refreshBtn = document.getElementById('refreshBtn');
+    refreshBtn.onclick = function() {
+        // Instant recovery - clears freeze, preserves all progress
+        clearAllGameTimeouts();
+        
+        // Reset only the round state, keep progress
+        state.isPlaying = false;
+        state.canTap = false;
+        state.roundEnded = false;
+        state.playerIndex = 0;
+        state.pattern = [];
+        
+        // Clear visual state of cells
+        if (state.cells && state.cells.length) {
+            state.cells.forEach(function(c) { 
+                c.classList.remove('lit', 'correct', 'wrong', 'player-tap', 'show-num');
+                var numEl = c.querySelector('.cell-num');
+                if (numEl) numEl.textContent = '';
+            });
+        }
+        
+        // Close any overlays
+        document.getElementById('tierupOverlay').classList.remove('show');
+        document.getElementById('upgradeOverlay').classList.remove('show');
+        
+        // Re-enable GO button
+        actionBtn.disabled = false;
+        
+        // Show ready message
+        messageText.innerHTML = '<span class="lang-en">' + (state.roundsCompleted + 1) + '/' + ROUNDS_PER_TIER + ' - TAP GO!</span><span class="lang-es">' + (state.roundsCompleted + 1) + '/' + ROUNDS_PER_TIER + ' - ¡TOCA IR!</span>';
+        messageText.className = 'message-text';
+        
+        // Update displays
+        updateStats();
+        updateDivisionDisplay();
+        
+        // Quick feedback
+        showCoach('🔄 Ready!');
+    };
+
     // ===== STATE =====
     var state = {
         level: parseInt(localStorage.getItem('lc-match-level')) || 1,
@@ -343,7 +392,7 @@ body.es .lang-en{display:none!important}
         tier: parseInt(localStorage.getItem('lc-match-tier')) || 1,
         score: parseInt(localStorage.getItem('lc-match-score')) || 0,
         streak: parseInt(localStorage.getItem('lc-match-streak')) || 0,
-        roundsCompleted: 0,
+        roundsCompleted: parseInt(localStorage.getItem('lc-match-rounds')) || 0,
         pattern: [],
         playerIndex: 0,
         isPlaying: false,
@@ -353,6 +402,8 @@ body.es .lang-en{display:none!important}
     };
     if (state.level > 10) state.level = 10;
     if (state.level < 1) state.level = 1;
+    // Cap roundsCompleted to valid range
+    if (state.roundsCompleted >= ROUNDS_PER_TIER) state.roundsCompleted = 0;
 
     var courtGrid = document.getElementById('courtGrid');
     var messageText = document.getElementById('messageText');
@@ -589,6 +640,7 @@ body.es .lang-en{display:none!important}
             state.roundsCompleted++;
             localStorage.setItem('lc-match-score', state.score);
             localStorage.setItem('lc-match-streak', state.streak);
+            localStorage.setItem('lc-match-rounds', state.roundsCompleted);
             
             var intensity = state.streak >= 5 ? 'party' : state.streak >= 3 ? 'big' : 'medium';
             var msgs = state.streak >= 5 ? ['🧠 LEGEND!', '🏆 WOW!'] : state.streak >= 3 ? ['😂 FIRE!', '🤣 AMAZING!'] : ['😄 NICE!', '😊 GREAT!'];
@@ -616,6 +668,7 @@ body.es .lang-en{display:none!important}
         state.tier++;
         state.roundsCompleted = 0;
         localStorage.setItem('lc-match-tier', state.tier);
+        localStorage.setItem('lc-match-rounds', 0);
         
         // Auto-advance to next level if not at max
         var oldLevel = state.level;
@@ -645,6 +698,7 @@ body.es .lang-en{display:none!important}
 
     function maxTier() {
         state.roundsCompleted = 0;
+        localStorage.setItem('lc-match-rounds', 0);
         
         // Ensure at max level too
         if (state.level < 10) {
@@ -712,6 +766,7 @@ body.es .lang-en{display:none!important}
             state.roundEnded = false;
             localStorage.setItem('lc-match-level', state.level);
             localStorage.setItem('lc-match-tier', 1);
+            localStorage.setItem('lc-match-rounds', 0);
             updateDivisionDisplay();
             updateStats();
             resetRound();
@@ -733,6 +788,7 @@ body.es .lang-en{display:none!important}
             state.roundEnded = false;
             localStorage.setItem('lc-match-speed', state.speed);
             localStorage.setItem('lc-match-tier', 1);
+            localStorage.setItem('lc-match-rounds', 0);
             updateDivisionDisplay();
             updateStats();
             resetRound();
