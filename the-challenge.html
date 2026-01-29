@@ -48,11 +48,10 @@ html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background
 .cell.found{background:var(--orange)!important;border-color:var(--orange)!important}
 .info{display:flex;justify-content:space-between;padding:6px 10px;background:var(--card);border-radius:8px;margin:5px 0}
 .info-txt{font-family:'Bebas Neue',sans-serif;font-size:0.85rem;color:var(--gold)}
-.go-btn{width:100%;min-height:52px;padding:14px;border:none;border-radius:10px;font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:3px;cursor:pointer;background:linear-gradient(135deg,var(--gold),#FFA500);color:var(--dark)}
+.go-btn{width:100%;min-height:52px;padding:14px;border:none;border-radius:10px;font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:3px;cursor:pointer;background:linear-gradient(135deg,var(--gold),#FFA500);color:var(--dark);position:relative;z-index:100}
 .go-btn.seq-btn{background:linear-gradient(135deg,var(--teal),#00B890)}
 .go-btn.match-btn{background:linear-gradient(135deg,var(--orange),#FF5500)}
 .go-btn:disabled{opacity:0.4;cursor:not-allowed}
-.debug{position:fixed;bottom:10px;left:10px;background:rgba(0,0,0,0.8);color:lime;padding:5px 10px;font-size:12px;font-family:monospace;z-index:9999;border-radius:4px}
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,0.9);display:none;align-items:center;justify-content:center;z-index:1100}
 .overlay.show{display:flex}
 .ocard{background:var(--card);border:2px solid var(--gold);border-radius:14px;padding:24px;text-align:center;max-width:280px}
@@ -94,10 +93,8 @@ html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background
 <span class="info-txt" id="iScore">0</span>
 </div>
 
-<button class="go-btn" id="goBtn" data-action="start">GO</button>
+<button class="go-btn" id="goBtn">GO</button>
 </div>
-
-<div id="debug" class="debug">Ready</div>
 
 <div class="overlay" id="winOverlay">
 <div class="ocard">
@@ -118,7 +115,8 @@ html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background
 </div>
 
 <script>
-// GLOBALS
+// Simple state: 'idle', 'react', 'sequence', 'match'
+var STATE = 'idle';
 var level = parseInt(localStorage.getItem('lc-challenge-level')) || 1;
 var score = 0;
 var streak = 0;
@@ -136,11 +134,9 @@ var court = document.getElementById('court');
 var msgTxt = document.getElementById('msgTxt');
 var msgBox = document.getElementById('msgBox');
 var goBtn = document.getElementById('goBtn');
-var debug = document.getElementById('debug');
 
 var SPEEDS = {slow:1200, med:800, fast:500};
 
-function log(s){ debug.textContent = s; }
 function getSpeed(){ return level <= 3 ? 'slow' : level <= 6 ? 'med' : 'fast'; }
 function getDiv(){ return level <= 3 ? 'D3' : level <= 6 ? 'D2' : 'D1'; }
 function getTotal(){ return level + 4; }
@@ -173,17 +169,16 @@ function buildGrid(){
 }
 
 // Cell tap via event delegation
-court.addEventListener('click', function(e){
+court.onclick = function(e){
     var cell = e.target;
     if(!cell.classList.contains('cell')) return;
+    if(!canTap) return;
     var idx = parseInt(cell.getAttribute('data-idx'));
-    handleTap(idx);
-});
+    handleTap(idx, cell);
+};
 
 function clearCells(){
-    for(var i=0; i<cells.length; i++){
-        cells[i].className = 'cell';
-    }
+    for(var i=0; i<cells.length; i++) cells[i].className = 'cell';
 }
 
 function updateStats(){
@@ -194,23 +189,20 @@ function updateStats(){
     document.getElementById('iScore').textContent = score;
 }
 
-// ========== BUTTON CLICK ==========
-goBtn.addEventListener('click', function(){
-    var action = goBtn.getAttribute('data-action');
-    log('Button: ' + action);
-    
-    if(action === 'start'){
+// ========== BUTTON HANDLER ==========
+goBtn.onclick = function(){
+    if(STATE === 'idle'){
         startReact();
-    } else if(action === 'sequence'){
-        startSequence();
-    } else if(action === 'match'){
-        startMatch();
+    } else if(STATE === 'wait-seq'){
+        runSequence();
+    } else if(STATE === 'wait-match'){
+        runMatch();
     }
-});
+};
 
-// ========== PHASE 1: REACT ==========
+// ========== REACT PHASE ==========
 function startReact(){
-    log('Starting REACT');
+    STATE = 'react';
     score = 0;
     seq = [];
     seqIdx = 0;
@@ -223,7 +215,6 @@ function startReact(){
     goBtn.disabled = true;
     goBtn.className = 'go-btn';
     goBtn.textContent = '...';
-    goBtn.setAttribute('data-action', 'none');
     
     clearCells();
     updateStats();
@@ -244,7 +235,7 @@ function startReact(){
 }
 
 function flashNext(){
-    log('Flash ' + (taps+1) + '/' + total);
+    if(STATE !== 'react') return;
     
     if(curCell >= 0) cells[curCell].classList.remove('lit');
     
@@ -258,19 +249,29 @@ function flashNext(){
     
     beep(880, 0.12);
     
-    var spd = SPEEDS[getSpeed()];
     timer = setTimeout(function(){
-        if(canTap){
+        if(canTap && STATE === 'react'){
             canTap = false;
             fail('TOO SLOW!');
         }
-    }, spd);
+    }, SPEEDS[getSpeed()]);
 }
 
-// ========== PHASE 2: SEQUENCE ==========
-function startSequence(){
-    log('Starting SEQUENCE');
+function reactDone(){
+    STATE = 'wait-seq';
+    canTap = false;
+    beep(784, 0.15);
+    msgTxt.textContent = '✓ REACT DONE!';
     
+    // Enable button for sequence
+    goBtn.disabled = false;
+    goBtn.className = 'go-btn seq-btn';
+    goBtn.textContent = '🔢 SEQUENCE →';
+}
+
+// ========== SEQUENCE PHASE ==========
+function runSequence(){
+    STATE = 'sequence';
     clearCells();
     seqIdx = 0;
     canTap = true;
@@ -278,11 +279,9 @@ function startSequence(){
     goBtn.disabled = true;
     goBtn.className = 'go-btn';
     goBtn.textContent = '...';
-    goBtn.setAttribute('data-action', 'none');
     
     document.getElementById('phReact').className = 'ph ph-react done';
     document.getElementById('phSeq').className = 'ph ph-seq on';
-    document.getElementById('phMatch').className = 'ph ph-match';
     court.className = 'court seq';
     msgBox.className = 'msg seq';
     
@@ -290,10 +289,21 @@ function startSequence(){
     msgTxt.textContent = '🔢 TAP IN ORDER!';
 }
 
-// ========== PHASE 3: MATCH ==========
-function startMatch(){
-    log('Starting MATCH');
+function seqDone(){
+    STATE = 'wait-match';
+    canTap = false;
+    beep(784, 0.15);
+    msgTxt.textContent = '✓ ORDER DONE!';
     
+    // Enable button for match
+    goBtn.disabled = false;
+    goBtn.className = 'go-btn match-btn';
+    goBtn.textContent = '🎯 FIND ALL →';
+}
+
+// ========== MATCH PHASE ==========
+function runMatch(){
+    STATE = 'match';
     clearCells();
     found = [];
     canTap = true;
@@ -301,9 +311,7 @@ function startMatch(){
     goBtn.disabled = true;
     goBtn.className = 'go-btn';
     goBtn.textContent = '...';
-    goBtn.setAttribute('data-action', 'none');
     
-    document.getElementById('phReact').className = 'ph ph-react done';
     document.getElementById('phSeq').className = 'ph ph-seq done';
     document.getElementById('phMatch').className = 'ph ph-match on';
     court.className = 'court match';
@@ -314,19 +322,14 @@ function startMatch(){
 }
 
 // ========== HANDLE TAP ==========
-function handleTap(idx){
-    if(!canTap) return;
+function handleTap(idx, cell){
     
-    var cell = cells[idx];
-    var action = goBtn.getAttribute('data-action');
-    
-    // REACT PHASE
-    if(action === 'none' && document.getElementById('phReact').classList.contains('on')){
+    // REACT
+    if(STATE === 'react'){
         clearTimeout(timer);
         canTap = false;
         
         if(idx === curCell){
-            log('Correct tap ' + (taps+1));
             beep(660, 0.1);
             cell.classList.remove('lit');
             cell.classList.add('ok');
@@ -337,16 +340,7 @@ function handleTap(idx){
             updateStats();
             
             if(taps >= total){
-                // REACT COMPLETE!
-                log('REACT DONE - show seq button');
-                beep(784, 0.15);
-                msgTxt.textContent = '✓ REACT DONE!';
-                
-                // Show SEQUENCE button
-                goBtn.disabled = false;
-                goBtn.className = 'go-btn seq-btn';
-                goBtn.textContent = '🔢 SEQUENCE →';
-                goBtn.setAttribute('data-action', 'sequence');
+                reactDone();
             } else {
                 setTimeout(function(){
                     cell.classList.remove('ok');
@@ -360,12 +354,11 @@ function handleTap(idx){
         return;
     }
     
-    // SEQUENCE PHASE
-    if(document.getElementById('phSeq').classList.contains('on')){
+    // SEQUENCE
+    if(STATE === 'sequence'){
         var expect = seq[seqIdx];
         
         if(idx === expect){
-            log('Seq correct ' + (seqIdx+1));
             beep(660, 0.1);
             cell.classList.add('ok');
             seqIdx++;
@@ -375,17 +368,7 @@ function handleTap(idx){
             updateStats();
             
             if(seqIdx >= seq.length){
-                // SEQUENCE COMPLETE!
-                log('SEQ DONE - show match button');
-                canTap = false;
-                beep(784, 0.15);
-                msgTxt.textContent = '✓ ORDER DONE!';
-                
-                // Show MATCH button
-                goBtn.disabled = false;
-                goBtn.className = 'go-btn match-btn';
-                goBtn.textContent = '🎯 FIND ALL →';
-                goBtn.setAttribute('data-action', 'match');
+                seqDone();
             }
         } else {
             cell.classList.add('bad');
@@ -396,13 +379,12 @@ function handleTap(idx){
         return;
     }
     
-    // MATCH PHASE
-    if(document.getElementById('phMatch').classList.contains('on')){
+    // MATCH
+    if(STATE === 'match'){
         var inSeq = seq.indexOf(idx) !== -1;
         var already = found.indexOf(idx) !== -1;
         
         if(inSeq && !already){
-            log('Found ' + (found.length+1));
             beep(660, 0.1);
             cell.classList.add('found');
             found.push(idx);
@@ -412,7 +394,6 @@ function handleTap(idx){
             updateStats();
             
             if(found.length >= seq.length){
-                // ALL DONE!
                 canTap = false;
                 win();
             }
@@ -425,7 +406,7 @@ function handleTap(idx){
 }
 
 function win(){
-    log('WIN!');
+    STATE = 'idle';
     streak++;
     
     beep(523, 0.1);
@@ -453,7 +434,7 @@ function win(){
 }
 
 function fail(msg){
-    log('FAIL: ' + msg);
+    STATE = 'idle';
     clearTimeout(timer);
     beep(200, 0.25);
     
@@ -470,7 +451,7 @@ function fail(msg){
 }
 
 function reset(){
-    log('Reset');
+    STATE = 'idle';
     curCell = -1;
     clearCells();
     updateStats();
@@ -485,10 +466,9 @@ function reset(){
     goBtn.disabled = false;
     goBtn.className = 'go-btn';
     goBtn.textContent = 'GO';
-    goBtn.setAttribute('data-action', 'start');
 }
 
-// Overlay buttons
+// Overlays
 document.getElementById('winBtn').onclick = function(){
     document.getElementById('winOverlay').classList.remove('show');
     reset();
@@ -504,7 +484,6 @@ document.getElementById('champBtn').onclick = function(){
 // Init
 buildGrid();
 updateStats();
-log('Ready');
 </script>
 </body>
 </html>
