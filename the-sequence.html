@@ -322,6 +322,22 @@ body.es .lang-en{display:none!important}
     function getNextColor() { var color = FLASH_COLORS[colorIndex]; colorIndex = (colorIndex + 1) % FLASH_COLORS.length; return color; }
     function setFlashColor(color) { document.documentElement.style.setProperty('--flash-color', color); }
 
+    // ===== TIMEOUT MANAGEMENT =====
+    var gameTimeouts = [];
+    function setGameTimeout(fn, delay) {
+        var id = setTimeout(function() {
+            var idx = gameTimeouts.indexOf(id);
+            if (idx > -1) gameTimeouts.splice(idx, 1);
+            fn();
+        }, delay);
+        gameTimeouts.push(id);
+        return id;
+    }
+    function clearAllGameTimeouts() {
+        gameTimeouts.forEach(function(id) { clearTimeout(id); });
+        gameTimeouts = [];
+    }
+
     // ===== STATE =====
     var state = {
         level: parseInt(localStorage.getItem('lc-seq-level')) || 1,
@@ -334,6 +350,7 @@ body.es .lang-en{display:none!important}
         playerIndex: 0,
         isPlaying: false,
         canTap: false,
+        roundEnded: false,
         cells: [],
         currentColor: FLASH_COLORS[0]
     };
@@ -462,9 +479,10 @@ body.es .lang-en{display:none!important}
     }
 
     function playSequence(cb) {
-        var cfg = SPEED_CFG[state.speed];
+        var cfg = SPEED_CFG[state.speed] || SPEED_CFG.slow;
         var i = 0;
         function next() {
+            if (!state.isPlaying) return; // Guard against stale sequence
             if (i > 0) {
                 state.cells[state.sequence[i - 1]].classList.remove('lit');
             }
@@ -474,9 +492,9 @@ body.es .lang-en{display:none!important}
                 cell.querySelector('.cell-num').textContent = i + 1;
                 playNote(state.sequence[i]);
                 i++;
-                setTimeout(next, cfg.show + cfg.gap);
+                setGameTimeout(next, cfg.show + cfg.gap);
             } else {
-                setTimeout(cb, 300);
+                setGameTimeout(cb, 300);
             }
         }
         next();
@@ -484,12 +502,18 @@ body.es .lang-en{display:none!important}
 
     function startRound() {
         if (state.isPlaying) return;
+        
+        // Clear any pending timeouts
+        clearAllGameTimeouts();
+        
         state.currentColor = getNextColor();
         setFlashColor(state.currentColor);
         state.isPlaying = true;
         state.canTap = false;
+        state.roundEnded = false;
         state.playerIndex = 0;
         actionBtn.disabled = true;
+        
         state.cells.forEach(function(c) { 
             c.classList.remove('lit', 'correct', 'wrong', 'player-tap', 'show-num'); 
             c.querySelector('.cell-num').textContent = '';
@@ -497,8 +521,10 @@ body.es .lang-en{display:none!important}
         state.sequence = generateSequence();
         messageText.innerHTML = '<span class="lang-en">WATCH...</span><span class="lang-es">MIRA...</span>';
         messageText.className = 'message-text watch';
-        setTimeout(function() {
+        setGameTimeout(function() {
+            if (!state.isPlaying) return; // Guard
             playSequence(function() {
+                if (!state.isPlaying) return; // Guard
                 messageText.innerHTML = '<span class="lang-en">YOUR TURN!</span><span class="lang-es">¡TU TURNO!</span>';
                 messageText.className = 'message-text go';
                 state.canTap = true;
@@ -507,11 +533,11 @@ body.es .lang-en{display:none!important}
     }
 
     function handleTap(idx) {
-        if (!state.canTap || !state.isPlaying) return;
+        if (!state.canTap || !state.isPlaying || state.roundEnded) return;
         var cell = state.cells[idx];
         cell.classList.add('player-tap');
         playNote(idx);
-        setTimeout(function() { cell.classList.remove('player-tap'); }, 200);
+        setGameTimeout(function() { cell.classList.remove('player-tap'); }, 200);
         if (idx === state.sequence[state.playerIndex]) {
             cell.classList.add('correct', 'show-num');
             cell.querySelector('.cell-num').textContent = state.playerIndex + 1;
@@ -519,24 +545,31 @@ body.es .lang-en{display:none!important}
             if (state.playerIndex > 2) laughCelebration('small');
             if (state.playerIndex >= state.sequence.length) {
                 state.canTap = false;
+                state.roundEnded = true;
                 roundComplete(true);
             }
         } else {
             cell.classList.add('wrong');
             playError();
             state.canTap = false;
-            setTimeout(function() { 
+            state.roundEnded = true;
+            setGameTimeout(function() { 
                 state.sequence.forEach(function(i, num) { 
                     state.cells[i].classList.add('correct', 'show-num'); 
                     state.cells[i].querySelector('.cell-num').textContent = num + 1;
                 }); 
             }, 400);
-            setTimeout(function() { roundComplete(false); }, 1500);
+            setGameTimeout(function() { roundComplete(false); }, 1500);
         }
     }
 
     function roundComplete(success) {
+        // Guard against double completion
+        if (!state.isPlaying && !state.roundEnded) return;
+        
         state.isPlaying = false;
+        state.canTap = false;
+        
         if (success) {
             var pts = state.sequence.length * 10 * state.level * (state.speed === 'fast' ? 3 : state.speed === 'med' ? 2 : 1);
             state.score += pts;
@@ -551,9 +584,9 @@ body.es .lang-en{display:none!important}
             showCoach(msgs[Math.floor(Math.random() * msgs.length)]);
             updateStats();
             if (state.roundsCompleted >= ROUNDS_PER_TIER) {
-                setTimeout(function() { state.tier < TOTAL_TIERS ? tierUp() : maxTier(); }, 800);
+                setGameTimeout(function() { state.tier < TOTAL_TIERS ? tierUp() : maxTier(); }, 800);
             } else {
-                setTimeout(resetRound, 1000);
+                setGameTimeout(resetRound, 1000);
             }
         } else {
             state.streak = 0;
@@ -561,7 +594,7 @@ body.es .lang-en{display:none!important}
             updateStats();
             messageText.innerHTML = '<span class="lang-en">WRONG!</span><span class="lang-es">¡ERROR!</span>';
             messageText.className = 'message-text error';
-            setTimeout(resetRound, 1500);
+            setGameTimeout(resetRound, 1500);
         }
     }
 
@@ -569,8 +602,28 @@ body.es .lang-en{display:none!important}
         state.tier++;
         state.roundsCompleted = 0;
         localStorage.setItem('lc-seq-tier', state.tier);
+        
+        // Auto-advance to next level if not at max
+        var oldLevel = state.level;
+        if (state.level < 10) {
+            state.level++;
+            localStorage.setItem('lc-seq-level', state.level);
+            // Update level selector UI
+            document.querySelectorAll('[data-level]').forEach(function(b) { b.classList.remove('active'); });
+            var newLevelBtn = document.querySelector('[data-level="' + state.level + '"]');
+            if (newLevelBtn) newLevelBtn.classList.add('active');
+        }
+        
         laughCelebration('party');
-        document.getElementById('tierupMessage').innerHTML = currentLang === 'es' ? '¡Tienes ' + state.tier + ' GoStars!' : 'You have ' + state.tier + ' GoStars!';
+        
+        // Show message with level advance info
+        var msgEn = 'You earned GoStar ' + state.tier + '!';
+        var msgEs = '¡Ganaste GoStar ' + state.tier + '!';
+        if (state.level > oldLevel) {
+            msgEn += ' Now Level ' + state.level + ' (' + getSeqLen() + ' cells)';
+            msgEs += ' Ahora Nivel ' + state.level + ' (' + getSeqLen() + ' celdas)';
+        }
+        document.getElementById('tierupMessage').innerHTML = currentLang === 'es' ? msgEs : msgEn;
         tierupOverlay.classList.add('show');
         updateStats();
         updateDivisionDisplay();
@@ -578,24 +631,51 @@ body.es .lang-en{display:none!important}
 
     function maxTier() {
         state.roundsCompleted = 0;
-        document.getElementById('tierupMessage').innerHTML = currentLang === 'es' ? '¡10 GOSTARS - MÁXIMO!' : '10 GOSTARS - MASTER!';
+        
+        // Ensure at max level too
+        if (state.level < 10) {
+            state.level = 10;
+            localStorage.setItem('lc-seq-level', state.level);
+            document.querySelectorAll('[data-level]').forEach(function(b) { b.classList.remove('active'); });
+            var maxLevelBtn = document.querySelector('[data-level="10"]');
+            if (maxLevelBtn) maxLevelBtn.classList.add('active');
+        }
+        
+        var msgEn = '🏆 10 GOSTARS - MASTER! 🏆';
+        var msgEs = '🏆 10 GOSTARS - ¡MAESTRO! 🏆';
+        document.getElementById('tierupMessage').innerHTML = currentLang === 'es' ? msgEs : msgEn;
         document.querySelector('#tierupOverlay .overlay-emoji').textContent = '👑';
         tierupOverlay.classList.add('show');
         updateStats();
+        updateDivisionDisplay();
     }
 
     document.getElementById('tierupBtn').onclick = function() {
         tierupOverlay.classList.remove('show');
         document.querySelector('#tierupOverlay .overlay-emoji').textContent = '⭐';
+        clearAllGameTimeouts();
         resetRound();
     };
 
     function resetRound() {
+        // Clear any pending timeouts
+        clearAllGameTimeouts();
+        
+        // Reset all game state
+        state.isPlaying = false;
+        state.canTap = false;
+        state.roundEnded = false;
+        state.playerIndex = 0;
+        state.sequence = [];
+        
+        // Clear all cells
         state.cells.forEach(function(c) { 
             c.classList.remove('lit', 'correct', 'wrong', 'player-tap', 'show-num');
             c.querySelector('.cell-num').textContent = '';
         });
-        messageText.innerHTML = '<span>' + (state.roundsCompleted + 1) + '/' + ROUNDS_PER_TIER + '</span>';
+        
+        // Update UI
+        messageText.innerHTML = '<span class="lang-en">' + (state.roundsCompleted + 1) + '/' + ROUNDS_PER_TIER + ' - TAP GO!</span><span class="lang-es">' + (state.roundsCompleted + 1) + '/' + ROUNDS_PER_TIER + ' - ¡TOCA IR!</span>';
         messageText.className = 'message-text';
         actionBtn.disabled = false;
         updateStats();
@@ -605,6 +685,7 @@ body.es .lang-en{display:none!important}
     document.querySelectorAll('[data-level]').forEach(function(btn) {
         btn.onclick = function() {
             if (state.isPlaying) return;
+            clearAllGameTimeouts();
             document.querySelectorAll('[data-level]').forEach(function(b) { b.classList.remove('active'); });
             btn.classList.add('active');
             state.level = parseInt(btn.dataset.level);
@@ -612,10 +693,14 @@ body.es .lang-en{display:none!important}
             if (state.level < 1) state.level = 1;
             state.tier = 1;
             state.roundsCompleted = 0;
+            state.isPlaying = false;
+            state.canTap = false;
+            state.roundEnded = false;
             localStorage.setItem('lc-seq-level', state.level);
             localStorage.setItem('lc-seq-tier', 1);
             updateDivisionDisplay();
             updateStats();
+            resetRound();
         };
     });
 
@@ -623,15 +708,20 @@ body.es .lang-en{display:none!important}
         btn.onclick = function() {
             if (state.isPlaying) return;
             if (!speedAccess.allSpeeds && btn.dataset.speed !== 'slow') { showUpgrade(); return; }
+            clearAllGameTimeouts();
             document.querySelectorAll('.speed-btn').forEach(function(b) { b.classList.remove('active'); });
             btn.classList.add('active');
             state.speed = btn.dataset.speed;
             state.tier = 1;
             state.roundsCompleted = 0;
+            state.isPlaying = false;
+            state.canTap = false;
+            state.roundEnded = false;
             localStorage.setItem('lc-seq-speed', state.speed);
             localStorage.setItem('lc-seq-tier', 1);
             updateDivisionDisplay();
             updateStats();
+            resetRound();
         };
     });
 
