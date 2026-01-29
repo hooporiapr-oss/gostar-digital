@@ -50,6 +50,7 @@ html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background
 .info-txt{font-family:'Bebas Neue',sans-serif;font-size:0.85rem;color:var(--gold)}
 .go-btn{width:100%;min-height:48px;padding:12px;border:none;border-radius:10px;font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:4px;cursor:pointer;background:linear-gradient(135deg,var(--gold),#FFA500);color:var(--dark)}
 .go-btn:disabled{opacity:0.5}
+.go-btn.next{background:linear-gradient(135deg,var(--teal),#00B890)}
 .emojis{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999}
 .emo{position:absolute;font-size:1.8rem;animation:pop 1s ease-out forwards}
 @keyframes pop{0%{opacity:1;transform:translate(-50%,-50%) scale(0.5)}30%{transform:translate(-50%,-50%) scale(1.2)}100%{opacity:0;transform:translate(var(--x),var(--y)) scale(0.6)}}
@@ -167,14 +168,14 @@ function burst(n){
     var cx = r.left + r.width/2, cy = r.top + r.height/2;
     for(var i=0; i<n; i++){
         (function(i){
-            window.setTimeout(function(){
+            setTimeout(function(){
                 var e = document.createElement('div');
                 e.className = 'emo';
                 e.textContent = EMOS[Math.floor(Math.random()*EMOS.length)];
                 var a = Math.random()*Math.PI*2, d = 50+Math.random()*70;
                 e.style.cssText = 'left:'+cx+'px;top:'+cy+'px;--x:'+(Math.cos(a)*d)+'px;--y:'+(Math.sin(a)*d)+'px';
                 emojis.appendChild(e);
-                window.setTimeout(function(){ e.remove(); }, 1200);
+                setTimeout(function(){ e.remove(); }, 1200);
             }, i*40);
         })(i);
     }
@@ -206,26 +207,33 @@ function updateUI(){
     document.getElementById('iDiv').textContent = 'L'+G.level+' '+getDiv();
     document.getElementById('iScore').textContent = G.score;
     
-    // Phases
     var pr = document.getElementById('phReact');
     var ps = document.getElementById('phSeq');
     var pm = document.getElementById('phMatch');
-    pr.className = 'ph ph-react' + (G.phase==='react'?' on':G.phase==='sequence'||G.phase==='match'?' done':'');
-    ps.className = 'ph ph-seq' + (G.phase==='sequence'?' on':G.phase==='match'?' done':'');
+    pr.className = 'ph ph-react' + (G.phase==='react'||G.phase==='wait-seq'?' on':G.phase==='sequence'||G.phase==='wait-match'||G.phase==='match'?' done':'');
+    ps.className = 'ph ph-seq' + (G.phase==='sequence'||G.phase==='wait-match'?' on':G.phase==='match'?' done':'');
     pm.className = 'ph ph-match' + (G.phase==='match'?' on':'');
     
-    // Colors
-    court.className = 'court' + (G.phase==='react'?' react':G.phase==='sequence'?' seq':G.phase==='match'?' match':'');
-    msgBox.className = 'msg' + (G.phase==='react'?' react':G.phase==='sequence'?' seq':G.phase==='match'?' match':'');
+    court.className = 'court' + (G.phase==='react'||G.phase==='wait-seq'?' react':G.phase==='sequence'||G.phase==='wait-match'?' seq':G.phase==='match'?' match':'');
+    msgBox.className = 'msg' + (G.phase==='react'||G.phase==='wait-seq'?' react':G.phase==='sequence'||G.phase==='wait-match'?' seq':G.phase==='match'?' match':'');
 }
 
 function setMsg(t){ msgTxt.textContent = t; }
 
+// ========== BUTTON HANDLER ==========
+goBtn.onclick = function(){
+    if(G.phase === 'idle'){
+        startGame();
+    } else if(G.phase === 'wait-seq'){
+        goToSequence();
+    } else if(G.phase === 'wait-match'){
+        goToMatch();
+    }
+};
+
 // ========== GAME FLOW ==========
 
 function startGame(){
-    if(G.phase !== 'idle') return;
-    
     G.score = 0;
     G.seq = [];
     G.seqIdx = 0;
@@ -236,6 +244,7 @@ function startGame(){
     G.canTap = false;
     
     goBtn.disabled = true;
+    goBtn.className = 'go-btn';
     clearCells();
     
     G.phase = 'react';
@@ -244,7 +253,7 @@ function startGame(){
     
     setMsg('GET READY...');
     
-    window.setTimeout(function(){
+    setTimeout(function(){
         setMsg('⚡ REACT!');
         flashNext();
     }, 800);
@@ -266,7 +275,7 @@ function flashNext(){
     beep(880, 0.12);
     
     var spd = SPEEDS[getSpeed()];
-    G.timer = window.setTimeout(function(){
+    G.timer = setTimeout(function(){
         if(G.canTap && G.phase === 'react'){
             G.canTap = false;
             fail('TOO SLOW!');
@@ -281,7 +290,7 @@ function tap(idx){
     
     // === REACT ===
     if(G.phase === 'react'){
-        window.clearTimeout(G.timer);
+        clearTimeout(G.timer);
         G.canTap = false;
         
         if(idx === G.curCell){
@@ -298,16 +307,19 @@ function tap(idx){
             if(G.taps % 3 === 0) burst(3);
             
             if(G.taps >= G.total){
-                // REACT DONE -> SEQUENCE
+                // REACT DONE -> wait for button tap
                 beep(659, 0.12);
-                window.setTimeout(function(){ beep(784, 0.12); }, 80);
+                setTimeout(function(){ beep(784, 0.12); }, 80);
                 burst(5);
-                setMsg('✓ REACT DONE!');
                 
-                // TRANSITION TO SEQUENCE
-                window.setTimeout(goToSequence, 1200);
+                G.phase = 'wait-seq';
+                setMsg('✓ REACT DONE!');
+                goBtn.disabled = false;
+                goBtn.className = 'go-btn next';
+                goBtn.textContent = '🔢 SEQUENCE →';
+                updateUI();
             } else {
-                window.setTimeout(function(){
+                setTimeout(function(){
                     cell.classList.remove('ok');
                     flashNext();
                 }, 180);
@@ -334,15 +346,18 @@ function tap(idx){
             document.getElementById('iScore').textContent = G.score;
             
             if(G.seqIdx >= G.seq.length){
-                // SEQUENCE DONE -> MATCH
+                // SEQUENCE DONE -> wait for button tap
                 G.canTap = false;
                 beep(659, 0.12);
-                window.setTimeout(function(){ beep(784, 0.12); }, 80);
+                setTimeout(function(){ beep(784, 0.12); }, 80);
                 burst(5);
-                setMsg('✓ ORDER DONE!');
                 
-                // TRANSITION TO MATCH
-                window.setTimeout(goToMatch, 1200);
+                G.phase = 'wait-match';
+                setMsg('✓ ORDER DONE!');
+                goBtn.disabled = false;
+                goBtn.className = 'go-btn next';
+                goBtn.textContent = '🎯 FIND ALL →';
+                updateUI();
             }
         } else {
             cell.classList.add('bad');
@@ -369,7 +384,6 @@ function tap(idx){
             document.getElementById('iScore').textContent = G.score;
             
             if(G.found.length >= G.seq.length){
-                // ALL DONE!
                 G.canTap = false;
                 win();
             }
@@ -388,6 +402,9 @@ function goToSequence(){
     G.seqIdx = 0;
     G.canTap = true;
     
+    goBtn.disabled = true;
+    goBtn.className = 'go-btn';
+    
     updateUI();
     document.getElementById('iCount').textContent = '0/'+G.seq.length;
     setMsg('🔢 TAP IN ORDER!');
@@ -398,6 +415,9 @@ function goToMatch(){
     G.phase = 'match';
     G.found = [];
     G.canTap = true;
+    
+    goBtn.disabled = true;
+    goBtn.className = 'go-btn';
     
     updateUI();
     document.getElementById('iCount').textContent = '0/'+G.seq.length;
@@ -410,9 +430,9 @@ function win(){
     burst(12);
     
     beep(523, 0.12);
-    window.setTimeout(function(){ beep(659, 0.12); }, 80);
-    window.setTimeout(function(){ beep(784, 0.12); }, 160);
-    window.setTimeout(function(){ beep(1047, 0.15); }, 240);
+    setTimeout(function(){ beep(659, 0.12); }, 80);
+    setTimeout(function(){ beep(784, 0.12); }, 160);
+    setTimeout(function(){ beep(1047, 0.15); }, 240);
     
     setMsg('🏆 TRIPLE THREAT COMPLETE!');
     
@@ -421,12 +441,12 @@ function win(){
     
     if(G.level > 10){
         localStorage.setItem('lc-challenge-champion', 'true');
-        window.setTimeout(function(){
+        setTimeout(function(){
             document.getElementById('champMsg').textContent = 'Score: '+G.score;
             document.getElementById('champOverlay').classList.add('show');
         }, 1200);
     } else {
-        window.setTimeout(function(){
+        setTimeout(function(){
             document.getElementById('winMsg').textContent = 'Advancing to Level '+G.level;
             document.getElementById('winOverlay').classList.add('show');
         }, 1200);
@@ -434,7 +454,7 @@ function win(){
 }
 
 function fail(msg){
-    window.clearTimeout(G.timer);
+    clearTimeout(G.timer);
     beep(200, 0.25);
     
     if(G.curCell >= 0 && G.phase === 'react'){
@@ -448,7 +468,7 @@ function fail(msg){
     
     setMsg(msg);
     
-    window.setTimeout(reset, 1200);
+    setTimeout(reset, 1200);
 }
 
 function reset(){
@@ -458,6 +478,8 @@ function reset(){
     updateUI();
     setMsg('TAP GO!');
     goBtn.disabled = false;
+    goBtn.className = 'go-btn';
+    goBtn.textContent = 'GO';
 }
 
 // Overlay buttons
@@ -472,9 +494,6 @@ document.getElementById('champBtn').onclick = function(){
     localStorage.setItem('lc-challenge-level', 1);
     reset();
 };
-
-// GO button
-goBtn.onclick = startGame;
 
 // Init
 buildGrid();
