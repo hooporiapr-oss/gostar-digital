@@ -337,12 +337,33 @@ body.es .lang-en{display:none!important}
     var LAUGH_EMOJIS = ['😂','😆','🤣','😄','😁','🥳','😊','⚡'];
     var PARTY_EMOJIS = ['🥳','🎉','😂','🤣','✨','💫','⚡','🏆'];
 
-    // ===== STATE =====
+    // ===== STATE (per-speed tracking) =====
+    function getSpeedKey(speed, key) {
+        return 'lc-flash-' + speed + '-' + key;
+    }
+    
+    function loadSpeedState(speed) {
+        return {
+            level: parseInt(localStorage.getItem(getSpeedKey(speed, 'level'))) || 1,
+            score: parseInt(localStorage.getItem(getSpeedKey(speed, 'score'))) || 0,
+            streak: parseInt(localStorage.getItem(getSpeedKey(speed, 'streak'))) || 0
+        };
+    }
+    
+    function saveSpeedState(speed, level, score, streak) {
+        localStorage.setItem(getSpeedKey(speed, 'level'), level);
+        localStorage.setItem(getSpeedKey(speed, 'score'), score);
+        localStorage.setItem(getSpeedKey(speed, 'streak'), streak);
+    }
+    
+    var currentSpeed = localStorage.getItem('lc-flash-speed') || 'slow';
+    var speedData = loadSpeedState(currentSpeed);
+    
     var state = {
-        level: parseInt(localStorage.getItem('lc-flash-level')) || 1,
-        speed: localStorage.getItem('lc-flash-speed') || 'slow',
-        score: parseInt(localStorage.getItem('lc-flash-score')) || 0,
-        streak: parseInt(localStorage.getItem('lc-flash-streak')) || 0,
+        level: speedData.level,
+        speed: currentSpeed,
+        score: speedData.score,
+        streak: speedData.streak,
         round: 0,
         perfectCount: 0,
         targetCells: [],
@@ -501,7 +522,6 @@ body.es .lang-en{display:none!important}
 
         setTimeout(function() {
             playFlashSound();
-            // Flash cells WITHOUT numbers - pure position memory
             state.targetCells.forEach(function(i) {
                 state.cells[i].classList.add('lit');
             });
@@ -574,8 +594,7 @@ body.es .lang-en{display:none!important}
             
             updateProgressionStars();
             updateStats();
-            localStorage.setItem('lc-flash-score', state.score);
-            localStorage.setItem('lc-flash-streak', state.streak);
+            saveSpeedState(state.speed, state.level, state.score, state.streak);
 
             var intensity = state.streak >= 5 ? 'party' : state.streak >= 3 ? 'big' : 'medium';
             laughCelebration(intensity);
@@ -607,7 +626,7 @@ body.es .lang-en{display:none!important}
             
             updateProgressionStars();
             updateStats();
-            localStorage.setItem('lc-flash-streak', 0);
+            saveSpeedState(state.speed, state.level, state.score, state.streak);
 
             messageText.innerHTML = '<span class="lang-en">MISSED! ' + correct + '/' + needed + '</span><span class="lang-es">¡FALLASTE! ' + correct + '/' + needed + '</span>';
             messageText.className = 'message-text miss';
@@ -619,7 +638,12 @@ body.es .lang-en{display:none!important}
     function levelUp() {
         state.level++;
         state.perfectCount = 0;
-        localStorage.setItem('lc-flash-level', state.level);
+        saveSpeedState(state.speed, state.level, state.score, state.streak);
+        
+        // Update level buttons
+        document.querySelectorAll('.level-btn').forEach(function(b) {
+            b.classList.toggle('active', parseInt(b.dataset.level) === state.level);
+        });
         
         updateProgressionStars();
         laughCelebration('party');
@@ -646,15 +670,17 @@ body.es .lang-en{display:none!important}
     }
 
     // ===== SELECTORS =====
-    document.querySelectorAll('[data-level]').forEach(function(b) {
+    document.querySelectorAll('.level-btn').forEach(function(b) {
         b.onclick = function() {
             if (state.isPlaying) return;
-            document.querySelectorAll('[data-level]').forEach(function(x) { x.classList.remove('active'); });
+            document.querySelectorAll('.level-btn').forEach(function(x) { x.classList.remove('active'); });
             b.classList.add('active');
             state.level = parseInt(b.dataset.level);
             state.perfectCount = 0;
-            localStorage.setItem('lc-flash-level', state.level);
+            state.round = 0;
+            saveSpeedState(state.speed, state.level, state.score, state.streak);
             updateProgressionStars();
+            updateStats();
             updateDivisionDisplay();
         };
     });
@@ -670,40 +696,62 @@ body.es .lang-en{display:none!important}
             b.classList.add('active');
             state.speed = b.dataset.speed;
             localStorage.setItem('lc-flash-speed', state.speed);
+            
+            // Load this speed's progress
+            var speedData = loadSpeedState(state.speed);
+            state.level = speedData.level;
+            state.score = speedData.score;
+            state.streak = speedData.streak;
+            
+            // Update level buttons to show this speed's level
+            document.querySelectorAll('.level-btn').forEach(function(lb) {
+                lb.classList.toggle('active', parseInt(lb.dataset.level) === state.level);
+            });
+            
+            state.perfectCount = 0;
+            state.round = 0;
+            updateProgressionStars();
+            updateStats();
             updateDivisionDisplay();
         };
     });
 
     actionBtn.onclick = startRound;
 
-    // ===== LOAD SAVED STATE =====
-    function loadSavedState() {
-        var sl = localStorage.getItem('lc-flash-level');
-        if (sl) {
-            state.level = parseInt(sl);
-            if (state.level > 10) state.level = 10;
-            if (state.level < 1) state.level = 1;
-            document.querySelectorAll('[data-level]').forEach(function(b) { b.classList.remove('active'); });
-            var lb = document.querySelector('[data-level="' + state.level + '"]');
-            if (lb) lb.classList.add('active');
-        }
-        var ss = localStorage.getItem('lc-flash-speed');
-        if (ss && (speedAccess.allSpeeds || ss === 'slow')) {
-            state.speed = ss;
-            document.querySelectorAll('.speed-btn').forEach(function(b) { b.classList.remove('active'); });
-            var sb = document.querySelector('.speed-btn[data-speed="' + state.speed + '"]');
-            if (sb) sb.classList.add('active');
-        }
-    }
-
     // ===== INIT =====
     initCourt();
     initSpeedButtons();
-    loadSavedState();
     setLang(currentLang);
     updateDivisionDisplay();
     updateStats();
     updateProgressionStars();
+    
+    // Set initial level button
+    document.querySelectorAll('.level-btn').forEach(function(b) {
+        b.classList.toggle('active', parseInt(b.dataset.level) === state.level);
+    });
+    
+    // Set initial speed button
+    document.querySelectorAll('.speed-btn').forEach(function(b) {
+        if (!b.classList.contains('locked')) {
+            b.classList.toggle('active', b.dataset.speed === state.speed);
+        }
+    });
+
+    // Check speed access on load
+    if (isProduction) {
+        var pin = sessionStorage.getItem('lc-pin');
+        if (pin) {
+            fetch('/api/user/speed-access/' + pin)
+            .then(function(r) { return r.json(); })
+            .then(function(d) {
+                speedAccess = d;
+                localStorage.setItem('lc-speed-access', JSON.stringify(d));
+                initSpeedButtons();
+            })
+            .catch(function() {});
+        }
+    }
 })();
 </script>
 </body>
