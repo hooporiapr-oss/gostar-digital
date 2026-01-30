@@ -872,12 +872,12 @@ body.en .lang-es { display: none !important; }
         };
         var speedLabel = speedLabels[currentSpeedView][currentLang] || speedLabels[currentSpeedView].en;
         
-        // Get GoStars (tier) for SELECTED SPEED
-        var tier = parseInt(localStorage.getItem(prefix + '-tier-' + currentSpeedView)) || parseInt(localStorage.getItem(prefix + '-tier')) || 1;
-        
-        // Get level for SELECTED SPEED
+        // Get level for SELECTED SPEED - Level = GoStars (L1=1 star, L2=2 stars, etc.)
         var level = parseInt(localStorage.getItem(prefix + '-level-' + currentSpeedView)) || parseInt(localStorage.getItem(prefix + '-level')) || 1;
         level = Math.min(10, Math.max(1, level));
+        
+        // GoStars = Level
+        var goStars = level;
         
         // Get levels for all speeds (for overview)
         var levelSlow = parseInt(localStorage.getItem(prefix + '-level-slow')) || parseInt(localStorage.getItem(prefix + '-level')) || 1;
@@ -895,16 +895,16 @@ body.en .lang-es { display: none !important; }
             titleEl.innerHTML = 'TUS GOSTARS ' + gameLabel + ' ' + speedLabel;
         }
         
-        // Update GoStars display for selected speed
+        // Update GoStars display - stars match level
         var display = '';
         for (var i = 0; i < 10; i++) {
-            display += i < tier ? '⭐' : '☆';
+            display += i < goStars ? '⭐' : '☆';
         }
         document.getElementById('gostarsDisplay').textContent = display;
         
         // Update GoStars label
         var labelEl = document.getElementById('gostarsLabel');
-        labelEl.textContent = tier + ' / 10 GoStars';
+        labelEl.textContent = goStars + ' / 10 GoStars';
         labelEl.className = 'gostars-label ' + colorClass;
         
         // Update current level section
