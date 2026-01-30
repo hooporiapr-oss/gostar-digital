@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Choose Your Workout | LaughCourt</title>
+<title>Dashboard | LaughCourt</title>
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -106,7 +106,7 @@ body.en .lang-es { display: none !important; }
     cursor: pointer;
     transition: all 0.2s;
 }
-.logout-btn:hover {
+.logout-btn:active {
     border-color: var(--gold);
     color: var(--gold);
 }
@@ -133,174 +133,6 @@ body.en .lang-es { display: none !important; }
     font-size: 0.75rem;
     color: var(--muted);
     margin-bottom: 20px;
-}
-
-/* ============ WORKOUT GRID - 2 CARDS ============ */
-.workout-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 20px;
-    width: 100%;
-}
-
-.workout-card {
-    background: var(--card);
-    border: 2px solid var(--border);
-    border-radius: 14px;
-    padding: 20px 10px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.3s;
-    text-decoration: none;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-width: 0; /* Prevents grid blowout */
-}
-
-.workout-card:active {
-    transform: scale(0.98);
-}
-
-.workout-card.match {
-    border-color: rgba(255, 107, 53, 0.3);
-}
-.workout-card.match:active {
-    border-color: var(--orange);
-    box-shadow: 0 5px 20px rgba(255, 107, 53, 0.2);
-}
-
-.workout-card.sequence {
-    border-color: rgba(0, 217, 165, 0.3);
-}
-.workout-card.sequence:active {
-    border-color: var(--teal);
-    box-shadow: 0 5px 20px rgba(0, 217, 165, 0.2);
-}
-
-.workout-icon {
-    font-size: 2.5rem;
-    margin-bottom: 8px;
-    display: block;
-    line-height: 1;
-}
-
-.workout-name {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.2rem;
-    letter-spacing: 1px;
-    color: var(--text);
-    margin-bottom: 6px;
-}
-
-.workout-card.match .workout-name { color: var(--orange); }
-.workout-card.sequence .workout-name { color: var(--teal); }
-
-.workout-desc {
-    font-size: 0.7rem;
-    color: var(--muted);
-    margin-bottom: 12px;
-    line-height: 1.3;
-}
-
-.workout-level {
-    display: inline-block;
-    padding: 5px 12px;
-    background: rgba(255,255,255,0.05);
-    border-radius: 15px;
-    font-size: 0.65rem;
-    font-weight: 600;
-    color: var(--text);
-    letter-spacing: 1px;
-}
-
-/* ============ PROGRESS SECTION ============ */
-.progress-section {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 15px;
-    text-align: center;
-    margin-bottom: 15px;
-    width: 100%;
-}
-
-.progress-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.85rem;
-    letter-spacing: 2px;
-    color: var(--muted);
-    margin-bottom: 8px;
-}
-
-.gostars-display {
-    font-size: 1.4rem;
-    letter-spacing: 2px;
-    margin-bottom: 4px;
-    word-break: break-all;
-}
-
-.gostars-label {
-    font-size: 0.75rem;
-    color: var(--gold);
-    font-weight: 600;
-}
-
-/* ============ SPEED SELECTOR ============ */
-.speed-section {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 15px;
-    text-align: center;
-    margin-bottom: 15px;
-    width: 100%;
-}
-
-.speed-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.85rem;
-    letter-spacing: 2px;
-    color: var(--muted);
-    margin-bottom: 12px;
-}
-
-.speed-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    width: 100%;
-}
-
-.speed-btn {
-    flex: 1;
-    max-width: 100px;
-    padding: 10px 8px;
-    border: 2px solid var(--border);
-    background: transparent;
-    color: var(--muted);
-    border-radius: 8px;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.85rem;
-    letter-spacing: 1px;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.speed-btn:active {
-    transform: scale(0.95);
-}
-
-.speed-btn.active {
-    background: var(--gold);
-    border-color: var(--gold);
-    color: var(--dark);
-}
-
-.speed-btn.locked {
-    opacity: 0.4;
-    cursor: not-allowed;
 }
 
 /* ============ TRIAL BANNER ============ */
@@ -344,6 +176,284 @@ body.en .lang-es { display: none !important; }
     transform: scale(0.95);
 }
 
+/* ============ WORKOUT GRID - 2 CARDS ============ */
+.workout-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.workout-card {
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 0;
+}
+
+.workout-card:active {
+    transform: scale(0.98);
+}
+
+.workout-card.match {
+    border-color: rgba(255, 107, 53, 0.3);
+}
+.workout-card.match:active {
+    border-color: var(--orange);
+    box-shadow: 0 5px 20px rgba(255, 107, 53, 0.2);
+}
+
+.workout-card.sequence {
+    border-color: rgba(0, 217, 165, 0.3);
+}
+.workout-card.sequence:active {
+    border-color: var(--teal);
+    box-shadow: 0 5px 20px rgba(0, 217, 165, 0.2);
+}
+
+.workout-icon {
+    font-size: 2.5rem;
+    margin-bottom: 8px;
+    display: block;
+    line-height: 1;
+}
+
+.workout-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+    color: var(--text);
+    margin-bottom: 4px;
+}
+
+.workout-card.match .workout-name { color: var(--orange); }
+.workout-card.sequence .workout-name { color: var(--teal); }
+
+.workout-desc {
+    font-size: 0.65rem;
+    color: var(--muted);
+    line-height: 1.3;
+}
+
+.play-label {
+    margin-top: 10px;
+    padding: 6px 16px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 15px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    color: var(--text);
+}
+
+.workout-card.match .play-label { background: rgba(255,107,53,0.15); color: var(--orange); }
+.workout-card.sequence .play-label { background: rgba(0,217,165,0.15); color: var(--teal); }
+
+/* ============ PROGRESS SECTION WITH TOGGLE ============ */
+.progress-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+/* Game Toggle Tabs */
+.game-toggle {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+}
+
+.game-tab {
+    flex: 1;
+    padding: 12px 10px;
+    background: transparent;
+    border: none;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.game-tab:first-child {
+    border-right: 1px solid var(--border);
+}
+
+.game-tab.active {
+    background: rgba(255,255,255,0.03);
+}
+
+.game-tab.active.match {
+    color: var(--orange);
+    box-shadow: inset 0 -2px 0 var(--orange);
+}
+
+.game-tab.active.sequence {
+    color: var(--teal);
+    box-shadow: inset 0 -2px 0 var(--teal);
+}
+
+.game-tab:active {
+    background: rgba(255,255,255,0.05);
+}
+
+/* GoStars Display */
+.gostars-section {
+    padding: 15px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+}
+
+.gostars-title {
+    font-size: 0.65rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+}
+
+.gostars-display {
+    font-size: 1.3rem;
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+}
+
+.gostars-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+}
+
+.gostars-label.match { color: var(--orange); }
+.gostars-label.sequence { color: var(--teal); }
+
+/* Speed Levels Grid */
+.speed-levels {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    text-align: center;
+}
+
+.speed-level {
+    padding: 12px 8px;
+    border-right: 1px solid var(--border);
+}
+
+.speed-level:last-child {
+    border-right: none;
+}
+
+.speed-level-name {
+    font-size: 0.6rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+.speed-level-name .lock {
+    font-size: 0.55rem;
+}
+
+.speed-level-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 1px;
+}
+
+.speed-level-value.match { color: var(--orange); }
+.speed-level-value.sequence { color: var(--teal); }
+.speed-level-value.locked { color: var(--muted); opacity: 0.5; }
+
+.speed-level-cells {
+    font-size: 0.55rem;
+    color: var(--muted);
+    margin-top: 2px;
+}
+
+/* ============ UNLOCK SPEEDS CTA ============ */
+.unlock-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 15px;
+    text-align: center;
+    margin-bottom: 15px;
+    display: none;
+}
+
+.unlock-section.show {
+    display: block;
+}
+
+.unlock-text {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-bottom: 10px;
+}
+
+.unlock-speeds {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.unlock-speed-chip {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+}
+
+.unlock-speed-chip.unlocked {
+    background: rgba(0,217,165,0.15);
+    color: var(--teal);
+}
+
+.unlock-speed-chip.locked {
+    background: rgba(255,215,0,0.15);
+    color: var(--gold);
+}
+
+.unlock-btn {
+    display: inline-block;
+    padding: 10px 25px;
+    background: linear-gradient(135deg, var(--gold), var(--orange));
+    color: var(--dark);
+    text-decoration: none;
+    border-radius: 25px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    transition: all 0.2s;
+}
+
+.unlock-btn:active {
+    transform: scale(0.95);
+}
+
 /* ============ FOOTER NAV ============ */
 .footer-nav {
     display: flex;
@@ -364,7 +474,7 @@ body.en .lang-es { display: none !important; }
     color: var(--gold);
 }
 
-/* ============ RESPONSIVE - LARGER SCREENS ============ */
+/* ============ RESPONSIVE ============ */
 @media (min-width: 400px) {
     .header { padding: 15px 20px; }
     .logo { font-size: 1.5rem; }
@@ -376,11 +486,11 @@ body.en .lang-es { display: none !important; }
     .workout-grid { gap: 15px; }
     .workout-card { padding: 25px 15px; }
     .workout-icon { font-size: 3rem; }
-    .workout-name { font-size: 1.4rem; }
-    .workout-desc { font-size: 0.75rem; }
-    .workout-level { font-size: 0.7rem; }
-    .gostars-display { font-size: 1.6rem; letter-spacing: 3px; }
-    .speed-btn { padding: 12px 15px; font-size: 0.9rem; }
+    .workout-name { font-size: 1.3rem; }
+    .workout-desc { font-size: 0.7rem; }
+    .game-tab { font-size: 1rem; padding: 14px 12px; }
+    .gostars-display { font-size: 1.5rem; letter-spacing: 3px; }
+    .speed-level-value { font-size: 1.6rem; }
 }
 
 @media (min-width: 500px) {
@@ -388,7 +498,9 @@ body.en .lang-es { display: none !important; }
     .workout-card { padding: 30px 20px; border-radius: 16px; }
     .workout-icon { font-size: 3.5rem; }
     .workout-name { font-size: 1.5rem; }
-    .speed-btn { max-width: 120px; font-size: 1rem; }
+    .game-tab { font-size: 1.1rem; }
+    .gostars-display { font-size: 1.7rem; }
+    .speed-level-value { font-size: 1.8rem; }
 }
 </style>
 </head>
@@ -422,7 +534,7 @@ body.en .lang-es { display: none !important; }
         <span class="lang-es">Entrenamiento de Memoria</span>
     </p>
 
-    <!-- Trial Banner (shown for trial users) -->
+    <!-- Trial Banner -->
     <div class="trial-banner" id="trialBanner" style="display: none;">
         <p class="trial-text">
             <span class="lang-en">🎉 Free trial active!</span>
@@ -435,17 +547,20 @@ body.en .lang-es { display: none !important; }
         </a>
     </div>
 
-    <!-- Workout Grid - 2 GAMES -->
+    <!-- Workout Grid -->
     <div class="workout-grid">
         <!-- THE MATCH -->
         <a href="/the-match.html" class="workout-card match">
             <span class="workout-icon">🧠</span>
             <div class="workout-name">THE MATCH</div>
             <p class="workout-desc">
-                <span class="lang-en">Memorize positions<br>Tap in order</span>
-                <span class="lang-es">Memoriza posiciones<br>Toca en orden</span>
+                <span class="lang-en">Memorize & tap in order</span>
+                <span class="lang-es">Memoriza y toca en orden</span>
             </p>
-            <span class="workout-level" id="matchLevel">L1-SLOW</span>
+            <span class="play-label">
+                <span class="lang-en">PLAY →</span>
+                <span class="lang-es">JUGAR →</span>
+            </span>
         </a>
 
         <!-- THE SEQUENCE -->
@@ -453,34 +568,84 @@ body.en .lang-es { display: none !important; }
             <span class="workout-icon">🔢</span>
             <div class="workout-name">THE SEQUENCE</div>
             <p class="workout-desc">
-                <span class="lang-en">Watch sequence<br>Repeat it back</span>
-                <span class="lang-es">Mira secuencia<br>Repítela</span>
+                <span class="lang-en">Watch & repeat back</span>
+                <span class="lang-es">Mira y repite</span>
             </p>
-            <span class="workout-level" id="sequenceLevel">L1-SLOW</span>
+            <span class="play-label">
+                <span class="lang-en">PLAY →</span>
+                <span class="lang-es">JUGAR →</span>
+            </span>
         </a>
     </div>
 
-    <!-- Progress Section -->
+    <!-- Progress Section with Toggle -->
     <div class="progress-section">
-        <p class="progress-title">
-            <span class="lang-en">YOUR GOSTARS</span>
-            <span class="lang-es">TUS GOSTARS</span>
-        </p>
-        <div class="gostars-display" id="gostarsDisplay">⭐☆☆☆☆☆☆☆☆☆</div>
-        <p class="gostars-label"><span id="gostarCount">1</span> <span class="lang-en">GoStars</span><span class="lang-es">GoStars</span></p>
+        <!-- Game Toggle -->
+        <div class="game-toggle">
+            <button class="game-tab match active" id="tabMatch" data-game="match">
+                🧠 THE MATCH
+            </button>
+            <button class="game-tab sequence" id="tabSequence" data-game="sequence">
+                🔢 THE SEQUENCE
+            </button>
+        </div>
+
+        <!-- GoStars Display -->
+        <div class="gostars-section">
+            <p class="gostars-title" id="gostarsTitle">
+                <span class="lang-en">YOUR MATCH GOSTARS</span>
+                <span class="lang-es">TUS GOSTARS DE MATCH</span>
+            </p>
+            <div class="gostars-display" id="gostarsDisplay">⭐☆☆☆☆☆☆☆☆☆</div>
+            <p class="gostars-label match" id="gostarsLabel">1 / 10 GoStars</p>
+        </div>
+
+        <!-- Speed Levels -->
+        <div class="speed-levels">
+            <div class="speed-level">
+                <p class="speed-level-name">
+                    <span class="lang-en">SLOW</span>
+                    <span class="lang-es">LENTO</span>
+                </p>
+                <div class="speed-level-value match" id="levelSlow">L1</div>
+                <div class="speed-level-cells" id="cellsSlow">5 cells</div>
+            </div>
+            <div class="speed-level">
+                <p class="speed-level-name" id="medLabel">
+                    <span class="lock" id="medLock">🔒</span>
+                    <span class="lang-en">MED</span>
+                    <span class="lang-es">MED</span>
+                </p>
+                <div class="speed-level-value match locked" id="levelMed">L1</div>
+                <div class="speed-level-cells" id="cellsMed">5 cells</div>
+            </div>
+            <div class="speed-level">
+                <p class="speed-level-name" id="fastLabel">
+                    <span class="lock" id="fastLock">🔒</span>
+                    <span class="lang-en">FAST</span>
+                    <span class="lang-es">RÁPIDO</span>
+                </p>
+                <div class="speed-level-value match locked" id="levelFast">L1</div>
+                <div class="speed-level-cells" id="cellsFast">5 cells</div>
+            </div>
+        </div>
     </div>
 
-    <!-- Speed Selector -->
-    <div class="speed-section">
-        <p class="speed-title">
-            <span class="lang-en">SPEED</span>
-            <span class="lang-es">VELOCIDAD</span>
+    <!-- Unlock Speeds CTA -->
+    <div class="unlock-section" id="unlockSection">
+        <p class="unlock-text">
+            <span class="lang-en">🚀 Unlock MED & FAST speeds to challenge yourself!</span>
+            <span class="lang-es">🚀 ¡Desbloquea MED y RÁPIDO para más desafío!</span>
         </p>
-        <div class="speed-buttons">
-            <button class="speed-btn active" data-speed="slow" id="speedSlow">SLOW</button>
-            <button class="speed-btn" data-speed="med" id="speedMed">MED</button>
-            <button class="speed-btn" data-speed="fast" id="speedFast">FAST</button>
+        <div class="unlock-speeds">
+            <span class="unlock-speed-chip unlocked">✓ SLOW</span>
+            <span class="unlock-speed-chip locked">🔒 MED</span>
+            <span class="unlock-speed-chip locked">🔒 FAST</span>
         </div>
+        <a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="unlock-btn">
+            <span class="lang-en">UNLOCK ALL $5/mo</span>
+            <span class="lang-es">DESBLOQUEAR $5/mes</span>
+        </a>
     </div>
 
     <!-- Footer Links -->
@@ -509,54 +674,25 @@ body.en .lang-es { display: none !important; }
         document.getElementById('btnEn').className = lang === 'en' ? 'lang-btn active' : 'lang-btn';
         document.getElementById('btnEs').className = lang === 'es' ? 'lang-btn active' : 'lang-btn';
         updateTrialDays();
+        updateProgressDisplay();
     }
 
     document.getElementById('btnEn').onclick = function() { setLang('en'); };
     document.getElementById('btnEs').onclick = function() { setLang('es'); };
-    setLang(currentLang);
 
     // ==================== SPEED ACCESS ====================
     var speedAccess = { allSpeeds: false };
     try { var sa = localStorage.getItem('lc-speed-access'); if (sa) speedAccess = JSON.parse(sa); } catch(e) {}
 
-    // ==================== SPEED SELECTOR ====================
-    var currentSpeed = localStorage.getItem('lc-speed') || 'slow';
-    var speedBtns = document.querySelectorAll('.speed-btn');
-    
-    function initSpeedButtons() {
-        if (!speedAccess.allSpeeds) {
-            document.getElementById('speedMed').classList.add('locked');
-            document.getElementById('speedFast').classList.add('locked');
-        }
+    // Show/hide unlock section
+    var unlockSection = document.getElementById('unlockSection');
+    if (speedAccess.allSpeeds) {
+        unlockSection.classList.remove('show');
+        document.getElementById('medLock').style.display = 'none';
+        document.getElementById('fastLock').style.display = 'none';
+    } else {
+        unlockSection.classList.add('show');
     }
-    
-    function setSpeed(speed) {
-        if (!speedAccess.allSpeeds && speed !== 'slow') {
-            window.location.href = 'https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005';
-            return;
-        }
-        
-        currentSpeed = speed;
-        localStorage.setItem('lc-speed', speed);
-        localStorage.setItem('lc-match-speed', speed);
-        localStorage.setItem('lc-seq-speed', speed);
-        
-        speedBtns.forEach(function(btn) {
-            btn.classList.remove('active');
-            if (btn.dataset.speed === speed) {
-                btn.classList.add('active');
-            }
-        });
-        
-        updateLevelDisplays();
-    }
-
-    speedBtns.forEach(function(btn) {
-        btn.onclick = function() { setSpeed(btn.dataset.speed); };
-    });
-
-    initSpeedButtons();
-    setSpeed(currentSpeed);
 
     // ==================== TRIAL STATUS ====================
     var isTrial = localStorage.getItem('lc-trial') === 'true';
@@ -570,40 +706,92 @@ body.en .lang-es { display: none !important; }
             document.getElementById('trialDays').textContent = text;
         }
     }
-    
-    updateTrialDays();
 
-    // ==================== LEVEL DISPLAYS ====================
-    function updateLevelDisplays() {
-        var speedLabel = currentSpeed.toUpperCase();
-        if (currentLang === 'es') {
-            speedLabel = currentSpeed === 'slow' ? 'LENTO' : currentSpeed === 'med' ? 'MED' : 'RÁPIDO';
+    // ==================== GAME TOGGLE ====================
+    var currentGame = 'match';
+    var tabMatch = document.getElementById('tabMatch');
+    var tabSequence = document.getElementById('tabSequence');
+
+    function setGame(game) {
+        currentGame = game;
+        
+        // Update tabs
+        tabMatch.classList.remove('active');
+        tabSequence.classList.remove('active');
+        
+        if (game === 'match') {
+            tabMatch.classList.add('active');
+        } else {
+            tabSequence.classList.add('active');
         }
         
-        var matchLvl = localStorage.getItem('lc-match-level') || '1';
-        var sequenceLvl = localStorage.getItem('lc-seq-level') || '1';
-        
-        document.getElementById('matchLevel').textContent = 'L' + matchLvl + '-' + speedLabel;
-        document.getElementById('sequenceLevel').textContent = 'L' + sequenceLvl + '-' + speedLabel;
+        updateProgressDisplay();
     }
-    
-    updateLevelDisplays();
 
-    // ==================== GOSTARS ====================
-    function updateGoStars() {
-        var matchTier = parseInt(localStorage.getItem('lc-match-tier') || '1');
-        var seqTier = parseInt(localStorage.getItem('lc-seq-tier') || '1');
-        var totalGoStars = Math.max(matchTier, seqTier);
+    tabMatch.onclick = function() { setGame('match'); };
+    tabSequence.onclick = function() { setGame('sequence'); };
+
+    // ==================== PROGRESS DISPLAY ====================
+    var LEVEL_CELLS = {1:5,2:6,3:7,4:8,5:9,6:10,7:11,8:12,9:13,10:14};
+    
+    function getCellsForLevel(level) {
+        return LEVEL_CELLS[level] || 5;
+    }
+
+    function updateProgressDisplay() {
+        var prefix = currentGame === 'match' ? 'lc-match' : 'lc-seq';
+        var gameLabel = currentGame === 'match' ? 'MATCH' : 'SEQUENCE';
+        var colorClass = currentGame === 'match' ? 'match' : 'sequence';
         
+        // Get GoStars (tier)
+        var tier = parseInt(localStorage.getItem(prefix + '-tier')) || 1;
+        
+        // Get level (single level per game for now - can expand to per-speed later)
+        var level = parseInt(localStorage.getItem(prefix + '-level')) || 1;
+        
+        // Cap level at 10
+        level = Math.min(10, Math.max(1, level));
+        
+        // Update title
+        var titleEl = document.getElementById('gostarsTitle');
+        if (currentLang === 'en') {
+            titleEl.innerHTML = 'YOUR ' + gameLabel + ' GOSTARS';
+        } else {
+            titleEl.innerHTML = 'TUS GOSTARS DE ' + gameLabel;
+        }
+        
+        // Update GoStars display
         var display = '';
         for (var i = 0; i < 10; i++) {
-            display += i < totalGoStars ? '⭐' : '☆';
+            display += i < tier ? '⭐' : '☆';
         }
         document.getElementById('gostarsDisplay').textContent = display;
-        document.getElementById('gostarCount').textContent = totalGoStars;
+        
+        // Update GoStars label
+        var labelEl = document.getElementById('gostarsLabel');
+        labelEl.textContent = tier + ' / 10 GoStars';
+        labelEl.className = 'gostars-label ' + colorClass;
+        
+        // Update speed levels (all same level for now - user progresses through single level)
+        var levelSlowEl = document.getElementById('levelSlow');
+        var levelMedEl = document.getElementById('levelMed');
+        var levelFastEl = document.getElementById('levelFast');
+        
+        levelSlowEl.textContent = 'L' + level;
+        levelSlowEl.className = 'speed-level-value ' + colorClass;
+        
+        levelMedEl.textContent = 'L' + level;
+        levelMedEl.className = 'speed-level-value ' + colorClass + (speedAccess.allSpeeds ? '' : ' locked');
+        
+        levelFastEl.textContent = 'L' + level;
+        levelFastEl.className = 'speed-level-value ' + colorClass + (speedAccess.allSpeeds ? '' : ' locked');
+        
+        // Update cells count
+        var cellsLabel = currentLang === 'en' ? ' cells' : ' celdas';
+        document.getElementById('cellsSlow').textContent = getCellsForLevel(level) + cellsLabel;
+        document.getElementById('cellsMed').textContent = getCellsForLevel(level) + cellsLabel;
+        document.getElementById('cellsFast').textContent = getCellsForLevel(level) + cellsLabel;
     }
-    
-    updateGoStars();
 
     // ==================== LOGOUT ====================
     window.logout = function() {
@@ -622,6 +810,10 @@ body.en .lang-es { display: none !important; }
             window.location.href = '/login';
         }
     };
+
+    // ==================== INIT ====================
+    setLang(currentLang);
+    updateProgressDisplay();
 
 })();
 </script>
