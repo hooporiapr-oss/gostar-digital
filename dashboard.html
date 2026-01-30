@@ -743,14 +743,23 @@ body.en .lang-es { display: none !important; }
         var gameLabel = currentGame === 'match' ? 'MATCH' : 'SEQUENCE';
         var colorClass = currentGame === 'match' ? 'match' : 'sequence';
         
-        // Get GoStars (tier)
-        var tier = parseInt(localStorage.getItem(prefix + '-tier')) || 1;
+        // Get GoStars (tier) - highest tier across all speeds
+        var tierSlow = parseInt(localStorage.getItem(prefix + '-tier-slow')) || 1;
+        var tierMed = parseInt(localStorage.getItem(prefix + '-tier-med')) || 1;
+        var tierFast = parseInt(localStorage.getItem(prefix + '-tier-fast')) || 1;
+        // Fallback to old key for backward compatibility
+        var tierOld = parseInt(localStorage.getItem(prefix + '-tier')) || 1;
+        var tier = Math.max(tierSlow, tierMed, tierFast, tierOld);
         
-        // Get level (single level per game for now - can expand to per-speed later)
-        var level = parseInt(localStorage.getItem(prefix + '-level')) || 1;
+        // Get level PER SPEED
+        var levelSlow = parseInt(localStorage.getItem(prefix + '-level-slow')) || parseInt(localStorage.getItem(prefix + '-level')) || 1;
+        var levelMed = parseInt(localStorage.getItem(prefix + '-level-med')) || 1;
+        var levelFast = parseInt(localStorage.getItem(prefix + '-level-fast')) || 1;
         
-        // Cap level at 10
-        level = Math.min(10, Math.max(1, level));
+        // Cap levels at 10
+        levelSlow = Math.min(10, Math.max(1, levelSlow));
+        levelMed = Math.min(10, Math.max(1, levelMed));
+        levelFast = Math.min(10, Math.max(1, levelFast));
         
         // Update title
         var titleEl = document.getElementById('gostarsTitle');
@@ -772,25 +781,25 @@ body.en .lang-es { display: none !important; }
         labelEl.textContent = tier + ' / 10 GoStars';
         labelEl.className = 'gostars-label ' + colorClass;
         
-        // Update speed levels (all same level for now - user progresses through single level)
+        // Update speed levels - EACH SPEED HAS ITS OWN LEVEL
         var levelSlowEl = document.getElementById('levelSlow');
         var levelMedEl = document.getElementById('levelMed');
         var levelFastEl = document.getElementById('levelFast');
         
-        levelSlowEl.textContent = 'L' + level;
+        levelSlowEl.textContent = 'L' + levelSlow;
         levelSlowEl.className = 'speed-level-value ' + colorClass;
         
-        levelMedEl.textContent = 'L' + level;
+        levelMedEl.textContent = 'L' + levelMed;
         levelMedEl.className = 'speed-level-value ' + colorClass + (speedAccess.allSpeeds ? '' : ' locked');
         
-        levelFastEl.textContent = 'L' + level;
+        levelFastEl.textContent = 'L' + levelFast;
         levelFastEl.className = 'speed-level-value ' + colorClass + (speedAccess.allSpeeds ? '' : ' locked');
         
-        // Update cells count
+        // Update cells count per speed
         var cellsLabel = currentLang === 'en' ? ' cells' : ' celdas';
-        document.getElementById('cellsSlow').textContent = getCellsForLevel(level) + cellsLabel;
-        document.getElementById('cellsMed').textContent = getCellsForLevel(level) + cellsLabel;
-        document.getElementById('cellsFast').textContent = getCellsForLevel(level) + cellsLabel;
+        document.getElementById('cellsSlow').textContent = getCellsForLevel(levelSlow) + cellsLabel;
+        document.getElementById('cellsMed').textContent = getCellsForLevel(levelMed) + cellsLabel;
+        document.getElementById('cellsFast').textContent = getCellsForLevel(levelFast) + cellsLabel;
     }
 
     // ==================== LOGOUT ====================
