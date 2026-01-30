@@ -389,12 +389,12 @@ body.es .lang-en{display:none!important}
 
     // ===== STATE =====
     var state = {
-        level: parseInt(localStorage.getItem('lc-seq-level')) || 1,
         speed: localStorage.getItem('lc-seq-speed') || 'slow',
-        tier: parseInt(localStorage.getItem('lc-seq-tier')) || 1,
+        level: 1, // Will be set below based on speed
+        tier: 1, // Will be set below based on speed
         score: parseInt(localStorage.getItem('lc-seq-score')) || 0,
         streak: parseInt(localStorage.getItem('lc-seq-streak')) || 0,
-        roundsCompleted: parseInt(localStorage.getItem('lc-seq-rounds')) || 0,
+        roundsCompleted: 0, // Will be set below based on speed
         sequence: [],
         playerIndex: 0,
         isPlaying: false,
@@ -403,10 +403,12 @@ body.es .lang-en{display:none!important}
         cells: [],
         currentColor: FLASH_COLORS[0]
     };
+    // Load level, tier, rounds PER SPEED
+    state.level = parseInt(localStorage.getItem('lc-seq-level-' + state.speed)) || parseInt(localStorage.getItem('lc-seq-level')) || 1;
+    state.tier = parseInt(localStorage.getItem('lc-seq-tier-' + state.speed)) || parseInt(localStorage.getItem('lc-seq-tier')) || 1;
+    state.roundsCompleted = parseInt(localStorage.getItem('lc-seq-rounds-' + state.speed)) || 0;
     if (state.level > 10) state.level = 10;
     if (state.level < 1) state.level = 1;
-    // Cap roundsCompleted to valid range
-    if (state.roundsCompleted >= ROUNDS_PER_TIER) state.roundsCompleted = 0;
 
     var courtGrid = document.getElementById('courtGrid');
     var messageText = document.getElementById('messageText');
@@ -628,7 +630,7 @@ body.es .lang-en{display:none!important}
             state.roundsCompleted++;
             localStorage.setItem('lc-seq-score', state.score);
             localStorage.setItem('lc-seq-streak', state.streak);
-            localStorage.setItem('lc-seq-rounds', state.roundsCompleted);
+            localStorage.setItem('lc-seq-rounds-' + state.speed, state.roundsCompleted);
             var intensity = state.streak >= 5 ? 'party' : state.streak >= 3 ? 'big' : 'medium';
             var msgs = state.streak >= 5 ? ['🔢 LEGEND!', '🏆 WOW!'] : state.streak >= 3 ? ['😂 FIRE!', '🤣 AMAZING!'] : ['😄 NICE!', '😊 GREAT!'];
             playSuccess();
@@ -653,14 +655,14 @@ body.es .lang-en{display:none!important}
     function tierUp() {
         state.tier++;
         state.roundsCompleted = 0;
-        localStorage.setItem('lc-seq-tier', state.tier);
-        localStorage.setItem('lc-seq-rounds', 0);
+        localStorage.setItem('lc-seq-tier-' + state.speed, state.tier);
+        localStorage.setItem('lc-seq-rounds-' + state.speed, 0);
         
         // Auto-advance to next level if not at max
         var oldLevel = state.level;
         if (state.level < 10) {
             state.level++;
-            localStorage.setItem('lc-seq-level', state.level);
+            localStorage.setItem('lc-seq-level-' + state.speed, state.level);
             // Update level selector UI
             document.querySelectorAll('[data-level]').forEach(function(b) { b.classList.remove('active'); });
             var newLevelBtn = document.querySelector('[data-level="' + state.level + '"]');
@@ -684,12 +686,12 @@ body.es .lang-en{display:none!important}
 
     function maxTier() {
         state.roundsCompleted = 0;
-        localStorage.setItem('lc-seq-rounds', 0);
+        localStorage.setItem('lc-seq-rounds-' + state.speed, 0);
         
         // Ensure at max level too
         if (state.level < 10) {
             state.level = 10;
-            localStorage.setItem('lc-seq-level', state.level);
+            localStorage.setItem('lc-seq-level-' + state.speed, state.level);
             document.querySelectorAll('[data-level]').forEach(function(b) { b.classList.remove('active'); });
             var maxLevelBtn = document.querySelector('[data-level="10"]');
             if (maxLevelBtn) maxLevelBtn.classList.add('active');
@@ -750,9 +752,10 @@ body.es .lang-en{display:none!important}
             state.isPlaying = false;
             state.canTap = false;
             state.roundEnded = false;
-            localStorage.setItem('lc-seq-level', state.level);
-            localStorage.setItem('lc-seq-tier', 1);
-            localStorage.setItem('lc-seq-rounds', 0);
+            // Save per-speed
+            localStorage.setItem('lc-seq-level-' + state.speed, state.level);
+            localStorage.setItem('lc-seq-tier-' + state.speed, 1);
+            localStorage.setItem('lc-seq-rounds-' + state.speed, 0);
             updateDivisionDisplay();
             updateStats();
             resetRound();
@@ -767,14 +770,23 @@ body.es .lang-en{display:none!important}
             document.querySelectorAll('.speed-btn').forEach(function(b) { b.classList.remove('active'); });
             btn.classList.add('active');
             state.speed = btn.dataset.speed;
-            state.tier = 1;
-            state.roundsCompleted = 0;
+            localStorage.setItem('lc-seq-speed', state.speed);
+            
+            // Load level/tier/rounds for THIS speed
+            state.level = parseInt(localStorage.getItem('lc-seq-level-' + state.speed)) || 1;
+            state.tier = parseInt(localStorage.getItem('lc-seq-tier-' + state.speed)) || 1;
+            state.roundsCompleted = parseInt(localStorage.getItem('lc-seq-rounds-' + state.speed)) || 0;
+            if (state.level > 10) state.level = 10;
+            if (state.level < 1) state.level = 1;
+            
+            // Update level selector UI
+            document.querySelectorAll('[data-level]').forEach(function(b) { b.classList.remove('active'); });
+            var lb = document.querySelector('[data-level="' + state.level + '"]');
+            if (lb) lb.classList.add('active');
+            
             state.isPlaying = false;
             state.canTap = false;
             state.roundEnded = false;
-            localStorage.setItem('lc-seq-speed', state.speed);
-            localStorage.setItem('lc-seq-tier', 1);
-            localStorage.setItem('lc-seq-rounds', 0);
             updateDivisionDisplay();
             updateStats();
             resetRound();
@@ -785,15 +797,6 @@ body.es .lang-en{display:none!important}
 
     // ===== LOAD SAVED STATE =====
     function loadState() {
-        var sl = localStorage.getItem('lc-seq-level');
-        if (sl) {
-            state.level = parseInt(sl);
-            if (state.level > 10) state.level = 10;
-            if (state.level < 1) state.level = 1;
-            document.querySelectorAll('[data-level]').forEach(function(b) { b.classList.remove('active'); });
-            var lb = document.querySelector('[data-level="' + state.level + '"]');
-            if (lb) lb.classList.add('active');
-        }
         var ss = localStorage.getItem('lc-seq-speed');
         if (ss && (speedAccess.allSpeeds || ss === 'slow')) {
             state.speed = ss;
@@ -801,6 +804,18 @@ body.es .lang-en{display:none!important}
             var sb = document.querySelector('.speed-btn[data-speed="' + state.speed + '"]');
             if (sb) sb.classList.add('active');
         }
+        
+        // Load level/tier/rounds for current speed
+        state.level = parseInt(localStorage.getItem('lc-seq-level-' + state.speed)) || parseInt(localStorage.getItem('lc-seq-level')) || 1;
+        state.tier = parseInt(localStorage.getItem('lc-seq-tier-' + state.speed)) || parseInt(localStorage.getItem('lc-seq-tier')) || 1;
+        state.roundsCompleted = parseInt(localStorage.getItem('lc-seq-rounds-' + state.speed)) || 0;
+        if (state.level > 10) state.level = 10;
+        if (state.level < 1) state.level = 1;
+        
+        // Update level selector UI
+        document.querySelectorAll('[data-level]').forEach(function(b) { b.classList.remove('active'); });
+        var lb = document.querySelector('[data-level="' + state.level + '"]');
+        if (lb) lb.classList.add('active');
     }
 
     // ===== INIT =====
