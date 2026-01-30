@@ -998,17 +998,17 @@ body.en .lang-es { display: none !important; }
         };
         var speedLabel = speedLabels[currentSpeedView][currentLang] || speedLabels[currentSpeedView].en;
         
-        // Get level for SELECTED SPEED
-        var level = parseInt(localStorage.getItem(prefix + '-level-' + currentSpeedView)) || parseInt(localStorage.getItem(prefix + '-level')) || 1;
+        // Get level for SELECTED SPEED (NEW format: prefix-speed-level)
+        var level = parseInt(localStorage.getItem(prefix + '-' + currentSpeedView + '-level')) || 1;
         level = Math.min(10, Math.max(1, level));
         
         // GoStars = Level
         var goStars = level;
         
-        // Get levels for all speeds
-        var levelSlow = parseInt(localStorage.getItem(prefix + '-level-slow')) || parseInt(localStorage.getItem(prefix + '-level')) || 1;
-        var levelMed = parseInt(localStorage.getItem(prefix + '-level-med')) || 1;
-        var levelFast = parseInt(localStorage.getItem(prefix + '-level-fast')) || 1;
+        // Get levels for all speeds (NEW format: prefix-speed-level)
+        var levelSlow = parseInt(localStorage.getItem(prefix + '-slow-level')) || 1;
+        var levelMed = parseInt(localStorage.getItem(prefix + '-med-level')) || 1;
+        var levelFast = parseInt(localStorage.getItem(prefix + '-fast-level')) || 1;
         levelSlow = Math.min(10, Math.max(1, levelSlow));
         levelMed = Math.min(10, Math.max(1, levelMed));
         levelFast = Math.min(10, Math.max(1, levelFast));
