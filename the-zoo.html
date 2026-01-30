@@ -359,12 +359,33 @@ body.es .lang-en{display:none!important}
     var LAUGH_EMOJIS = ['😂','😆','🤣','😄','😁','🥳','😊','🦁'];
     var PARTY_EMOJIS = ['🥳','🎉','😂','🤣','✨','💫','🦁','🏆'];
 
-    // ===== STATE =====
+    // ===== STATE (per-speed tracking) =====
+    function getSpeedKey(speed, key) {
+        return 'lc-zoo-' + speed + '-' + key;
+    }
+    
+    function loadSpeedState(speed) {
+        return {
+            level: parseInt(localStorage.getItem(getSpeedKey(speed, 'level'))) || 1,
+            score: parseInt(localStorage.getItem(getSpeedKey(speed, 'score'))) || 0,
+            streak: parseInt(localStorage.getItem(getSpeedKey(speed, 'streak'))) || 0
+        };
+    }
+    
+    function saveSpeedState(speed, level, score, streak) {
+        localStorage.setItem(getSpeedKey(speed, 'level'), level);
+        localStorage.setItem(getSpeedKey(speed, 'score'), score);
+        localStorage.setItem(getSpeedKey(speed, 'streak'), streak);
+    }
+    
+    var currentSpeed = localStorage.getItem('lc-zoo-speed') || 'slow';
+    var speedData = loadSpeedState(currentSpeed);
+    
     var state = {
-        level: parseInt(localStorage.getItem('lc-zoo-level')) || 1,
-        speed: localStorage.getItem('lc-zoo-speed') || 'slow',
-        score: parseInt(localStorage.getItem('lc-zoo-score')) || 0,
-        streak: parseInt(localStorage.getItem('lc-zoo-streak')) || 0,
+        level: speedData.level,
+        speed: currentSpeed,
+        score: speedData.score,
+        streak: speedData.streak,
         round: 0,
         perfectCount: 0,
         isPlaying: false,
@@ -664,8 +685,7 @@ body.es .lang-en{display:none!important}
             
             updateProgressionStars();
             updateStats();
-            localStorage.setItem('lc-zoo-score', state.score);
-            localStorage.setItem('lc-zoo-streak', state.streak);
+            saveSpeedState(state.speed, state.level, state.score, state.streak);
 
             var intensity = state.streak >= 5 ? 'party' : state.streak >= 3 ? 'big' : 'medium';
             laughCelebration(intensity);
@@ -682,7 +702,7 @@ body.es .lang-en{display:none!important}
         } else {
             playWrongSound();
             state.streak = 0;
-            localStorage.setItem('lc-zoo-streak', state.streak);
+            saveSpeedState(state.speed, state.level, state.score, state.streak);
             updateStats();
 
             messageText.innerHTML = '<span class="lang-en">WRONG SPOTS!</span><span class="lang-es">¡MAL UBICADO!</span>';
@@ -708,7 +728,7 @@ body.es .lang-en{display:none!important}
         document.getElementById('levelUpOverlay').classList.remove('show');
         if (state.level < 10) {
             state.level++;
-            localStorage.setItem('lc-zoo-level', state.level);
+            saveSpeedState(state.speed, state.level, state.score, state.streak);
             document.querySelectorAll('.level-btn').forEach(function(b) {
                 b.classList.toggle('active', parseInt(b.dataset.level) === state.level);
             });
@@ -735,7 +755,7 @@ body.es .lang-en{display:none!important}
             document.querySelectorAll('.level-btn').forEach(function(x) { x.classList.remove('active'); });
             b.classList.add('active');
             state.level = parseInt(b.dataset.level);
-            localStorage.setItem('lc-zoo-level', state.level);
+            saveSpeedState(state.speed, state.level, state.score, state.streak);
             state.perfectCount = 0;
             state.round = 0;
             updateProgressionStars();
@@ -753,6 +773,18 @@ body.es .lang-en{display:none!important}
             b.classList.add('active');
             state.speed = b.dataset.speed;
             localStorage.setItem('lc-zoo-speed', state.speed);
+            
+            // Load this speed's progress
+            var speedData = loadSpeedState(state.speed);
+            state.level = speedData.level;
+            state.score = speedData.score;
+            state.streak = speedData.streak;
+            
+            // Update level buttons to show this speed's level
+            document.querySelectorAll('.level-btn').forEach(function(lb) {
+                lb.classList.toggle('active', parseInt(lb.dataset.level) === state.level);
+            });
+            
             state.perfectCount = 0;
             state.round = 0;
             updateProgressionStars();
