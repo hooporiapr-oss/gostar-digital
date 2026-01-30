@@ -24,7 +24,6 @@
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background:var(--dark);color:var(--text);touch-action:manipulation;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
 
-/* ============ SIMPLIFIED NAV ============ */
 .mini-nav{position:fixed;top:0;left:0;right:0;background:var(--card);border-bottom:1px solid var(--border);padding-top:env(safe-area-inset-top);z-index:1000;transition:transform 0.3s ease}
 .nav-row{display:flex;align-items:center;justify-content:space-between;height:50px;padding:0 12px}
 .back-btn{display:flex;align-items:center;gap:6px;padding:8px 12px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:8px;font-family:'Outfit',sans-serif;font-size:0.75rem;font-weight:600;cursor:pointer;text-decoration:none;transition:all 0.2s}
@@ -50,12 +49,10 @@ html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background
 .settings-link.upgrade{background:linear-gradient(135deg,var(--gold),#FFA500);color:var(--dark);font-weight:600;margin-bottom:6px}
 .settings-link.logout{background:0;border:1px solid var(--border);color:var(--muted)}
 
-/* FOCUS MODE BUTTON */
 .focus-btn{position:fixed;top:calc(env(safe-area-inset-top, 0px) + 6px);right:12px;width:32px;height:32px;border-radius:6px;background:var(--card);border:1px solid var(--border);color:var(--muted);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:1001;transition:all 0.2s}
 .focus-btn:active{transform:scale(0.95)}
 .focus-btn.active{background:rgba(155,89,182,0.3);border-color:var(--purple);color:var(--purple)}
 
-/* FOCUS MODE STYLES */
 body.focus-mode .mini-nav{transform:translateY(-100%)}
 body.focus-mode .game-container{padding-top:calc(env(safe-area-inset-top) + 60px)}
 body.focus-mode .stats-bar{display:none}
@@ -159,10 +156,8 @@ body.es .lang-en{display:none!important}
 </head>
 <body class="en">
 
-<!-- FOCUS BUTTON -->
 <button class="focus-btn" id="focusBtn" title="Focus Mode">⛶</button>
 
-<!-- SIMPLIFIED NAV - NO TABS -->
 <nav class="mini-nav">
 <div class="nav-row">
 <a href="/dashboard.html" class="back-btn">← <span class="lang-en">DASHBOARD</span><span class="lang-es">TABLERO</span></a>
@@ -347,12 +342,33 @@ body.es .lang-en{display:none!important}
     var LAUGH_EMOJIS = ['😂','😆','🤣','😄','😁','🥳','😊','🎯'];
     var PARTY_EMOJIS = ['🥳','🎉','😂','🤣','✨','💫','🎯','🏆'];
 
-    // ===== STATE =====
+    // ===== STATE (per-speed tracking) =====
+    function getSpeedKey(speed, key) {
+        return 'lc-reaction-' + speed + '-' + key;
+    }
+    
+    function loadSpeedState(speed) {
+        return {
+            level: parseInt(localStorage.getItem(getSpeedKey(speed, 'level'))) || 1,
+            score: parseInt(localStorage.getItem(getSpeedKey(speed, 'score'))) || 0,
+            streak: parseInt(localStorage.getItem(getSpeedKey(speed, 'streak'))) || 0
+        };
+    }
+    
+    function saveSpeedState(speed, level, score, streak) {
+        localStorage.setItem(getSpeedKey(speed, 'level'), level);
+        localStorage.setItem(getSpeedKey(speed, 'score'), score);
+        localStorage.setItem(getSpeedKey(speed, 'streak'), streak);
+    }
+    
+    var currentSpeed = localStorage.getItem('lc-reaction-speed') || 'slow';
+    var speedData = loadSpeedState(currentSpeed);
+    
     var state = {
-        level: parseInt(localStorage.getItem('lc-reaction-level')) || 1,
-        speed: localStorage.getItem('lc-reaction-speed') || 'slow',
-        score: parseInt(localStorage.getItem('lc-reaction-score')) || 0,
-        streak: parseInt(localStorage.getItem('lc-reaction-streak')) || 0,
+        level: speedData.level,
+        speed: currentSpeed,
+        score: speedData.score,
+        streak: speedData.streak,
         round: 0,
         perfectCount: 0,
         currentTap: 0,
@@ -668,7 +684,7 @@ body.es .lang-en{display:none!important}
             
             updateTapsCounter();
             updateStats();
-            localStorage.setItem('lc-reaction-score', state.score);
+            saveSpeedState(state.speed, state.level, state.score, state.streak);
 
             if (state.currentTap % 3 === 0) laughCelebration('small');
 
@@ -698,7 +714,7 @@ body.es .lang-en{display:none!important}
         
         state.perfectCount = 0;
         state.streak = 0;
-        localStorage.setItem('lc-reaction-streak', 0);
+        saveSpeedState(state.speed, state.level, state.score, state.streak);
         
         updateProgressionStars();
         updateStats();
@@ -717,7 +733,7 @@ body.es .lang-en{display:none!important}
             playCorrectSound();
             state.perfectCount++;
             state.streak++;
-            localStorage.setItem('lc-reaction-streak', state.streak);
+            saveSpeedState(state.speed, state.level, state.score, state.streak);
             
             updateProgressionStars();
             updateStats();
@@ -753,7 +769,12 @@ body.es .lang-en{display:none!important}
     function levelUp() {
         state.level++;
         state.perfectCount = 0;
-        localStorage.setItem('lc-reaction-level', state.level);
+        saveSpeedState(state.speed, state.level, state.score, state.streak);
+        
+        // Update level buttons
+        document.querySelectorAll('.level-btn').forEach(function(b) {
+            b.classList.toggle('active', parseInt(b.dataset.level) === state.level);
+        });
         
         updateProgressionStars();
         laughCelebration('party');
@@ -784,15 +805,17 @@ body.es .lang-en{display:none!important}
     }
 
     // ===== SELECTORS =====
-    document.querySelectorAll('[data-level]').forEach(function(b) {
+    document.querySelectorAll('.level-btn').forEach(function(b) {
         b.onclick = function() {
             if (state.isPlaying) return;
-            document.querySelectorAll('[data-level]').forEach(function(x) { x.classList.remove('active'); });
+            document.querySelectorAll('.level-btn').forEach(function(x) { x.classList.remove('active'); });
             b.classList.add('active');
             state.level = parseInt(b.dataset.level);
             state.perfectCount = 0;
-            localStorage.setItem('lc-reaction-level', state.level);
+            state.round = 0;
+            saveSpeedState(state.speed, state.level, state.score, state.streak);
             updateProgressionStars();
+            updateStats();
             updateDivisionDisplay();
         };
     });
@@ -808,40 +831,62 @@ body.es .lang-en{display:none!important}
             b.classList.add('active');
             state.speed = b.dataset.speed;
             localStorage.setItem('lc-reaction-speed', state.speed);
+            
+            // Load this speed's progress
+            var speedData = loadSpeedState(state.speed);
+            state.level = speedData.level;
+            state.score = speedData.score;
+            state.streak = speedData.streak;
+            
+            // Update level buttons to show this speed's level
+            document.querySelectorAll('.level-btn').forEach(function(lb) {
+                lb.classList.toggle('active', parseInt(lb.dataset.level) === state.level);
+            });
+            
+            state.perfectCount = 0;
+            state.round = 0;
+            updateProgressionStars();
+            updateStats();
             updateDivisionDisplay();
         };
     });
 
     actionBtn.onclick = startRound;
 
-    // ===== LOAD SAVED STATE =====
-    function loadSavedState() {
-        var sl = localStorage.getItem('lc-reaction-level');
-        if (sl) {
-            state.level = parseInt(sl);
-            if (state.level > 10) state.level = 10;
-            if (state.level < 1) state.level = 1;
-            document.querySelectorAll('[data-level]').forEach(function(b) { b.classList.remove('active'); });
-            var lb = document.querySelector('[data-level="' + state.level + '"]');
-            if (lb) lb.classList.add('active');
-        }
-        var ss = localStorage.getItem('lc-reaction-speed');
-        if (ss && (speedAccess.allSpeeds || ss === 'slow')) {
-            state.speed = ss;
-            document.querySelectorAll('.speed-btn').forEach(function(b) { b.classList.remove('active'); });
-            var sb = document.querySelector('.speed-btn[data-speed="' + state.speed + '"]');
-            if (sb) sb.classList.add('active');
-        }
-    }
-
     // ===== INIT =====
     initCourt();
     initSpeedButtons();
-    loadSavedState();
     setLang(currentLang);
     updateDivisionDisplay();
     updateStats();
     updateProgressionStars();
+    
+    // Set initial level button
+    document.querySelectorAll('.level-btn').forEach(function(b) {
+        b.classList.toggle('active', parseInt(b.dataset.level) === state.level);
+    });
+    
+    // Set initial speed button
+    document.querySelectorAll('.speed-btn').forEach(function(b) {
+        if (!b.classList.contains('locked')) {
+            b.classList.toggle('active', b.dataset.speed === state.speed);
+        }
+    });
+
+    // Check speed access on load
+    if (isProduction) {
+        var pin = sessionStorage.getItem('lc-pin');
+        if (pin) {
+            fetch('/api/user/speed-access/' + pin)
+            .then(function(r) { return r.json(); })
+            .then(function(d) {
+                speedAccess = d;
+                localStorage.setItem('lc-speed-access', JSON.stringify(d));
+                initSpeedButtons();
+            })
+            .catch(function() {});
+        }
+    }
 })();
 </script>
 </body>
