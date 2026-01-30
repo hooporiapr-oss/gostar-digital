@@ -98,13 +98,13 @@ body.focus-mode .coach-message{bottom:120px}
 .court-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:8px;background-color:#1a1a24;background-image:url('/icon.png');background-size:85%;background-position:center;background-repeat:no-repeat;border-radius:16px;border:3px solid var(--lime);width:min(100%,calc(100dvh - 300px),320px);height:min(100%,calc(100dvh - 300px),320px);min-width:200px;min-height:200px;aspect-ratio:1;position:relative;transition:all 0.3s ease}
 .court-grid::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(10,10,15,0.6);border-radius:13px;pointer-events:none;z-index:0}
 
-.grid-cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:6px;cursor:pointer;background:rgba(255,255,255,0.08);border:2px solid rgba(255,255,255,0.2);min-width:32px;min-height:32px;transition:all 0.15s;position:relative;z-index:1;font-size:1.5rem}
+.grid-cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:8px;cursor:pointer;background:rgba(255,255,255,0.08);border:2px solid rgba(255,255,255,0.2);min-width:32px;min-height:32px;transition:all 0.15s;position:relative;z-index:1;font-size:1.5rem}
 .grid-cell:active:not(.disabled){transform:scale(0.95)}
-.grid-cell.showing{background:rgba(50,205,50,0.3)!important;border-color:var(--lime)!important}
-.grid-cell.selected{background:rgba(50,205,50,0.4)!important;border-color:var(--lime)!important;box-shadow:0 0 12px var(--lime)}
-.grid-cell.correct{background:var(--teal)!important;border-color:var(--teal)!important;box-shadow:0 0 12px var(--teal)}
+.grid-cell.showing{border-color:rgba(255,255,255,0.5)!important;box-shadow:0 0 8px rgba(255,255,255,0.3)}
+.grid-cell.selected{border-color:var(--lime)!important;box-shadow:0 0 12px var(--lime);transform:scale(1.05)}
+.grid-cell.correct{border-color:var(--teal)!important;box-shadow:0 0 15px var(--teal)}
 .grid-cell.wrong{background:var(--pink)!important;border-color:var(--pink)!important;box-shadow:0 0 12px var(--pink)}
-.grid-cell.reveal{background:rgba(50,205,50,0.2)!important;border-color:var(--lime)!important}
+.grid-cell.reveal{border-color:var(--gold)!important;box-shadow:0 0 10px var(--gold)}
 .grid-cell.disabled{pointer-events:none}
 
 .division-display{display:flex;justify-content:space-between;align-items:center;padding:5px 10px;background:var(--card);border-radius:8px;margin:4px 0;flex-shrink:0;min-height:34px}
@@ -114,7 +114,7 @@ body.focus-mode .coach-message{bottom:120px}
 
 .find-prompt{display:flex;align-items:center;justify-content:center;gap:8px;padding:8px;background:rgba(50,205,50,0.15);border:2px solid var(--lime);border-radius:10px;margin-bottom:4px}
 .find-prompt-text{font-family:'Bebas Neue',sans-serif;font-size:0.85rem;letter-spacing:1px;color:var(--lime)}
-.find-prompt-animal{font-size:1.8rem}
+.find-prompt-animal{font-size:1.8rem;width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center}
 
 .action-btn{width:100%;min-height:46px;padding:11px;border:none;border-radius:10px;font-family:'Bebas Neue',sans-serif;font-size:1.25rem;letter-spacing:4px;cursor:pointer;background:linear-gradient(135deg,var(--lime),var(--lime-light));color:var(--dark);flex-shrink:0;transition:all 0.3s ease}
 .action-btn:disabled{opacity:0.5;cursor:not-allowed}
@@ -148,9 +148,9 @@ body.focus-mode .coach-message{bottom:120px}
 body.en .lang-es{display:none!important}
 body.es .lang-en{display:none!important}
 
-@media(min-height:720px){.court-grid{width:min(100%,calc(100dvh - 300px),340px);height:min(100%,calc(100dvh - 300px),340px)}.stat-value{font-size:1.1rem}.message-text{font-size:0.95rem}.selector-btn{min-height:38px}.selector-btn.level-btn{min-height:30px}.action-btn{min-height:50px;font-size:1.35rem}.grid-cell{font-size:1.7rem}}
-@media(max-height:620px){.stat-value{font-size:0.9rem}.message-display{padding:5px;min-height:30px}.message-text{font-size:0.8rem}.selector-btn{min-height:30px;font-size:0.75rem}.selector-btn.level-btn{min-height:24px;font-size:0.65rem}.court-grid{min-width:180px;min-height:180px;width:min(100%,calc(100dvh - 260px),280px);height:min(100%,calc(100dvh - 260px),280px);gap:3px;padding:6px}.grid-cell{min-width:28px;min-height:28px;font-size:1.3rem}.division-display{padding:4px 8px;min-height:30px}.action-btn{min-height:42px;font-size:1.1rem}.progression-star{font-size:1.1rem}.find-prompt{padding:6px}.find-prompt-animal{font-size:1.5rem}}
-@media(max-height:540px){.nav-row{height:44px}.stats-bar{padding:3px 5px;margin-bottom:3px}.stat-value{font-size:0.8rem}.stat-label{font-size:0.38rem}.message-display{padding:4px;margin-bottom:3px;min-height:26px}.message-text{font-size:0.7rem}.selectors-row{margin-bottom:3px}.selector-group{padding:3px}.selector-label{font-size:0.4rem;margin-bottom:2px}.selector-btn{min-height:26px;font-size:0.65rem}.selector-btn.level-btn{min-height:22px;font-size:0.55rem}.court-grid{min-width:150px;min-height:150px;gap:2px;padding:5px}.grid-cell{min-width:24px;min-height:24px;font-size:1.1rem}.division-display{padding:3px 6px;min-height:26px;margin:3px 0}.division-badge,.taps-counter{font-size:0.75rem}.score-display{font-size:0.9rem}.action-btn{min-height:38px;padding:8px;font-size:1rem}.progression-display{padding:4px}.progression-star{font-size:1rem}.find-prompt{padding:5px;margin-bottom:3px}.find-prompt-text{font-size:0.7rem}.find-prompt-animal{font-size:1.3rem}}
+@media(min-height:720px){.court-grid{width:min(100%,calc(100dvh - 300px),340px);height:min(100%,calc(100dvh - 300px),340px)}.stat-value{font-size:1.1rem}.message-text{font-size:0.95rem}.selector-btn{min-height:38px}.selector-btn.level-btn{min-height:30px}.action-btn{min-height:50px;font-size:1.35rem}.grid-cell{font-size:1.7rem;border-radius:10px}}
+@media(max-height:620px){.stat-value{font-size:0.9rem}.message-display{padding:5px;min-height:30px}.message-text{font-size:0.8rem}.selector-btn{min-height:30px;font-size:0.75rem}.selector-btn.level-btn{min-height:24px;font-size:0.65rem}.court-grid{min-width:180px;min-height:180px;width:min(100%,calc(100dvh - 260px),280px);height:min(100%,calc(100dvh - 260px),280px);gap:3px;padding:6px}.grid-cell{min-width:28px;min-height:28px;font-size:1.3rem;border-radius:6px}.division-display{padding:4px 8px;min-height:30px}.action-btn{min-height:42px;font-size:1.1rem}.progression-star{font-size:1.1rem}.find-prompt{padding:6px}.find-prompt-animal{font-size:1.5rem;width:40px;height:40px}}
+@media(max-height:540px){.nav-row{height:44px}.stats-bar{padding:3px 5px;margin-bottom:3px}.stat-value{font-size:0.8rem}.stat-label{font-size:0.38rem}.message-display{padding:4px;margin-bottom:3px;min-height:26px}.message-text{font-size:0.7rem}.selectors-row{margin-bottom:3px}.selector-group{padding:3px}.selector-label{font-size:0.4rem;margin-bottom:2px}.selector-btn{min-height:26px;font-size:0.65rem}.selector-btn.level-btn{min-height:22px;font-size:0.55rem}.court-grid{min-width:150px;min-height:150px;gap:2px;padding:5px}.grid-cell{min-width:24px;min-height:24px;font-size:1.1rem;border-radius:5px}.division-display{padding:3px 6px;min-height:26px;margin:3px 0}.division-badge,.taps-counter{font-size:0.75rem}.score-display{font-size:0.9rem}.action-btn{min-height:38px;padding:8px;font-size:1rem}.progression-display{padding:4px}.progression-star{font-size:1rem}.find-prompt{padding:5px;margin-bottom:3px}.find-prompt-text{font-size:0.7rem}.find-prompt-animal{font-size:1.3rem;width:36px;height:36px}}
 </style>
 </head>
 <body class="en">
@@ -198,51 +198,49 @@ body.es .lang-en{display:none!important}
 </div>
 <div class="progression-display">
 <span class="progression-label"><span class="lang-en">LEVEL UP:</span><span class="lang-es">SUBIR:</span></span>
-<div class="progression-stars">
-<span class="progression-star" id="star1">⭐</span>
-<span class="progression-star" id="star2">⭐</span>
-</div>
-</div>
-<div class="find-prompt" id="findPrompt" style="display:none;">
-<span class="find-prompt-text"><span class="lang-en">FIND:</span><span class="lang-es">BUSCA:</span></span>
-<span class="find-prompt-animal" id="findAnimal">🦁</span>
+<div class="progression-stars"><span class="progression-star" id="star1">⭐</span><span class="progression-star" id="star2">⭐</span></div>
 </div>
 <div class="court-wrapper"><div class="court-grid" id="courtGrid"></div></div>
-<div class="division-display"><div class="division-badge" id="divisionBadge">L1 SLOW</div><div class="taps-counter" id="tapsCounter">0/2</div><div class="score-display" id="totalScore">0</div></div>
-<button class="action-btn" id="actionBtn"><span class="lang-en">GO</span><span class="lang-es">IR</span></button>
+<div id="findPrompt" class="find-prompt" style="display:none">
+<span class="find-prompt-text"><span class="lang-en">FIND BOTH</span><span class="lang-es">ENCUENTRA</span></span>
+<span class="find-prompt-animal" id="findAnimal"></span>
 </div>
+<div class="division-display">
+<span class="division-badge" id="divisionBadge">L1 SLOW</span>
+<span class="taps-counter" id="tapsCounter">0/2</span>
+<span class="score-display">⭐ <span id="totalScore">0</span></span>
+</div>
+<button class="action-btn" id="actionBtn"><span class="lang-en">GO!</span><span class="lang-es">¡IR!</span></button>
+</div>
+
+<div class="coach-message" id="coachMessage"></div>
 
 <div class="overlay" id="levelUpOverlay">
 <div class="overlay-card">
-<div class="overlay-emoji">🦁</div>
+<div class="overlay-emoji">🏆🦁🏆</div>
 <h2 class="overlay-title"><span class="lang-en">LEVEL UP!</span><span class="lang-es">¡SUBISTE!</span></h2>
 <p class="overlay-message" id="levelUpMessage"></p>
-<button class="overlay-btn" id="levelUpBtn"><span class="lang-en">LET'S GO!</span><span class="lang-es">¡VAMOS!</span></button>
+<button class="overlay-btn" id="nextLevelBtn"><span class="lang-en">NEXT LEVEL</span><span class="lang-es">SIGUIENTE</span></button>
+<button class="overlay-btn secondary" id="stayLevelBtn"><span class="lang-en">Stay & Practice</span><span class="lang-es">Seguir Practicando</span></button>
 </div>
 </div>
 
 <div class="overlay" id="upgradeOverlay">
 <div class="overlay-card">
-<div class="overlay-emoji">🔓🦁</div>
-<h2 class="overlay-title">UNLOCK ALL SPEEDS</h2>
-<div class="upgrade-speed-preview">
-<span class="upgrade-speed-chip current">✓ Slow</span>
-<span class="upgrade-speed-chip locked">🔒 Med</span>
-<span class="upgrade-speed-chip locked">🔒 Fast</span>
-</div>
-<div class="upgrade-price">$5<span>/mo</span></div>
-<a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="overlay-btn" style="display:block;text-decoration:none;margin-bottom:6px;">UPGRADE 🚀</a>
-<button class="overlay-btn secondary" id="upgradeClose"><span class="lang-en">CONTINUE SLOW</span><span class="lang-es">CONTINUAR</span></button>
+<div class="overlay-emoji">🚀⚡🔓</div>
+<h2 class="overlay-title"><span class="lang-en">UNLOCK ALL SPEEDS!</span><span class="lang-es">¡DESBLOQUEA TODO!</span></h2>
+<div class="upgrade-speed-preview"><span class="upgrade-speed-chip current">✓ SLOW</span><span class="upgrade-speed-chip locked">🔒 MED</span><span class="upgrade-speed-chip locked">🔒 FAST</span></div>
+<div class="upgrade-price">$5<span>/month</span></div>
+<p class="overlay-message"><span class="lang-en">Get MED & FAST speeds + all 5 games!</span><span class="lang-es">¡Obtén velocidades MED y FAST + 5 juegos!</span></p>
+<a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="overlay-btn" style="display:inline-block;text-decoration:none"><span class="lang-en">UPGRADE NOW</span><span class="lang-es">MEJORAR AHORA</span></a>
+<button class="overlay-btn secondary" id="upgradeClose"><span class="lang-en">Maybe Later</span><span class="lang-es">Quizás Luego</span></button>
 </div>
 </div>
-
-<div class="coach-message" id="coachMessage"></div>
 
 <script>
-(function(){
-    // ===== ANIMALS =====
-    var ANIMALS = ['🐶','🐱','🦁','🐸','🦊','🐼','🐯','🐮','🐷','🐵','🐰','🐻'];
-    
+(function() {
+    'use strict';
+
     // ===== FOCUS MODE =====
     var focusBtn = document.getElementById('focusBtn');
     var isFocusMode = localStorage.getItem('lc-focus-mode') === 'true';
@@ -340,6 +338,22 @@ body.es .lang-en{display:none!important}
 
     function showUpgradeModal() { document.getElementById('upgradeOverlay').classList.add('show'); }
     document.getElementById('upgradeClose').onclick = function() { document.getElementById('upgradeOverlay').classList.remove('show'); };
+
+    // ===== ANIMALS WITH COLORS =====
+    var ANIMALS = [
+        { emoji: '🐶', color: '#8B4513', name: 'dog' },      // Brown
+        { emoji: '🐱', color: '#FF9500', name: 'cat' },      // Orange
+        { emoji: '🦁', color: '#FFD700', name: 'lion' },     // Gold
+        { emoji: '🐸', color: '#32CD32', name: 'frog' },     // Lime Green
+        { emoji: '🦊', color: '#FF6B35', name: 'fox' },      // Orange-Red
+        { emoji: '🐼', color: '#2D2D2D', name: 'panda' },    // Dark Gray
+        { emoji: '🐯', color: '#FFA500', name: 'tiger' },    // Orange
+        { emoji: '🐮', color: '#F5F5DC', name: 'cow' },      // Beige
+        { emoji: '🐷', color: '#FFB6C1', name: 'pig' },      // Pink
+        { emoji: '🐵', color: '#CD853F', name: 'monkey' },   // Peru/Tan
+        { emoji: '🐰', color: '#E8E8E8', name: 'rabbit' },   // Light Gray
+        { emoji: '🐻', color: '#8B5A2B', name: 'bear' }      // Dark Brown
+    ];
 
     // ===== GAME CONFIG =====
     var TOTAL_CELLS = 25;
@@ -442,6 +456,17 @@ body.es .lang-en{display:none!important}
         setTimeout(function() { coachMessage.classList.remove('show'); }, 2000);
     }
 
+    // ===== HELPER: Show animal in cell with color =====
+    function showAnimalInCell(cell, animal) {
+        cell.textContent = animal.emoji;
+        cell.style.backgroundColor = animal.color;
+    }
+
+    function clearCell(cell) {
+        cell.textContent = '';
+        cell.style.backgroundColor = '';
+    }
+
     // ===== INIT COURT =====
     function initCourt() {
         courtGrid.innerHTML = '';
@@ -504,7 +529,7 @@ body.es .lang-en{display:none!important}
 
         state.cells.forEach(function(c) { 
             c.className = 'grid-cell'; 
-            c.textContent = '';
+            clearCell(c);
         });
 
         // Generate pairs
@@ -543,12 +568,12 @@ body.es .lang-en{display:none!important}
         messageText.innerHTML = '<span class="lang-en">MEMORIZE THE PAIRS!</span><span class="lang-es">¡MEMORIZA LAS PAREJAS!</span>';
         messageText.className = 'message-text watch';
 
-        // Show animals
+        // Show animals with colors
         setTimeout(function() {
             playShowSound();
             state.gridData.forEach(function(animal, idx) {
                 if (animal) {
-                    state.cells[idx].textContent = animal;
+                    showAnimalInCell(state.cells[idx], animal);
                     state.cells[idx].classList.add('showing');
                 }
             });
@@ -556,7 +581,7 @@ body.es .lang-en{display:none!important}
             // Hide after speed duration
             setTimeout(function() {
                 state.cells.forEach(function(c) { 
-                    c.textContent = '';
+                    clearCell(c);
                     c.classList.remove('showing');
                 });
 
@@ -564,10 +589,12 @@ body.es .lang-en{display:none!important}
                 state.targetAnimal = roundAnimals[Math.floor(Math.random() * roundAnimals.length)];
                 state.targetPositions = [];
                 state.gridData.forEach(function(animal, idx) {
-                    if (animal === state.targetAnimal) state.targetPositions.push(idx);
+                    if (animal && animal.emoji === state.targetAnimal.emoji) state.targetPositions.push(idx);
                 });
 
-                findAnimal.textContent = state.targetAnimal;
+                // Show target in find prompt with color
+                findAnimal.textContent = state.targetAnimal.emoji;
+                findAnimal.style.backgroundColor = state.targetAnimal.color;
                 findPrompt.style.display = 'flex';
                 
                 messageText.innerHTML = '<span class="lang-en">FIND BOTH!</span><span class="lang-es">¡ENCUENTRA LAS DOS!</span>';
@@ -611,7 +638,7 @@ body.es .lang-en{display:none!important}
             if (state.targetPositions.indexOf(idx) !== -1) {
                 state.cells[idx].classList.remove('selected');
                 state.cells[idx].classList.add('correct');
-                state.cells[idx].textContent = state.targetAnimal;
+                showAnimalInCell(state.cells[idx], state.targetAnimal);
                 correct++;
             } else {
                 state.cells[idx].classList.remove('selected');
@@ -619,12 +646,12 @@ body.es .lang-en{display:none!important}
             }
         });
 
-        // Show missed positions
+        // Show missed positions with color
         if (correct < 2) {
             state.targetPositions.forEach(function(idx) {
                 if (state.selectedCells.indexOf(idx) === -1) {
                     state.cells[idx].classList.add('reveal');
-                    state.cells[idx].textContent = state.targetAnimal;
+                    showAnimalInCell(state.cells[idx], state.targetAnimal);
                 }
             });
         }
@@ -648,134 +675,128 @@ body.es .lang-en{display:none!important}
             messageText.innerHTML = '<span class="lang-en">PERFECT!</span><span class="lang-es">¡PERFECTO!</span>';
             messageText.className = 'message-text perfect';
 
-            var msgs = state.streak >= 5 ? ['🦁 LEGEND!', '🏆 WOW!'] : state.streak >= 3 ? ['🦁 AMAZING!', '🤣 GREAT!'] : ['🦁 NICE!', '😊 GOOD!'];
-            showCoach(msgs[Math.floor(Math.random() * msgs.length)]);
+            if (state.streak === 3) showCoach(currentLang === 'es' ? '¡Racha de 3! 🔥' : '3 Streak! 🔥');
+            else if (state.streak === 5) showCoach(currentLang === 'es' ? '¡Racha de 5! 🔥🔥' : '5 Streak! 🔥🔥');
 
             if (state.perfectCount >= 2) {
-                setTimeout(function() {
-                    if (state.level < 10) {
-                        levelUp();
-                    } else {
-                        showCoach('👑 MAX LEVEL!');
-                        state.perfectCount = 0;
-                        updateProgressionStars();
-                        finishRound();
-                    }
-                }, 1200);
-            } else {
-                setTimeout(finishRound, 1500);
+                setTimeout(function() { showLevelUpOverlay(); }, 800);
             }
         } else {
             playWrongSound();
-            state.perfectCount = 0;
             state.streak = 0;
-            
-            updateProgressionStars();
+            localStorage.setItem('lc-zoo-streak', state.streak);
             updateStats();
-            localStorage.setItem('lc-zoo-streak', 0);
 
-            messageText.innerHTML = '<span class="lang-en">MISSED!</span><span class="lang-es">¡FALLASTE!</span>';
+            messageText.innerHTML = '<span class="lang-en">WRONG SPOTS!</span><span class="lang-es">¡MAL UBICADO!</span>';
             messageText.className = 'message-text miss';
-
-            setTimeout(finishRound, 2000);
         }
+
+        setTimeout(function() {
+            state.isPlaying = false;
+            actionBtn.disabled = false;
+            actionBtn.innerHTML = '<span class="lang-en">NEXT</span><span class="lang-es">SIGUIENTE</span>';
+        }, 1200);
     }
 
-    function levelUp() {
-        state.level++;
-        state.perfectCount = 0;
-        localStorage.setItem('lc-zoo-level', state.level);
-        
-        updateProgressionStars();
-        laughCelebration('party');
-        
-        document.getElementById('levelUpMessage').innerHTML = currentLang === 'es' 
-            ? '¡Ahora estás en Nivel ' + state.level + '!' 
-            : 'You are now Level ' + state.level + '!';
+    function showLevelUpOverlay() {
+        var msg = currentLang === 'es'
+            ? 'Completaste Nivel ' + state.level + ' con 2 perfectos!'
+            : 'You completed Level ' + state.level + ' with 2 perfects!';
+        document.getElementById('levelUpMessage').textContent = msg;
         document.getElementById('levelUpOverlay').classList.add('show');
-        
-        updateDivisionDisplay();
-        updateStats();
     }
 
-    document.getElementById('levelUpBtn').onclick = function() {
+    document.getElementById('nextLevelBtn').onclick = function() {
         document.getElementById('levelUpOverlay').classList.remove('show');
-        finishRound();
+        if (state.level < 10) {
+            state.level++;
+            localStorage.setItem('lc-zoo-level', state.level);
+            document.querySelectorAll('.level-btn').forEach(function(b) {
+                b.classList.toggle('active', parseInt(b.dataset.level) === state.level);
+            });
+            updateDivisionDisplay();
+        }
+        state.perfectCount = 0;
+        state.round = 0;
+        updateProgressionStars();
+        updateStats();
+        actionBtn.innerHTML = '<span class="lang-en">GO!</span><span class="lang-es">¡IR!</span>';
     };
 
-    function finishRound() {
-        state.isPlaying = false;
-        findPrompt.style.display = 'none';
-        
-        state.cells.forEach(function(c) { 
-            c.className = 'grid-cell'; 
-            c.textContent = '';
-        });
-        
-        messageText.innerHTML = '<span class="lang-en">TAP GO!</span><span class="lang-es">¡PULSA IR!</span>';
-        messageText.className = 'message-text';
-        actionBtn.disabled = false;
-    }
+    document.getElementById('stayLevelBtn').onclick = function() {
+        document.getElementById('levelUpOverlay').classList.remove('show');
+        state.perfectCount = 0;
+        updateProgressionStars();
+        actionBtn.innerHTML = '<span class="lang-en">GO!</span><span class="lang-es">¡IR!</span>';
+    };
 
     // ===== SELECTORS =====
-    document.querySelectorAll('[data-level]').forEach(function(b) {
+    document.querySelectorAll('.level-btn').forEach(function(b) {
         b.onclick = function() {
             if (state.isPlaying) return;
-            document.querySelectorAll('[data-level]').forEach(function(x) { x.classList.remove('active'); });
+            document.querySelectorAll('.level-btn').forEach(function(x) { x.classList.remove('active'); });
             b.classList.add('active');
             state.level = parseInt(b.dataset.level);
-            state.perfectCount = 0;
             localStorage.setItem('lc-zoo-level', state.level);
+            state.perfectCount = 0;
+            state.round = 0;
             updateProgressionStars();
+            updateStats();
             updateDivisionDisplay();
+            actionBtn.innerHTML = '<span class="lang-en">GO!</span><span class="lang-es">¡IR!</span>';
         };
     });
 
     document.querySelectorAll('.speed-btn').forEach(function(b) {
         b.onclick = function() {
             if (state.isPlaying) return;
-            if (!speedAccess.allSpeeds && b.dataset.speed !== 'slow') {
-                showUpgradeModal();
-                return;
-            }
+            if (b.classList.contains('locked')) { showUpgradeModal(); return; }
             document.querySelectorAll('.speed-btn').forEach(function(x) { x.classList.remove('active'); });
             b.classList.add('active');
             state.speed = b.dataset.speed;
             localStorage.setItem('lc-zoo-speed', state.speed);
+            state.perfectCount = 0;
+            state.round = 0;
+            updateProgressionStars();
+            updateStats();
             updateDivisionDisplay();
+            actionBtn.innerHTML = '<span class="lang-en">GO!</span><span class="lang-es">¡IR!</span>';
         };
     });
 
     actionBtn.onclick = startRound;
 
-    // ===== LOAD SAVED STATE =====
-    function loadSavedState() {
-        var sl = localStorage.getItem('lc-zoo-level');
-        if (sl) {
-            state.level = parseInt(sl);
-            if (state.level > 10) state.level = 10;
-            if (state.level < 1) state.level = 1;
-            document.querySelectorAll('[data-level]').forEach(function(b) { b.classList.remove('active'); });
-            var lb = document.querySelector('[data-level="' + state.level + '"]');
-            if (lb) lb.classList.add('active');
-        }
-        var ss = localStorage.getItem('lc-zoo-speed');
-        if (ss && (speedAccess.allSpeeds || ss === 'slow')) {
-            state.speed = ss;
-            document.querySelectorAll('.speed-btn').forEach(function(b) { b.classList.remove('active'); });
-            var sb = document.querySelector('.speed-btn[data-speed="' + state.speed + '"]');
-            if (sb) sb.classList.add('active');
-        }
-    }
-
     // ===== INIT =====
+    setLang(currentLang);
     initCourt();
     initSpeedButtons();
-    loadSavedState();
-    setLang(currentLang);
-    updateDivisionDisplay();
     updateStats();
+    updateDivisionDisplay();
     updateProgressionStars();
+
+    document.querySelectorAll('.level-btn').forEach(function(b) {
+        b.classList.toggle('active', parseInt(b.dataset.level) === state.level);
+    });
+    document.querySelectorAll('.speed-btn').forEach(function(b) {
+        if (!b.classList.contains('locked')) {
+            b.classList.toggle('active', b.dataset.speed === state.speed);
+        }
+    });
+
+    // Check speed access on load
+    if (isProduction) {
+        var pin = sessionStorage.getItem('lc-pin');
+        if (pin) {
+            fetch('/api/user/speed-access/' + pin)
+            .then(function(r) { return r.json(); })
+            .then(function(d) {
+                speedAccess = d;
+                localStorage.setItem('lc-speed-access', JSON.stringify(d));
+                initSpeedButtons();
+            })
+            .catch(function() {});
+        }
+    }
 })();
 </script>
 </body>
