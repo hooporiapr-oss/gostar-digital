@@ -112,9 +112,7 @@ body.focus-mode .coach-message{bottom:120px}
 .taps-counter{font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--teal)}
 .score-display{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;color:var(--gold)}
 
-.find-prompt{display:flex;align-items:center;justify-content:center;gap:8px;padding:8px;background:rgba(50,205,50,0.15);border:2px solid var(--lime);border-radius:10px;margin-bottom:4px}
-.find-prompt-text{font-family:'Bebas Neue',sans-serif;font-size:0.85rem;letter-spacing:1px;color:var(--lime)}
-.find-prompt-animal{font-size:1.8rem;width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center}
+.grid-cell.center-target{background:linear-gradient(135deg,var(--lime),var(--lime-light))!important;border:3px solid var(--gold)!important;box-shadow:0 0 15px var(--gold),inset 0 0 10px rgba(255,255,255,0.3);transform:scale(1.08);z-index:5}
 
 .action-btn{width:100%;min-height:46px;padding:11px;border:none;border-radius:10px;font-family:'Bebas Neue',sans-serif;font-size:1.25rem;letter-spacing:4px;cursor:pointer;background:linear-gradient(135deg,var(--lime),var(--lime-light));color:var(--dark);flex-shrink:0;transition:all 0.3s ease}
 .action-btn:disabled{opacity:0.5;cursor:not-allowed}
@@ -149,8 +147,8 @@ body.en .lang-es{display:none!important}
 body.es .lang-en{display:none!important}
 
 @media(min-height:720px){.court-grid{width:min(100%,calc(100dvh - 300px),340px);height:min(100%,calc(100dvh - 300px),340px)}.stat-value{font-size:1.1rem}.message-text{font-size:0.95rem}.selector-btn{min-height:38px}.selector-btn.level-btn{min-height:30px}.action-btn{min-height:50px;font-size:1.35rem}.grid-cell{font-size:1.7rem;border-radius:10px}}
-@media(max-height:620px){.stat-value{font-size:0.9rem}.message-display{padding:5px;min-height:30px}.message-text{font-size:0.8rem}.selector-btn{min-height:30px;font-size:0.75rem}.selector-btn.level-btn{min-height:24px;font-size:0.65rem}.court-grid{min-width:180px;min-height:180px;width:min(100%,calc(100dvh - 260px),280px);height:min(100%,calc(100dvh - 260px),280px);gap:3px;padding:6px}.grid-cell{min-width:28px;min-height:28px;font-size:1.3rem;border-radius:6px}.division-display{padding:4px 8px;min-height:30px}.action-btn{min-height:42px;font-size:1.1rem}.progression-star{font-size:1.1rem}.find-prompt{padding:6px}.find-prompt-animal{font-size:1.5rem;width:40px;height:40px}}
-@media(max-height:540px){.nav-row{height:44px}.stats-bar{padding:3px 5px;margin-bottom:3px}.stat-value{font-size:0.8rem}.stat-label{font-size:0.38rem}.message-display{padding:4px;margin-bottom:3px;min-height:26px}.message-text{font-size:0.7rem}.selectors-row{margin-bottom:3px}.selector-group{padding:3px}.selector-label{font-size:0.4rem;margin-bottom:2px}.selector-btn{min-height:26px;font-size:0.65rem}.selector-btn.level-btn{min-height:22px;font-size:0.55rem}.court-grid{min-width:150px;min-height:150px;gap:2px;padding:5px}.grid-cell{min-width:24px;min-height:24px;font-size:1.1rem;border-radius:5px}.division-display{padding:3px 6px;min-height:26px;margin:3px 0}.division-badge,.taps-counter{font-size:0.75rem}.score-display{font-size:0.9rem}.action-btn{min-height:38px;padding:8px;font-size:1rem}.progression-display{padding:4px}.progression-star{font-size:1rem}.find-prompt{padding:5px;margin-bottom:3px}.find-prompt-text{font-size:0.7rem}.find-prompt-animal{font-size:1.3rem;width:36px;height:36px}}
+@media(max-height:620px){.stat-value{font-size:0.9rem}.message-display{padding:5px;min-height:30px}.message-text{font-size:0.8rem}.selector-btn{min-height:30px;font-size:0.75rem}.selector-btn.level-btn{min-height:24px;font-size:0.65rem}.court-grid{min-width:180px;min-height:180px;width:min(100%,calc(100dvh - 260px),280px);height:min(100%,calc(100dvh - 260px),280px);gap:3px;padding:6px}.grid-cell{min-width:28px;min-height:28px;font-size:1.3rem;border-radius:6px}.division-display{padding:4px 8px;min-height:30px}.action-btn{min-height:42px;font-size:1.1rem}.progression-star{font-size:1.1rem}}
+@media(max-height:540px){.nav-row{height:44px}.stats-bar{padding:3px 5px;margin-bottom:3px}.stat-value{font-size:0.8rem}.stat-label{font-size:0.38rem}.message-display{padding:4px;margin-bottom:3px;min-height:26px}.message-text{font-size:0.7rem}.selectors-row{margin-bottom:3px}.selector-group{padding:3px}.selector-label{font-size:0.4rem;margin-bottom:2px}.selector-btn{min-height:26px;font-size:0.65rem}.selector-btn.level-btn{min-height:22px;font-size:0.55rem}.court-grid{min-width:150px;min-height:150px;gap:2px;padding:5px}.grid-cell{min-width:24px;min-height:24px;font-size:1.1rem;border-radius:5px}.division-display{padding:3px 6px;min-height:26px;margin:3px 0}.division-badge,.taps-counter{font-size:0.75rem}.score-display{font-size:0.9rem}.action-btn{min-height:38px;padding:8px;font-size:1rem}.progression-display{padding:4px}.progression-star{font-size:1rem}}
 </style>
 </head>
 <body class="en">
@@ -201,10 +199,7 @@ body.es .lang-en{display:none!important}
 <div class="progression-stars"><span class="progression-star" id="star1">⭐</span><span class="progression-star" id="star2">⭐</span></div>
 </div>
 <div class="court-wrapper"><div class="court-grid" id="courtGrid"></div></div>
-<div id="findPrompt" class="find-prompt" style="display:none">
-<span class="find-prompt-text"><span class="lang-en">FIND BOTH</span><span class="lang-es">ENCUENTRA</span></span>
-<span class="find-prompt-animal" id="findAnimal"></span>
-</div>
+
 <div class="division-display">
 <span class="division-badge" id="divisionBadge">L1 SLOW</span>
 <span class="taps-counter" id="tapsCounter">0/2</span>
@@ -357,6 +352,7 @@ body.es .lang-en{display:none!important}
 
     // ===== GAME CONFIG =====
     var TOTAL_CELLS = 25;
+    var CENTER_CELL = 12; // Center of 5x5 grid (row 3, col 3)
     function getPairCount(level) { return level + 1; } // L1=2 pairs, L10=11 pairs
     var SPEED_CONFIG = { slow: 3000, med: 2000, fast: 1200 };
     var LAUGH_EMOJIS = ['😂','😆','🤣','😄','😁','🥳','😊','🦁'];
@@ -386,8 +382,6 @@ body.es .lang-en{display:none!important}
     var actionBtn = document.getElementById('actionBtn');
     var coachMessage = document.getElementById('coachMessage');
     var emojiContainer = document.getElementById('emojiContainer');
-    var findPrompt = document.getElementById('findPrompt');
-    var findAnimal = document.getElementById('findAnimal');
 
     // ===== AUDIO =====
     var audioCtx = null;
@@ -525,10 +519,10 @@ body.es .lang-en{display:none!important}
         updateStats();
         updateTapsCounter();
         actionBtn.disabled = true;
-        findPrompt.style.display = 'none';
 
         state.cells.forEach(function(c) { 
             c.className = 'grid-cell'; 
+            c.style.pointerEvents = '';
             clearCell(c);
         });
 
@@ -549,9 +543,11 @@ body.es .lang-en{display:none!important}
         });
         shuffleArray(pairs);
         
-        // Pick random positions
+        // Pick random positions (exclude center cell - reserved for target)
         var availablePositions = [];
-        for (var i = 0; i < TOTAL_CELLS; i++) availablePositions.push(i);
+        for (var i = 0; i < TOTAL_CELLS; i++) {
+            if (i !== CENTER_CELL) availablePositions.push(i);
+        }
         shuffleArray(availablePositions);
         var usedPositions = availablePositions.slice(0, cellCount);
         
@@ -592,10 +588,11 @@ body.es .lang-en{display:none!important}
                     if (animal && animal.emoji === state.targetAnimal.emoji) state.targetPositions.push(idx);
                 });
 
-                // Show target in find prompt with color
-                findAnimal.textContent = state.targetAnimal.emoji;
-                findAnimal.style.backgroundColor = state.targetAnimal.color;
-                findPrompt.style.display = 'flex';
+                // Show target in CENTER CELL
+                var centerCell = state.cells[CENTER_CELL];
+                showAnimalInCell(centerCell, state.targetAnimal);
+                centerCell.classList.add('center-target');
+                centerCell.style.pointerEvents = 'none'; // Can't tap the target cell
                 
                 messageText.innerHTML = '<span class="lang-en">FIND BOTH!</span><span class="lang-es">¡ENCUENTRA LAS DOS!</span>';
                 messageText.className = 'message-text find';
