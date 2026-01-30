@@ -24,7 +24,6 @@
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background:var(--dark);color:var(--text);touch-action:manipulation;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
 
-/* ============ SIMPLIFIED NAV ============ */
 .mini-nav{position:fixed;top:0;left:0;right:0;background:var(--card);border-bottom:1px solid var(--border);padding-top:env(safe-area-inset-top);z-index:1000;transition:transform 0.3s ease}
 .nav-row{display:flex;align-items:center;justify-content:space-between;height:50px;padding:0 12px}
 .back-btn{display:flex;align-items:center;gap:6px;padding:8px 12px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:8px;font-family:'Outfit',sans-serif;font-size:0.75rem;font-weight:600;cursor:pointer;text-decoration:none;transition:all 0.2s}
@@ -50,16 +49,13 @@ html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background
 .settings-link.upgrade{background:linear-gradient(135deg,var(--gold),#FFA500);color:var(--dark);font-weight:600;margin-bottom:6px}
 .settings-link.logout{background:0;border:1px solid var(--border);color:var(--muted)}
 
-/* FOCUS MODE BUTTON */
 .focus-btn{position:fixed;top:calc(env(safe-area-inset-top, 0px) + 58px);right:12px;width:32px;height:32px;border-radius:6px;background:var(--card);border:1px solid var(--border);color:var(--muted);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:999;transition:all 0.2s}
 .focus-btn:active{transform:scale(0.95)}
 .focus-btn.active{background:rgba(0,217,165,0.3);border-color:var(--teal);color:var(--teal)}
 
-/* REFRESH BUTTON - Always visible for freeze recovery */
 .refresh-btn{position:fixed;top:calc(env(safe-area-inset-top, 0px) + 58px);right:50px;width:32px;height:32px;border-radius:6px;background:var(--card);border:1px solid var(--border);color:var(--muted);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:999;transition:all 0.2s}
 .refresh-btn:active{transform:scale(0.95);background:rgba(0,217,165,0.2);border-color:var(--teal);color:var(--teal)}
 
-/* FOCUS MODE STYLES */
 body.focus-mode .mini-nav{transform:translateY(-100%)}
 body.focus-mode .game-container{padding-top:calc(env(safe-area-inset-top) + 60px)}
 body.focus-mode .stats-bar{display:none}
@@ -160,13 +156,9 @@ body.es .lang-en{display:none!important}
 </head>
 <body class="en">
 
-<!-- REFRESH BUTTON - Tap to recover from freeze -->
 <button class="refresh-btn" id="refreshBtn" title="Reset Round">🔄</button>
-
-<!-- FOCUS BUTTON -->
 <button class="focus-btn" id="focusBtn" title="Focus Mode">⛶</button>
 
-<!-- SIMPLIFIED NAV - NO TABS -->
 <nav class="mini-nav">
 <div class="nav-row">
 <a href="/dashboard.html" class="back-btn">← <span class="lang-en">DASHBOARD</span><span class="lang-es">TABLERO</span></a>
@@ -346,20 +338,39 @@ body.es .lang-en{display:none!important}
         gameTimeouts = [];
     }
 
+    // ===== PER-SPEED STATE MANAGEMENT =====
+    function getSpeedKey(speed, key) {
+        return 'lc-seq-' + speed + '-' + key;
+    }
+    
+    function loadSpeedState(speed) {
+        return {
+            level: parseInt(localStorage.getItem(getSpeedKey(speed, 'level'))) || 1,
+            tier: parseInt(localStorage.getItem(getSpeedKey(speed, 'tier'))) || 1,
+            roundsCompleted: parseInt(localStorage.getItem(getSpeedKey(speed, 'rounds'))) || 0,
+            score: parseInt(localStorage.getItem(getSpeedKey(speed, 'score'))) || 0,
+            streak: parseInt(localStorage.getItem(getSpeedKey(speed, 'streak'))) || 0
+        };
+    }
+    
+    function saveSpeedState(speed, level, tier, roundsCompleted, score, streak) {
+        localStorage.setItem(getSpeedKey(speed, 'level'), level);
+        localStorage.setItem(getSpeedKey(speed, 'tier'), tier);
+        localStorage.setItem(getSpeedKey(speed, 'rounds'), roundsCompleted);
+        localStorage.setItem(getSpeedKey(speed, 'score'), score);
+        localStorage.setItem(getSpeedKey(speed, 'streak'), streak);
+    }
+
     // ===== REFRESH/RECOVERY BUTTON =====
     var refreshBtn = document.getElementById('refreshBtn');
     refreshBtn.onclick = function() {
-        // Instant recovery - clears freeze, preserves all progress
         clearAllGameTimeouts();
-        
-        // Reset only the round state, keep progress
         state.isPlaying = false;
         state.canTap = false;
         state.roundEnded = false;
         state.playerIndex = 0;
         state.sequence = [];
         
-        // Clear visual state of cells
         if (state.cells && state.cells.length) {
             state.cells.forEach(function(c) { 
                 c.classList.remove('lit', 'correct', 'wrong', 'player-tap', 'show-num');
@@ -368,33 +379,29 @@ body.es .lang-en{display:none!important}
             });
         }
         
-        // Close any overlays
         document.getElementById('tierupOverlay').classList.remove('show');
         document.getElementById('upgradeOverlay').classList.remove('show');
-        
-        // Re-enable GO button
         actionBtn.disabled = false;
         
-        // Show ready message
         messageText.innerHTML = '<span class="lang-en">' + (state.roundsCompleted + 1) + '/' + ROUNDS_PER_TIER + ' - TAP GO!</span><span class="lang-es">' + (state.roundsCompleted + 1) + '/' + ROUNDS_PER_TIER + ' - ¡TOCA IR!</span>';
         messageText.className = 'message-text';
         
-        // Update displays
         updateStats();
         updateDivisionDisplay();
-        
-        // Quick feedback
         showCoach('🔄 Ready!');
     };
 
-    // ===== STATE =====
+    // ===== STATE (per-speed tracking) =====
+    var currentSpeed = localStorage.getItem('lc-seq-speed') || 'slow';
+    var speedData = loadSpeedState(currentSpeed);
+    
     var state = {
-        speed: localStorage.getItem('lc-seq-speed') || 'slow',
-        level: 1, // Will be set below based on speed
-        tier: 1, // Will be set below based on speed
-        score: parseInt(localStorage.getItem('lc-seq-score')) || 0,
-        streak: parseInt(localStorage.getItem('lc-seq-streak')) || 0,
-        roundsCompleted: 0, // Will be set below based on speed
+        speed: currentSpeed,
+        level: speedData.level,
+        tier: speedData.tier,
+        roundsCompleted: speedData.roundsCompleted,
+        score: speedData.score,
+        streak: speedData.streak,
         sequence: [],
         playerIndex: 0,
         isPlaying: false,
@@ -403,10 +410,6 @@ body.es .lang-en{display:none!important}
         cells: [],
         currentColor: FLASH_COLORS[0]
     };
-    // Load level, tier, rounds PER SPEED
-    state.level = parseInt(localStorage.getItem('lc-seq-level-' + state.speed)) || parseInt(localStorage.getItem('lc-seq-level')) || 1;
-    state.tier = parseInt(localStorage.getItem('lc-seq-tier-' + state.speed)) || parseInt(localStorage.getItem('lc-seq-tier')) || 1;
-    state.roundsCompleted = parseInt(localStorage.getItem('lc-seq-rounds-' + state.speed)) || 0;
     if (state.level > 10) state.level = 10;
     if (state.level < 1) state.level = 1;
 
@@ -535,7 +538,7 @@ body.es .lang-en{display:none!important}
         var cfg = SPEED_CFG[state.speed] || SPEED_CFG.slow;
         var i = 0;
         function next() {
-            if (!state.isPlaying) return; // Guard against stale sequence
+            if (!state.isPlaying) return;
             if (i > 0) {
                 state.cells[state.sequence[i - 1]].classList.remove('lit');
             }
@@ -556,9 +559,7 @@ body.es .lang-en{display:none!important}
     function startRound() {
         if (state.isPlaying) return;
         
-        // Clear any pending timeouts
         clearAllGameTimeouts();
-        
         state.currentColor = getNextColor();
         setFlashColor(state.currentColor);
         state.isPlaying = true;
@@ -575,9 +576,9 @@ body.es .lang-en{display:none!important}
         messageText.innerHTML = '<span class="lang-en">WATCH...</span><span class="lang-es">MIRA...</span>';
         messageText.className = 'message-text watch';
         setGameTimeout(function() {
-            if (!state.isPlaying) return; // Guard
+            if (!state.isPlaying) return;
             playSequence(function() {
-                if (!state.isPlaying) return; // Guard
+                if (!state.isPlaying) return;
                 messageText.innerHTML = '<span class="lang-en">YOUR TURN!</span><span class="lang-es">¡TU TURNO!</span>';
                 messageText.className = 'message-text go';
                 state.canTap = true;
@@ -617,7 +618,6 @@ body.es .lang-en{display:none!important}
     }
 
     function roundComplete(success) {
-        // Guard against double completion
         if (!state.isPlaying && !state.roundEnded) return;
         
         state.isPlaying = false;
@@ -628,9 +628,8 @@ body.es .lang-en{display:none!important}
             state.score += pts;
             state.streak++;
             state.roundsCompleted++;
-            localStorage.setItem('lc-seq-score', state.score);
-            localStorage.setItem('lc-seq-streak', state.streak);
-            localStorage.setItem('lc-seq-rounds-' + state.speed, state.roundsCompleted);
+            saveSpeedState(state.speed, state.level, state.tier, state.roundsCompleted, state.score, state.streak);
+            
             var intensity = state.streak >= 5 ? 'party' : state.streak >= 3 ? 'big' : 'medium';
             var msgs = state.streak >= 5 ? ['🔢 LEGEND!', '🏆 WOW!'] : state.streak >= 3 ? ['😂 FIRE!', '🤣 AMAZING!'] : ['😄 NICE!', '😊 GREAT!'];
             playSuccess();
@@ -644,7 +643,7 @@ body.es .lang-en{display:none!important}
             }
         } else {
             state.streak = 0;
-            localStorage.setItem('lc-seq-streak', 0);
+            saveSpeedState(state.speed, state.level, state.tier, state.roundsCompleted, state.score, state.streak);
             updateStats();
             messageText.innerHTML = '<span class="lang-en">WRONG!</span><span class="lang-es">¡ERROR!</span>';
             messageText.className = 'message-text error';
@@ -655,23 +654,18 @@ body.es .lang-en{display:none!important}
     function tierUp() {
         state.tier++;
         state.roundsCompleted = 0;
-        localStorage.setItem('lc-seq-tier-' + state.speed, state.tier);
-        localStorage.setItem('lc-seq-rounds-' + state.speed, 0);
         
-        // Auto-advance to next level if not at max
         var oldLevel = state.level;
         if (state.level < 10) {
             state.level++;
-            localStorage.setItem('lc-seq-level-' + state.speed, state.level);
-            // Update level selector UI
-            document.querySelectorAll('[data-level]').forEach(function(b) { b.classList.remove('active'); });
+            document.querySelectorAll('.level-btn').forEach(function(b) { b.classList.remove('active'); });
             var newLevelBtn = document.querySelector('[data-level="' + state.level + '"]');
             if (newLevelBtn) newLevelBtn.classList.add('active');
         }
         
+        saveSpeedState(state.speed, state.level, state.tier, state.roundsCompleted, state.score, state.streak);
         laughCelebration('party');
         
-        // Show message with level advance info
         var msgEn = 'You earned GoStar ' + state.tier + '!';
         var msgEs = '¡Ganaste GoStar ' + state.tier + '!';
         if (state.level > oldLevel) {
@@ -686,16 +680,15 @@ body.es .lang-en{display:none!important}
 
     function maxTier() {
         state.roundsCompleted = 0;
-        localStorage.setItem('lc-seq-rounds-' + state.speed, 0);
         
-        // Ensure at max level too
         if (state.level < 10) {
             state.level = 10;
-            localStorage.setItem('lc-seq-level-' + state.speed, state.level);
-            document.querySelectorAll('[data-level]').forEach(function(b) { b.classList.remove('active'); });
+            document.querySelectorAll('.level-btn').forEach(function(b) { b.classList.remove('active'); });
             var maxLevelBtn = document.querySelector('[data-level="10"]');
             if (maxLevelBtn) maxLevelBtn.classList.add('active');
         }
+        
+        saveSpeedState(state.speed, state.level, state.tier, state.roundsCompleted, state.score, state.streak);
         
         var msgEn = '🏆 10 GOSTARS - MASTER! 🏆';
         var msgEs = '🏆 10 GOSTARS - ¡MAESTRO! 🏆';
@@ -714,23 +707,18 @@ body.es .lang-en{display:none!important}
     };
 
     function resetRound() {
-        // Clear any pending timeouts
         clearAllGameTimeouts();
-        
-        // Reset all game state
         state.isPlaying = false;
         state.canTap = false;
         state.roundEnded = false;
         state.playerIndex = 0;
         state.sequence = [];
         
-        // Clear all cells
         state.cells.forEach(function(c) { 
             c.classList.remove('lit', 'correct', 'wrong', 'player-tap', 'show-num');
             c.querySelector('.cell-num').textContent = '';
         });
         
-        // Update UI
         messageText.innerHTML = '<span class="lang-en">' + (state.roundsCompleted + 1) + '/' + ROUNDS_PER_TIER + ' - TAP GO!</span><span class="lang-es">' + (state.roundsCompleted + 1) + '/' + ROUNDS_PER_TIER + ' - ¡TOCA IR!</span>';
         messageText.className = 'message-text';
         actionBtn.disabled = false;
@@ -738,11 +726,11 @@ body.es .lang-en{display:none!important}
     }
 
     // ===== SELECTORS =====
-    document.querySelectorAll('[data-level]').forEach(function(btn) {
+    document.querySelectorAll('.level-btn').forEach(function(btn) {
         btn.onclick = function() {
             if (state.isPlaying) return;
             clearAllGameTimeouts();
-            document.querySelectorAll('[data-level]').forEach(function(b) { b.classList.remove('active'); });
+            document.querySelectorAll('.level-btn').forEach(function(b) { b.classList.remove('active'); });
             btn.classList.add('active');
             state.level = parseInt(btn.dataset.level);
             if (state.level > 10) state.level = 10;
@@ -752,10 +740,7 @@ body.es .lang-en{display:none!important}
             state.isPlaying = false;
             state.canTap = false;
             state.roundEnded = false;
-            // Save per-speed
-            localStorage.setItem('lc-seq-level-' + state.speed, state.level);
-            localStorage.setItem('lc-seq-tier-' + state.speed, 1);
-            localStorage.setItem('lc-seq-rounds-' + state.speed, 0);
+            saveSpeedState(state.speed, state.level, state.tier, state.roundsCompleted, state.score, state.streak);
             updateDivisionDisplay();
             updateStats();
             resetRound();
@@ -772,15 +757,19 @@ body.es .lang-en{display:none!important}
             state.speed = btn.dataset.speed;
             localStorage.setItem('lc-seq-speed', state.speed);
             
-            // Load level/tier/rounds for THIS speed
-            state.level = parseInt(localStorage.getItem('lc-seq-level-' + state.speed)) || 1;
-            state.tier = parseInt(localStorage.getItem('lc-seq-tier-' + state.speed)) || 1;
-            state.roundsCompleted = parseInt(localStorage.getItem('lc-seq-rounds-' + state.speed)) || 0;
+            // Load this speed's full progress
+            var speedData = loadSpeedState(state.speed);
+            state.level = speedData.level;
+            state.tier = speedData.tier;
+            state.roundsCompleted = speedData.roundsCompleted;
+            state.score = speedData.score;
+            state.streak = speedData.streak;
+            
             if (state.level > 10) state.level = 10;
             if (state.level < 1) state.level = 1;
             
             // Update level selector UI
-            document.querySelectorAll('[data-level]').forEach(function(b) { b.classList.remove('active'); });
+            document.querySelectorAll('.level-btn').forEach(function(b) { b.classList.remove('active'); });
             var lb = document.querySelector('[data-level="' + state.level + '"]');
             if (lb) lb.classList.add('active');
             
@@ -795,37 +784,40 @@ body.es .lang-en{display:none!important}
 
     actionBtn.onclick = startRound;
 
-    // ===== LOAD SAVED STATE =====
-    function loadState() {
-        var ss = localStorage.getItem('lc-seq-speed');
-        if (ss && (speedAccess.allSpeeds || ss === 'slow')) {
-            state.speed = ss;
-            document.querySelectorAll('.speed-btn').forEach(function(b) { b.classList.remove('active'); });
-            var sb = document.querySelector('.speed-btn[data-speed="' + state.speed + '"]');
-            if (sb) sb.classList.add('active');
-        }
-        
-        // Load level/tier/rounds for current speed
-        state.level = parseInt(localStorage.getItem('lc-seq-level-' + state.speed)) || parseInt(localStorage.getItem('lc-seq-level')) || 1;
-        state.tier = parseInt(localStorage.getItem('lc-seq-tier-' + state.speed)) || parseInt(localStorage.getItem('lc-seq-tier')) || 1;
-        state.roundsCompleted = parseInt(localStorage.getItem('lc-seq-rounds-' + state.speed)) || 0;
-        if (state.level > 10) state.level = 10;
-        if (state.level < 1) state.level = 1;
-        
-        // Update level selector UI
-        document.querySelectorAll('[data-level]').forEach(function(b) { b.classList.remove('active'); });
-        var lb = document.querySelector('[data-level="' + state.level + '"]');
-        if (lb) lb.classList.add('active');
-    }
-
     // ===== INIT =====
     initCourt();
     initSpeedButtons();
-    loadState();
     setLang(currentLang);
     updateDivisionDisplay();
     updateStats();
     renderTierDots();
+    
+    // Set initial level button
+    document.querySelectorAll('.level-btn').forEach(function(b) {
+        b.classList.toggle('active', parseInt(b.dataset.level) === state.level);
+    });
+    
+    // Set initial speed button
+    document.querySelectorAll('.speed-btn').forEach(function(b) {
+        if (!b.classList.contains('locked')) {
+            b.classList.toggle('active', b.dataset.speed === state.speed);
+        }
+    });
+
+    // Check speed access on load
+    if (isProduction) {
+        var pin = sessionStorage.getItem('lc-pin');
+        if (pin) {
+            fetch('/api/user/speed-access/' + pin)
+            .then(function(r) { return r.json(); })
+            .then(function(d) {
+                speedAccess = d;
+                localStorage.setItem('lc-speed-access', JSON.stringify(d));
+                initSpeedButtons();
+            })
+            .catch(function() {});
+        }
+    }
 })();
 </script>
 </body>
