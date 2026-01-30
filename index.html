@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>LaughCourt | Memory Workouts with Your GoStar Trophy Case</title>
 <meta name="description" content="Memory workouts that sharpen your mind and fill your GoStar Trophy Case. THE MATCH and THE SEQUENCE. 7-day free trial. $5/month.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,13 +22,23 @@
     --nav-height: 50px;
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    width: 100%;
+    overflow-x: hidden;
+}
 
 body {
     font-family: 'Outfit', sans-serif;
     background: var(--dark);
     color: var(--text);
     min-height: 100vh;
+    width: 100%;
     overflow-x: hidden;
 }
 
@@ -38,7 +48,10 @@ body.es .lang-en { display: none !important; }
 /* ============ MINI NAV ============ */
 .mini-nav {
     position: fixed;
-    top: 0; left: 0; right: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
     background: var(--card);
     border-bottom: 1px solid var(--border);
     z-index: 1000;
@@ -46,66 +59,74 @@ body.es .lang-en { display: none !important; }
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 20px;
+    padding: 0 12px;
 }
 
 .nav-logo {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.2rem;
-    letter-spacing: 2px;
+    font-size: 1rem;
+    letter-spacing: 1px;
     text-decoration: none;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 4px;
+    flex-shrink: 0;
 }
-.nav-logo .ball { font-size: 1rem; }
+.nav-logo .ball { font-size: 0.85rem; }
 .nav-logo .laugh { color: var(--gold); }
 .nav-logo .court { color: var(--text); }
 
-.nav-right { display: flex; align-items: center; gap: 15px; }
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
 
-.nav-lang { display: flex; gap: 4px; }
+.nav-lang {
+    display: flex;
+    gap: 2px;
+}
 .nav-lang-btn {
-    padding: 5px 10px;
+    padding: 4px 6px;
     border: 1px solid var(--border);
     background: transparent;
     color: var(--muted);
     border-radius: 4px;
-    font-size: 0.65rem;
+    font-size: 0.55rem;
     font-weight: 600;
     cursor: pointer;
-    min-width: 32px;
-    min-height: 28px;
+    min-width: 24px;
+    min-height: 24px;
 }
-.nav-lang-btn.active { border-color: var(--gold); color: var(--gold); }
+.nav-lang-btn.active {
+    border-color: var(--gold);
+    color: var(--gold);
+}
 
 .nav-login {
-    padding: 6px 16px;
+    padding: 4px 10px;
     background: transparent;
     border: 1px solid var(--gold);
     color: var(--gold);
-    border-radius: 20px;
-    font-size: 0.7rem;
+    border-radius: 15px;
+    font-size: 0.6rem;
     font-weight: 600;
     text-decoration: none;
-    letter-spacing: 1px;
-    transition: all 0.3s;
-}
-.nav-login:hover {
-    background: var(--gold);
-    color: var(--dark);
+    letter-spacing: 0.5px;
 }
 
 /* ============ HERO ============ */
 .hero {
     min-height: 100vh;
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 40px 20px;
-    padding-top: calc(var(--nav-height) + 40px);
+    padding: 20px 16px;
+    padding-top: calc(var(--nav-height) + 20px);
     position: relative;
     overflow: hidden;
 }
@@ -131,34 +152,33 @@ body.es .lang-en { display: none !important; }
 .hero-content {
     position: relative;
     z-index: 1;
-    max-width: 700px;
+    width: 100%;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .hero-badge {
     display: inline-block;
     background: rgba(255,215,0,0.2);
     color: var(--gold);
-    padding: 8px 20px;
-    border-radius: 30px;
-    font-size: 0.75rem;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.55rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 25px;
-    animation: fadeInDown 0.8s ease-out;
-}
-
-@keyframes fadeInDown {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
+    letter-spacing: 0.5px;
+    margin-bottom: 16px;
+    text-align: center;
 }
 
 .hero-logo {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 5rem;
-    letter-spacing: 10px;
-    margin-bottom: 10px;
-    animation: fadeIn 1s ease-out 0.2s both;
+    font-size: 2.8rem;
+    letter-spacing: 4px;
+    margin-bottom: 6px;
+    text-align: center;
 }
 
 .hero-logo .laugh { color: var(--gold); }
@@ -166,76 +186,63 @@ body.es .lang-en { display: none !important; }
 
 .hero-tagline {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.8rem;
-    letter-spacing: 8px;
+    font-size: 0.85rem;
+    letter-spacing: 3px;
     color: var(--gold);
-    margin-bottom: 30px;
-    animation: fadeIn 1s ease-out 0.4s both;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    margin-bottom: 20px;
+    text-align: center;
 }
 
 .hero-headline {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 2.5rem;
-    letter-spacing: 3px;
-    line-height: 1.2;
-    margin-bottom: 20px;
-    animation: fadeIn 1s ease-out 0.6s both;
+    font-size: 1.6rem;
+    letter-spacing: 1px;
+    line-height: 1.15;
+    margin-bottom: 16px;
+    text-align: center;
+    width: 100%;
 }
 
-.hero-headline .highlight-orange { color: var(--orange); }
-.hero-headline .highlight-teal { color: var(--teal); }
 .hero-headline .highlight-gold { color: var(--gold); }
 
 .hero-sub {
-    font-size: 1.15rem;
+    font-size: 0.9rem;
     color: var(--muted);
-    line-height: 1.7;
-    margin-bottom: 40px;
-    animation: fadeIn 1s ease-out 0.8s both;
+    line-height: 1.5;
+    margin-bottom: 24px;
+    text-align: center;
+    width: 100%;
+    padding: 0 8px;
 }
 
 .hero-cta {
+    width: 100%;
     display: flex;
     justify-content: center;
-    gap: 15px;
-    flex-wrap: wrap;
-    animation: fadeIn 1s ease-out 1s both;
 }
 
 .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 18px 40px;
-    border-radius: 50px;
+    display: inline-block;
+    padding: 14px 24px;
+    border-radius: 30px;
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.2rem;
-    letter-spacing: 3px;
+    font-size: 0.95rem;
+    letter-spacing: 1.5px;
     text-decoration: none;
-    transition: all 0.3s;
+    text-align: center;
 }
 
 .btn-primary {
     background: linear-gradient(135deg, var(--gold), var(--orange));
     color: var(--dark);
-    box-shadow: 0 10px 40px rgba(255,107,0,0.3);
-}
-
-.btn-primary:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 15px 50px rgba(255,107,0,0.4);
+    box-shadow: 0 8px 30px rgba(255,107,0,0.3);
 }
 
 .hero-login {
-    margin-top: 20px;
-    font-size: 0.9rem;
+    margin-top: 16px;
+    font-size: 0.8rem;
     color: var(--muted);
-    animation: fadeIn 1s ease-out 1.2s both;
+    text-align: center;
 }
 
 .hero-login a {
@@ -243,22 +250,18 @@ body.es .lang-en { display: none !important; }
     text-decoration: none;
 }
 
-.hero-login a:hover {
-    text-decoration: underline;
-}
-
 .scroll-hint {
     position: absolute;
-    bottom: 30px;
+    bottom: 16px;
     left: 50%;
     transform: translateX(-50%);
     color: var(--muted);
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
-    animation: fadeIn 1s ease-out 1.5s both;
+    gap: 4px;
+    text-align: center;
 }
 
 .scroll-hint span:last-child {
@@ -267,222 +270,200 @@ body.es .lang-en { display: none !important; }
 
 @keyframes bounce {
     0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(8px); }
+    50% { transform: translateY(6px); }
 }
 
-/* ============ SECTION STYLES ============ */
+/* ============ SECTION BASE ============ */
 .section {
-    padding: 80px 20px;
-    max-width: 900px;
-    margin: 0 auto;
+    width: 100%;
+    padding: 50px 16px;
+    text-align: center;
 }
 
 .section.alt-bg {
     background: var(--darker);
-    max-width: 100%;
-}
-
-.section.alt-bg .section-inner {
-    max-width: 900px;
-    margin: 0 auto;
-}
-
-.section-header {
-    text-align: center;
-    margin-bottom: 50px;
 }
 
 .section-badge {
     display: inline-block;
     background: rgba(255,215,0,0.15);
     color: var(--gold);
-    padding: 8px 20px;
-    border-radius: 30px;
-    font-size: 0.75rem;
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 0.6rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 20px;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
 }
 
 .section-title {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 2.8rem;
-    letter-spacing: 4px;
-    margin-bottom: 15px;
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    text-align: center;
 }
 
 .section-sub {
     color: var(--muted);
-    font-size: 1.1rem;
-    max-width: 600px;
-    margin: 0 auto;
-    line-height: 1.6;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    text-align: center;
+    margin-bottom: 30px;
 }
 
-/* ============ TROPHY CASE FEATURE ============ */
+/* ============ TROPHY CASE ============ */
 .trophy-section {
+    width: 100%;
     background: linear-gradient(180deg, var(--darker) 0%, var(--dark) 100%);
-    padding: 80px 20px;
-}
-
-.trophy-inner {
-    max-width: 900px;
-    margin: 0 auto;
-}
-
-.trophy-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
-    align-items: center;
-}
-
-@media (max-width: 700px) {
-    .trophy-grid { grid-template-columns: 1fr; }
-}
-
-.trophy-content {
-    text-align: left;
+    padding: 50px 16px;
+    text-align: center;
 }
 
 .trophy-badge {
     display: inline-block;
     background: rgba(255,215,0,0.2);
     color: var(--gold);
-    padding: 8px 20px;
-    border-radius: 30px;
-    font-size: 0.75rem;
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 0.6rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 20px;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
 }
 
 .trophy-title {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 2.5rem;
-    letter-spacing: 3px;
-    margin-bottom: 15px;
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
     line-height: 1.1;
+    text-align: center;
 }
 
 .trophy-title .gold { color: var(--gold); }
 
 .trophy-desc {
     color: var(--muted);
-    font-size: 1rem;
-    line-height: 1.7;
-    margin-bottom: 25px;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    text-align: center;
 }
 
 .trophy-features {
     list-style: none;
+    margin-bottom: 24px;
+    text-align: center;
 }
 
 .trophy-features li {
-    padding: 10px 0;
+    padding: 6px 0;
     color: var(--text);
-    font-size: 0.95rem;
+    font-size: 0.85rem;
     display: flex;
     align-items: center;
-    gap: 12px;
+    justify-content: center;
+    gap: 8px;
 }
 
 .trophy-features .star {
     color: var(--gold);
-    font-size: 1.2rem;
+    font-size: 0.9rem;
 }
 
 .trophy-preview {
     background: var(--card);
-    border: 2px solid var(--border);
-    border-radius: 20px;
-    padding: 25px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 12px;
     text-align: center;
+    width: 100%;
+    max-width: 280px;
+    margin: 0 auto;
 }
 
 .trophy-preview-title {
-    font-size: 0.7rem;
+    font-size: 0.55rem;
     color: var(--muted);
     text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 15px;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
 }
 
 .trophy-preview-game {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.2rem;
-    letter-spacing: 2px;
+    font-size: 1rem;
+    letter-spacing: 1px;
     color: var(--orange);
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 }
 
 .trophy-preview-stars {
-    font-size: 1.8rem;
-    letter-spacing: 4px;
-    margin-bottom: 10px;
+    font-size: 1.3rem;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
 }
 
 .trophy-preview-label {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1rem;
+    font-size: 0.85rem;
     color: var(--gold);
-    letter-spacing: 1px;
-    margin-bottom: 20px;
+    margin-bottom: 12px;
 }
 
 .trophy-preview-speeds {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 10px;
+    display: flex;
+    justify-content: space-around;
     border-top: 1px solid var(--border);
-    padding-top: 15px;
+    padding-top: 10px;
 }
 
 .trophy-speed {
     text-align: center;
+    flex: 1;
 }
 
 .trophy-speed-name {
-    font-size: 0.6rem;
+    font-size: 0.5rem;
     color: var(--muted);
     text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 5px;
+    letter-spacing: 0.5px;
+    margin-bottom: 3px;
 }
 
 .trophy-speed-level {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     color: var(--orange);
 }
 
 .trophy-speed-cells {
-    font-size: 0.6rem;
+    font-size: 0.5rem;
     color: var(--muted);
 }
 
-/* ============ WORKOUTS GRID - 2 GAMES ============ */
-.workouts-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 25px;
-}
-
-@media (max-width: 650px) {
-    .workouts-grid { grid-template-columns: 1fr; }
+/* ============ WORKOUTS ============ */
+.workouts-wrapper {
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
 }
 
 .workout-card {
     background: var(--card);
-    border-radius: 20px;
-    padding: 40px 30px;
+    border-radius: 14px;
+    padding: 24px 16px;
     text-align: center;
     position: relative;
     overflow: hidden;
-    transition: all 0.4s ease;
-    border: 2px solid transparent;
+    margin-bottom: 16px;
+}
+
+.workout-card:last-child {
+    margin-bottom: 0;
 }
 
 .workout-card::before {
@@ -491,308 +472,276 @@ body.es .lang-en { display: none !important; }
     top: 0;
     left: 0;
     right: 0;
-    height: 4px;
+    height: 3px;
 }
 
 .workout-card.match::before { background: linear-gradient(90deg, var(--gold), var(--orange)); }
 .workout-card.sequence::before { background: linear-gradient(90deg, var(--teal), var(--cyan)); }
 
-.workout-card:hover { transform: translateY(-8px); }
-.workout-card.match:hover { border-color: var(--orange); box-shadow: 0 20px 50px rgba(255,107,53,0.25); }
-.workout-card.sequence:hover { border-color: var(--teal); box-shadow: 0 20px 50px rgba(0,217,165,0.25); }
-
-.workout-icon { font-size: 3.5rem; margin-bottom: 15px; }
+.workout-icon { font-size: 2.2rem; margin-bottom: 10px; }
 
 .workout-name {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 2rem;
-    letter-spacing: 3px;
-    margin-bottom: 8px;
+    font-size: 1.6rem;
+    letter-spacing: 2px;
+    margin-bottom: 4px;
 }
 
 .workout-card.match .workout-name { color: var(--orange); }
 .workout-card.sequence .workout-name { color: var(--teal); }
 
 .workout-type {
-    font-size: 0.75rem;
+    font-size: 0.65rem;
     text-transform: uppercase;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
     color: var(--muted);
-    margin-bottom: 18px;
+    margin-bottom: 12px;
 }
 
 .workout-desc {
     color: var(--muted);
-    font-size: 0.95rem;
-    line-height: 1.6;
-    margin-bottom: 20px;
+    font-size: 0.8rem;
+    line-height: 1.45;
+    margin-bottom: 14px;
 }
 
 .workout-badge {
     display: inline-block;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-size: 0.7rem;
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 0.6rem;
     font-weight: 700;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
 }
 
 .workout-card.match .workout-badge { background: rgba(255,107,53,0.2); color: var(--orange); }
 .workout-card.sequence .workout-badge { background: rgba(0,217,165,0.2); color: var(--teal); }
 
 /* ============ HOW IT WORKS ============ */
-.how-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 25px;
-    margin-top: 40px;
-}
-
-@media (max-width: 700px) {
-    .how-grid { grid-template-columns: 1fr; gap: 20px; }
+.how-wrapper {
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
 }
 
 .how-step {
     text-align: center;
-    padding: 30px 20px;
+    padding: 20px 16px;
     background: var(--card);
-    border-radius: 16px;
+    border-radius: 12px;
     border: 1px solid var(--border);
-    transition: all 0.3s;
+    margin-bottom: 12px;
 }
 
-.how-step:hover {
-    border-color: var(--gold);
-    transform: translateY(-5px);
+.how-step:last-child {
+    margin-bottom: 0;
 }
 
 .how-number {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     background: linear-gradient(135deg, var(--gold), var(--orange));
     color: var(--dark);
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 15px;
+    margin: 0 auto 10px;
 }
 
 .how-title {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.3rem;
-    letter-spacing: 2px;
-    margin-bottom: 10px;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
     color: var(--gold);
 }
 
 .how-text {
     color: var(--muted);
-    font-size: 0.9rem;
-    line-height: 1.5;
+    font-size: 0.8rem;
+    line-height: 1.4;
 }
 
 /* ============ VALUE PROPS ============ */
-.props-grid {
+.props-wrapper {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
-}
-
-@media (max-width: 800px) {
-    .props-grid { grid-template-columns: repeat(2, 1fr); }
-}
-
-@media (max-width: 500px) {
-    .props-grid { grid-template-columns: 1fr; }
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
 }
 
 .prop {
     text-align: center;
-    padding: 25px 15px;
+    padding: 16px 10px;
     background: var(--card);
-    border-radius: 16px;
+    border-radius: 12px;
     border: 1px solid var(--border);
-    transition: all 0.3s;
 }
 
-.prop:hover {
-    border-color: var(--gold);
-    transform: translateY(-5px);
-}
-
-.prop-icon { font-size: 2rem; margin-bottom: 12px; }
+.prop-icon { font-size: 1.6rem; margin-bottom: 8px; }
 
 .prop-title {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1rem;
-    letter-spacing: 2px;
-    margin-bottom: 8px;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
     color: var(--gold);
 }
 
 .prop-text {
     color: var(--muted);
-    font-size: 0.8rem;
-    line-height: 1.5;
+    font-size: 0.65rem;
+    line-height: 1.35;
 }
 
 /* ============ WHO ITS FOR ============ */
-.audience-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 25px;
-}
-
-@media (max-width: 700px) {
-    .audience-grid { grid-template-columns: 1fr; }
+.audience-wrapper {
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
 }
 
 .audience-card {
     background: var(--card);
-    border-radius: 16px;
-    padding: 30px 20px;
+    border-radius: 12px;
+    padding: 20px 16px;
     text-align: center;
     border: 1px solid var(--border);
-    transition: all 0.3s;
+    margin-bottom: 12px;
 }
 
-.audience-card:hover {
-    border-color: var(--teal);
-    transform: translateY(-5px);
+.audience-card:last-child {
+    margin-bottom: 0;
 }
 
-.audience-icon { font-size: 2.5rem; margin-bottom: 15px; }
+.audience-icon { font-size: 1.8rem; margin-bottom: 10px; }
 
 .audience-title {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.3rem;
-    letter-spacing: 2px;
-    margin-bottom: 10px;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
     color: var(--teal);
 }
 
 .audience-text {
     color: var(--muted);
-    font-size: 0.9rem;
-    line-height: 1.5;
+    font-size: 0.8rem;
+    line-height: 1.4;
 }
 
 /* ============ PRICING ============ */
 .pricing-card {
     background: var(--card);
     border: 2px solid var(--gold);
-    border-radius: 24px;
-    padding: 40px;
-    max-width: 420px;
-    margin: 0 auto 30px;
-    box-shadow: 0 10px 40px rgba(255,215,0,0.1);
+    border-radius: 16px;
+    padding: 24px 16px;
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto 20px;
     text-align: center;
 }
 
 .pricing-trial {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.5rem;
-    letter-spacing: 3px;
+    font-size: 1.2rem;
+    letter-spacing: 1px;
     color: var(--teal);
-    margin-bottom: 10px;
+    margin-bottom: 6px;
 }
 
 .pricing-then {
     color: var(--muted);
-    font-size: 0.9rem;
-    margin-bottom: 10px;
+    font-size: 0.8rem;
+    margin-bottom: 6px;
 }
 
 .pricing-amount {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 4rem;
-    letter-spacing: 2px;
+    font-size: 3rem;
     color: var(--gold);
     line-height: 1;
 }
 
 .pricing-period {
-    font-size: 1.2rem;
+    font-size: 0.9rem;
     color: var(--muted);
-    margin-bottom: 25px;
+    margin-bottom: 16px;
 }
 
 .pricing-features {
     list-style: none;
     text-align: left;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 .pricing-features li {
-    padding: 10px 0;
+    padding: 7px 0;
     border-bottom: 1px solid var(--border);
     color: var(--text);
-    font-size: 0.95rem;
+    font-size: 0.8rem;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
 }
 
 .pricing-features li:last-child { border-bottom: none; }
 
 .pricing-features .check {
     color: var(--teal);
-    font-size: 1.1rem;
+    font-size: 0.9rem;
 }
 
 .pricing-cta {
-    display: inline-block;
+    display: block;
     width: 100%;
-    padding: 18px 40px;
+    padding: 14px 16px;
     background: linear-gradient(135deg, var(--gold), var(--orange));
     color: var(--dark);
-    border-radius: 50px;
+    border-radius: 30px;
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.2rem;
-    letter-spacing: 3px;
+    font-size: 1rem;
+    letter-spacing: 1.5px;
     text-decoration: none;
-    transition: all 0.3s;
-    box-shadow: 0 10px 40px rgba(255,107,0,0.3);
+    text-align: center;
 }
 
-.pricing-cta:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 15px 50px rgba(255,107,0,0.4);
-}
-
-/* Facilities Callout */
 .facilities-callout {
     background: rgba(0,217,165,0.1);
     border: 1px solid var(--teal);
-    border-radius: 16px;
-    padding: 25px 30px;
-    max-width: 500px;
+    border-radius: 12px;
+    padding: 16px 14px;
+    width: 100%;
+    max-width: 300px;
     margin: 0 auto;
     text-align: center;
 }
 
 .facilities-title {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.2rem;
-    letter-spacing: 2px;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
     color: var(--teal);
-    margin-bottom: 10px;
+    margin-bottom: 6px;
 }
 
 .facilities-text {
     color: var(--muted);
-    font-size: 0.85rem;
-    line-height: 1.5;
+    font-size: 0.75rem;
+    line-height: 1.4;
 }
 
 .facilities-text strong { color: var(--text); }
 
 /* ============ FINAL CTA ============ */
 .final-cta {
-    padding: 100px 20px;
+    width: 100%;
+    padding: 50px 16px;
     text-align: center;
     position: relative;
     overflow: hidden;
@@ -804,8 +753,8 @@ body.es .lang-en { display: none !important; }
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 600px;
-    height: 600px;
+    width: 300px;
+    height: 300px;
     background: radial-gradient(circle, rgba(255,215,0,0.1) 0%, transparent 60%);
     pointer-events: none;
 }
@@ -813,59 +762,56 @@ body.es .lang-en { display: none !important; }
 .final-cta-content {
     position: relative;
     z-index: 1;
-    max-width: 600px;
-    margin: 0 auto;
+    width: 100%;
 }
 
 .final-icon {
-    font-size: 4rem;
-    margin-bottom: 20px;
+    font-size: 3rem;
+    margin-bottom: 12px;
 }
 
 .final-title {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 3rem;
-    letter-spacing: 4px;
-    margin-bottom: 15px;
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    line-height: 1.1;
+    text-align: center;
 }
 
 .final-sub {
     color: var(--muted);
-    font-size: 1.1rem;
-    margin-bottom: 40px;
+    font-size: 0.85rem;
+    margin-bottom: 24px;
+    text-align: center;
 }
 
 .final-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    max-width: 350px;
-    margin: 0 auto 30px;
+    width: 100%;
+    max-width: 280px;
+    margin: 0 auto 20px;
 }
 
 .cta-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    padding: 20px 30px;
-    border-radius: 50px;
+    display: block;
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 30px;
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.2rem;
-    letter-spacing: 3px;
+    font-size: 0.95rem;
+    letter-spacing: 1.5px;
     text-decoration: none;
-    transition: all 0.3s;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.cta-btn:last-child {
+    margin-bottom: 0;
 }
 
 .cta-btn.primary {
     background: linear-gradient(135deg, var(--gold), var(--orange));
     color: var(--dark);
-    box-shadow: 0 10px 40px rgba(255,107,53,0.3);
-}
-
-.cta-btn.primary:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 50px rgba(255,107,53,0.4);
 }
 
 .cta-btn.secondary {
@@ -874,14 +820,10 @@ body.es .lang-en { display: none !important; }
     border: 2px solid rgba(255,255,255,0.2);
 }
 
-.cta-btn.secondary:hover {
-    border-color: var(--teal);
-    color: var(--teal);
-}
-
 .final-note {
     color: var(--muted);
-    font-size: 0.9rem;
+    font-size: 0.8rem;
+    text-align: center;
 }
 
 .final-note a {
@@ -889,66 +831,61 @@ body.es .lang-en { display: none !important; }
     text-decoration: none;
 }
 
-.final-note a:hover { text-decoration: underline; }
-
 /* ============ FOOTER ============ */
 .footer {
+    width: 100%;
     text-align: center;
-    padding: 40px 20px;
+    padding: 30px 16px;
     border-top: 1px solid rgba(255,255,255,0.05);
 }
 
 .footer-logo {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.5rem;
-    letter-spacing: 4px;
-    margin-bottom: 8px;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+    margin-bottom: 5px;
 }
 
 .footer-logo .laugh { color: var(--gold); }
 .footer-logo .court { color: var(--text); }
 
 .footer-tagline {
-    font-size: 0.65rem;
-    letter-spacing: 3px;
+    font-size: 0.55rem;
+    letter-spacing: 1.5px;
     color: var(--gold);
     text-transform: uppercase;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 .footer-links {
-    margin-bottom: 10px;
-    font-size: 0.75rem;
+    margin-bottom: 8px;
+    font-size: 0.65rem;
 }
 
 .footer-links a {
     color: var(--muted);
     text-decoration: none;
-    margin: 0 10px;
-    transition: color 0.3s;
+    margin: 0 6px;
 }
 
-.footer-links a:hover { color: var(--gold); }
-
 .footer-company {
-    font-size: 0.75rem;
+    font-size: 0.65rem;
     color: var(--muted);
 }
 
 .footer-trademarks {
-    font-size: 0.6rem;
+    font-size: 0.5rem;
     color: var(--muted);
-    margin-top: 15px;
-    padding: 0 20px;
-    line-height: 1.5;
+    margin-top: 10px;
+    line-height: 1.4;
     opacity: 0.7;
 }
 
-/* ============ ANIMATIONS ============ */
+/* ============ FADE IN ============ */
 .fade-in {
     opacity: 0;
-    transform: translateY(30px);
-    transition: all 0.8s ease-out;
+    transform: translateY(20px);
+    transition: all 0.6s ease-out;
 }
 
 .fade-in.visible {
@@ -956,28 +893,90 @@ body.es .lang-en { display: none !important; }
     transform: translateY(0);
 }
 
-/* ============ RESPONSIVE ============ */
-@media (max-width: 600px) {
-    .hero-logo { font-size: 3rem; letter-spacing: 5px; }
-    .hero-tagline { font-size: 1.2rem; letter-spacing: 4px; }
-    .hero-headline { font-size: 1.8rem; }
-    .section-title { font-size: 2rem; }
-    .trophy-title { font-size: 2rem; }
-    .final-title { font-size: 2rem; }
-    .btn { padding: 15px 30px; font-size: 1rem; }
-    .cta-btn { padding: 16px 25px; font-size: 1rem; }
-    .workout-card { padding: 30px 20px; }
-    .final-icon { font-size: 3rem; }
-    .pricing-amount { font-size: 3rem; }
-    .pricing-card { padding: 30px 20px; }
-    .nav-login { padding: 5px 12px; font-size: 0.65rem; }
-    .trophy-content { text-align: center; }
+/* ============ TABLET (600px+) ============ */
+@media (min-width: 600px) {
+    .mini-nav { padding: 0 20px; }
+    .nav-logo { font-size: 1.15rem; }
+    .nav-lang-btn { font-size: 0.6rem; padding: 5px 8px; }
+    .nav-login { font-size: 0.65rem; padding: 5px 12px; }
+    
+    .hero { padding: 30px 24px; padding-top: calc(var(--nav-height) + 30px); }
+    .hero-badge { font-size: 0.65rem; padding: 7px 16px; }
+    .hero-logo { font-size: 4rem; letter-spacing: 6px; }
+    .hero-tagline { font-size: 1.1rem; letter-spacing: 4px; }
+    .hero-headline { font-size: 2.2rem; }
+    .hero-sub { font-size: 1rem; }
+    .btn { padding: 16px 32px; font-size: 1.05rem; }
+    
+    .section { padding: 70px 24px; }
+    .section-title { font-size: 2.2rem; }
+    
+    .trophy-section { padding: 70px 24px; }
+    .trophy-title { font-size: 2.2rem; }
+    .trophy-preview { max-width: 320px; }
+    
+    .workouts-wrapper {
+        max-width: 600px;
+        display: flex;
+        gap: 20px;
+    }
+    .workout-card {
+        flex: 1;
+        margin-bottom: 0;
+    }
+    
+    .how-wrapper {
+        max-width: 700px;
+        display: flex;
+        gap: 16px;
+    }
+    .how-step {
+        flex: 1;
+        margin-bottom: 0;
+    }
+    
+    .props-wrapper {
+        max-width: 600px;
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    .audience-wrapper {
+        max-width: 700px;
+        display: flex;
+        gap: 16px;
+    }
+    .audience-card {
+        flex: 1;
+        margin-bottom: 0;
+    }
+    
+    .pricing-card { max-width: 360px; padding: 30px 24px; }
+    .facilities-callout { max-width: 360px; }
+    
+    .final-title { font-size: 2.4rem; }
+    .final-buttons { max-width: 320px; }
+}
+
+/* ============ DESKTOP (900px+) ============ */
+@media (min-width: 900px) {
+    .hero-logo { font-size: 5rem; letter-spacing: 8px; }
+    .hero-tagline { font-size: 1.4rem; letter-spacing: 6px; }
+    .hero-headline { font-size: 2.6rem; }
+    
+    .section-title { font-size: 2.6rem; }
+    .trophy-title { font-size: 2.6rem; }
+    
+    .workouts-wrapper { max-width: 700px; }
+    .how-wrapper { max-width: 800px; }
+    .audience-wrapper { max-width: 800px; }
+    
+    .final-title { font-size: 2.8rem; }
 }
 </style>
 </head>
 <body class="en">
 
-<!-- ============ MINI NAV ============ -->
+<!-- NAV -->
 <nav class="mini-nav">
     <a href="/" class="nav-logo">
         <span class="ball">🏀</span>
@@ -995,12 +994,12 @@ body.es .lang-en { display: none !important; }
     </div>
 </nav>
 
-<!-- ============ HERO ============ -->
+<!-- HERO -->
 <section class="hero">
     <div class="hero-content">
         <div class="hero-badge">
-            <span class="lang-en">🏆 Memory Workouts + Your GoStar Trophy Case</span>
-            <span class="lang-es">🏆 Ejercicios de Memoria + Tu Vitrina de GoStars</span>
+            <span class="lang-en">🏆 Your GoStar Trophy Case</span>
+            <span class="lang-es">🏆 Tu Vitrina de GoStars</span>
         </div>
         <div class="hero-logo">
             <span class="laugh">LAUGH</span><span class="court">COURT</span>
@@ -1014,18 +1013,18 @@ body.es .lang-en { display: none !important; }
             <span class="lang-es">EJERCITA. SUBE DE NIVEL.<br><span class="highlight-gold">LLENA TU VITRINA.</span></span>
         </h1>
         <p class="hero-sub">
-            <span class="lang-en">Two memory workouts that make you smile. Earn GoStars as you level up. Watch your Trophy Case fill with every win.</span>
-            <span class="lang-es">Dos ejercicios de memoria que te hacen sonreír. Gana GoStars mientras subes de nivel. Mira tu Vitrina llenarse con cada victoria.</span>
+            <span class="lang-en">Two memory workouts that make you smile. Earn GoStars as you level up.</span>
+            <span class="lang-es">Dos ejercicios de memoria que te hacen sonreír. Gana GoStars al subir de nivel.</span>
         </p>
         <div class="hero-cta">
             <a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="btn btn-primary">
-                <span class="lang-en">START 7-DAY FREE TRIAL →</span>
-                <span class="lang-es">COMENZAR 7 DÍAS GRATIS →</span>
+                <span class="lang-en">START FREE TRIAL →</span>
+                <span class="lang-es">COMENZAR GRATIS →</span>
             </a>
         </div>
         <p class="hero-login">
-            <span class="lang-en">Already a member? <a href="/login">Login here</a></span>
-            <span class="lang-es">¿Ya eres miembro? <a href="/login">Entra aquí</a></span>
+            <span class="lang-en">Already a member? <a href="/login">Login</a></span>
+            <span class="lang-es">¿Ya eres miembro? <a href="/login">Entrar</a></span>
         </p>
     </div>
     <div class="scroll-hint">
@@ -1035,398 +1034,221 @@ body.es .lang-en { display: none !important; }
     </div>
 </section>
 
-<!-- ============ GOSTAR TROPHY CASE ============ -->
+<!-- TROPHY CASE -->
 <section class="trophy-section fade-in">
-    <div class="trophy-inner">
-        <div class="trophy-grid">
-            <div class="trophy-content">
-                <div class="trophy-badge">
-                    <span class="lang-en">⭐ Your Progress</span>
-                    <span class="lang-es">⭐ Tu Progreso</span>
-                </div>
-                <h2 class="trophy-title">
-                    <span class="lang-en">YOUR <span class="gold">GOSTAR</span><br>TROPHY CASE</span>
-                    <span class="lang-es">TU VITRINA DE<br><span class="gold">GOSTARS</span></span>
-                </h2>
-                <p class="trophy-desc">
-                    <span class="lang-en">Every level you conquer earns you a GoStar. Track your progress across both workouts and all three speeds. Your Trophy Case shows exactly how far you've come.</span>
-                    <span class="lang-es">Cada nivel que conquistas te gana un GoStar. Sigue tu progreso en ambos ejercicios y las tres velocidades. Tu Vitrina muestra exactamente cuánto has avanzado.</span>
-                </p>
-                <ul class="trophy-features">
-                    <li>
-                        <span class="star">⭐</span>
-                        <span class="lang-en">Level up = Earn a GoStar</span>
-                        <span class="lang-es">Sube de nivel = Gana un GoStar</span>
-                    </li>
-                    <li>
-                        <span class="star">⭐</span>
-                        <span class="lang-en">6 unique paths to master (2 games × 3 speeds)</span>
-                        <span class="lang-es">6 caminos únicos (2 juegos × 3 velocidades)</span>
-                    </li>
-                    <li>
-                        <span class="star">⭐</span>
-                        <span class="lang-en">See your stars grow with every win</span>
-                        <span class="lang-es">Mira tus estrellas crecer con cada victoria</span>
-                    </li>
-                </ul>
+    <div class="trophy-badge">
+        <span class="lang-en">⭐ Your Progress</span>
+        <span class="lang-es">⭐ Tu Progreso</span>
+    </div>
+    <h2 class="trophy-title">
+        <span class="lang-en">YOUR <span class="gold">GOSTAR</span><br>TROPHY CASE</span>
+        <span class="lang-es">TU VITRINA DE<br><span class="gold">GOSTARS</span></span>
+    </h2>
+    <p class="trophy-desc">
+        <span class="lang-en">Every level you conquer earns a GoStar. Track progress across both workouts and all speeds.</span>
+        <span class="lang-es">Cada nivel que conquistas gana un GoStar. Sigue tu progreso en ambos ejercicios.</span>
+    </p>
+    <ul class="trophy-features">
+        <li><span class="star">⭐</span><span class="lang-en">Level up = Earn a GoStar</span><span class="lang-es">Sube de nivel = Gana un GoStar</span></li>
+        <li><span class="star">⭐</span><span class="lang-en">6 paths (2 games × 3 speeds)</span><span class="lang-es">6 caminos (2 juegos × 3 velocidades)</span></li>
+        <li><span class="star">⭐</span><span class="lang-en">Watch your stars grow</span><span class="lang-es">Mira tus estrellas crecer</span></li>
+    </ul>
+    <div class="trophy-preview">
+        <div class="trophy-preview-title">
+            <span class="lang-en">SAMPLE TROPHY CASE</span>
+            <span class="lang-es">EJEMPLO DE VITRINA</span>
+        </div>
+        <div class="trophy-preview-game">🧠 THE MATCH - SLOW</div>
+        <div class="trophy-preview-stars">⭐⭐⭐⭐⭐☆☆☆☆☆</div>
+        <div class="trophy-preview-label">5 / 10 GoStars</div>
+        <div class="trophy-preview-speeds">
+            <div class="trophy-speed">
+                <div class="trophy-speed-name">SLOW</div>
+                <div class="trophy-speed-level">L5</div>
+                <div class="trophy-speed-cells">9 cells</div>
             </div>
-            <div class="trophy-preview">
-                <div class="trophy-preview-title">
-                    <span class="lang-en">SAMPLE TROPHY CASE</span>
-                    <span class="lang-es">EJEMPLO DE VITRINA</span>
-                </div>
-                <div class="trophy-preview-game">🧠 THE MATCH - SLOW</div>
-                <div class="trophy-preview-stars">⭐⭐⭐⭐⭐☆☆☆☆☆</div>
-                <div class="trophy-preview-label">5 / 10 GoStars</div>
-                <div class="trophy-preview-speeds">
-                    <div class="trophy-speed">
-                        <div class="trophy-speed-name">SLOW</div>
-                        <div class="trophy-speed-level">L5</div>
-                        <div class="trophy-speed-cells">9 cells</div>
-                    </div>
-                    <div class="trophy-speed">
-                        <div class="trophy-speed-name">MED</div>
-                        <div class="trophy-speed-level">L3</div>
-                        <div class="trophy-speed-cells">7 cells</div>
-                    </div>
-                    <div class="trophy-speed">
-                        <div class="trophy-speed-name">FAST</div>
-                        <div class="trophy-speed-level">L2</div>
-                        <div class="trophy-speed-cells">6 cells</div>
-                    </div>
-                </div>
+            <div class="trophy-speed">
+                <div class="trophy-speed-name">MED</div>
+                <div class="trophy-speed-level">L3</div>
+                <div class="trophy-speed-cells">7 cells</div>
+            </div>
+            <div class="trophy-speed">
+                <div class="trophy-speed-name">FAST</div>
+                <div class="trophy-speed-level">L2</div>
+                <div class="trophy-speed-cells">6 cells</div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- ============ WORKOUTS ============ -->
+<!-- WORKOUTS -->
 <section class="section fade-in">
-    <div class="section-header">
-        <div class="section-badge">
-            <span class="lang-en">🏀 Two Workouts</span>
-            <span class="lang-es">🏀 Dos Ejercicios</span>
-        </div>
-        <h2 class="section-title">
-            <span class="lang-en">CHOOSE YOUR WORKOUT</span>
-            <span class="lang-es">ELIGE TU EJERCICIO</span>
-        </h2>
-        <p class="section-sub">
-            <span class="lang-en">Two games. Two types of memory. 60 divisions of challenge.</span>
-            <span class="lang-es">Dos juegos. Dos tipos de memoria. 60 divisiones de reto.</span>
-        </p>
+    <div class="section-badge">
+        <span class="lang-en">🏀 Two Workouts</span>
+        <span class="lang-es">🏀 Dos Ejercicios</span>
     </div>
-    
-    <div class="workouts-grid">
-        <!-- THE MATCH -->
+    <h2 class="section-title">
+        <span class="lang-en">CHOOSE YOUR WORKOUT</span>
+        <span class="lang-es">ELIGE TU EJERCICIO</span>
+    </h2>
+    <p class="section-sub">
+        <span class="lang-en">Two games. Two types of memory. 60 divisions.</span>
+        <span class="lang-es">Dos juegos. Dos tipos de memoria. 60 divisiones.</span>
+    </p>
+    <div class="workouts-wrapper">
         <div class="workout-card match">
             <div class="workout-icon">🧠</div>
             <div class="workout-name">THE MATCH</div>
-            <div class="workout-type">
-                <span class="lang-en">Spatial Memory</span>
-                <span class="lang-es">Memoria Espacial</span>
-            </div>
-            <p class="workout-desc">
-                <span class="lang-en">Numbered cells flash simultaneously. Memorize their positions, then tap them back in order. Where were they?</span>
-                <span class="lang-es">Celdas numeradas se iluminan simultáneamente. Memoriza sus posiciones, luego tócalas en orden. ¿Dónde estaban?</span>
-            </p>
-            <div class="workout-badge">
-                <span class="lang-en">🧠 MEMORIZE POSITIONS</span>
-                <span class="lang-es">🧠 MEMORIZA POSICIONES</span>
-            </div>
+            <div class="workout-type"><span class="lang-en">Spatial Memory</span><span class="lang-es">Memoria Espacial</span></div>
+            <p class="workout-desc"><span class="lang-en">Cells flash simultaneously. Memorize positions, tap back in order.</span><span class="lang-es">Celdas se iluminan. Memoriza posiciones, tócalas en orden.</span></p>
+            <div class="workout-badge"><span class="lang-en">🧠 MEMORIZE POSITIONS</span><span class="lang-es">🧠 MEMORIZA POSICIONES</span></div>
         </div>
-        
-        <!-- THE SEQUENCE -->
         <div class="workout-card sequence">
             <div class="workout-icon">🔢</div>
             <div class="workout-name">THE SEQUENCE</div>
-            <div class="workout-type">
-                <span class="lang-en">Sequential Memory</span>
-                <span class="lang-es">Memoria Secuencial</span>
-            </div>
-            <p class="workout-desc">
-                <span class="lang-en">Watch cells light up one by one with numbers. Tap them back in the exact order. The longer the chain, the bigger the challenge!</span>
-                <span class="lang-es">Mira las celdas iluminarse una por una con números. Repítelas en el orden exacto. ¡Mientras más larga la cadena, mayor el reto!</span>
-            </p>
-            <div class="workout-badge">
-                <span class="lang-en">🔢 REPEAT THE ORDER</span>
-                <span class="lang-es">🔢 REPITE EL ORDEN</span>
-            </div>
+            <div class="workout-type"><span class="lang-en">Sequential Memory</span><span class="lang-es">Memoria Secuencial</span></div>
+            <p class="workout-desc"><span class="lang-en">Cells light up one by one. Tap them back in exact order.</span><span class="lang-es">Celdas se iluminan una por una. Repítelas en orden exacto.</span></p>
+            <div class="workout-badge"><span class="lang-en">🔢 REPEAT THE ORDER</span><span class="lang-es">🔢 REPITE EL ORDEN</span></div>
         </div>
     </div>
 </section>
 
-<!-- ============ HOW IT WORKS ============ -->
+<!-- HOW IT WORKS -->
 <section class="section alt-bg fade-in">
-    <div class="section-inner">
-        <div class="section-header">
-            <div class="section-badge">
-                <span class="lang-en">🎯 Simple Rules</span>
-                <span class="lang-es">🎯 Reglas Simples</span>
-            </div>
-            <h2 class="section-title">
-                <span class="lang-en">HOW IT WORKS</span>
-                <span class="lang-es">CÓMO FUNCIONA</span>
-            </h2>
+    <div class="section-badge">
+        <span class="lang-en">🎯 Simple Rules</span>
+        <span class="lang-es">🎯 Reglas Simples</span>
+    </div>
+    <h2 class="section-title">
+        <span class="lang-en">HOW IT WORKS</span>
+        <span class="lang-es">CÓMO FUNCIONA</span>
+    </h2>
+    <div class="how-wrapper">
+        <div class="how-step">
+            <div class="how-number">1</div>
+            <div class="how-title"><span class="lang-en">WATCH</span><span class="lang-es">OBSERVA</span></div>
+            <p class="how-text"><span class="lang-en">Numbered cells light up.</span><span class="lang-es">Celdas numeradas se iluminan.</span></p>
         </div>
-        
-        <div class="how-grid">
-            <div class="how-step">
-                <div class="how-number">1</div>
-                <div class="how-title">
-                    <span class="lang-en">WATCH</span>
-                    <span class="lang-es">OBSERVA</span>
-                </div>
-                <p class="how-text">
-                    <span class="lang-en">Numbered cells light up on the court. Pay attention to where and when.</span>
-                    <span class="lang-es">Celdas numeradas se iluminan en la cancha. Presta atención a dónde y cuándo.</span>
-                </p>
-            </div>
-            <div class="how-step">
-                <div class="how-number">2</div>
-                <div class="how-title">
-                    <span class="lang-en">REMEMBER</span>
-                    <span class="lang-es">RECUERDA</span>
-                </div>
-                <p class="how-text">
-                    <span class="lang-en">Track positions (MATCH) or order (SEQUENCE). Numbers help you keep count.</span>
-                    <span class="lang-es">Recuerda posiciones (MATCH) u orden (SECUENCIA). Los números te ayudan.</span>
-                </p>
-            </div>
-            <div class="how-step">
-                <div class="how-number">3</div>
-                <div class="how-title">
-                    <span class="lang-en">WIN & EARN</span>
-                    <span class="lang-es">GANA Y OBTÉN</span>
-                </div>
-                <p class="how-text">
-                    <span class="lang-en">Win 3 rounds to level up and earn a GoStar for your Trophy Case!</span>
-                    <span class="lang-es">¡Gana 3 rondas para subir de nivel y ganar un GoStar para tu Vitrina!</span>
-                </p>
-            </div>
+        <div class="how-step">
+            <div class="how-number">2</div>
+            <div class="how-title"><span class="lang-en">REMEMBER</span><span class="lang-es">RECUERDA</span></div>
+            <p class="how-text"><span class="lang-en">Track positions or order.</span><span class="lang-es">Recuerda posiciones u orden.</span></p>
+        </div>
+        <div class="how-step">
+            <div class="how-number">3</div>
+            <div class="how-title"><span class="lang-en">WIN & EARN</span><span class="lang-es">GANA</span></div>
+            <p class="how-text"><span class="lang-en">Win 3 rounds = GoStar!</span><span class="lang-es">¡Gana 3 rondas = GoStar!</span></p>
         </div>
     </div>
 </section>
 
-<!-- ============ VALUE PROPS ============ -->
+<!-- VALUE PROPS -->
 <section class="section fade-in">
-    <div class="section-header">
-        <h2 class="section-title">
-            <span class="lang-en">WHY LAUGHCOURT?</span>
-            <span class="lang-es">¿POR QUÉ LAUGHCOURT?</span>
-        </h2>
-    </div>
-    
-    <div class="props-grid">
+    <h2 class="section-title">
+        <span class="lang-en">WHY LAUGHCOURT?</span>
+        <span class="lang-es">¿POR QUÉ LAUGHCOURT?</span>
+    </h2>
+    <div class="props-wrapper">
         <div class="prop">
             <div class="prop-icon">🏆</div>
-            <div class="prop-title">
-                <span class="lang-en">TROPHY CASE</span>
-                <span class="lang-es">TU VITRINA</span>
-            </div>
-            <p class="prop-text">
-                <span class="lang-en">Watch your GoStars grow. Your wins, displayed.</span>
-                <span class="lang-es">Mira tus GoStars crecer. Tus victorias, en exhibición.</span>
-            </p>
+            <div class="prop-title"><span class="lang-en">TROPHY CASE</span><span class="lang-es">VITRINA</span></div>
+            <p class="prop-text"><span class="lang-en">Watch GoStars grow</span><span class="lang-es">Mira tus GoStars crecer</span></p>
         </div>
         <div class="prop">
             <div class="prop-icon">📱</div>
-            <div class="prop-title">
-                <span class="lang-en">PLAY ANYWHERE</span>
-                <span class="lang-es">JUEGA DONDE SEA</span>
-            </div>
-            <p class="prop-text">
-                <span class="lang-en">Phone, tablet, or desktop. No app needed.</span>
-                <span class="lang-es">Teléfono, tablet o PC. Sin descargar app.</span>
-            </p>
+            <div class="prop-title"><span class="lang-en">ANYWHERE</span><span class="lang-es">DONDE SEA</span></div>
+            <p class="prop-text"><span class="lang-en">Phone, tablet, desktop</span><span class="lang-es">Teléfono, tablet, PC</span></p>
         </div>
         <div class="prop">
             <div class="prop-icon">⭐</div>
-            <div class="prop-title">
-                <span class="lang-en">60 DIVISIONS</span>
-                <span class="lang-es">60 DIVISIONES</span>
-            </div>
-            <p class="prop-text">
-                <span class="lang-en">10 levels × 3 speeds × 2 games.</span>
-                <span class="lang-es">10 niveles × 3 velocidades × 2 juegos.</span>
-            </p>
+            <div class="prop-title"><span class="lang-en">60 DIVISIONS</span><span class="lang-es">60 DIVISIONES</span></div>
+            <p class="prop-text"><span class="lang-en">10 × 3 × 2 games</span><span class="lang-es">10 × 3 × 2 juegos</span></p>
         </div>
         <div class="prop">
             <div class="prop-icon">😂</div>
-            <div class="prop-title">
-                <span class="lang-en">JOY FIRST</span>
-                <span class="lang-es">ALEGRÍA PRIMERO</span>
-            </div>
-            <p class="prop-text">
-                <span class="lang-en">Emojis celebrate every win. It should be fun!</span>
-                <span class="lang-es">Emojis celebran cada victoria. ¡Debe ser divertido!</span>
-            </p>
+            <div class="prop-title"><span class="lang-en">JOY FIRST</span><span class="lang-es">ALEGRÍA</span></div>
+            <p class="prop-text"><span class="lang-en">Celebrate every win!</span><span class="lang-es">¡Celebra cada victoria!</span></p>
         </div>
     </div>
 </section>
 
-<!-- ============ WHO IT'S FOR ============ -->
+<!-- WHO IT'S FOR -->
 <section class="section alt-bg fade-in">
-    <div class="section-inner">
-        <div class="section-header">
-            <div class="section-badge">
-                <span class="lang-en">👥 For Everyone</span>
-                <span class="lang-es">👥 Para Todos</span>
-            </div>
-            <h2 class="section-title">
-                <span class="lang-en">WHO IT'S FOR</span>
-                <span class="lang-es">PARA QUIÉN ES</span>
-            </h2>
+    <div class="section-badge">
+        <span class="lang-en">👥 For Everyone</span>
+        <span class="lang-es">👥 Para Todos</span>
+    </div>
+    <h2 class="section-title">
+        <span class="lang-en">WHO IT'S FOR</span>
+        <span class="lang-es">PARA QUIÉN ES</span>
+    </h2>
+    <div class="audience-wrapper">
+        <div class="audience-card">
+            <div class="audience-icon">👴👵</div>
+            <div class="audience-title"><span class="lang-en">SENIORS</span><span class="lang-es">ADULTOS MAYORES</span></div>
+            <p class="audience-text"><span class="lang-en">Keep your mind sharp with fun daily workouts.</span><span class="lang-es">Mantén tu mente aguda con ejercicios divertidos.</span></p>
         </div>
-        
-        <div class="audience-grid">
-            <div class="audience-card">
-                <div class="audience-icon">👴👵</div>
-                <div class="audience-title">
-                    <span class="lang-en">SENIORS</span>
-                    <span class="lang-es">ADULTOS MAYORES</span>
-                </div>
-                <p class="audience-text">
-                    <span class="lang-en">Keep your mind sharp with fun, daily workouts. Simple to learn, rewarding to master.</span>
-                    <span class="lang-es">Mantén tu mente aguda con ejercicios divertidos. Fácil de aprender, gratificante de dominar.</span>
-                </p>
-            </div>
-            <div class="audience-card">
-                <div class="audience-icon">🏥</div>
-                <div class="audience-title">
-                    <span class="lang-en">FACILITIES</span>
-                    <span class="lang-es">CENTROS</span>
-                </div>
-                <p class="audience-text">
-                    <span class="lang-en">Give your members a Trophy Case they'll want to check every day. Bilingual EN/ES.</span>
-                    <span class="lang-es">Dale a tus miembros una Vitrina que querrán revisar cada día. Bilingüe EN/ES.</span>
-                </p>
-            </div>
-            <div class="audience-card">
-                <div class="audience-icon">🎮</div>
-                <div class="audience-title">
-                    <span class="lang-en">EVERYONE</span>
-                    <span class="lang-es">TODOS</span>
-                </div>
-                <p class="audience-text">
-                    <span class="lang-en">Anyone who wants to challenge their memory while having fun.</span>
-                    <span class="lang-es">Cualquiera que quiera retar su memoria mientras se divierte.</span>
-                </p>
-            </div>
+        <div class="audience-card">
+            <div class="audience-icon">🏥</div>
+            <div class="audience-title"><span class="lang-en">FACILITIES</span><span class="lang-es">CENTROS</span></div>
+            <p class="audience-text"><span class="lang-en">A Trophy Case members check every day.</span><span class="lang-es">Una Vitrina que revisarán cada día.</span></p>
+        </div>
+        <div class="audience-card">
+            <div class="audience-icon">🎮</div>
+            <div class="audience-title"><span class="lang-en">EVERYONE</span><span class="lang-es">TODOS</span></div>
+            <p class="audience-text"><span class="lang-en">Anyone who wants to challenge their memory.</span><span class="lang-es">Cualquiera que quiera retar su memoria.</span></p>
         </div>
     </div>
 </section>
 
-<!-- ============ PRICING ============ -->
+<!-- PRICING -->
 <section class="section fade-in">
-    <div class="section-header">
-        <h2 class="section-title">
-            <span class="lang-en">SIMPLE PRICING</span>
-            <span class="lang-es">PRECIO SIMPLE</span>
-        </h2>
-        <p class="section-sub">
-            <span class="lang-en">One plan. Full access. Cancel anytime.</span>
-            <span class="lang-es">Un plan. Acceso completo. Cancela cuando quieras.</span>
-        </p>
-    </div>
-    
+    <h2 class="section-title">
+        <span class="lang-en">SIMPLE PRICING</span>
+        <span class="lang-es">PRECIO SIMPLE</span>
+    </h2>
+    <p class="section-sub">
+        <span class="lang-en">One plan. Full access. Cancel anytime.</span>
+        <span class="lang-es">Un plan. Acceso completo. Cancela cuando quieras.</span>
+    </p>
     <div class="pricing-card">
-        <div class="pricing-trial">
-            <span class="lang-en">7-DAY FREE TRIAL</span>
-            <span class="lang-es">7 DÍAS DE PRUEBA GRATIS</span>
-        </div>
-        <div class="pricing-then">
-            <span class="lang-en">then</span>
-            <span class="lang-es">después</span>
-        </div>
+        <div class="pricing-trial"><span class="lang-en">7-DAY FREE TRIAL</span><span class="lang-es">7 DÍAS GRATIS</span></div>
+        <div class="pricing-then"><span class="lang-en">then</span><span class="lang-es">después</span></div>
         <div class="pricing-amount">$5</div>
-        <div class="pricing-period">
-            <span class="lang-en">per month</span>
-            <span class="lang-es">por mes</span>
-        </div>
-        
+        <div class="pricing-period"><span class="lang-en">per month</span><span class="lang-es">por mes</span></div>
         <ul class="pricing-features">
-            <li>
-                <span class="check">✓</span>
-                <span class="lang-en">Your GoStar Trophy Case</span>
-                <span class="lang-es">Tu Vitrina de GoStars</span>
-            </li>
-            <li>
-                <span class="check">✓</span>
-                <span class="lang-en">All 3 speeds (SLOW, MED, FAST)</span>
-                <span class="lang-es">Las 3 velocidades (LENTO, MED, RÁPIDO)</span>
-            </li>
-            <li>
-                <span class="check">✓</span>
-                <span class="lang-en">Both workouts: MATCH + SEQUENCE</span>
-                <span class="lang-es">Ambos ejercicios: MATCH + SECUENCIA</span>
-            </li>
-            <li>
-                <span class="check">✓</span>
-                <span class="lang-en">60 divisions to master</span>
-                <span class="lang-es">60 divisiones para dominar</span>
-            </li>
-            <li>
-                <span class="check">✓</span>
-                <span class="lang-en">Cancel anytime</span>
-                <span class="lang-es">Cancela cuando quieras</span>
-            </li>
+            <li><span class="check">✓</span><span class="lang-en">Your GoStar Trophy Case</span><span class="lang-es">Tu Vitrina de GoStars</span></li>
+            <li><span class="check">✓</span><span class="lang-en">All 3 speeds</span><span class="lang-es">Las 3 velocidades</span></li>
+            <li><span class="check">✓</span><span class="lang-en">Both workouts</span><span class="lang-es">Ambos ejercicios</span></li>
+            <li><span class="check">✓</span><span class="lang-en">60 divisions</span><span class="lang-es">60 divisiones</span></li>
+            <li><span class="check">✓</span><span class="lang-en">Cancel anytime</span><span class="lang-es">Cancela cuando quieras</span></li>
         </ul>
-        
-        <a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="pricing-cta">
-            <span class="lang-en">START FREE TRIAL →</span>
-            <span class="lang-es">COMENZAR GRATIS →</span>
-        </a>
+        <a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="pricing-cta"><span class="lang-en">START FREE TRIAL →</span><span class="lang-es">COMENZAR GRATIS →</span></a>
     </div>
-    
     <div class="facilities-callout">
-        <div class="facilities-title">
-            <span class="lang-en">🏥 FACILITIES & GROUPS</span>
-            <span class="lang-es">🏥 FACILIDADES Y GRUPOS</span>
-        </div>
-        <p class="facilities-text">
-            <span class="lang-en">Need multiple seats? Purchase the quantity you need at checkout. <strong>One PIN, multiple devices.</strong></span>
-            <span class="lang-es">¿Necesitas múltiples asientos? Compra la cantidad que necesites. <strong>Un PIN, múltiples dispositivos.</strong></span>
-        </p>
+        <div class="facilities-title"><span class="lang-en">🏥 FACILITIES & GROUPS</span><span class="lang-es">🏥 FACILIDADES Y GRUPOS</span></div>
+        <p class="facilities-text"><span class="lang-en">Need multiple seats? Purchase quantity at checkout. <strong>One PIN, multiple devices.</strong></span><span class="lang-es">¿Necesitas múltiples asientos? Compra la cantidad al pagar. <strong>Un PIN, múltiples dispositivos.</strong></span></p>
     </div>
 </section>
 
-<!-- ============ FINAL CTA ============ -->
+<!-- FINAL CTA -->
 <section class="final-cta fade-in">
     <div class="final-cta-content">
         <div class="final-icon">🏆</div>
-        <h2 class="final-title">
-            <span class="lang-en">START FILLING YOUR<br>TROPHY CASE TODAY</span>
-            <span class="lang-es">COMIENZA A LLENAR TU<br>VITRINA HOY</span>
-        </h2>
-        <p class="final-sub">
-            <span class="lang-en">Work out. Level up. Earn GoStars. Show them off.</span>
-            <span class="lang-es">Ejercita. Sube de nivel. Gana GoStars. Presúmelos.</span>
-        </p>
+        <h2 class="final-title"><span class="lang-en">START YOUR<br>TROPHY CASE</span><span class="lang-es">COMIENZA TU<br>VITRINA</span></h2>
+        <p class="final-sub"><span class="lang-en">Work out. Level up. Earn GoStars.</span><span class="lang-es">Ejercita. Sube de nivel. Gana GoStars.</span></p>
         <div class="final-buttons">
-            <a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="cta-btn primary">
-                <span class="lang-en">🆕 START FREE TRIAL</span>
-                <span class="lang-es">🆕 COMENZAR GRATIS</span>
-            </a>
-            <a href="/login" class="cta-btn secondary">
-                <span class="lang-en">🔑 ALREADY HAVE A PIN</span>
-                <span class="lang-es">🔑 YA TENGO UN PIN</span>
-            </a>
+            <a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="cta-btn primary"><span class="lang-en">🆕 START FREE TRIAL</span><span class="lang-es">🆕 COMENZAR GRATIS</span></a>
+            <a href="/login" class="cta-btn secondary"><span class="lang-en">🔑 ALREADY HAVE A PIN</span><span class="lang-es">🔑 YA TENGO UN PIN</span></a>
         </div>
-        <p class="final-note">
-            <span class="lang-en">Questions? <a href="/faq">Visit our FAQ</a></span>
-            <span class="lang-es">¿Preguntas? <a href="/faq">Visita nuestro FAQ</a></span>
-        </p>
+        <p class="final-note"><span class="lang-en">Questions? <a href="/faq">Visit our FAQ</a></span><span class="lang-es">¿Preguntas? <a href="/faq">Visita nuestro FAQ</a></span></p>
     </div>
 </section>
 
-<!-- ============ FOOTER ============ -->
+<!-- FOOTER -->
 <footer class="footer">
     <div class="footer-logo">🏀 <span class="laugh">LAUGH</span><span class="court">COURT</span></div>
-    <div class="footer-tagline">
-        <span class="lang-en">Where Joy Meets The Game</span>
-        <span class="lang-es">Donde La Alegría Se Une Al Juego</span>
-    </div>
+    <div class="footer-tagline"><span class="lang-en">Where Joy Meets The Game</span><span class="lang-es">Donde La Alegría Se Une Al Juego</span></div>
     <div class="footer-links">
         <a href="/login"><span class="lang-en">Login</span><span class="lang-es">Entrar</span></a>
         <a href="/faq">FAQ</a>
@@ -1434,9 +1256,7 @@ body.es .lang-en { display: none !important; }
         <a href="/terms.html"><span class="lang-en">Terms</span><span class="lang-es">Términos</span></a>
     </div>
     <div class="footer-company">by GoStar Digital LLC 🇵🇷</div>
-    <div class="footer-trademarks">
-        LaughCourt™, The Starting Five™, GoStars™, and Ritnome™ are trademarks of GoStar Digital LLC.
-    </div>
+    <div class="footer-trademarks">LaughCourt™, The Starting Five™, GoStars™, Ritnome™ are trademarks of GoStar Digital LLC.</div>
 </footer>
 
 <script>
