@@ -112,7 +112,8 @@ body.focus-mode .coach-message{bottom:120px}
 .taps-counter{font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--teal)}
 .score-display{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;color:var(--gold)}
 
-.grid-cell.center-target{background:linear-gradient(135deg,var(--lime),var(--lime-light))!important;border:3px solid var(--gold)!important;box-shadow:0 0 15px var(--gold),inset 0 0 10px rgba(255,255,255,0.3);transform:scale(1.08);z-index:5}
+.grid-cell.center-target{border:3px solid var(--gold)!important;box-shadow:0 0 20px var(--gold),0 0 40px var(--gold);transform:scale(1.1);z-index:5;animation:targetPulse 1s ease-in-out infinite}
+@keyframes targetPulse{0%,100%{box-shadow:0 0 15px var(--gold),0 0 30px var(--gold)}50%{box-shadow:0 0 25px var(--gold),0 0 50px var(--gold)}}
 
 .action-btn{width:100%;min-height:46px;padding:11px;border:none;border-radius:10px;font-family:'Bebas Neue',sans-serif;font-size:1.25rem;letter-spacing:4px;cursor:pointer;background:linear-gradient(135deg,var(--lime),var(--lime-light));color:var(--dark);flex-shrink:0;transition:all 0.3s ease}
 .action-btn:disabled{opacity:0.5;cursor:not-allowed}
