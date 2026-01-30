@@ -12,6 +12,8 @@
     --gold: #FFD700;
     --orange: #FF6B35;
     --teal: #00D9A5;
+    --cyan: #00CED1;
+    --purple: #9B59B6;
     --dark: #0a0a0f;
     --darker: #050508;
     --card: #111118;
@@ -176,11 +178,11 @@ body.en .lang-es { display: none !important; }
     transform: scale(0.95);
 }
 
-/* ============ WORKOUT GRID - 2 CARDS ============ */
+/* ============ WORKOUT GRID - 4 CARDS (2x2) ============ */
 .workout-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    gap: 10px;
     margin-bottom: 15px;
     width: 100%;
 }
@@ -189,7 +191,7 @@ body.en .lang-es { display: none !important; }
     background: var(--card);
     border: 2px solid var(--border);
     border-radius: 14px;
-    padding: 20px 10px;
+    padding: 15px 8px;
     text-align: center;
     cursor: pointer;
     transition: all 0.3s;
@@ -220,43 +222,63 @@ body.en .lang-es { display: none !important; }
     box-shadow: 0 5px 20px rgba(0, 217, 165, 0.2);
 }
 
+.workout-card.flash {
+    border-color: rgba(0, 206, 209, 0.3);
+}
+.workout-card.flash:active {
+    border-color: var(--cyan);
+    box-shadow: 0 5px 20px rgba(0, 206, 209, 0.2);
+}
+
+.workout-card.reaction {
+    border-color: rgba(155, 89, 182, 0.3);
+}
+.workout-card.reaction:active {
+    border-color: var(--purple);
+    box-shadow: 0 5px 20px rgba(155, 89, 182, 0.2);
+}
+
 .workout-icon {
-    font-size: 2.5rem;
-    margin-bottom: 8px;
+    font-size: 2rem;
+    margin-bottom: 6px;
     display: block;
     line-height: 1;
 }
 
 .workout-name {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.1rem;
+    font-size: 0.95rem;
     letter-spacing: 1px;
     color: var(--text);
-    margin-bottom: 4px;
+    margin-bottom: 3px;
 }
 
 .workout-card.match .workout-name { color: var(--orange); }
 .workout-card.sequence .workout-name { color: var(--teal); }
+.workout-card.flash .workout-name { color: var(--cyan); }
+.workout-card.reaction .workout-name { color: var(--purple); }
 
 .workout-desc {
-    font-size: 0.65rem;
+    font-size: 0.55rem;
     color: var(--muted);
     line-height: 1.3;
 }
 
 .play-label {
-    margin-top: 10px;
-    padding: 6px 16px;
+    margin-top: 8px;
+    padding: 5px 12px;
     background: rgba(255,255,255,0.05);
     border-radius: 15px;
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.75rem;
+    font-size: 0.65rem;
     letter-spacing: 2px;
     color: var(--text);
 }
 
 .workout-card.match .play-label { background: rgba(255,107,53,0.15); color: var(--orange); }
 .workout-card.sequence .play-label { background: rgba(0,217,165,0.15); color: var(--teal); }
+.workout-card.flash .play-label { background: rgba(0,206,209,0.15); color: var(--cyan); }
+.workout-card.reaction .play-label { background: rgba(155,89,182,0.15); color: var(--purple); }
 
 /* ============ PROGRESS SECTION WITH TOGGLE ============ */
 .progress-section {
@@ -268,7 +290,7 @@ body.en .lang-es { display: none !important; }
     width: 100%;
 }
 
-/* Game Toggle Tabs */
+/* Game Toggle Tabs - 4 Games */
 .game-toggle {
     display: flex;
     border-bottom: 1px solid var(--border);
@@ -276,23 +298,24 @@ body.en .lang-es { display: none !important; }
 
 .game-tab {
     flex: 1;
-    padding: 12px 10px;
+    padding: 10px 4px;
     background: transparent;
     border: none;
+    border-right: 1px solid var(--border);
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.9rem;
-    letter-spacing: 1px;
+    font-size: 0.65rem;
+    letter-spacing: 0.5px;
     color: var(--muted);
     cursor: pointer;
     transition: all 0.2s;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
+    gap: 3px;
 }
 
-.game-tab:first-child {
-    border-right: 1px solid var(--border);
+.game-tab:last-child {
+    border-right: none;
 }
 
 .game-tab.active {
@@ -307,6 +330,16 @@ body.en .lang-es { display: none !important; }
 .game-tab.active.sequence {
     color: var(--teal);
     box-shadow: inset 0 -2px 0 var(--teal);
+}
+
+.game-tab.active.flash {
+    color: var(--cyan);
+    box-shadow: inset 0 -2px 0 var(--cyan);
+}
+
+.game-tab.active.reaction {
+    color: var(--purple);
+    box-shadow: inset 0 -2px 0 var(--purple);
 }
 
 .game-tab:active {
@@ -379,6 +412,8 @@ body.en .lang-es { display: none !important; }
 
 .current-level-value.match { color: var(--orange); }
 .current-level-value.sequence { color: var(--teal); }
+.current-level-value.flash { color: var(--cyan); }
+.current-level-value.reaction { color: var(--purple); }
 
 .current-level-cells {
     font-size: 0.75rem;
@@ -414,6 +449,8 @@ body.en .lang-es { display: none !important; }
 
 .gostars-label.match { color: var(--orange); }
 .gostars-label.sequence { color: var(--teal); }
+.gostars-label.flash { color: var(--cyan); }
+.gostars-label.reaction { color: var(--purple); }
 
 /* Speed Levels Grid */
 .speed-levels {
@@ -450,28 +487,31 @@ body.en .lang-es { display: none !important; }
 .speed-level-value {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 1.4rem;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
+    margin-bottom: 2px;
 }
 
 .speed-level-value.match { color: var(--orange); }
 .speed-level-value.sequence { color: var(--teal); }
-.speed-level-value.locked { color: var(--muted); opacity: 0.5; }
+.speed-level-value.flash { color: var(--cyan); }
+.speed-level-value.reaction { color: var(--purple); }
+.speed-level-value.locked { opacity: 0.4; }
 
 .speed-level-cells {
-    font-size: 0.55rem;
+    font-size: 0.6rem;
     color: var(--muted);
-    margin-top: 2px;
 }
 
-/* ============ UNLOCK SPEEDS CTA ============ */
+/* ============ UNLOCK SECTION ============ */
 .unlock-section {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(255,215,0,0.05), rgba(255,107,53,0.05));
+    border: 1px solid rgba(255,215,0,0.15);
+    border-radius: 12px;
     padding: 15px;
     text-align: center;
     margin-bottom: 15px;
     display: none;
+    width: 100%;
 }
 
 .unlock-section.show {
@@ -480,7 +520,7 @@ body.en .lang-es { display: none !important; }
 
 .unlock-text {
     font-size: 0.75rem;
-    color: var(--muted);
+    color: var(--text);
     margin-bottom: 10px;
 }
 
@@ -492,7 +532,7 @@ body.en .lang-es { display: none !important; }
 }
 
 .unlock-speed-chip {
-    padding: 4px 10px;
+    padding: 5px 12px;
     border-radius: 12px;
     font-family: 'Bebas Neue', sans-serif;
     font-size: 0.7rem;
@@ -512,12 +552,12 @@ body.en .lang-es { display: none !important; }
 .unlock-btn {
     display: inline-block;
     padding: 10px 25px;
-    background: linear-gradient(135deg, var(--gold), var(--orange));
+    background: linear-gradient(135deg, var(--gold), #FFA500);
     color: var(--dark);
     text-decoration: none;
-    border-radius: 25px;
+    border-radius: 20px;
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     letter-spacing: 2px;
     transition: all 0.2s;
 }
@@ -530,16 +570,14 @@ body.en .lang-es { display: none !important; }
 .footer-nav {
     display: flex;
     justify-content: center;
-    gap: 15px;
+    gap: 20px;
     padding-top: 10px;
-    flex-wrap: wrap;
 }
 
 .footer-link {
+    font-size: 0.7rem;
     color: var(--muted);
     text-decoration: none;
-    font-size: 0.75rem;
-    transition: color 0.2s;
 }
 
 .footer-link:active {
@@ -555,22 +593,22 @@ body.en .lang-es { display: none !important; }
     .main { padding: 25px 20px 40px; }
     .page-title { font-size: 1.8rem; }
     .page-subtitle { font-size: 0.8rem; }
-    .workout-grid { gap: 15px; }
-    .workout-card { padding: 25px 15px; }
-    .workout-icon { font-size: 3rem; }
-    .workout-name { font-size: 1.3rem; }
-    .workout-desc { font-size: 0.7rem; }
-    .game-tab { font-size: 1rem; padding: 14px 12px; }
+    .workout-grid { gap: 12px; }
+    .workout-card { padding: 18px 10px; }
+    .workout-icon { font-size: 2.3rem; }
+    .workout-name { font-size: 1.05rem; }
+    .workout-desc { font-size: 0.6rem; }
+    .game-tab { font-size: 0.7rem; padding: 12px 6px; }
     .gostars-display { font-size: 1.5rem; letter-spacing: 3px; }
     .speed-level-value { font-size: 1.6rem; }
 }
 
 @media (min-width: 500px) {
     .page-title { font-size: 2rem; }
-    .workout-card { padding: 30px 20px; border-radius: 16px; }
-    .workout-icon { font-size: 3.5rem; }
-    .workout-name { font-size: 1.5rem; }
-    .game-tab { font-size: 1.1rem; }
+    .workout-card { padding: 22px 12px; border-radius: 16px; }
+    .workout-icon { font-size: 2.8rem; }
+    .workout-name { font-size: 1.2rem; }
+    .game-tab { font-size: 0.8rem; }
     .gostars-display { font-size: 1.7rem; }
     .speed-level-value { font-size: 1.8rem; }
 }
@@ -619,15 +657,15 @@ body.en .lang-es { display: none !important; }
         </a>
     </div>
 
-    <!-- Workout Grid -->
+    <!-- Workout Grid - 4 Games -->
     <div class="workout-grid">
         <!-- THE MATCH -->
         <a href="/the-match.html" class="workout-card match">
             <span class="workout-icon">🧠</span>
             <div class="workout-name">THE MATCH</div>
             <p class="workout-desc">
-                <span class="lang-en">Memorize & tap in order</span>
-                <span class="lang-es">Memoriza y toca en orden</span>
+                <span class="lang-en">Position + Numbers</span>
+                <span class="lang-es">Posición + Números</span>
             </p>
             <span class="play-label">
                 <span class="lang-en">PLAY →</span>
@@ -640,8 +678,36 @@ body.en .lang-es { display: none !important; }
             <span class="workout-icon">🔢</span>
             <div class="workout-name">THE SEQUENCE</div>
             <p class="workout-desc">
-                <span class="lang-en">Watch & repeat back</span>
-                <span class="lang-es">Mira y repite</span>
+                <span class="lang-en">Order Memory</span>
+                <span class="lang-es">Memoria de Orden</span>
+            </p>
+            <span class="play-label">
+                <span class="lang-en">PLAY →</span>
+                <span class="lang-es">JUGAR →</span>
+            </span>
+        </a>
+
+        <!-- THE FLASH -->
+        <a href="/the-flash.html" class="workout-card flash">
+            <span class="workout-icon">⚡</span>
+            <div class="workout-name">THE FLASH</div>
+            <p class="workout-desc">
+                <span class="lang-en">Pure Position</span>
+                <span class="lang-es">Posición Pura</span>
+            </p>
+            <span class="play-label">
+                <span class="lang-en">PLAY →</span>
+                <span class="lang-es">JUGAR →</span>
+            </span>
+        </a>
+
+        <!-- THE REACTION -->
+        <a href="/the-reaction.html" class="workout-card reaction">
+            <span class="workout-icon">🎯</span>
+            <div class="workout-name">THE REACTION</div>
+            <p class="workout-desc">
+                <span class="lang-en">Speed & Reflex</span>
+                <span class="lang-es">Velocidad y Reflejos</span>
             </p>
             <span class="play-label">
                 <span class="lang-en">PLAY →</span>
@@ -652,14 +718,12 @@ body.en .lang-es { display: none !important; }
 
     <!-- Progress Section with Toggle -->
     <div class="progress-section">
-        <!-- Game Toggle -->
+        <!-- Game Toggle - 4 Games -->
         <div class="game-toggle">
-            <button class="game-tab match active" id="tabMatch" data-game="match">
-                🧠 THE MATCH
-            </button>
-            <button class="game-tab sequence" id="tabSequence" data-game="sequence">
-                🔢 THE SEQUENCE
-            </button>
+            <button class="game-tab match active" id="tabMatch" data-game="match">🧠 MATCH</button>
+            <button class="game-tab sequence" id="tabSequence" data-game="sequence">🔢 SEQ</button>
+            <button class="game-tab flash" id="tabFlash" data-game="flash">⚡ FLASH</button>
+            <button class="game-tab reaction" id="tabReaction" data-game="reaction">🎯 REACT</button>
         </div>
 
         <!-- Speed Toggle -->
@@ -675,20 +739,14 @@ body.en .lang-es { display: none !important; }
 
         <!-- GoStars Display -->
         <div class="gostars-section">
-            <p class="gostars-title" id="gostarsTitle">
-                <span class="lang-en">YOUR MATCH GOSTARS</span>
-                <span class="lang-es">TUS GOSTARS DE MATCH</span>
-            </p>
+            <p class="gostars-title" id="gostarsTitle">YOUR MATCH GOSTARS</p>
             <div class="gostars-display" id="gostarsDisplay">⭐☆☆☆☆☆☆☆☆☆</div>
             <p class="gostars-label match" id="gostarsLabel">1 / 10 GoStars</p>
         </div>
 
         <!-- Current Speed Level -->
         <div class="current-level-section">
-            <p class="current-level-title" id="currentLevelTitle">
-                <span class="lang-en">SLOW LEVEL</span>
-                <span class="lang-es">NIVEL LENTO</span>
-            </p>
+            <p class="current-level-title" id="currentLevelTitle">SLOW LEVEL</p>
             <div class="current-level-display">
                 <span class="current-level-value match" id="currentLevelValue">L1</span>
                 <span class="current-level-cells" id="currentLevelCells">5 cells</span>
@@ -707,9 +765,7 @@ body.en .lang-es { display: none !important; }
             </div>
             <div class="speed-level" id="speedLevelMed">
                 <p class="speed-level-name" id="medLabel">
-                    <span class="lock" id="medLock">🔒</span>
-                    <span class="lang-en">MED</span>
-                    <span class="lang-es">MED</span>
+                    <span class="lock" id="medLock">🔒</span> MED
                 </p>
                 <div class="speed-level-value match locked" id="levelMed">L1</div>
                 <div class="speed-level-cells" id="cellsMed">5 cells</div>
@@ -802,11 +858,13 @@ body.en .lang-es { display: none !important; }
         }
     }
 
-    // ==================== GAME TOGGLE ====================
+    // ==================== GAME TOGGLE - 4 GAMES ====================
     var currentGame = 'match';
     var currentSpeedView = 'slow';
     var tabMatch = document.getElementById('tabMatch');
     var tabSequence = document.getElementById('tabSequence');
+    var tabFlash = document.getElementById('tabFlash');
+    var tabReaction = document.getElementById('tabReaction');
     var tabSlow = document.getElementById('tabSlow');
     var tabMed = document.getElementById('tabMed');
     var tabFast = document.getElementById('tabFast');
@@ -817,12 +875,13 @@ body.en .lang-es { display: none !important; }
         // Update tabs
         tabMatch.classList.remove('active');
         tabSequence.classList.remove('active');
+        tabFlash.classList.remove('active');
+        tabReaction.classList.remove('active');
         
-        if (game === 'match') {
-            tabMatch.classList.add('active');
-        } else {
-            tabSequence.classList.add('active');
-        }
+        if (game === 'match') tabMatch.classList.add('active');
+        else if (game === 'sequence') tabSequence.classList.add('active');
+        else if (game === 'flash') tabFlash.classList.add('active');
+        else tabReaction.classList.add('active');
         
         updateProgressDisplay();
     }
@@ -835,19 +894,17 @@ body.en .lang-es { display: none !important; }
         tabMed.classList.remove('active');
         tabFast.classList.remove('active');
         
-        if (speed === 'slow') {
-            tabSlow.classList.add('active');
-        } else if (speed === 'med') {
-            tabMed.classList.add('active');
-        } else {
-            tabFast.classList.add('active');
-        }
+        if (speed === 'slow') tabSlow.classList.add('active');
+        else if (speed === 'med') tabMed.classList.add('active');
+        else tabFast.classList.add('active');
         
         updateProgressDisplay();
     }
 
     tabMatch.onclick = function() { setGame('match'); };
     tabSequence.onclick = function() { setGame('sequence'); };
+    tabFlash.onclick = function() { setGame('flash'); };
+    tabReaction.onclick = function() { setGame('reaction'); };
     tabSlow.onclick = function() { setSpeedView('slow'); };
     tabMed.onclick = function() { setSpeedView('med'); };
     tabFast.onclick = function() { setSpeedView('fast'); };
@@ -860,9 +917,23 @@ body.en .lang-es { display: none !important; }
     }
 
     function updateProgressDisplay() {
-        var prefix = currentGame === 'match' ? 'lc-match' : 'lc-seq';
-        var gameLabel = currentGame === 'match' ? 'MATCH' : 'SEQUENCE';
-        var colorClass = currentGame === 'match' ? 'match' : 'sequence';
+        // Game prefixes and labels
+        var prefixMap = {
+            match: 'lc-match',
+            sequence: 'lc-seq',
+            flash: 'lc-flash',
+            reaction: 'lc-reaction'
+        };
+        var labelMap = {
+            match: 'MATCH',
+            sequence: 'SEQUENCE',
+            flash: 'FLASH',
+            reaction: 'REACTION'
+        };
+        
+        var prefix = prefixMap[currentGame];
+        var gameLabel = labelMap[currentGame];
+        var colorClass = currentGame;
         
         // Speed labels
         var speedLabels = {
@@ -872,14 +943,14 @@ body.en .lang-es { display: none !important; }
         };
         var speedLabel = speedLabels[currentSpeedView][currentLang] || speedLabels[currentSpeedView].en;
         
-        // Get level for SELECTED SPEED - Level = GoStars (L1=1 star, L2=2 stars, etc.)
+        // Get level for SELECTED SPEED
         var level = parseInt(localStorage.getItem(prefix + '-level-' + currentSpeedView)) || parseInt(localStorage.getItem(prefix + '-level')) || 1;
         level = Math.min(10, Math.max(1, level));
         
         // GoStars = Level
         var goStars = level;
         
-        // Get levels for all speeds (for overview)
+        // Get levels for all speeds
         var levelSlow = parseInt(localStorage.getItem(prefix + '-level-slow')) || parseInt(localStorage.getItem(prefix + '-level')) || 1;
         var levelMed = parseInt(localStorage.getItem(prefix + '-level-med')) || 1;
         var levelFast = parseInt(localStorage.getItem(prefix + '-level-fast')) || 1;
@@ -895,7 +966,7 @@ body.en .lang-es { display: none !important; }
             titleEl.innerHTML = 'TUS GOSTARS ' + gameLabel + ' ' + speedLabel;
         }
         
-        // Update GoStars display - stars match level
+        // Update GoStars display
         var display = '';
         for (var i = 0; i < 10; i++) {
             display += i < goStars ? '⭐' : '☆';
@@ -922,7 +993,7 @@ body.en .lang-es { display: none !important; }
         var cellsLabel = currentLang === 'en' ? ' cells' : ' celdas';
         document.getElementById('currentLevelCells').textContent = getCellsForLevel(level) + cellsLabel;
         
-        // Update speed levels overview - highlight selected
+        // Update speed levels overview
         var speedLevelSlow = document.getElementById('speedLevelSlow');
         var speedLevelMed = document.getElementById('speedLevelMed');
         var speedLevelFast = document.getElementById('speedLevelFast');
@@ -945,7 +1016,7 @@ body.en .lang-es { display: none !important; }
         levelFastEl.textContent = 'L' + levelFast;
         levelFastEl.className = 'speed-level-value ' + colorClass + (speedAccess.allSpeeds ? '' : ' locked');
         
-        // Update cells count for each speed's level
+        // Update cells count
         document.getElementById('cellsSlow').textContent = getCellsForLevel(levelSlow) + cellsLabel;
         document.getElementById('cellsMed').textContent = getCellsForLevel(levelMed) + cellsLabel;
         document.getElementById('cellsFast').textContent = getCellsForLevel(levelFast) + cellsLabel;
