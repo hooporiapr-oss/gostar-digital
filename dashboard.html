@@ -313,6 +313,78 @@ body.en .lang-es { display: none !important; }
     background: rgba(255,255,255,0.05);
 }
 
+/* Speed Toggle */
+.speed-toggle {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    background: rgba(0,0,0,0.2);
+}
+
+.speed-tab {
+    flex: 1;
+    padding: 10px 8px;
+    background: transparent;
+    border: none;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    border-right: 1px solid var(--border);
+}
+
+.speed-tab:last-child {
+    border-right: none;
+}
+
+.speed-tab.active {
+    background: rgba(255,215,0,0.1);
+    color: var(--gold);
+}
+
+.speed-tab:active {
+    background: rgba(255,255,255,0.05);
+}
+
+/* Current Level Section */
+.current-level-section {
+    padding: 12px 15px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    background: rgba(255,255,255,0.02);
+}
+
+.current-level-title {
+    font-size: 0.6rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+}
+
+.current-level-display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.current-level-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 2px;
+}
+
+.current-level-value.match { color: var(--orange); }
+.current-level-value.sequence { color: var(--teal); }
+
+.current-level-cells {
+    font-size: 0.75rem;
+    color: var(--muted);
+}
+
 /* GoStars Display */
 .gostars-section {
     padding: 15px;
@@ -590,6 +662,17 @@ body.en .lang-es { display: none !important; }
             </button>
         </div>
 
+        <!-- Speed Toggle -->
+        <div class="speed-toggle">
+            <button class="speed-tab active" id="tabSlow" data-speed="slow">
+                <span class="lang-en">SLOW</span><span class="lang-es">LENTO</span>
+            </button>
+            <button class="speed-tab" id="tabMed" data-speed="med">MED</button>
+            <button class="speed-tab" id="tabFast" data-speed="fast">
+                <span class="lang-en">FAST</span><span class="lang-es">RÁPIDO</span>
+            </button>
+        </div>
+
         <!-- GoStars Display -->
         <div class="gostars-section">
             <p class="gostars-title" id="gostarsTitle">
@@ -600,9 +683,21 @@ body.en .lang-es { display: none !important; }
             <p class="gostars-label match" id="gostarsLabel">1 / 10 GoStars</p>
         </div>
 
-        <!-- Speed Levels -->
+        <!-- Current Speed Level -->
+        <div class="current-level-section">
+            <p class="current-level-title" id="currentLevelTitle">
+                <span class="lang-en">SLOW LEVEL</span>
+                <span class="lang-es">NIVEL LENTO</span>
+            </p>
+            <div class="current-level-display">
+                <span class="current-level-value match" id="currentLevelValue">L1</span>
+                <span class="current-level-cells" id="currentLevelCells">5 cells</span>
+            </div>
+        </div>
+
+        <!-- All Speeds Overview -->
         <div class="speed-levels">
-            <div class="speed-level">
+            <div class="speed-level" id="speedLevelSlow">
                 <p class="speed-level-name">
                     <span class="lang-en">SLOW</span>
                     <span class="lang-es">LENTO</span>
@@ -610,7 +705,7 @@ body.en .lang-es { display: none !important; }
                 <div class="speed-level-value match" id="levelSlow">L1</div>
                 <div class="speed-level-cells" id="cellsSlow">5 cells</div>
             </div>
-            <div class="speed-level">
+            <div class="speed-level" id="speedLevelMed">
                 <p class="speed-level-name" id="medLabel">
                     <span class="lock" id="medLock">🔒</span>
                     <span class="lang-en">MED</span>
@@ -619,7 +714,7 @@ body.en .lang-es { display: none !important; }
                 <div class="speed-level-value match locked" id="levelMed">L1</div>
                 <div class="speed-level-cells" id="cellsMed">5 cells</div>
             </div>
-            <div class="speed-level">
+            <div class="speed-level" id="speedLevelFast">
                 <p class="speed-level-name" id="fastLabel">
                     <span class="lock" id="fastLock">🔒</span>
                     <span class="lang-en">FAST</span>
@@ -709,8 +804,12 @@ body.en .lang-es { display: none !important; }
 
     // ==================== GAME TOGGLE ====================
     var currentGame = 'match';
+    var currentSpeedView = 'slow';
     var tabMatch = document.getElementById('tabMatch');
     var tabSequence = document.getElementById('tabSequence');
+    var tabSlow = document.getElementById('tabSlow');
+    var tabMed = document.getElementById('tabMed');
+    var tabFast = document.getElementById('tabFast');
 
     function setGame(game) {
         currentGame = game;
@@ -728,8 +827,30 @@ body.en .lang-es { display: none !important; }
         updateProgressDisplay();
     }
 
+    function setSpeedView(speed) {
+        currentSpeedView = speed;
+        
+        // Update speed tabs
+        tabSlow.classList.remove('active');
+        tabMed.classList.remove('active');
+        tabFast.classList.remove('active');
+        
+        if (speed === 'slow') {
+            tabSlow.classList.add('active');
+        } else if (speed === 'med') {
+            tabMed.classList.add('active');
+        } else {
+            tabFast.classList.add('active');
+        }
+        
+        updateProgressDisplay();
+    }
+
     tabMatch.onclick = function() { setGame('match'); };
     tabSequence.onclick = function() { setGame('sequence'); };
+    tabSlow.onclick = function() { setSpeedView('slow'); };
+    tabMed.onclick = function() { setSpeedView('med'); };
+    tabFast.onclick = function() { setSpeedView('fast'); };
 
     // ==================== PROGRESS DISPLAY ====================
     var LEVEL_CELLS = {1:5,2:6,3:7,4:8,5:9,6:10,7:11,8:12,9:13,10:14};
@@ -743,33 +864,38 @@ body.en .lang-es { display: none !important; }
         var gameLabel = currentGame === 'match' ? 'MATCH' : 'SEQUENCE';
         var colorClass = currentGame === 'match' ? 'match' : 'sequence';
         
-        // Get GoStars (tier) - highest tier across all speeds
-        var tierSlow = parseInt(localStorage.getItem(prefix + '-tier-slow')) || 1;
-        var tierMed = parseInt(localStorage.getItem(prefix + '-tier-med')) || 1;
-        var tierFast = parseInt(localStorage.getItem(prefix + '-tier-fast')) || 1;
-        // Fallback to old key for backward compatibility
-        var tierOld = parseInt(localStorage.getItem(prefix + '-tier')) || 1;
-        var tier = Math.max(tierSlow, tierMed, tierFast, tierOld);
+        // Speed labels
+        var speedLabels = {
+            slow: { en: 'SLOW', es: 'LENTO' },
+            med: { en: 'MED', es: 'MED' },
+            fast: { en: 'FAST', es: 'RÁPIDO' }
+        };
+        var speedLabel = speedLabels[currentSpeedView][currentLang] || speedLabels[currentSpeedView].en;
         
-        // Get level PER SPEED
+        // Get GoStars (tier) for SELECTED SPEED
+        var tier = parseInt(localStorage.getItem(prefix + '-tier-' + currentSpeedView)) || parseInt(localStorage.getItem(prefix + '-tier')) || 1;
+        
+        // Get level for SELECTED SPEED
+        var level = parseInt(localStorage.getItem(prefix + '-level-' + currentSpeedView)) || parseInt(localStorage.getItem(prefix + '-level')) || 1;
+        level = Math.min(10, Math.max(1, level));
+        
+        // Get levels for all speeds (for overview)
         var levelSlow = parseInt(localStorage.getItem(prefix + '-level-slow')) || parseInt(localStorage.getItem(prefix + '-level')) || 1;
         var levelMed = parseInt(localStorage.getItem(prefix + '-level-med')) || 1;
         var levelFast = parseInt(localStorage.getItem(prefix + '-level-fast')) || 1;
-        
-        // Cap levels at 10
         levelSlow = Math.min(10, Math.max(1, levelSlow));
         levelMed = Math.min(10, Math.max(1, levelMed));
         levelFast = Math.min(10, Math.max(1, levelFast));
         
-        // Update title
+        // Update title with game + speed
         var titleEl = document.getElementById('gostarsTitle');
         if (currentLang === 'en') {
-            titleEl.innerHTML = 'YOUR ' + gameLabel + ' GOSTARS';
+            titleEl.innerHTML = 'YOUR ' + gameLabel + ' ' + speedLabel + ' GOSTARS';
         } else {
-            titleEl.innerHTML = 'TUS GOSTARS DE ' + gameLabel;
+            titleEl.innerHTML = 'TUS GOSTARS ' + gameLabel + ' ' + speedLabel;
         }
         
-        // Update GoStars display
+        // Update GoStars display for selected speed
         var display = '';
         for (var i = 0; i < 10; i++) {
             display += i < tier ? '⭐' : '☆';
@@ -781,7 +907,31 @@ body.en .lang-es { display: none !important; }
         labelEl.textContent = tier + ' / 10 GoStars';
         labelEl.className = 'gostars-label ' + colorClass;
         
-        // Update speed levels - EACH SPEED HAS ITS OWN LEVEL
+        // Update current level section
+        var levelTitleEl = document.getElementById('currentLevelTitle');
+        if (currentLang === 'en') {
+            levelTitleEl.innerHTML = speedLabel + ' LEVEL';
+        } else {
+            levelTitleEl.innerHTML = 'NIVEL ' + speedLabel;
+        }
+        
+        var levelValueEl = document.getElementById('currentLevelValue');
+        levelValueEl.textContent = 'L' + level;
+        levelValueEl.className = 'current-level-value ' + colorClass;
+        
+        var cellsLabel = currentLang === 'en' ? ' cells' : ' celdas';
+        document.getElementById('currentLevelCells').textContent = getCellsForLevel(level) + cellsLabel;
+        
+        // Update speed levels overview - highlight selected
+        var speedLevelSlow = document.getElementById('speedLevelSlow');
+        var speedLevelMed = document.getElementById('speedLevelMed');
+        var speedLevelFast = document.getElementById('speedLevelFast');
+        
+        speedLevelSlow.style.background = currentSpeedView === 'slow' ? 'rgba(255,215,0,0.08)' : 'transparent';
+        speedLevelMed.style.background = currentSpeedView === 'med' ? 'rgba(255,215,0,0.08)' : 'transparent';
+        speedLevelFast.style.background = currentSpeedView === 'fast' ? 'rgba(255,215,0,0.08)' : 'transparent';
+        
+        // Update speed level values
         var levelSlowEl = document.getElementById('levelSlow');
         var levelMedEl = document.getElementById('levelMed');
         var levelFastEl = document.getElementById('levelFast');
@@ -795,8 +945,7 @@ body.en .lang-es { display: none !important; }
         levelFastEl.textContent = 'L' + levelFast;
         levelFastEl.className = 'speed-level-value ' + colorClass + (speedAccess.allSpeeds ? '' : ' locked');
         
-        // Update cells count per speed
-        var cellsLabel = currentLang === 'en' ? ' cells' : ' celdas';
+        // Update cells count for each speed's level
         document.getElementById('cellsSlow').textContent = getCellsForLevel(levelSlow) + cellsLabel;
         document.getElementById('cellsMed').textContent = getCellsForLevel(levelMed) + cellsLabel;
         document.getElementById('cellsFast').textContent = getCellsForLevel(levelFast) + cellsLabel;
