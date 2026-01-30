@@ -6,7 +6,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // ============ PLATFORM VERSION ============
-const PLATFORM_VERSION = '2.3.0';
+const PLATFORM_VERSION = '3.0.0';
 const PLATFORM_VERSION_NAME = 'LaughCourt™ - Where Joy Meets The Game';
 
 // ============ ADMIN SECRET KEY ============
@@ -651,16 +651,24 @@ app.get('/api/activity/list', adminKeyAuth, function(req, res) {
 app.get('/', function(req, res) { res.sendFile(path.join(__dirname, 'index.html')); });
 app.get('/trial-pin', function(req, res) { res.sendFile(path.join(__dirname, 'trial-pin.html')); });
 app.get('/how-to-play', function(req, res) { res.sendFile(path.join(__dirname, 'how-to-play.html')); });
-app.get('/the-sequence', function(req, res) { res.sendFile(path.join(__dirname, 'the-sequence.html')); });
-app.get('/play', function(req, res) { res.sendFile(path.join(__dirname, 'play.html')); });
-app.get('/the-match', function(req, res) { res.sendFile(path.join(__dirname, 'the-match.html')); });
-app.get('/the-combo', function(req, res) { res.sendFile(path.join(__dirname, 'the-combo.html')); });
-app.get('/the-reflex', function(req, res) { res.sendFile(path.join(__dirname, 'the-reflex.html')); });
-app.get('/the-starting-five', function(req, res) { res.sendFile(path.join(__dirname, 'the-starting-five.html')); });
-app.get('/the-gotrotters', function(req, res) { res.redirect(301, '/the-starting-five'); });
-app.get('/hub', function(req, res) { res.sendFile(path.join(__dirname, 'trotter-hub.html')); });
 app.get('/login', function(req, res) { res.sendFile(path.join(__dirname, 'login.html')); });
 app.get('/faq', function(req, res) { res.sendFile(path.join(__dirname, 'faq.html')); });
+
+// Dashboard & Games
+app.get('/dashboard', function(req, res) { res.sendFile(path.join(__dirname, 'dashboard.html')); });
+app.get('/the-match', function(req, res) { res.sendFile(path.join(__dirname, 'the-match.html')); });
+app.get('/the-sequence', function(req, res) { res.sendFile(path.join(__dirname, 'the-sequence.html')); });
+app.get('/the-flash', function(req, res) { res.sendFile(path.join(__dirname, 'the-flash.html')); });
+app.get('/the-reaction', function(req, res) { res.sendFile(path.join(__dirname, 'the-reaction.html')); });
+app.get('/the-zoo', function(req, res) { res.sendFile(path.join(__dirname, 'the-zoo.html')); });
+
+// Legacy redirects
+app.get('/play', function(req, res) { res.redirect(301, '/dashboard.html'); });
+app.get('/the-combo', function(req, res) { res.redirect(301, '/dashboard.html'); });
+app.get('/the-reflex', function(req, res) { res.redirect(301, '/dashboard.html'); });
+app.get('/the-starting-five', function(req, res) { res.sendFile(path.join(__dirname, 'the-starting-five.html')); });
+app.get('/the-gotrotters', function(req, res) { res.redirect(301, '/the-starting-five'); });
+app.get('/hub', function(req, res) { res.redirect(301, '/dashboard.html'); });
 
 // ============ SUCCESS PAGE ============
 app.get('/success', function(req, res) {
@@ -679,7 +687,7 @@ app.get('/success', function(req, res) {
         html += '<footer class="footer"><div class="footer-logo">🏀 <span class="laugh">LAUGH</span><span class="court">COURT</span></div><div class="footer-company">by <a href="https://gostar.digital">GoStar Digital LLC</a> 🇵🇷</div></footer></div><script>(function(){var lang=localStorage.getItem("laughcourt_lang")||"en";document.body.className=lang;document.getElementById("btnEn").className=lang==="en"?"lang-btn active":"lang-btn";document.getElementById("btnEs").className=lang==="es"?"lang-btn active":"lang-btn";document.getElementById("btnEn").onclick=function(){localStorage.setItem("laughcourt_lang","en");document.body.className="en";this.className="lang-btn active";document.getElementById("btnEs").className="lang-btn";};document.getElementById("btnEs").onclick=function(){localStorage.setItem("laughcourt_lang","es");document.body.className="es";this.className="lang-btn active";document.getElementById("btnEn").className="lang-btn";};';
         
         if (found && pin) {
-            html += 'var pin="' + pin + '";var countdown=5;var interval=setInterval(function(){countdown--;var cEn=document.getElementById("countEn");var cEs=document.getElementById("countEs");if(cEn)cEn.textContent=countdown;if(cEs)cEs.textContent=countdown;if(countdown<=0){clearInterval(interval);doLogin();}},1000);function doLogin(){var btn=document.getElementById("playBtn");if(btn)btn.disabled=true;fetch("/api/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({pin:pin})}).then(function(r){return r.json();}).then(function(data){if(data.success){localStorage.setItem("lc-user",JSON.stringify({pin:pin}));sessionStorage.setItem("lc-pin",pin);sessionStorage.setItem("lc-token",data.token);localStorage.setItem("lc-terms-accepted",new Date().toISOString());window.location.href="/play";}else{window.location.href="/login";}}).catch(function(){window.location.href="/login";});}var playBtn=document.getElementById("playBtn");if(playBtn)playBtn.onclick=function(){clearInterval(interval);doLogin();};';
+            html += 'var pin="' + pin + '";var countdown=5;var interval=setInterval(function(){countdown--;var cEn=document.getElementById("countEn");var cEs=document.getElementById("countEs");if(cEn)cEn.textContent=countdown;if(cEs)cEs.textContent=countdown;if(countdown<=0){clearInterval(interval);doLogin();}},1000);function doLogin(){var btn=document.getElementById("playBtn");if(btn)btn.disabled=true;fetch("/api/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({pin:pin})}).then(function(r){return r.json();}).then(function(data){if(data.success){localStorage.setItem("lc-user",JSON.stringify({pin:pin}));sessionStorage.setItem("lc-pin",pin);sessionStorage.setItem("lc-token",data.token);localStorage.setItem("lc-terms-accepted",new Date().toISOString());window.location.href="/dashboard.html";}else{window.location.href="/login";}}).catch(function(){window.location.href="/login";});}var playBtn=document.getElementById("playBtn");if(playBtn)playBtn.onclick=function(){clearInterval(interval);doLogin();};';
         }
         
         html += '})();</script></body></html>';
@@ -725,7 +733,7 @@ app.get('/success', function(req, res) {
 // ============ HEALTH & VERSION ============
 app.get('/health', function(req, res) { res.json({ status: 'healthy', timestamp: new Date().toISOString(), version: PLATFORM_VERSION }); });
 
-app.get('/api/platform/version', function(req, res) { res.json({ version: PLATFORM_VERSION, versionName: PLATFORM_VERSION_NAME, game: 'LAUGHCOURT', divisions: 15, levels: 5, speeds: ['SLOW', 'MED', 'FAST'] }); });
+app.get('/api/platform/version', function(req, res) { res.json({ version: PLATFORM_VERSION, versionName: PLATFORM_VERSION_NAME, games: 5, divisions: 150, levels: 10, speeds: ['SLOW', 'MED', 'FAST'] }); });
 
 // ============ START SERVER ============
 app.listen(PORT, function() {
@@ -743,11 +751,15 @@ app.listen(PORT, function() {
     console.log('   /                 → Landing page');
     console.log('   /login            → PIN Login');
     console.log('   /success          → Post-payment');
-    console.log('   /play             → Game choice');
-    console.log('   /the-match        → THE MATCH');
-    console.log('   /the-sequence     → THE SEQUENCE');
-    console.log('   /the-combo        → THE COMBO CHALLENGE');
+    console.log('   /dashboard.html   → Trophy Case');
     console.log('');
-    console.log('🏀 Ready to play!');
+    console.log('🏆 5 WORKOUTS:');
+    console.log('   /the-match        → 🧠 THE MATCH');
+    console.log('   /the-sequence     → 🔢 THE SEQUENCE');
+    console.log('   /the-flash        → ⚡ THE FLASH');
+    console.log('   /the-reaction     → 🎯 THE REACTION');
+    console.log('   /the-zoo          → 🦁 THE ZOO');
+    console.log('');
+    console.log('🏀 Ready to play! 5 Games. $5. 150 Divisions.');
     console.log('');
 });
