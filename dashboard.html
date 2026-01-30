@@ -14,6 +14,7 @@
     --teal: #00D9A5;
     --cyan: #00CED1;
     --purple: #9B59B6;
+    --lime: #32CD32;
     --dark: #0a0a0f;
     --darker: #050508;
     --card: #111118;
@@ -237,6 +238,13 @@ body.en .lang-es { display: none !important; }
     border-color: var(--purple);
     box-shadow: 0 5px 20px rgba(155, 89, 182, 0.2);
 }
+.workout-card.zoo {
+    border-color: rgba(50, 205, 50, 0.3);
+}
+.workout-card.zoo:active {
+    border-color: var(--lime);
+    box-shadow: 0 5px 20px rgba(50, 205, 50, 0.2);
+}
 
 .workout-icon {
     font-size: 2rem;
@@ -257,6 +265,7 @@ body.en .lang-es { display: none !important; }
 .workout-card.sequence .workout-name { color: var(--teal); }
 .workout-card.flash .workout-name { color: var(--cyan); }
 .workout-card.reaction .workout-name { color: var(--purple); }
+.workout-card.zoo .workout-name { color: var(--lime); }
 
 .workout-desc {
     font-size: 0.55rem;
@@ -279,6 +288,7 @@ body.en .lang-es { display: none !important; }
 .workout-card.sequence .play-label { background: rgba(0,217,165,0.15); color: var(--teal); }
 .workout-card.flash .play-label { background: rgba(0,206,209,0.15); color: var(--cyan); }
 .workout-card.reaction .play-label { background: rgba(155,89,182,0.15); color: var(--purple); }
+.workout-card.zoo .play-label { background: rgba(50,205,50,0.15); color: var(--lime); }
 
 /* ============ PROGRESS SECTION WITH TOGGLE ============ */
 .progress-section {
@@ -340,6 +350,11 @@ body.en .lang-es { display: none !important; }
 .game-tab.active.reaction {
     color: var(--purple);
     box-shadow: inset 0 -2px 0 var(--purple);
+}
+
+.game-tab.active.zoo {
+    color: var(--lime);
+    box-shadow: inset 0 -2px 0 var(--lime);
 }
 
 .game-tab:active {
@@ -414,6 +429,7 @@ body.en .lang-es { display: none !important; }
 .current-level-value.sequence { color: var(--teal); }
 .current-level-value.flash { color: var(--cyan); }
 .current-level-value.reaction { color: var(--purple); }
+.current-level-value.zoo { color: var(--lime); }
 
 .current-level-cells {
     font-size: 0.75rem;
@@ -451,6 +467,7 @@ body.en .lang-es { display: none !important; }
 .gostars-label.sequence { color: var(--teal); }
 .gostars-label.flash { color: var(--cyan); }
 .gostars-label.reaction { color: var(--purple); }
+.gostars-label.zoo { color: var(--lime); }
 
 /* Speed Levels Grid */
 .speed-levels {
@@ -495,6 +512,7 @@ body.en .lang-es { display: none !important; }
 .speed-level-value.sequence { color: var(--teal); }
 .speed-level-value.flash { color: var(--cyan); }
 .speed-level-value.reaction { color: var(--purple); }
+.speed-level-value.zoo { color: var(--lime); }
 .speed-level-value.locked { opacity: 0.4; }
 
 .speed-level-cells {
@@ -714,16 +732,31 @@ body.en .lang-es { display: none !important; }
                 <span class="lang-es">JUGAR →</span>
             </span>
         </a>
+
+        <!-- THE ZOO -->
+        <a href="/the-zoo.html" class="workout-card zoo">
+            <span class="workout-icon">🦁</span>
+            <div class="workout-name">THE ZOO</div>
+            <p class="workout-desc">
+                <span class="lang-en">Pair Memory</span>
+                <span class="lang-es">Memoria de Pares</span>
+            </p>
+            <span class="play-label">
+                <span class="lang-en">PLAY →</span>
+                <span class="lang-es">JUGAR →</span>
+            </span>
+        </a>
     </div>
 
     <!-- Progress Section with Toggle -->
     <div class="progress-section">
-        <!-- Game Toggle - 4 Games -->
+        <!-- Game Toggle - 5 Games -->
         <div class="game-toggle">
             <button class="game-tab match active" id="tabMatch" data-game="match">🧠 MATCH</button>
             <button class="game-tab sequence" id="tabSequence" data-game="sequence">🔢 SEQ</button>
             <button class="game-tab flash" id="tabFlash" data-game="flash">⚡ FLASH</button>
             <button class="game-tab reaction" id="tabReaction" data-game="reaction">🎯 REACT</button>
+            <button class="game-tab zoo" id="tabZoo" data-game="zoo">🦁 ZOO</button>
         </div>
 
         <!-- Speed Toggle -->
@@ -865,6 +898,7 @@ body.en .lang-es { display: none !important; }
     var tabSequence = document.getElementById('tabSequence');
     var tabFlash = document.getElementById('tabFlash');
     var tabReaction = document.getElementById('tabReaction');
+    var tabZoo = document.getElementById('tabZoo');
     var tabSlow = document.getElementById('tabSlow');
     var tabMed = document.getElementById('tabMed');
     var tabFast = document.getElementById('tabFast');
@@ -877,11 +911,13 @@ body.en .lang-es { display: none !important; }
         tabSequence.classList.remove('active');
         tabFlash.classList.remove('active');
         tabReaction.classList.remove('active');
+        tabZoo.classList.remove('active');
         
         if (game === 'match') tabMatch.classList.add('active');
         else if (game === 'sequence') tabSequence.classList.add('active');
         else if (game === 'flash') tabFlash.classList.add('active');
-        else tabReaction.classList.add('active');
+        else if (game === 'reaction') tabReaction.classList.add('active');
+        else tabZoo.classList.add('active');
         
         updateProgressDisplay();
     }
@@ -905,6 +941,7 @@ body.en .lang-es { display: none !important; }
     tabSequence.onclick = function() { setGame('sequence'); };
     tabFlash.onclick = function() { setGame('flash'); };
     tabReaction.onclick = function() { setGame('reaction'); };
+    tabZoo.onclick = function() { setGame('zoo'); };
     tabSlow.onclick = function() { setSpeedView('slow'); };
     tabMed.onclick = function() { setSpeedView('med'); };
     tabFast.onclick = function() { setSpeedView('fast'); };
@@ -922,13 +959,15 @@ body.en .lang-es { display: none !important; }
             match: 'lc-match',
             sequence: 'lc-seq',
             flash: 'lc-flash',
-            reaction: 'lc-reaction'
+            reaction: 'lc-reaction',
+            zoo: 'lc-zoo'
         };
         var labelMap = {
             match: 'MATCH',
             sequence: 'SEQUENCE',
             flash: 'FLASH',
-            reaction: 'REACTION'
+            reaction: 'REACTION',
+            zoo: 'ZOO'
         };
         
         var prefix = prefixMap[currentGame];
