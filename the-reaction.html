@@ -165,8 +165,8 @@ body.es .lang-en{display:none!important}
 <!-- SIMPLIFIED NAV - NO TABS -->
 <nav class="mini-nav">
 <div class="nav-row">
-<a href="/dashboard.html" class="back-btn">← <span class="lang-en">BACK</span><span class="lang-es">VOLVER</span></a>
-<div class="nav-title">⚡ THE REACTION</div>
+<a href="/dashboard.html" class="back-btn">← <span class="lang-en">DASHBOARD</span><span class="lang-es">TABLERO</span></a>
+<div class="nav-title">🎯 THE REACTION</div>
 <div class="nav-right">
 <div class="nav-lang"><button class="nav-lang-btn active" id="btnEn">EN</button><button class="nav-lang-btn" id="btnEs">ES</button></div>
 <div class="settings-wrapper"><button class="settings-btn" id="settingsBtn">⚙️</button>
@@ -216,7 +216,7 @@ body.es .lang-en{display:none!important}
 
 <div class="overlay" id="levelUpOverlay">
 <div class="overlay-card">
-<div class="overlay-emoji">⚡</div>
+<div class="overlay-emoji">🎯</div>
 <h2 class="overlay-title"><span class="lang-en">LEVEL UP!</span><span class="lang-es">¡SUBISTE!</span></h2>
 <p class="overlay-message" id="levelUpMessage"></p>
 <button class="overlay-btn" id="levelUpBtn"><span class="lang-en">LET'S GO!</span><span class="lang-es">¡VAMOS!</span></button>
@@ -225,7 +225,7 @@ body.es .lang-en{display:none!important}
 
 <div class="overlay" id="upgradeOverlay">
 <div class="overlay-card">
-<div class="overlay-emoji">🔓⚡</div>
+<div class="overlay-emoji">🔓🎯</div>
 <h2 class="overlay-title">UNLOCK ALL SPEEDS</h2>
 <div class="upgrade-speed-preview">
 <span class="upgrade-speed-chip current">✓ Slow</span>
@@ -344,8 +344,8 @@ body.es .lang-en{display:none!important}
     var TOTAL_CELLS = 25;
     function getCellCount(level) { return level + 4; }
     var SPEED_CONFIG = { slow: 1200, med: 800, fast: 500 };
-    var LAUGH_EMOJIS = ['😂','😆','🤣','😄','😁','🥳','😊','⚡'];
-    var PARTY_EMOJIS = ['🥳','🎉','😂','🤣','✨','💫','⚡','🏆'];
+    var LAUGH_EMOJIS = ['😂','😆','🤣','😄','😁','🥳','😊','🎯'];
+    var PARTY_EMOJIS = ['🥳','🎉','😂','🤣','✨','💫','🎯','🏆'];
 
     // ===== STATE =====
     var state = {
@@ -546,11 +546,9 @@ body.es .lang-en{display:none!important}
         
         var flashSpeed = SPEED_CONFIG[state.speed] * 0.5;
         
-        // Show message for MATCH flash
-        messageText.innerHTML = '<span class="lang-en">🎯 MATCH PREVIEW</span><span class="lang-es">🎯 VISTA MATCH</span>';
+        messageText.innerHTML = '<span class="lang-en">🧠 MATCH PREVIEW</span><span class="lang-es">🧠 VISTA MATCH</span>';
         messageText.className = 'message-text flash-match';
         
-        // PHASE 1: MATCH - All cells lit at once (orange)
         courtGrid.classList.add('flash-match');
         playMatchBeep();
         
@@ -565,11 +563,9 @@ body.es .lang-en{display:none!important}
             courtGrid.classList.remove('flash-match');
             
             setTimeout(function() {
-                // Show message for SEQUENCE flash
                 messageText.innerHTML = '<span class="lang-en">🔢 SEQUENCE PREVIEW</span><span class="lang-es">🔢 VISTA SEQUENCE</span>';
                 messageText.className = 'message-text flash-seq';
                 
-                // PHASE 2: SEQUENCE - Replay in order (teal)
                 courtGrid.classList.add('flash-seq');
                 
                 state.reactionSequence.forEach(function(idx, i) {
@@ -732,7 +728,7 @@ body.es .lang-en{display:none!important}
             messageText.innerHTML = '<span class="lang-en">PERFECT!</span><span class="lang-es">¡PERFECTO!</span>';
             messageText.className = 'message-text perfect';
 
-            var msgs = state.streak >= 5 ? ['⚡ LIGHTNING!', '🏆 LEGEND!'] : state.streak >= 3 ? ['⚡ FAST!', '🔥 AMAZING!'] : ['⚡ NICE!', '👍 GREAT!'];
+            var msgs = state.streak >= 5 ? ['🎯 LIGHTNING!', '🏆 LEGEND!'] : state.streak >= 3 ? ['🎯 FAST!', '🔥 AMAZING!'] : ['🎯 NICE!', '👍 GREAT!'];
             showCoach(msgs[Math.floor(Math.random() * msgs.length)]);
 
             setTimeout(function() {
