@@ -765,16 +765,48 @@ body.es .lang-en{display:none!important}
         }
         state.perfectCount = 0;
         state.round = 0;
+        state.isPlaying = false; // Reset playing state
+        state.foundMatches = 0;
+        state.totalMatches = 0;
+        
+        // Clear the grid
+        state.cells.forEach(function(c) { 
+            c.className = 'grid-cell'; 
+            c.style.pointerEvents = '';
+            c.textContent = '';
+            c.style.backgroundColor = '';
+        });
+        
         updateProgressionStars();
         updateStats();
+        updateTapsCounter();
+        actionBtn.disabled = false; // Enable the button
         actionBtn.innerHTML = '<span class="lang-en">GO!</span><span class="lang-es">¡IR!</span>';
+        messageText.innerHTML = '<span class="lang-en">TAP GO TO START!</span><span class="lang-es">¡TOCA IR!</span>';
+        messageText.className = 'message-text';
     };
 
     document.getElementById('stayLevelBtn').onclick = function() {
         document.getElementById('levelUpOverlay').classList.remove('show');
         state.perfectCount = 0;
+        state.isPlaying = false; // Reset playing state
+        state.foundMatches = 0;
+        state.totalMatches = 0;
+        
+        // Clear the grid
+        state.cells.forEach(function(c) { 
+            c.className = 'grid-cell'; 
+            c.style.pointerEvents = '';
+            c.textContent = '';
+            c.style.backgroundColor = '';
+        });
+        
         updateProgressionStars();
+        updateTapsCounter();
+        actionBtn.disabled = false; // Enable the button
         actionBtn.innerHTML = '<span class="lang-en">GO!</span><span class="lang-es">¡IR!</span>';
+        messageText.innerHTML = '<span class="lang-en">TAP GO TO START!</span><span class="lang-es">¡TOCA IR!</span>';
+        messageText.className = 'message-text';
     };
 
     // ===== SELECTORS =====
