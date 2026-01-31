@@ -996,6 +996,7 @@
 
     <script>
         (function() {
+            // ==================== LANGUAGE ====================
             var currentLang = localStorage.getItem('lc-lang') || 'en';
             
             function setLang(l) {
@@ -1010,6 +1011,26 @@
             document.getElementById('btnEs').addEventListener('click', function() { setLang('es'); });
             
             setLang(currentLang);
+
+            // ==================== FAQ ACCORDION ====================
+            var questions = document.querySelectorAll('.faq-question');
+            for (var i = 0; i < questions.length; i++) {
+                questions[i].addEventListener('click', function() {
+                    var item = this.parentElement;
+                    var wasOpen = item.classList.contains('open');
+                    
+                    // Close all open items
+                    var allItems = document.querySelectorAll('.faq-item');
+                    for (var j = 0; j < allItems.length; j++) {
+                        allItems[j].classList.remove('open');
+                    }
+                    
+                    // Toggle clicked item
+                    if (!wasOpen) {
+                        item.classList.add('open');
+                    }
+                });
+            }
         })();
     </script>
 </body>
