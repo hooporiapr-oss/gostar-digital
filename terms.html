@@ -16,7 +16,7 @@ body.en .lang-es{display:none !important}
 
 .nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:15px 40px;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(180deg,rgba(10,10,15,0.98) 0%,rgba(10,10,15,0.9) 100%);backdrop-filter:blur(20px)}
 .nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:3px;text-decoration:none;display:flex;align-items:center;gap:8px}
-.nav-logo .ball{font-size:1.4rem}
+.nav-logo .icon{width:32px;height:32px;vertical-align:middle}
 .nav-logo .laugh{color:var(--gold)}
 .nav-logo .court{color:var(--text)}
 .nav-lang{display:flex;gap:5px}
@@ -48,7 +48,8 @@ a:hover{color:var(--teal)}
 
 .footer{padding:50px 20px 30px;background:var(--darker);text-align:center;border-top:1px solid rgba(255,255,255,0.05)}
 .footer-brand{margin-bottom:15px}
-.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:3px;margin-bottom:5px}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:3px;margin-bottom:5px;display:flex;align-items:center;justify-content:center;gap:8px}
+.footer-logo .icon{width:32px;height:32px;vertical-align:middle}
 .footer-logo .laugh{color:var(--gold)}
 .footer-logo .court{color:var(--text)}
 .footer-tagline{font-size:0.7rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);display:block;margin-top:5px}
@@ -62,18 +63,20 @@ a:hover{color:var(--teal)}
 @media(max-width:768px){
     .nav{padding:15px 20px}
     .nav-logo{font-size:1.4rem}
+    .nav-logo .icon{width:26px;height:26px}
     .lang-btn{padding:6px 12px;font-size:0.75rem}
     .container{padding:100px 20px 60px}
     .content-card{padding:30px 25px}
     h2{font-size:1.5rem}
     .footer-links{gap:20px}
+    .footer-logo .icon{width:26px;height:26px}
 }
 </style>
 </head>
 <body class="en">
 
 <nav class="nav">
-    <a href="/" class="nav-logo"><span class="ball">🏀</span> <span class="laugh">LAUGH</span><span class="court">COURT</span></a>
+    <a href="/" class="nav-logo"><img src="/icon.png" alt="LaughCourt" class="icon"> <span class="laugh">LAUGH</span><span class="court">COURT</span></a>
     <div class="nav-lang">
         <button class="lang-btn active" id="btn-en">EN</button>
         <button class="lang-btn" id="btn-es">ES</button>
@@ -132,7 +135,7 @@ a:hover{color:var(--teal)}
             <p>LaughCourt offers the following subscription options:</p>
             
             <div class="pricing-summary">
-                <h3>🏀 INDIVIDUAL SUBSCRIPTION</h3>
+                <h3>🐕 INDIVIDUAL SUBSCRIPTION</h3>
                 <ul>
                     <li><strong>Price:</strong> $5/month</li>
                     <li>Full access to both LaughCourt workouts (<span class="workout-match">THE MATCH</span> and <span class="workout-sequence">THE SEQUENCE</span>)</li>
@@ -286,7 +289,7 @@ a:hover{color:var(--teal)}
             <p>LaughCourt ofrece las siguientes opciones de suscripción:</p>
             
             <div class="pricing-summary">
-                <h3>🏀 SUSCRIPCIÓN INDIVIDUAL</h3>
+                <h3>🐕 SUSCRIPCIÓN INDIVIDUAL</h3>
                 <ul>
                     <li><strong>Precio:</strong> $5/mes</li>
                     <li>Acceso completo a ambos ejercicios de LaughCourt (<span class="workout-match">THE MATCH</span> y <span class="workout-sequence">THE SEQUENCE</span>)</li>
@@ -406,7 +409,7 @@ a:hover{color:var(--teal)}
 <footer class="footer">
     <div class="footer-brand">
         <div class="footer-logo">
-            🏀 <span class="laugh">LAUGH</span><span class="court">COURT</span>
+            <img src="/icon.png" alt="LaughCourt" class="icon"> <span class="laugh">LAUGH</span><span class="court">COURT</span>
         </div>
         <span class="footer-tagline">
             <span class="lang-en">Where Joy Meets The Game</span>
