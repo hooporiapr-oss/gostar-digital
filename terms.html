@@ -194,7 +194,7 @@ a:hover{color:var(--teal)}
             <p><strong>Failed Payments:</strong> If payment fails, we will attempt to charge your card again. After multiple failed attempts, your subscription may be suspended.</p>
 
             <h2>8. CANCELLATION & REFUNDS</h2>
-            <p><strong>How to Cancel:</strong> You may cancel your subscription at any time through the <a href="https://billing.stripe.com/p/login/fZu8wQgpyc5c0Qr8e500000" target="_blank">Stripe Customer Portal</a> or by contacting support@gostar.digital.</p>
+            <p><strong>How to Cancel:</strong> You may cancel your subscription at any time through the <a href="https://billing.stripe.com/p/login/fZu8wQgpyc5c0Qr8e500000" target="_blank">Stripe Customer Portal</a> or by contacting <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="61121411110e131521060e121500134f0508060815000d">[email&#160;protected]</a>.</p>
             <p><strong>Effect of Cancellation:</strong> Access continues until the end of your current billing period. No partial refunds for unused time.</p>
             <p><strong>Refund Policy:</strong> We generally do not provide refunds for subscription fees. However, if you experience technical issues preventing platform use, contact us and we will review your case.</p>
             <p><strong>Data After Cancellation:</strong> Your data is retained for 30 days after cancellation, then permanently deleted.</p>
@@ -251,7 +251,7 @@ a:hover{color:var(--teal)}
 
             <h2>17. CONTACT US</h2>
             <p>If you have questions about these Terms, please contact us:</p>
-            <p><strong>Email:</strong> support@gostar.digital</p>
+            <p><strong>Email:</strong> <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="11626461617e636551767e626570633f7578767865707d">[email&#160;protected]</a></p>
             <p><strong>Company:</strong> GoStar Digital LLC</p>
             <p><strong>Location:</strong> Puerto Rico, USA 🇵🇷</p>
         </div>
@@ -351,7 +351,7 @@ a:hover{color:var(--teal)}
             <p><strong>Pagos Fallidos:</strong> Si el pago falla, intentaremos cargar su tarjeta nuevamente. Después de múltiples intentos fallidos, su suscripción puede ser suspendida.</p>
 
             <h2>8. CANCELACIÓN Y REEMBOLSOS</h2>
-            <p><strong>Cómo Cancelar:</strong> Puede cancelar su suscripción en cualquier momento a través del <a href="https://billing.stripe.com/p/login/fZu8wQgpyc5c0Qr8e500000" target="_blank">Portal de Cliente de Stripe</a> o contactando a support@gostar.digital.</p>
+            <p><strong>Cómo Cancelar:</strong> Puede cancelar su suscripción en cualquier momento a través del <a href="https://billing.stripe.com/p/login/fZu8wQgpyc5c0Qr8e500000" target="_blank">Portal de Cliente de Stripe</a> o contactando a <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="90e3e5e0e0ffe2e4d0f7ffe3e4f1e2bef4f9f7f9e4f1fc">[email&#160;protected]</a>.</p>
             <p><strong>Efecto de la Cancelación:</strong> El acceso continúa hasta el final de su período de facturación actual. No hay reembolsos parciales por tiempo no utilizado.</p>
             <p><strong>Política de Reembolso:</strong> Generalmente no proporcionamos reembolsos por tarifas de suscripción. Sin embargo, si experimenta problemas técnicos que impidan el uso de la plataforma, contáctenos y revisaremos su caso.</p>
             <p><strong>Datos Después de la Cancelación:</strong> Sus datos se retienen por 30 días después de la cancelación, luego se eliminan permanentemente.</p>
@@ -408,7 +408,7 @@ a:hover{color:var(--teal)}
 
             <h2>17. CONTÁCTENOS</h2>
             <p>Si tiene preguntas sobre estos Términos, contáctenos:</p>
-            <p><strong>Email:</strong> support@gostar.digital</p>
+            <p><strong>Email:</strong> <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="36454346465944427651594542574418525f515f42575a">[email&#160;protected]</a></p>
             <p><strong>Compañía:</strong> GoStar Digital LLC</p>
             <p><strong>Ubicación:</strong> Puerto Rico, EE.UU. 🇵🇷</p>
         </div>
@@ -427,6 +427,7 @@ a:hover{color:var(--teal)}
     </div>
     <div class="footer-links">
         <a href="/login"><span class="lang-en">Login</span><span class="lang-es">Entrar</span></a>
+        <a href="/how-to-play.html"><span class="lang-en">How To Play</span><span class="lang-es">Cómo Jugar</span></a>
         <a href="/faq">FAQ</a>
         <a href="/privacy.html"><span class="lang-en">Privacy Policy</span><span class="lang-es">Privacidad</span></a>
         <a href="/terms.html"><span class="lang-en">Terms of Use</span><span class="lang-es">Términos</span></a>
@@ -444,20 +445,22 @@ a:hover{color:var(--teal)}
 </footer>
 
 <script>
-var lang = localStorage.getItem('lc-lang') || 'en';
+(function() {
+    var lang = localStorage.getItem('lc-lang') || 'en';
+    
+    function setLang(l) {
+        lang = l;
+        localStorage.setItem('lc-lang', l);
+        document.body.className = l;
+        document.getElementById('btn-en').className = l === 'en' ? 'lang-btn active' : 'lang-btn';
+        document.getElementById('btn-es').className = l === 'es' ? 'lang-btn active' : 'lang-btn';
+    }
 
-function setLang(l) {
-    lang = l;
-    localStorage.setItem('lc-lang', l);
-    document.body.className = l;
-    document.getElementById('btn-en').className = l === 'en' ? 'lang-btn active' : 'lang-btn';
-    document.getElementById('btn-es').className = l === 'es' ? 'lang-btn active' : 'lang-btn';
-}
-
-document.getElementById('btn-en').addEventListener('click', function() { setLang('en'); });
-document.getElementById('btn-es').addEventListener('click', function() { setLang('es'); });
-
-setLang(lang);
+    document.getElementById('btn-en').addEventListener('click', function() { setLang('en'); });
+    document.getElementById('btn-es').addEventListener('click', function() { setLang('es'); });
+    
+    setLang(lang);
+})();
 </script>
 </body>
 </html>
