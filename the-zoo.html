@@ -75,6 +75,7 @@ body.focus-mode .coach-message{bottom:120px}
 .message-text.find{color:var(--lime)}
 .message-text.perfect{color:var(--teal)}
 .message-text.miss{color:var(--pink)}
+.message-text.timeout{color:var(--pink)}
 .selectors-row{display:flex;gap:6px;margin-bottom:4px;flex-shrink:0}
 .selector-group{flex:1;background:var(--card);border-radius:8px;padding:5px}
 .selector-group.level-group{flex:1.8}
@@ -93,6 +94,13 @@ body.focus-mode .coach-message{bottom:120px}
 .progression-star{font-size:1.3rem;opacity:0.25;transition:all 0.3s}
 .progression-star.earned{opacity:1;transform:scale(1.15);filter:drop-shadow(0 0 4px var(--lime))}
 
+/* ===== TIMER BAR ===== */
+.timer-wrap{width:100%;height:6px;background:rgba(255,255,255,0.08);border-radius:3px;margin-bottom:4px;overflow:hidden;flex-shrink:0;opacity:0;transition:opacity 0.2s}
+.timer-wrap.active{opacity:1}
+.timer-bar{height:100%;width:100%;background:var(--lime);border-radius:3px;transition:none}
+.timer-bar.warning{background:var(--gold)}
+.timer-bar.danger{background:var(--pink)}
+
 .court-wrapper{flex:1;display:flex;align-items:center;justify-content:center;min-height:0;overflow:hidden;transition:all 0.3s ease}
 
 .court-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:8px;background-color:#1a1a24;background-image:url('/icon.png');background-size:85%;background-position:center;background-repeat:no-repeat;border-radius:16px;border:3px solid var(--lime);width:min(100%,calc(100dvh - 300px),320px);height:min(100%,calc(100dvh - 300px),320px);min-width:200px;min-height:200px;aspect-ratio:1;position:relative;transition:all 0.3s ease}
@@ -105,6 +113,7 @@ body.focus-mode .coach-message{bottom:120px}
 .grid-cell.correct{border-color:var(--teal)!important;box-shadow:0 0 15px var(--teal)}
 .grid-cell.wrong{background:var(--pink)!important;border-color:var(--pink)!important;box-shadow:0 0 12px var(--pink)}
 .grid-cell.reveal{border-color:var(--gold)!important;box-shadow:0 0 10px var(--gold)}
+.grid-cell.blanked{border-color:rgba(255,255,255,0.1)!important;box-shadow:none}
 .grid-cell.disabled{pointer-events:none}
 
 .division-display{display:flex;justify-content:space-between;align-items:center;padding:5px 10px;background:var(--card);border-radius:8px;margin:4px 0;flex-shrink:0;min-height:34px}
@@ -180,6 +189,12 @@ body.es .lang-en{display:none!important}
 <div class="stat"><div class="stat-value" id="scoreDisplay">0</div><div class="stat-label"><span class="lang-en">Score</span><span class="lang-es">Puntos</span></div></div>
 </div>
 <div class="message-display"><span class="message-text" id="messageText"><span class="lang-en">Select level & GO!</span><span class="lang-es">¡Selecciona e IR!</span></span></div>
+
+<!-- TIMER BAR (new for reactionary mode) -->
+<div class="timer-wrap" id="timerWrap">
+<div class="timer-bar" id="timerBar"></div>
+</div>
+
 <div class="selectors-row">
 <div class="selector-group level-group"><div class="selector-label"><span class="lang-en">Level</span><span class="lang-es">Nivel</span></div><div class="selector-options level-options">
 <button class="selector-btn level-btn active" data-level="1">1</button>
@@ -337,27 +352,34 @@ body.es .lang-en{display:none!important}
 
     // ===== ANIMALS WITH COLORS =====
     var ANIMALS = [
-        { emoji: '🐶', color: '#8B4513', name: 'dog' },      // Brown
-        { emoji: '🐱', color: '#FF9500', name: 'cat' },      // Orange
-        { emoji: '🦁', color: '#FFD700', name: 'lion' },     // Gold
-        { emoji: '🐸', color: '#32CD32', name: 'frog' },     // Lime Green
-        { emoji: '🦊', color: '#FF6B35', name: 'fox' },      // Orange-Red
-        { emoji: '🐼', color: '#2D2D2D', name: 'panda' },    // Dark Gray
-        { emoji: '🐯', color: '#FFA500', name: 'tiger' },    // Orange
-        { emoji: '🐮', color: '#F5F5DC', name: 'cow' },      // Beige
-        { emoji: '🐷', color: '#FFB6C1', name: 'pig' },      // Pink
-        { emoji: '🐵', color: '#CD853F', name: 'monkey' },   // Peru/Tan
-        { emoji: '🐰', color: '#E8E8E8', name: 'rabbit' },   // Light Gray
-        { emoji: '🐻', color: '#8B5A2B', name: 'bear' }      // Dark Brown
+        { emoji: '🐶', color: '#8B4513', name: 'dog' },
+        { emoji: '🐱', color: '#FF9500', name: 'cat' },
+        { emoji: '🦁', color: '#FFD700', name: 'lion' },
+        { emoji: '🐸', color: '#32CD32', name: 'frog' },
+        { emoji: '🦊', color: '#FF6B35', name: 'fox' },
+        { emoji: '🐼', color: '#2D2D2D', name: 'panda' },
+        { emoji: '🐯', color: '#FFA500', name: 'tiger' },
+        { emoji: '🐮', color: '#F5F5DC', name: 'cow' },
+        { emoji: '🐷', color: '#FFB6C1', name: 'pig' },
+        { emoji: '🐵', color: '#CD853F', name: 'monkey' },
+        { emoji: '🐰', color: '#E8E8E8', name: 'rabbit' },
+        { emoji: '🐻', color: '#8B5A2B', name: 'bear' }
     ];
 
     // ===== GAME CONFIG =====
     var TOTAL_CELLS = 25;
-    var CENTER_CELL = 12; // Center of 5x5 grid (row 3, col 3)
-    function getPairCount(level) { return level; } // L1=1 pair, L2=2 pairs... L10=10 pairs
+    var CENTER_CELL = 12;
     var SPEED_CONFIG = { slow: 3000, med: 2000, fast: 1200 };
     var LAUGH_EMOJIS = ['😂','😆','🤣','😄','😁','🥳','😊','🦁'];
     var PARTY_EMOJIS = ['🥳','🎉','😂','🤣','✨','💫','🦁','🏆'];
+
+    // ===== TIMER ELEMENTS =====
+    var timerWrap = document.getElementById('timerWrap');
+    var timerBar = document.getElementById('timerBar');
+    var flashTimeout = null;
+    var timerRAF = null;
+    var timerStartTime = 0;
+    var timerDuration = 0;
 
     // ===== STATE (per-speed tracking) =====
     function getSpeedKey(speed, key) {
@@ -435,6 +457,7 @@ body.es .lang-en{display:none!important}
     function playTapSound() { playTone(440, 0.1); }
     function playCorrectSound() { [523, 659, 784].forEach(function(f, i) { setTimeout(function() { playTone(f, 0.12); }, i * 80); }); }
     function playWrongSound() { playTone(200, 0.3); }
+    function playTimeoutSound() { [300, 200].forEach(function(f, i) { setTimeout(function() { playTone(f, 0.2); }, i * 120); }); }
 
     // ===== CELEBRATIONS =====
     function getCourtCenter() {
@@ -507,6 +530,41 @@ body.es .lang-en{display:none!important}
         }
     }
 
+    // ===== TIMER =====
+    function startTimer(duration) {
+        timerDuration = duration;
+        timerStartTime = performance.now();
+        timerWrap.classList.add('active');
+        timerBar.className = 'timer-bar';
+        timerBar.style.width = '100%';
+
+        function tick() {
+            var elapsed = performance.now() - timerStartTime;
+            var pct = Math.max(0, 1 - elapsed / timerDuration);
+            timerBar.style.width = (pct * 100) + '%';
+
+            if (pct < 0.3) timerBar.className = 'timer-bar danger';
+            else if (pct < 0.5) timerBar.className = 'timer-bar warning';
+
+            if (pct > 0 && state.canTap) {
+                timerRAF = requestAnimationFrame(tick);
+            }
+        }
+        timerRAF = requestAnimationFrame(tick);
+    }
+
+    function stopTimer() {
+        if (timerRAF) cancelAnimationFrame(timerRAF);
+        if (flashTimeout) clearTimeout(flashTimeout);
+        timerRAF = null;
+        flashTimeout = null;
+    }
+
+    function hideTimer() {
+        stopTimer();
+        timerWrap.classList.remove('active');
+    }
+
     // ===== UI UPDATES =====
     function updateDivisionDisplay() {
         var sp = state.speed.toUpperCase();
@@ -535,7 +593,7 @@ body.es .lang-en{display:none!important}
         document.getElementById('star2').className = state.perfectCount >= 2 ? 'progression-star earned' : 'progression-star';
     }
 
-    // ===== GAME LOGIC =====
+    // ===== GAME LOGIC (REACTIONARY) =====
     function startRound() {
         if (state.isPlaying) return;
         
@@ -545,6 +603,7 @@ body.es .lang-en{display:none!important}
         state.round++;
         updateStats();
         actionBtn.disabled = true;
+        hideTimer();
 
         state.cells.forEach(function(c) { 
             c.className = 'grid-cell'; 
@@ -552,16 +611,14 @@ body.es .lang-en{display:none!important}
             clearCell(c);
         });
 
-        // Level = number of cells that flash (L1=5, L2=6... L10=14)
-        // Always 1 match to find
-        var cellCount = state.level + 4; // L1=5 cells, L10=14 cells
-        var matchCount = 1; // Always just 1 match
+        // Level = number of outer cells that light up (L1=5, L2=6... L10=14)
+        var cellCount = state.level + 4;
         
         // Pick the target animal
         var availableAnimals = ANIMALS.slice();
         shuffleArray(availableAnimals);
         state.targetAnimal = availableAnimals[0];
-        var distractorAnimals = availableAnimals.slice(1); // Rest are distractors
+        var distractorAnimals = availableAnimals.slice(1);
         
         // Get all positions except center
         var outerPositions = [];
@@ -570,22 +627,21 @@ body.es .lang-en{display:none!important}
         }
         shuffleArray(outerPositions);
         
-        // Only use 'cellCount' positions
         var usedPositions = outerPositions.slice(0, cellCount);
         
-        // Reset grid
+        // Reset grid data
         state.gridData = [];
         for (var i = 0; i < TOTAL_CELLS; i++) state.gridData.push(null);
         
         // Center always has target
         state.gridData[CENTER_CELL] = state.targetAnimal;
         
-        // Place 1 target animal in the first used position
+        // Place 1 target in a random used position
         state.targetPositions = [];
         state.gridData[usedPositions[0]] = state.targetAnimal;
         state.targetPositions.push(usedPositions[0]);
         
-        // Fill remaining used positions with random distractors
+        // Fill remaining with distractors
         var distractorIdx = 0;
         for (var d = 1; d < usedPositions.length; d++) {
             var pos = usedPositions[d];
@@ -593,19 +649,18 @@ body.es .lang-en{display:none!important}
             distractorIdx++;
         }
         
-        // Reset found matches for this round
         state.foundMatches = 0;
-        state.totalMatches = matchCount;
-        updateTapsCounter(); // Update counter AFTER values are set
+        state.totalMatches = 1;
+        updateTapsCounter();
 
-        messageText.innerHTML = '<span class="lang-en">MEMORIZE!</span><span class="lang-es">¡MEMORIZA!</span>';
+        // Brief "GET READY" then reveal
+        messageText.innerHTML = '<span class="lang-en">GET READY...</span><span class="lang-es">PREPÁRATE...</span>';
         messageText.className = 'message-text watch';
 
-        // Show cells together
         setTimeout(function() {
             playShowSound();
             
-            // Show only the used cells + center
+            // Show ALL cells at once — animals stay visible
             state.gridData.forEach(function(animal, idx) {
                 if (animal) {
                     showAnimalInCell(state.cells[idx], animal);
@@ -613,58 +668,97 @@ body.es .lang-en{display:none!important}
                 }
             });
             
-            // Mark center as target
+            // Mark center as target (gold pulse, not tappable)
             var centerCell = state.cells[CENTER_CELL];
             centerCell.classList.add('center-target');
             centerCell.style.pointerEvents = 'none';
 
-            // Hide outer cells after speed duration, center stays
-            setTimeout(function() {
+            // REACTIONARY: Animals stay visible, start countdown
+            messageText.innerHTML = '<span class="lang-en">FIND THE MATCH!</span><span class="lang-es">¡ENCUENTRA EL IGUAL!</span>';
+            messageText.className = 'message-text find';
+            state.canTap = true;
+
+            // Start the countdown timer
+            var duration = SPEED_CONFIG[state.speed];
+            startTimer(duration);
+
+            // Timeout = animals vanish = fail
+            flashTimeout = setTimeout(function() {
+                if (!state.canTap) return;
+                state.canTap = false;
+                hideTimer();
+
+                // Blank all outer cells — they vanished!
                 state.cells.forEach(function(c, idx) {
-                    if (idx === CENTER_CELL) return; // Keep center visible
-                    clearCell(c);
-                    c.classList.remove('showing');
+                    if (idx === CENTER_CELL) return;
+                    if (state.gridData[idx]) {
+                        clearCell(c);
+                        c.classList.remove('showing');
+                        c.classList.add('blanked');
+                    }
                 });
-                
-                messageText.innerHTML = '<span class="lang-en">FIND THE MATCH!</span><span class="lang-es">¡ENCUENTRA EL IGUAL!</span>';
-                messageText.className = 'message-text find';
-                state.canTap = true;
-            }, SPEED_CONFIG[state.speed]);
-        }, 500);
+
+                // Reveal where the answer was
+                setTimeout(function() {
+                    state.targetPositions.forEach(function(idx) {
+                        state.cells[idx].classList.remove('blanked');
+                        state.cells[idx].classList.add('reveal');
+                        showAnimalInCell(state.cells[idx], state.targetAnimal);
+                    });
+                }, 300);
+
+                messageText.innerHTML = '<span class="lang-en">⏰ TIME\'S UP!</span><span class="lang-es">⏰ ¡TIEMPO!</span>';
+                messageText.className = 'message-text timeout';
+                playTimeoutSound();
+
+                // Treat timeout as a fail
+                setTimeout(roundFail, 1000);
+            }, duration);
+
+        }, 700);
     }
 
     function handleCellTap(index) {
         if (!state.canTap || !state.isPlaying) return;
-        if (index === CENTER_CELL) return; // Can't tap center
+        if (index === CENTER_CELL) return;
 
         var cell = state.cells[index];
-        
-        // Skip if already found or already wrong
+        if (!state.gridData[index]) return; // empty cell
         if (cell.classList.contains('correct') || cell.classList.contains('wrong')) return;
 
         try { playTapSound(); } catch(e) {}
         
-        // Check if this cell has the target animal
         var isCorrect = state.targetPositions.indexOf(index) !== -1;
         
         if (isCorrect) {
-            // Correct tap - found the match!
+            state.canTap = false;
+            stopTimer();
+            
             cell.classList.add('correct');
             showAnimalInCell(cell, state.targetAnimal);
             state.foundMatches = 1;
             updateTapsCounter();
             
+            // Blank other outer cells
+            state.cells.forEach(function(c, idx) {
+                if (idx === CENTER_CELL || idx === index) return;
+                if (state.gridData[idx]) {
+                    clearCell(c);
+                    c.classList.remove('showing');
+                    c.classList.add('blanked');
+                }
+            });
+            
             try { laughCelebration('medium'); } catch(e) {}
             
-            // Found the 1 match - round complete
-            state.canTap = false;
             setTimeout(roundSuccess, 400);
         } else {
-            // Wrong tap!
-            cell.classList.add('wrong');
             state.canTap = false;
+            stopTimer();
             
-            // Show all missed targets
+            cell.classList.add('wrong');
+            
+            // Reveal the correct answer
             state.targetPositions.forEach(function(idx) {
                 if (!state.cells[idx].classList.contains('correct')) {
                     state.cells[idx].classList.add('reveal');
@@ -680,6 +774,7 @@ body.es .lang-en{display:none!important}
         try {
             try { playCorrectSound(); } catch(e) {}
             
+            hideTimer();
             state.perfectCount = (state.perfectCount || 0) + 1;
             state.streak = (state.streak || 0) + 1;
             state.score = (state.score || 0) + (20 * state.level * (state.speed === 'fast' ? 3 : state.speed === 'med' ? 2 : 1));
@@ -707,34 +802,34 @@ body.es .lang-en{display:none!important}
                 setTimeout(endRound, 1000);
             }
         } catch(err) {
-            // Safety net - always allow next round
             setTimeout(endRound, 500);
         }
     }
 
     function roundFail() {
         playWrongSound();
+        hideTimer();
         state.streak = 0;
-        state.perfectCount = 0; // Reset - need 2 CONSECUTIVE successes
+        state.perfectCount = 0;
         saveSpeedState(state.speed, state.level, state.score, state.streak);
         updateStats();
         updateProgressionStars();
 
-        messageText.innerHTML = '<span class="lang-en">WRONG!</span><span class="lang-es">¡ERROR!</span>';
-        messageText.className = 'message-text miss';
+        // Only set WRONG message if not already showing TIME'S UP
+        if (messageText.className.indexOf('timeout') === -1) {
+            messageText.innerHTML = '<span class="lang-en">WRONG!</span><span class="lang-es">¡ERROR!</span>';
+            messageText.className = 'message-text miss';
+        }
         
         setTimeout(endRound, 1200);
     }
 
     function endRound() {
         state.isPlaying = false;
+        state.canTap = false;
+        hideTimer();
         actionBtn.disabled = false;
         actionBtn.innerHTML = '<span class="lang-en">NEXT</span><span class="lang-es">SIGUIENTE</span>';
-    }
-
-    function revealResults() {
-        // Legacy function - no longer used but kept for safety
-        endRound();
     }
 
     function showLevelUpOverlay() {
@@ -757,11 +852,10 @@ body.es .lang-en{display:none!important}
         }
         state.perfectCount = 0;
         state.round = 0;
-        state.isPlaying = false; // Reset playing state
+        state.isPlaying = false;
         state.foundMatches = 0;
         state.totalMatches = 0;
         
-        // Clear the grid
         state.cells.forEach(function(c) { 
             c.className = 'grid-cell'; 
             c.style.pointerEvents = '';
@@ -769,10 +863,11 @@ body.es .lang-en{display:none!important}
             c.style.backgroundColor = '';
         });
         
+        hideTimer();
         updateProgressionStars();
         updateStats();
         updateTapsCounter();
-        actionBtn.disabled = false; // Enable the button
+        actionBtn.disabled = false;
         actionBtn.innerHTML = '<span class="lang-en">GO!</span><span class="lang-es">¡IR!</span>';
         messageText.innerHTML = '<span class="lang-en">TAP GO TO START!</span><span class="lang-es">¡TOCA IR!</span>';
         messageText.className = 'message-text';
@@ -781,11 +876,10 @@ body.es .lang-en{display:none!important}
     document.getElementById('stayLevelBtn').onclick = function() {
         document.getElementById('levelUpOverlay').classList.remove('show');
         state.perfectCount = 0;
-        state.isPlaying = false; // Reset playing state
+        state.isPlaying = false;
         state.foundMatches = 0;
         state.totalMatches = 0;
         
-        // Clear the grid
         state.cells.forEach(function(c) { 
             c.className = 'grid-cell'; 
             c.style.pointerEvents = '';
@@ -793,9 +887,10 @@ body.es .lang-en{display:none!important}
             c.style.backgroundColor = '';
         });
         
+        hideTimer();
         updateProgressionStars();
         updateTapsCounter();
-        actionBtn.disabled = false; // Enable the button
+        actionBtn.disabled = false;
         actionBtn.innerHTML = '<span class="lang-en">GO!</span><span class="lang-es">¡IR!</span>';
         messageText.innerHTML = '<span class="lang-en">TAP GO TO START!</span><span class="lang-es">¡TOCA IR!</span>';
         messageText.className = 'message-text';
@@ -827,13 +922,11 @@ body.es .lang-en{display:none!important}
             state.speed = b.dataset.speed;
             localStorage.setItem('lc-zoo-speed', state.speed);
             
-            // Load this speed's progress
             var speedData = loadSpeedState(state.speed);
             state.level = speedData.level;
             state.score = speedData.score;
             state.streak = speedData.streak;
             
-            // Update level buttons to show this speed's level
             document.querySelectorAll('.level-btn').forEach(function(lb) {
                 lb.classList.toggle('active', parseInt(lb.dataset.level) === state.level);
             });
@@ -866,7 +959,6 @@ body.es .lang-en{display:none!important}
         }
     });
 
-    // Check speed access on load
     if (isProduction) {
         var pin = sessionStorage.getItem('lc-pin');
         if (pin) {
