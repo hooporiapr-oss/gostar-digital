@@ -62,7 +62,11 @@ body.en .lang-es { display: none !important; }
     gap: 6px;
     flex-shrink: 0;
 }
-.logo .ball { font-size: 1.1rem; }
+.logo .icon {
+    width: 28px;
+    height: 28px;
+    vertical-align: middle;
+}
 .logo .laugh { color: var(--gold); }
 .logo .court { color: var(--text); }
 
@@ -189,7 +193,7 @@ body.en .lang-es { display: none !important; }
     transform: scale(0.95);
 }
 
-/* ============ WORKOUT GRID - 4 CARDS (2x2) ============ */
+/* ============ WORKOUT GRID - 5 CARDS ============ */
 .workout-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -310,7 +314,7 @@ body.en .lang-es { display: none !important; }
     width: 100%;
 }
 
-/* Game Toggle Tabs - 4 Games */
+/* Game Toggle Tabs - 5 Games */
 .game-toggle {
     display: flex;
     border-bottom: 1px solid var(--border);
@@ -616,6 +620,7 @@ body.en .lang-es { display: none !important; }
 @media (min-width: 400px) {
     .header { padding: 15px 20px; }
     .logo { font-size: 1.5rem; }
+    .logo .icon { width: 32px; height: 32px; }
     .lang-btn { padding: 5px 10px; font-size: 0.7rem; }
     .logout-btn { padding: 8px 15px; font-size: 0.75rem; }
     .main { padding: 25px 20px 40px; }
@@ -641,6 +646,7 @@ body.en .lang-es { display: none !important; }
     .game-tab { font-size: 0.8rem; }
     .gostars-display { font-size: 1.7rem; }
     .speed-level-value { font-size: 1.8rem; }
+    .logo .icon { width: 36px; height: 36px; }
 }
 </style>
 </head>
@@ -649,7 +655,7 @@ body.en .lang-es { display: none !important; }
 <!-- ============ HEADER ============ -->
 <header class="header">
     <div class="logo">
-        <span class="ball">🏀</span> <span class="laugh">LAUGH</span><span class="court">COURT</span>
+        <img src="/icon.png" alt="LaughCourt" class="icon"> <span class="laugh">LAUGH</span><span class="court">COURT</span>
     </div>
     <div class="header-right">
         <div class="lang-toggle">
@@ -691,7 +697,7 @@ body.en .lang-es { display: none !important; }
         </a>
     </div>
 
-    <!-- Workout Grid - 4 Games -->
+    <!-- Workout Grid - 5 Games -->
     <div class="workout-grid">
         <!-- THE MATCH -->
         <a href="/the-match.html" class="workout-card match">
@@ -907,7 +913,7 @@ body.en .lang-es { display: none !important; }
         }
     }
 
-    // ==================== GAME TOGGLE - 4 GAMES ====================
+    // ==================== GAME TOGGLE - 5 GAMES ====================
     var currentGame = 'match';
     var currentSpeedView = 'slow';
     var tabMatch = document.getElementById('tabMatch');
