@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--gold:#FFD700;--orange:#FF6B35;--teal:#00D9A5;--cyan:#00CED1;--dark:#0a0a0f;--darker:#050508;--card:#111118;--text:#FFFFFF;--muted:#8892a0;--border:rgba(255,255,255,0.08)}
+:root{--gold:#FFD700;--orange:#FF6B35;--teal:#00D9A5;--cyan:#00CED1;--purple:#9B59B6;--green:#2ECC71;--dark:#0a0a0f;--darker:#050508;--card:#111118;--text:#FFFFFF;--muted:#8892a0;--border:rgba(255,255,255,0.08)}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Outfit',sans-serif;background:var(--dark);color:var(--text);line-height:1.7}
 body.es .lang-en{display:none !important}
@@ -42,6 +42,9 @@ a:hover{color:var(--teal)}
 .gostar{color:var(--gold);font-weight:700}
 .workout-match{color:var(--orange);font-weight:600}
 .workout-sequence{color:var(--teal);font-weight:600}
+.workout-flash{color:var(--cyan);font-weight:600}
+.workout-reaction{color:var(--purple);font-weight:600}
+.workout-zoo{color:var(--green);font-weight:600}
 
 .footer{padding:50px 20px 30px;background:var(--darker);text-align:center;border-top:1px solid rgba(255,255,255,0.05)}
 .footer-brand{margin-bottom:15px}
@@ -106,9 +109,9 @@ a:hover{color:var(--teal)}
             <ul>
                 <li><strong>Account Information:</strong> Email address, 4-digit PIN</li>
                 <li><strong>Payment Information:</strong> Processed securely by Stripe (we never see or store your card details)</li>
-                <li><strong>Workout Data:</strong> Scores, <span class="gostar">GoStar</span> progression (1-10 tiers per game), speed preferences, session times, streaks, personal bests across both workouts (<span class="workout-match">THE MATCH</span> and <span class="workout-sequence">THE SEQUENCE</span>)</li>
+                <li><strong>Workout Data:</strong> Scores, <span class="gostar">GoStar</span> progression (1-10 tiers per game), speed preferences, session times, streaks, personal bests across all five workouts (<span class="workout-match">THE MATCH</span>, <span class="workout-sequence">THE SEQUENCE</span>, <span class="workout-flash">THE FLASH</span>, <span class="workout-reaction">THE REACTION</span>, and <span class="workout-zoo">THE ZOO</span>)</li>
                 <li><strong>Speed Settings:</strong> Preferred speed (SLOW, MED, FAST)</li>
-                <li><strong>Level Progress:</strong> Current level (1-10) and division data across 60 total divisions</li>
+                <li><strong>Level Progress:</strong> Current level (1-10) and division data across 150 total divisions</li>
             </ul>
             <p><strong>For Facility Trial Users:</strong></p>
             <ul>
@@ -126,7 +129,7 @@ a:hover{color:var(--teal)}
             <h2>HOW WE USE INFORMATION</h2>
             <p>We use the information we collect to:</p>
             <ul>
-                <li>Provide and improve LaughCourt's 2 memory workouts (<span class="workout-match">THE MATCH</span> for spatial memory and <span class="workout-sequence">THE SEQUENCE</span> for sequential memory)</li>
+                <li>Provide and improve LaughCourt's 5 memory workouts (<span class="workout-match">THE MATCH</span>, <span class="workout-sequence">THE SEQUENCE</span>, <span class="workout-flash">THE FLASH</span>, <span class="workout-reaction">THE REACTION</span>, and <span class="workout-zoo">THE ZOO</span>)</li>
                 <li>Track your progress through our <span class="gostar">10-tier GoStar</span> achievement system</li>
                 <li>Remember your speed preferences (SLOW/MED/FAST) and level progress</li>
                 <li>Process subscription payments via Stripe</li>
@@ -187,7 +190,7 @@ a:hover{color:var(--teal)}
                 <li>Remember your login status and PIN</li>
                 <li>Store your language preference (EN/ES)</li>
                 <li>Save your speed preference (SLOW/MED/FAST)</li>
-                <li>Track workout progress and <span class="gostar">GoStar</span> tiers for both games</li>
+                <li>Track workout progress and <span class="gostar">GoStar</span> tiers for all five games</li>
                 <li>Store notification preferences</li>
             </ul>
 
@@ -224,9 +227,9 @@ a:hover{color:var(--teal)}
             <ul>
                 <li><strong>Información de Cuenta:</strong> Correo electrónico, PIN de 4 dígitos</li>
                 <li><strong>Información de Pago:</strong> Procesada de forma segura por Stripe (nunca vemos ni almacenamos los datos de su tarjeta)</li>
-                <li><strong>Datos de Ejercicios:</strong> Puntuaciones, progresión de <span class="gostar">GoStars</span> (1-10 niveles por juego), preferencias de velocidad, tiempos de sesión, rachas, mejores marcas en ambos ejercicios (<span class="workout-match">THE MATCH</span> y <span class="workout-sequence">THE SEQUENCE</span>)</li>
+                <li><strong>Datos de Ejercicios:</strong> Puntuaciones, progresión de <span class="gostar">GoStars</span> (1-10 niveles por juego), preferencias de velocidad, tiempos de sesión, rachas, mejores marcas en los cinco ejercicios (<span class="workout-match">THE MATCH</span>, <span class="workout-sequence">THE SEQUENCE</span>, <span class="workout-flash">THE FLASH</span>, <span class="workout-reaction">THE REACTION</span> y <span class="workout-zoo">THE ZOO</span>)</li>
                 <li><strong>Configuración de Velocidad:</strong> Velocidad preferida (LENTO, MEDIO, RÁPIDO)</li>
-                <li><strong>Progreso de Nivel:</strong> Nivel actual (1-10) y datos de división en las 60 divisiones totales</li>
+                <li><strong>Progreso de Nivel:</strong> Nivel actual (1-10) y datos de división en las 150 divisiones totales</li>
             </ul>
             <p><strong>Para Usuarios de Prueba de Instalaciones:</strong></p>
             <ul>
@@ -244,7 +247,7 @@ a:hover{color:var(--teal)}
             <h2>CÓMO USAMOS LA INFORMACIÓN</h2>
             <p>Usamos la información que recopilamos para:</p>
             <ul>
-                <li>Proporcionar y mejorar los 2 ejercicios de memoria de LaughCourt (<span class="workout-match">THE MATCH</span> para memoria espacial y <span class="workout-sequence">THE SEQUENCE</span> para memoria secuencial)</li>
+                <li>Proporcionar y mejorar los 5 ejercicios de memoria de LaughCourt (<span class="workout-match">THE MATCH</span>, <span class="workout-sequence">THE SEQUENCE</span>, <span class="workout-flash">THE FLASH</span>, <span class="workout-reaction">THE REACTION</span> y <span class="workout-zoo">THE ZOO</span>)</li>
                 <li>Rastrear su progreso a través de nuestro sistema de logros de <span class="gostar">10 niveles de GoStars</span></li>
                 <li>Recordar sus preferencias de velocidad (LENTO/MEDIO/RÁPIDO) y progreso de nivel</li>
                 <li>Procesar pagos de suscripción vía Stripe</li>
@@ -305,7 +308,7 @@ a:hover{color:var(--teal)}
                 <li>Recordar su estado de inicio de sesión y PIN</li>
                 <li>Almacenar su preferencia de idioma (EN/ES)</li>
                 <li>Guardar su preferencia de velocidad (LENTO/MEDIO/RÁPIDO)</li>
-                <li>Rastrear el progreso de ejercicios y niveles de <span class="gostar">GoStars</span> para ambos juegos</li>
+                <li>Rastrear el progreso de ejercicios y niveles de <span class="gostar">GoStars</span> para los cinco juegos</li>
                 <li>Almacenar preferencias de notificaciones</li>
             </ul>
 
