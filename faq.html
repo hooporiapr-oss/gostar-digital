@@ -13,6 +13,8 @@
             --orange: #FF6B35;
             --teal: #00D9A5;
             --cyan: #00CED1;
+            --purple: #9B59B6;
+            --green: #2ECC71;
             --dark: #0a0a0f;
             --darker: #050508;
             --card: #111118;
@@ -201,7 +203,7 @@
             overflow: hidden;
             transition: max-height 0.3s ease;
         }
-        .faq-item.open .faq-answer { max-height: 600px; }
+        .faq-item.open .faq-answer { max-height: 800px; }
         .faq-answer-content {
             padding: 0 20px 20px;
             color: var(--muted);
@@ -213,6 +215,12 @@
         .faq-answer-content strong { color: var(--text); }
         .faq-answer-content ul { margin: 10px 0; padding-left: 20px; }
         .faq-answer-content li { margin-bottom: 5px; }
+
+        .workout-match { color: var(--orange); font-weight: 600; }
+        .workout-sequence { color: var(--teal); font-weight: 600; }
+        .workout-flash { color: var(--cyan); font-weight: 600; }
+        .workout-reaction { color: var(--purple); font-weight: 600; }
+        .workout-zoo { color: var(--green); font-weight: 600; }
 
         .highlight-box {
             background: rgba(255, 215, 0, 0.08);
@@ -375,16 +383,22 @@
                 </button>
                 <div class="faq-answer">
                     <div class="faq-answer-content">
-                        <span class="lang-en">LaughCourt is a memory workout platform — fun exercises that sharpen your mind and make you smile. Our two workouts are designed for all ages, from children to seniors, including rehabilitation programs:
+                        <span class="lang-en">LaughCourt is a memory workout platform — fun exercises that sharpen your mind and make you smile. Our five workouts are designed for all ages, from children to seniors, including rehabilitation programs:
                             <ul>
-                                <li><strong>🧠 THE MATCH</strong> — Spatial memory (numbered cells flash simultaneously — tap them back in order)</li>
-                                <li><strong>🔢 THE SEQUENCE</strong> — Sequential memory (watch cells flash one by one — repeat the order)</li>
+                                <li><strong class="workout-match">🧠 THE MATCH</strong> — Spatial memory (numbered cells flash simultaneously — tap them back in order)</li>
+                                <li><strong class="workout-sequence">🔢 THE SEQUENCE</strong> — Sequential memory (watch cells flash one by one — repeat the order)</li>
+                                <li><strong class="workout-flash">⚡ THE FLASH</strong> — Pure position memory (cells flash without numbers — memorize by sight alone)</li>
+                                <li><strong class="workout-reaction">🎯 THE REACTION</strong> — Speed & reflex (tap the lit cell before time runs out)</li>
+                                <li><strong class="workout-zoo">🦁 THE ZOO</strong> — Visual scanning (find the matching animal among distractors)</li>
                             </ul>
                         </span>
-                        <span class="lang-es">LaughCourt es una plataforma de ejercicios de memoria — ejercicios divertidos que agudizan tu mente y te hacen sonreír. Nuestros dos ejercicios están diseñados para todas las edades, desde niños hasta adultos mayores, incluyendo programas de rehabilitación:
+                        <span class="lang-es">LaughCourt es una plataforma de ejercicios de memoria — ejercicios divertidos que agudizan tu mente y te hacen sonreír. Nuestros cinco ejercicios están diseñados para todas las edades, desde niños hasta adultos mayores, incluyendo programas de rehabilitación:
                             <ul>
-                                <li><strong>🧠 THE MATCH</strong> — Memoria espacial (celdas numeradas se iluminan simultáneamente — tócalas en orden)</li>
-                                <li><strong>🔢 THE SEQUENCE</strong> — Memoria secuencial (observa las celdas iluminarse una por una — repite el orden)</li>
+                                <li><strong class="workout-match">🧠 THE MATCH</strong> — Memoria espacial (celdas numeradas se iluminan simultáneamente — tócalas en orden)</li>
+                                <li><strong class="workout-sequence">🔢 THE SEQUENCE</strong> — Memoria secuencial (observa las celdas iluminarse una por una — repite el orden)</li>
+                                <li><strong class="workout-flash">⚡ THE FLASH</strong> — Memoria de posición pura (celdas sin números — memoriza solo con la vista)</li>
+                                <li><strong class="workout-reaction">🎯 THE REACTION</strong> — Velocidad y reflejos (toca la celda iluminada antes de que se acabe el tiempo)</li>
+                                <li><strong class="workout-zoo">🦁 THE ZOO</strong> — Escaneo visual (encuentra el animal que coincide entre distractores)</li>
                             </ul>
                         </span>
                     </div>
@@ -460,19 +474,25 @@
                 </button>
                 <div class="faq-answer">
                     <div class="faq-answer-content">
-                        <span class="lang-en">LaughCourt features two memory workouts on a 5×5 court:
+                        <span class="lang-en">LaughCourt features five memory workouts on a 5×5 court:
                             <ul>
-                                <li><strong>🧠 THE MATCH</strong> — Numbered cells light up orange simultaneously. Memorize their positions and tap them back in order (1, 2, 3...). The numbers help you track which cell is which!</li>
-                                <li><strong>🔢 THE SEQUENCE</strong> — Watch cells light up one by one with numbers, then tap them back in the exact same order. The longer the chain, the bigger the challenge!</li>
+                                <li><strong class="workout-match">🧠 THE MATCH</strong> — Numbered cells light up orange simultaneously. Memorize their positions and tap them back in order (1, 2, 3...). The numbers help you track which cell is which!</li>
+                                <li><strong class="workout-sequence">🔢 THE SEQUENCE</strong> — Watch cells light up one by one with numbers, then tap them back in the exact same order. The longer the chain, the bigger the challenge!</li>
+                                <li><strong class="workout-flash">⚡ THE FLASH</strong> — Cells flash without numbers. Pure position memory — memorize locations by sight alone, then tap them back in order.</li>
+                                <li><strong class="workout-reaction">🎯 THE REACTION</strong> — A cell lights up and you must tap it before time runs out. Tests your reflexes and reaction speed!</li>
+                                <li><strong class="workout-zoo">🦁 THE ZOO</strong> — Animals appear on the grid. Find and tap the cell that matches the target animal among distractors. Visual scanning workout!</li>
                             </ul>
-                            Both games use numbered cells so you always know the order to tap them back.
+                            Each workout trains a different cognitive skill!
                         </span>
-                        <span class="lang-es">LaughCourt incluye dos ejercicios de memoria en una cancha 5×5:
+                        <span class="lang-es">LaughCourt incluye cinco ejercicios de memoria en una cancha 5×5:
                             <ul>
-                                <li><strong>🧠 THE MATCH</strong> — Celdas numeradas se iluminan naranja simultáneamente. Memoriza sus posiciones y tócalas en orden (1, 2, 3...). ¡Los números te ayudan a saber cuál es cuál!</li>
-                                <li><strong>🔢 THE SEQUENCE</strong> — Observa las celdas iluminarse una por una con números, luego repítelas en el mismo orden exacto. ¡Mientras más larga la cadena, mayor el reto!</li>
+                                <li><strong class="workout-match">🧠 THE MATCH</strong> — Celdas numeradas se iluminan naranja simultáneamente. Memoriza sus posiciones y tócalas en orden (1, 2, 3...). ¡Los números te ayudan a saber cuál es cuál!</li>
+                                <li><strong class="workout-sequence">🔢 THE SEQUENCE</strong> — Observa las celdas iluminarse una por una con números, luego repítelas en el mismo orden exacto. ¡Mientras más larga la cadena, mayor el reto!</li>
+                                <li><strong class="workout-flash">⚡ THE FLASH</strong> — Celdas sin números. Memoria de posición pura — memoriza ubicaciones solo con la vista, luego tócalas en orden.</li>
+                                <li><strong class="workout-reaction">🎯 THE REACTION</strong> — Una celda se ilumina y debes tocarla antes de que se acabe el tiempo. ¡Prueba tus reflejos y velocidad de reacción!</li>
+                                <li><strong class="workout-zoo">🦁 THE ZOO</strong> — Animales aparecen en la cuadrícula. Encuentra y toca la celda que coincide con el animal objetivo entre distractores. ¡Ejercicio de escaneo visual!</li>
                             </ul>
-                            Ambos juegos usan celdas numeradas para que siempre sepas el orden en que tocarlas.
+                            ¡Cada ejercicio entrena una habilidad cognitiva diferente!
                         </span>
                     </div>
                 </div>
@@ -481,28 +501,34 @@
             <div class="faq-item">
                 <button class="faq-question">
                     <span>
-                        <span class="lang-en">What's the difference between THE MATCH and THE SEQUENCE?</span>
-                        <span class="lang-es">¿Cuál es la diferencia entre THE MATCH y THE SEQUENCE?</span>
+                        <span class="lang-en">What's the difference between the five workouts?</span>
+                        <span class="lang-es">¿Cuál es la diferencia entre los cinco ejercicios?</span>
                     </span>
                     <span class="faq-icon">+</span>
                 </button>
                 <div class="faq-answer">
                     <div class="faq-answer-content">
-                        <span class="lang-en">They train different types of memory:
+                        <span class="lang-en">Each workout trains a different cognitive skill:
                             <ul>
-                                <li><strong>🧠 THE MATCH (Orange)</strong> — All cells flash <strong>at the same time</strong>. You need to remember WHERE each numbered cell was located. This trains <strong>spatial memory</strong>.</li>
-                                <li><strong>🔢 THE SEQUENCE (Teal)</strong> — Cells flash <strong>one at a time</strong>. You need to remember the ORDER they appeared. This trains <strong>sequential memory</strong>.</li>
+                                <li><strong class="workout-match">🧠 THE MATCH (Orange)</strong> — All cells flash <strong>at the same time</strong>. Remember WHERE each numbered cell was. Trains <strong>spatial memory</strong>.</li>
+                                <li><strong class="workout-sequence">🔢 THE SEQUENCE (Teal)</strong> — Cells flash <strong>one at a time</strong>. Remember the ORDER they appeared. Trains <strong>sequential memory</strong>.</li>
+                                <li><strong class="workout-flash">⚡ THE FLASH (Cyan)</strong> — Like THE MATCH but <strong>without numbers</strong>. Pure position memory by sight alone. Trains <strong>visual memory</strong>.</li>
+                                <li><strong class="workout-reaction">🎯 THE REACTION (Purple)</strong> — Tap the lit cell <strong>before time runs out</strong>. Trains <strong>reflexes and processing speed</strong>.</li>
+                                <li><strong class="workout-zoo">🦁 THE ZOO (Green)</strong> — Find the <strong>matching animal</strong> among distractors. Trains <strong>visual scanning and attention</strong>.</li>
                             </ul>
                         </span>
-                        <span class="lang-es">Entrenan diferentes tipos de memoria:
+                        <span class="lang-es">Cada ejercicio entrena una habilidad cognitiva diferente:
                             <ul>
-                                <li><strong>🧠 THE MATCH (Naranja)</strong> — Todas las celdas se iluminan <strong>al mismo tiempo</strong>. Necesitas recordar DÓNDE estaba cada celda numerada. Esto entrena la <strong>memoria espacial</strong>.</li>
-                                <li><strong>🔢 THE SEQUENCE (Teal)</strong> — Las celdas se iluminan <strong>una a la vez</strong>. Necesitas recordar el ORDEN en que aparecieron. Esto entrena la <strong>memoria secuencial</strong>.</li>
+                                <li><strong class="workout-match">🧠 THE MATCH (Naranja)</strong> — Todas las celdas se iluminan <strong>al mismo tiempo</strong>. Recuerda DÓNDE estaba cada celda numerada. Entrena <strong>memoria espacial</strong>.</li>
+                                <li><strong class="workout-sequence">🔢 THE SEQUENCE (Teal)</strong> — Las celdas se iluminan <strong>una a la vez</strong>. Recuerda el ORDEN en que aparecieron. Entrena <strong>memoria secuencial</strong>.</li>
+                                <li><strong class="workout-flash">⚡ THE FLASH (Cian)</strong> — Como THE MATCH pero <strong>sin números</strong>. Memoria de posición pura solo con la vista. Entrena <strong>memoria visual</strong>.</li>
+                                <li><strong class="workout-reaction">🎯 THE REACTION (Púrpura)</strong> — Toca la celda iluminada <strong>antes de que se acabe el tiempo</strong>. Entrena <strong>reflejos y velocidad de procesamiento</strong>.</li>
+                                <li><strong class="workout-zoo">🦁 THE ZOO (Verde)</strong> — Encuentra el <strong>animal que coincide</strong> entre distractores. Entrena <strong>escaneo visual y atención</strong>.</li>
                             </ul>
                         </span>
                         <div class="highlight-box teal">
-                            <span class="lang-en">💡 <strong>Tip:</strong> Try both workouts to exercise different parts of your brain!</span>
-                            <span class="lang-es">💡 <strong>Consejo:</strong> ¡Prueba ambos ejercicios para ejercitar diferentes partes de tu cerebro!</span>
+                            <span class="lang-en">💡 <strong>Tip:</strong> Try all five workouts to exercise different parts of your brain!</span>
+                            <span class="lang-es">💡 <strong>Consejo:</strong> ¡Prueba los cinco ejercicios para ejercitar diferentes partes de tu cerebro!</span>
                         </div>
                     </div>
                 </div>
@@ -518,8 +544,8 @@
                 </button>
                 <div class="faq-answer">
                     <div class="faq-answer-content">
-                        <span class="lang-en">Each workout has <strong>30 divisions</strong> — 10 difficulty levels × 3 speeds (SLOW, MED, FAST). Start at your comfort zone and progress as you improve. Division examples: L1-SLOW (beginner), L5-MED (intermediate), L10-FAST (expert). That's <strong>60 total divisions</strong> across both workouts!</span>
-                        <span class="lang-es">Cada ejercicio tiene <strong>30 divisiones</strong> — 10 niveles de dificultad × 3 velocidades (LENTO, MEDIO, RÁPIDO). Comienza en tu zona de confort y progresa a medida que mejoras. Ejemplos: L1-LENTO (principiante), L5-MEDIO (intermedio), L10-RÁPIDO (experto). ¡Eso son <strong>60 divisiones en total</strong> entre ambos ejercicios!</span>
+                        <span class="lang-en">Each workout has <strong>30 divisions</strong> — 10 difficulty levels × 3 speeds (SLOW, MED, FAST). Start at your comfort zone and progress as you improve. Division examples: L1-SLOW (beginner), L5-MED (intermediate), L10-FAST (expert). That's <strong>150 total divisions</strong> across all five workouts!</span>
+                        <span class="lang-es">Cada ejercicio tiene <strong>30 divisiones</strong> — 10 niveles de dificultad × 3 velocidades (LENTO, MEDIO, RÁPIDO). Comienza en tu zona de confort y progresa a medida que mejoras. Ejemplos: L1-LENTO (principiante), L5-MEDIO (intermedio), L10-RÁPIDO (experto). ¡Eso son <strong>150 divisiones en total</strong> entre los cinco ejercicios!</span>
                     </div>
                 </div>
             </div>
@@ -564,8 +590,8 @@
                 </button>
                 <div class="faq-answer">
                     <div class="faq-answer-content">
-                        <span class="lang-en">Get <strong>3 perfect rounds</strong> to earn a GoStar! Each workout tracks your GoStars separately (up to 10 each). The tier dots at the top of the screen show your progress. Complete all 10 tiers to become a master!</span>
-                        <span class="lang-es">¡Logra <strong>3 rondas perfectas</strong> para ganar un GoStar! Cada ejercicio rastrea tus GoStars por separado (hasta 10 cada uno). Los puntos de nivel en la parte superior muestran tu progreso. ¡Completa los 10 niveles para ser un maestro!</span>
+                        <span class="lang-en">Get <strong>3 perfect rounds</strong> to earn a GoStar! Each workout tracks your GoStars separately (up to 10 each, 50 total across all five games). The tier dots at the top of the screen show your progress. Complete all 10 tiers in a workout to become a master!</span>
+                        <span class="lang-es">¡Logra <strong>3 rondas perfectas</strong> para ganar un GoStar! Cada ejercicio rastrea tus GoStars por separado (hasta 10 cada uno, 50 en total entre los cinco juegos). Los puntos de nivel en la parte superior muestran tu progreso. ¡Completa los 10 niveles en un ejercicio para ser un maestro!</span>
                     </div>
                 </div>
             </div>
@@ -656,15 +682,15 @@
                     <div class="faq-answer-content">
                         <span class="lang-en">LaughCourt offers simple pricing:
                             <ul>
-                                <li><strong>7-DAY FREE TRIAL</strong> — Experience all workouts at SLOW speed</li>
-                                <li><strong>$5/month</strong> — Unlocks all speeds (SLOW + MED + FAST) for both workouts</li>
+                                <li><strong>7-DAY FREE TRIAL</strong> — Experience all five workouts at SLOW speed</li>
+                                <li><strong>$5/month</strong> — Unlocks all speeds (SLOW + MED + FAST) for all five workouts</li>
                             </ul>
                             Start with a free trial to experience LaughCourt before any charges!
                         </span>
                         <span class="lang-es">LaughCourt ofrece precios simples:
                             <ul>
-                                <li><strong>PRUEBA GRATIS 7 DÍAS</strong> — Experimenta todos los ejercicios en velocidad LENTA</li>
-                                <li><strong>$5/mes</strong> — Desbloquea todas las velocidades (LENTO + MEDIO + RÁPIDO) para ambos ejercicios</li>
+                                <li><strong>PRUEBA GRATIS 7 DÍAS</strong> — Experimenta los cinco ejercicios en velocidad LENTA</li>
+                                <li><strong>$5/mes</strong> — Desbloquea todas las velocidades (LENTO + MEDIO + RÁPIDO) para los cinco ejercicios</li>
                             </ul>
                             ¡Comienza con una prueba gratis para experimentar LaughCourt antes de cualquier cargo!
                         </span>
@@ -714,8 +740,8 @@
                 </button>
                 <div class="faq-answer">
                     <div class="faq-answer-content">
-                        <span class="lang-en">We offer a <strong>7-day free trial</strong> so you can fully experience LaughCourt before any charges. After the trial, subscription fees are non-refundable. If you're having issues, please contact us at <a href="/cdn-cgi/l/email-protection#ef9c9a9f9f809d9baf88809c9b8e9dc18b8688869b8e83"><span class="__cf_email__" data-cfemail="186b6d6868776a6c587f776b6c796a367c717f716c7974">[email&#160;protected]</span></a> — we're happy to help resolve any problems.</span>
-                        <span class="lang-es">Ofrecemos una <strong>prueba gratis de 7 días</strong> para que puedas experimentar LaughCourt completamente antes de cualquier cargo. Después de la prueba, las tarifas de suscripción no son reembolsables. Si tienes problemas, contáctanos en <a href="/cdn-cgi/l/email-protection#81f2f4f1f1eef3f5c1e6eef2f5e0f3afe5e8e6e8f5e0ed"><span class="__cf_email__" data-cfemail="6e1d1b1e1e011c1a2e09011d1a0f1c400a0709071a0f02">[email&#160;protected]</span></a> — estaremos felices de ayudar a resolver cualquier problema.</span>
+                        <span class="lang-en">We offer a <strong>7-day free trial</strong> so you can fully experience LaughCourt before any charges. After the trial, subscription fees are non-refundable. If you're having issues, please contact us at support@gostar.digital — we're happy to help resolve any problems.</span>
+                        <span class="lang-es">Ofrecemos una <strong>prueba gratis de 7 días</strong> para que puedas experimentar LaughCourt completamente antes de cualquier cargo. Después de la prueba, las tarifas de suscripción no son reembolsables. Si tienes problemas, contáctanos en support@gostar.digital — estaremos felices de ayudar a resolver cualquier problema.</span>
                     </div>
                 </div>
             </div>
@@ -745,7 +771,7 @@
                             <ul>
                                 <li><strong>Email address</strong> — for account identification and communication</li>
                                 <li><strong>Payment information</strong> — processed securely by Stripe (we don't store card numbers)</li>
-                                <li><strong>Workout progress</strong> — scores, levels, and achievements</li>
+                                <li><strong>Workout progress</strong> — scores, levels, and achievements across all five games</li>
                             </ul>
                             For complete details, see our <a href="/privacy.html">Privacy Policy</a>.
                         </span>
@@ -753,7 +779,7 @@
                             <ul>
                                 <li><strong>Correo electrónico</strong> — para identificación de cuenta y comunicación</li>
                                 <li><strong>Información de pago</strong> — procesada de forma segura por Stripe (no almacenamos números de tarjeta)</li>
-                                <li><strong>Progreso de ejercicios</strong> — puntuaciones, niveles y logros</li>
+                                <li><strong>Progreso de ejercicios</strong> — puntuaciones, niveles y logros en los cinco juegos</li>
                             </ul>
                             Para detalles completos, consulta nuestra <a href="/privacy.html">Política de Privacidad</a>.
                         </span>
@@ -836,7 +862,7 @@
                                 <li><strong>Check your internet connection</strong></li>
                                 <li><strong>Disable ad blockers</strong> temporarily</li>
                             </ul>
-                            Still having trouble? Contact <a href="/cdn-cgi/l/email-protection#3e4d4b4e4e514c4a7e59514d4a5f4c105a5759574a5f52"><span class="__cf_email__" data-cfemail="11626461617e636551767e626570633f7578767865707d">[email&#160;protected]</span></a>
+                            Still having trouble? Contact support@gostar.digital
                         </span>
                         <span class="lang-es">Intenta estos pasos:
                             <ul>
@@ -846,7 +872,7 @@
                                 <li><strong>Verifica tu conexión a internet</strong></li>
                                 <li><strong>Desactiva bloqueadores de anuncios</strong> temporalmente</li>
                             </ul>
-                            ¿Sigues con problemas? Contacta <a href="/cdn-cgi/l/email-protection#8af9fffafae5f8fecaede5f9feebf8a4eee3ede3feebe6"><span class="__cf_email__" data-cfemail="17646267677865635770786463766539737e707e63767b">[email&#160;protected]</span></a>
+                            ¿Sigues con problemas? Contacta support@gostar.digital
                         </span>
                     </div>
                 </div>
@@ -905,8 +931,8 @@
                 </button>
                 <div class="faq-answer">
                     <div class="faq-answer-content">
-                        <span class="lang-en">Yes! We offer special programs for rehabilitation centers, nursing homes, senior centers, and other facilities. Contact us at <a href="/cdn-cgi/l/email-protection#0f7c7a7f7f607d7b4f68607c7b6e7d216b6668667b6e63"><span class="__cf_email__" data-cfemail="c7b4b2b7b7a8b5b387a0a8b4b3a6b5e9a3aea0aeb3a6ab">[email&#160;protected]</span></a> with "Facility Inquiry" in the subject line to learn about multi-seat options.</span>
-                        <span class="lang-es">¡Sí! Ofrecemos programas especiales para centros de rehabilitación, hogares de ancianos, centros de adultos mayores y otras instalaciones. Contáctanos en <a href="/cdn-cgi/l/email-protection#67141217170815132700081413061549030e000e13060b"><span class="__cf_email__" data-cfemail="0a797f7a7a65787e4a6d65797e6b78246e636d637e6b66">[email&#160;protected]</span></a> con "Consulta de Instalación" en el asunto para conocer opciones de múltiples asientos.</span>
+                        <span class="lang-en">Yes! We offer special programs for rehabilitation centers, nursing homes, senior centers, and other facilities. Contact us at support@gostar.digital with "Facility Inquiry" in the subject line to learn about multi-seat options.</span>
+                        <span class="lang-es">¡Sí! Ofrecemos programas especiales para centros de rehabilitación, hogares de ancianos, centros de adultos mayores y otras instalaciones. Contáctanos en support@gostar.digital con "Consulta de Instalación" en el asunto para conocer opciones de múltiples asientos.</span>
                     </div>
                 </div>
             </div>
@@ -939,7 +965,7 @@
                 <span class="lang-en">We're here to help! Reach out and we'll get back to you as soon as possible.</span>
                 <span class="lang-es">¡Estamos aquí para ayudar! Escríbenos y te responderemos lo antes posible.</span>
             </p>
-            <a href="/cdn-cgi/l/email-protection#60131510100f121420070f131401124e0409070914010c" class="contact-link">
+            <a href="mailto:support@gostar.digital" class="contact-link">
                 <span class="lang-en">📧 CONTACT US</span>
                 <span class="lang-es">📧 CONTÁCTANOS</span>
             </a>
