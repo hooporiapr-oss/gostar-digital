@@ -209,7 +209,7 @@ a:hover{color:var(--teal)}
 
             <h2>CONTACT US</h2>
             <p>If you have questions about this Privacy Policy or your data, please contact us:</p>
-            <p><strong>Email:</strong> support@gostar.digital</p>
+            <p><strong>Email:</strong> <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="8bf8fefbfbe4f9ffcbece4f8ffeaf9a5efe2ece2ffeae7">[email&#160;protected]</a></p>
             <p><strong>Company:</strong> GoStar Digital LLC</p>
             <p><strong>Location:</strong> Puerto Rico, USA 🇵🇷</p>
         </div>
@@ -327,7 +327,7 @@ a:hover{color:var(--teal)}
 
             <h2>CONTÁCTENOS</h2>
             <p>Si tiene preguntas sobre esta Política de Privacidad o sus datos, contáctenos:</p>
-            <p><strong>Email:</strong> support@gostar.digital</p>
+            <p><strong>Email:</strong> <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="0a797f7a7a65787e4a6d65797e6b78246e636d637e6b66">[email&#160;protected]</a></p>
             <p><strong>Compañía:</strong> GoStar Digital LLC</p>
             <p><strong>Ubicación:</strong> Puerto Rico, EE.UU. 🇵🇷</p>
         </div>
@@ -346,6 +346,7 @@ a:hover{color:var(--teal)}
     </div>
     <div class="footer-links">
         <a href="/login"><span class="lang-en">Login</span><span class="lang-es">Entrar</span></a>
+        <a href="/how-to-play.html"><span class="lang-en">How To Play</span><span class="lang-es">Cómo Jugar</span></a>
         <a href="/faq">FAQ</a>
         <a href="/privacy.html"><span class="lang-en">Privacy Policy</span><span class="lang-es">Privacidad</span></a>
         <a href="/terms.html"><span class="lang-en">Terms of Use</span><span class="lang-es">Términos</span></a>
@@ -363,20 +364,22 @@ a:hover{color:var(--teal)}
 </footer>
 
 <script>
-var lang = localStorage.getItem('lc-lang') || 'en';
+(function() {
+    var lang = localStorage.getItem('lc-lang') || 'en';
+    
+    function setLang(l) {
+        lang = l;
+        localStorage.setItem('lc-lang', l);
+        document.body.className = l;
+        document.getElementById('btn-en').className = l === 'en' ? 'lang-btn active' : 'lang-btn';
+        document.getElementById('btn-es').className = l === 'es' ? 'lang-btn active' : 'lang-btn';
+    }
 
-function setLang(l) {
-    lang = l;
-    localStorage.setItem('lc-lang', l);
-    document.body.className = l;
-    document.getElementById('btn-en').className = l === 'en' ? 'lang-btn active' : 'lang-btn';
-    document.getElementById('btn-es').className = l === 'es' ? 'lang-btn active' : 'lang-btn';
-}
-
-document.getElementById('btn-en').addEventListener('click', function() { setLang('en'); });
-document.getElementById('btn-es').addEventListener('click', function() { setLang('es'); });
-
-setLang(lang);
+    document.getElementById('btn-en').addEventListener('click', function() { setLang('en'); });
+    document.getElementById('btn-es').addEventListener('click', function() { setLang('es'); });
+    
+    setLang(lang);
+})();
 </script>
 </body>
 </html>
