@@ -354,7 +354,7 @@ body.es .lang-en{display:none!important}
     // ===== GAME CONFIG =====
     var TOTAL_CELLS = 25;
     var CENTER_CELL = 12; // Center of 5x5 grid (row 3, col 3)
-    function getPairCount(level) { return level + 1; } // L1=2 pairs, L10=11 pairs
+    function getPairCount(level) { return level; } // L1=1 pair, L2=2 pairs... L10=10 pairs
     var SPEED_CONFIG = { slow: 3000, med: 2000, fast: 1200 };
     var LAUGH_EMOJIS = ['😂','😆','🤣','😄','😁','🥳','😊','🦁'];
     var PARTY_EMOJIS = ['🥳','🎉','😂','🤣','✨','💫','🦁','🏆'];
@@ -394,7 +394,9 @@ body.es .lang-en{display:none!important}
         gridData: [],
         targetAnimal: null,
         targetPositions: [],
-        selectedCells: []
+        selectedCells: [],
+        foundMatches: 0,
+        totalMatches: 0
     };
     if (state.level > 10) state.level = 10;
     if (state.level < 1) state.level = 1;
@@ -514,7 +516,7 @@ body.es .lang-en{display:none!important}
     }
 
     function updateTapsCounter() {
-        document.getElementById('tapsCounter').textContent = state.selectedCells.length + '/2';
+        document.getElementById('tapsCounter').textContent = state.foundMatches + '/' + state.totalMatches;
     }
 
     function updateStats() {
@@ -548,56 +550,57 @@ body.es .lang-en{display:none!important}
             clearCell(c);
         });
 
-        // Generate pairs
-        var pairCount = getPairCount(state.level);
-        var cellCount = pairCount * 2;
+        // Level = number of matches to find (cells matching center)
+        var matchCount = state.level;
         
-        // Pick random animals
+        // Pick the target animal
         var availableAnimals = ANIMALS.slice();
         shuffleArray(availableAnimals);
-        var roundAnimals = availableAnimals.slice(0, pairCount);
+        state.targetAnimal = availableAnimals[0];
+        var distractorAnimals = availableAnimals.slice(1); // Rest are distractors
         
-        // Create pairs array
-        var pairs = [];
-        roundAnimals.forEach(function(animal) {
-            pairs.push(animal);
-            pairs.push(animal);
-        });
-        shuffleArray(pairs);
-        
-        // Pick random positions (exclude center cell - reserved for target)
-        var availablePositions = [];
+        // Get all positions except center
+        var outerPositions = [];
         for (var i = 0; i < TOTAL_CELLS; i++) {
-            if (i !== CENTER_CELL) availablePositions.push(i);
+            if (i !== CENTER_CELL) outerPositions.push(i);
         }
-        shuffleArray(availablePositions);
-        var usedPositions = availablePositions.slice(0, cellCount);
+        shuffleArray(outerPositions);
         
         // Reset grid
         state.gridData = [];
         for (var i = 0; i < TOTAL_CELLS; i++) state.gridData.push(null);
         
-        // Place pairs
-        pairs.forEach(function(animal, idx) {
-            var pos = usedPositions[idx];
-            state.gridData[pos] = animal;
-        });
-
-        // Pick target animal FIRST (before showing)
-        state.targetAnimal = roundAnimals[Math.floor(Math.random() * roundAnimals.length)];
+        // Center always has target
+        state.gridData[CENTER_CELL] = state.targetAnimal;
+        
+        // Place target animal in 'matchCount' other cells
         state.targetPositions = [];
-        state.gridData.forEach(function(animal, idx) {
-            if (animal && animal.emoji === state.targetAnimal.emoji) state.targetPositions.push(idx);
-        });
+        for (var t = 0; t < matchCount && t < outerPositions.length; t++) {
+            var pos = outerPositions[t];
+            state.gridData[pos] = state.targetAnimal;
+            state.targetPositions.push(pos);
+        }
+        
+        // Fill remaining outer cells with random distractors
+        var distractorIdx = 0;
+        for (var d = matchCount; d < outerPositions.length; d++) {
+            var pos = outerPositions[d];
+            state.gridData[pos] = distractorAnimals[distractorIdx % distractorAnimals.length];
+            distractorIdx++;
+        }
+        
+        // Reset found matches for this round
+        state.foundMatches = 0;
+        state.totalMatches = matchCount;
 
-        messageText.innerHTML = '<span class="lang-en">MEMORIZE THE PAIRS!</span><span class="lang-es">¡MEMORIZA LAS PAREJAS!</span>';
+        messageText.innerHTML = '<span class="lang-en">MEMORIZE!</span><span class="lang-es">¡MEMORIZA!</span>';
         messageText.className = 'message-text watch';
 
-        // Show animals with colors AND center target together
+        // Show ALL 25 cells together
         setTimeout(function() {
             playShowSound();
             
-            // Show all pairs
+            // Show all cells including center
             state.gridData.forEach(function(animal, idx) {
                 if (animal) {
                     showAnimalInCell(state.cells[idx], animal);
@@ -605,22 +608,22 @@ body.es .lang-en{display:none!important}
                 }
             });
             
-            // Show target in CENTER CELL at the same time
+            // Mark center as target
             var centerCell = state.cells[CENTER_CELL];
-            showAnimalInCell(centerCell, state.targetAnimal);
             centerCell.classList.add('center-target');
             centerCell.style.pointerEvents = 'none';
 
-            // Hide pairs after speed duration, but KEEP center target visible
+            // Hide outer cells after speed duration, center stays
             setTimeout(function() {
                 state.cells.forEach(function(c, idx) {
-                    // Skip the center cell - keep target visible
-                    if (idx === CENTER_CELL) return;
+                    if (idx === CENTER_CELL) return; // Keep center visible
                     clearCell(c);
                     c.classList.remove('showing');
                 });
                 
-                messageText.innerHTML = '<span class="lang-en">FIND BOTH!</span><span class="lang-es">¡ENCUENTRA LAS DOS!</span>';
+                var matchText = matchCount === 1 ? 'MATCH' : 'MATCHES';
+                var matchTextEs = matchCount === 1 ? 'IGUAL' : 'IGUALES';
+                messageText.innerHTML = '<span class="lang-en">FIND ' + matchCount + ' ' + matchText + '!</span><span class="lang-es">¡ENCUENTRA ' + matchCount + ' ' + matchTextEs + '!</span>';
                 messageText.className = 'message-text find';
                 state.canTap = true;
             }, SPEED_CONFIG[state.speed]);
@@ -629,95 +632,106 @@ body.es .lang-en{display:none!important}
 
     function handleCellTap(index) {
         if (!state.canTap || !state.isPlaying) return;
+        if (index === CENTER_CELL) return; // Can't tap center
 
         var cell = state.cells[index];
         
-        // Deselect if already selected
-        if (cell.classList.contains('selected')) {
-            cell.classList.remove('selected');
-            var idx = state.selectedCells.indexOf(index);
-            if (idx > -1) state.selectedCells.splice(idx, 1);
-            updateTapsCounter();
-            return;
-        }
-
-        if (state.selectedCells.length >= 2) return;
+        // Skip if already found or already wrong
+        if (cell.classList.contains('correct') || cell.classList.contains('wrong')) return;
 
         playTapSound();
-        cell.classList.add('selected');
-        state.selectedCells.push(index);
-        updateTapsCounter();
-
-        if (state.selectedCells.length >= 2) {
-            state.canTap = false;
-            setTimeout(revealResults, 400);
-        }
-    }
-
-    function revealResults() {
-        var correct = 0;
         
-        state.selectedCells.forEach(function(idx) {
-            if (state.targetPositions.indexOf(idx) !== -1) {
-                state.cells[idx].classList.remove('selected');
-                state.cells[idx].classList.add('correct');
-                showAnimalInCell(state.cells[idx], state.targetAnimal);
-                correct++;
-            } else {
-                state.cells[idx].classList.remove('selected');
-                state.cells[idx].classList.add('wrong');
+        // Check if this cell has the target animal
+        var isCorrect = state.targetPositions.indexOf(index) !== -1;
+        
+        if (isCorrect) {
+            // Correct tap!
+            cell.classList.add('correct');
+            showAnimalInCell(cell, state.targetAnimal);
+            state.foundMatches++;
+            updateTapsCounter();
+            
+            // Update counter
+            var remaining = state.totalMatches - state.foundMatches;
+            if (remaining > 0) {
+                var matchText = remaining === 1 ? 'MORE' : 'MORE';
+                var matchTextEs = remaining === 1 ? 'MÁS' : 'MÁS';
+                messageText.innerHTML = '<span class="lang-en">' + remaining + ' ' + matchText + '!</span><span class="lang-es">¡' + remaining + ' ' + matchTextEs + '!</span>';
             }
-        });
-
-        // Show missed positions with color
-        if (correct < 2) {
+            
+            laughCelebration('small');
+            
+            // Check if all found
+            if (state.foundMatches >= state.totalMatches) {
+                state.canTap = false;
+                setTimeout(roundSuccess, 400);
+            }
+        } else {
+            // Wrong tap!
+            cell.classList.add('wrong');
+            state.canTap = false;
+            
+            // Show all missed targets
             state.targetPositions.forEach(function(idx) {
-                if (state.selectedCells.indexOf(idx) === -1) {
+                if (!state.cells[idx].classList.contains('correct')) {
                     state.cells[idx].classList.add('reveal');
                     showAnimalInCell(state.cells[idx], state.targetAnimal);
                 }
             });
-        }
-
-        var isPerfect = correct === 2;
-
-        if (isPerfect) {
-            playCorrectSound();
-            state.perfectCount++;
-            state.streak++;
-            state.score += 20 * state.level * (state.speed === 'fast' ? 3 : state.speed === 'med' ? 2 : 1);
             
-            updateProgressionStars();
-            updateStats();
-            saveSpeedState(state.speed, state.level, state.score, state.streak);
-
-            var intensity = state.streak >= 5 ? 'party' : state.streak >= 3 ? 'big' : 'medium';
-            laughCelebration(intensity);
-
-            messageText.innerHTML = '<span class="lang-en">PERFECT!</span><span class="lang-es">¡PERFECTO!</span>';
-            messageText.className = 'message-text perfect';
-
-            if (state.streak === 3) showCoach(currentLang === 'es' ? '¡Racha de 3! 🔥' : '3 Streak! 🔥');
-            else if (state.streak === 5) showCoach(currentLang === 'es' ? '¡Racha de 5! 🔥🔥' : '5 Streak! 🔥🔥');
-
-            if (state.perfectCount >= 2) {
-                setTimeout(function() { showLevelUpOverlay(); }, 800);
-            }
-        } else {
-            playWrongSound();
-            state.streak = 0;
-            saveSpeedState(state.speed, state.level, state.score, state.streak);
-            updateStats();
-
-            messageText.innerHTML = '<span class="lang-en">WRONG SPOTS!</span><span class="lang-es">¡MAL UBICADO!</span>';
-            messageText.className = 'message-text miss';
+            setTimeout(roundFail, 800);
         }
+    }
 
-        setTimeout(function() {
-            state.isPlaying = false;
-            actionBtn.disabled = false;
-            actionBtn.innerHTML = '<span class="lang-en">NEXT</span><span class="lang-es">SIGUIENTE</span>';
-        }, 1200);
+    function roundSuccess() {
+        playCorrectSound();
+        state.perfectCount++;
+        state.streak++;
+        state.score += 20 * state.level * (state.speed === 'fast' ? 3 : state.speed === 'med' ? 2 : 1);
+        
+        updateProgressionStars();
+        updateStats();
+        saveSpeedState(state.speed, state.level, state.score, state.streak);
+
+        var intensity = state.streak >= 5 ? 'party' : state.streak >= 3 ? 'big' : 'medium';
+        laughCelebration(intensity);
+
+        messageText.innerHTML = '<span class="lang-en">PERFECT!</span><span class="lang-es">¡PERFECTO!</span>';
+        messageText.className = 'message-text perfect';
+
+        if (state.streak === 3) showCoach(currentLang === 'es' ? '¡Racha de 3! 🔥' : '3 Streak! 🔥');
+        else if (state.streak === 5) showCoach(currentLang === 'es' ? '¡Racha de 5! 🔥🔥' : '5 Streak! 🔥🔥');
+
+        if (state.perfectCount >= 2) {
+            setTimeout(function() { showLevelUpOverlay(); }, 800);
+        } else {
+            setTimeout(endRound, 1000);
+        }
+    }
+
+    function roundFail() {
+        playWrongSound();
+        state.streak = 0;
+        state.perfectCount = 0; // Reset - need 2 CONSECUTIVE successes
+        saveSpeedState(state.speed, state.level, state.score, state.streak);
+        updateStats();
+        updateProgressionStars();
+
+        messageText.innerHTML = '<span class="lang-en">WRONG!</span><span class="lang-es">¡ERROR!</span>';
+        messageText.className = 'message-text miss';
+        
+        setTimeout(endRound, 1200);
+    }
+
+    function endRound() {
+        state.isPlaying = false;
+        actionBtn.disabled = false;
+        actionBtn.innerHTML = '<span class="lang-en">NEXT</span><span class="lang-es">SIGUIENTE</span>';
+    }
+
+    function revealResults() {
+        // Legacy function - no longer used but kept for safety
+        endRound();
     }
 
     function showLevelUpOverlay() {
