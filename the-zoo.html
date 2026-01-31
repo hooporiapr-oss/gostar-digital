@@ -583,38 +583,42 @@ body.es .lang-en{display:none!important}
             state.gridData[pos] = animal;
         });
 
+        // Pick target animal FIRST (before showing)
+        state.targetAnimal = roundAnimals[Math.floor(Math.random() * roundAnimals.length)];
+        state.targetPositions = [];
+        state.gridData.forEach(function(animal, idx) {
+            if (animal && animal.emoji === state.targetAnimal.emoji) state.targetPositions.push(idx);
+        });
+
         messageText.innerHTML = '<span class="lang-en">MEMORIZE THE PAIRS!</span><span class="lang-es">¡MEMORIZA LAS PAREJAS!</span>';
         messageText.className = 'message-text watch';
 
-        // Show animals with colors
+        // Show animals with colors AND center target together
         setTimeout(function() {
             playShowSound();
+            
+            // Show all pairs
             state.gridData.forEach(function(animal, idx) {
                 if (animal) {
                     showAnimalInCell(state.cells[idx], animal);
                     state.cells[idx].classList.add('showing');
                 }
             });
+            
+            // Show target in CENTER CELL at the same time
+            var centerCell = state.cells[CENTER_CELL];
+            showAnimalInCell(centerCell, state.targetAnimal);
+            centerCell.classList.add('center-target');
+            centerCell.style.pointerEvents = 'none';
 
-            // Hide after speed duration
+            // Hide pairs after speed duration, but KEEP center target visible
             setTimeout(function() {
-                state.cells.forEach(function(c) { 
+                state.cells.forEach(function(c, idx) {
+                    // Skip the center cell - keep target visible
+                    if (idx === CENTER_CELL) return;
                     clearCell(c);
                     c.classList.remove('showing');
                 });
-
-                // Pick target animal
-                state.targetAnimal = roundAnimals[Math.floor(Math.random() * roundAnimals.length)];
-                state.targetPositions = [];
-                state.gridData.forEach(function(animal, idx) {
-                    if (animal && animal.emoji === state.targetAnimal.emoji) state.targetPositions.push(idx);
-                });
-
-                // Show target in CENTER CELL
-                var centerCell = state.cells[CENTER_CELL];
-                showAnimalInCell(centerCell, state.targetAnimal);
-                centerCell.classList.add('center-target');
-                centerCell.style.pointerEvents = 'none'; // Can't tap the target cell
                 
                 messageText.innerHTML = '<span class="lang-en">FIND BOTH!</span><span class="lang-es">¡ENCUENTRA LAS DOS!</span>';
                 messageText.className = 'message-text find';
