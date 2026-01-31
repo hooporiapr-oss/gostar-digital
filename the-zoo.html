@@ -203,7 +203,7 @@ body.es .lang-en{display:none!important}
 
 <div class="division-display">
 <span class="division-badge" id="divisionBadge">L1 SLOW</span>
-<span class="taps-counter" id="tapsCounter">0/2</span>
+<span class="taps-counter" id="tapsCounter">-</span>
 <span class="score-display">⭐ <span id="totalScore">0</span></span>
 </div>
 <button class="action-btn" id="actionBtn"><span class="lang-en">GO!</span><span class="lang-es">¡IR!</span></button>
@@ -512,11 +512,14 @@ body.es .lang-en{display:none!important}
         var sp = state.speed.toUpperCase();
         if (currentLang === 'es') sp = state.speed === 'slow' ? 'LENTO' : state.speed === 'med' ? 'MEDIO' : 'RÁPIDO';
         document.getElementById('divisionBadge').textContent = 'L' + state.level + ' ' + sp;
-        updateTapsCounter();
     }
 
     function updateTapsCounter() {
-        document.getElementById('tapsCounter').textContent = state.foundMatches + '/' + state.totalMatches;
+        if (state.totalMatches > 0) {
+            document.getElementById('tapsCounter').textContent = state.foundMatches + '/' + state.totalMatches;
+        } else {
+            document.getElementById('tapsCounter').textContent = '-';
+        }
     }
 
     function updateStats() {
@@ -541,7 +544,6 @@ body.es .lang-en{display:none!important}
         state.selectedCells = [];
         state.round++;
         updateStats();
-        updateTapsCounter();
         actionBtn.disabled = true;
 
         state.cells.forEach(function(c) { 
@@ -592,6 +594,7 @@ body.es .lang-en{display:none!important}
         // Reset found matches for this round
         state.foundMatches = 0;
         state.totalMatches = matchCount;
+        updateTapsCounter(); // Update counter AFTER values are set
 
         messageText.innerHTML = '<span class="lang-en">MEMORIZE!</span><span class="lang-es">¡MEMORIZA!</span>';
         messageText.className = 'message-text watch';
