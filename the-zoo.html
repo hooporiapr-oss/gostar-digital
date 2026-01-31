@@ -553,7 +553,7 @@ body.es .lang-en{display:none!important}
         });
 
         // Level = number of matches to find (cells matching center)
-        var matchCount = state.level;
+        var matchCount = Math.max(1, state.level || 1); // Ensure at least 1 match
         
         // Pick the target animal
         var availableAnimals = ANIMALS.slice();
@@ -642,7 +642,7 @@ body.es .lang-en{display:none!important}
         // Skip if already found or already wrong
         if (cell.classList.contains('correct') || cell.classList.contains('wrong')) return;
 
-        playTapSound();
+        try { playTapSound(); } catch(e) {}
         
         // Check if this cell has the target animal
         var isCorrect = state.targetPositions.indexOf(index) !== -1;
@@ -651,21 +651,19 @@ body.es .lang-en{display:none!important}
             // Correct tap!
             cell.classList.add('correct');
             showAnimalInCell(cell, state.targetAnimal);
-            state.foundMatches++;
+            state.foundMatches = (state.foundMatches || 0) + 1;
             updateTapsCounter();
             
-            // Update counter
-            var remaining = state.totalMatches - state.foundMatches;
+            // Update message
+            var remaining = (state.totalMatches || 1) - state.foundMatches;
             if (remaining > 0) {
-                var matchText = remaining === 1 ? 'MORE' : 'MORE';
-                var matchTextEs = remaining === 1 ? 'MÁS' : 'MÁS';
-                messageText.innerHTML = '<span class="lang-en">' + remaining + ' ' + matchText + '!</span><span class="lang-es">¡' + remaining + ' ' + matchTextEs + '!</span>';
+                messageText.innerHTML = '<span class="lang-en">' + remaining + ' MORE!</span><span class="lang-es">¡' + remaining + ' MÁS!</span>';
             }
             
-            laughCelebration('small');
+            try { laughCelebration('medium'); } catch(e) {}
             
             // Check if all found
-            if (state.foundMatches >= state.totalMatches) {
+            if (state.foundMatches >= (state.totalMatches || 1)) {
                 state.canTap = false;
                 setTimeout(roundSuccess, 400);
             }
@@ -687,28 +685,38 @@ body.es .lang-en{display:none!important}
     }
 
     function roundSuccess() {
-        playCorrectSound();
-        state.perfectCount++;
-        state.streak++;
-        state.score += 20 * state.level * (state.speed === 'fast' ? 3 : state.speed === 'med' ? 2 : 1);
-        
-        updateProgressionStars();
-        updateStats();
-        saveSpeedState(state.speed, state.level, state.score, state.streak);
+        try {
+            try { playCorrectSound(); } catch(e) {}
+            
+            state.perfectCount = (state.perfectCount || 0) + 1;
+            state.streak = (state.streak || 0) + 1;
+            state.score = (state.score || 0) + (20 * state.level * (state.speed === 'fast' ? 3 : state.speed === 'med' ? 2 : 1));
+            
+            updateProgressionStars();
+            updateStats();
+            saveSpeedState(state.speed, state.level, state.score, state.streak);
 
-        var intensity = state.streak >= 5 ? 'party' : state.streak >= 3 ? 'big' : 'medium';
-        laughCelebration(intensity);
+            try {
+                var intensity = state.streak >= 5 ? 'party' : state.streak >= 3 ? 'big' : 'medium';
+                laughCelebration(intensity);
+            } catch(e) {}
 
-        messageText.innerHTML = '<span class="lang-en">PERFECT!</span><span class="lang-es">¡PERFECTO!</span>';
-        messageText.className = 'message-text perfect';
+            messageText.innerHTML = '<span class="lang-en">PERFECT!</span><span class="lang-es">¡PERFECTO!</span>';
+            messageText.className = 'message-text perfect';
 
-        if (state.streak === 3) showCoach(currentLang === 'es' ? '¡Racha de 3! 🔥' : '3 Streak! 🔥');
-        else if (state.streak === 5) showCoach(currentLang === 'es' ? '¡Racha de 5! 🔥🔥' : '5 Streak! 🔥🔥');
+            try {
+                if (state.streak === 3) showCoach(currentLang === 'es' ? '¡Racha de 3! 🔥' : '3 Streak! 🔥');
+                else if (state.streak === 5) showCoach(currentLang === 'es' ? '¡Racha de 5! 🔥🔥' : '5 Streak! 🔥🔥');
+            } catch(e) {}
 
-        if (state.perfectCount >= 2) {
-            setTimeout(function() { showLevelUpOverlay(); }, 800);
-        } else {
-            setTimeout(endRound, 1000);
+            if (state.perfectCount >= 2) {
+                setTimeout(showLevelUpOverlay, 800);
+            } else {
+                setTimeout(endRound, 1000);
+            }
+        } catch(err) {
+            // Safety net - always allow next round
+            setTimeout(endRound, 500);
         }
     }
 
