@@ -659,8 +659,8 @@ app.get('/dashboard', function(req, res) { res.sendFile(path.join(__dirname, 'da
 app.get('/the-match', function(req, res) { res.sendFile(path.join(__dirname, 'the-match.html')); });
 app.get('/the-sequence', function(req, res) { res.sendFile(path.join(__dirname, 'the-sequence.html')); });
 app.get('/the-flash', function(req, res) { res.sendFile(path.join(__dirname, 'the-flash.html')); });
-app.get('/the-reaction', function(req, res) { res.sendFile(path.join(__dirname, 'the-reaction.html')); });
-app.get('/the-pocket', function(req, res) { res.sendFile(path.join(__dirname, 'the-reaction.html')); });
+app.get('/the-pocket', function(req, res) { res.sendFile(path.join(__dirname, 'the-pocket.html')); });
+app.get('/the-reaction', function(req, res) { res.redirect(301, '/the-pocket'); });
 app.get('/the-echo', function(req, res) { res.sendFile(path.join(__dirname, 'the-echo.html')); });
 
 // Legacy redirects
