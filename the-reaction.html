@@ -136,6 +136,8 @@ body.focus-mode .ritnome-badge{display:none}
 
 .division-display{display:flex;justify-content:space-between;align-items:center;padding:5px 10px;background:var(--card);border-radius:8px;margin:4px 0;flex-shrink:0;min-height:34px}
 .division-badge{font-family:'Bebas Neue',sans-serif;font-size:0.85rem;letter-spacing:2px;color:var(--purple)}
+.lives-display{font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--purple);letter-spacing:2px}
+.court-grid.beat-pulse{border-color:var(--gold)!important;box-shadow:0 0 15px rgba(255,215,0,0.4)}
 .taps-counter{font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--teal)}
 .score-display{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;color:var(--gold)}
 
@@ -176,7 +178,7 @@ body.es .lang-en{display:none!important}
 
 @media(min-height:720px){.court-grid{width:min(100%,calc(100dvh - 300px),340px);height:min(100%,calc(100dvh - 300px),340px)}.stat-value{font-size:1.1rem}.message-text{font-size:0.95rem}.selector-btn{min-height:38px}.selector-btn.level-btn{min-height:30px}.action-btn{min-height:50px;font-size:1.35rem}}
 @media(max-height:620px){.stat-value{font-size:0.9rem}.message-display{padding:5px;min-height:30px}.message-text{font-size:0.8rem}.selector-btn{min-height:30px;font-size:0.75rem}.selector-btn.level-btn{min-height:24px;font-size:0.65rem}.court-grid{min-width:180px;min-height:180px;width:min(100%,calc(100dvh - 260px),280px);height:min(100%,calc(100dvh - 260px),280px);gap:3px;padding:6px}.grid-cell{min-width:28px;min-height:28px}.division-display{padding:4px 8px;min-height:30px}.action-btn{min-height:42px;font-size:1.1rem}.progression-star{font-size:1.1rem}}
-@media(max-height:540px){.nav-row{height:44px}.stats-bar{padding:3px 5px;margin-bottom:3px}.stat-value{font-size:0.8rem}.stat-label{font-size:0.38rem}.message-display{padding:4px;margin-bottom:3px;min-height:26px}.message-text{font-size:0.7rem}.selectors-row{margin-bottom:3px}.selector-group{padding:3px}.selector-label{font-size:0.4rem;margin-bottom:2px}.selector-btn{min-height:26px;font-size:0.65rem}.selector-btn.level-btn{min-height:22px;font-size:0.55rem}.court-grid{min-width:150px;min-height:150px;gap:2px;padding:5px}.grid-cell{min-width:24px;min-height:24px}.division-display{padding:3px 6px;min-height:26px;margin:3px 0}.division-badge,.taps-counter{font-size:0.75rem}.score-display{font-size:0.9rem}.action-btn{min-height:38px;padding:8px;font-size:1rem}.progression-display{padding:4px}.progression-star{font-size:1rem}}
+@media(max-height:540px){.nav-row{height:44px}.stats-bar{padding:3px 5px;margin-bottom:3px}.stat-value{font-size:0.8rem}.stat-label{font-size:0.38rem}.message-display{padding:4px;margin-bottom:3px;min-height:26px}.message-text{font-size:0.7rem}.selectors-row{margin-bottom:3px}.selector-group{padding:3px}.selector-label{font-size:0.4rem;margin-bottom:2px}.selector-btn{min-height:26px;font-size:0.65rem}.selector-btn.level-btn{min-height:22px;font-size:0.55rem}.court-grid{min-width:150px;min-height:150px;gap:2px;padding:5px}.grid-cell{min-width:24px;min-height:24px}.division-display{padding:3px 6px;min-height:26px;margin:3px 0}.division-badge,.taps-counter,.lives-display{font-size:0.75rem}.score-display{font-size:0.9rem}.action-btn{min-height:38px;padding:8px;font-size:1rem}.progression-display{padding:4px}.progression-star{font-size:1rem}}
 </style>
 </head>
 <body class="en">
@@ -232,7 +234,7 @@ body.es .lang-en{display:none!important}
 </div>
 </div>
 <div class="court-wrapper"><div class="court-grid" id="courtGrid"></div></div>
-<div class="division-display"><div class="division-badge" id="divisionBadge">L1 TRAINING</div><div class="taps-counter" id="tapsCounter">♪ 0/5</div><div class="score-display" id="totalScore">0</div></div>
+<div class="division-display"><div class="division-badge" id="divisionBadge">L1 TRAINING</div><div class="lives-display" id="livesDisplay">♥♥♥</div><div class="taps-counter" id="tapsCounter">♪ 0/3</div><div class="score-display" id="totalScore">0</div></div>
 <button class="action-btn" id="actionBtn"><span class="lang-en">LET'S GO</span><span class="lang-es">PA'LANTE</span></button>
 </div>
 
@@ -281,13 +283,14 @@ body.es .lang-en{display:none!important}
         state.phase = 'idle';
         state.isPlaying = false;
         state.awaitingTap = false;
+        state.lives = MAX_LIVES;
         if (state.cells.length) state.cells.forEach(function(c) { c.className = 'grid-cell'; c.querySelector('.cell-num').textContent = ''; });
         document.getElementById('levelUpOverlay').classList.remove('show');
         document.getElementById('upgradeOverlay').classList.remove('show');
         actionBtn.disabled = false;
         messageText.innerHTML = '<span class="lang-en">TAP LET\'S GO!</span><span class="lang-es">¡TOCA PA\'LANTE!</span>';
         messageText.className = 'message-text';
-        updateStats(); updateDivisionDisplay(); updateRitnomePulse(state.speed);
+        updateStats(); updateDivisionDisplay(); updateRitnomePulse(state.speed); updateLivesDisplay();
         showCoach('🔄 Ready!');
     };
 
@@ -349,10 +352,11 @@ body.es .lang-en{display:none!important}
 
     // ===== GAME CONFIG =====
     var TOTAL_CELLS = 25;
-    function getCellCount(level) { return level + 4; }
+    function getCellCount(level) { return level + 2; }
     function getBeatInterval() { return state.speed === 'fast' ? 500 : state.speed === 'med' ? 667 : 1000; }
-    var PERFECT_WINDOW = 180;
-    var GOOD_WINDOW = 350;
+    var PERFECT_WINDOW = 300;
+    var GOOD_WINDOW = 600;
+    var MAX_LIVES = 3;
     var LAUGH_EMOJIS = ['😂','😆','🤣','😄','😁','🥳','😊','🎯'];
     var PARTY_EMOJIS = ['🥳','🎉','😂','🤣','✨','💫','🎯','🏆'];
 
@@ -394,6 +398,7 @@ body.es .lang-en{display:none!important}
         currentTargetCell: -1,
         awaitingTap: false,
         tapReceived: false,
+        lives: 3,
         playStartTime: 0,
         beatTimers: [],
         missTimer: null,
@@ -472,6 +477,14 @@ body.es .lang-en{display:none!important}
         document.getElementById('star1').className = state.perfectCount >= 1 ? 'progression-star earned' : 'progression-star';
         document.getElementById('star2').className = state.perfectCount >= 2 ? 'progression-star earned' : 'progression-star';
     }
+    function updateLivesDisplay() {
+        var el = document.getElementById('livesDisplay');
+        if (!el) return;
+        var hearts = '';
+        for (var i = 0; i < MAX_LIVES; i++) hearts += i < state.lives ? '♥' : '♡';
+        el.textContent = hearts;
+        el.style.color = state.lives <= 1 ? 'var(--pink)' : 'var(--purple)';
+    }
 
     // ===== TIMER MANAGEMENT =====
     function clearAllTimers() {
@@ -518,13 +531,16 @@ body.es .lang-en{display:none!important}
 
         if (state.beatIndex >= state.pattern.length) {
             state.beatIndex = 0; state.watchLoop++;
-            if (state.watchLoop >= 2) {
+            if (state.watchLoop >= 3) {
                 state.beatTimers.push(setTimeout(function() { clearAllCells(); startCountdown(); }, interval));
                 return;
             }
             // Pause between loops
+            var loopMsg = state.watchLoop === 1
+                ? '<span class="lang-en">👁️ AGAIN...</span><span class="lang-es">👁️ OTRA VEZ...</span>'
+                : '<span class="lang-en">👁️ LAST TIME...</span><span class="lang-es">👁️ ÚLTIMA VEZ...</span>';
             state.beatTimers.push(setTimeout(function() {
-                messageText.innerHTML = '<span class="lang-en">👁️ ONE MORE TIME...</span><span class="lang-es">👁️ UNA VEZ MÁS...</span>';
+                messageText.innerHTML = loopMsg;
                 state.beatTimers.push(setTimeout(runWatchBeat, 500));
             }, interval));
             return;
@@ -564,9 +580,11 @@ body.es .lang-en{display:none!important}
         state.phase = 'playing';
         state.beatIndex = 0;
         state.tapResults = [];
+        state.lives = MAX_LIVES;
         state.playStartTime = performance.now();
         clearAllCells();
         updateTapsCounter();
+        updateLivesDisplay();
         schedulePlayBeat(0);
     }
 
@@ -593,6 +611,10 @@ body.es .lang-en{display:none!important}
         state.cells[cellIdx].querySelector('.cell-num').textContent = beatIdx + 1;
         tickSound();
 
+        // Beat pulse on grid
+        courtGrid.classList.add('beat-pulse');
+        state.beatTimers.push(setTimeout(function() { courtGrid.classList.remove('beat-pulse'); }, 150));
+
         state.beatIndex = beatIdx;
         state.awaitingTap = true;
         state.tapReceived = false;
@@ -607,17 +629,27 @@ body.es .lang-en{display:none!important}
             }
         }, interval * 0.55));
 
-        // Miss deadline: 85% of beat interval
+        // Miss deadline: 95% of beat interval
         state.missTimer = setTimeout(function() {
             if (state.phase === 'playing' && !state.tapReceived && state.beatIndex === beatIdx) {
                 state.awaitingTap = false;
+                state.lives--;
                 state.cells[cellIdx].classList.add('missed');
                 failSound();
-                courtGrid.classList.add('shake'); setTimeout(function() { courtGrid.classList.remove('shake'); }, 300);
-                var isEs = currentLang === 'es';
-                endRound(false, isEs ? 'PERDISTE EL RITMO' : 'DROPPED THE BEAT');
+                updateLivesDisplay();
+                if (state.lives <= 0) {
+                    courtGrid.classList.add('shake'); setTimeout(function() { courtGrid.classList.remove('shake'); }, 300);
+                    var isEs = currentLang === 'es';
+                    endRound(false, isEs ? 'SIN VIDAS' : 'OUT OF LIVES');
+                } else {
+                    state.tapResults.push('miss');
+                    updateTapsCounter();
+                    var isEs = currentLang === 'es';
+                    messageText.innerHTML = isEs ? '💨 ¡SIGUE!' : '💨 KEEP GOING!';
+                    messageText.className = 'message-text miss';
+                }
             }
-        }, interval * 0.85);
+        }, interval * 0.95);
 
         // Schedule next beat
         schedulePlayBeat(beatIdx + 1);
@@ -637,10 +669,21 @@ body.es .lang-en{display:none!important}
         var isEs = currentLang === 'es';
 
         if (index !== expected) {
+            state.lives--;
             state.cells[index].classList.add('missed');
             failSound();
-            courtGrid.classList.add('shake'); setTimeout(function() { courtGrid.classList.remove('shake'); }, 300);
-            endRound(false, isEs ? 'CELDA INCORRECTA' : 'WRONG CELL');
+            updateLivesDisplay();
+            if (state.lives <= 0) {
+                courtGrid.classList.add('shake'); setTimeout(function() { courtGrid.classList.remove('shake'); }, 300);
+                endRound(false, isEs ? 'SIN VIDAS' : 'OUT OF LIVES');
+            } else {
+                // Wrong cell but still alive - mark as miss, continue
+                state.tapResults.push('miss');
+                state.awaitingTap = false;
+                updateTapsCounter();
+                messageText.innerHTML = isEs ? '❌ CELDA INCORRECTA' : '❌ WRONG CELL';
+                messageText.className = 'message-text miss';
+            }
             return;
         }
 
@@ -747,7 +790,9 @@ body.es .lang-en{display:none!important}
     // ===== FINISH ROUND =====
     function finishRound() {
         state.isPlaying = false; state.currentTargetCell = -1;
+        state.lives = MAX_LIVES;
         clearAllCells();
+        updateLivesDisplay();
         messageText.innerHTML = '<span class="lang-en">TAP LET\'S GO!</span><span class="lang-es">¡TOCA PA\'LANTE!</span>';
         messageText.className = 'message-text';
         actionBtn.disabled = false;
@@ -806,7 +851,7 @@ body.es .lang-en{display:none!important}
 
     // ===== INIT =====
     initCourt(); initSpeedButtons(); setLang(currentLang);
-    updateDivisionDisplay(); updateStats(); updateProgressionStars();
+    updateDivisionDisplay(); updateStats(); updateProgressionStars(); updateLivesDisplay();
     document.querySelectorAll('.level-btn').forEach(function(b) { b.classList.toggle('active', parseInt(b.dataset.level) === state.level); });
     document.querySelectorAll('.speed-btn').forEach(function(b) { if (!b.classList.contains('locked')) b.classList.toggle('active', b.dataset.speed === state.speed); });
     updateRitnomePulse(state.speed);
