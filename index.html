@@ -233,8 +233,12 @@ body.es .lang-en { display: none !important; }
 .grid-demo-label {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 0.75rem; letter-spacing: 3px; color: var(--muted);
-    margin-bottom: 14px;
+    margin-bottom: 14px; min-height: 1.2em;
+    transition: color 0.3s;
 }
+.grid-demo-label.phase-show { color: var(--gold); }
+.grid-demo-label.phase-tap { color: var(--orange); }
+.grid-demo-label.phase-done { color: var(--teal); }
 .demo-court {
     display: grid; grid-template-columns: repeat(5, 1fr);
     gap: 4px; padding: 8px; background: #1a1a24;
@@ -253,26 +257,52 @@ body.es .lang-en { display: none !important; }
     display: flex; align-items: center; justify-content: center;
     position: relative; z-index: 1;
     font-family: 'Bebas Neue', sans-serif; font-size: 1rem;
-    color: transparent;
+    color: transparent; transition: all 0.25s ease;
 }
 .demo-cell.lit {
     background: var(--orange); border-color: var(--gold);
     box-shadow: 0 0 14px rgba(255,107,53,0.5);
     color: var(--text); text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    transform: scale(1.06);
 }
 .demo-cell.correct {
     background: var(--teal); border-color: var(--teal);
     box-shadow: 0 0 12px rgba(0,217,165,0.4);
-    color: var(--text);
+    color: var(--text); transform: scale(1.06);
 }
 .grid-demo-caption {
     font-size: 0.72rem; color: var(--muted);
     margin-top: 14px; line-height: 1.5;
 }
 .grid-demo-caption em { color: var(--orange); font-style: normal; font-weight: 600; }
+
+/* ============ MID-PAGE CTA ============ */
+.mid-cta {
+    text-align: center; padding: 30px 16px 40px;
+    border-top: 1px solid var(--border);
+}
+.mid-cta-text {
+    font-size: 0.85rem; color: var(--muted); margin-bottom: 16px;
+    line-height: 1.5; max-width: 400px; margin-left: auto; margin-right: auto;
+}
+.btn-sm { padding: 10px 20px; font-size: 0.85rem; }
+
+/* ============ ETYMOLOGY LEAD-IN ============ */
+.etym-lead {
+    font-size: 0.95rem; color: var(--text); font-weight: 500;
+    margin-bottom: 20px; padding-top: 30px;
+}
+
 @media (min-width: 600px) {
     .demo-court { width: 260px; height: 260px; }
     .demo-cell { font-size: 1.15rem; }
+    .mid-cta-text { font-size: 0.9rem; }
+}
+
+/* ============ PRICING VALUE ============ */
+.pricing-value {
+    font-size: 0.7rem; color: var(--muted); letter-spacing: 0.3px;
+    margin-bottom: 14px;
 }
 
 /* ============ §3 ETYMOLOGY ============ */
@@ -625,8 +655,8 @@ body.es .lang-en { display: none !important; }
 <section class="hero">
     <div class="hero-content">
         <div class="hero-badge">
-            <span class="lang-en">🏆 Cognitive Fitness, Powered by Rhythm</span>
-            <span class="lang-es">🏆 Fitness Cognitivo, Impulsado por Ritmo</span>
+            <span class="lang-en">🏆 Recognition & Recall, Powered by Rhythm</span>
+            <span class="lang-es">🏆 Reconocimiento y Recuerdo, Impulsado por Ritmo</span>
         </div>
         <div class="hero-logo">
             <span class="laugh">LAUGH</span><span class="court">COURT</span>
@@ -636,11 +666,11 @@ body.es .lang-en { display: none !important; }
             <span class="lang-es">DONDE LA ALEGRÍA SE UNE AL JUEGO</span>
         </div>
         <h1 class="hero-headline">
-            <span class="lang-en">FIVE GAMES. THREE SPEEDS.<br><span class="highlight-gold">ONE GRID. YOUR BRAIN.</span></span>
-            <span class="lang-es">CINCO JUEGOS. TRES VELOCIDADES.<br><span class="highlight-gold">UNA CUADRÍCULA. TU CEREBRO.</span></span>
+            <span class="lang-en">FIVE GAMES. THREE SPEEDS.<br><span class="highlight-gold">ONE GRID. YOUR MOVE.</span></span>
+            <span class="lang-es">CINCO JUEGOS. TRES VELOCIDADES.<br><span class="highlight-gold">UNA CUADRÍCULA. TU TURNO.</span></span>
         </h1>
         <p class="hero-sub">
-            <span class="lang-en">Memory, reflexes, and pattern skills — all tested on a 5×5 grid running at real beats per minute.</span>
+            <span class="lang-en">Recognition, recall, and pattern skills — all tested on a 5×5 grid running at real beats per minute.</span>
             <span class="lang-es">Memoria, reflejos y patrones — todo en una cuadrícula 5×5 a pulsos reales por minuto.</span>
         </p>
         <div class="hero-cta">
@@ -663,20 +693,20 @@ body.es .lang-en { display: none !important; }
 
 <!-- ============ GRID DEMO ============ -->
 <div class="grid-demo reveal">
-    <div class="grid-demo-label">
+    <div class="grid-demo-label" id="demoLabel">
         <span class="lang-en">THIS IS THE COURT</span>
         <span class="lang-es">ESTA ES LA CANCHA</span>
     </div>
-    <div class="demo-court">
-        <div class="demo-cell"></div><div class="demo-cell"></div><div class="demo-cell lit">1</div><div class="demo-cell"></div><div class="demo-cell"></div>
-        <div class="demo-cell"></div><div class="demo-cell"></div><div class="demo-cell"></div><div class="demo-cell"></div><div class="demo-cell lit">4</div>
-        <div class="demo-cell lit">2</div><div class="demo-cell"></div><div class="demo-cell"></div><div class="demo-cell"></div><div class="demo-cell"></div>
-        <div class="demo-cell"></div><div class="demo-cell"></div><div class="demo-cell"></div><div class="demo-cell correct">✓</div><div class="demo-cell"></div>
-        <div class="demo-cell"></div><div class="demo-cell lit">3</div><div class="demo-cell"></div><div class="demo-cell"></div><div class="demo-cell lit">5</div>
+    <div class="demo-court" id="demoCourt">
+        <div class="demo-cell" data-d="0"></div><div class="demo-cell" data-d="1"></div><div class="demo-cell" data-d="2"></div><div class="demo-cell" data-d="3"></div><div class="demo-cell" data-d="4"></div>
+        <div class="demo-cell" data-d="5"></div><div class="demo-cell" data-d="6"></div><div class="demo-cell" data-d="7"></div><div class="demo-cell" data-d="8"></div><div class="demo-cell" data-d="9"></div>
+        <div class="demo-cell" data-d="10"></div><div class="demo-cell" data-d="11"></div><div class="demo-cell" data-d="12"></div><div class="demo-cell" data-d="13"></div><div class="demo-cell" data-d="14"></div>
+        <div class="demo-cell" data-d="15"></div><div class="demo-cell" data-d="16"></div><div class="demo-cell" data-d="17"></div><div class="demo-cell" data-d="18"></div><div class="demo-cell" data-d="19"></div>
+        <div class="demo-cell" data-d="20"></div><div class="demo-cell" data-d="21"></div><div class="demo-cell" data-d="22"></div><div class="demo-cell" data-d="23"></div><div class="demo-cell" data-d="24"></div>
     </div>
-    <p class="grid-demo-caption">
-        <span class="lang-en">Cells light up. Memorize. Tap back. → It's that simple.<br>The <em>speed</em> is what makes it a challenge.</span>
-        <span class="lang-es">Las celdas se iluminan. Memoriza. Repite. → Así de simple.<br>La <em>velocidad</em> es lo que lo hace un desafío.</span>
+    <p class="grid-demo-caption" id="demoCaption">
+        <span class="lang-en">Watch the cells light up → Recognize → Recall in order.<br>The <em>speed</em> is what makes it a challenge.</span>
+        <span class="lang-es">Las celdas se iluminan → Reconoce → Recuerda en orden.<br>La <em>velocidad</em> es lo que lo hace un desafío.</span>
     </p>
 </div>
 
@@ -709,7 +739,7 @@ body.es .lang-en { display: none !important; }
             <div class="wk-body">
                 <ol class="wk-steps">
                     <li class="wk-step"><span class="wk-num">1</span><span class="wk-text"><span class="lang-en">Numbered cells light up <strong>simultaneously</strong> on the grid</span><span class="lang-es">Celdas numeradas se iluminan <strong>simultáneamente</strong></span></span></li>
-                    <li class="wk-step"><span class="wk-num">2</span><span class="wk-text"><span class="lang-en">Memorize both <strong>positions</strong> and <strong>numbers</strong></span><span class="lang-es">Memoriza las <strong>posiciones</strong> y los <strong>números</strong></span></span></li>
+                    <li class="wk-step"><span class="wk-num">2</span><span class="wk-text"><span class="lang-en">Recognize both <strong>positions</strong> and <strong>numbers</strong></span><span class="lang-es">Reconoce las <strong>posiciones</strong> y los <strong>números</strong></span></span></li>
                     <li class="wk-step"><span class="wk-num">3</span><span class="wk-text"><span class="lang-en">Tap cells in <strong>numerical order</strong> (1, 2, 3...)</span><span class="lang-es">Toca las celdas en <strong>orden numérico</strong> (1, 2, 3...)</span></span></li>
                 </ol>
             </div>
@@ -780,7 +810,7 @@ body.es .lang-en { display: none !important; }
             </div>
             <div class="wk-body">
                 <ol class="wk-steps">
-                    <li class="wk-step"><span class="wk-num">1</span><span class="wk-text"><span class="lang-en">Watch a <strong>pattern flash</strong> — memorize positions</span><span class="lang-es">Observa un <strong>patrón</strong> — memoriza posiciones</span></span></li>
+                    <li class="wk-step"><span class="wk-num">1</span><span class="wk-text"><span class="lang-en">Watch a <strong>pattern flash</strong> — recognize the positions</span><span class="lang-es">Observa un <strong>patrón</strong> — reconoce las posiciones</span></span></li>
                     <li class="wk-step"><span class="wk-num">2</span><span class="wk-text"><span class="lang-en">A <strong>second pattern</strong> flashes — same or different?</span><span class="lang-es">Un <strong>segundo patrón</strong> — ¿igual o diferente?</span></span></li>
                     <li class="wk-step"><span class="wk-num">3</span><span class="wk-text"><span class="lang-en">Tap <strong>SAME</strong> or <strong>DIFFERENT</strong> — trust your eyes!</span><span class="lang-es">Toca <strong>IGUAL</strong> o <strong>DIFERENTE</strong> — ¡confía en tus ojos!</span></span></li>
                 </ol>
@@ -790,8 +820,24 @@ body.es .lang-en { display: none !important; }
     </div>
 </section>
 
+<!-- ============ MID-PAGE CTA ============ -->
+<div class="mid-cta reveal">
+    <p class="mid-cta-text">
+        <span class="lang-en">No pseudoscience. No ads. No upsells. Just five pattern challenges running on real rhythm.</span>
+        <span class="lang-es">Sin pseudociencia. Sin anuncios. Sin sorpresas. Cinco desafíos de patrones a ritmo real.</span>
+    </p>
+    <a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="btn btn-primary btn-sm">
+        <span class="lang-en">TRY IT FREE →</span>
+        <span class="lang-es">PRUÉBALO GRATIS →</span>
+    </a>
+</div>
+
 <!-- ============ §3 RITMO → RITNOME™ ============ -->
 <section class="etymology reveal">
+    <p class="etym-lead">
+        <span class="lang-en">You noticed every game runs on a timer. That timer has a name.</span>
+        <span class="lang-es">Notaste que cada juego corre con un temporizador. Ese temporizador tiene nombre.</span>
+    </p>
     <div class="powered-inline">
         <div class="p-dot"></div>
         <div class="p-text">
@@ -940,17 +986,17 @@ body.es .lang-en { display: none !important; }
         <div class="audience-card">
             <div class="audience-icon">👴👵</div>
             <div class="audience-title"><span class="lang-en">SENIORS</span><span class="lang-es">ADULTOS MAYORES</span></div>
-            <p class="audience-text"><span class="lang-en">Keep your mind sharp with fun daily challenges.</span><span class="lang-es">Mantén tu mente aguda con desafíos divertidos.</span></p>
+            <p class="audience-text"><span class="lang-en">Daily recognition & recall that feels like a game, not homework. Start at 60 BPM and build at your pace.</span><span class="lang-es">Reconocimiento y recuerdo diario que se siente como un juego, no como tarea. Empieza a 60 BPM y avanza a tu ritmo.</span></p>
         </div>
         <div class="audience-card">
             <div class="audience-icon">🏥</div>
             <div class="audience-title"><span class="lang-en">FACILITIES</span><span class="lang-es">CENTROS</span></div>
-            <p class="audience-text"><span class="lang-en">A Trophy Case your members check every day.</span><span class="lang-es">Una Vitrina que revisarán cada día.</span></p>
+            <p class="audience-text"><span class="lang-en">Give your members a Trophy Case they actually want to fill. One PIN per seat. Progress tracking built in.</span><span class="lang-es">Dale a tus miembros una Vitrina que realmente quieran llenar. Un PIN por asiento. Seguimiento de progreso incluido.</span></p>
         </div>
         <div class="audience-card">
             <div class="audience-icon">🎮</div>
             <div class="audience-title"><span class="lang-en">EVERYONE</span><span class="lang-es">TODOS</span></div>
-            <p class="audience-text"><span class="lang-en">Anyone who wants to challenge their patterns & reflexes.</span><span class="lang-es">Cualquiera que quiera retar sus patrones y reflejos.</span></p>
+            <p class="audience-text"><span class="lang-en">If you've ever lost your keys, blanked on a name, or missed a beat — this is for you. Train the skills you actually use.</span><span class="lang-es">Si alguna vez perdiste tus llaves, olvidaste un nombre, o perdiste el ritmo — esto es para ti. Entrena las habilidades que realmente usas.</span></p>
         </div>
     </div>
 </section>
@@ -970,6 +1016,7 @@ body.es .lang-en { display: none !important; }
         <div class="pricing-then"><span class="lang-en">then</span><span class="lang-es">después</span></div>
         <div class="pricing-amount">$5</div>
         <div class="pricing-period"><span class="lang-en">per month</span><span class="lang-es">por mes</span></div>
+        <div class="pricing-value"><span class="lang-en">5 games · 3 speeds · 150 levels — less than a coffee</span><span class="lang-es">5 juegos · 3 velocidades · 150 niveles — menos que un café</span></div>
         <ul class="pricing-features">
             <li><span class="check">✓</span><span class="lang-en">Your GoStar™ Trophy Case</span><span class="lang-es">Tu Vitrina de GoStars™</span></li>
             <li><span class="check">✓</span><span class="lang-en">All 3 Ritnome™ settings</span><span class="lang-es">Los 3 configuraciones Ritnome™</span></li>
@@ -990,7 +1037,7 @@ body.es .lang-en { display: none !important; }
     <div class="final-cta-content">
         <div class="final-icon">🏆</div>
         <h2 class="final-title"><span class="lang-en">START YOUR<br>TROPHY CASE</span><span class="lang-es">COMIENZA TU<br>VITRINA</span></h2>
-        <p class="final-sub"><span class="lang-en">Five challenges. Three tempos. One Trophy Case.</span><span class="lang-es">Cinco desafíos. Tres tempos. Una Vitrina.</span></p>
+        <p class="final-sub"><span class="lang-en">Five games. Three speeds. 150 levels. One grid. Your move.</span><span class="lang-es">Cinco juegos. Tres velocidades. 150 niveles. Una cuadrícula. Tu turno.</span></p>
         <div class="final-buttons">
             <a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="cta-btn primary"><span class="lang-en">🆕 START FREE TRIAL</span><span class="lang-es">🆕 COMENZAR GRATIS</span></a>
             <a href="/login" class="cta-btn secondary"><span class="lang-en">🔑 ALREADY HAVE A PIN</span><span class="lang-es">🔑 YA TENGO UN PIN</span></a>
@@ -1044,6 +1091,93 @@ body.es .lang-en { display: none !important; }
     window.addEventListener('scroll', checkReveal);
     window.addEventListener('load', checkReveal);
     checkReveal();
+
+    /* ============ GRID DEMO ANIMATION ============ */
+    var demoPattern = [
+        { idx: 2, num: '1' },
+        { idx: 10, num: '2' },
+        { idx: 21, num: '3' },
+        { idx: 9, num: '4' },
+        { idx: 24, num: '5' }
+    ];
+    var demoCells = document.querySelectorAll('.demo-cell');
+    var demoLabel = document.getElementById('demoLabel');
+    var demoRunning = false;
+
+    function demoReset() {
+        demoCells.forEach(function(c) {
+            c.className = 'demo-cell';
+            c.textContent = '';
+        });
+        demoLabel.className = 'grid-demo-label';
+        demoLabel.innerHTML = '<span class="lang-en">THIS IS THE COURT</span><span class="lang-es">ESTA ES LA CANCHA</span>';
+    }
+
+    function demoRound() {
+        if (!demoRunning) return;
+        demoReset();
+
+        /* Phase 1: Show pattern (600ms in) */
+        setTimeout(function() {
+            if (!demoRunning) return;
+            demoLabel.innerHTML = '<span class="lang-en">⏱ RECOGNIZE!</span><span class="lang-es">⏱ ¡RECONOCE!</span>';
+            demoLabel.className = 'grid-demo-label phase-show';
+            demoPattern.forEach(function(p) {
+                demoCells[p.idx].classList.add('lit');
+                demoCells[p.idx].textContent = p.num;
+            });
+        }, 600);
+
+        /* Phase 2: Hide pattern (3100ms in) */
+        setTimeout(function() {
+            if (!demoRunning) return;
+            demoPattern.forEach(function(p) {
+                demoCells[p.idx].classList.remove('lit');
+                demoCells[p.idx].textContent = '';
+            });
+            demoLabel.innerHTML = '<span class="lang-en">👆 TAP IN ORDER!</span><span class="lang-es">👆 ¡TOCA EN ORDEN!</span>';
+            demoLabel.className = 'grid-demo-label phase-tap';
+        }, 3100);
+
+        /* Phase 3: Tap correct one by one (3600ms in, staggered 400ms each) */
+        demoPattern.forEach(function(p, i) {
+            setTimeout(function() {
+                if (!demoRunning) return;
+                demoCells[p.idx].classList.add('correct');
+                demoCells[p.idx].textContent = '✓';
+            }, 3600 + (i * 400));
+        });
+
+        /* Phase 4: Celebration (5800ms in) */
+        setTimeout(function() {
+            if (!demoRunning) return;
+            demoLabel.innerHTML = '<span class="lang-en">✅ PERFECT!</span><span class="lang-es">✅ ¡PERFECTO!</span>';
+            demoLabel.className = 'grid-demo-label phase-done';
+        }, 5800);
+
+        /* Phase 5: Reset and loop (7500ms) */
+        setTimeout(function() {
+            if (demoRunning) demoRound();
+        }, 7500);
+    }
+
+    /* Start/stop demo based on visibility */
+    var demoSection = document.querySelector('.grid-demo');
+    function checkDemoVisibility() {
+        if (!demoSection) return;
+        var rect = demoSection.getBoundingClientRect();
+        var visible = rect.top < window.innerHeight && rect.bottom > 0;
+        if (visible && !demoRunning) {
+            demoRunning = true;
+            demoRound();
+        } else if (!visible && demoRunning) {
+            demoRunning = false;
+            demoReset();
+        }
+    }
+    window.addEventListener('scroll', checkDemoVisibility);
+    window.addEventListener('load', checkDemoVisibility);
+    checkDemoVisibility();
 })();
 </script>
 
