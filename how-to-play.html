@@ -32,6 +32,7 @@
             color: var(--text);
             min-height: 100vh;
             line-height: 1.6;
+            -webkit-text-size-adjust: 100%;
         }
 
         body.es .lang-en { display: none !important; }
@@ -42,43 +43,46 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 20px;
+            padding: 12px 16px;
             background: var(--darker);
             border-bottom: 1px solid var(--border);
             position: sticky;
             top: 0;
             z-index: 100;
+            gap: 8px;
         }
 
         .logo {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             letter-spacing: 2px;
             text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
+            flex-shrink: 0;
         }
-        .logo .icon { width: 28px; height: 28px; }
+        .logo .icon { width: 24px; height: 24px; }
         .logo .laugh { color: var(--gold); }
         .logo .court { color: var(--text); }
 
         .nav-right {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
+            flex-shrink: 0;
         }
 
         .lang-toggle {
             display: flex;
-            gap: 3px;
+            gap: 2px;
             background: var(--card);
-            padding: 3px;
+            padding: 2px;
             border-radius: 8px;
             border: 1px solid var(--border);
         }
         .lang-btn {
-            padding: 5px 10px;
+            padding: 4px 10px;
             border: none;
             background: transparent;
             color: var(--muted);
@@ -94,11 +98,12 @@
         .back-link {
             color: var(--muted);
             text-decoration: none;
-            font-size: 0.8rem;
-            padding: 6px 12px;
+            font-size: 0.75rem;
+            padding: 5px 10px;
             border: 1px solid var(--border);
             border-radius: 8px;
             transition: all 0.2s;
+            white-space: nowrap;
         }
         .back-link:hover { color: var(--gold); border-color: var(--gold); }
 
@@ -106,91 +111,92 @@
         .main {
             max-width: 800px;
             margin: 0 auto;
-            padding: 30px 20px 60px;
+            padding: 24px 16px 48px;
         }
 
         /* ===== HERO ===== */
-        .hero { text-align: center; margin-bottom: 40px; }
-        .hero-icon { font-size: 4rem; margin-bottom: 15px; }
+        .hero { text-align: center; margin-bottom: 32px; }
+        .hero-icon { font-size: 3rem; margin-bottom: 10px; }
         .hero-title {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 2.5rem;
+            font-size: 2rem;
             letter-spacing: 4px;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
         .hero-title .gold { color: var(--gold); }
         .hero-subtitle {
-            font-size: 1rem;
+            font-size: 0.9rem;
             color: var(--muted);
             max-width: 500px;
             margin: 0 auto;
+            padding: 0 10px;
         }
 
         /* ===== SECTIONS ===== */
-        .section { margin-bottom: 40px; }
+        .section { margin-bottom: 32px; }
         .section-title {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             letter-spacing: 3px;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             color: var(--gold);
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
-        .section-title .emoji { font-size: 1.5rem; }
+        .section-title .emoji { font-size: 1.3rem; }
 
         /* ===== OVERVIEW CARDS ===== */
         .overview-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-bottom: 30px;
+            gap: 10px;
+            margin-bottom: 16px;
         }
         .overview-card {
             background: var(--card);
             border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 20px 15px;
+            padding: 14px 8px;
             text-align: center;
         }
         .overview-number {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 2.5rem;
+            font-size: 2rem;
             color: var(--gold);
             line-height: 1;
         }
         .overview-label {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: var(--muted);
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-top: 5px;
+            margin-top: 4px;
         }
 
         /* ===== WORKOUT CARDS ===== */
         .workout-section {
             background: var(--card);
             border: 2px solid var(--border);
-            border-radius: 16px;
-            margin-bottom: 20px;
+            border-radius: 14px;
+            margin-bottom: 16px;
             overflow: hidden;
         }
         .workout-header {
-            padding: 20px;
+            padding: 16px;
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
             border-bottom: 1px solid var(--border);
         }
-        .workout-icon { font-size: 2.5rem; line-height: 1; }
-        .workout-info { flex: 1; }
+        .workout-icon { font-size: 2rem; line-height: 1; flex-shrink: 0; }
+        .workout-info { flex: 1; min-width: 0; }
         .workout-name {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             letter-spacing: 2px;
         }
-        .workout-tagline { font-size: 0.8rem; color: var(--muted); }
+        .workout-tagline { font-size: 0.75rem; color: var(--muted); }
 
         .workout-section.match { border-color: rgba(255,107,53,0.3); }
         .workout-section.match .workout-name { color: var(--orange); }
@@ -208,57 +214,61 @@
         .workout-section.zoo .workout-name { color: var(--lime); }
         .workout-section.zoo .workout-header { background: rgba(50,205,50,0.05); }
 
-        .workout-body { padding: 20px; }
+        .workout-body { padding: 16px; }
         .how-to-title {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 1rem;
+            font-size: 0.9rem;
             letter-spacing: 2px;
             color: var(--gold);
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
         .step-list { list-style: none; }
-        .step-item { display: flex; gap: 12px; margin-bottom: 12px; align-items: flex-start; }
+        .step-item { display: flex; gap: 10px; margin-bottom: 10px; align-items: flex-start; }
         .step-number {
-            width: 24px; height: 24px; min-width: 24px;
+            width: 22px; height: 22px; min-width: 22px;
             background: var(--gold); color: var(--dark);
             border-radius: 50%; display: flex; align-items: center;
-            justify-content: center; font-weight: 700; font-size: 0.75rem;
+            justify-content: center; font-weight: 700; font-size: 0.7rem;
+            margin-top: 1px;
         }
-        .step-text { font-size: 0.9rem; color: var(--text); line-height: 1.5; }
+        .step-text { font-size: 0.85rem; color: var(--text); line-height: 1.5; }
         .tip-box {
-            background: rgba(255,215,0,0.1);
-            border: 1px solid rgba(255,215,0,0.2);
+            background: rgba(255,215,0,0.08);
+            border: 1px solid rgba(255,215,0,0.15);
             border-radius: 10px;
-            padding: 12px 15px;
-            margin-top: 15px;
-            font-size: 0.85rem;
+            padding: 10px 12px;
+            margin-top: 12px;
+            font-size: 0.8rem;
+            line-height: 1.5;
         }
         .tip-box .tip-label { color: var(--gold); font-weight: 700; }
 
         /* ===== RITNOME™ SPEED SYSTEM ===== */
         .speed-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-bottom: 20px;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-bottom: 16px;
         }
         .speed-card {
             background: var(--card);
             border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 20px 15px;
-            text-align: center;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
         }
-        .speed-emoji { font-size: 2rem; margin-bottom: 8px; }
+        .speed-emoji { font-size: 1.5rem; flex-shrink: 0; }
+        .speed-info { flex: 1; }
         .speed-name {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             letter-spacing: 2px;
-            margin-bottom: 5px;
         }
-        .speed-bpm { font-size: 0.8rem; color: var(--gold); font-weight: 600; }
-        .speed-ritnome { font-size: 0.65rem; color: var(--muted); margin-top: 4px; letter-spacing: 0.5px; }
-        .speed-desc { font-size: 0.75rem; color: var(--muted); margin-top: 8px; }
+        .speed-bpm { font-size: 0.75rem; color: var(--gold); font-weight: 600; }
+        .speed-ritnome { font-size: 0.65rem; color: var(--muted); margin-top: 2px; letter-spacing: 0.5px; }
+        .speed-desc { font-size: 0.75rem; color: var(--muted); margin-top: 4px; }
         .speed-card.training { border-color: rgba(255,215,0,0.2); }
         .speed-card.training .speed-name { color: var(--text); }
         .speed-card.tempo { border-color: rgba(255,215,0,0.2); }
@@ -267,7 +277,7 @@
         .speed-card.elite .speed-name { color: var(--gold); }
         .free-badge {
             display: inline-block;
-            margin-top: 8px;
+            margin-top: 4px;
             padding: 2px 8px;
             background: rgba(0,217,165,0.15);
             color: var(--teal);
@@ -282,43 +292,43 @@
             background: var(--card);
             border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
+            padding: 14px;
+            margin-bottom: 16px;
         }
-        .level-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+        .level-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
         .level-row:last-child { margin-bottom: 0; }
-        .level-badge { font-family: 'Bebas Neue', sans-serif; font-size: 0.9rem; color: var(--gold); width: 40px; }
-        .level-cells { display: flex; gap: 3px; flex: 1; }
-        .level-cell { width: 20px; height: 20px; background: var(--gold); border-radius: 3px; opacity: 0.8; }
-        .level-count { font-size: 0.75rem; color: var(--muted); width: 60px; text-align: right; }
+        .level-badge { font-family: 'Bebas Neue', sans-serif; font-size: 0.85rem; color: var(--gold); width: 32px; flex-shrink: 0; }
+        .level-cells { display: flex; gap: 3px; flex: 1; flex-wrap: wrap; }
+        .level-cell { width: 16px; height: 16px; background: var(--gold); border-radius: 3px; opacity: 0.8; }
+        .level-count { font-size: 0.7rem; color: var(--muted); width: 50px; text-align: right; flex-shrink: 0; }
 
         /* ===== GOSTAR SYSTEM ===== */
         .gostar-display {
             background: linear-gradient(135deg, rgba(255,215,0,0.1), rgba(255,107,53,0.1));
             border: 2px solid rgba(255,215,0,0.3);
-            border-radius: 16px;
-            padding: 25px;
+            border-radius: 14px;
+            padding: 20px 16px;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
         .gostar-title {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.3rem;
+            font-size: 1.1rem;
             letter-spacing: 2px;
             color: var(--gold);
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
-        .gostar-stars { font-size: 1.8rem; letter-spacing: 4px; margin-bottom: 10px; }
-        .gostar-label { font-size: 0.9rem; color: var(--muted); }
+        .gostar-stars { font-size: 1.4rem; letter-spacing: 2px; margin-bottom: 8px; }
+        .gostar-label { font-size: 0.85rem; color: var(--muted); }
         .gostar-breakdown {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            gap: 10px;
-            margin-top: 20px;
+            gap: 8px;
+            margin-top: 16px;
         }
-        .gostar-game { background: var(--card); border-radius: 8px; padding: 10px 5px; text-align: center; }
-        .gostar-game-icon { font-size: 1.2rem; margin-bottom: 4px; }
-        .gostar-game-count { font-family: 'Bebas Neue', sans-serif; font-size: 0.9rem; color: var(--gold); }
+        .gostar-game { background: var(--card); border-radius: 8px; padding: 8px 4px; text-align: center; }
+        .gostar-game-icon { font-size: 1.1rem; margin-bottom: 2px; }
+        .gostar-game-count { font-family: 'Bebas Neue', sans-serif; font-size: 0.85rem; color: var(--gold); }
 
         /* ===== REPORT CARD ===== */
         .report-card-demo {
@@ -326,30 +336,30 @@
             border: 1px solid var(--border);
             border-radius: 12px;
             overflow: hidden;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
         .report-header {
             background: linear-gradient(135deg, var(--gold), var(--orange));
-            padding: 15px 20px;
+            padding: 12px 16px;
             text-align: center;
         }
         .report-header-title {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.3rem;
+            font-size: 1.1rem;
             letter-spacing: 3px;
             color: var(--dark);
         }
-        .report-body { padding: 20px; }
+        .report-body { padding: 14px 16px; }
         .report-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 0;
+            padding: 8px 0;
             border-bottom: 1px solid var(--border);
         }
         .report-row:last-child { border-bottom: none; }
-        .report-label { font-size: 0.85rem; color: var(--muted); }
-        .report-value { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 1px; }
+        .report-label { font-size: 0.8rem; color: var(--muted); }
+        .report-value { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 1px; }
         .report-value.gold { color: var(--gold); }
         .report-value.teal { color: var(--teal); }
 
@@ -358,36 +368,36 @@
             background: var(--card);
             border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
+            padding: 14px 16px;
+            margin-bottom: 16px;
         }
-        .info-box p { font-size: 0.9rem; color: var(--text); margin-bottom: 12px; }
+        .info-box p { font-size: 0.85rem; color: var(--text); margin-bottom: 10px; line-height: 1.6; }
         .info-box p:last-child { margin-bottom: 0; }
 
         /* ===== CTA ===== */
         .cta-section {
             text-align: center;
-            padding: 40px 20px;
+            padding: 28px 16px;
             background: linear-gradient(135deg, rgba(255,215,0,0.05), rgba(255,107,53,0.05));
             border: 1px solid rgba(255,215,0,0.2);
-            border-radius: 16px;
+            border-radius: 14px;
         }
         .cta-title {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             letter-spacing: 3px;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
-        .cta-subtitle { font-size: 0.9rem; color: var(--muted); margin-bottom: 20px; }
+        .cta-subtitle { font-size: 0.85rem; color: var(--muted); margin-bottom: 16px; }
         .cta-btn {
             display: inline-block;
-            padding: 14px 35px;
+            padding: 12px 32px;
             background: linear-gradient(135deg, var(--gold), var(--orange));
             color: var(--dark);
             text-decoration: none;
             border-radius: 50px;
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.1rem;
+            font-size: 1rem;
             letter-spacing: 2px;
             transition: all 0.3s;
         }
@@ -395,57 +405,107 @@
 
         /* ===== FOOTER ===== */
         .footer {
-            padding: 30px 20px;
+            padding: 24px 16px;
             text-align: center;
             background: var(--darker);
             border-top: 1px solid var(--border);
-            margin-top: 40px;
+            margin-top: 32px;
         }
         .footer-logo {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.1rem;
+            font-size: 1rem;
             letter-spacing: 3px;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
+            gap: 5px;
         }
-        .footer-logo .icon { width: 24px; height: 24px; }
+        .footer-logo .icon { width: 22px; height: 22px; }
         .footer-logo .laugh { color: var(--gold); }
         .footer-logo .court { color: var(--text); }
-        .footer-links { margin: 12px 0; font-size: 0.7rem; }
-        .footer-links a { color: var(--muted); text-decoration: none; margin: 0 10px; transition: color 0.2s; }
+        .footer-links { margin: 10px 0; font-size: 0.7rem; }
+        .footer-links a { color: var(--muted); text-decoration: none; margin: 0 8px; transition: color 0.2s; }
         .footer-links a:hover { color: var(--gold); }
         .footer-company { font-size: 0.65rem; color: var(--muted); }
-        .footer-trademarks { font-size: 0.55rem; color: var(--muted); margin-top: 12px; line-height: 1.5; }
+        .footer-trademarks { font-size: 0.55rem; color: var(--muted); margin-top: 10px; line-height: 1.5; padding: 0 10px; }
 
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 600px) {
-            .hero-title { font-size: 2rem; }
-            .overview-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
-            .overview-card { padding: 15px 10px; }
-            .overview-number { font-size: 2rem; }
-            .speed-grid { grid-template-columns: 1fr; }
+        /* ===== RESPONSIVE — TABLETS & UP ===== */
+        @media (min-width: 601px) {
+            .main { padding: 30px 24px 60px; }
+            .nav { padding: 15px 24px; }
+            .hero-icon { font-size: 4rem; }
+            .hero-title { font-size: 2.5rem; }
+            .hero-subtitle { font-size: 1rem; }
+            .section-title { font-size: 1.8rem; }
+            .overview-number { font-size: 2.5rem; }
+            .overview-card { padding: 20px 15px; }
+            .speed-grid { grid-template-columns: repeat(3, 1fr); }
             .speed-card {
-                display: flex; align-items: center; gap: 15px;
-                text-align: left; padding: 15px;
+                flex-direction: column;
+                text-align: center;
+                padding: 20px 15px;
+                gap: 0;
             }
-            .speed-emoji { margin-bottom: 0; font-size: 1.5rem; }
-            .speed-info { flex: 1; }
-            .speed-desc { margin-top: 4px; }
-            .gostar-breakdown { grid-template-columns: repeat(5, 1fr); gap: 5px; }
-            .gostar-game { padding: 8px 3px; }
-            .gostar-game-icon { font-size: 1rem; }
-            .level-cell { width: 12px; height: 12px; }
-            .level-visual { padding: 15px; overflow-x: auto; }
-            .workout-header { flex-direction: column; text-align: center; gap: 10px; }
+            .speed-emoji { margin-bottom: 8px; font-size: 2rem; }
+            .speed-name { font-size: 1.2rem; }
+            .workout-header { padding: 20px; gap: 15px; }
+            .workout-icon { font-size: 2.5rem; }
+            .workout-name { font-size: 1.5rem; }
+            .workout-body { padding: 20px; }
+            .step-text { font-size: 0.9rem; }
+            .level-cell { width: 20px; height: 20px; }
+            .gostar-stars { font-size: 1.8rem; letter-spacing: 4px; }
+            .cta-section { padding: 40px 24px; }
+            .cta-title { font-size: 1.8rem; }
+            .info-box { padding: 20px; }
+            .info-box p { font-size: 0.9rem; }
         }
 
-        @media (max-width: 400px) {
-            .overview-grid { gap: 8px; }
-            .overview-number { font-size: 1.6rem; }
-            .overview-label { font-size: 0.65rem; }
+        /* ===== TINY SCREENS (320px) ===== */
+        @media (max-width: 374px) {
+            .nav { padding: 10px 12px; gap: 6px; }
+            .logo { font-size: 1.05rem; gap: 4px; }
+            .logo .icon { width: 20px; height: 20px; }
+            .lang-btn { padding: 3px 8px; font-size: 0.65rem; }
+            .back-link { font-size: 0.7rem; padding: 4px 8px; }
+            .main { padding: 20px 12px 40px; }
+            .hero-icon { font-size: 2.5rem; }
+            .hero-title { font-size: 1.6rem; letter-spacing: 3px; }
+            .hero-subtitle { font-size: 0.8rem; }
+            .section-title { font-size: 1.3rem; gap: 6px; }
+            .section-title .emoji { font-size: 1.1rem; }
+            .overview-grid { gap: 6px; }
+            .overview-card { padding: 10px 6px; border-radius: 10px; }
+            .overview-number { font-size: 1.5rem; }
+            .overview-label { font-size: 0.6rem; }
+            .workout-header { padding: 12px; gap: 10px; }
+            .workout-icon { font-size: 1.6rem; }
+            .workout-name { font-size: 1.1rem; }
+            .workout-tagline { font-size: 0.7rem; }
+            .workout-body { padding: 12px; }
+            .step-text { font-size: 0.8rem; }
+            .step-number { width: 20px; height: 20px; min-width: 20px; font-size: 0.65rem; }
+            .tip-box { padding: 8px 10px; font-size: 0.75rem; }
+            .speed-card { padding: 12px; gap: 10px; }
+            .speed-name { font-size: 1rem; }
+            .level-cell { width: 12px; height: 12px; }
+            .level-badge { font-size: 0.75rem; width: 28px; }
+            .level-count { font-size: 0.65rem; width: 44px; }
+            .gostar-display { padding: 16px 12px; }
+            .gostar-stars { font-size: 1.1rem; letter-spacing: 1px; }
+            .gostar-breakdown { gap: 5px; }
+            .gostar-game { padding: 6px 2px; }
+            .gostar-game-icon { font-size: 0.9rem; }
+            .gostar-game-count { font-size: 0.75rem; }
+            .info-box { padding: 12px; }
+            .info-box p { font-size: 0.8rem; }
+            .cta-section { padding: 20px 12px; border-radius: 12px; }
+            .cta-title { font-size: 1.3rem; }
+            .cta-subtitle { font-size: 0.8rem; }
+            .cta-btn { padding: 10px 28px; font-size: 0.9rem; }
+            .footer { padding: 20px 12px; }
+            .footer-links a { margin: 0 6px; }
         }
     </style>
 </head>
