@@ -225,6 +225,56 @@ body.es .lang-en { display: none !important; }
 .wk-card.echo .wk-header { background: rgba(50,205,50,0.05); }
 .wk-card.echo .wk-name { color: var(--lime); }
 
+/* ============ GRID DEMO ============ */
+.grid-demo {
+    padding: 40px 16px 10px;
+    text-align: center;
+}
+.grid-demo-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.75rem; letter-spacing: 3px; color: var(--muted);
+    margin-bottom: 14px;
+}
+.demo-court {
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    gap: 4px; padding: 8px; background: #1a1a24;
+    border-radius: 14px; border: 3px solid var(--orange);
+    width: 220px; height: 220px; margin: 0 auto;
+    position: relative;
+}
+.demo-court::before {
+    content: ''; position: absolute; inset: 0;
+    background: rgba(10,10,15,0.55); border-radius: 11px;
+    pointer-events: none; z-index: 0;
+}
+.demo-cell {
+    aspect-ratio: 1; border-radius: 5px;
+    background: rgba(255,255,255,0.08); border: 2px solid rgba(255,255,255,0.2);
+    display: flex; align-items: center; justify-content: center;
+    position: relative; z-index: 1;
+    font-family: 'Bebas Neue', sans-serif; font-size: 1rem;
+    color: transparent;
+}
+.demo-cell.lit {
+    background: var(--orange); border-color: var(--gold);
+    box-shadow: 0 0 14px rgba(255,107,53,0.5);
+    color: var(--text); text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+.demo-cell.correct {
+    background: var(--teal); border-color: var(--teal);
+    box-shadow: 0 0 12px rgba(0,217,165,0.4);
+    color: var(--text);
+}
+.grid-demo-caption {
+    font-size: 0.72rem; color: var(--muted);
+    margin-top: 14px; line-height: 1.5;
+}
+.grid-demo-caption em { color: var(--orange); font-style: normal; font-weight: 600; }
+@media (min-width: 600px) {
+    .demo-court { width: 260px; height: 260px; }
+    .demo-cell { font-size: 1.15rem; }
+}
+
 /* ============ §3 ETYMOLOGY ============ */
 .etymology { padding: 50px 16px; text-align: center; position: relative; }
 .etymology::before {
@@ -575,8 +625,8 @@ body.es .lang-en { display: none !important; }
 <section class="hero">
     <div class="hero-content">
         <div class="hero-badge">
-            <span class="lang-en">🏆 Powered by Ritnome™ Tempo Technology</span>
-            <span class="lang-es">🏆 Impulsado por Tecnología Ritnome™</span>
+            <span class="lang-en">🏆 Cognitive Fitness, Powered by Rhythm</span>
+            <span class="lang-es">🏆 Fitness Cognitivo, Impulsado por Ritmo</span>
         </div>
         <div class="hero-logo">
             <span class="laugh">LAUGH</span><span class="court">COURT</span>
@@ -586,12 +636,12 @@ body.es .lang-en { display: none !important; }
             <span class="lang-es">DONDE LA ALEGRÍA SE UNE AL JUEGO</span>
         </div>
         <h1 class="hero-headline">
-            <span class="lang-en">WORK OUT. LEVEL UP.<br><span class="highlight-gold">FILL YOUR TROPHY CASE.</span></span>
-            <span class="lang-es">EJERCITA. SUBE DE NIVEL.<br><span class="highlight-gold">LLENA TU VITRINA.</span></span>
+            <span class="lang-en">FIVE GAMES. THREE SPEEDS.<br><span class="highlight-gold">ONE GRID. YOUR BRAIN.</span></span>
+            <span class="lang-es">CINCO JUEGOS. TRES VELOCIDADES.<br><span class="highlight-gold">UNA CUADRÍCULA. TU CEREBRO.</span></span>
         </h1>
         <p class="hero-sub">
-            <span class="lang-en">Five pattern challenges at three precision tempos. Earn GoStars™ as you level up.</span>
-            <span class="lang-es">Cinco desafíos de patrones a tres tempos de precisión. Gana GoStars™ al subir de nivel.</span>
+            <span class="lang-en">Memory, reflexes, and pattern skills — all tested on a 5×5 grid running at real beats per minute.</span>
+            <span class="lang-es">Memoria, reflejos y patrones — todo en una cuadrícula 5×5 a pulsos reales por minuto.</span>
         </p>
         <div class="hero-cta">
             <a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="btn btn-primary">
@@ -605,25 +655,44 @@ body.es .lang-en { display: none !important; }
         </p>
     </div>
     <div class="scroll-hint">
-        <span class="lang-en">Meet the 5 Ritnomes™</span>
-        <span class="lang-es">Conoce los 5 Ritnomes™</span>
+        <span class="lang-en">See it in action</span>
+        <span class="lang-es">Míralo en acción</span>
         <span>↓</span>
     </div>
 </section>
 
-<!-- ============ §2 THE 5 RITNOMES ============ -->
+<!-- ============ GRID DEMO ============ -->
+<div class="grid-demo reveal">
+    <div class="grid-demo-label">
+        <span class="lang-en">THIS IS THE COURT</span>
+        <span class="lang-es">ESTA ES LA CANCHA</span>
+    </div>
+    <div class="demo-court">
+        <div class="demo-cell"></div><div class="demo-cell"></div><div class="demo-cell lit">1</div><div class="demo-cell"></div><div class="demo-cell"></div>
+        <div class="demo-cell"></div><div class="demo-cell"></div><div class="demo-cell"></div><div class="demo-cell"></div><div class="demo-cell lit">4</div>
+        <div class="demo-cell lit">2</div><div class="demo-cell"></div><div class="demo-cell"></div><div class="demo-cell"></div><div class="demo-cell"></div>
+        <div class="demo-cell"></div><div class="demo-cell"></div><div class="demo-cell"></div><div class="demo-cell correct">✓</div><div class="demo-cell"></div>
+        <div class="demo-cell"></div><div class="demo-cell lit">3</div><div class="demo-cell"></div><div class="demo-cell"></div><div class="demo-cell lit">5</div>
+    </div>
+    <p class="grid-demo-caption">
+        <span class="lang-en">Cells light up. Memorize. Tap back. → It's that simple.<br>The <em>speed</em> is what makes it a challenge.</span>
+        <span class="lang-es">Las celdas se iluminan. Memoriza. Repite. → Así de simple.<br>La <em>velocidad</em> es lo que lo hace un desafío.</span>
+    </p>
+</div>
+
+<!-- ============ §2 THE 5 GAMES ============ -->
 <section class="section reveal" id="workouts">
     <div class="section-badge">
-        <span class="lang-en">🏋️ The Five Ritnomes™</span>
-        <span class="lang-es">🏋️ Los Cinco Ritnomes™</span>
+        <span class="lang-en">🏋️ Five Ways to Play</span>
+        <span class="lang-es">🏋️ Cinco Formas de Jugar</span>
     </div>
     <h2 class="section-title">
-        <span class="lang-en">YOUR FIVE CHALLENGES</span>
-        <span class="lang-es">TUS CINCO DESAFÍOS</span>
+        <span class="lang-en">SAME GRID. FIVE CHALLENGES.</span>
+        <span class="lang-es">MISMA CUADRÍCULA. CINCO DESAFÍOS.</span>
     </h2>
     <p class="section-sub">
-        <span class="lang-en">Each challenge trains a different skill. All powered by Ritnome™ tempo.</span>
-        <span class="lang-es">Cada desafío entrena una habilidad diferente. Todos impulsados por el tempo Ritnome™.</span>
+        <span class="lang-en">One 5×5 grid. Five games that each test a different skill. All running at real beats per minute.</span>
+        <span class="lang-es">Una cuadrícula 5×5. Cinco juegos que entrenan habilidades diferentes. Todos a pulsos reales por minuto.</span>
     </p>
 
     <div class="workouts-full">
