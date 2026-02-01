@@ -82,11 +82,14 @@ body.focus-mode .ritnome-badge{display:none}
 .stat-value{font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--purple);line-height:1}
 .stat-label{font-size:0.42rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px}
 .message-display{background:var(--card);border:2px solid var(--purple);border-radius:8px;padding:7px;margin-bottom:4px;text-align:center;flex-shrink:0;min-height:36px;display:flex;align-items:center;justify-content:center}
-.message-text{font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:2px;color:var(--text)}
+.message-text{font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:2px;color:var(--text);transition:color 0.15s}
 .message-text.ready{color:var(--purple)}
 .message-text.go{color:var(--teal)}
 .message-text.perfect{color:var(--teal)}
+.message-text.good{color:var(--orange)}
+.message-text.late{color:var(--purple-light)}
 .message-text.miss{color:var(--pink)}
+.message-text.countdown{color:var(--gold);font-size:1.4rem}
 .message-text.flash-match{color:var(--orange)}
 .message-text.flash-seq{color:var(--teal)}
 .selectors-row{display:flex;gap:6px;margin-bottom:4px;flex-shrink:0}
@@ -111,17 +114,25 @@ body.focus-mode .ritnome-badge{display:none}
 
 .court-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:8px;background-color:#1a1a24;background-image:url('/icon.png');background-size:85%;background-position:center;background-repeat:no-repeat;border-radius:16px;border:3px solid var(--purple);width:min(100%,calc(100dvh - 300px),320px);height:min(100%,calc(100dvh - 300px),320px);min-width:200px;min-height:200px;aspect-ratio:1;position:relative;transition:all 0.3s ease}
 .court-grid::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(10,10,15,0.6);border-radius:13px;pointer-events:none;z-index:0}
-.court-grid.flash-match{border-color:var(--orange)!important;box-shadow:0 0 30px var(--orange)}
-.court-grid.flash-seq{border-color:var(--teal)!important;box-shadow:0 0 30px var(--teal)}
 
 .grid-cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:6px;cursor:pointer;background:rgba(255,255,255,0.08);border:2px solid rgba(255,255,255,0.2);min-width:32px;min-height:32px;transition:all 0.1s;position:relative;z-index:1}
 .grid-cell:active:not(.disabled){transform:scale(0.95)}
-.grid-cell.lit{background:var(--purple)!important;border-color:var(--purple)!important;box-shadow:0 0 25px var(--purple);transform:scale(1.08)}
-.grid-cell.lit-match{background:var(--orange)!important;border-color:var(--orange)!important;box-shadow:0 0 20px var(--orange);transform:scale(1.05)}
-.grid-cell.lit-seq{background:var(--teal)!important;border-color:var(--teal)!important;box-shadow:0 0 20px var(--teal);transform:scale(1.05)}
-.grid-cell.correct{background:var(--teal)!important;border-color:var(--teal)!important;box-shadow:0 0 15px var(--teal)}
-.grid-cell.missed{background:var(--pink)!important;border-color:var(--pink)!important;box-shadow:0 0 15px var(--pink)}
 .grid-cell.disabled{pointer-events:none}
+
+/* Watch phase — purple */
+.grid-cell.lit{background:var(--purple)!important;border-color:var(--purple)!important;box-shadow:0 0 25px var(--purple);transform:scale(1.08)}
+/* Play target — gold */
+.grid-cell.target{background:var(--gold)!important;border-color:var(--gold)!important;box-shadow:0 0 28px rgba(255,215,0,0.5);transform:scale(1.08)}
+/* Tap results */
+.grid-cell.correct{background:var(--teal)!important;border-color:var(--teal)!important;box-shadow:0 0 15px var(--teal)}
+.grid-cell.good-tap{background:var(--orange)!important;border-color:var(--orange)!important;box-shadow:0 0 15px var(--orange)}
+.grid-cell.missed{background:var(--pink)!important;border-color:var(--pink)!important;box-shadow:0 0 15px var(--pink)}
+
+/* Cell sequence number */
+.cell-num{font-family:'Bebas Neue',sans-serif;font-size:0.9rem;color:var(--dark);opacity:0;pointer-events:none;position:relative;z-index:2;transition:opacity 0.08s}
+.grid-cell.lit .cell-num{opacity:0.85}
+.grid-cell.target .cell-num{opacity:1}
+.grid-cell.correct .cell-num,.grid-cell.good-tap .cell-num{opacity:0.7}
 
 .division-display{display:flex;justify-content:space-between;align-items:center;padding:5px 10px;background:var(--card);border-radius:8px;margin:4px 0;flex-shrink:0;min-height:34px}
 .division-badge{font-family:'Bebas Neue',sans-serif;font-size:0.85rem;letter-spacing:2px;color:var(--purple)}
@@ -159,6 +170,9 @@ body.focus-mode .ritnome-badge{display:none}
 
 body.en .lang-es{display:none!important}
 body.es .lang-en{display:none!important}
+
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.shake{animation:shake 0.3s ease-out}
 
 @media(min-height:720px){.court-grid{width:min(100%,calc(100dvh - 300px),340px);height:min(100%,calc(100dvh - 300px),340px)}.stat-value{font-size:1.1rem}.message-text{font-size:0.95rem}.selector-btn{min-height:38px}.selector-btn.level-btn{min-height:30px}.action-btn{min-height:50px;font-size:1.35rem}}
 @media(max-height:620px){.stat-value{font-size:0.9rem}.message-display{padding:5px;min-height:30px}.message-text{font-size:0.8rem}.selector-btn{min-height:30px;font-size:0.75rem}.selector-btn.level-btn{min-height:24px;font-size:0.65rem}.court-grid{min-width:180px;min-height:180px;width:min(100%,calc(100dvh - 260px),280px);height:min(100%,calc(100dvh - 260px),280px);gap:3px;padding:6px}.grid-cell{min-width:28px;min-height:28px}.division-display{padding:4px 8px;min-height:30px}.action-btn{min-height:42px;font-size:1.1rem}.progression-star{font-size:1.1rem}}
@@ -218,7 +232,7 @@ body.es .lang-en{display:none!important}
 </div>
 </div>
 <div class="court-wrapper"><div class="court-grid" id="courtGrid"></div></div>
-<div class="division-display"><div class="division-badge" id="divisionBadge">L1 TRAINING</div><div class="taps-counter" id="tapsCounter">0/5</div><div class="score-display" id="totalScore">0</div></div>
+<div class="division-display"><div class="division-badge" id="divisionBadge">L1 TRAINING</div><div class="taps-counter" id="tapsCounter">♪ 0/5</div><div class="score-display" id="totalScore">0</div></div>
 <button class="action-btn" id="actionBtn"><span class="lang-en">LET'S GO</span><span class="lang-es">PA'LANTE</span></button>
 </div>
 
@@ -253,55 +267,33 @@ body.es .lang-en{display:none!important}
     // ===== FOCUS MODE =====
     var focusBtn = document.getElementById('focusBtn');
     var isFocusMode = localStorage.getItem('lc-focus-mode') === 'true';
-    
-    function toggleFocusMode() {
-        isFocusMode = !isFocusMode;
-        localStorage.setItem('lc-focus-mode', isFocusMode);
-        applyFocusMode();
-    }
-    
+    function toggleFocusMode() { isFocusMode = !isFocusMode; localStorage.setItem('lc-focus-mode', isFocusMode); applyFocusMode(); }
     function applyFocusMode() {
-        if (isFocusMode) {
-            document.body.classList.add('focus-mode');
-            focusBtn.classList.add('active');
-        } else {
-            document.body.classList.remove('focus-mode');
-            focusBtn.classList.remove('active');
-        }
+        if (isFocusMode) { document.body.classList.add('focus-mode'); focusBtn.classList.add('active'); }
+        else { document.body.classList.remove('focus-mode'); focusBtn.classList.remove('active'); }
     }
-    
     focusBtn.onclick = toggleFocusMode;
     applyFocusMode();
 
-    // ===== REFRESH/RECOVERY BUTTON =====
-    var refreshBtn = document.getElementById('refreshBtn');
-    refreshBtn.onclick = function() {
-        clearTimeout(state.timer);
+    // ===== REFRESH BUTTON =====
+    document.getElementById('refreshBtn').onclick = function() {
+        clearAllTimers();
+        state.phase = 'idle';
         state.isPlaying = false;
-        state.canTap = false;
-        state.currentCell = -1;
-        
-        if (state.cells && state.cells.length) {
-            state.cells.forEach(function(c) { c.className = 'grid-cell'; });
-        }
-        
+        state.awaitingTap = false;
+        if (state.cells.length) state.cells.forEach(function(c) { c.className = 'grid-cell'; c.querySelector('.cell-num').textContent = ''; });
         document.getElementById('levelUpOverlay').classList.remove('show');
         document.getElementById('upgradeOverlay').classList.remove('show');
         actionBtn.disabled = false;
-        
         messageText.innerHTML = '<span class="lang-en">TAP LET\'S GO!</span><span class="lang-es">¡TOCA PA\'LANTE!</span>';
         messageText.className = 'message-text';
-        
-        updateStats();
-        updateDivisionDisplay();
-    updateRitnomePulse(state.speed);
+        updateStats(); updateDivisionDisplay(); updateRitnomePulse(state.speed);
         showCoach('🔄 Ready!');
     };
 
     // ===== AUTH CHECK =====
     var host = window.location.hostname;
     var isProduction = host.indexOf('laughcourt') > -1 || host.indexOf('github.io') > -1 || host.indexOf('gostardigital') > -1;
-    
     if (isProduction) {
         var user = null;
         try { user = JSON.parse(localStorage.getItem('lc-user')); } catch(e) {}
@@ -314,15 +306,13 @@ body.es .lang-en{display:none!important}
             .then(function(d) { if (!d.valid) { localStorage.removeItem('lc-user'); localStorage.removeItem('lc-speed-access'); sessionStorage.clear(); window.location.href = '/login'; } })
             .catch(function() {});
         }
-        validateSession();
-        setInterval(validateSession, 30000);
+        validateSession(); setInterval(validateSession, 30000);
     }
 
     // ===== SETTINGS DROPDOWN =====
     var settingsBtn = document.getElementById('settingsBtn'), settingsDropdown = document.getElementById('settingsDropdown');
     settingsBtn.onclick = function(e) { e.stopPropagation(); settingsBtn.classList.toggle('open'); settingsDropdown.classList.toggle('show'); };
     document.onclick = function(e) { if (!settingsDropdown.contains(e.target) && e.target !== focusBtn) { settingsBtn.classList.remove('open'); settingsDropdown.classList.remove('show'); } };
-
     document.getElementById('logoutBtn').onclick = function() {
         var p = sessionStorage.getItem('lc-pin'), t = sessionStorage.getItem('lc-token');
         if (p && t) fetch('/api/session/destroy', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ pin: p, token: t }) }).catch(function() {});
@@ -332,8 +322,7 @@ body.es .lang-en{display:none!important}
     // ===== LANGUAGE =====
     var currentLang = localStorage.getItem('laughcourt_lang') || 'en';
     function setLang(l) {
-        currentLang = l;
-        localStorage.setItem('laughcourt_lang', l);
+        currentLang = l; localStorage.setItem('laughcourt_lang', l);
         document.body.className = l + (isFocusMode ? ' focus-mode' : '');
         document.getElementById('btnEn').className = l === 'en' ? 'nav-lang-btn active' : 'nav-lang-btn';
         document.getElementById('btnEs').className = l === 'es' ? 'nav-lang-btn active' : 'nav-lang-btn';
@@ -345,88 +334,72 @@ body.es .lang-en{display:none!important}
     // ===== SPEED ACCESS =====
     var speedAccess = { allSpeeds: false };
     try { var sa = localStorage.getItem('lc-speed-access'); if (sa) speedAccess = JSON.parse(sa); } catch(e) {}
-
     function updateSpeedStatusUI() {
         var ss = document.getElementById('speedStatus'), us = document.getElementById('upgradeSection');
-        if (speedAccess.allSpeeds) {
-            ss.innerHTML = '<span class="speed-chip unlocked">✓ 60</span><span class="speed-chip unlocked">✓ 90</span><span class="speed-chip unlocked">✓ 120</span>';
-            us.style.display = 'none';
-        } else {
-            ss.innerHTML = '<span class="speed-chip unlocked">✓ 60</span><span class="speed-chip locked">🔒 90</span><span class="speed-chip locked">🔒 120</span>';
-            us.style.display = 'block';
-        }
+        if (speedAccess.allSpeeds) { ss.innerHTML = '<span class="speed-chip unlocked">✓ 60</span><span class="speed-chip unlocked">✓ 90</span><span class="speed-chip unlocked">✓ 120</span>'; us.style.display = 'none'; }
+        else { ss.innerHTML = '<span class="speed-chip unlocked">✓ 60</span><span class="speed-chip locked">🔒 90</span><span class="speed-chip locked">🔒 120</span>'; us.style.display = 'block'; }
     }
-
     function initSpeedButtons() {
-        document.querySelectorAll('.speed-btn').forEach(function(b) {
-            if (!speedAccess.allSpeeds && b.dataset.speed !== 'slow') b.classList.add('locked');
-            else b.classList.remove('locked');
-        });
-        if (!speedAccess.allSpeeds) {
-            state.speed = 'slow';
-            document.querySelectorAll('.speed-btn').forEach(function(b) { b.classList.remove('active'); });
-            document.querySelector('.speed-btn[data-speed="slow"]').classList.add('active');
-        }
+        document.querySelectorAll('.speed-btn').forEach(function(b) { if (!speedAccess.allSpeeds && b.dataset.speed !== 'slow') b.classList.add('locked'); else b.classList.remove('locked'); });
+        if (!speedAccess.allSpeeds) { state.speed = 'slow'; document.querySelectorAll('.speed-btn').forEach(function(b) { b.classList.remove('active'); }); document.querySelector('.speed-btn[data-speed="slow"]').classList.add('active'); }
         updateSpeedStatusUI();
     }
-
     function showUpgradeModal() { document.getElementById('upgradeOverlay').classList.add('show'); }
     document.getElementById('upgradeClose').onclick = function() { document.getElementById('upgradeOverlay').classList.remove('show'); };
 
     // ===== GAME CONFIG =====
     var TOTAL_CELLS = 25;
     function getCellCount(level) { return level + 4; }
-    var SPEED_CONFIG = { slow: 1200, med: 800, fast: 500 };
+    function getBeatInterval() { return state.speed === 'fast' ? 500 : state.speed === 'med' ? 667 : 1000; }
+    var PERFECT_WINDOW = 180;
+    var GOOD_WINDOW = 350;
     var LAUGH_EMOJIS = ['😂','😆','🤣','😄','😁','🥳','😊','🎯'];
     var PARTY_EMOJIS = ['🥳','🎉','😂','🤣','✨','💫','🎯','🏆'];
 
-    // ===== STATE (per-speed tracking) =====
+    // ===== RITNOME PULSE =====
     function updateRitnomePulse(speed) {
         var dot = document.getElementById('ritnomeDot');
         if (!dot) return;
-        var ms = speed === 'fast' ? '500ms' : speed === 'med' ? '667ms' : '1000ms';
-        dot.style.animationDuration = ms;
+        dot.style.animationDuration = speed === 'fast' ? '500ms' : speed === 'med' ? '667ms' : '1000ms';
     }
-    function getSpeedKey(speed, key) {
-        return 'lc-reaction-' + speed + '-' + key;
-    }
-    
+
+    // ===== PER-SPEED STATE =====
+    function getSpeedKey(speed, key) { return 'lc-reaction-' + speed + '-' + key; }
     function loadSpeedState(speed) {
-        return {
-            level: parseInt(localStorage.getItem(getSpeedKey(speed, 'level'))) || 1,
-            score: parseInt(localStorage.getItem(getSpeedKey(speed, 'score'))) || 0,
-            streak: parseInt(localStorage.getItem(getSpeedKey(speed, 'streak'))) || 0
-        };
+        return { level: parseInt(localStorage.getItem(getSpeedKey(speed, 'level'))) || 1, score: parseInt(localStorage.getItem(getSpeedKey(speed, 'score'))) || 0, streak: parseInt(localStorage.getItem(getSpeedKey(speed, 'streak'))) || 0 };
     }
-    
     function saveSpeedState(speed, level, score, streak) {
         localStorage.setItem(getSpeedKey(speed, 'level'), level);
         localStorage.setItem(getSpeedKey(speed, 'score'), score);
         localStorage.setItem(getSpeedKey(speed, 'streak'), streak);
     }
-    
+
     var currentSpeed = localStorage.getItem('lc-reaction-speed') || 'slow';
     var speedData = loadSpeedState(currentSpeed);
-    
+
+    // ===== STATE =====
     var state = {
-        level: speedData.level,
+        level: Math.min(Math.max(speedData.level, 1), 10),
         speed: currentSpeed,
         score: speedData.score,
         streak: speedData.streak,
         round: 0,
         perfectCount: 0,
-        currentTap: 0,
-        totalTaps: 5,
+        phase: 'idle',
+        pattern: [],
+        beatIndex: 0,
+        watchLoop: 0,
+        tapResults: [],
+        currentBeatTime: 0,
+        currentTargetCell: -1,
+        awaitingTap: false,
+        tapReceived: false,
+        playStartTime: 0,
+        beatTimers: [],
+        missTimer: null,
         isPlaying: false,
-        canTap: false,
-        cells: [],
-        currentCell: -1,
-        timer: null,
-        timerStart: 0,
-        reactionSequence: []
+        cells: []
     };
-    if (state.level > 10) state.level = 10;
-    if (state.level < 1) state.level = 1;
 
     var courtGrid = document.getElementById('courtGrid');
     var messageText = document.getElementById('messageText');
@@ -436,141 +409,44 @@ body.es .lang-en{display:none!important}
 
     // ===== AUDIO =====
     var audioCtx = null;
-    function getAudioContext() {
-        if (!audioCtx) try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) {}
-        return audioCtx;
-    }
-
-    function playRitnomeBeep() {
+    function getAudioContext() { if (!audioCtx) try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) {} return audioCtx; }
+    function beep(freq, dur, vol, type) {
         var c = getAudioContext(); if (!c) return;
-        try {
-            if (c.state === 'suspended') c.resume();
-            var o = c.createOscillator(), g = c.createGain();
-            o.type = 'sine'; o.frequency.value = 880;
-            o.connect(g); g.connect(c.destination);
-            g.gain.setValueAtTime(0.3, c.currentTime);
-            g.gain.exponentialRampToValueAtTime(0.01, c.currentTime + 0.1);
-            o.start(); o.stop(c.currentTime + 0.1);
-        } catch(e) {}
+        try { if (c.state === 'suspended') c.resume(); var o = c.createOscillator(), g = c.createGain(); o.type = type || 'sine'; o.frequency.value = freq; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(vol || 0.15, c.currentTime); g.gain.exponentialRampToValueAtTime(0.01, c.currentTime + (dur || 0.1)); o.start(); o.stop(c.currentTime + (dur || 0.1) + 0.02); } catch(e) {}
     }
-
-    function playTapSound() {
-        var c = getAudioContext(); if (!c) return;
-        try {
-            if (c.state === 'suspended') c.resume();
-            var o = c.createOscillator(), g = c.createGain();
-            o.type = 'sine'; o.frequency.value = 660;
-            o.connect(g); g.connect(c.destination);
-            g.gain.setValueAtTime(0.25, c.currentTime);
-            g.gain.exponentialRampToValueAtTime(0.01, c.currentTime + 0.08);
-            o.start(); o.stop(c.currentTime + 0.1);
-        } catch(e) {}
-    }
-
-    function playCorrectSound() { 
-        [523, 659, 784].forEach(function(f, i) { 
-            setTimeout(function() { 
-                var c = getAudioContext(); if (!c) return;
-                try {
-                    var o = c.createOscillator(), g = c.createGain();
-                    o.type = 'sine'; o.frequency.value = f;
-                    o.connect(g); g.connect(c.destination);
-                    g.gain.setValueAtTime(0.2, c.currentTime);
-                    g.gain.exponentialRampToValueAtTime(0.01, c.currentTime + 0.12);
-                    o.start(); o.stop(c.currentTime + 0.15);
-                } catch(e) {}
-            }, i * 80); 
-        }); 
-    }
-    
-    function playMissSound() {
-        var c = getAudioContext(); if (!c) return;
-        try {
-            if (c.state === 'suspended') c.resume();
-            var o = c.createOscillator(), g = c.createGain();
-            o.type = 'sawtooth'; o.frequency.value = 150;
-            o.connect(g); g.connect(c.destination);
-            g.gain.setValueAtTime(0.3, c.currentTime);
-            g.gain.exponentialRampToValueAtTime(0.01, c.currentTime + 0.3);
-            o.start(); o.stop(c.currentTime + 0.35);
-        } catch(e) {}
-    }
-    
-    function playMatchBeep() {
-        var c = getAudioContext(); if (!c) return;
-        try {
-            if (c.state === 'suspended') c.resume();
-            var o = c.createOscillator(), g = c.createGain();
-            o.type = 'sine'; o.frequency.value = 523;
-            o.connect(g); g.connect(c.destination);
-            g.gain.setValueAtTime(0.25, c.currentTime);
-            g.gain.exponentialRampToValueAtTime(0.01, c.currentTime + 0.15);
-            o.start(); o.stop(c.currentTime + 0.15);
-        } catch(e) {}
-    }
-    
-    function playSeqBeep() {
-        var c = getAudioContext(); if (!c) return;
-        try {
-            if (c.state === 'suspended') c.resume();
-            var o = c.createOscillator(), g = c.createGain();
-            o.type = 'sine'; o.frequency.value = 698;
-            o.connect(g); g.connect(c.destination);
-            g.gain.setValueAtTime(0.25, c.currentTime);
-            g.gain.exponentialRampToValueAtTime(0.01, c.currentTime + 0.1);
-            o.start(); o.stop(c.currentTime + 0.1);
-        } catch(e) {}
-    }
+    function tickSound() { beep(880, 0.04, 0.12); }
+    function watchTickSound() { beep(660, 0.06, 0.1); }
+    function perfectSound() { beep(1300, 0.08, 0.15); setTimeout(function(){ beep(1600, 0.06, 0.12); }, 60); }
+    function goodSound() { beep(1000, 0.06, 0.1); }
+    function failSound() { beep(200, 0.25, 0.15, 'sawtooth'); }
+    function levelUpSound() { beep(800, 0.1, 0.12); setTimeout(function(){ beep(1000, 0.1, 0.12); }, 100); setTimeout(function(){ beep(1300, 0.15, 0.15); }, 200); }
+    function countdownSound() { beep(440, 0.08, 0.1); }
 
     // ===== CELEBRATIONS =====
-    function getCourtCenter() {
-        var r = courtGrid.getBoundingClientRect();
-        return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
-    }
-
+    function getCourtCenter() { var r = courtGrid.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; }
     function createBurstEmoji(e, x, y, t) {
-        var el = document.createElement('div');
-        el.className = 'burst-emoji' + (t ? ' ' + t : '');
-        el.textContent = e;
+        var el = document.createElement('div'); el.className = 'burst-emoji' + (t ? ' ' + t : ''); el.textContent = e;
         var a = Math.random() * Math.PI * 2, d = 50 + Math.random() * 80;
         el.style.cssText = 'left:' + x + 'px;top:' + y + 'px;--tx:' + Math.cos(a) * d + 'px;--ty:' + Math.sin(a) * d + 'px;--rot:' + (Math.random() - 0.5) * 720 + 'deg';
-        emojiContainer.appendChild(el);
-        setTimeout(function() { if (el.parentNode) el.remove(); }, 1500);
+        emojiContainer.appendChild(el); setTimeout(function() { if (el.parentNode) el.remove(); }, 1500);
     }
-
     function laughCelebration(intensity) {
-        var c = getCourtCenter();
-        var n = intensity === 'party' ? 8 : intensity === 'big' ? 5 : intensity === 'medium' ? 3 : 2;
+        var c = getCourtCenter(); var n = intensity === 'party' ? 8 : intensity === 'big' ? 5 : intensity === 'medium' ? 3 : 2;
         var em = intensity === 'party' ? PARTY_EMOJIS : LAUGH_EMOJIS;
         var t = intensity === 'party' ? 'party' : intensity === 'big' ? 'big' : '';
-        for (var j = 0; j < n; j++) {
-            (function(idx) {
-                setTimeout(function() {
-                    createBurstEmoji(em[Math.floor(Math.random() * em.length)], c.x + (Math.random() - 0.5) * 20, c.y + (Math.random() - 0.5) * 20, t);
-                }, idx * 35);
-            })(j);
-        }
-        courtGrid.classList.add('joy-pulse');
-        setTimeout(function() { courtGrid.classList.remove('joy-pulse'); }, 500);
+        for (var j = 0; j < n; j++) { (function(idx) { setTimeout(function() { createBurstEmoji(em[Math.floor(Math.random() * em.length)], c.x + (Math.random() - 0.5) * 20, c.y + (Math.random() - 0.5) * 20, t); }, idx * 35); })(j); }
+        courtGrid.classList.add('joy-pulse'); setTimeout(function() { courtGrid.classList.remove('joy-pulse'); }, 500);
     }
-
-    function showCoach(m) {
-        coachMessage.textContent = m;
-        coachMessage.classList.add('show');
-        setTimeout(function() { coachMessage.classList.remove('show'); }, 2000);
-    }
+    function showCoach(m) { coachMessage.textContent = m; coachMessage.classList.add('show'); setTimeout(function() { coachMessage.classList.remove('show'); }, 2000); }
 
     // ===== INIT COURT =====
     function initCourt() {
-        courtGrid.innerHTML = '';
-        state.cells = [];
+        courtGrid.innerHTML = ''; state.cells = [];
         for (var i = 0; i < TOTAL_CELLS; i++) {
-            var cell = document.createElement('div');
-            cell.className = 'grid-cell';
-            cell.dataset.index = i;
-            cell.onclick = function() { handleCellTap(parseInt(this.dataset.index)); };
-            courtGrid.appendChild(cell);
-            state.cells.push(cell);
+            var cell = document.createElement('div'); cell.className = 'grid-cell'; cell.dataset.index = i;
+            var num = document.createElement('span'); num.className = 'cell-num'; cell.appendChild(num);
+            cell.onclick = (function(idx) { return function() { handleCellTap(idx); }; })(i);
+            courtGrid.appendChild(cell); state.cells.push(cell);
         }
     }
 
@@ -580,12 +456,11 @@ body.es .lang-en{display:none!important}
         document.getElementById('divisionBadge').textContent = 'L' + state.level + ' ' + sp;
         updateTapsCounter();
     }
-
     function updateTapsCounter() {
         var needed = getCellCount(state.level);
-        document.getElementById('tapsCounter').textContent = state.currentTap + '/' + needed;
+        var completed = state.tapResults ? state.tapResults.length : 0;
+        document.getElementById('tapsCounter').textContent = '♪ ' + completed + '/' + needed;
     }
-
     function updateStats() {
         document.getElementById('levelDisplay').textContent = state.level;
         document.getElementById('roundDisplay').textContent = state.round;
@@ -593,258 +468,308 @@ body.es .lang-en{display:none!important}
         document.getElementById('scoreDisplay').textContent = state.score;
         document.getElementById('totalScore').textContent = state.score;
     }
-
     function updateProgressionStars() {
         document.getElementById('star1').className = state.perfectCount >= 1 ? 'progression-star earned' : 'progression-star';
         document.getElementById('star2').className = state.perfectCount >= 2 ? 'progression-star earned' : 'progression-star';
     }
 
-    // ===== MEMORY FLASH SYSTEM =====
-    function playMemoryFlash(callback) {
-        state.cells.forEach(function(c) { c.className = 'grid-cell'; });
-        
-        var flashSpeed = SPEED_CONFIG[state.speed] * 0.5;
-        
-        messageText.innerHTML = '<span class="lang-en">🧠 MATCH PREVIEW</span><span class="lang-es">🧠 VISTA MATCH</span>';
-        messageText.className = 'message-text flash-match';
-        
-        courtGrid.classList.add('flash-match');
-        playMatchBeep();
-        
-        state.reactionSequence.forEach(function(idx) {
-            state.cells[idx].classList.add('lit-match');
-        });
-        
-        setTimeout(function() {
-            state.reactionSequence.forEach(function(idx) {
-                state.cells[idx].classList.remove('lit-match');
-            });
-            courtGrid.classList.remove('flash-match');
-            
-            setTimeout(function() {
-                messageText.innerHTML = '<span class="lang-en">🔢 SEQUENCE PREVIEW</span><span class="lang-es">🔢 VISTA SEQUENCE</span>';
-                messageText.className = 'message-text flash-seq';
-                
-                courtGrid.classList.add('flash-seq');
-                
-                state.reactionSequence.forEach(function(idx, i) {
-                    setTimeout(function() {
-                        state.cells[idx].classList.add('lit-seq');
-                        playSeqBeep();
-                        
-                        setTimeout(function() {
-                            state.cells[idx].classList.remove('lit-seq');
-                        }, flashSpeed * 0.6);
-                        
-                    }, i * flashSpeed);
-                });
-                
-                var totalSeqTime = state.reactionSequence.length * flashSpeed;
-                setTimeout(function() {
-                    courtGrid.classList.remove('flash-seq');
-                    state.cells.forEach(function(c) { c.className = 'grid-cell'; });
-                    
-                    setTimeout(callback, 200);
-                }, totalSeqTime + 100);
-                
-            }, 200);
-            
-        }, flashSpeed * 1.2);
+    // ===== TIMER MANAGEMENT =====
+    function clearAllTimers() {
+        state.beatTimers.forEach(function(t) { clearTimeout(t); }); state.beatTimers = [];
+        if (state.missTimer) { clearTimeout(state.missTimer); state.missTimer = null; }
+    }
+    function clearAllCells() {
+        state.cells.forEach(function(c) { c.className = 'grid-cell'; c.querySelector('.cell-num').textContent = ''; });
     }
 
-    // ===== GAME LOGIC =====
-    function startRound() {
-        if (state.isPlaying) return;
-        
-        state.isPlaying = true;
-        state.canTap = false;
-        state.currentTap = 0;
-        state.totalTaps = getCellCount(state.level);
-        state.round++;
-        state.reactionSequence = [];
-        updateStats();
-        updateTapsCounter();
-        actionBtn.disabled = true;
+    // ===== PATTERN GENERATION =====
+    function generatePattern() {
+        var len = getCellCount(state.level); var indices = [];
+        while (indices.length < len) { var idx = Math.floor(Math.random() * TOTAL_CELLS); if (indices.indexOf(idx) === -1) indices.push(idx); }
+        return indices;
+    }
 
-        state.cells.forEach(function(c) { c.className = 'grid-cell'; });
-
-        messageText.innerHTML = '<span class="lang-en">GET READY...</span><span class="lang-es">PREPÁRATE...</span>';
+    // ===== PHASE: WATCH =====
+    function startWatch() {
+        state.phase = 'watching'; state.beatIndex = 0; state.watchLoop = 0;
+        clearAllCells();
+        messageText.innerHTML = '<span class="lang-en">👁️ WATCH THE PATTERN</span><span class="lang-es">👁️ OBSERVA EL PATRÓN</span>';
         messageText.className = 'message-text ready';
-
-        setTimeout(function() {
-            messageText.innerHTML = '<span class="lang-en">REACT!</span><span class="lang-es">¡REACCIONA!</span>';
-            messageText.className = 'message-text go';
-            flashNextCell();
-        }, 800);
+        state.tapResults = [];
+        updateTapsCounter();
+        state.beatTimers.push(setTimeout(runWatchBeat, 600));
     }
 
-    function flashNextCell() {
-        if (!state.isPlaying) return;
-        
-        if (state.currentCell >= 0) {
-            state.cells[state.currentCell].classList.remove('lit');
-        }
+    function runWatchBeat() {
+        if (state.phase !== 'watching') return;
+        var interval = getBeatInterval();
+        var patIdx = state.beatIndex;
+        var cellIdx = state.pattern[patIdx];
 
-        var newCell;
-        do { newCell = Math.floor(Math.random() * TOTAL_CELLS); } while (newCell === state.currentCell);
-        
-        state.currentCell = newCell;
-        state.reactionSequence.push(newCell);
-        state.cells[state.currentCell].classList.add('lit');
-        state.canTap = true;
-        
-        playRitnomeBeep();
+        clearAllCells();
+        state.cells[cellIdx].classList.add('lit');
+        state.cells[cellIdx].querySelector('.cell-num').textContent = patIdx + 1;
+        watchTickSound();
 
-        var duration = SPEED_CONFIG[state.speed];
-        state.timerStart = Date.now();
+        // Dim after 55% of beat
+        state.beatTimers.push(setTimeout(function() { if (state.cells[cellIdx]) { state.cells[cellIdx].classList.remove('lit'); state.cells[cellIdx].querySelector('.cell-num').textContent = ''; } }, interval * 0.55));
 
-        state.timer = setTimeout(function() {
-            if (state.canTap && state.isPlaying) {
-                state.canTap = false;
-                missedTap();
+        state.beatIndex++;
+
+        if (state.beatIndex >= state.pattern.length) {
+            state.beatIndex = 0; state.watchLoop++;
+            if (state.watchLoop >= 2) {
+                state.beatTimers.push(setTimeout(function() { clearAllCells(); startCountdown(); }, interval));
+                return;
             }
-        }, duration);
+            // Pause between loops
+            state.beatTimers.push(setTimeout(function() {
+                messageText.innerHTML = '<span class="lang-en">👁️ ONE MORE TIME...</span><span class="lang-es">👁️ UNA VEZ MÁS...</span>';
+                state.beatTimers.push(setTimeout(runWatchBeat, 500));
+            }, interval));
+            return;
+        }
+        state.beatTimers.push(setTimeout(runWatchBeat, interval));
     }
 
+    // ===== PHASE: COUNTDOWN =====
+    function startCountdown() {
+        state.phase = 'countdown';
+        clearAllCells();
+        var interval = getBeatInterval();
+        var counts = ['3', '2', '1'];
+        var i = 0;
+
+        function doCount() {
+            if (state.phase !== 'countdown') return;
+            messageText.textContent = counts[i];
+            messageText.className = 'message-text countdown';
+            countdownSound();
+            i++;
+            if (i < counts.length) { state.beatTimers.push(setTimeout(doCount, interval)); }
+            else {
+                state.beatTimers.push(setTimeout(function() {
+                    messageText.innerHTML = '<span class="lang-en">🎯 PLAY IN THE POCKET</span><span class="lang-es">🎯 JUEGA EN EL POCKET</span>';
+                    messageText.className = 'message-text go';
+                    tickSound();
+                    state.beatTimers.push(setTimeout(startPlay, 300));
+                }, interval));
+            }
+        }
+        doCount();
+    }
+
+    // ===== PHASE: PLAY =====
+    function startPlay() {
+        state.phase = 'playing';
+        state.beatIndex = 0;
+        state.tapResults = [];
+        state.playStartTime = performance.now();
+        clearAllCells();
+        updateTapsCounter();
+        schedulePlayBeat(0);
+    }
+
+    function schedulePlayBeat(beatIdx) {
+        if (beatIdx >= state.pattern.length) return;
+        var interval = getBeatInterval();
+        var beatTime = state.playStartTime + (beatIdx * interval);
+        var delay = beatTime - performance.now();
+        state.beatTimers.push(setTimeout(function() { firePlayBeat(beatIdx, performance.now()); }, Math.max(delay, 0)));
+    }
+
+    function firePlayBeat(beatIdx, actualTime) {
+        if (state.phase !== 'playing') return;
+        var interval = getBeatInterval();
+        var cellIdx = state.pattern[beatIdx];
+
+        // Clear previous cells (keep result colors briefly)
+        state.cells.forEach(function(c) {
+            if (c.classList.contains('target')) { c.classList.remove('target'); c.querySelector('.cell-num').textContent = ''; }
+        });
+
+        // Light up target
+        state.cells[cellIdx].classList.add('target');
+        state.cells[cellIdx].querySelector('.cell-num').textContent = beatIdx + 1;
+        tickSound();
+
+        state.beatIndex = beatIdx;
+        state.awaitingTap = true;
+        state.tapReceived = false;
+        state.currentBeatTime = actualTime;
+        state.currentTargetCell = cellIdx;
+
+        // Dim target after 55% of beat
+        state.beatTimers.push(setTimeout(function() {
+            if (state.cells[cellIdx].classList.contains('target')) {
+                state.cells[cellIdx].classList.remove('target');
+                state.cells[cellIdx].querySelector('.cell-num').textContent = '';
+            }
+        }, interval * 0.55));
+
+        // Miss deadline: 85% of beat interval
+        state.missTimer = setTimeout(function() {
+            if (state.phase === 'playing' && !state.tapReceived && state.beatIndex === beatIdx) {
+                state.awaitingTap = false;
+                state.cells[cellIdx].classList.add('missed');
+                failSound();
+                courtGrid.classList.add('shake'); setTimeout(function() { courtGrid.classList.remove('shake'); }, 300);
+                var isEs = currentLang === 'es';
+                endRound(false, isEs ? 'PERDISTE EL RITMO' : 'DROPPED THE BEAT');
+            }
+        }, interval * 0.85);
+
+        // Schedule next beat
+        schedulePlayBeat(beatIdx + 1);
+    }
+
+    // ===== TAP HANDLER =====
     function handleCellTap(index) {
-        if (!state.canTap || !state.isPlaying) return;
+        getAudioContext(); // init on gesture
+        if (state.phase !== 'playing' || !state.awaitingTap || state.tapReceived) return;
 
-        clearTimeout(state.timer);
-        state.canTap = false;
+        state.tapReceived = true;
+        if (state.missTimer) { clearTimeout(state.missTimer); state.missTimer = null; }
 
-        var cell = state.cells[index];
-        
-        if (index === state.currentCell) {
-            playTapSound();
-            cell.classList.remove('lit');
-            cell.classList.add('correct');
-            state.currentTap++;
-            
-            var reactionTime = Date.now() - state.timerStart;
-            var maxTime = SPEED_CONFIG[state.speed];
-            var timeBonus = Math.floor((1 - reactionTime / maxTime) * 10);
-            state.score += 10 + timeBonus;
-            
-            updateTapsCounter();
-            updateStats();
-            saveSpeedState(state.speed, state.level, state.score, state.streak);
+        var expected = state.currentTargetCell;
+        var delta = performance.now() - state.currentBeatTime;
+        var beatIdx = state.beatIndex;
+        var isEs = currentLang === 'es';
 
-            if (state.currentTap % 3 === 0) laughCelebration('small');
+        if (index !== expected) {
+            state.cells[index].classList.add('missed');
+            failSound();
+            courtGrid.classList.add('shake'); setTimeout(function() { courtGrid.classList.remove('shake'); }, 300);
+            endRound(false, isEs ? 'CELDA INCORRECTA' : 'WRONG CELL');
+            return;
+        }
 
-            if (state.currentTap >= state.totalTaps) {
-                roundComplete(true);
-            } else {
-                setTimeout(function() {
-                    cell.classList.remove('correct');
-                    flashNextCell();
-                }, 200);
-            }
+        // Correct cell — score timing
+        var rating, points;
+        if (delta <= PERFECT_WINDOW) { rating = 'perfect'; points = 20; }
+        else if (delta <= GOOD_WINDOW) { rating = 'good'; points = 12; }
+        else { rating = 'good'; points = 5; } // late = still good visually
+
+        state.cells[index].classList.remove('target');
+        state.cells[index].classList.add(rating === 'perfect' ? 'correct' : 'good-tap');
+        state.cells[index].querySelector('.cell-num').textContent = '';
+        state.tapResults.push(rating);
+        state.score += points;
+        updateTapsCounter(); updateStats();
+        saveSpeedState(state.speed, state.level, state.score, state.streak);
+
+        // Timing feedback
+        if (rating === 'perfect') {
+            perfectSound();
+            messageText.innerHTML = isEs ? '✨ ¡PERFECTO!' : '✨ PERFECT!';
+            messageText.className = 'message-text perfect';
         } else {
-            cell.classList.add('missed');
-            missedTap();
+            goodSound();
+            messageText.innerHTML = isEs ? '👍 ¡BIEN!' : '👍 GOOD!';
+            messageText.className = 'message-text good';
+        }
+
+        // Mid-round celebrations
+        if (state.tapResults.length % 4 === 0) laughCelebration('small');
+
+        state.awaitingTap = false;
+
+        // Check if pattern complete
+        if (beatIdx >= state.pattern.length - 1) {
+            setTimeout(function() { endRound(true); }, 250);
         }
     }
 
-    function missedTap() {
-        state.isPlaying = false;
-        state.canTap = false;
-        clearTimeout(state.timer);
-        
-        playMissSound();
-        
-        state.cells[state.currentCell].classList.remove('lit');
-        state.cells[state.currentCell].classList.add('missed');
-        
-        state.perfectCount = 0;
-        state.streak = 0;
-        saveSpeedState(state.speed, state.level, state.score, state.streak);
-        
-        updateProgressionStars();
-        updateStats();
-        
-        messageText.innerHTML = '<span class="lang-en">TOO SLOW!</span><span class="lang-es">¡MUY LENTO!</span>';
-        messageText.className = 'message-text miss';
+    // ===== END ROUND =====
+    function endRound(won, reason) {
+        state.phase = 'idle';
+        clearAllTimers();
 
-        setTimeout(finishRound, 1500);
-    }
-
-    function roundComplete(success) {
-        state.isPlaying = false;
-        clearTimeout(state.timer);
-        
-        if (success) {
-            playCorrectSound();
+        if (won) {
             state.perfectCount++;
             state.streak++;
             saveSpeedState(state.speed, state.level, state.score, state.streak);
-            
-            updateProgressionStars();
-            updateStats();
+            updateProgressionStars(); updateStats();
 
-            var intensity = state.streak >= 5 ? 'party' : state.streak >= 3 ? 'big' : 'medium';
+            var allPerfect = state.tapResults.every(function(r) { return r === 'perfect'; });
+            var intensity = allPerfect ? 'party' : state.streak >= 5 ? 'big' : 'medium';
             laughCelebration(intensity);
 
-            messageText.innerHTML = '<span class="lang-en">PERFECT!</span><span class="lang-es">¡PERFECTO!</span>';
+            var isEs = currentLang === 'es';
+            if (allPerfect) {
+                messageText.innerHTML = isEs ? '🔥 ¡PERFECCIÓN TOTAL!' : '🔥 ALL PERFECT!';
+                showCoach(isEs ? '🎯 ¡Máquina!' : '🎯 In the pocket!');
+            } else {
+                messageText.innerHTML = isEs ? '🔥 ¡EN EL POCKET!' : '🔥 LOCKED IN!';
+                showCoach(state.streak >= 3 ? '🔥 On fire!' : '🎯 Nice!');
+            }
             messageText.className = 'message-text perfect';
 
-            var msgs = state.streak >= 5 ? ['🎯 LIGHTNING!', '🏆 LEGEND!'] : state.streak >= 3 ? ['🎯 FAST!', '🔥 AMAZING!'] : ['🎯 NICE!', '👍 GREAT!'];
-            showCoach(msgs[Math.floor(Math.random() * msgs.length)]);
-
+            // Check level up
             setTimeout(function() {
-                playMemoryFlash(function() {
-                    if (state.perfectCount >= 2) {
-                        if (state.level < 10) {
-                            levelUp();
-                        } else {
-                            showCoach('👑 MAX LEVEL!');
-                            state.perfectCount = 0;
-                            updateProgressionStars();
-                            finishRound();
-                        }
-                    } else {
-                        finishRound();
-                    }
-                });
-            }, 800);
+                if (state.perfectCount >= 2) {
+                    if (state.level < 10) { levelUp(); }
+                    else { showCoach('👑 MAX LEVEL!'); state.perfectCount = 0; updateProgressionStars(); finishRound(); }
+                } else { finishRound(); }
+            }, 1200);
+        } else {
+            state.perfectCount = 0;
+            state.streak = 0;
+            saveSpeedState(state.speed, state.level, state.score, state.streak);
+            updateProgressionStars(); updateStats();
+
+            var isEs = currentLang === 'es';
+            messageText.innerHTML = '<span style="color:var(--pink)">' + (reason || (isEs ? 'FUERA DEL POCKET' : 'DROPPED THE POCKET')) + '</span>';
+            messageText.className = 'message-text miss';
+            showCoach(isEs ? '💪 ¡Otra vez!' : '💪 Try again!');
+
+            setTimeout(finishRound, 1500);
         }
     }
 
+    // ===== LEVEL UP =====
     function levelUp() {
         state.level++;
         state.perfectCount = 0;
         saveSpeedState(state.speed, state.level, state.score, state.streak);
-        
-        // Update level buttons
-        document.querySelectorAll('.level-btn').forEach(function(b) {
-            b.classList.toggle('active', parseInt(b.dataset.level) === state.level);
-        });
-        
+        document.querySelectorAll('.level-btn').forEach(function(b) { b.classList.toggle('active', parseInt(b.dataset.level) === state.level); });
         updateProgressionStars();
         laughCelebration('party');
-        
-        document.getElementById('levelUpMessage').innerHTML = currentLang === 'es' 
-            ? '¡Ahora estás en Nivel ' + state.level + '!' 
-            : 'You are now Level ' + state.level + '!';
+        levelUpSound();
+        document.getElementById('levelUpMessage').innerHTML = currentLang === 'es'
+            ? '¡Ahora estás en Nivel ' + state.level + '!<br>Patrón: ' + getCellCount(state.level) + ' celdas'
+            : 'You are now Level ' + state.level + '!<br>Pattern: ' + getCellCount(state.level) + ' cells';
         document.getElementById('levelUpOverlay').classList.add('show');
-        
-        updateDivisionDisplay();
-        updateStats();
+        updateDivisionDisplay(); updateStats();
     }
+    document.getElementById('levelUpBtn').onclick = function() { document.getElementById('levelUpOverlay').classList.remove('show'); finishRound(); };
 
-    document.getElementById('levelUpBtn').onclick = function() {
-        document.getElementById('levelUpOverlay').classList.remove('show');
-        finishRound();
-    };
-
+    // ===== FINISH ROUND =====
     function finishRound() {
-        state.isPlaying = false;
-        state.currentCell = -1;
-        
-        state.cells.forEach(function(c) { c.className = 'grid-cell'; });
-        
+        state.isPlaying = false; state.currentTargetCell = -1;
+        clearAllCells();
         messageText.innerHTML = '<span class="lang-en">TAP LET\'S GO!</span><span class="lang-es">¡TOCA PA\'LANTE!</span>';
         messageText.className = 'message-text';
         actionBtn.disabled = false;
+        updateTapsCounter();
+    }
+
+    // ===== START ROUND =====
+    function startRound() {
+        if (state.isPlaying) return;
+        getAudioContext();
+        state.isPlaying = true;
+        state.round++;
+        state.pattern = generatePattern();
+        state.tapResults = [];
+        actionBtn.disabled = true;
+        updateStats(); updateDivisionDisplay();
+        clearAllCells();
+
+        // Brief "get ready" then start watching
+        messageText.innerHTML = '<span class="lang-en">GET READY...</span><span class="lang-es">PREPÁRATE...</span>';
+        messageText.className = 'message-text ready';
+        state.beatTimers.push(setTimeout(startWatch, 600));
     }
 
     // ===== SELECTORS =====
@@ -854,82 +779,41 @@ body.es .lang-en{display:none!important}
             document.querySelectorAll('.level-btn').forEach(function(x) { x.classList.remove('active'); });
             b.classList.add('active');
             state.level = parseInt(b.dataset.level);
-            state.perfectCount = 0;
-            state.round = 0;
+            state.perfectCount = 0; state.round = 0;
             saveSpeedState(state.speed, state.level, state.score, state.streak);
-            updateProgressionStars();
-            updateStats();
-            updateDivisionDisplay();
+            updateProgressionStars(); updateStats(); updateDivisionDisplay();
         };
     });
 
     document.querySelectorAll('.speed-btn').forEach(function(b) {
         b.onclick = function() {
             if (state.isPlaying) return;
-            if (!speedAccess.allSpeeds && b.dataset.speed !== 'slow') {
-                showUpgradeModal();
-                return;
-            }
+            if (!speedAccess.allSpeeds && b.dataset.speed !== 'slow') { showUpgradeModal(); return; }
             document.querySelectorAll('.speed-btn').forEach(function(x) { x.classList.remove('active'); });
             b.classList.add('active');
             state.speed = b.dataset.speed;
             updateRitnomePulse(state.speed);
             localStorage.setItem('lc-reaction-speed', state.speed);
-            
-            // Load this speed's progress
             var speedData = loadSpeedState(state.speed);
-            state.level = speedData.level;
-            state.score = speedData.score;
-            state.streak = speedData.streak;
-            
-            // Update level buttons to show this speed's level
-            document.querySelectorAll('.level-btn').forEach(function(lb) {
-                lb.classList.toggle('active', parseInt(lb.dataset.level) === state.level);
-            });
-            
-            state.perfectCount = 0;
-            state.round = 0;
-            updateProgressionStars();
-            updateStats();
-            updateDivisionDisplay();
+            state.level = speedData.level; state.score = speedData.score; state.streak = speedData.streak;
+            document.querySelectorAll('.level-btn').forEach(function(lb) { lb.classList.toggle('active', parseInt(lb.dataset.level) === state.level); });
+            state.perfectCount = 0; state.round = 0;
+            updateProgressionStars(); updateStats(); updateDivisionDisplay();
         };
     });
 
     actionBtn.onclick = startRound;
 
     // ===== INIT =====
-    initCourt();
-    initSpeedButtons();
-    setLang(currentLang);
-    updateDivisionDisplay();
-    updateStats();
-    updateProgressionStars();
-    
-    // Set initial level button
-    document.querySelectorAll('.level-btn').forEach(function(b) {
-        b.classList.toggle('active', parseInt(b.dataset.level) === state.level);
-    });
-    
-    // Set initial speed button
-    document.querySelectorAll('.speed-btn').forEach(function(b) {
-        if (!b.classList.contains('locked')) {
-            b.classList.toggle('active', b.dataset.speed === state.speed);
-        }
-    });
+    initCourt(); initSpeedButtons(); setLang(currentLang);
+    updateDivisionDisplay(); updateStats(); updateProgressionStars();
+    document.querySelectorAll('.level-btn').forEach(function(b) { b.classList.toggle('active', parseInt(b.dataset.level) === state.level); });
+    document.querySelectorAll('.speed-btn').forEach(function(b) { if (!b.classList.contains('locked')) b.classList.toggle('active', b.dataset.speed === state.speed); });
+    updateRitnomePulse(state.speed);
 
-    // Check speed access on load
     if (isProduction) {
         var pin = sessionStorage.getItem('lc-pin');
-        if (pin) {
-            fetch('/api/user/speed-access/' + pin)
-            .then(function(r) { return r.json(); })
-            .then(function(d) {
-                speedAccess = d;
-                localStorage.setItem('lc-speed-access', JSON.stringify(d));
-                initSpeedButtons();
-            })
-            .catch(function() {});
-        }
+        if (pin) { fetch('/api/user/speed-access/' + pin).then(function(r) { return r.json(); }).then(function(d) { speedAccess = d; localStorage.setItem('lc-speed-access', JSON.stringify(d)); initSpeedButtons(); }).catch(function() {}); }
     }
 })();
 </script>
