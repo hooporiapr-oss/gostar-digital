@@ -654,15 +654,17 @@ app.get('/how-to-play', function(req, res) { res.sendFile(path.join(__dirname, '
 app.get('/login', function(req, res) { res.sendFile(path.join(__dirname, 'login.html')); });
 app.get('/faq', function(req, res) { res.sendFile(path.join(__dirname, 'faq.html')); });
 
-// Dashboard & Games
+// Dashboard & Ritnomes™
 app.get('/dashboard', function(req, res) { res.sendFile(path.join(__dirname, 'dashboard.html')); });
 app.get('/the-match', function(req, res) { res.sendFile(path.join(__dirname, 'the-match.html')); });
 app.get('/the-sequence', function(req, res) { res.sendFile(path.join(__dirname, 'the-sequence.html')); });
 app.get('/the-flash', function(req, res) { res.sendFile(path.join(__dirname, 'the-flash.html')); });
 app.get('/the-reaction', function(req, res) { res.sendFile(path.join(__dirname, 'the-reaction.html')); });
-app.get('/the-zoo', function(req, res) { res.sendFile(path.join(__dirname, 'the-zoo.html')); });
+app.get('/the-pocket', function(req, res) { res.sendFile(path.join(__dirname, 'the-reaction.html')); });
+app.get('/the-echo', function(req, res) { res.sendFile(path.join(__dirname, 'the-echo.html')); });
 
 // Legacy redirects
+app.get('/the-zoo', function(req, res) { res.redirect(301, '/the-echo'); });
 app.get('/play', function(req, res) { res.redirect(301, '/dashboard.html'); });
 app.get('/the-combo', function(req, res) { res.redirect(301, '/dashboard.html'); });
 app.get('/the-reflex', function(req, res) { res.redirect(301, '/dashboard.html'); });
@@ -733,7 +735,7 @@ app.get('/success', function(req, res) {
 // ============ HEALTH & VERSION ============
 app.get('/health', function(req, res) { res.json({ status: 'healthy', timestamp: new Date().toISOString(), version: PLATFORM_VERSION }); });
 
-app.get('/api/platform/version', function(req, res) { res.json({ version: PLATFORM_VERSION, versionName: PLATFORM_VERSION_NAME, games: 5, divisions: 150, levels: 10, speeds: ['SLOW', 'MED', 'FAST'] }); });
+app.get('/api/platform/version', function(req, res) { res.json({ version: PLATFORM_VERSION, versionName: PLATFORM_VERSION_NAME, ritnomes: 5, divisions: 150, levels: 10, speeds: ['SLOW', 'MED', 'FAST'] }); });
 
 // ============ START SERVER ============
 app.listen(PORT, function() {
@@ -753,13 +755,13 @@ app.listen(PORT, function() {
     console.log('   /success          → Post-payment');
     console.log('   /dashboard.html   → Trophy Case');
     console.log('');
-    console.log('🏆 5 WORKOUTS:');
-    console.log('   /the-match        → 🧠 THE MATCH');
-    console.log('   /the-sequence     → 🔢 THE SEQUENCE');
-    console.log('   /the-flash        → ⚡ THE FLASH');
-    console.log('   /the-reaction     → 🎯 THE REACTION');
-    console.log('   /the-zoo          → 🦁 THE ZOO');
+    console.log('🏆 5 RITNOMES™:');
+    console.log('   /the-match        → 🧠 THE MATCH (Association)');
+    console.log('   /the-sequence     → 🔢 THE SEQUENCE (Recall)');
+    console.log('   /the-flash        → ⚡ THE FLASH (Recognition)');
+    console.log('   /the-pocket       → 🎯 THE POCKET (Performance)');
+    console.log('   /the-echo         → 🔄 THE ECHO (Comparison)');
     console.log('');
-    console.log('🏀 Ready to play! 5 Games. $5. 150 Divisions.');
+    console.log('🏀 Ready to play! 5 Ritnomes™. $5. 150 Divisions.');
     console.log('');
 });
