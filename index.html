@@ -3,35 +3,30 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>LaughCourt | Workouts with Your GoStar Trophy Case</title>
-<meta name="description" content="Workouts that sharpen your mind and fill your GoStar Trophy Case. THE MATCH, THE SEQUENCE, THE FLASH, THE REACTION & THE ZOO. 7-day free trial. $5/month.">
+<title>LaughCourt™ | Pattern & Reflex Challenges Powered by Ritnome™</title>
+<meta name="description" content="Five pattern challenges powered by Ritnome™ tempo technology. THE MATCH, THE SEQUENCE, THE FLASH, THE POCKET & THE ECHO. Earn GoStars. Fill your Trophy Case. 7-day free trial. $5/month.">
+<link rel="icon" type="image/png" href="favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
     --gold: #FFD700;
     --orange: #FF6B35;
     --teal: #00D9A5;
     --cyan: #00CED1;
+    --purple: #9B59B6;
+    --lime: #32CD32;
     --dark: #0a0a0f;
     --darker: #050508;
     --card: #111118;
     --text: #FFFFFF;
     --muted: #8892a0;
-    --border: rgba(255,255,255,0.1);
+    --border: rgba(255,255,255,0.08);
     --nav-height: 50px;
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html {
-    width: 100%;
-    overflow-x: hidden;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { width: 100%; overflow-x: hidden; scroll-behavior: smooth; }
 
 body {
     font-family: 'Outfit', sans-serif;
@@ -40,941 +35,490 @@ body {
     min-height: 100vh;
     width: 100%;
     overflow-x: hidden;
+    line-height: 1.6;
 }
 
 body.en .lang-es { display: none !important; }
 body.es .lang-en { display: none !important; }
 
-/* ============ MINI NAV ============ */
-.mini-nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    background: var(--card);
-    border-bottom: 1px solid var(--border);
-    z-index: 1000;
-    height: var(--nav-height);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 12px;
-}
-
-.nav-logo {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1rem;
-    letter-spacing: 1px;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    flex-shrink: 0;
-}
-.nav-logo .icon {
-    width: 22px;
-    height: 22px;
-    vertical-align: middle;
-}
-.nav-logo .laugh { color: var(--gold); }
-.nav-logo .court { color: var(--text); }
-
-.nav-right {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-shrink: 0;
-}
-
-.nav-lang {
-    display: flex;
-    gap: 2px;
-}
-.nav-lang-btn {
-    padding: 4px 6px;
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--muted);
-    border-radius: 4px;
-    font-size: 0.55rem;
-    font-weight: 600;
-    cursor: pointer;
-    min-width: 24px;
-    min-height: 24px;
-}
-.nav-lang-btn.active {
-    border-color: var(--gold);
-    color: var(--gold);
-}
-
-.nav-login {
-    padding: 4px 10px;
-    background: transparent;
-    border: 1px solid var(--gold);
-    color: var(--gold);
-    border-radius: 15px;
-    font-size: 0.6rem;
-    font-weight: 600;
-    text-decoration: none;
-    letter-spacing: 0.5px;
-}
-
-/* ============ HERO ============ */
-.hero {
-    min-height: 100vh;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 20px 16px;
-    padding-top: calc(var(--nav-height) + 20px);
-    position: relative;
-    overflow: hidden;
-}
-
-.hero::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: 
-        radial-gradient(circle at 30% 40%, rgba(255,107,53,0.12) 0%, transparent 35%),
-        radial-gradient(circle at 70% 60%, rgba(0,217,165,0.12) 0%, transparent 35%);
-    animation: heroPulse 12s ease-in-out infinite;
-}
-
+/* ============ ANIMATIONS ============ */
 @keyframes heroPulse {
     0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.6; }
     50% { transform: scale(1.1) rotate(3deg); opacity: 0.9; }
 }
-
-.hero-content {
-    position: relative;
-    z-index: 1;
-    width: 100%;
-    max-width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+@keyframes dot-60 {
+    0%, 100% { transform: scale(0.85); opacity: 0.4; }
+    50% { transform: scale(1); opacity: 1; }
 }
-
-.hero-badge {
-    display: inline-block;
-    background: rgba(255,215,0,0.2);
-    color: var(--gold);
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 0.55rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 16px;
-    text-align: center;
+@keyframes dot-90 {
+    0%, 100% { transform: scale(0.85); opacity: 0.4; }
+    50% { transform: scale(1); opacity: 1; }
 }
-
-.hero-logo {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 2.8rem;
-    letter-spacing: 4px;
-    margin-bottom: 6px;
-    text-align: center;
+@keyframes dot-120 {
+    0%, 100% { transform: scale(0.85); opacity: 0.4; }
+    50% { transform: scale(1); opacity: 1; }
 }
-
-.hero-logo .laugh { color: var(--gold); }
-.hero-logo .court { color: var(--text); }
-
-.hero-tagline {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.85rem;
-    letter-spacing: 3px;
-    color: var(--gold);
-    margin-bottom: 20px;
-    text-align: center;
+@keyframes ring-expand {
+    0% { width: 20px; height: 20px; opacity: 0.6; }
+    100% { width: 70px; height: 70px; opacity: 0; }
 }
-
-.hero-headline {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.6rem;
-    letter-spacing: 1px;
-    line-height: 1.15;
-    margin-bottom: 16px;
-    text-align: center;
-    width: 100%;
+@keyframes glow-breathe {
+    0%, 100% { opacity: 0.5; transform: translate(-50%, -55%) scale(0.9); }
+    50% { opacity: 1; transform: translate(-50%, -55%) scale(1.1); }
 }
-
-.hero-headline .highlight-gold { color: var(--gold); }
-
-.hero-sub {
-    font-size: 0.9rem;
-    color: var(--muted);
-    line-height: 1.5;
-    margin-bottom: 24px;
-    text-align: center;
-    width: 100%;
-    padding: 0 8px;
+@keyframes fade-up {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
 }
-
-.hero-cta {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-}
-
-.btn {
-    display: inline-block;
-    padding: 14px 24px;
-    border-radius: 30px;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.95rem;
-    letter-spacing: 1.5px;
-    text-decoration: none;
-    text-align: center;
-}
-
-.btn-primary {
-    background: linear-gradient(135deg, var(--gold), var(--orange));
-    color: var(--dark);
-    box-shadow: 0 8px 30px rgba(255,107,0,0.3);
-}
-
-.hero-login {
-    margin-top: 16px;
-    font-size: 0.8rem;
-    color: var(--muted);
-    text-align: center;
-}
-
-.hero-login a {
-    color: var(--gold);
-    text-decoration: none;
-}
-
-.scroll-hint {
-    position: absolute;
-    bottom: 16px;
-    left: 50%;
-    transform: translateX(-50%);
-    color: var(--muted);
-    font-size: 0.7rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-    text-align: center;
-}
-
-.scroll-hint span:last-child {
-    animation: bounce 1.5s infinite;
-}
-
 @keyframes bounce {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(6px); }
 }
 
-/* ============ SECTION BASE ============ */
-.section {
-    width: 100%;
-    padding: 50px 16px;
-    text-align: center;
+.reveal {
+    opacity: 0;
+    transform: translateY(25px);
+    transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.15s; }
+.reveal-delay-2 { transition-delay: 0.3s; }
+.reveal-delay-3 { transition-delay: 0.45s; }
+.reveal-delay-4 { transition-delay: 0.6s; }
+
+/* ============ NAV ============ */
+.mini-nav {
+    position: fixed; top: 0; left: 0; right: 0; width: 100%;
+    background: rgba(17,17,24,0.95); backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border); z-index: 1000;
+    height: var(--nav-height); display: flex; align-items: center;
+    justify-content: space-between; padding: 0 12px;
+}
+.nav-logo {
+    font-family: 'Bebas Neue', sans-serif; font-size: 1rem;
+    letter-spacing: 1px; text-decoration: none;
+    display: flex; align-items: center; gap: 4px; flex-shrink: 0;
+}
+.nav-logo .icon { width: 22px; height: 22px; }
+.nav-logo .laugh { color: var(--gold); }
+.nav-logo .court { color: var(--text); }
+.nav-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.nav-lang { display: flex; gap: 2px; }
+.nav-lang-btn {
+    padding: 4px 6px; border: 1px solid var(--border); background: transparent;
+    color: var(--muted); border-radius: 4px; font-size: 0.55rem;
+    font-weight: 600; cursor: pointer; min-width: 24px; min-height: 24px;
+}
+.nav-lang-btn.active { border-color: var(--gold); color: var(--gold); }
+.nav-login {
+    padding: 4px 10px; background: transparent; border: 1px solid var(--gold);
+    color: var(--gold); border-radius: 15px; font-size: 0.6rem;
+    font-weight: 600; text-decoration: none; letter-spacing: 0.5px;
 }
 
-.section.alt-bg {
-    background: var(--darker);
+/* ============ §1 HERO ============ */
+.hero {
+    min-height: 100vh; width: 100%; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; text-align: center;
+    padding: 20px 16px; padding-top: calc(var(--nav-height) + 20px);
+    position: relative; overflow: hidden;
 }
+.hero::before {
+    content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+    background:
+        radial-gradient(circle at 30% 40%, rgba(255,107,53,0.12) 0%, transparent 35%),
+        radial-gradient(circle at 70% 60%, rgba(0,217,165,0.12) 0%, transparent 35%);
+    animation: heroPulse 12s ease-in-out infinite;
+}
+.hero-content { position: relative; z-index: 1; width: 100%; max-width: 100%; display: flex; flex-direction: column; align-items: center; }
+.hero-badge {
+    display: inline-block; background: rgba(255,215,0,0.2); color: var(--gold);
+    padding: 6px 12px; border-radius: 20px; font-size: 0.55rem;
+    font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 16px;
+}
+.hero-logo { font-family: 'Bebas Neue', sans-serif; font-size: 2.8rem; letter-spacing: 4px; margin-bottom: 6px; }
+.hero-logo .laugh { color: var(--gold); }
+.hero-logo .court { color: var(--text); }
+.hero-tagline {
+    font-family: 'Bebas Neue', sans-serif; font-size: 0.85rem;
+    letter-spacing: 3px; color: var(--gold); margin-bottom: 20px;
+}
+.hero-headline {
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem;
+    letter-spacing: 1px; line-height: 1.15; margin-bottom: 16px;
+}
+.hero-headline .highlight-gold { color: var(--gold); }
+.hero-sub { font-size: 0.9rem; color: var(--muted); line-height: 1.5; margin-bottom: 24px; padding: 0 8px; }
+.hero-cta { width: 100%; display: flex; justify-content: center; }
+.btn {
+    display: inline-block; padding: 14px 24px; border-radius: 30px;
+    font-family: 'Bebas Neue', sans-serif; font-size: 0.95rem;
+    letter-spacing: 1.5px; text-decoration: none; text-align: center;
+}
+.btn-primary {
+    background: linear-gradient(135deg, var(--gold), var(--orange));
+    color: var(--dark); box-shadow: 0 8px 30px rgba(255,107,0,0.3);
+}
+.hero-login { margin-top: 16px; font-size: 0.8rem; color: var(--muted); }
+.hero-login a { color: var(--gold); text-decoration: none; }
+.scroll-hint {
+    position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%);
+    color: var(--muted); font-size: 0.7rem; display: flex;
+    flex-direction: column; align-items: center; gap: 4px;
+}
+.scroll-hint span:last-child { animation: bounce 1.5s infinite; }
 
+/* ============ SHARED SECTION BASE ============ */
+.section { width: 100%; padding: 50px 16px; text-align: center; }
+.section.alt-bg { background: var(--darker); }
 .section-badge {
-    display: inline-block;
-    background: rgba(255,215,0,0.15);
-    color: var(--gold);
-    padding: 5px 12px;
-    border-radius: 15px;
-    font-size: 0.6rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 12px;
+    display: inline-block; background: rgba(255,215,0,0.15); color: var(--gold);
+    padding: 5px 12px; border-radius: 15px; font-size: 0.6rem;
+    font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;
 }
-
 .section-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.8rem;
-    letter-spacing: 2px;
-    margin-bottom: 10px;
-    text-align: center;
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem;
+    letter-spacing: 2px; margin-bottom: 10px;
 }
+.section-sub { color: var(--muted); font-size: 0.85rem; line-height: 1.5; margin-bottom: 30px; }
 
-.section-sub {
-    color: var(--muted);
-    font-size: 0.85rem;
-    line-height: 1.5;
-    text-align: center;
-    margin-bottom: 30px;
+/* ============ §2 THE 5 RITNOMES ============ */
+.workouts-full { max-width: 600px; margin: 0 auto; }
+.wk-card {
+    background: var(--card); border: 2px solid var(--border);
+    border-radius: 14px; margin-bottom: 14px; overflow: hidden;
 }
-
-/* ============ TROPHY CASE ============ */
-.trophy-section {
-    width: 100%;
-    background: linear-gradient(180deg, var(--darker) 0%, var(--dark) 100%);
-    padding: 50px 16px;
-    text-align: center;
-}
-
-.trophy-badge {
-    display: inline-block;
-    background: rgba(255,215,0,0.2);
-    color: var(--gold);
-    padding: 5px 12px;
-    border-radius: 15px;
-    font-size: 0.6rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 12px;
-}
-
-.trophy-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.8rem;
-    letter-spacing: 2px;
-    margin-bottom: 12px;
-    line-height: 1.1;
-    text-align: center;
-}
-
-.trophy-title .gold { color: var(--gold); }
-
-.trophy-desc {
-    color: var(--muted);
-    font-size: 0.85rem;
-    line-height: 1.5;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-.trophy-features {
-    list-style: none;
-    margin-bottom: 24px;
-    text-align: center;
-}
-
-.trophy-features li {
-    padding: 6px 0;
-    color: var(--text);
-    font-size: 0.85rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-}
-
-.trophy-features .star {
-    color: var(--gold);
-    font-size: 0.9rem;
-}
-
-.trophy-preview {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 16px 12px;
-    text-align: center;
-    width: 100%;
-    max-width: 280px;
-    margin: 0 auto;
-}
-
-.trophy-preview-title {
-    font-size: 0.55rem;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 10px;
-}
-
-.trophy-preview-game {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1rem;
-    letter-spacing: 1px;
-    color: var(--orange);
-    margin-bottom: 6px;
-}
-
-.trophy-preview-stars {
-    font-size: 1.3rem;
-    letter-spacing: 2px;
-    margin-bottom: 6px;
-}
-
-.trophy-preview-label {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.85rem;
-    color: var(--gold);
-    margin-bottom: 12px;
-}
-
-.trophy-preview-speeds {
-    display: flex;
-    justify-content: space-around;
-    border-top: 1px solid var(--border);
-    padding-top: 10px;
-}
-
-.trophy-speed {
-    text-align: center;
-    flex: 1;
-}
-
-.trophy-speed-name {
-    font-size: 0.5rem;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 3px;
-}
-
-.trophy-speed-level {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.1rem;
-    color: var(--orange);
-}
-
-.trophy-speed-cells {
-    font-size: 0.5rem;
-    color: var(--muted);
-}
-
-/* ============ WORKOUTS ============ */
-.workouts-wrapper {
-    width: 100%;
-    max-width: 320px;
-    margin: 0 auto;
-}
-
-.workout-card {
-    background: var(--card);
-    border-radius: 14px;
-    padding: 24px 16px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-    margin-bottom: 16px;
-}
-
-.workout-card:last-child {
-    margin-bottom: 0;
-}
-
-.workout-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-}
-
-.workout-card.match::before { background: linear-gradient(90deg, var(--gold), var(--orange)); }
-.workout-card.sequence::before { background: linear-gradient(90deg, var(--teal), var(--cyan)); }
-.workout-card.flash::before { background: linear-gradient(90deg, var(--cyan), #40E0D0); }
-.workout-card.reaction::before { background: linear-gradient(90deg, #9B59B6, #A873B8); }
-.workout-card.zoo::before { background: linear-gradient(90deg, #32CD32, #7CFC00); }
-
-.workout-icon { font-size: 2.2rem; margin-bottom: 10px; }
-
-.workout-name {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.6rem;
-    letter-spacing: 2px;
-    margin-bottom: 4px;
-}
-
-.workout-card.match .workout-name { color: var(--orange); }
-.workout-card.sequence .workout-name { color: var(--teal); }
-.workout-card.flash .workout-name { color: var(--cyan); }
-.workout-card.reaction .workout-name { color: #9B59B6; }
-.workout-card.zoo .workout-name { color: #32CD32; }
-
-.workout-type {
-    font-size: 0.65rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--muted);
-    margin-bottom: 12px;
-}
-
-.workout-desc {
-    color: var(--muted);
-    font-size: 0.8rem;
-    line-height: 1.45;
-    margin-bottom: 14px;
-}
-
-.workout-badge {
-    display: inline-block;
-    padding: 5px 12px;
-    border-radius: 15px;
-    font-size: 0.6rem;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-}
-
-.workout-card.match .workout-badge { background: rgba(255,107,53,0.2); color: var(--orange); }
-.workout-card.sequence .workout-badge { background: rgba(0,217,165,0.2); color: var(--teal); }
-.workout-card.flash .workout-badge { background: rgba(0,206,209,0.2); color: var(--cyan); }
-.workout-card.reaction .workout-badge { background: rgba(155,89,182,0.2); color: #9B59B6; }
-.workout-card.zoo .workout-badge { background: rgba(50,205,50,0.2); color: #32CD32; }
-
-/* ============ HOW IT WORKS ============ */
-.how-wrapper {
-    width: 100%;
-    max-width: 320px;
-    margin: 0 auto;
-}
-
-.how-step {
-    text-align: center;
-    padding: 20px 16px;
-    background: var(--card);
-    border-radius: 12px;
-    border: 1px solid var(--border);
-    margin-bottom: 12px;
-}
-
-.how-step:last-child {
-    margin-bottom: 0;
-}
-
-.how-number {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--gold), var(--orange));
-    color: var(--dark);
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 10px;
-}
-
-.how-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.1rem;
-    letter-spacing: 1px;
-    margin-bottom: 6px;
-    color: var(--gold);
-}
-
-.how-text {
-    color: var(--muted);
-    font-size: 0.8rem;
-    line-height: 1.4;
-}
-
-/* ============ VALUE PROPS ============ */
-.props-wrapper {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    width: 100%;
-    max-width: 320px;
-    margin: 0 auto;
-}
-
-.prop {
-    text-align: center;
-    padding: 16px 10px;
-    background: var(--card);
-    border-radius: 12px;
-    border: 1px solid var(--border);
-}
-
-.prop-icon { font-size: 1.6rem; margin-bottom: 8px; }
-
-.prop-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.75rem;
-    letter-spacing: 0.5px;
-    margin-bottom: 4px;
-    color: var(--gold);
-}
-
-.prop-text {
-    color: var(--muted);
-    font-size: 0.65rem;
-    line-height: 1.35;
-}
-
-/* ============ WHO ITS FOR ============ */
-.audience-wrapper {
-    width: 100%;
-    max-width: 320px;
-    margin: 0 auto;
-}
-
-.audience-card {
-    background: var(--card);
-    border-radius: 12px;
-    padding: 20px 16px;
-    text-align: center;
-    border: 1px solid var(--border);
-    margin-bottom: 12px;
-}
-
-.audience-card:last-child {
-    margin-bottom: 0;
-}
-
-.audience-icon { font-size: 1.8rem; margin-bottom: 10px; }
-
-.audience-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.1rem;
-    letter-spacing: 1px;
-    margin-bottom: 6px;
-    color: var(--teal);
-}
-
-.audience-text {
-    color: var(--muted);
-    font-size: 0.8rem;
-    line-height: 1.4;
-}
-
-/* ============ PRICING ============ */
-.pricing-card {
-    background: var(--card);
-    border: 2px solid var(--gold);
-    border-radius: 16px;
-    padding: 24px 16px;
-    width: 100%;
-    max-width: 300px;
-    margin: 0 auto 20px;
-    text-align: center;
-}
-
-.pricing-trial {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.2rem;
-    letter-spacing: 1px;
-    color: var(--teal);
-    margin-bottom: 6px;
-}
-
-.pricing-then {
-    color: var(--muted);
-    font-size: 0.8rem;
-    margin-bottom: 6px;
-}
-
-.pricing-amount {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 3rem;
-    color: var(--gold);
-    line-height: 1;
-}
-
-.pricing-period {
-    font-size: 0.9rem;
-    color: var(--muted);
-    margin-bottom: 16px;
-}
-
-.pricing-features {
-    list-style: none;
-    text-align: left;
-    margin-bottom: 20px;
-}
-
-.pricing-features li {
-    padding: 7px 0;
+.wk-card:last-child { margin-bottom: 0; }
+.wk-header {
+    padding: 14px 16px; display: flex; align-items: center; gap: 12px;
     border-bottom: 1px solid var(--border);
-    color: var(--text);
-    font-size: 0.8rem;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+}
+.wk-icon { font-size: 1.8rem; line-height: 1; flex-shrink: 0; }
+.wk-info { flex: 1; min-width: 0; }
+.wk-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 2px; }
+.wk-tagline { font-size: 0.7rem; color: var(--muted); }
+.wk-body { padding: 14px 16px; }
+.wk-steps { list-style: none; }
+.wk-step { display: flex; gap: 10px; margin-bottom: 8px; align-items: flex-start; }
+.wk-step:last-child { margin-bottom: 0; }
+.wk-num {
+    width: 20px; height: 20px; min-width: 20px; border-radius: 50%;
+    background: var(--gold); color: var(--dark); display: flex;
+    align-items: center; justify-content: center; font-weight: 700;
+    font-size: 0.65rem; margin-top: 2px;
+}
+.wk-text { font-size: 0.82rem; color: var(--text); line-height: 1.45; }
+
+.wk-card.match { border-color: rgba(255,107,53,0.3); }
+.wk-card.match .wk-header { background: rgba(255,107,53,0.05); }
+.wk-card.match .wk-name { color: var(--orange); }
+.wk-card.sequence { border-color: rgba(0,217,165,0.3); }
+.wk-card.sequence .wk-header { background: rgba(0,217,165,0.05); }
+.wk-card.sequence .wk-name { color: var(--teal); }
+.wk-card.flash { border-color: rgba(0,206,209,0.3); }
+.wk-card.flash .wk-header { background: rgba(0,206,209,0.05); }
+.wk-card.flash .wk-name { color: var(--cyan); }
+.wk-card.pocket { border-color: rgba(155,89,182,0.3); }
+.wk-card.pocket .wk-header { background: rgba(155,89,182,0.05); }
+.wk-card.pocket .wk-name { color: var(--purple); }
+.wk-card.echo { border-color: rgba(50,205,50,0.3); }
+.wk-card.echo .wk-header { background: rgba(50,205,50,0.05); }
+.wk-card.echo .wk-name { color: var(--lime); }
+
+/* ============ §3 ETYMOLOGY ============ */
+.etymology { padding: 50px 16px; text-align: center; position: relative; }
+.etymology::before {
+    content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 1px; height: 60px; background: linear-gradient(to bottom, transparent, rgba(255,215,0,0.3));
+}
+.etym-equation {
+    display: flex; align-items: center; justify-content: center;
+    gap: 14px; flex-wrap: wrap; margin-bottom: 20px; padding-top: 30px;
+}
+.etym-word {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(1.6rem, 5vw, 2.8rem); letter-spacing: 3px; color: var(--text);
+}
+.etym-word span { color: var(--gold); }
+.etym-equals { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; color: var(--gold); }
+.etym-result {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(1.8rem, 6vw, 3.2rem); letter-spacing: 5px; color: var(--gold);
+}
+.etym-desc {
+    color: var(--muted); font-size: 0.9rem; max-width: 500px;
+    margin: 0 auto; line-height: 1.7;
 }
 
+/* ============ §4 THREE SPEEDS ============ */
+.tiers { padding: 50px 16px; text-align: center; position: relative; }
+.tiers::before {
+    content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 1px; height: 60px; background: linear-gradient(to bottom, transparent, rgba(255,215,0,0.3));
+}
+.tier-cards {
+    display: grid; grid-template-columns: 1fr; gap: 16px;
+    max-width: 320px; margin: 0 auto;
+}
+.tier-card {
+    background: linear-gradient(145deg, var(--card) 0%, var(--darker) 100%);
+    border: 1px solid var(--border); border-radius: 20px;
+    padding: 30px 20px; text-align: center; position: relative;
+    overflow: hidden; transition: all 0.4s;
+}
+.tier-card::before {
+    content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+    background: radial-gradient(circle, var(--glow) 0%, transparent 70%);
+    pointer-events: none; opacity: 0; transition: opacity 0.4s;
+}
+.tier-card:hover::before { opacity: 1; }
+.tier-card:hover { border-color: rgba(255,215,0,0.2); transform: translateY(-3px); }
+
+.tier-dot-wrap {
+    position: relative; display: inline-flex; align-items: center;
+    justify-content: center; width: 50px; height: 50px; margin-bottom: 16px;
+}
+.tier-dot { width: 18px; height: 18px; border-radius: 50%; position: relative; z-index: 2; }
+.tier-ring {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 18px; height: 18px; border-radius: 50%; z-index: 1;
+}
+
+.tier-training { --glow: rgba(0,217,165,0.06); }
+.tier-training .tier-dot { background: var(--teal); box-shadow: 0 0 20px rgba(0,217,165,0.4); animation: dot-60 1s ease-in-out infinite; }
+.tier-training .tier-ring { border: 1px solid rgba(0,217,165,0.15); animation: ring-expand 2.5s ease-out infinite; }
+.tier-training .tier-bpm { color: var(--teal); }
+.tier-training .tier-name { color: var(--teal); }
+
+.tier-tempo { --glow: rgba(255,107,53,0.06); }
+.tier-tempo .tier-dot { background: var(--orange); box-shadow: 0 0 20px rgba(255,107,53,0.4); animation: dot-90 0.667s ease-in-out infinite; }
+.tier-tempo .tier-ring { border: 1px solid rgba(255,107,53,0.15); animation: ring-expand 1.8s ease-out infinite; }
+.tier-tempo .tier-bpm { color: var(--orange); }
+.tier-tempo .tier-name { color: var(--orange); }
+
+.tier-elite { --glow: rgba(255,215,0,0.06); }
+.tier-elite .tier-dot { background: var(--gold); box-shadow: 0 0 20px rgba(255,215,0,0.4); animation: dot-120 0.5s ease-in-out infinite; }
+.tier-elite .tier-ring { border: 1px solid rgba(255,215,0,0.15); animation: ring-expand 1.2s ease-out infinite; }
+.tier-elite .tier-bpm { color: var(--gold); }
+.tier-elite .tier-name { color: var(--gold); }
+
+.tier-bpm { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; letter-spacing: 2px; line-height: 1; margin-bottom: 2px; }
+.tier-bpm-unit { font-size: 0.9rem; letter-spacing: 3px; color: var(--muted); }
+.tier-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 3px; margin-bottom: 10px; }
+.tier-tagline { color: var(--text); font-size: 0.9rem; font-weight: 500; font-style: italic; margin-bottom: 6px; }
+.tier-desc { color: var(--muted); font-size: 0.78rem; line-height: 1.6; }
+.tier-free-badge {
+    display: inline-block; margin-top: 8px; padding: 2px 10px;
+    background: rgba(0,217,165,0.15); color: var(--teal);
+    border-radius: 8px; font-size: 0.6rem; font-weight: 700; letter-spacing: 1px;
+}
+
+/* ============ §5 TROPHY CASE ============ */
+.trophy-section {
+    width: 100%; background: linear-gradient(180deg, var(--darker) 0%, var(--dark) 100%);
+    padding: 50px 16px; text-align: center;
+}
+.trophy-badge {
+    display: inline-block; background: rgba(255,215,0,0.2); color: var(--gold);
+    padding: 5px 12px; border-radius: 15px; font-size: 0.6rem;
+    font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;
+}
+.trophy-title {
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem;
+    letter-spacing: 2px; margin-bottom: 12px; line-height: 1.1;
+}
+.trophy-title .gold { color: var(--gold); }
+.trophy-desc { color: var(--muted); font-size: 0.85rem; line-height: 1.5; margin-bottom: 20px; }
+.trophy-features { list-style: none; margin-bottom: 24px; }
+.trophy-features li {
+    padding: 6px 0; color: var(--text); font-size: 0.85rem;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.trophy-features .star { color: var(--gold); font-size: 0.9rem; }
+.trophy-preview {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 16px 12px; width: 100%;
+    max-width: 280px; margin: 0 auto;
+}
+.trophy-preview-title {
+    font-size: 0.55rem; color: var(--muted); text-transform: uppercase;
+    letter-spacing: 1px; margin-bottom: 10px;
+}
+.trophy-preview-game {
+    font-family: 'Bebas Neue', sans-serif; font-size: 1rem;
+    letter-spacing: 1px; color: var(--orange); margin-bottom: 6px;
+}
+.trophy-preview-stars { font-size: 1.3rem; letter-spacing: 2px; margin-bottom: 6px; }
+.trophy-preview-label {
+    font-family: 'Bebas Neue', sans-serif; font-size: 0.85rem;
+    color: var(--gold); margin-bottom: 12px;
+}
+.trophy-preview-speeds {
+    display: flex; justify-content: space-around;
+    border-top: 1px solid var(--border); padding-top: 10px;
+}
+.trophy-speed { text-align: center; flex: 1; }
+.trophy-speed-name { font-size: 0.5rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px; }
+.trophy-speed-level { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; color: var(--orange); }
+.trophy-speed-cells { font-size: 0.5rem; color: var(--muted); }
+
+/* ============ §6 WHO IT'S FOR ============ */
+.audience-wrapper { width: 100%; max-width: 320px; margin: 0 auto; }
+.audience-card {
+    background: var(--card); border-radius: 12px; padding: 20px 16px;
+    text-align: center; border: 1px solid var(--border); margin-bottom: 12px;
+}
+.audience-card:last-child { margin-bottom: 0; }
+.audience-icon { font-size: 1.8rem; margin-bottom: 10px; }
+.audience-title {
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem;
+    letter-spacing: 1px; margin-bottom: 6px; color: var(--teal);
+}
+.audience-text { color: var(--muted); font-size: 0.8rem; line-height: 1.4; }
+
+/* ============ §7 PRICING ============ */
+.pricing-card {
+    background: var(--card); border: 2px solid var(--gold);
+    border-radius: 16px; padding: 24px 16px; width: 100%;
+    max-width: 300px; margin: 0 auto 20px; text-align: center;
+}
+.pricing-trial {
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem;
+    letter-spacing: 1px; color: var(--teal); margin-bottom: 6px;
+}
+.pricing-then { color: var(--muted); font-size: 0.8rem; margin-bottom: 6px; }
+.pricing-amount {
+    font-family: 'Bebas Neue', sans-serif; font-size: 3rem;
+    color: var(--gold); line-height: 1;
+}
+.pricing-period { font-size: 0.9rem; color: var(--muted); margin-bottom: 16px; }
+.pricing-features { list-style: none; text-align: left; margin-bottom: 20px; }
+.pricing-features li {
+    padding: 7px 0; border-bottom: 1px solid var(--border);
+    color: var(--text); font-size: 0.8rem; display: flex; align-items: center; gap: 8px;
+}
 .pricing-features li:last-child { border-bottom: none; }
-
-.pricing-features .check {
-    color: var(--teal);
-    font-size: 0.9rem;
-}
-
+.pricing-features .check { color: var(--teal); font-size: 0.9rem; }
 .pricing-cta {
-    display: block;
-    width: 100%;
-    padding: 14px 16px;
+    display: block; width: 100%; padding: 14px 16px;
     background: linear-gradient(135deg, var(--gold), var(--orange));
-    color: var(--dark);
-    border-radius: 30px;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1rem;
-    letter-spacing: 1.5px;
-    text-decoration: none;
-    text-align: center;
+    color: var(--dark); border-radius: 30px; font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem; letter-spacing: 1.5px; text-decoration: none; text-align: center;
 }
-
 .facilities-callout {
-    background: rgba(0,217,165,0.1);
-    border: 1px solid var(--teal);
-    border-radius: 12px;
-    padding: 16px 14px;
-    width: 100%;
-    max-width: 300px;
-    margin: 0 auto;
-    text-align: center;
+    background: rgba(0,217,165,0.1); border: 1px solid var(--teal);
+    border-radius: 12px; padding: 16px 14px; width: 100%;
+    max-width: 300px; margin: 0 auto;
 }
-
 .facilities-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.9rem;
-    letter-spacing: 1px;
-    color: var(--teal);
-    margin-bottom: 6px;
+    font-family: 'Bebas Neue', sans-serif; font-size: 0.9rem;
+    letter-spacing: 1px; color: var(--teal); margin-bottom: 6px;
 }
-
-.facilities-text {
-    color: var(--muted);
-    font-size: 0.75rem;
-    line-height: 1.4;
-}
-
+.facilities-text { color: var(--muted); font-size: 0.75rem; line-height: 1.4; }
 .facilities-text strong { color: var(--text); }
 
-/* ============ FINAL CTA ============ */
-.final-cta {
-    width: 100%;
-    padding: 50px 16px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-}
-
+/* ============ §8 FINAL CTA ============ */
+.final-cta { width: 100%; padding: 50px 16px; text-align: center; position: relative; overflow: hidden; }
 .final-cta::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 300px;
-    height: 300px;
+    content: ''; position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%); width: 300px; height: 300px;
     background: radial-gradient(circle, rgba(255,215,0,0.1) 0%, transparent 60%);
     pointer-events: none;
 }
-
-.final-cta-content {
-    position: relative;
-    z-index: 1;
-    width: 100%;
-}
-
-.final-icon {
-    font-size: 3rem;
-    margin-bottom: 12px;
-}
-
+.final-cta-content { position: relative; z-index: 1; width: 100%; }
+.final-icon { font-size: 3rem; margin-bottom: 12px; }
 .final-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.8rem;
-    letter-spacing: 2px;
-    margin-bottom: 10px;
-    line-height: 1.1;
-    text-align: center;
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem;
+    letter-spacing: 2px; margin-bottom: 10px; line-height: 1.1;
 }
-
-.final-sub {
-    color: var(--muted);
-    font-size: 0.85rem;
-    margin-bottom: 24px;
-    text-align: center;
-}
-
-.final-buttons {
-    width: 100%;
-    max-width: 280px;
-    margin: 0 auto 20px;
-}
-
+.final-sub { color: var(--muted); font-size: 0.85rem; margin-bottom: 24px; }
+.final-buttons { width: 100%; max-width: 280px; margin: 0 auto 20px; }
 .cta-btn {
-    display: block;
-    width: 100%;
-    padding: 14px 16px;
-    border-radius: 30px;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.95rem;
-    letter-spacing: 1.5px;
-    text-decoration: none;
-    text-align: center;
-    margin-bottom: 10px;
+    display: block; width: 100%; padding: 14px 16px; border-radius: 30px;
+    font-family: 'Bebas Neue', sans-serif; font-size: 0.95rem;
+    letter-spacing: 1.5px; text-decoration: none; text-align: center; margin-bottom: 10px;
 }
+.cta-btn:last-child { margin-bottom: 0; }
+.cta-btn.primary { background: linear-gradient(135deg, var(--gold), var(--orange)); color: var(--dark); }
+.cta-btn.secondary { background: transparent; color: var(--text); border: 2px solid rgba(255,255,255,0.2); }
+.final-note { color: var(--muted); font-size: 0.8rem; }
+.final-note a { color: var(--gold); text-decoration: none; }
 
-.cta-btn:last-child {
-    margin-bottom: 0;
+/* ============ POWERED BADGE (inline) ============ */
+.powered-inline {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: rgba(5,5,8,0.9); border: 1px solid rgba(255,215,0,0.2);
+    border-radius: 25px; padding: 8px 20px 8px 14px; margin-bottom: 20px;
 }
-
-.cta-btn.primary {
-    background: linear-gradient(135deg, var(--gold), var(--orange));
-    color: var(--dark);
+.powered-inline .p-dot {
+    width: 10px; height: 10px; background: var(--gold); border-radius: 50%;
+    animation: dot-60 1s ease-in-out infinite; box-shadow: 0 0 10px rgba(255,215,0,0.4);
 }
-
-.cta-btn.secondary {
-    background: transparent;
-    color: var(--text);
-    border: 2px solid rgba(255,255,255,0.2);
-}
-
-.final-note {
-    color: var(--muted);
-    font-size: 0.8rem;
-    text-align: center;
-}
-
-.final-note a {
-    color: var(--gold);
-    text-decoration: none;
-}
+.powered-inline .p-label { font-size: 0.45rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.powered-inline .p-name { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 2px; color: var(--gold); }
+.powered-inline .p-text { display: flex; flex-direction: column; line-height: 1; }
 
 /* ============ FOOTER ============ */
 .footer {
-    width: 100%;
-    text-align: center;
-    padding: 30px 16px;
-    border-top: 1px solid rgba(255,255,255,0.05);
+    width: 100%; text-align: center; padding: 30px 16px;
+    border-top: 1px solid rgba(255,255,255,0.05); background: var(--darker);
 }
-
 .footer-logo {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.2rem;
-    letter-spacing: 2px;
-    margin-bottom: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem;
+    letter-spacing: 2px; margin-bottom: 5px;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
 }
-.footer-logo .icon {
-    width: 28px;
-    height: 28px;
-    vertical-align: middle;
-}
-
+.footer-logo .icon { width: 28px; height: 28px; }
 .footer-logo .laugh { color: var(--gold); }
 .footer-logo .court { color: var(--text); }
-
 .footer-tagline {
-    font-size: 0.55rem;
-    letter-spacing: 1.5px;
-    color: var(--gold);
-    text-transform: uppercase;
-    margin-bottom: 10px;
+    font-size: 0.55rem; letter-spacing: 1.5px; color: var(--gold);
+    text-transform: uppercase; margin-bottom: 10px;
 }
-
-.footer-links {
-    margin-bottom: 8px;
-    font-size: 0.65rem;
-}
-
-.footer-links a {
-    color: var(--muted);
-    text-decoration: none;
-    margin: 0 6px;
-}
-
-.footer-company {
-    font-size: 0.65rem;
-    color: var(--muted);
-}
-
+.footer-links { margin-bottom: 8px; font-size: 0.65rem; }
+.footer-links a { color: var(--muted); text-decoration: none; margin: 0 6px; }
+.footer-company { font-size: 0.65rem; color: var(--muted); }
 .footer-trademarks {
-    font-size: 0.5rem;
-    color: var(--muted);
-    margin-top: 10px;
-    line-height: 1.4;
-    opacity: 0.7;
-}
-
-/* ============ FADE IN ============ */
-.fade-in {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.6s ease-out;
-}
-
-.fade-in.visible {
-    opacity: 1;
-    transform: translateY(0);
+    font-size: 0.5rem; color: var(--muted); margin-top: 10px;
+    line-height: 1.4; opacity: 0.7;
 }
 
 /* ============ TABLET (600px+) ============ */
 @media (min-width: 600px) {
     .mini-nav { padding: 0 20px; }
     .nav-logo { font-size: 1.15rem; }
-    .nav-lang-btn { font-size: 0.6rem; padding: 5px 8px; }
-    .nav-login { font-size: 0.65rem; padding: 5px 12px; }
-    
     .hero { padding: 30px 24px; padding-top: calc(var(--nav-height) + 30px); }
-    .hero-badge { font-size: 0.65rem; padding: 7px 16px; }
     .hero-logo { font-size: 4rem; letter-spacing: 6px; }
     .hero-tagline { font-size: 1.1rem; letter-spacing: 4px; }
     .hero-headline { font-size: 2.2rem; }
     .hero-sub { font-size: 1rem; }
     .btn { padding: 16px 32px; font-size: 1.05rem; }
-    
+
     .section { padding: 70px 24px; }
     .section-title { font-size: 2.2rem; }
-    
+
+    .workouts-full { max-width: 700px; }
+    .wk-header { padding: 18px 20px; }
+    .wk-body { padding: 18px 20px; }
+    .wk-name { font-size: 1.4rem; }
+
+    .etymology { padding: 80px 24px; }
+    .etym-desc { font-size: 1rem; }
+
+    .tiers { padding: 80px 24px; }
+    .tier-cards { grid-template-columns: repeat(3, 1fr); max-width: 900px; gap: 20px; }
+    .tier-bpm { font-size: 3.5rem; }
+
     .trophy-section { padding: 70px 24px; }
     .trophy-title { font-size: 2.2rem; }
     .trophy-preview { max-width: 320px; }
-    
-    .workouts-wrapper {
-        max-width: 600px;
-        display: flex;
-        gap: 20px;
-    }
-    .workout-card {
-        flex: 1;
-        margin-bottom: 0;
-    }
-    
-    .how-wrapper {
-        max-width: 700px;
-        display: flex;
-        gap: 16px;
-    }
-    .how-step {
-        flex: 1;
-        margin-bottom: 0;
-    }
-    
-    .props-wrapper {
-        max-width: 600px;
-        grid-template-columns: repeat(4, 1fr);
-    }
-    
-    .audience-wrapper {
-        max-width: 700px;
-        display: flex;
-        gap: 16px;
-    }
-    .audience-card {
-        flex: 1;
-        margin-bottom: 0;
-    }
-    
+
+    .audience-wrapper { max-width: 700px; display: flex; gap: 16px; }
+    .audience-card { flex: 1; margin-bottom: 0; }
+
     .pricing-card { max-width: 360px; padding: 30px 24px; }
     .facilities-callout { max-width: 360px; }
-    
+
     .final-title { font-size: 2.4rem; }
     .final-buttons { max-width: 320px; }
 }
@@ -984,21 +528,32 @@ body.es .lang-en { display: none !important; }
     .hero-logo { font-size: 5rem; letter-spacing: 8px; }
     .hero-tagline { font-size: 1.4rem; letter-spacing: 6px; }
     .hero-headline { font-size: 2.6rem; }
-    
     .section-title { font-size: 2.6rem; }
     .trophy-title { font-size: 2.6rem; }
-    
-    .workouts-wrapper { max-width: 700px; }
-    .how-wrapper { max-width: 800px; }
-    .audience-wrapper { max-width: 800px; }
-    
+    .tier-cards { max-width: 1000px; gap: 28px; }
     .final-title { font-size: 2.8rem; }
+    .workouts-full { max-width: 800px; }
+}
+
+/* ============ TINY (≤374px) ============ */
+@media (max-width: 374px) {
+    .hero-logo { font-size: 2.2rem; letter-spacing: 2px; }
+    .hero-tagline { font-size: 0.7rem; letter-spacing: 2px; }
+    .hero-headline { font-size: 1.3rem; }
+    .section-title { font-size: 1.4rem; }
+    .trophy-title { font-size: 1.4rem; }
+    .etym-word { font-size: 1.3rem; }
+    .etym-result { font-size: 1.5rem; }
+    .tier-bpm { font-size: 2.4rem; }
+    .wk-name { font-size: 1rem; }
+    .wk-text { font-size: 0.78rem; }
+    .wk-num { width: 18px; height: 18px; min-width: 18px; font-size: 0.6rem; }
 }
 </style>
 </head>
 <body class="en">
 
-<!-- NAV -->
+<!-- ============ NAV ============ -->
 <nav class="mini-nav">
     <a href="/" class="nav-logo">
         <img src="/icon.png" alt="LaughCourt" class="icon">
@@ -1016,12 +571,12 @@ body.es .lang-en { display: none !important; }
     </div>
 </nav>
 
-<!-- HERO -->
+<!-- ============ §1 HERO ============ -->
 <section class="hero">
     <div class="hero-content">
         <div class="hero-badge">
-            <span class="lang-en">🏆 Your GoStar Trophy Case</span>
-            <span class="lang-es">🏆 Tu Vitrina de GoStars</span>
+            <span class="lang-en">🏆 Powered by Ritnome™ Tempo Technology</span>
+            <span class="lang-es">🏆 Impulsado por Tecnología Ritnome™</span>
         </div>
         <div class="hero-logo">
             <span class="laugh">LAUGH</span><span class="court">COURT</span>
@@ -1035,8 +590,8 @@ body.es .lang-en { display: none !important; }
             <span class="lang-es">EJERCITA. SUBE DE NIVEL.<br><span class="highlight-gold">LLENA TU VITRINA.</span></span>
         </h1>
         <p class="hero-sub">
-            <span class="lang-en">Five workouts that make you smile. Earn GoStars as you level up.</span>
-            <span class="lang-es">Cinco ejercicios que te hacen sonreír. Gana GoStars al subir de nivel.</span>
+            <span class="lang-en">Five pattern challenges at three precision tempos. Earn GoStars™ as you level up.</span>
+            <span class="lang-es">Cinco desafíos de patrones a tres tempos de precisión. Gana GoStars™ al subir de nivel.</span>
         </p>
         <div class="hero-cta">
             <a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="btn btn-primary">
@@ -1050,14 +605,213 @@ body.es .lang-en { display: none !important; }
         </p>
     </div>
     <div class="scroll-hint">
-        <span class="lang-en">See your Trophy Case</span>
-        <span class="lang-es">Ver tu Vitrina</span>
+        <span class="lang-en">Meet the 5 Ritnomes™</span>
+        <span class="lang-es">Conoce los 5 Ritnomes™</span>
         <span>↓</span>
     </div>
 </section>
 
-<!-- TROPHY CASE -->
-<section class="trophy-section fade-in">
+<!-- ============ §2 THE 5 RITNOMES ============ -->
+<section class="section reveal" id="workouts">
+    <div class="section-badge">
+        <span class="lang-en">🏋️ The Five Ritnomes™</span>
+        <span class="lang-es">🏋️ Los Cinco Ritnomes™</span>
+    </div>
+    <h2 class="section-title">
+        <span class="lang-en">YOUR FIVE CHALLENGES</span>
+        <span class="lang-es">TUS CINCO DESAFÍOS</span>
+    </h2>
+    <p class="section-sub">
+        <span class="lang-en">Each challenge trains a different skill. All powered by Ritnome™ tempo.</span>
+        <span class="lang-es">Cada desafío entrena una habilidad diferente. Todos impulsados por el tempo Ritnome™.</span>
+    </p>
+
+    <div class="workouts-full">
+
+        <!-- THE MATCH -->
+        <div class="wk-card match reveal">
+            <div class="wk-header">
+                <span class="wk-icon">🧠</span>
+                <div class="wk-info">
+                    <h3 class="wk-name">THE MATCH</h3>
+                    <p class="wk-tagline"><span class="lang-en">Spatial Patterns — Position + Numbers</span><span class="lang-es">Patrones Espaciales — Posición + Números</span></p>
+                </div>
+            </div>
+            <div class="wk-body">
+                <ol class="wk-steps">
+                    <li class="wk-step"><span class="wk-num">1</span><span class="wk-text"><span class="lang-en">Numbered cells light up <strong>simultaneously</strong> on the grid</span><span class="lang-es">Celdas numeradas se iluminan <strong>simultáneamente</strong></span></span></li>
+                    <li class="wk-step"><span class="wk-num">2</span><span class="wk-text"><span class="lang-en">Memorize both <strong>positions</strong> and <strong>numbers</strong></span><span class="lang-es">Memoriza las <strong>posiciones</strong> y los <strong>números</strong></span></span></li>
+                    <li class="wk-step"><span class="wk-num">3</span><span class="wk-text"><span class="lang-en">Tap cells in <strong>numerical order</strong> (1, 2, 3...)</span><span class="lang-es">Toca las celdas en <strong>orden numérico</strong> (1, 2, 3...)</span></span></li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- THE SEQUENCE -->
+        <div class="wk-card sequence reveal">
+            <div class="wk-header">
+                <span class="wk-icon">🔢</span>
+                <div class="wk-info">
+                    <h3 class="wk-name">THE SEQUENCE</h3>
+                    <p class="wk-tagline"><span class="lang-en">Sequential Patterns — Order Matters</span><span class="lang-es">Patrones Secuenciales — El Orden Importa</span></p>
+                </div>
+            </div>
+            <div class="wk-body">
+                <ol class="wk-steps">
+                    <li class="wk-step"><span class="wk-num">1</span><span class="wk-text"><span class="lang-en">Cells light up <strong>one by one</strong> in sequence</span><span class="lang-es">Celdas se iluminan <strong>una por una</strong> en secuencia</span></span></li>
+                    <li class="wk-step"><span class="wk-num">2</span><span class="wk-text"><span class="lang-en">Pay attention to the <strong>exact order</strong></span><span class="lang-es">Presta atención al <strong>orden exacto</strong></span></span></li>
+                    <li class="wk-step"><span class="wk-num">3</span><span class="wk-text"><span class="lang-en">Tap them back in the <strong>same sequence</strong></span><span class="lang-es">Repítelas en la <strong>misma secuencia</strong></span></span></li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- THE FLASH -->
+        <div class="wk-card flash reveal">
+            <div class="wk-header">
+                <span class="wk-icon">⚡</span>
+                <div class="wk-info">
+                    <h3 class="wk-name">THE FLASH</h3>
+                    <p class="wk-tagline"><span class="lang-en">Pure Position Recall — No Numbers</span><span class="lang-es">Reconocimiento Puro — Sin Números</span></p>
+                </div>
+            </div>
+            <div class="wk-body">
+                <ol class="wk-steps">
+                    <li class="wk-step"><span class="wk-num">1</span><span class="wk-text"><span class="lang-en">Cells flash briefly <strong>without numbers</strong></span><span class="lang-es">Celdas parpadean brevemente <strong>sin números</strong></span></span></li>
+                    <li class="wk-step"><span class="wk-num">2</span><span class="wk-text"><span class="lang-en">Focus on <strong>which positions</strong> lit up</span><span class="lang-es">Enfócate en <strong>cuáles posiciones</strong> se iluminaron</span></span></li>
+                    <li class="wk-step"><span class="wk-num">3</span><span class="wk-text"><span class="lang-en">Tap all cells that flashed (any order)</span><span class="lang-es">Toca todas las celdas que parpadearon (cualquier orden)</span></span></li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- THE POCKET -->
+        <div class="wk-card pocket reveal">
+            <div class="wk-header">
+                <span class="wk-icon">🎯</span>
+                <div class="wk-info">
+                    <h3 class="wk-name">THE POCKET</h3>
+                    <p class="wk-tagline"><span class="lang-en">Rhythm Performance — Beat the Clock</span><span class="lang-es">Rendimiento Rítmico — Contra el Reloj</span></p>
+                </div>
+            </div>
+            <div class="wk-body">
+                <ol class="wk-steps">
+                    <li class="wk-step"><span class="wk-num">1</span><span class="wk-text"><span class="lang-en">A cell lights up on the grid</span><span class="lang-es">Una celda se ilumina en la cuadrícula</span></span></li>
+                    <li class="wk-step"><span class="wk-num">2</span><span class="wk-text"><span class="lang-en">Tap it <strong>as fast as possible</strong> before timeout</span><span class="lang-es">Tócala <strong>lo más rápido posible</strong> antes de que expire</span></span></li>
+                    <li class="wk-step"><span class="wk-num">3</span><span class="wk-text"><span class="lang-en">Keep going — cells appear faster as you progress!</span><span class="lang-es">¡Continúa — aparecen más rápido al avanzar!</span></span></li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- THE ECHO -->
+        <div class="wk-card echo reveal">
+            <div class="wk-header">
+                <span class="wk-icon">🔊</span>
+                <div class="wk-info">
+                    <h3 class="wk-name">THE ECHO</h3>
+                    <p class="wk-tagline"><span class="lang-en">Pattern Comparison — Same or Different?</span><span class="lang-es">Comparación de Patrones — ¿Igual o Diferente?</span></p>
+                </div>
+            </div>
+            <div class="wk-body">
+                <ol class="wk-steps">
+                    <li class="wk-step"><span class="wk-num">1</span><span class="wk-text"><span class="lang-en">Watch a <strong>pattern flash</strong> — memorize positions</span><span class="lang-es">Observa un <strong>patrón</strong> — memoriza posiciones</span></span></li>
+                    <li class="wk-step"><span class="wk-num">2</span><span class="wk-text"><span class="lang-en">A <strong>second pattern</strong> flashes — same or different?</span><span class="lang-es">Un <strong>segundo patrón</strong> — ¿igual o diferente?</span></span></li>
+                    <li class="wk-step"><span class="wk-num">3</span><span class="wk-text"><span class="lang-en">Tap <strong>SAME</strong> or <strong>DIFFERENT</strong> — trust your eyes!</span><span class="lang-es">Toca <strong>IGUAL</strong> o <strong>DIFERENTE</strong> — ¡confía en tus ojos!</span></span></li>
+                </ol>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ============ §3 RITMO → RITNOME™ ============ -->
+<section class="etymology reveal">
+    <div class="powered-inline">
+        <div class="p-dot"></div>
+        <div class="p-text">
+            <span class="p-label">Powered by</span>
+            <span class="p-name">RITNOME™</span>
+        </div>
+    </div>
+    <div class="etym-equation">
+        <div class="etym-word"><span>RIT</span>MO</div>
+        <div class="etym-equals">=</div>
+        <div class="etym-result">RITNOME™</div>
+    </div>
+    <p class="etym-desc">
+        <span class="lang-en">Born from <em>ritmo</em> — the Spanish word for rhythm. Ritnome™ is the proprietary tempo engine by GoStar Digital LLC that drives every pattern challenge at exact beats per minute — turning every round into a rhythmic performance.</span>
+        <span class="lang-es">Nacido de <em>ritmo</em> — la palabra en español para ritmo. Ritnome™ es el motor de tempo propietario de GoStar Digital LLC que impulsa cada desafío de patrones a pulsos exactos por minuto — convirtiendo cada ronda en una actuación rítmica.</span>
+    </p>
+</section>
+
+<!-- ============ §4 THE THREE SPEEDS ============ -->
+<section class="tiers">
+    <div class="section-badge reveal">
+        <span class="lang-en">⏱️ Three Precision Settings</span>
+        <span class="lang-es">⏱️ Tres Configuraciones de Precisión</span>
+    </div>
+    <h2 class="section-title reveal">
+        <span class="lang-en">THE RITNOME™ TIERS</span>
+        <span class="lang-es">LOS NIVELES RITNOME™</span>
+    </h2>
+    <div class="tier-cards">
+        <!-- TRAINING 60 -->
+        <div class="tier-card tier-training reveal reveal-delay-1">
+            <div class="tier-dot-wrap">
+                <div class="tier-dot"></div>
+                <div class="tier-ring"></div>
+            </div>
+            <div class="tier-bpm">60 <span class="tier-bpm-unit">BPM</span></div>
+            <div class="tier-name">TRAINING</div>
+            <div class="tier-tagline">
+                <span class="lang-en">"Find your rhythm."</span>
+                <span class="lang-es">"Encuentra tu ritmo."</span>
+            </div>
+            <p class="tier-desc">
+                <span class="lang-en">One beat per second. Build your foundation and establish your baseline.</span>
+                <span class="lang-es">Un pulso por segundo. Construye tu base y establece tu línea base.</span>
+            </p>
+            <div class="tier-free-badge">
+                <span class="lang-en">FREE</span>
+                <span class="lang-es">GRATIS</span>
+            </div>
+        </div>
+        <!-- TEMPO 90 -->
+        <div class="tier-card tier-tempo reveal reveal-delay-2">
+            <div class="tier-dot-wrap">
+                <div class="tier-dot"></div>
+                <div class="tier-ring"></div>
+            </div>
+            <div class="tier-bpm">90 <span class="tier-bpm-unit">BPM</span></div>
+            <div class="tier-name">TEMPO</div>
+            <div class="tier-tagline">
+                <span class="lang-en">"Feel the pressure."</span>
+                <span class="lang-es">"Siente la presión."</span>
+            </div>
+            <p class="tier-desc">
+                <span class="lang-en">Patterns flash faster, reaction windows tighten. Where good becomes sharp.</span>
+                <span class="lang-es">Los patrones aparecen más rápido, las ventanas se estrechan. Donde lo bueno se vuelve preciso.</span>
+            </p>
+        </div>
+        <!-- ELITE 120 -->
+        <div class="tier-card tier-elite reveal reveal-delay-3">
+            <div class="tier-dot-wrap">
+                <div class="tier-dot"></div>
+                <div class="tier-ring"></div>
+            </div>
+            <div class="tier-bpm">120 <span class="tier-bpm-unit">BPM</span></div>
+            <div class="tier-name">ELITE</div>
+            <div class="tier-tagline">
+                <span class="lang-en">"Match the beat or miss the play."</span>
+                <span class="lang-es">"Iguala el ritmo o pierde la jugada."</span>
+            </div>
+            <p class="tier-desc">
+                <span class="lang-en">Two beats per second. Maximum tempo. Where GoStars™ are truly earned.</span>
+                <span class="lang-es">Dos pulsos por segundo. Tempo máximo. Donde los GoStars™ realmente se ganan.</span>
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- ============ §5 GOSTAR TROPHY CASE ============ -->
+<section class="trophy-section reveal">
     <div class="trophy-badge">
         <span class="lang-en">⭐ Your Progress</span>
         <span class="lang-es">⭐ Tu Progreso</span>
@@ -1067,13 +821,13 @@ body.es .lang-en { display: none !important; }
         <span class="lang-es">TU VITRINA DE<br><span class="gold">GOSTARS</span></span>
     </h2>
     <p class="trophy-desc">
-        <span class="lang-en">Every level you conquer earns a GoStar. Track progress across all five workouts and Ritnome™ settings.</span>
-        <span class="lang-es">Cada nivel que conquistas gana un GoStar. Sigue tu progreso en los cinco ejercicios y configuraciones Ritnome™.</span>
+        <span class="lang-en">Every level you conquer earns a GoStar™. Track progress across all five challenges and three Ritnome™ settings.</span>
+        <span class="lang-es">Cada nivel que conquistas gana un GoStar™. Sigue tu progreso en los cinco desafíos y tres configuraciones Ritnome™.</span>
     </p>
     <ul class="trophy-features">
         <li><span class="star">⭐</span><span class="lang-en">Level up = Earn a GoStar</span><span class="lang-es">Sube de nivel = Gana un GoStar</span></li>
-        <li><span class="star">⭐</span><span class="lang-en">15 paths (5 games × 3 Ritnome™)</span><span class="lang-es">15 caminos (5 juegos × 3 Ritnome™)</span></li>
-        <li><span class="star">⭐</span><span class="lang-en">Watch your stars grow</span><span class="lang-es">Mira tus estrellas crecer</span></li>
+        <li><span class="star">⭐</span><span class="lang-en">15 paths (5 challenges × 3 Ritnome™)</span><span class="lang-es">15 caminos (5 desafíos × 3 Ritnome™)</span></li>
+        <li><span class="star">⭐</span><span class="lang-en">150 total divisions to master</span><span class="lang-es">150 divisiones para dominar</span></li>
     </ul>
     <div class="trophy-preview">
         <div class="trophy-preview-title">
@@ -1103,87 +857,8 @@ body.es .lang-en { display: none !important; }
     </div>
 </section>
 
-<!-- WORKOUTS -->
-<section class="section fade-in">
-    <div class="section-badge">
-        <span class="lang-en">🧠 Five Workouts</span>
-        <span class="lang-es">🧠 Cinco Ejercicios</span>
-    </div>
-    <h2 class="section-title">
-        <span class="lang-en">CHOOSE YOUR WORKOUT</span>
-        <span class="lang-es">ELIGE TU EJERCICIO</span>
-    </h2>
-    <div class="workouts-wrapper">
-        <div class="workout-card match">
-            <div class="workout-icon">🧠</div>
-            <div class="workout-name">THE MATCH</div>
-            <div class="workout-type"><span class="lang-en">Spatial Patterns</span><span class="lang-es">Patrones Espaciales</span></div>
-            <p class="workout-desc"><span class="lang-en">Cells flash simultaneously. Memorize positions, tap back in order.</span><span class="lang-es">Celdas se iluminan. Memoriza posiciones, tócalas en orden.</span></p>
-            <div class="workout-badge"><span class="lang-en">🧠 MEMORIZE POSITIONS</span><span class="lang-es">🧠 MEMORIZA POSICIONES</span></div>
-        </div>
-        <div class="workout-card sequence">
-            <div class="workout-icon">🔢</div>
-            <div class="workout-name">THE SEQUENCE</div>
-            <div class="workout-type"><span class="lang-en">Sequential Patterns</span><span class="lang-es">Patrones Secuenciales</span></div>
-            <p class="workout-desc"><span class="lang-en">Cells light up one by one. Tap them back in exact order.</span><span class="lang-es">Celdas se iluminan una por una. Repítelas en orden exacto.</span></p>
-            <div class="workout-badge"><span class="lang-en">🔢 REPEAT THE ORDER</span><span class="lang-es">🔢 REPITE EL ORDEN</span></div>
-        </div>
-        <div class="workout-card flash">
-            <div class="workout-icon">⚡</div>
-            <div class="workout-name">THE FLASH</div>
-            <div class="workout-type"><span class="lang-en">Pure Position Recall</span><span class="lang-es">Reconocimiento de Posición Puro</span></div>
-            <p class="workout-desc"><span class="lang-en">Cells flash without numbers. Memorize positions by sight alone.</span><span class="lang-es">Celdas sin números. Memoriza posiciones solo con la vista.</span></p>
-            <div class="workout-badge"><span class="lang-en">⚡ NO NUMBER HINTS</span><span class="lang-es">⚡ SIN NÚMEROS</span></div>
-        </div>
-        <div class="workout-card reaction">
-            <div class="workout-icon">🎯</div>
-            <div class="workout-name">THE REACTION</div>
-            <div class="workout-type"><span class="lang-en">Speed & Reflex</span><span class="lang-es">Velocidad y Reflejos</span></div>
-            <p class="workout-desc"><span class="lang-en">Tap the lit cell before time runs out. Test your reflexes.</span><span class="lang-es">Toca la celda iluminada antes de que se acabe el tiempo.</span></p>
-            <div class="workout-badge"><span class="lang-en">🎯 REACT FAST</span><span class="lang-es">🎯 REACCIONA RÁPIDO</span></div>
-        </div>
-        <div class="workout-card zoo">
-            <div class="workout-icon">🦁</div>
-            <div class="workout-name">THE ZOO</div>
-            <div class="workout-type"><span class="lang-en">Paired Reflex</span><span class="lang-es">Reflejo de Pares</span></div>
-            <p class="workout-desc"><span class="lang-en">A target animal appears. Scan the grid and tap the match before time runs out.</span><span class="lang-es">Un animal objetivo aparece. Escanea la cuadrícula y encuentra el par antes de que se agote el tiempo.</span></p>
-            <div class="workout-badge"><span class="lang-en">🦁 FIND THE MATCH</span><span class="lang-es">🦁 ENCUENTRA EL PAR</span></div>
-        </div>
-    </div>
-</section>
-
-<!-- VALUE PROPS -->
-<section class="section fade-in">
-    <h2 class="section-title">
-        <span class="lang-en">WHY LAUGHCOURT?</span>
-        <span class="lang-es">¿POR QUÉ LAUGHCOURT?</span>
-    </h2>
-    <div class="props-wrapper">
-        <div class="prop">
-            <div class="prop-icon">🏆</div>
-            <div class="prop-title"><span class="lang-en">TROPHY CASE</span><span class="lang-es">VITRINA</span></div>
-            <p class="prop-text"><span class="lang-en">Watch GoStars grow</span><span class="lang-es">Mira tus GoStars crecer</span></p>
-        </div>
-        <div class="prop">
-            <div class="prop-icon">📱</div>
-            <div class="prop-title"><span class="lang-en">ANYWHERE</span><span class="lang-es">DONDE SEA</span></div>
-            <p class="prop-text"><span class="lang-en">Phone, tablet, desktop</span><span class="lang-es">Teléfono, tablet, PC</span></p>
-        </div>
-        <div class="prop">
-            <div class="prop-icon">⭐</div>
-            <div class="prop-title"><span class="lang-en">150 DIVISIONS</span><span class="lang-es">150 DIVISIONES</span></div>
-            <p class="prop-text"><span class="lang-en">10 × 3 × 5 games</span><span class="lang-es">10 × 3 × 5 juegos</span></p>
-        </div>
-        <div class="prop">
-            <div class="prop-icon">😂</div>
-            <div class="prop-title"><span class="lang-en">JOY FIRST</span><span class="lang-es">ALEGRÍA</span></div>
-            <p class="prop-text"><span class="lang-en">Celebrate every win!</span><span class="lang-es">¡Celebra cada victoria!</span></p>
-        </div>
-    </div>
-</section>
-
-<!-- WHO IT'S FOR -->
-<section class="section alt-bg fade-in">
+<!-- ============ §6 WHO IT'S FOR ============ -->
+<section class="section alt-bg reveal">
     <div class="section-badge">
         <span class="lang-en">👥 For Everyone</span>
         <span class="lang-es">👥 Para Todos</span>
@@ -1196,23 +871,23 @@ body.es .lang-en { display: none !important; }
         <div class="audience-card">
             <div class="audience-icon">👴👵</div>
             <div class="audience-title"><span class="lang-en">SENIORS</span><span class="lang-es">ADULTOS MAYORES</span></div>
-            <p class="audience-text"><span class="lang-en">Keep your mind sharp with fun daily workouts.</span><span class="lang-es">Mantén tu mente aguda con ejercicios divertidos.</span></p>
+            <p class="audience-text"><span class="lang-en">Keep your mind sharp with fun daily challenges.</span><span class="lang-es">Mantén tu mente aguda con desafíos divertidos.</span></p>
         </div>
         <div class="audience-card">
             <div class="audience-icon">🏥</div>
             <div class="audience-title"><span class="lang-en">FACILITIES</span><span class="lang-es">CENTROS</span></div>
-            <p class="audience-text"><span class="lang-en">A Trophy Case members check every day.</span><span class="lang-es">Una Vitrina que revisarán cada día.</span></p>
+            <p class="audience-text"><span class="lang-en">A Trophy Case your members check every day.</span><span class="lang-es">Una Vitrina que revisarán cada día.</span></p>
         </div>
         <div class="audience-card">
             <div class="audience-icon">🎮</div>
             <div class="audience-title"><span class="lang-en">EVERYONE</span><span class="lang-es">TODOS</span></div>
-            <p class="audience-text"><span class="lang-en">Anyone who wants to challenge their mind.</span><span class="lang-es">Cualquiera que quiera retar su mente.</span></p>
+            <p class="audience-text"><span class="lang-en">Anyone who wants to challenge their patterns & reflexes.</span><span class="lang-es">Cualquiera que quiera retar sus patrones y reflejos.</span></p>
         </div>
     </div>
 </section>
 
-<!-- PRICING -->
-<section class="section fade-in">
+<!-- ============ §7 PRICING ============ -->
+<section class="section reveal">
     <h2 class="section-title">
         <span class="lang-en">SIMPLE PRICING</span>
         <span class="lang-es">PRECIO SIMPLE</span>
@@ -1227,10 +902,10 @@ body.es .lang-en { display: none !important; }
         <div class="pricing-amount">$5</div>
         <div class="pricing-period"><span class="lang-en">per month</span><span class="lang-es">por mes</span></div>
         <ul class="pricing-features">
-            <li><span class="check">✓</span><span class="lang-en">Your GoStar Trophy Case</span><span class="lang-es">Tu Vitrina de GoStars</span></li>
-            <li><span class="check">✓</span><span class="lang-en">All 3 Ritnome™</span><span class="lang-es">Los 3 Ritnome™</span></li>
-            <li><span class="check">✓</span><span class="lang-en">All 4 workouts</span><span class="lang-es">Los 4 ejercicios</span></li>
-            <li><span class="check">✓</span><span class="lang-en">120 divisions</span><span class="lang-es">120 divisiones</span></li>
+            <li><span class="check">✓</span><span class="lang-en">Your GoStar™ Trophy Case</span><span class="lang-es">Tu Vitrina de GoStars™</span></li>
+            <li><span class="check">✓</span><span class="lang-en">All 3 Ritnome™ settings</span><span class="lang-es">Los 3 configuraciones Ritnome™</span></li>
+            <li><span class="check">✓</span><span class="lang-en">All 5 challenges</span><span class="lang-es">Los 5 desafíos</span></li>
+            <li><span class="check">✓</span><span class="lang-en">150 divisions to master</span><span class="lang-es">150 divisiones para dominar</span></li>
             <li><span class="check">✓</span><span class="lang-en">Cancel anytime</span><span class="lang-es">Cancela cuando quieras</span></li>
         </ul>
         <a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="pricing-cta"><span class="lang-en">START FREE TRIAL →</span><span class="lang-es">COMENZAR GRATIS →</span></a>
@@ -1241,37 +916,40 @@ body.es .lang-en { display: none !important; }
     </div>
 </section>
 
-<!-- FINAL CTA -->
-<section class="final-cta fade-in">
+<!-- ============ §8 FINAL CTA ============ -->
+<section class="final-cta reveal">
     <div class="final-cta-content">
         <div class="final-icon">🏆</div>
         <h2 class="final-title"><span class="lang-en">START YOUR<br>TROPHY CASE</span><span class="lang-es">COMIENZA TU<br>VITRINA</span></h2>
-        <p class="final-sub"><span class="lang-en">Work out. Level up. Earn GoStars.</span><span class="lang-es">Ejercita. Sube de nivel. Gana GoStars.</span></p>
+        <p class="final-sub"><span class="lang-en">Five challenges. Three tempos. One Trophy Case.</span><span class="lang-es">Cinco desafíos. Tres tempos. Una Vitrina.</span></p>
         <div class="final-buttons">
             <a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="cta-btn primary"><span class="lang-en">🆕 START FREE TRIAL</span><span class="lang-es">🆕 COMENZAR GRATIS</span></a>
             <a href="/login" class="cta-btn secondary"><span class="lang-en">🔑 ALREADY HAVE A PIN</span><span class="lang-es">🔑 YA TENGO UN PIN</span></a>
         </div>
-        <p class="final-note"><span class="lang-en">Questions? <a href="/faq">Visit our FAQ</a></span><span class="lang-es">¿Preguntas? <a href="/faq">Visita nuestro FAQ</a></span></p>
+        <p class="final-note"><span class="lang-en">Questions? <a href="/faq">Visit our FAQ</a> · <a href="/how-to-play.html">How To Play</a></span><span class="lang-es">¿Preguntas? <a href="/faq">FAQ</a> · <a href="/how-to-play.html">Cómo Jugar</a></span></p>
     </div>
 </section>
 
-<!-- FOOTER -->
+<!-- ============ FOOTER ============ -->
 <footer class="footer">
     <div class="footer-logo"><img src="/icon.png" alt="LaughCourt" class="icon"> <span class="laugh">LAUGH</span><span class="court">COURT</span></div>
     <div class="footer-tagline"><span class="lang-en">Where Joy Meets The Game</span><span class="lang-es">Donde La Alegría Se Une Al Juego</span></div>
     <div class="footer-links">
         <a href="/login"><span class="lang-en">Login</span><span class="lang-es">Entrar</span></a>
+        <a href="/how-to-play.html"><span class="lang-en">How To Play</span><span class="lang-es">Cómo Jugar</span></a>
         <a href="/faq">FAQ</a>
         <a href="/privacy.html"><span class="lang-en">Privacy</span><span class="lang-es">Privacidad</span></a>
         <a href="/terms.html"><span class="lang-en">Terms</span><span class="lang-es">Términos</span></a>
+        <a href="https://ritnome.com">Ritnome™</a>
     </div>
     <div class="footer-company">by GoStar Digital LLC 🇵🇷</div>
-    <div class="footer-trademarks">LaughCourt™, The Starting Five™, GoStars™, Ritnome™ are trademarks of GoStar Digital LLC.</div>
+    <div class="footer-trademarks">LaughCourt™, The Starting Five™, GoStars™, Ritnome™ are trademarks of GoStar Digital LLC. © 2026 All rights reserved.</div>
 </footer>
 
 <script>
 (function() {
     var currentLang = localStorage.getItem('lc-lang') || 'en';
+
     function setLang(lang) {
         currentLang = lang;
         localStorage.setItem('lc-lang', lang);
@@ -1279,23 +957,24 @@ body.es .lang-en { display: none !important; }
         document.getElementById('btnEn').className = lang === 'en' ? 'nav-lang-btn active' : 'nav-lang-btn';
         document.getElementById('btnEs').className = lang === 'es' ? 'nav-lang-btn active' : 'nav-lang-btn';
     }
+
     document.getElementById('btnEn').onclick = function() { setLang('en'); };
     document.getElementById('btnEs').onclick = function() { setLang('es'); };
     setLang(currentLang);
 
-    function handleScroll() {
-        var elements = document.querySelectorAll('.fade-in');
-        for (var i = 0; i < elements.length; i++) {
-            var el = elements[i];
-            var rect = el.getBoundingClientRect();
-            if (rect.top < window.innerHeight * 0.85) {
-                el.classList.add('visible');
+    /* Scroll Reveal */
+    var reveals = document.querySelectorAll('.reveal');
+    function checkReveal() {
+        var trigger = window.innerHeight * 0.88;
+        for (var i = 0; i < reveals.length; i++) {
+            if (reveals[i].getBoundingClientRect().top < trigger) {
+                reveals[i].classList.add('visible');
             }
         }
     }
-
-    window.addEventListener('scroll', handleScroll);
-    window.addEventListener('load', handleScroll);
+    window.addEventListener('scroll', checkReveal);
+    window.addEventListener('load', checkReveal);
+    checkReveal();
 })();
 </script>
 
