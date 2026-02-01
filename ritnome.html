@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ritnome™ Badge Concepts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#FFD700;--orange:#FF6B35;--teal:#00D9A5;--dark:#0a0a0f;--darker:#050508;--card:#111118;--text:#FFFFFF;--muted:#8892a0}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Outfit',sans-serif;background:#0a0a0f;color:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:60px 20px}
+h1{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;letter-spacing:3px;color:var(--gold);margin-bottom:10px}
+.subtitle{color:var(--muted);margin-bottom:60px;text-align:center}
+.concepts{display:flex;flex-direction:column;gap:80px;width:100%;max-width:800px}
+.concept{text-align:center}
+.concept-label{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:2px;color:var(--teal);margin-bottom:8px}
+.concept-desc{color:var(--muted);font-size:0.85rem;margin-bottom:30px}
+.mock-game{background:var(--card);border:1px solid rgba(255,255,255,0.06);border-radius:20px;height:300px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.mock-grid{display:grid;grid-template-columns:repeat(5,40px);gap:6px;opacity:0.15}
+.mock-cell{width:40px;height:40px;background:rgba(255,255,255,0.1);border-radius:8px}
+
+/* ============================================ */
+/* CONCEPT A — BOTTOM CENTER PILL (HEARTBEAT)   */
+/* ============================================ */
+.badge-a{
+    position:absolute;
+    bottom:14px;
+    left:50%;
+    transform:translateX(-50%);
+    display:flex;
+    align-items:center;
+    gap:8px;
+    background:rgba(5,5,8,0.85);
+    border:1px solid rgba(255,215,0,0.15);
+    border-radius:20px;
+    padding:6px 16px 6px 10px;
+    backdrop-filter:blur(10px);
+}
+.badge-a .pulse-dot{
+    width:8px;height:8px;
+    background:var(--gold);
+    border-radius:50%;
+    animation:pulse-a 1s ease-in-out infinite;
+}
+@keyframes pulse-a{
+    0%,100%{opacity:0.3;transform:scale(0.8)}
+    50%{opacity:1;transform:scale(1.2)}
+}
+.badge-a .badge-text{display:flex;flex-direction:column;align-items:flex-start;line-height:1}
+.badge-a .powered{font-size:0.5rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);font-weight:600}
+.badge-a .ritnome{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;color:var(--gold)}
+
+/* ============================================ */
+/* CONCEPT B — BOTTOM LEFT MINIMAL              */
+/* ============================================ */
+.badge-b{
+    position:absolute;
+    bottom:14px;
+    left:16px;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    opacity:0.5;
+    transition:opacity 0.3s;
+}
+.badge-b:hover{opacity:1}
+.badge-b .bar{width:2px;height:18px;background:var(--gold);border-radius:1px}
+.badge-b .badge-text{display:flex;flex-direction:column;align-items:flex-start;line-height:1}
+.badge-b .powered{font-size:0.45rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);font-weight:600}
+.badge-b .ritnome{font-family:'Bebas Neue',sans-serif;font-size:0.85rem;letter-spacing:2px;color:var(--gold)}
+
+/* ============================================ */
+/* CONCEPT C — BOTTOM CENTER EQ BARS            */
+/* ============================================ */
+.badge-c{
+    position:absolute;
+    bottom:14px;
+    left:50%;
+    transform:translateX(-50%);
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:rgba(5,5,8,0.9);
+    border:1px solid rgba(255,215,0,0.12);
+    border-radius:22px;
+    padding:7px 18px;
+    backdrop-filter:blur(10px);
+}
+.badge-c .eq-bars{display:flex;align-items:flex-end;gap:2px;height:14px}
+.badge-c .eq-bar{
+    width:3px;
+    background:var(--gold);
+    border-radius:1px;
+    animation:eq 0.8s ease-in-out infinite alternate;
+}
+.badge-c .eq-bar:nth-child(1){height:6px;animation-delay:0s}
+.badge-c .eq-bar:nth-child(2){height:12px;animation-delay:0.15s}
+.badge-c .eq-bar:nth-child(3){height:8px;animation-delay:0.3s}
+.badge-c .eq-bar:nth-child(4){height:14px;animation-delay:0.1s}
+.badge-c .eq-bar:nth-child(5){height:5px;animation-delay:0.25s}
+@keyframes eq{
+    0%{transform:scaleY(0.4)}
+    100%{transform:scaleY(1)}
+}
+.badge-c .divider{width:1px;height:18px;background:rgba(255,215,0,0.2)}
+.badge-c .badge-text{display:flex;flex-direction:column;align-items:flex-start;line-height:1}
+.badge-c .powered{font-size:0.5rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);font-weight:600}
+.badge-c .ritnome{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:2px;color:var(--gold)}
+
+/* ============================================ */
+/* CONCEPT D — FLOATING CORNER STAMP            */
+/* ============================================ */
+.badge-d{
+    position:absolute;
+    bottom:14px;
+    right:16px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    background:rgba(255,215,0,0.08);
+    border:1px solid rgba(255,215,0,0.25);
+    border-radius:8px;
+    padding:6px 14px;
+}
+.badge-d .wave{
+    width:20px;height:14px;
+    position:relative;
+    overflow:hidden;
+}
+.badge-d .wave svg{
+    width:20px;height:14px;
+}
+.badge-d .wave path{
+    stroke:var(--gold);
+    stroke-width:1.5;
+    fill:none;
+    stroke-dasharray:40;
+    stroke-dashoffset:40;
+    animation:wave-draw 2s linear infinite;
+}
+@keyframes wave-draw{
+    0%{stroke-dashoffset:40}
+    100%{stroke-dashoffset:0}
+}
+.badge-d .badge-text{display:flex;flex-direction:column;align-items:flex-start;line-height:1}
+.badge-d .powered{font-size:0.5rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);font-weight:600}
+.badge-d .ritnome{font-family:'Bebas Neue',sans-serif;font-size:0.95rem;letter-spacing:2px;color:var(--gold)}
+
+@media(max-width:600px){
+    .mock-game{height:240px}
+    .mock-grid{grid-template-columns:repeat(5,32px);gap:4px}
+    .mock-cell{width:32px;height:32px}
+}
+</style>
+</head>
+<body>
+
+<h1>POWERED BY RITNOME™</h1>
+<p class="subtitle">Badge concepts for all 5 game screens — pick your weapon</p>
+
+<div class="concepts">
+
+<!-- CONCEPT A -->
+<div class="concept">
+    <div class="concept-label">CONCEPT A — HEARTBEAT PILL</div>
+    <div class="concept-desc">Bottom center · Pulsing dot at 60 BPM · The dot IS the rhythm</div>
+    <div class="mock-game">
+        <div class="mock-grid">
+            <div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div>
+            <div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div>
+            <div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div>
+            <div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div>
+            <div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div>
+        </div>
+        <div class="badge-a">
+            <div class="pulse-dot"></div>
+            <div class="badge-text">
+                <span class="powered">Powered by</span>
+                <span class="ritnome">RITNOME™</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CONCEPT B -->
+<div class="concept">
+    <div class="concept-label">CONCEPT B — WHISPER BAR</div>
+    <div class="concept-desc">Bottom left · Barely there, gold on hover · The confident understatement</div>
+    <div class="mock-game">
+        <div class="mock-grid">
+            <div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div>
+            <div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div>
+            <div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div>
+            <div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div>
+            <div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div>
+        </div>
+        <div class="badge-b">
+            <div class="bar"></div>
+            <div class="badge-text">
+                <span class="powered">Powered by</span>
+                <span class="ritnome">RITNOME™</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CONCEPT C -->
+<div class="concept">
+    <div class="concept-label">CONCEPT C — EQ BARS</div>
+    <div class="concept-desc">Bottom center · Animated equalizer bars · The rhythm is alive</div>
+    <div class="mock-game">
+        <div class="mock-grid">
+            <div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div>
+            <div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div>
+            <div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div>
+            <div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div>
+            <div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div>
+        </div>
+        <div class="badge-c">
+            <div class="eq-bars">
+                <div class="eq-bar"></div>
+                <div class="eq-bar"></div>
+                <div class="eq-bar"></div>
+                <div class="eq-bar"></div>
+                <div class="eq-bar"></div>
+            </div>
+            <div class="divider"></div>
+            <div class="badge-text">
+                <span class="powered">Powered by</span>
+                <span class="ritnome">RITNOME™</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CONCEPT D -->
+<div class="concept">
+    <div class="concept-label">CONCEPT D — WAVE STAMP</div>
+    <div class="concept-desc">Bottom right · Animated sine wave · The signal is always running</div>
+    <div class="mock-game">
+        <div class="mock-grid">
+            <div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div>
+            <div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div>
+            <div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div>
+            <div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div>
+            <div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div><div class="mock-cell"></div>
+        </div>
+        <div class="badge-d">
+            <div class="wave">
+                <svg viewBox="0 0 20 14">
+                    <path d="M0,7 Q2.5,0 5,7 Q7.5,14 10,7 Q12.5,0 15,7 Q17.5,14 20,7"/>
+                </svg>
+            </div>
+            <div class="badge-text">
+                <span class="powered">Powered by</span>
+                <span class="ritnome">RITNOME™</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+
+<p style="color:var(--muted);margin-top:60px;font-size:0.8rem;text-align:center">All badges hide in focus mode · Click to pick your weapon</p>
+
+</body>
+</html>
