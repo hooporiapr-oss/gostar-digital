@@ -3,32 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>THE RECALL | RITNOME™ — Recognition · Recall · Reflex · React · Rhythm</title>
+<title>THE RECALL | RITNOME™ — Recall · Replay · Reflex · React · Rhythm</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-:root {
-    --orange: #FF6B35;
-    --gold: #FFD700;
-    --teal: #00D9A5;
-    --pink: #FF1493;
-    --purple: #9B59B6;
-    --dark: #0a0a0f;
-    --card: #111118;
-    --text: #FFFFFF;
-    --muted: #8892a0;
-    --border: rgba(255,255,255,0.1);
-    --nav-height: 50px;
-    --primary: #FF6B35;
-    --flash-color: #FF6B35;
-}
+:root{--orange:#FF6B35;--gold:#FFD700;--teal:#00D9A5;--pink:#FF1493;--purple:#9B59B6;--dark:#0a0a0f;--card:#111118;--text:#FFFFFF;--muted:#8892a0;--border:rgba(255,255,255,0.1);--nav-height:50px;--primary:#FF6B35;--flash-color:#FF6B35}
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background:var(--dark);color:var(--text);touch-action:manipulation;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
 .mini-nav{position:fixed;top:0;left:0;right:0;background:var(--card);border-bottom:1px solid var(--border);padding-top:env(safe-area-inset-top);z-index:1000;transition:transform 0.3s ease}
 .nav-row{display:flex;align-items:center;justify-content:space-between;height:50px;padding:0 12px}
 .back-btn{display:flex;align-items:center;gap:6px;padding:8px 12px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:8px;font-family:'Outfit',sans-serif;font-size:0.75rem;font-weight:600;cursor:pointer;text-decoration:none;transition:all 0.2s}
 .back-btn:hover,.back-btn:active{border-color:var(--orange);color:var(--orange)}
-.nav-title{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:2px;color:var(--orange);display:flex;align-items:center;gap:6px}
+.nav-title{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:2px;color:var(--orange)}
 .nav-right{display:flex;align-items:center;gap:6px}
 .nav-lang{display:flex;gap:2px}
 .nav-lang-btn{padding:5px 8px;border:1px solid var(--border);background:0;color:var(--muted);border-radius:4px;font-size:0.6rem;font-weight:600;cursor:pointer;min-width:28px;min-height:28px}
@@ -38,8 +24,7 @@ html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background
 .settings-btn.open{background:rgba(255,255,255,0.1);color:var(--gold)}
 .settings-dropdown{position:absolute;top:calc(100% + 6px);right:0;width:175px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px;display:none;box-shadow:0 10px 40px rgba(0,0,0,0.5)}
 .settings-dropdown.show{display:block}
-.settings-section{margin-bottom:10px}
-.settings-section:last-child{margin-bottom:0}
+.settings-section{margin-bottom:10px}.settings-section:last-child{margin-bottom:0}
 .settings-label{font-size:0.5rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
 .speed-status{display:flex;gap:4px}
 .speed-chip{flex:1;padding:4px 2px;border-radius:4px;font-family:'Bebas Neue',sans-serif;font-size:0.55rem;text-align:center;background:rgba(255,255,255,0.05);color:var(--muted)}
@@ -55,16 +40,13 @@ html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background
 .refresh-btn:active{transform:scale(0.95);background:rgba(0,217,165,0.2);border-color:var(--teal);color:var(--teal)}
 body.focus-mode .mini-nav{transform:translateY(-100%)}
 body.focus-mode .game-container{padding-top:calc(env(safe-area-inset-top) + 60px)}
-body.focus-mode .stats-bar{display:none}
-body.focus-mode .message-display{display:none}
-body.focus-mode .selectors-row{display:none}
-body.focus-mode .tier-display{display:none}
-body.focus-mode .division-display{display:none}
+body.focus-mode .stats-bar,body.focus-mode .message-display,body.focus-mode .selectors-row,body.focus-mode .tier-display,body.focus-mode .division-display{display:none}
 body.focus-mode .court-wrapper{flex:1;position:relative;z-index:10}
 body.focus-mode .court-grid{width:min(95vw, calc(100dvh - 200px));height:min(95vw, calc(100dvh - 200px));max-width:500px;max-height:500px;position:relative;z-index:20}
 body.focus-mode .action-btn{position:fixed;bottom:calc(env(safe-area-inset-bottom, 10px) + 15px);left:15px;right:15px;z-index:100}
 body.focus-mode .coach-message{bottom:120px}
 body.focus-mode .focus-btn,body.focus-mode .refresh-btn{top:calc(env(safe-area-inset-top, 0px) + 10px)}
+body.focus-mode .demo-label{top:-40px}
 .ritnome-badge{position:fixed;bottom:calc(env(safe-area-inset-bottom, 10px) + 70px);left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:8px;background:rgba(5,5,8,0.85);border:1px solid rgba(255,215,0,0.15);border-radius:20px;padding:6px 16px 6px 10px;backdrop-filter:blur(10px);z-index:998;cursor:default;transition:opacity 0.3s}
 .ritnome-badge .pulse-dot{width:8px;height:8px;background:var(--gold);border-radius:50%;box-shadow:0 0 6px rgba(255,215,0,0.4);animation:ritnome-pulse 1s ease-in-out infinite}
 .ritnome-badge .badge-text{display:flex;flex-direction:column;line-height:1}
@@ -72,8 +54,19 @@ body.focus-mode .focus-btn,body.focus-mode .refresh-btn{top:calc(env(safe-area-i
 .ritnome-badge .ritnome-name{font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:2px;color:var(--gold)}
 @keyframes ritnome-pulse{0%,100%{opacity:0.3;transform:scale(0.8)}50%{opacity:1;transform:scale(1.2)}}
 body.focus-mode .ritnome-badge{display:none}
+body.demo-mode .stats-bar{opacity:0.4}
+body.demo-mode .selectors-row{opacity:0.4;pointer-events:none}
+body.demo-mode .tier-display{opacity:0.4}
+body.demo-mode .division-display{opacity:0.4}
+body.demo-mode .refresh-btn,body.demo-mode .focus-btn{display:none}
+.demo-label{position:absolute;top:-30px;left:50%;transform:translateX(-50%);font-family:'Bebas Neue',sans-serif;font-size:0.8rem;letter-spacing:2px;color:var(--gold);background:rgba(0,0,0,0.8);padding:5px 14px;border-radius:12px;white-space:nowrap;z-index:100;transition:all 0.3s;border:1px solid rgba(255,215,0,0.3)}
+.demo-label.phase-watch{color:var(--gold);border-color:rgba(255,215,0,0.4)}
+.demo-label.phase-recall{color:var(--orange);border-color:rgba(255,107,53,0.4)}
+.demo-label.phase-success{color:var(--teal);border-color:rgba(0,217,165,0.4)}
+.action-btn.demo-pulse{animation:demoPulse 1.5s ease-in-out infinite}
+@keyframes demoPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,107,53,0.7)}50%{box-shadow:0 0 20px 8px rgba(255,107,53,0.4)}}
 .game-container{width:100%;max-width:420px;height:100dvh;margin:0 auto;padding:5px 10px;padding-top:calc(var(--nav-height) + env(safe-area-inset-top) + 8px);padding-bottom:max(5px,env(safe-area-inset-bottom));display:flex;flex-direction:column;overflow:hidden;transition:padding 0.3s ease}
-.stats-bar{display:flex;justify-content:center;gap:12px;padding:5px 8px;background:var(--card);border-radius:8px;margin-bottom:4px;flex-shrink:0}
+.stats-bar{display:flex;justify-content:center;gap:12px;padding:5px 8px;background:var(--card);border-radius:8px;margin-bottom:4px;flex-shrink:0;transition:opacity 0.3s}
 .stat{text-align:center;min-width:40px}
 .stat-value{font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--orange);line-height:1}
 .stat-label{font-size:0.42rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px}
@@ -82,7 +75,7 @@ body.focus-mode .ritnome-badge{display:none}
 .message-text.watch{color:var(--gold)}
 .message-text.go{color:var(--orange)}
 .message-text.error{color:var(--pink)}
-.selectors-row{display:flex;gap:6px;margin-bottom:4px;flex-shrink:0}
+.selectors-row{display:flex;gap:6px;margin-bottom:4px;flex-shrink:0;transition:opacity 0.3s}
 .selector-group{flex:1;background:var(--card);border-radius:8px;padding:5px}
 .selector-group.level-group{flex:1.8}
 .selector-label{text-align:center;font-size:0.45rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px}
@@ -93,11 +86,11 @@ body.focus-mode .ritnome-badge{display:none}
 .selector-btn.active{border-color:var(--orange);color:var(--orange);background:rgba(255,107,53,0.1)}
 .selector-btn.locked{opacity:0.5}
 .selector-btn.locked::after{content:'🔒';position:absolute;top:0;right:2px;font-size:0.4rem}
-.tier-display{display:flex;justify-content:center;gap:3px;margin-bottom:4px;flex-shrink:0}
+.tier-display{display:flex;justify-content:center;gap:3px;margin-bottom:4px;flex-shrink:0;transition:opacity 0.3s}
 .tier-dot{width:7px;height:7px;border-radius:50%;background:var(--border)}
 .tier-dot.completed{background:var(--orange);box-shadow:0 0 5px var(--orange)}
 .tier-dot.current{background:var(--gold);box-shadow:0 0 6px var(--gold);transform:scale(1.2)}
-.court-wrapper{flex:1;display:flex;align-items:center;justify-content:center;min-height:0;overflow:hidden;transition:all 0.3s ease}
+.court-wrapper{flex:1;display:flex;align-items:center;justify-content:center;min-height:0;overflow:hidden;transition:all 0.3s ease;position:relative}
 .court-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:8px;background-color:#1a1a24;background-image:url('/icon.png');background-size:85%;background-position:center;background-repeat:no-repeat;border-radius:16px;border:3px solid var(--orange);width:min(100%,calc(100dvh - 300px),320px);height:min(100%,calc(100dvh - 300px),320px);min-width:200px;min-height:200px;aspect-ratio:1;position:relative;transition:all 0.3s ease}
 .court-grid::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(10,10,15,0.6);border-radius:13px;pointer-events:none;z-index:0}
 .grid-cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:6px;cursor:pointer;background:rgba(255,255,255,0.08);border:2px solid rgba(255,255,255,0.2);min-width:32px;min-height:32px;transition:all 0.15s;position:relative;z-index:1}
@@ -110,7 +103,7 @@ body.focus-mode .ritnome-badge{display:none}
 .grid-cell.lit .cell-num,.grid-cell.show-num .cell-num{opacity:1}
 @keyframes correctPulse{50%{transform:scale(1.15)}}
 @keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
-.division-display{display:flex;justify-content:space-between;align-items:center;padding:5px 10px;background:var(--card);border-radius:8px;margin:4px 0;flex-shrink:0;min-height:34px}
+.division-display{display:flex;justify-content:space-between;align-items:center;padding:5px 10px;background:var(--card);border-radius:8px;margin:4px 0;flex-shrink:0;min-height:34px;transition:opacity 0.3s}
 .division-badge{font-family:'Bebas Neue',sans-serif;font-size:0.85rem;letter-spacing:2px;color:var(--orange)}
 .cells-counter{font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--orange)}
 .score-display{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;color:var(--gold)}
@@ -142,119 +135,207 @@ body.focus-mode .ritnome-badge{display:none}
 body.en .lang-es{display:none!important}
 body.es .lang-en{display:none!important}
 @media(min-height:720px){.court-grid{width:min(100%,calc(100dvh - 300px),340px);height:min(100%,calc(100dvh - 300px),340px)}.stat-value{font-size:1.1rem}.message-text{font-size:0.95rem}.selector-btn{min-height:38px}.selector-btn.level-btn{min-height:30px}.action-btn{min-height:50px;font-size:1.35rem}.grid-cell .cell-num{font-size:1.6rem}}
-@media(max-height:620px){.stat-value{font-size:0.9rem}.message-display{padding:5px;min-height:30px}.message-text{font-size:0.8rem}.selector-btn{min-height:30px;font-size:0.75rem}.selector-btn.level-btn{min-height:24px;font-size:0.65rem}.court-grid{min-width:180px;min-height:180px;width:min(100%,calc(100dvh - 260px),280px);height:min(100%,calc(100dvh - 260px),280px);gap:3px;padding:6px}.grid-cell{min-width:28px;min-height:28px}.grid-cell .cell-num{font-size:1.2rem}.division-display{padding:4px 8px;min-height:30px}.action-btn{min-height:42px;font-size:1.1rem}}
-@media(max-height:540px){.nav-row{height:44px}.stats-bar{padding:3px 5px;margin-bottom:3px}.stat-value{font-size:0.8rem}.stat-label{font-size:0.38rem}.message-display{padding:4px;margin-bottom:3px;min-height:26px}.message-text{font-size:0.7rem}.selectors-row{margin-bottom:3px}.selector-group{padding:3px}.selector-label{font-size:0.4rem;margin-bottom:2px}.selector-btn{min-height:26px;font-size:0.65rem}.selector-btn.level-btn{min-height:22px;font-size:0.55rem}.court-grid{min-width:150px;min-height:150px;gap:2px;padding:5px}.grid-cell{min-width:24px;min-height:24px}.grid-cell .cell-num{font-size:1rem}.division-display{padding:3px 6px;min-height:26px;margin:3px 0}.division-badge,.cells-counter{font-size:0.75rem}.score-display{font-size:0.9rem}.action-btn{min-height:38px;padding:8px;font-size:1rem}}
+@media(max-height:620px){.stat-value{font-size:0.9rem}.message-display{padding:5px;min-height:30px}.message-text{font-size:0.8rem}.selector-btn{min-height:30px;font-size:0.75rem}.selector-btn.level-btn{min-height:24px;font-size:0.65rem}.court-grid{min-width:180px;min-height:180px;width:min(100%,calc(100dvh - 260px),280px);height:min(100%,calc(100dvh - 260px),280px);gap:3px;padding:6px}.grid-cell{min-width:28px;min-height:28px}.grid-cell .cell-num{font-size:1.2rem}.division-display{padding:4px 8px;min-height:30px}.action-btn{min-height:42px;font-size:1.1rem}.demo-label{font-size:0.7rem;top:-26px}}
+@media(max-height:540px){.nav-row{height:44px}.stats-bar{padding:3px 5px;margin-bottom:3px}.stat-value{font-size:0.8rem}.stat-label{font-size:0.38rem}.message-display{padding:4px;margin-bottom:3px;min-height:26px}.message-text{font-size:0.7rem}.selectors-row{margin-bottom:3px}.selector-group{padding:3px}.selector-label{font-size:0.4rem;margin-bottom:2px}.selector-btn{min-height:26px;font-size:0.65rem}.selector-btn.level-btn{min-height:22px;font-size:0.55rem}.court-grid{min-width:150px;min-height:150px;gap:2px;padding:5px}.grid-cell{min-width:24px;min-height:24px}.grid-cell .cell-num{font-size:1rem}.division-display{padding:3px 6px;min-height:26px;margin:3px 0}.division-badge,.cells-counter{font-size:0.75rem}.score-display{font-size:0.9rem}.action-btn{min-height:38px;padding:8px;font-size:1rem}.demo-label{font-size:0.6rem;top:-22px;padding:4px 10px}}
 </style>
 </head>
-<body class="en">
+<body class="en demo-mode">
 <button class="refresh-btn" id="refreshBtn" title="Reset Round">🔄</button>
 <button class="focus-btn" id="focusBtn" title="Focus Mode">⛶</button>
 <div class="ritnome-badge" id="ritnomeBadge"><div class="pulse-dot" id="ritnomeDot"></div><div class="badge-text"><span class="powered-by">Powered by</span><span class="ritnome-name">RITNOME™</span></div></div>
-<nav class="mini-nav">
-<div class="nav-row">
+<nav class="mini-nav"><div class="nav-row">
 <a href="/dashboard.html" class="back-btn">← <span class="lang-en">DASHBOARD</span><span class="lang-es">TABLERO</span></a>
 <div class="nav-title">THE RECALL</div>
-<div class="nav-right">
-<div class="nav-lang"><button class="nav-lang-btn active" id="btnEn">EN</button><button class="nav-lang-btn" id="btnEs">ES</button></div>
+<div class="nav-right"><div class="nav-lang"><button class="nav-lang-btn active" id="btnEn">EN</button><button class="nav-lang-btn" id="btnEs">ES</button></div>
 <div class="settings-wrapper"><button class="settings-btn" id="settingsBtn">⚙️</button>
 <div class="settings-dropdown" id="settingsDropdown">
 <div class="settings-section"><div class="settings-label">Ritnome™ BPM</div><div class="speed-status" id="speedStatus"><span class="speed-chip unlocked">✓ 60</span><span class="speed-chip locked">🔒 90</span><span class="speed-chip locked">🔒 120</span></div></div>
 <div class="settings-section" id="upgradeSection"><a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="settings-link upgrade">🚀 UNLOCK ALL</a></div>
 <div class="settings-section"><button class="settings-link logout" id="logoutBtn">← <span class="lang-en">Log Out</span><span class="lang-es">Salir</span></button></div>
-</div></div></div></div>
-</nav>
+</div></div></div></div></nav>
 <div class="emoji-container" id="emojiContainer"></div>
 <div class="game-container">
-<div class="stats-bar">
-<div class="stat"><div class="stat-value" id="tierDisplay">1</div><div class="stat-label">GoStars</div></div>
-<div class="stat"><div class="stat-value" id="roundDisplay">0/3</div><div class="stat-label"><span class="lang-en">Round</span><span class="lang-es">Ronda</span></div></div>
-<div class="stat"><div class="stat-value" id="streakDisplay">0</div><div class="stat-label">🔥</div></div>
-<div class="stat"><div class="stat-value" id="scoreDisplay">0</div><div class="stat-label"><span class="lang-en">Score</span><span class="lang-es">Puntos</span></div></div>
-</div>
-<div class="message-display"><span class="message-text" id="messageText"><span class="lang-en">Select level & LET'S GO!</span><span class="lang-es">¡Selecciona nivel y PA'LANTE!</span></span></div>
-<div class="selectors-row">
-<div class="selector-group level-group"><div class="selector-label"><span class="lang-en">Level</span><span class="lang-es">Nivel</span></div><div class="selector-options level-options">
+<div class="stats-bar"><div class="stat"><div class="stat-value" id="tierDisplay">1</div><div class="stat-label">GoStars</div></div><div class="stat"><div class="stat-value" id="roundDisplay">0/3</div><div class="stat-label"><span class="lang-en">Round</span><span class="lang-es">Ronda</span></div></div><div class="stat"><div class="stat-value" id="streakDisplay">0</div><div class="stat-label">🔥</div></div><div class="stat"><div class="stat-value" id="scoreDisplay">0</div><div class="stat-label"><span class="lang-en">Score</span><span class="lang-es">Puntos</span></div></div></div>
+<div class="message-display"><span class="message-text" id="messageText"><span class="lang-en">👀 WATCH THE DEMO...</span><span class="lang-es">👀 MIRA LA DEMO...</span></span></div>
+<div class="selectors-row"><div class="selector-group level-group"><div class="selector-label"><span class="lang-en">Level</span><span class="lang-es">Nivel</span></div><div class="selector-options level-options">
 <button class="selector-btn level-btn active" data-level="1">1</button><button class="selector-btn level-btn" data-level="2">2</button><button class="selector-btn level-btn" data-level="3">3</button><button class="selector-btn level-btn" data-level="4">4</button><button class="selector-btn level-btn" data-level="5">5</button><button class="selector-btn level-btn" data-level="6">6</button><button class="selector-btn level-btn" data-level="7">7</button><button class="selector-btn level-btn" data-level="8">8</button><button class="selector-btn level-btn" data-level="9">9</button><button class="selector-btn level-btn" data-level="10">10</button>
-</div></div>
-<div class="selector-group"><div class="selector-label">Ritnome™ BPM</div><div class="selector-options"><button class="selector-btn speed-btn active" data-speed="slow">60</button><button class="selector-btn speed-btn" data-speed="med">90</button><button class="selector-btn speed-btn" data-speed="fast">120</button></div></div>
-</div>
+</div></div><div class="selector-group"><div class="selector-label">Ritnome™ BPM</div><div class="selector-options"><button class="selector-btn speed-btn active" data-speed="slow">60</button><button class="selector-btn speed-btn" data-speed="med">90</button><button class="selector-btn speed-btn" data-speed="fast">120</button></div></div></div>
 <div class="tier-display" id="tierDots"></div>
-<div class="court-wrapper"><div class="court-grid" id="courtGrid"></div></div>
+<div class="court-wrapper"><div class="demo-label" id="demoLabel"><span class="lang-en">👀 WATCH...</span><span class="lang-es">👀 MIRA...</span></div><div class="court-grid" id="courtGrid"></div></div>
 <div class="division-display"><div class="division-badge" id="divisionBadge">L1 TRAINING</div><div class="cells-counter" id="cellsCounter">CELLS: 5</div><div class="score-display" id="totalScore">0</div></div>
-<button class="action-btn" id="actionBtn"><span class="lang-en">LET'S GO</span><span class="lang-es">PA'LANTE</span></button>
+<button class="action-btn demo-pulse" id="actionBtn"><span class="lang-en">▶ PLAY NOW</span><span class="lang-es">▶ JUGAR AHORA</span></button>
 </div>
 <div class="overlay" id="tierupOverlay"><div class="overlay-card"><div class="overlay-emoji">⭐</div><h2 class="overlay-title"><span class="lang-en">⭐ GOSTAR EARNED!</span><span class="lang-es">⭐ ¡GOSTAR GANADO!</span></h2><p class="overlay-message" id="tierupMessage"></p><button class="overlay-btn" id="tierupBtn"><span class="lang-en">LET'S GO!</span><span class="lang-es">¡VAMOS!</span></button></div></div>
 <div class="overlay" id="upgradeOverlay"><div class="overlay-card"><div class="overlay-emoji">🔓</div><h2 class="overlay-title">UNLOCK ALL RITNOME™</h2><div class="upgrade-speed-preview"><span class="upgrade-speed-chip current">✓ 60</span><span class="upgrade-speed-chip locked">🔒 90</span><span class="upgrade-speed-chip locked">🔒 120</span></div><div class="upgrade-price">$5<span>/mo</span></div><p class="overlay-message"><span class="lang-en">Get all BPM speeds + all 5 challenges!</span><span class="lang-es">¡Obtén todas las velocidades + los 5 desafíos!</span></p><a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="overlay-btn" style="display:block;text-decoration:none;margin-bottom:6px;">UPGRADE 🚀</a><button class="overlay-btn secondary" id="upgradeClose">CONTINUE 60</button></div></div>
 <div class="coach-message" id="coachMessage"></div>
 <script>
 (function(){
-    var focusBtn = document.getElementById('focusBtn');
-    var isFocusMode = localStorage.getItem('lc-focus-mode') === 'true';
-    function toggleFocusMode() { isFocusMode = !isFocusMode; localStorage.setItem('lc-focus-mode', isFocusMode); applyFocusMode(); }
-    function applyFocusMode() { if (isFocusMode) { document.body.classList.add('focus-mode'); focusBtn.classList.add('active'); } else { document.body.classList.remove('focus-mode'); focusBtn.classList.remove('active'); } }
-    focusBtn.onclick = toggleFocusMode; applyFocusMode();
-    var host = window.location.hostname;
-    var isProduction = host.indexOf('ritnome') > -1 || host.indexOf('laughcourt') > -1 || host.indexOf('github.io') > -1 || host.indexOf('gostardigital') > -1;
-    if (isProduction) { var user = null; try { user = JSON.parse(localStorage.getItem('lc-user')); } catch(e) {} if (!user || !user.pin || user.pin.length < 4) { window.location.replace('/login'); return; } var sessionPin = sessionStorage.getItem('lc-pin'), sessionToken = sessionStorage.getItem('lc-token'); function validateSession() { if (!sessionPin || !sessionToken) { window.location.href = '/login'; return; } fetch('/api/session/validate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ pin: sessionPin, token: sessionToken }) }).then(function(r) { return r.json(); }).then(function(d) { if (!d.valid) { localStorage.removeItem('lc-user'); localStorage.removeItem('lc-speed-access'); sessionStorage.clear(); window.location.href = '/login'; } }).catch(function() {}); } validateSession(); setInterval(validateSession, 30000); }
-    var settingsBtn = document.getElementById('settingsBtn'), settingsDropdown = document.getElementById('settingsDropdown');
-    settingsBtn.onclick = function(e) { e.stopPropagation(); settingsBtn.classList.toggle('open'); settingsDropdown.classList.toggle('show'); };
-    document.onclick = function(e) { if (!settingsDropdown.contains(e.target) && e.target !== focusBtn) { settingsBtn.classList.remove('open'); settingsDropdown.classList.remove('show'); } };
-    document.getElementById('logoutBtn').onclick = function() { var sp = sessionStorage.getItem('lc-pin'), st = sessionStorage.getItem('lc-token'); if (sp && st) fetch('/api/session/destroy', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ pin: sp, token: st }) }).catch(function() {}); localStorage.removeItem('lc-user'); localStorage.removeItem('lc-speed-access'); sessionStorage.clear(); window.location.href = '/login'; };
-    var currentLang = localStorage.getItem('lc-lang') || 'en';
-    function setLang(lang) { currentLang = lang; localStorage.setItem('lc-lang', lang); document.body.className = lang + (isFocusMode ? ' focus-mode' : ''); document.getElementById('btnEn').className = lang === 'en' ? 'nav-lang-btn active' : 'nav-lang-btn'; document.getElementById('btnEs').className = lang === 'es' ? 'nav-lang-btn active' : 'nav-lang-btn'; updateDivisionDisplay(); updateRitnomePulse(state.speed); }
-    document.getElementById('btnEn').onclick = function() { setLang('en'); }; document.getElementById('btnEs').onclick = function() { setLang('es'); };
-    var speedAccess = { allSpeeds: false }; try { var sa = localStorage.getItem('lc-speed-access'); if (sa) speedAccess = JSON.parse(sa); } catch(e) {}
-    function updateSpeedStatusUI() { var ss = document.getElementById('speedStatus'), us = document.getElementById('upgradeSection'); if (speedAccess.allSpeeds) { ss.innerHTML = '<span class="speed-chip unlocked">✓ 60</span><span class="speed-chip unlocked">✓ 90</span><span class="speed-chip unlocked">✓ 120</span>'; us.style.display = 'none'; } else { ss.innerHTML = '<span class="speed-chip unlocked">✓ 60</span><span class="speed-chip locked">🔒 90</span><span class="speed-chip locked">🔒 120</span>'; us.style.display = 'block'; } }
-    function initSpeedButtons() { document.querySelectorAll('.speed-btn').forEach(function(btn) { if (!speedAccess.allSpeeds && btn.dataset.speed !== 'slow') btn.classList.add('locked'); else btn.classList.remove('locked'); }); if (!speedAccess.allSpeeds) { state.speed = 'slow'; document.querySelectorAll('.speed-btn').forEach(function(b) { b.classList.remove('active'); }); document.querySelector('.speed-btn[data-speed="slow"]').classList.add('active'); } updateSpeedStatusUI(); }
-    function showUpgrade() { document.getElementById('upgradeOverlay').classList.add('show'); }
-    document.getElementById('upgradeClose').onclick = function() { document.getElementById('upgradeOverlay').classList.remove('show'); };
-    var TOTAL_CELLS = 25, ROUNDS_PER_TIER = 3, TOTAL_TIERS = 10;
-    var LEVEL_CELLS = {1:5,2:6,3:7,4:8,5:9,6:10,7:11,8:12,9:13,10:14};
-    var SPEED_CFG = { slow: {display:2500}, med: {display:2000}, fast: {display:1500} };
-    var LAUGH_EMOJIS = ['😂','😆','🤣','😄','😁','🥳','😊','🏀'];
-    var PARTY_EMOJIS = ['🥳','🎉','😂','🤣','✨','💫','🏀','🏆'];
-    var gameTimeouts = [];
-    function setGameTimeout(fn, delay) { var id = setTimeout(function() { var idx = gameTimeouts.indexOf(id); if (idx > -1) gameTimeouts.splice(idx, 1); fn(); }, delay); gameTimeouts.push(id); return id; }
-    function clearAllGameTimeouts() { gameTimeouts.forEach(function(id) { clearTimeout(id); }); gameTimeouts = []; }
-    function updateRitnomePulse(speed) { var dot = document.getElementById('ritnomeDot'); if (!dot) return; var ms = speed === 'fast' ? '500ms' : speed === 'med' ? '667ms' : '1000ms'; dot.style.animationDuration = ms; }
-    function getSpeedKey(speed, key) { return 'lc-match-' + speed + '-' + key; }
-    function loadSpeedState(speed) { return { level: parseInt(localStorage.getItem(getSpeedKey(speed, 'level'))) || 1, tier: parseInt(localStorage.getItem(getSpeedKey(speed, 'tier'))) || 1, roundsCompleted: parseInt(localStorage.getItem(getSpeedKey(speed, 'rounds'))) || 0, score: parseInt(localStorage.getItem(getSpeedKey(speed, 'score'))) || 0, streak: parseInt(localStorage.getItem(getSpeedKey(speed, 'streak'))) || 0 }; }
-    function saveSpeedState(speed, level, tier, roundsCompleted, score, streak) { localStorage.setItem(getSpeedKey(speed, 'level'), level); localStorage.setItem(getSpeedKey(speed, 'tier'), tier); localStorage.setItem(getSpeedKey(speed, 'rounds'), roundsCompleted); localStorage.setItem(getSpeedKey(speed, 'score'), score); localStorage.setItem(getSpeedKey(speed, 'streak'), streak); }
-    var refreshBtn = document.getElementById('refreshBtn');
-    refreshBtn.onclick = function() { clearAllGameTimeouts(); state.isPlaying = false; state.canTap = false; state.roundEnded = false; state.playerIndex = 0; state.pattern = []; if (state.cells && state.cells.length) { state.cells.forEach(function(c) { c.classList.remove('lit', 'correct', 'wrong', 'player-tap', 'show-num'); var numEl = c.querySelector('.cell-num'); if (numEl) numEl.textContent = ''; }); } document.getElementById('tierupOverlay').classList.remove('show'); document.getElementById('upgradeOverlay').classList.remove('show'); actionBtn.disabled = false; messageText.innerHTML = '<span class="lang-en">' + (state.roundsCompleted + 1) + '/' + ROUNDS_PER_TIER + ' - TAP LET\'S GO!</span><span class="lang-es">' + (state.roundsCompleted + 1) + '/' + ROUNDS_PER_TIER + ' - ¡TOCA PA\'LANTE!</span>'; messageText.className = 'message-text'; updateStats(); updateDivisionDisplay(); showCoach('🔄 Ready!'); };
-    var currentSpeed = localStorage.getItem('lc-match-speed') || 'slow'; var speedData = loadSpeedState(currentSpeed);
-    var state = { speed: currentSpeed, level: speedData.level, tier: speedData.tier, roundsCompleted: speedData.roundsCompleted, score: speedData.score, streak: speedData.streak, pattern: [], playerIndex: 0, isPlaying: false, canTap: false, roundEnded: false, cells: [] };
-    if (state.level > 10) state.level = 10; if (state.level < 1) state.level = 1;
-    var courtGrid = document.getElementById('courtGrid'); var messageText = document.getElementById('messageText'); var actionBtn = document.getElementById('actionBtn'); var tierupOverlay = document.getElementById('tierupOverlay'); var coachMessage = document.getElementById('coachMessage'); var emojiContainer = document.getElementById('emojiContainer');
-    var audioCtx = null;
-    function playTone(freq, dur) { if (!audioCtx) try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) { return; } try { if (audioCtx.state === 'suspended') audioCtx.resume(); var osc = audioCtx.createOscillator(), gain = audioCtx.createGain(); osc.type = 'sine'; osc.frequency.value = freq; osc.connect(gain); gain.connect(audioCtx.destination); gain.gain.setValueAtTime(0.3, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + dur); osc.start(); osc.stop(audioCtx.currentTime + dur + 0.05); } catch(e) {} }
-    function playFlash() { playTone(880, 0.15); } function playTap() { playTone(660, 0.08); } function playSuccess() { [523,659,784].forEach(function(f,i) { setTimeout(function() { playTone(f, 0.12); }, i * 80); }); } function playError() { playTone(200, 0.3); }
-    function getCourtCenter() { var r = courtGrid.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; }
-    function createBurstEmoji(emoji, x, y, type) { var el = document.createElement('div'); el.className = 'burst-emoji' + (type ? ' ' + type : ''); el.textContent = emoji; var angle = Math.random() * Math.PI * 2, dist = 50 + Math.random() * 80; el.style.cssText = 'left:' + x + 'px;top:' + y + 'px;--tx:' + Math.cos(angle) * dist + 'px;--ty:' + Math.sin(angle) * dist + 'px;--rot:' + (Math.random() - 0.5) * 720 + 'deg'; emojiContainer.appendChild(el); setTimeout(function() { if (el.parentNode) el.remove(); }, 2000); }
-    function laughCelebration(intensity) { var center = getCourtCenter(); var count = intensity === 'party' ? 8 : intensity === 'big' ? 5 : intensity === 'medium' ? 3 : 2; var emojis = intensity === 'party' ? PARTY_EMOJIS : LAUGH_EMOJIS; var type = intensity === 'party' ? 'party' : intensity === 'big' ? 'big' : ''; for (var i = 0; i < count; i++) { (function(idx) { setTimeout(function() { createBurstEmoji(emojis[Math.floor(Math.random() * emojis.length)], center.x + (Math.random() - 0.5) * 20, center.y + (Math.random() - 0.5) * 20, type); }, idx * 35); })(i); } courtGrid.classList.add('joy-pulse'); setTimeout(function() { courtGrid.classList.remove('joy-pulse'); }, 500); }
-    function showCoach(msg) { coachMessage.textContent = msg; coachMessage.classList.add('show'); setTimeout(function() { coachMessage.classList.remove('show'); }, 2000); }
-    function initCourt() { courtGrid.innerHTML = ''; state.cells = []; for (var i = 0; i < TOTAL_CELLS; i++) { var cell = document.createElement('div'); cell.className = 'grid-cell'; cell.dataset.index = i; cell.innerHTML = '<span class="cell-num"></span>'; cell.onclick = function() { handleTap(parseInt(this.dataset.index)); }; courtGrid.appendChild(cell); state.cells.push(cell); } }
-    function renderTierDots() { var c = document.getElementById('tierDots'); c.innerHTML = ''; for (var i = 1; i <= TOTAL_TIERS; i++) { var d = document.createElement('div'); d.className = 'tier-dot' + (i < state.tier ? ' completed' : '') + (i === state.tier ? ' current' : ''); c.appendChild(d); } }
-    function getCellCount() { return LEVEL_CELLS[state.level] || 5; }
-    function updateDivisionDisplay() { var sp = state.speed === 'slow' ? 'TRAINING' : state.speed === 'med' ? 'TEMPO' : 'ELITE'; document.getElementById('divisionBadge').textContent = 'L' + state.level + ' ' + sp; document.getElementById('cellsCounter').textContent = 'CELLS: ' + getCellCount(); }
-    function updateStats() { document.getElementById('tierDisplay').textContent = state.tier; document.getElementById('roundDisplay').textContent = state.roundsCompleted + '/' + ROUNDS_PER_TIER; document.getElementById('streakDisplay').textContent = state.streak; document.getElementById('scoreDisplay').textContent = state.score; document.getElementById('totalScore').textContent = state.score; renderTierDots(); }
-    function generatePattern() { var count = getCellCount(); var avail = []; for (var i = 0; i < TOTAL_CELLS; i++) avail.push(i); for (var j = avail.length - 1; j > 0; j--) { var k = Math.floor(Math.random() * (j + 1)), t = avail[j]; avail[j] = avail[k]; avail[k] = t; } return avail.slice(0, count); }
-    function showPattern() { state.pattern.forEach(function(cellIdx, num) { var cell = state.cells[cellIdx]; cell.classList.add('lit'); cell.querySelector('.cell-num').textContent = num + 1; }); playFlash(); }
-    function hidePattern() { state.cells.forEach(function(cell) { cell.classList.remove('lit'); }); }
-    function startRound() { if (state.isPlaying) return; clearAllGameTimeouts(); state.isPlaying = true; state.canTap = false; state.roundEnded = false; state.playerIndex = 0; actionBtn.disabled = true; state.cells.forEach(function(c) { c.classList.remove('lit', 'correct', 'wrong', 'player-tap', 'show-num'); c.querySelector('.cell-num').textContent = ''; }); state.pattern = generatePattern(); messageText.innerHTML = '<span class="lang-en">MEMORIZE!</span><span class="lang-es">¡MEMORIZA!</span>'; messageText.className = 'message-text watch'; setGameTimeout(function() { if (!state.isPlaying) return; showPattern(); var displayTime = SPEED_CFG[state.speed] ? SPEED_CFG[state.speed].display : 2500; setGameTimeout(function() { if (!state.isPlaying) return; hidePattern(); messageText.innerHTML = '<span class="lang-en">TAP IN ORDER!</span><span class="lang-es">¡TOCA EN ORDEN!</span>'; messageText.className = 'message-text go'; state.canTap = true; }, displayTime); }, 400); }
-    function handleTap(idx) { if (!state.canTap || !state.isPlaying || state.roundEnded) return; var cell = state.cells[idx]; var expectedIdx = state.pattern[state.playerIndex]; cell.classList.add('player-tap'); playTap(); setGameTimeout(function() { cell.classList.remove('player-tap'); }, 150); if (idx === expectedIdx) { cell.classList.add('correct', 'show-num'); cell.querySelector('.cell-num').textContent = state.playerIndex + 1; state.playerIndex++; if (state.playerIndex > 2) laughCelebration('small'); if (state.playerIndex >= state.pattern.length) { state.canTap = false; state.roundEnded = true; roundComplete(true); } } else { cell.classList.add('wrong'); playError(); state.canTap = false; state.roundEnded = true; setGameTimeout(function() { state.pattern.forEach(function(i, num) { state.cells[i].classList.add('lit', 'show-num'); state.cells[i].querySelector('.cell-num').textContent = num + 1; }); }, 400); setGameTimeout(function() { roundComplete(false); }, 2000); } }
-    function roundComplete(success) { if (!state.isPlaying && !state.roundEnded) return; state.isPlaying = false; state.canTap = false; if (success) { var pts = state.pattern.length * 20 * (state.speed === 'fast' ? 3 : state.speed === 'med' ? 2 : 1); state.score += pts; state.streak++; state.roundsCompleted++; saveSpeedState(state.speed, state.level, state.tier, state.roundsCompleted, state.score, state.streak); var intensity = state.streak >= 5 ? 'party' : state.streak >= 3 ? 'big' : 'medium'; var msgs = state.streak >= 5 ? ['🏆 LEGEND!', '🏆 WOW!'] : state.streak >= 3 ? ['🔥 FIRE!', '🤣 AMAZING!'] : ['😄 NICE!', '😊 GREAT!']; playSuccess(); laughCelebration(intensity); showCoach(msgs[Math.floor(Math.random() * msgs.length)]); updateStats(); if (state.roundsCompleted >= ROUNDS_PER_TIER) { setGameTimeout(function() { state.tier < TOTAL_TIERS ? tierUp() : maxTier(); }, 800); } else { setGameTimeout(resetRound, 1000); } } else { state.streak = 0; saveSpeedState(state.speed, state.level, state.tier, state.roundsCompleted, state.score, state.streak); updateStats(); messageText.innerHTML = '<span class="lang-en">WRONG ORDER!</span><span class="lang-es">¡ORDEN INCORRECTO!</span>'; messageText.className = 'message-text error'; setGameTimeout(resetRound, 2000); } }
-    function tierUp() { state.tier++; state.roundsCompleted = 0; var oldLevel = state.level; if (state.level < 10) { state.level++; document.querySelectorAll('.level-btn').forEach(function(b) { b.classList.remove('active'); }); var newLevelBtn = document.querySelector('[data-level="' + state.level + '"]'); if (newLevelBtn) newLevelBtn.classList.add('active'); } saveSpeedState(state.speed, state.level, state.tier, state.roundsCompleted, state.score, state.streak); laughCelebration('party'); var msgEn = 'You earned GoStar ' + state.tier + '!'; var msgEs = '¡Ganaste GoStar ' + state.tier + '!'; if (state.level > oldLevel) { msgEn += ' Now Level ' + state.level + ' (' + getCellCount() + ' cells)'; msgEs += ' Ahora Nivel ' + state.level + ' (' + getCellCount() + ' celdas)'; } document.getElementById('tierupMessage').innerHTML = currentLang === 'es' ? msgEs : msgEn; tierupOverlay.classList.add('show'); updateStats(); updateDivisionDisplay(); }
-    function maxTier() { state.roundsCompleted = 0; if (state.level < 10) { state.level = 10; document.querySelectorAll('.level-btn').forEach(function(b) { b.classList.remove('active'); }); var maxLevelBtn = document.querySelector('[data-level="10"]'); if (maxLevelBtn) maxLevelBtn.classList.add('active'); } saveSpeedState(state.speed, state.level, state.tier, state.roundsCompleted, state.score, state.streak); var msgEn = '🏆 10 GOSTARS - MASTER! 🏆'; var msgEs = '🏆 10 GOSTARS - ¡MAESTRO! 🏆'; document.getElementById('tierupMessage').innerHTML = currentLang === 'es' ? msgEs : msgEn; document.querySelector('#tierupOverlay .overlay-emoji').textContent = '👑'; tierupOverlay.classList.add('show'); updateStats(); updateDivisionDisplay(); }
-    document.getElementById('tierupBtn').onclick = function() { tierupOverlay.classList.remove('show'); document.querySelector('#tierupOverlay .overlay-emoji').textContent = '⭐'; clearAllGameTimeouts(); resetRound(); };
-    function resetRound() { clearAllGameTimeouts(); state.isPlaying = false; state.canTap = false; state.roundEnded = false; state.playerIndex = 0; state.pattern = []; state.cells.forEach(function(c) { c.classList.remove('lit', 'correct', 'wrong', 'player-tap', 'show-num'); c.querySelector('.cell-num').textContent = ''; }); messageText.innerHTML = '<span class="lang-en">' + (state.roundsCompleted + 1) + '/' + ROUNDS_PER_TIER + ' - TAP LET\'S GO!</span><span class="lang-es">' + (state.roundsCompleted + 1) + '/' + ROUNDS_PER_TIER + ' - ¡TOCA PA\'LANTE!</span>'; messageText.className = 'message-text'; actionBtn.disabled = false; updateStats(); }
-    document.querySelectorAll('.level-btn').forEach(function(btn) { btn.onclick = function() { if (state.isPlaying) return; clearAllGameTimeouts(); document.querySelectorAll('.level-btn').forEach(function(b) { b.classList.remove('active'); }); btn.classList.add('active'); state.level = parseInt(btn.dataset.level); if (state.level > 10) state.level = 10; if (state.level < 1) state.level = 1; state.tier = 1; state.roundsCompleted = 0; state.isPlaying = false; state.canTap = false; state.roundEnded = false; saveSpeedState(state.speed, state.level, state.tier, state.roundsCompleted, state.score, state.streak); updateDivisionDisplay(); updateStats(); resetRound(); }; });
-    document.querySelectorAll('.speed-btn').forEach(function(btn) { btn.onclick = function() { if (state.isPlaying) return; if (!speedAccess.allSpeeds && btn.dataset.speed !== 'slow') { showUpgrade(); return; } clearAllGameTimeouts(); document.querySelectorAll('.speed-btn').forEach(function(b) { b.classList.remove('active'); }); btn.classList.add('active'); state.speed = btn.dataset.speed; updateRitnomePulse(state.speed); localStorage.setItem('lc-match-speed', state.speed); var speedData = loadSpeedState(state.speed); state.level = speedData.level; state.tier = speedData.tier; state.roundsCompleted = speedData.roundsCompleted; state.score = speedData.score; state.streak = speedData.streak; if (state.level > 10) state.level = 10; if (state.level < 1) state.level = 1; document.querySelectorAll('.level-btn').forEach(function(b) { b.classList.remove('active'); }); var lb = document.querySelector('[data-level="' + state.level + '"]'); if (lb) lb.classList.add('active'); state.isPlaying = false; state.canTap = false; state.roundEnded = false; updateDivisionDisplay(); updateStats(); resetRound(); }; });
-    actionBtn.onclick = startRound;
-    initCourt(); initSpeedButtons(); setLang(currentLang); updateDivisionDisplay(); updateStats(); renderTierDots();
-    document.querySelectorAll('.level-btn').forEach(function(b) { b.classList.toggle('active', parseInt(b.dataset.level) === state.level); });
-    document.querySelectorAll('.speed-btn').forEach(function(b) { if (!b.classList.contains('locked')) { b.classList.toggle('active', b.dataset.speed === state.speed); } });
-    if (isProduction) { var pin = sessionStorage.getItem('lc-pin'); if (pin) { fetch('/api/user/speed-access/' + pin).then(function(r) { return r.json(); }).then(function(d) { speedAccess = d; localStorage.setItem('lc-speed-access', JSON.stringify(d)); initSpeedButtons(); }).catch(function() {}); } }
+var $=function(id){return document.getElementById(id)};
+var courtGrid=$('courtGrid'),messageText=$('messageText'),actionBtn=$('actionBtn'),demoLabel=$('demoLabel'),tierupOverlay=$('tierupOverlay'),coachMessage=$('coachMessage'),emojiContainer=$('emojiContainer'),focusBtn=$('focusBtn'),refreshBtn=$('refreshBtn');
+var TOTAL_CELLS=25,ROUNDS_PER_TIER=3,TOTAL_TIERS=10;
+var LEVEL_CELLS={1:5,2:6,3:7,4:8,5:9,6:10,7:11,8:12,9:13,10:14};
+var SPEED_CFG={slow:{display:2500},med:{display:2000},fast:{display:1500}};
+var LAUGH_EMOJIS=['😂','😆','🤣','😄','😁','🥳','😊','🏀'];
+var PARTY_EMOJIS=['🥳','🎉','😂','🤣','✨','💫','🏀','🏆'];
+var state={speed:'slow',level:1,tier:1,roundsCompleted:0,score:0,streak:0,pattern:[],playerIndex:0,isPlaying:false,canTap:false,roundEnded:false,cells:[]};
+var demoMode=true,demoEpoch=0,demoTimeouts=[],gameTimeouts=[];
+var currentLang=localStorage.getItem('lc-lang')||'en';
+var isFocusMode=localStorage.getItem('lc-focus-mode')==='true';
+var speedAccess={allSpeeds:false};try{var sa=localStorage.getItem('lc-speed-access');if(sa)speedAccess=JSON.parse(sa)}catch(e){}
+var audioCtx=null;
+var host=window.location.hostname;
+var isProduction=host.indexOf('ritnome')>-1||host.indexOf('laughcourt')>-1||host.indexOf('github.io')>-1||host.indexOf('gostardigital')>-1;
+
+function setDemoTimeout(fn,delay){var id=setTimeout(function(){var idx=demoTimeouts.indexOf(id);if(idx>-1)demoTimeouts.splice(idx,1);fn()},delay);demoTimeouts.push(id);return id}
+function clearDemoTimeouts(){demoTimeouts.forEach(function(id){clearTimeout(id)});demoTimeouts=[]}
+function setGameTimeout(fn,delay){var id=setTimeout(function(){var idx=gameTimeouts.indexOf(id);if(idx>-1)gameTimeouts.splice(idx,1);fn()},delay);gameTimeouts.push(id);return id}
+function clearAllGameTimeouts(){gameTimeouts.forEach(function(id){clearTimeout(id)});gameTimeouts=[]}
+
+function randomPattern(count){var avail=[];for(var i=0;i<25;i++)avail.push(i);for(var j=avail.length-1;j>0;j--){var k=Math.floor(Math.random()*(j+1));var t=avail[j];avail[j]=avail[k];avail[k]=t}return avail.slice(0,count)}
+
+function runDemoRound(epoch){
+if(epoch!==demoEpoch||!demoMode)return;
+var pattern=randomPattern(5);
+var cells=state.cells;
+cells.forEach(function(c){c.classList.remove('lit','correct','wrong','show-num');var n=c.querySelector('.cell-num');if(n)n.textContent=''});
+setDemoTimeout(function(){
+if(epoch!==demoEpoch||!demoMode)return;
+demoLabel.innerHTML='<span class="lang-en">RECALL!</span><span class="lang-es">¡RECUERDA!</span>';
+demoLabel.className='demo-label phase-watch';
+messageText.innerHTML='<span class="lang-en">👀 MEMORIZE THE NUMBERS</span><span class="lang-es">👀 MEMORIZA LOS NÚMEROS</span>';
+messageText.className='message-text watch';
+pattern.forEach(function(idx,num){cells[idx].classList.add('lit');cells[idx].querySelector('.cell-num').textContent=num+1});
+},500);
+setDemoTimeout(function(){
+if(epoch!==demoEpoch||!demoMode)return;
+pattern.forEach(function(idx){cells[idx].classList.remove('lit');cells[idx].querySelector('.cell-num').textContent=''});
+demoLabel.innerHTML='<span class="lang-en">TAP 1, 2, 3...</span><span class="lang-es">TOCA 1, 2, 3...</span>';
+demoLabel.className='demo-label phase-recall';
+messageText.innerHTML='<span class="lang-en">👆 TAP IN ORDER!</span><span class="lang-es">👆 ¡TOCA EN ORDEN!</span>';
+messageText.className='message-text go';
+},2800);
+pattern.forEach(function(idx,i){setDemoTimeout(function(){if(epoch!==demoEpoch||!demoMode)return;cells[idx].classList.add('correct','show-num');cells[idx].querySelector('.cell-num').textContent='✓'},3300+(i*400))});
+setDemoTimeout(function(){
+if(epoch!==demoEpoch||!demoMode)return;
+demoLabel.innerHTML='<span class="lang-en">✅ PERFECT!</span><span class="lang-es">✅ ¡PERFECTO!</span>';
+demoLabel.className='demo-label phase-success';
+messageText.innerHTML='<span class="lang-en">🎉 TAP PLAY NOW!</span><span class="lang-es">🎉 ¡TOCA JUGAR!</span>';
+messageText.className='message-text';
+courtGrid.classList.add('joy-pulse');
+setTimeout(function(){courtGrid.classList.remove('joy-pulse')},500);
+},3300+(5*400)+200);
+setDemoTimeout(function(){
+if(epoch!==demoEpoch||!demoMode)return;
+cells.forEach(function(c){c.classList.remove('lit','correct','wrong','show-num');var n=c.querySelector('.cell-num');if(n)n.textContent=''});
+demoLabel.innerHTML='<span class="lang-en">👀 WATCH...</span><span class="lang-es">👀 MIRA...</span>';
+demoLabel.className='demo-label';
+runDemoRound(epoch);
+},6500);
+}
+
+function startDemo(){demoMode=true;demoEpoch++;document.body.classList.add('demo-mode');demoLabel.style.display='block';actionBtn.innerHTML='<span class="lang-en">▶ PLAY NOW</span><span class="lang-es">▶ JUGAR AHORA</span>';actionBtn.classList.add('demo-pulse');actionBtn.disabled=false;messageText.innerHTML='<span class="lang-en">👀 WATCH THE DEMO...</span><span class="lang-es">👀 MIRA LA DEMO...</span>';runDemoRound(demoEpoch)}
+
+function stopDemo(){demoMode=false;demoEpoch++;clearDemoTimeouts();document.body.classList.remove('demo-mode');demoLabel.style.display='none';actionBtn.classList.remove('demo-pulse');actionBtn.innerHTML='<span class="lang-en">LET\'S GO</span><span class="lang-es">PA\'LANTE</span>';state.cells.forEach(function(c){c.classList.remove('lit','correct','wrong','show-num');var n=c.querySelector('.cell-num');if(n)n.textContent=''})}
+
+function playTone(freq,dur){if(!audioCtx)try{audioCtx=new(window.AudioContext||window.webkitAudioContext)()}catch(e){return}try{if(audioCtx.state==='suspended')audioCtx.resume();var osc=audioCtx.createOscillator(),gain=audioCtx.createGain();osc.type='sine';osc.frequency.value=freq;osc.connect(gain);gain.connect(audioCtx.destination);gain.gain.setValueAtTime(0.3,audioCtx.currentTime);gain.gain.exponentialRampToValueAtTime(0.01,audioCtx.currentTime+dur);osc.start();osc.stop(audioCtx.currentTime+dur+0.05)}catch(e){}}
+function playFlash(){playTone(880,0.15)}
+function playTap(){playTone(660,0.08)}
+function playSuccess(){[523,659,784].forEach(function(f,i){setTimeout(function(){playTone(f,0.12)},i*80)})}
+function playError(){playTone(200,0.3)}
+
+function getCourtCenter(){var r=courtGrid.getBoundingClientRect();return{x:r.left+r.width/2,y:r.top+r.height/2}}
+function createBurstEmoji(emoji,x,y,type){var el=document.createElement('div');el.className='burst-emoji'+(type?' '+type:'');el.textContent=emoji;var angle=Math.random()*Math.PI*2,dist=50+Math.random()*80;el.style.cssText='left:'+x+'px;top:'+y+'px;--tx:'+Math.cos(angle)*dist+'px;--ty:'+Math.sin(angle)*dist+'px;--rot:'+(Math.random()-0.5)*720+'deg';emojiContainer.appendChild(el);setTimeout(function(){if(el.parentNode)el.remove()},2000)}
+function laughCelebration(intensity){var center=getCourtCenter();var count=intensity==='party'?8:intensity==='big'?5:intensity==='medium'?3:2;var emojis=intensity==='party'?PARTY_EMOJIS:LAUGH_EMOJIS;var type=intensity==='party'?'party':intensity==='big'?'big':'';for(var i=0;i<count;i++){(function(idx){setTimeout(function(){createBurstEmoji(emojis[Math.floor(Math.random()*emojis.length)],center.x+(Math.random()-0.5)*20,center.y+(Math.random()-0.5)*20,type)},idx*35)})(i)}courtGrid.classList.add('joy-pulse');setTimeout(function(){courtGrid.classList.remove('joy-pulse')},500)}
+function showCoach(msg){coachMessage.textContent=msg;coachMessage.classList.add('show');setTimeout(function(){coachMessage.classList.remove('show')},2000)}
+
+function toggleFocusMode(){isFocusMode=!isFocusMode;localStorage.setItem('lc-focus-mode',isFocusMode);applyFocusMode()}
+function applyFocusMode(){if(isFocusMode){document.body.classList.add('focus-mode');focusBtn.classList.add('active')}else{document.body.classList.remove('focus-mode');focusBtn.classList.remove('active')}}
+focusBtn.onclick=toggleFocusMode;
+
+if(isProduction){var user=null;try{user=JSON.parse(localStorage.getItem('lc-user'))}catch(e){}if(!user||!user.pin||user.pin.length<4){window.location.replace('/login');return}var sessionPin=sessionStorage.getItem('lc-pin'),sessionToken=sessionStorage.getItem('lc-token');function validateSession(){if(!sessionPin||!sessionToken){window.location.href='/login';return}fetch('/api/session/validate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pin:sessionPin,token:sessionToken})}).then(function(r){return r.json()}).then(function(d){if(!d.valid){localStorage.removeItem('lc-user');localStorage.removeItem('lc-speed-access');sessionStorage.clear();window.location.href='/login'}}).catch(function(){})}validateSession();setInterval(validateSession,30000)}
+
+var settingsBtn=$('settingsBtn'),settingsDropdown=$('settingsDropdown');
+settingsBtn.onclick=function(e){e.stopPropagation();settingsBtn.classList.toggle('open');settingsDropdown.classList.toggle('show')};
+document.onclick=function(e){if(!settingsDropdown.contains(e.target)&&e.target!==focusBtn){settingsBtn.classList.remove('open');settingsDropdown.classList.remove('show')}};
+$('logoutBtn').onclick=function(){var sp=sessionStorage.getItem('lc-pin'),st=sessionStorage.getItem('lc-token');if(sp&&st)fetch('/api/session/destroy',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pin:sp,token:st})}).catch(function(){});localStorage.removeItem('lc-user');localStorage.removeItem('lc-speed-access');sessionStorage.clear();window.location.href='/login'};
+
+function setLang(lang){currentLang=lang;localStorage.setItem('lc-lang',lang);var classes=lang;if(isFocusMode)classes+=' focus-mode';if(demoMode)classes+=' demo-mode';document.body.className=classes;$('btnEn').className=lang==='en'?'nav-lang-btn active':'nav-lang-btn';$('btnEs').className=lang==='es'?'nav-lang-btn active':'nav-lang-btn';updateDivisionDisplay();updateRitnomePulse(state.speed)}
+$('btnEn').onclick=function(){setLang('en')};
+$('btnEs').onclick=function(){setLang('es')};
+
+function updateSpeedStatusUI(){var ss=$('speedStatus'),us=$('upgradeSection');if(speedAccess.allSpeeds){ss.innerHTML='<span class="speed-chip unlocked">✓ 60</span><span class="speed-chip unlocked">✓ 90</span><span class="speed-chip unlocked">✓ 120</span>';us.style.display='none'}else{ss.innerHTML='<span class="speed-chip unlocked">✓ 60</span><span class="speed-chip locked">🔒 90</span><span class="speed-chip locked">🔒 120</span>';us.style.display='block'}}
+function initSpeedButtons(){document.querySelectorAll('.speed-btn').forEach(function(btn){if(!speedAccess.allSpeeds&&btn.dataset.speed!=='slow')btn.classList.add('locked');else btn.classList.remove('locked')});if(!speedAccess.allSpeeds){state.speed='slow';document.querySelectorAll('.speed-btn').forEach(function(b){b.classList.remove('active')});document.querySelector('.speed-btn[data-speed="slow"]').classList.add('active')}updateSpeedStatusUI()}
+function showUpgrade(){$('upgradeOverlay').classList.add('show')}
+$('upgradeClose').onclick=function(){$('upgradeOverlay').classList.remove('show')};
+
+function updateRitnomePulse(speed){var dot=$('ritnomeDot');if(!dot)return;var ms=speed==='fast'?'500ms':speed==='med'?'667ms':'1000ms';dot.style.animationDuration=ms}
+function getSpeedKey(speed,key){return'lc-match-'+speed+'-'+key}
+function loadSpeedState(speed){return{level:parseInt(localStorage.getItem(getSpeedKey(speed,'level')))||1,tier:parseInt(localStorage.getItem(getSpeedKey(speed,'tier')))||1,roundsCompleted:parseInt(localStorage.getItem(getSpeedKey(speed,'rounds')))||0,score:parseInt(localStorage.getItem(getSpeedKey(speed,'score')))||0,streak:parseInt(localStorage.getItem(getSpeedKey(speed,'streak')))||0}}
+function saveSpeedState(speed,level,tier,roundsCompleted,score,streak){localStorage.setItem(getSpeedKey(speed,'level'),level);localStorage.setItem(getSpeedKey(speed,'tier'),tier);localStorage.setItem(getSpeedKey(speed,'rounds'),roundsCompleted);localStorage.setItem(getSpeedKey(speed,'score'),score);localStorage.setItem(getSpeedKey(speed,'streak'),streak)}
+
+function initCourt(){courtGrid.innerHTML='';state.cells=[];for(var i=0;i<TOTAL_CELLS;i++){var cell=document.createElement('div');cell.className='grid-cell';cell.dataset.index=i;cell.innerHTML='<span class="cell-num"></span>';cell.onclick=function(){handleTap(parseInt(this.dataset.index))};courtGrid.appendChild(cell);state.cells.push(cell)}}
+function renderTierDots(){var c=$('tierDots');c.innerHTML='';for(var i=1;i<=TOTAL_TIERS;i++){var d=document.createElement('div');d.className='tier-dot'+(i<state.tier?' completed':'')+(i===state.tier?' current':'');c.appendChild(d)}}
+function getCellCount(){return LEVEL_CELLS[state.level]||5}
+function updateDivisionDisplay(){var sp=state.speed==='slow'?'TRAINING':state.speed==='med'?'TEMPO':'ELITE';$('divisionBadge').textContent='L'+state.level+' '+sp;$('cellsCounter').textContent='CELLS: '+getCellCount()}
+function updateStats(){$('tierDisplay').textContent=state.tier;$('roundDisplay').textContent=state.roundsCompleted+'/'+ROUNDS_PER_TIER;$('streakDisplay').textContent=state.streak;$('scoreDisplay').textContent=state.score;$('totalScore').textContent=state.score;renderTierDots()}
+
+function generatePattern(){var count=getCellCount();var avail=[];for(var i=0;i<TOTAL_CELLS;i++)avail.push(i);for(var j=avail.length-1;j>0;j--){var k=Math.floor(Math.random()*(j+1)),t=avail[j];avail[j]=avail[k];avail[k]=t}return avail.slice(0,count)}
+function showPattern(){state.pattern.forEach(function(cellIdx,num){var cell=state.cells[cellIdx];cell.classList.add('lit');cell.querySelector('.cell-num').textContent=num+1});playFlash()}
+function hidePattern(){state.cells.forEach(function(cell){cell.classList.remove('lit')})}
+
+function startRound(){
+if(demoMode){stopDemo();isFocusMode=true;localStorage.setItem('lc-focus-mode','true');applyFocusMode()}
+if(state.isPlaying)return;
+clearAllGameTimeouts();
+state.isPlaying=true;state.canTap=false;state.roundEnded=false;state.playerIndex=0;actionBtn.disabled=true;
+state.cells.forEach(function(c){c.classList.remove('lit','correct','wrong','player-tap','show-num');c.querySelector('.cell-num').textContent=''});
+state.pattern=generatePattern();
+messageText.innerHTML='<span class="lang-en">MEMORIZE!</span><span class="lang-es">¡MEMORIZA!</span>';
+messageText.className='message-text watch';
+setGameTimeout(function(){if(!state.isPlaying)return;showPattern();var displayTime=SPEED_CFG[state.speed]?SPEED_CFG[state.speed].display:2500;setGameTimeout(function(){if(!state.isPlaying)return;hidePattern();messageText.innerHTML='<span class="lang-en">TAP IN ORDER!</span><span class="lang-es">¡TOCA EN ORDEN!</span>';messageText.className='message-text go';state.canTap=true},displayTime)},400);
+}
+
+function handleTap(idx){
+if(!state.canTap||!state.isPlaying||state.roundEnded)return;
+var cell=state.cells[idx];var expectedIdx=state.pattern[state.playerIndex];
+cell.classList.add('player-tap');playTap();setGameTimeout(function(){cell.classList.remove('player-tap')},150);
+if(idx===expectedIdx){cell.classList.add('correct','show-num');cell.querySelector('.cell-num').textContent=state.playerIndex+1;state.playerIndex++;if(state.playerIndex>2)laughCelebration('small');if(state.playerIndex>=state.pattern.length){state.canTap=false;state.roundEnded=true;roundComplete(true)}}
+else{cell.classList.add('wrong');playError();state.canTap=false;state.roundEnded=true;setGameTimeout(function(){state.pattern.forEach(function(i,num){state.cells[i].classList.add('lit','show-num');state.cells[i].querySelector('.cell-num').textContent=num+1})},400);setGameTimeout(function(){roundComplete(false)},2000)}
+}
+
+function roundComplete(success){
+if(!state.isPlaying&&!state.roundEnded)return;
+state.isPlaying=false;state.canTap=false;
+if(success){var pts=state.pattern.length*20*(state.speed==='fast'?3:state.speed==='med'?2:1);state.score+=pts;state.streak++;state.roundsCompleted++;saveSpeedState(state.speed,state.level,state.tier,state.roundsCompleted,state.score,state.streak);var intensity=state.streak>=5?'party':state.streak>=3?'big':'medium';var msgs=state.streak>=5?['🏆 LEGEND!','🏆 WOW!']:state.streak>=3?['🔥 FIRE!','🤣 AMAZING!']:['😄 NICE!','😊 GREAT!'];playSuccess();laughCelebration(intensity);showCoach(msgs[Math.floor(Math.random()*msgs.length)]);updateStats();if(state.roundsCompleted>=ROUNDS_PER_TIER){setGameTimeout(function(){state.tier<TOTAL_TIERS?tierUp():maxTier()},800)}else{setGameTimeout(resetRound,1000)}}
+else{state.streak=0;saveSpeedState(state.speed,state.level,state.tier,state.roundsCompleted,state.score,state.streak);updateStats();messageText.innerHTML='<span class="lang-en">WRONG ORDER!</span><span class="lang-es">¡ORDEN INCORRECTO!</span>';messageText.className='message-text error';setGameTimeout(resetRound,2000)}
+}
+
+function tierUp(){state.tier++;state.roundsCompleted=0;var oldLevel=state.level;if(state.level<10){state.level++;document.querySelectorAll('.level-btn').forEach(function(b){b.classList.remove('active')});var newLevelBtn=document.querySelector('[data-level="'+state.level+'"]');if(newLevelBtn)newLevelBtn.classList.add('active')}saveSpeedState(state.speed,state.level,state.tier,state.roundsCompleted,state.score,state.streak);laughCelebration('party');var msgEn='You earned GoStar '+state.tier+'!';var msgEs='¡Ganaste GoStar '+state.tier+'!';if(state.level>oldLevel){msgEn+=' Now Level '+state.level+' ('+getCellCount()+' cells)';msgEs+=' Ahora Nivel '+state.level+' ('+getCellCount()+' celdas)'}$('tierupMessage').innerHTML=currentLang==='es'?msgEs:msgEn;tierupOverlay.classList.add('show');updateStats();updateDivisionDisplay()}
+
+function maxTier(){state.roundsCompleted=0;if(state.level<10){state.level=10;document.querySelectorAll('.level-btn').forEach(function(b){b.classList.remove('active')});var maxLevelBtn=document.querySelector('[data-level="10"]');if(maxLevelBtn)maxLevelBtn.classList.add('active')}saveSpeedState(state.speed,state.level,state.tier,state.roundsCompleted,state.score,state.streak);var msgEn='🏆 10 GOSTARS - MASTER! 🏆';var msgEs='🏆 10 GOSTARS - ¡MAESTRO! 🏆';$('tierupMessage').innerHTML=currentLang==='es'?msgEs:msgEn;document.querySelector('#tierupOverlay .overlay-emoji').textContent='👑';tierupOverlay.classList.add('show');updateStats();updateDivisionDisplay()}
+
+$('tierupBtn').onclick=function(){tierupOverlay.classList.remove('show');document.querySelector('#tierupOverlay .overlay-emoji').textContent='⭐';clearAllGameTimeouts();resetRound()};
+
+function resetRound(){clearAllGameTimeouts();state.isPlaying=false;state.canTap=false;state.roundEnded=false;state.playerIndex=0;state.pattern=[];state.cells.forEach(function(c){c.classList.remove('lit','correct','wrong','player-tap','show-num');c.querySelector('.cell-num').textContent=''});messageText.innerHTML='<span class="lang-en">'+(state.roundsCompleted+1)+'/'+ROUNDS_PER_TIER+' - TAP LET\'S GO!</span><span class="lang-es">'+(state.roundsCompleted+1)+'/'+ROUNDS_PER_TIER+' - ¡TOCA PA\'LANTE!</span>';messageText.className='message-text';actionBtn.disabled=false;updateStats()}
+
+refreshBtn.onclick=function(){clearAllGameTimeouts();state.isPlaying=false;state.canTap=false;state.roundEnded=false;state.playerIndex=0;state.pattern=[];if(state.cells&&state.cells.length){state.cells.forEach(function(c){c.classList.remove('lit','correct','wrong','player-tap','show-num');var n=c.querySelector('.cell-num');if(n)n.textContent=''})}$('tierupOverlay').classList.remove('show');$('upgradeOverlay').classList.remove('show');actionBtn.disabled=false;messageText.innerHTML='<span class="lang-en">'+(state.roundsCompleted+1)+'/'+ROUNDS_PER_TIER+' - TAP LET\'S GO!</span><span class="lang-es">'+(state.roundsCompleted+1)+'/'+ROUNDS_PER_TIER+' - ¡TOCA PA\'LANTE!</span>';messageText.className='message-text';updateStats();updateDivisionDisplay();showCoach('🔄 Ready!')};
+
+document.querySelectorAll('.level-btn').forEach(function(btn){btn.onclick=function(){if(state.isPlaying||demoMode)return;clearAllGameTimeouts();document.querySelectorAll('.level-btn').forEach(function(b){b.classList.remove('active')});btn.classList.add('active');state.level=parseInt(btn.dataset.level);if(state.level>10)state.level=10;if(state.level<1)state.level=1;state.tier=1;state.roundsCompleted=0;state.isPlaying=false;state.canTap=false;state.roundEnded=false;saveSpeedState(state.speed,state.level,state.tier,state.roundsCompleted,state.score,state.streak);updateDivisionDisplay();updateStats();resetRound()}});
+
+document.querySelectorAll('.speed-btn').forEach(function(btn){btn.onclick=function(){if(state.isPlaying||demoMode)return;if(!speedAccess.allSpeeds&&btn.dataset.speed!=='slow'){showUpgrade();return}clearAllGameTimeouts();document.querySelectorAll('.speed-btn').forEach(function(b){b.classList.remove('active')});btn.classList.add('active');state.speed=btn.dataset.speed;updateRitnomePulse(state.speed);localStorage.setItem('lc-match-speed',state.speed);var speedData=loadSpeedState(state.speed);state.level=speedData.level;state.tier=speedData.tier;state.roundsCompleted=speedData.roundsCompleted;state.score=speedData.score;state.streak=speedData.streak;if(state.level>10)state.level=10;if(state.level<1)state.level=1;document.querySelectorAll('.level-btn').forEach(function(b){b.classList.remove('active')});var lb=document.querySelector('[data-level="'+state.level+'"]');if(lb)lb.classList.add('active');state.isPlaying=false;state.canTap=false;state.roundEnded=false;updateDivisionDisplay();updateStats();resetRound()}});
+
+actionBtn.onclick=startRound;
+
+initCourt();
+var currentSpeed=localStorage.getItem('lc-match-speed')||'slow';
+var speedData=loadSpeedState(currentSpeed);
+state.speed=currentSpeed;state.level=speedData.level;state.tier=speedData.tier;state.roundsCompleted=speedData.roundsCompleted;state.score=speedData.score;state.streak=speedData.streak;
+if(state.level>10)state.level=10;if(state.level<1)state.level=1;
+initSpeedButtons();setLang(currentLang);updateDivisionDisplay();updateStats();renderTierDots();
+document.querySelectorAll('.level-btn').forEach(function(b){b.classList.toggle('active',parseInt(b.dataset.level)===state.level)});
+document.querySelectorAll('.speed-btn').forEach(function(b){if(!b.classList.contains('locked')){b.classList.toggle('active',b.dataset.speed===state.speed)}});
+if(isProduction){var pin=sessionStorage.getItem('lc-pin');if(pin){fetch('/api/user/speed-access/'+pin).then(function(r){return r.json()}).then(function(d){speedAccess=d;localStorage.setItem('lc-speed-access',JSON.stringify(d));initSpeedButtons()}).catch(function(){})}}
+startDemo();
 })();
 </script>
 </body>
