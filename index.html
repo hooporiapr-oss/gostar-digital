@@ -341,7 +341,7 @@ body.es .lang-en { display: none !important; }
     50% { border-color: #9B59B6; box-shadow: 0 0 10px rgba(155,89,182,0.4); }
 }
 .sim-court.beating {
-    animation: simBeatBorder 600ms ease-in-out infinite;
+    animation: simBeatBorder 900ms ease-in-out infinite;
 }
 
 /* Echo sim: echo-changed = orange glow, echo-original = dashed gold */
@@ -1455,8 +1455,8 @@ body.es .lang-en { display: none !important; }
         simReset(pocketCells, pocketLabel);
         pocketCourt.classList.remove('beating');
 
-        var beatMs = 650;
-        /* Pre-assign tap results: mix of perfect, good, miss */
+        var beatMs = 900;
+        /* Pre-assign tap results: mix of perfect, good */
         var results = ['correct', 'correct', 'good-tap', 'correct', 'good-tap'];
         var labels  = ['✨', '✨', '👍', '✨', '👍'];
 
@@ -1468,27 +1468,25 @@ body.es .lang-en { display: none !important; }
             pocketCourt.classList.add('beating');
         }, 300);
 
-        /* Phase 2: Targets appear one by one on the beat — immediate tap reaction */
+        /* Phase 2: Each beat — gold target appears, holds, then gets "tapped" */
         pattern.forEach(function(idx, i) {
-            /* Gold target appears */
+            /* Gold target appears on the beat */
             setTimeout(function() {
                 if (epoch !== pocketEpoch) return;
-                /* Clear previous target (only one active at a time) */
-                pocketCells.forEach(function(c) { c.classList.remove('target'); });
                 pocketCells[idx].classList.add('target');
-                pocketCells[idx].textContent = '';
+                pocketCells[idx].textContent = '●';
             }, 600 + (i * beatMs));
 
-            /* Quick "tap" reaction — show result */
+            /* "Tap" reaction — gold → result after visible hold */
             setTimeout(function() {
                 if (epoch !== pocketEpoch) return;
                 pocketCells[idx].classList.remove('target');
                 pocketCells[idx].classList.add(results[i]);
                 pocketCells[idx].textContent = labels[i];
-            }, 600 + (i * beatMs) + 180);
+            }, 600 + (i * beatMs) + 420);
         });
 
-        var playEnd = 600 + (5 * beatMs) + 100;
+        var playEnd = 600 + (5 * beatMs) + 200;
 
         /* Phase 3: Score summary */
         setTimeout(function() {
