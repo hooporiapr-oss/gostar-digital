@@ -225,56 +225,156 @@ body.es .lang-en { display: none !important; }
 .wk-card.echo .wk-header { background: rgba(50,205,50,0.05); }
 .wk-card.echo .wk-name { color: var(--lime); }
 
-/* ============ GRID DEMO ============ */
-.grid-demo {
-    padding: 40px 16px 10px;
-    text-align: center;
-}
-.grid-demo-label {
+/* ============ GAME SIMULATIONS (in-card) ============ */
+.sim-wrap { padding: 14px 16px; text-align: center; }
+.sim-label {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.75rem; letter-spacing: 3px; color: var(--muted);
-    margin-bottom: 14px; min-height: 1.2em;
+    font-size: 0.7rem; letter-spacing: 2px; color: var(--muted);
+    margin-bottom: 10px; min-height: 1.1em;
     transition: color 0.3s;
 }
-.grid-demo-label.phase-show { color: var(--gold); }
-.grid-demo-label.phase-tap { color: var(--orange); }
-.grid-demo-label.phase-done { color: var(--teal); }
-.demo-court {
+.sim-label.phase-show { color: var(--gold); }
+.sim-label.phase-tap { color: var(--orange); }
+.sim-label.phase-done { color: var(--teal); }
+.sim-court {
     display: grid; grid-template-columns: repeat(5, 1fr);
-    gap: 4px; padding: 8px; background: #1a1a24;
-    border-radius: 14px; border: 3px solid var(--orange);
-    width: 220px; height: 220px; margin: 0 auto;
+    gap: 3px; padding: 6px; background: #1a1a24;
+    border-radius: 10px; border: 2px solid var(--sim-border, var(--orange));
+    width: 180px; height: 180px; margin: 0 auto;
     position: relative;
 }
-.demo-court::before {
+.sim-court::before {
     content: ''; position: absolute; inset: 0;
-    background: rgba(10,10,15,0.55); border-radius: 11px;
+    background: rgba(10,10,15,0.55); border-radius: 8px;
     pointer-events: none; z-index: 0;
 }
-.demo-cell {
-    aspect-ratio: 1; border-radius: 5px;
-    background: rgba(255,255,255,0.08); border: 2px solid rgba(255,255,255,0.2);
+.sim-cell {
+    aspect-ratio: 1; border-radius: 4px;
+    background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.15);
     display: flex; align-items: center; justify-content: center;
     position: relative; z-index: 1;
-    font-family: 'Bebas Neue', sans-serif; font-size: 1rem;
-    color: transparent; transition: all 0.25s ease;
+    font-family: 'Bebas Neue', sans-serif; font-size: 0.8rem;
+    color: transparent; transition: all 0.2s ease;
 }
-.demo-cell.lit {
-    background: var(--orange); border-color: var(--gold);
-    box-shadow: 0 0 14px rgba(255,107,53,0.5);
-    color: var(--text); text-shadow: 0 1px 3px rgba(0,0,0,0.5);
-    transform: scale(1.06);
+.sim-cell.lit {
+    background: var(--sim-flash, var(--orange));
+    border-color: var(--sim-flash-border, var(--gold));
+    box-shadow: 0 0 10px var(--sim-glow, rgba(255,107,53,0.4));
+    color: var(--text); text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    transform: scale(1.08);
 }
-.demo-cell.correct {
+.sim-cell.correct {
     background: var(--teal); border-color: var(--teal);
-    box-shadow: 0 0 12px rgba(0,217,165,0.4);
-    color: var(--text); transform: scale(1.06);
+    box-shadow: 0 0 8px rgba(0,217,165,0.4);
+    color: var(--text); transform: scale(1.08);
 }
-.grid-demo-caption {
-    font-size: 0.72rem; color: var(--muted);
-    margin-top: 14px; line-height: 1.5;
+.sim-cell.wrong {
+    background: #FF1493; border-color: #FF1493;
+    box-shadow: 0 0 8px rgba(255,20,147,0.4);
+    color: var(--text);
 }
-.grid-demo-caption em { color: var(--orange); font-style: normal; font-weight: 600; }
+.sim-caption {
+    font-size: 0.68rem; color: var(--muted);
+    margin-top: 10px; line-height: 1.4;
+}
+.sim-play {
+    display: inline-block; margin-top: 12px;
+    padding: 10px 24px; border-radius: 25px;
+    font-family: 'Bebas Neue', sans-serif; font-size: 0.85rem;
+    letter-spacing: 2px; text-decoration: none; text-align: center;
+    color: var(--dark); font-weight: 700;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.sim-play:active { transform: scale(0.97); }
+.wk-card.match .sim-play {
+    background: linear-gradient(135deg, var(--orange), #E55A2B);
+    box-shadow: 0 4px 15px rgba(255,107,53,0.3);
+}
+.wk-card.sequence .sim-play {
+    background: linear-gradient(135deg, var(--teal), #00B88D);
+    box-shadow: 0 4px 15px rgba(0,217,165,0.3);
+}
+.wk-card.flash .sim-play {
+    background: linear-gradient(135deg, var(--cyan), #00A8AB);
+    box-shadow: 0 4px 15px rgba(0,206,209,0.3);
+}
+.wk-card.pocket .sim-play {
+    background: linear-gradient(135deg, var(--purple), #7D3C98);
+    box-shadow: 0 4px 15px rgba(155,89,182,0.3);
+}
+.wk-card.echo .sim-play {
+    background: linear-gradient(135deg, var(--lime), #28A428);
+    box-shadow: 0 4px 15px rgba(50,205,50,0.3);
+}
+
+/* Pocket sim: watch = purple, target = gold, mixed tap results */
+.sim-cell.watch {
+    background: #9B59B6; border-color: #9B59B6;
+    box-shadow: 0 0 10px rgba(155,89,182,0.5);
+    color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    transform: scale(1.08);
+}
+.sim-cell.target {
+    background: #FFD700; border-color: #FFD700;
+    box-shadow: 0 0 12px rgba(255,215,0,0.5);
+    color: var(--dark); font-weight: 700;
+    transform: scale(1.08);
+}
+.sim-cell.good-tap {
+    background: #FF6B35; border-color: #FF6B35;
+    box-shadow: 0 0 10px rgba(255,107,53,0.4);
+    color: #fff; font-weight: 700;
+    transform: scale(1.04);
+}
+.sim-cell.missed {
+    background: #FF1493; border-color: #FF1493;
+    box-shadow: 0 0 10px rgba(255,20,147,0.4);
+    color: #fff; font-weight: 700;
+    transform: scale(1.0);
+}
+.sim-court.beat-pulse {
+    border-color: #9B59B6 !important;
+    box-shadow: 0 0 12px rgba(155,89,182,0.5);
+}
+@keyframes simBeatBorder {
+    0%,100% { border-color: rgba(155,89,182,0.3); box-shadow: none; }
+    50% { border-color: #9B59B6; box-shadow: 0 0 10px rgba(155,89,182,0.4); }
+}
+.sim-court.beating {
+    animation: simBeatBorder 600ms ease-in-out infinite;
+}
+
+/* Echo sim: echo-changed = orange glow, echo-original = dashed gold */
+.sim-cell.echo-lit {
+    background: #FF6B35; border-color: #FF6B35;
+    box-shadow: 0 0 10px rgba(255,107,53,0.5);
+    color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    transform: scale(1.08);
+}
+.sim-cell.echo-changed {
+    background: #FF1493; border-color: #FF1493;
+    box-shadow: 0 0 14px rgba(255,20,147,0.5);
+    color: #fff; font-weight: 700;
+    transform: scale(1.12);
+}
+.sim-cell.echo-original {
+    border: 2px dashed #FFD700;
+    box-shadow: 0 0 10px rgba(255,215,0,0.4);
+    background: rgba(255,215,0,0.15);
+    color: #FFD700;
+}
+
+/* Sim theme colors per game */
+.wk-card.match .sim-court { --sim-border: var(--orange); --sim-flash: var(--orange); --sim-flash-border: var(--gold); --sim-glow: rgba(255,107,53,0.4); }
+.wk-card.sequence .sim-court { --sim-border: var(--teal); --sim-flash: var(--teal); --sim-flash-border: #7FFFD4; --sim-glow: rgba(0,217,165,0.4); }
+.wk-card.flash .sim-court { --sim-border: var(--cyan); --sim-flash: var(--cyan); --sim-flash-border: #7FEFEF; --sim-glow: rgba(0,206,209,0.4); }
+.wk-card.pocket .sim-court { --sim-border: var(--purple); --sim-flash: var(--purple); --sim-flash-border: #D2A8E0; --sim-glow: rgba(155,89,182,0.4); }
+.wk-card.echo .sim-court { --sim-border: var(--lime); --sim-flash: var(--lime); --sim-flash-border: #90EE90; --sim-glow: rgba(50,205,50,0.4); }
+
+@media (min-width: 600px) {
+    .sim-court { width: 210px; height: 210px; }
+    .sim-cell { font-size: 0.9rem; }
+}
 
 /* ============ MID-PAGE CTA ============ */
 .mid-cta {
@@ -294,8 +394,6 @@ body.es .lang-en { display: none !important; }
 }
 
 @media (min-width: 600px) {
-    .demo-court { width: 260px; height: 260px; }
-    .demo-cell { font-size: 1.15rem; }
     .mid-cta-text { font-size: 0.9rem; }
 }
 
@@ -691,25 +789,6 @@ body.es .lang-en { display: none !important; }
     </div>
 </section>
 
-<!-- ============ GRID DEMO ============ -->
-<div class="grid-demo reveal">
-    <div class="grid-demo-label" id="demoLabel">
-        <span class="lang-en">THIS IS THE COURT</span>
-        <span class="lang-es">ESTA ES LA CANCHA</span>
-    </div>
-    <div class="demo-court" id="demoCourt">
-        <div class="demo-cell" data-d="0"></div><div class="demo-cell" data-d="1"></div><div class="demo-cell" data-d="2"></div><div class="demo-cell" data-d="3"></div><div class="demo-cell" data-d="4"></div>
-        <div class="demo-cell" data-d="5"></div><div class="demo-cell" data-d="6"></div><div class="demo-cell" data-d="7"></div><div class="demo-cell" data-d="8"></div><div class="demo-cell" data-d="9"></div>
-        <div class="demo-cell" data-d="10"></div><div class="demo-cell" data-d="11"></div><div class="demo-cell" data-d="12"></div><div class="demo-cell" data-d="13"></div><div class="demo-cell" data-d="14"></div>
-        <div class="demo-cell" data-d="15"></div><div class="demo-cell" data-d="16"></div><div class="demo-cell" data-d="17"></div><div class="demo-cell" data-d="18"></div><div class="demo-cell" data-d="19"></div>
-        <div class="demo-cell" data-d="20"></div><div class="demo-cell" data-d="21"></div><div class="demo-cell" data-d="22"></div><div class="demo-cell" data-d="23"></div><div class="demo-cell" data-d="24"></div>
-    </div>
-    <p class="grid-demo-caption" id="demoCaption">
-        <span class="lang-en">Watch the cells light up → Recognize → Recall in order.<br>The <em>speed</em> is what makes it a challenge.</span>
-        <span class="lang-es">Las celdas se iluminan → Reconoce → Recuerda en orden.<br>La <em>velocidad</em> es lo que lo hace un desafío.</span>
-    </p>
-</div>
-
 <!-- ============ §2 THE 5 GAMES ============ -->
 <section class="section reveal" id="workouts">
     <div class="section-badge">
@@ -736,12 +815,20 @@ body.es .lang-en { display: none !important; }
                     <p class="wk-tagline"><span class="lang-en">Spatial Patterns — Position + Numbers</span><span class="lang-es">Patrones Espaciales — Posición + Números</span></p>
                 </div>
             </div>
-            <div class="wk-body">
-                <ol class="wk-steps">
-                    <li class="wk-step"><span class="wk-num">1</span><span class="wk-text"><span class="lang-en">Numbered cells light up <strong>simultaneously</strong> on the grid</span><span class="lang-es">Celdas numeradas se iluminan <strong>simultáneamente</strong></span></span></li>
-                    <li class="wk-step"><span class="wk-num">2</span><span class="wk-text"><span class="lang-en">Recognize both <strong>positions</strong> and <strong>numbers</strong></span><span class="lang-es">Reconoce las <strong>posiciones</strong> y los <strong>números</strong></span></span></li>
-                    <li class="wk-step"><span class="wk-num">3</span><span class="wk-text"><span class="lang-en">Tap cells in <strong>numerical order</strong> (1, 2, 3...)</span><span class="lang-es">Toca las celdas en <strong>orden numérico</strong> (1, 2, 3...)</span></span></li>
-                </ol>
+            <div class="sim-wrap">
+                <div class="sim-label" id="simMatchLabel">
+                    <span class="lang-en">NUMBERED CELLS FLASH — RECALL IN ORDER</span>
+                    <span class="lang-es">CELDAS NUMERADAS — RECUERDA EN ORDEN</span>
+                </div>
+                <div class="sim-court" id="simMatchCourt"></div>
+                <p class="sim-caption">
+                    <span class="lang-en">All cells flash <strong>at once</strong> with numbers — tap back 1, 2, 3...</span>
+                    <span class="lang-es">Todas las celdas parpadean <strong>a la vez</strong> con números — repite 1, 2, 3...</span>
+                </p>
+                <a href="/the-match.html" class="sim-play">
+                    <span class="lang-en">PLAY THE MATCH →</span>
+                    <span class="lang-es">JUGAR THE MATCH →</span>
+                </a>
             </div>
         </div>
 
@@ -754,12 +841,20 @@ body.es .lang-en { display: none !important; }
                     <p class="wk-tagline"><span class="lang-en">Sequential Patterns — Order Matters</span><span class="lang-es">Patrones Secuenciales — El Orden Importa</span></p>
                 </div>
             </div>
-            <div class="wk-body">
-                <ol class="wk-steps">
-                    <li class="wk-step"><span class="wk-num">1</span><span class="wk-text"><span class="lang-en">Cells light up <strong>one by one</strong> in sequence</span><span class="lang-es">Celdas se iluminan <strong>una por una</strong> en secuencia</span></span></li>
-                    <li class="wk-step"><span class="wk-num">2</span><span class="wk-text"><span class="lang-en">Pay attention to the <strong>exact order</strong></span><span class="lang-es">Presta atención al <strong>orden exacto</strong></span></span></li>
-                    <li class="wk-step"><span class="wk-num">3</span><span class="wk-text"><span class="lang-en">Tap them back in the <strong>same sequence</strong></span><span class="lang-es">Repítelas en la <strong>misma secuencia</strong></span></span></li>
-                </ol>
+            <div class="sim-wrap">
+                <div class="sim-label" id="simSeqLabel">
+                    <span class="lang-en">CELLS FLASH ONE BY ONE — RECALL THE ORDER</span>
+                    <span class="lang-es">CELDAS UNA POR UNA — RECUERDA EL ORDEN</span>
+                </div>
+                <div class="sim-court" id="simSeqCourt"></div>
+                <p class="sim-caption">
+                    <span class="lang-en">Cells light up <strong>one at a time</strong> — tap back in the <strong>same sequence</strong></span>
+                    <span class="lang-es">Las celdas se iluminan <strong>una a la vez</strong> — repite en la <strong>misma secuencia</strong></span>
+                </p>
+                <a href="/the-sequence.html" class="sim-play">
+                    <span class="lang-en">PLAY THE SEQUENCE →</span>
+                    <span class="lang-es">JUGAR THE SEQUENCE →</span>
+                </a>
             </div>
         </div>
 
@@ -772,12 +867,20 @@ body.es .lang-en { display: none !important; }
                     <p class="wk-tagline"><span class="lang-en">Pure Position Recall — No Numbers</span><span class="lang-es">Reconocimiento Puro — Sin Números</span></p>
                 </div>
             </div>
-            <div class="wk-body">
-                <ol class="wk-steps">
-                    <li class="wk-step"><span class="wk-num">1</span><span class="wk-text"><span class="lang-en">Cells flash briefly <strong>without numbers</strong></span><span class="lang-es">Celdas parpadean brevemente <strong>sin números</strong></span></span></li>
-                    <li class="wk-step"><span class="wk-num">2</span><span class="wk-text"><span class="lang-en">Focus on <strong>which positions</strong> lit up</span><span class="lang-es">Enfócate en <strong>cuáles posiciones</strong> se iluminaron</span></span></li>
-                    <li class="wk-step"><span class="wk-num">3</span><span class="wk-text"><span class="lang-en">Tap all cells that flashed (any order)</span><span class="lang-es">Toca todas las celdas que parpadearon (cualquier orden)</span></span></li>
-                </ol>
+            <div class="sim-wrap">
+                <div class="sim-label" id="simFlashLabel">
+                    <span class="lang-en">POSITIONS FLASH — NO NUMBERS, NO ORDER</span>
+                    <span class="lang-es">POSICIONES PARPADEAN — SIN NÚMEROS, SIN ORDEN</span>
+                </div>
+                <div class="sim-court" id="simFlashCourt"></div>
+                <p class="sim-caption">
+                    <span class="lang-en">Cells flash <strong>without numbers</strong> — tap back the <strong>positions</strong> (any order)</span>
+                    <span class="lang-es">Las celdas parpadean <strong>sin números</strong> — toca las <strong>posiciones</strong> (cualquier orden)</span>
+                </p>
+                <a href="/the-flash.html" class="sim-play">
+                    <span class="lang-en">PLAY THE FLASH →</span>
+                    <span class="lang-es">JUGAR THE FLASH →</span>
+                </a>
             </div>
         </div>
 
@@ -790,12 +893,20 @@ body.es .lang-en { display: none !important; }
                     <p class="wk-tagline"><span class="lang-en">Rhythm Performance — Beat the Clock</span><span class="lang-es">Rendimiento Rítmico — Contra el Reloj</span></p>
                 </div>
             </div>
-            <div class="wk-body">
-                <ol class="wk-steps">
-                    <li class="wk-step"><span class="wk-num">1</span><span class="wk-text"><span class="lang-en">A cell lights up on the grid</span><span class="lang-es">Una celda se ilumina en la cuadrícula</span></span></li>
-                    <li class="wk-step"><span class="wk-num">2</span><span class="wk-text"><span class="lang-en">Tap it <strong>as fast as possible</strong> before timeout</span><span class="lang-es">Tócala <strong>lo más rápido posible</strong> antes de que expire</span></span></li>
-                    <li class="wk-step"><span class="wk-num">3</span><span class="wk-text"><span class="lang-en">Keep going — cells appear faster as you progress!</span><span class="lang-es">¡Continúa — aparecen más rápido al avanzar!</span></span></li>
-                </ol>
+            <div class="sim-wrap">
+                <div class="sim-label" id="simPocketLabel">
+                    <span class="lang-en">WATCH THE BEAT — THEN TAP ON TIME</span>
+                    <span class="lang-es">MIRA EL RITMO — LUEGO TOCA A TIEMPO</span>
+                </div>
+                <div class="sim-court" id="simPocketCourt"></div>
+                <p class="sim-caption">
+                    <span class="lang-en">Watch the pattern on the beat — then <strong>tap each cell in rhythm</strong></span>
+                    <span class="lang-es">Observa el patrón en el ritmo — luego <strong>toca cada celda al compás</strong></span>
+                </p>
+                <a href="/the-pocket.html" class="sim-play">
+                    <span class="lang-en">PLAY THE POCKET →</span>
+                    <span class="lang-es">JUGAR THE POCKET →</span>
+                </a>
             </div>
         </div>
 
@@ -805,15 +916,23 @@ body.es .lang-en { display: none !important; }
                 <span class="wk-icon">🔊</span>
                 <div class="wk-info">
                     <h3 class="wk-name">THE ECHO</h3>
-                    <p class="wk-tagline"><span class="lang-en">Pattern Comparison — Same or Different?</span><span class="lang-es">Comparación de Patrones — ¿Igual o Diferente?</span></p>
+                    <p class="wk-tagline"><span class="lang-en">Pattern Comparison — Spot the Change</span><span class="lang-es">Comparación de Patrones — Encuentra el Cambio</span></p>
                 </div>
             </div>
-            <div class="wk-body">
-                <ol class="wk-steps">
-                    <li class="wk-step"><span class="wk-num">1</span><span class="wk-text"><span class="lang-en">Watch a <strong>pattern flash</strong> — recognize the positions</span><span class="lang-es">Observa un <strong>patrón</strong> — reconoce las posiciones</span></span></li>
-                    <li class="wk-step"><span class="wk-num">2</span><span class="wk-text"><span class="lang-en">A <strong>second pattern</strong> flashes — same or different?</span><span class="lang-es">Un <strong>segundo patrón</strong> — ¿igual o diferente?</span></span></li>
-                    <li class="wk-step"><span class="wk-num">3</span><span class="wk-text"><span class="lang-en">Tap <strong>SAME</strong> or <strong>DIFFERENT</strong> — trust your eyes!</span><span class="lang-es">Toca <strong>IGUAL</strong> o <strong>DIFERENTE</strong> — ¡confía en tus ojos!</span></span></li>
-                </ol>
+            <div class="sim-wrap">
+                <div class="sim-label" id="simEchoLabel">
+                    <span class="lang-en">WATCH — THEN SPOT WHAT CHANGED IN THE ECHO</span>
+                    <span class="lang-es">OBSERVA — LUEGO ENCUENTRA EL CAMBIO EN EL ECO</span>
+                </div>
+                <div class="sim-court" id="simEchoCourt"></div>
+                <p class="sim-caption">
+                    <span class="lang-en">Watch a pattern — then the <strong>Echo replays with one change</strong>. Spot it!</span>
+                    <span class="lang-es">Observa un patrón — luego el <strong>Eco repite con un cambio</strong>. ¡Encuéntralo!</span>
+                </p>
+                <a href="/the-echo.html" class="sim-play">
+                    <span class="lang-en">PLAY THE ECHO →</span>
+                    <span class="lang-es">JUGAR THE ECHO →</span>
+                </a>
             </div>
         </div>
 
@@ -1091,92 +1210,415 @@ body.es .lang-en { display: none !important; }
     window.addEventListener('load', checkReveal);
     checkReveal();
 
-    /* ============ GRID DEMO ANIMATION ============ */
-    var demoPattern = [
-        { idx: 2, num: '1' },
-        { idx: 10, num: '2' },
-        { idx: 21, num: '3' },
-        { idx: 9, num: '4' },
-        { idx: 24, num: '5' }
-    ];
-    var demoCells = document.querySelectorAll('.demo-cell');
-    var demoLabel = document.getElementById('demoLabel');
-    var demoRunning = false;
-
-    function demoReset() {
-        demoCells.forEach(function(c) {
-            c.className = 'demo-cell';
-            c.textContent = '';
-        });
-        demoLabel.className = 'grid-demo-label';
-        demoLabel.innerHTML = '<span class="lang-en">THIS IS THE COURT</span><span class="lang-es">ESTA ES LA CANCHA</span>';
-    }
-
-    function demoRound() {
-        if (!demoRunning) return;
-        demoReset();
-
-        /* Phase 1: Show pattern (600ms in) */
-        setTimeout(function() {
-            if (!demoRunning) return;
-            demoLabel.innerHTML = '<span class="lang-en">⏱ RECOGNIZE!</span><span class="lang-es">⏱ ¡RECONOCE!</span>';
-            demoLabel.className = 'grid-demo-label phase-show';
-            demoPattern.forEach(function(p) {
-                demoCells[p.idx].classList.add('lit');
-                demoCells[p.idx].textContent = p.num;
-            });
-        }, 600);
-
-        /* Phase 2: Hide pattern (3100ms in) */
-        setTimeout(function() {
-            if (!demoRunning) return;
-            demoPattern.forEach(function(p) {
-                demoCells[p.idx].classList.remove('lit');
-                demoCells[p.idx].textContent = '';
-            });
-            demoLabel.innerHTML = '<span class="lang-en">👆 TAP IN ORDER!</span><span class="lang-es">👆 ¡TOCA EN ORDEN!</span>';
-            demoLabel.className = 'grid-demo-label phase-tap';
-        }, 3100);
-
-        /* Phase 3: Tap correct one by one (3600ms in, staggered 400ms each) */
-        demoPattern.forEach(function(p, i) {
-            setTimeout(function() {
-                if (!demoRunning) return;
-                demoCells[p.idx].classList.add('correct');
-                demoCells[p.idx].textContent = '✓';
-            }, 3600 + (i * 400));
-        });
-
-        /* Phase 4: Celebration (5800ms in) */
-        setTimeout(function() {
-            if (!demoRunning) return;
-            demoLabel.innerHTML = '<span class="lang-en">✅ PERFECT!</span><span class="lang-es">✅ ¡PERFECTO!</span>';
-            demoLabel.className = 'grid-demo-label phase-done';
-        }, 5800);
-
-        /* Phase 5: Reset and loop (7500ms) */
-        setTimeout(function() {
-            if (demoRunning) demoRound();
-        }, 7500);
-    }
-
-    /* Start/stop demo based on visibility */
-    var demoSection = document.querySelector('.grid-demo');
-    function checkDemoVisibility() {
-        if (!demoSection) return;
-        var rect = demoSection.getBoundingClientRect();
-        var visible = rect.top < window.innerHeight && rect.bottom > 0;
-        if (visible && !demoRunning) {
-            demoRunning = true;
-            demoRound();
-        } else if (!visible && demoRunning) {
-            demoRunning = false;
-            demoReset();
+    /* ============ GAME SIMULATION ENGINE ============ */
+    function buildSimGrid(courtId, count) {
+        var court = document.getElementById(courtId);
+        if (!court) return [];
+        court.innerHTML = '';
+        var cells = [];
+        for (var i = 0; i < count; i++) {
+            var c = document.createElement('div');
+            c.className = 'sim-cell';
+            c.dataset.si = i;
+            court.appendChild(c);
+            cells.push(c);
         }
+        return cells;
     }
-    window.addEventListener('scroll', checkDemoVisibility);
-    window.addEventListener('load', checkDemoVisibility);
-    checkDemoVisibility();
+
+    function simReset(cells, label) {
+        cells.forEach(function(c) { c.className = 'sim-cell'; c.textContent = ''; });
+        if (label) { label.className = 'sim-label'; }
+    }
+
+    function randomPattern(total, count) {
+        var avail = [];
+        for (var i = 0; i < total; i++) avail.push(i);
+        for (var j = avail.length - 1; j > 0; j--) {
+            var k = Math.floor(Math.random() * (j + 1));
+            var t = avail[j]; avail[j] = avail[k]; avail[k] = t;
+        }
+        return avail.slice(0, count);
+    }
+
+    /* ============ THE MATCH SIMULATION ============ */
+    var matchCells = buildSimGrid('simMatchCourt', 25);
+    var matchLabel = document.getElementById('simMatchLabel');
+    var matchEpoch = 0;
+
+    function matchRound(epoch) {
+        if (epoch !== matchEpoch) return;
+        var pattern = randomPattern(25, 5);
+        simReset(matchCells, matchLabel);
+
+        setTimeout(function() {
+            if (epoch !== matchEpoch) return;
+            matchLabel.innerHTML = '<span class="lang-en">⏱ RECOGNIZE!</span><span class="lang-es">⏱ ¡RECONOCE!</span>';
+            matchLabel.className = 'sim-label phase-show';
+            pattern.forEach(function(idx, num) {
+                matchCells[idx].classList.add('lit');
+                matchCells[idx].textContent = num + 1;
+            });
+        }, 500);
+
+        setTimeout(function() {
+            if (epoch !== matchEpoch) return;
+            pattern.forEach(function(idx) {
+                matchCells[idx].classList.remove('lit');
+                matchCells[idx].textContent = '';
+            });
+            matchLabel.innerHTML = '<span class="lang-en">👆 RECALL IN ORDER!</span><span class="lang-es">👆 ¡RECUERDA EN ORDEN!</span>';
+            matchLabel.className = 'sim-label phase-tap';
+        }, 2800);
+
+        pattern.forEach(function(idx, i) {
+            setTimeout(function() {
+                if (epoch !== matchEpoch) return;
+                matchCells[idx].classList.add('correct');
+                matchCells[idx].textContent = '✓';
+            }, 3300 + (i * 350));
+        });
+
+        setTimeout(function() {
+            if (epoch !== matchEpoch) return;
+            matchLabel.innerHTML = '<span class="lang-en">✅ PERFECT!</span><span class="lang-es">✅ ¡PERFECTO!</span>';
+            matchLabel.className = 'sim-label phase-done';
+        }, 5200);
+
+        setTimeout(function() { if (epoch === matchEpoch) matchRound(epoch); }, 7000);
+    }
+
+    /* Visibility observer for all sims */
+    function createSimObserver(element, startFn, stopFn) {
+        if (!element) return;
+        var running = false;
+        function check() {
+            var rect = element.getBoundingClientRect();
+            var vis = rect.top < window.innerHeight && rect.bottom > 0;
+            if (vis && !running) { running = true; startFn(); }
+            else if (!vis && running) { running = false; stopFn(); }
+        }
+        window.addEventListener('scroll', check);
+        window.addEventListener('load', check);
+        check();
+    }
+
+    var matchCard = document.querySelector('.wk-card.match');
+    createSimObserver(matchCard,
+        function() { matchEpoch++; matchRound(matchEpoch); },
+        function() { matchEpoch++; simReset(matchCells, matchLabel);
+            matchLabel.innerHTML = '<span class="lang-en">NUMBERED CELLS FLASH — RECALL IN ORDER</span><span class="lang-es">CELDAS NUMERADAS — RECUERDA EN ORDEN</span>';
+        }
+    );
+
+    /* ============ THE SEQUENCE SIMULATION ============ */
+    var seqCells = buildSimGrid('simSeqCourt', 25);
+    var seqLabel = document.getElementById('simSeqLabel');
+    var seqEpoch = 0;
+    var SEQ_COLORS = ['#FFD700', '#00D9A5', '#FF6B35', '#FF1493'];
+
+    function seqResetStyles() {
+        seqCells.forEach(function(c) { c.style.background = ''; c.style.borderColor = ''; c.style.boxShadow = ''; c.style.color = 'transparent'; c.style.transform = ''; });
+    }
+
+    function seqRound(epoch) {
+        if (epoch !== seqEpoch) return;
+        var pattern = randomPattern(25, 5);
+        simReset(seqCells, seqLabel);
+        seqResetStyles();
+
+        setTimeout(function() {
+            if (epoch !== seqEpoch) return;
+            seqLabel.innerHTML = '<span class="lang-en">⏱ WATCH THE ORDER!</span><span class="lang-es">⏱ ¡MIRA EL ORDEN!</span>';
+            seqLabel.className = 'sim-label phase-show';
+        }, 400);
+
+        pattern.forEach(function(idx, i) {
+            setTimeout(function() {
+                if (epoch !== seqEpoch) return;
+                var color = SEQ_COLORS[i % SEQ_COLORS.length];
+                seqCells[idx].style.background = color;
+                seqCells[idx].style.borderColor = color;
+                seqCells[idx].style.boxShadow = '0 0 10px ' + color;
+                seqCells[idx].style.color = '#fff';
+                seqCells[idx].style.transform = 'scale(1.08)';
+                seqCells[idx].textContent = i + 1;
+            }, 600 + (i * 500));
+            setTimeout(function() {
+                if (epoch !== seqEpoch) return;
+                seqCells[idx].style.background = '';
+                seqCells[idx].style.borderColor = '';
+                seqCells[idx].style.boxShadow = '';
+                seqCells[idx].style.color = 'transparent';
+                seqCells[idx].style.transform = '';
+                seqCells[idx].textContent = '';
+            }, 600 + (i * 500) + 400);
+        });
+
+        var seqShowEnd = 600 + (5 * 500) + 200;
+        setTimeout(function() {
+            if (epoch !== seqEpoch) return;
+            seqLabel.innerHTML = '<span class="lang-en">👆 RECALL THE SEQUENCE!</span><span class="lang-es">👆 ¡RECUERDA LA SECUENCIA!</span>';
+            seqLabel.className = 'sim-label phase-tap';
+        }, seqShowEnd);
+
+        pattern.forEach(function(idx, i) {
+            setTimeout(function() {
+                if (epoch !== seqEpoch) return;
+                seqCells[idx].classList.add('correct');
+                seqCells[idx].textContent = '✓';
+            }, seqShowEnd + 400 + (i * 350));
+        });
+
+        setTimeout(function() {
+            if (epoch !== seqEpoch) return;
+            seqLabel.innerHTML = '<span class="lang-en">✅ PERFECT!</span><span class="lang-es">✅ ¡PERFECTO!</span>';
+            seqLabel.className = 'sim-label phase-done';
+        }, seqShowEnd + 400 + (5 * 350) + 200);
+
+        setTimeout(function() { if (epoch === seqEpoch) seqRound(epoch); }, seqShowEnd + 400 + (5 * 350) + 2000);
+    }
+
+    var seqCard = document.querySelector('.wk-card.sequence');
+    createSimObserver(seqCard,
+        function() { seqEpoch++; seqRound(seqEpoch); },
+        function() { seqEpoch++; simReset(seqCells, seqLabel); seqResetStyles();
+            seqLabel.innerHTML = '<span class="lang-en">CELLS FLASH ONE BY ONE — RECALL THE ORDER</span><span class="lang-es">CELDAS UNA POR UNA — RECUERDA EL ORDEN</span>';
+        }
+    );
+
+    /* ============ THE FLASH SIMULATION ============ */
+    var flashCells = buildSimGrid('simFlashCourt', 25);
+    var flashLabel = document.getElementById('simFlashLabel');
+    var flashEpoch = 0;
+
+    function flashRound(epoch) {
+        if (epoch !== flashEpoch) return;
+        var pattern = randomPattern(25, 5);
+        simReset(flashCells, flashLabel);
+
+        /* Phase 1: All cells flash cyan simultaneously — NO numbers */
+        setTimeout(function() {
+            if (epoch !== flashEpoch) return;
+            flashLabel.innerHTML = '<span class="lang-en">⚡ FLASH!</span><span class="lang-es">⚡ ¡FLASH!</span>';
+            flashLabel.className = 'sim-label phase-show';
+            pattern.forEach(function(idx) {
+                flashCells[idx].classList.add('lit');
+            });
+        }, 500);
+
+        /* Phase 2: Go dark */
+        setTimeout(function() {
+            if (epoch !== flashEpoch) return;
+            pattern.forEach(function(idx) { flashCells[idx].classList.remove('lit'); });
+            flashLabel.innerHTML = '<span class="lang-en">👆 FIND THEM!</span><span class="lang-es">👆 ¡ENCUÉNTRALOS!</span>';
+            flashLabel.className = 'sim-label phase-tap';
+        }, 2200);
+
+        /* Phase 3: Tap correct (any order — slight stagger) */
+        pattern.forEach(function(idx, i) {
+            setTimeout(function() {
+                if (epoch !== flashEpoch) return;
+                flashCells[idx].classList.add('correct');
+                flashCells[idx].textContent = '✓';
+            }, 2700 + (i * 250));
+        });
+
+        /* Phase 4: Celebration */
+        setTimeout(function() {
+            if (epoch !== flashEpoch) return;
+            flashLabel.innerHTML = '<span class="lang-en">✅ ALL FOUND!</span><span class="lang-es">✅ ¡TODOS!</span>';
+            flashLabel.className = 'sim-label phase-done';
+        }, 2700 + (5 * 250) + 200);
+
+        /* Phase 5: Loop */
+        setTimeout(function() { if (epoch === flashEpoch) flashRound(epoch); }, 2700 + (5 * 250) + 2000);
+    }
+
+    var flashCard = document.querySelector('.wk-card.flash');
+    createSimObserver(flashCard,
+        function() { flashEpoch++; flashRound(flashEpoch); },
+        function() { flashEpoch++; simReset(flashCells, flashLabel);
+            flashLabel.innerHTML = '<span class="lang-en">POSITIONS FLASH — NO NUMBERS, NO ORDER</span><span class="lang-es">POSICIONES PARPADEAN — SIN NÚMEROS, SIN ORDEN</span>';
+        }
+    );
+
+    /* ============ THE POCKET SIMULATION ============ */
+    var pocketCells = buildSimGrid('simPocketCourt', 25);
+    var pocketLabel = document.getElementById('simPocketLabel');
+    var pocketCourt = document.getElementById('simPocketCourt');
+    var pocketEpoch = 0;
+
+    function pocketRound(epoch) {
+        if (epoch !== pocketEpoch) return;
+        var pattern = randomPattern(25, 5);
+        simReset(pocketCells, pocketLabel);
+        pocketCourt.classList.remove('beating');
+
+        var beatMs = 650;
+        /* Pre-assign tap results: mix of perfect, good, miss */
+        var results = ['correct', 'correct', 'good-tap', 'correct', 'good-tap'];
+        var labels  = ['✨', '✨', '👍', '✨', '👍'];
+
+        /* Phase 1: GET READY + start beat pulse */
+        setTimeout(function() {
+            if (epoch !== pocketEpoch) return;
+            pocketLabel.innerHTML = '<span class="lang-en">🎯 TAP EACH CELL ON THE BEAT</span><span class="lang-es">🎯 TOCA CADA CELDA AL RITMO</span>';
+            pocketLabel.className = 'sim-label phase-tap';
+            pocketCourt.classList.add('beating');
+        }, 300);
+
+        /* Phase 2: Targets appear one by one on the beat — immediate tap reaction */
+        pattern.forEach(function(idx, i) {
+            /* Gold target appears */
+            setTimeout(function() {
+                if (epoch !== pocketEpoch) return;
+                /* Clear previous target (only one active at a time) */
+                pocketCells.forEach(function(c) { c.classList.remove('target'); });
+                pocketCells[idx].classList.add('target');
+                pocketCells[idx].textContent = '';
+            }, 600 + (i * beatMs));
+
+            /* Quick "tap" reaction — show result */
+            setTimeout(function() {
+                if (epoch !== pocketEpoch) return;
+                pocketCells[idx].classList.remove('target');
+                pocketCells[idx].classList.add(results[i]);
+                pocketCells[idx].textContent = labels[i];
+            }, 600 + (i * beatMs) + 180);
+        });
+
+        var playEnd = 600 + (5 * beatMs) + 100;
+
+        /* Phase 3: Score summary */
+        setTimeout(function() {
+            if (epoch !== pocketEpoch) return;
+            pocketCourt.classList.remove('beating');
+            pocketLabel.innerHTML = '<span class="lang-en">✅ 3 PERFECT · 2 GOOD — IN THE POCKET!</span><span class="lang-es">✅ 3 PERFECTO · 2 BIEN — ¡EN EL POCKET!</span>';
+            pocketLabel.className = 'sim-label phase-done';
+        }, playEnd);
+
+        /* Phase 4: Loop */
+        setTimeout(function() { if (epoch === pocketEpoch) pocketRound(epoch); }, playEnd + 2200);
+    }
+
+    var pocketCard = document.querySelector('.wk-card.pocket');
+    createSimObserver(pocketCard,
+        function() { pocketEpoch++; pocketRound(pocketEpoch); },
+        function() { pocketEpoch++; simReset(pocketCells, pocketLabel);
+            if (pocketCourt) pocketCourt.classList.remove('beating');
+            pocketLabel.innerHTML = '<span class="lang-en">WATCH THE BEAT — THEN TAP ON TIME</span><span class="lang-es">MIRA EL RITMO — LUEGO TOCA A TIEMPO</span>';
+        }
+    );
+
+    /* ============ THE ECHO SIMULATION ============ */
+    var echoCells = buildSimGrid('simEchoCourt', 25);
+    var echoLabel = document.getElementById('simEchoLabel');
+    var echoEpoch = 0;
+
+    function echoRound(epoch) {
+        if (epoch !== echoEpoch) return;
+        /* Generate original pattern + echo with one swap */
+        var original = randomPattern(25, 4);
+        var changePos = Math.floor(Math.random() * 4);
+        var echo = original.slice();
+        var newCell;
+        do { newCell = Math.floor(Math.random() * 25); } while (original.indexOf(newCell) !== -1);
+        echo[changePos] = newCell;
+
+        simReset(echoCells, echoLabel);
+        var beatMs = 550;
+
+        /* Phase 1: WATCH — orange cells one by one */
+        setTimeout(function() {
+            if (epoch !== echoEpoch) return;
+            echoLabel.innerHTML = '<span class="lang-en">👁️ WATCH</span><span class="lang-es">👁️ OBSERVA</span>';
+            echoLabel.className = 'sim-label phase-show';
+        }, 300);
+
+        original.forEach(function(idx, i) {
+            setTimeout(function() {
+                if (epoch !== echoEpoch) return;
+                echoCells[idx].classList.add('echo-lit');
+                echoCells[idx].textContent = i + 1;
+            }, 500 + (i * beatMs));
+            setTimeout(function() {
+                if (epoch !== echoEpoch) return;
+                echoCells[idx].classList.remove('echo-lit');
+                echoCells[idx].textContent = '';
+            }, 500 + (i * beatMs) + (beatMs * 0.55));
+        });
+
+        var watchEnd = 500 + (4 * beatMs) + 300;
+
+        /* Phase 2: ECHO — replay with one cell different */
+        setTimeout(function() {
+            if (epoch !== echoEpoch) return;
+            echoLabel.innerHTML = '<span class="lang-en">🔊 THE ECHO...</span><span class="lang-es">🔊 EL ECO...</span>';
+            echoLabel.className = 'sim-label';
+            echoLabel.style.color = '#FF6B35';
+        }, watchEnd);
+
+        echo.forEach(function(idx, i) {
+            setTimeout(function() {
+                if (epoch !== echoEpoch) return;
+                echoCells[idx].classList.add('echo-lit');
+                echoCells[idx].textContent = i + 1;
+            }, watchEnd + 200 + (i * beatMs));
+            setTimeout(function() {
+                if (epoch !== echoEpoch) return;
+                echoCells[idx].classList.remove('echo-lit');
+                echoCells[idx].textContent = '';
+            }, watchEnd + 200 + (i * beatMs) + (beatMs * 0.55));
+        });
+
+        var echoEnd = watchEnd + 200 + (4 * beatMs) + 400;
+
+        /* Phase 3: SPOT IT — highlight the changed cell pink, show original dashed */
+        setTimeout(function() {
+            if (epoch !== echoEpoch) return;
+            echoLabel.innerHTML = '<span class="lang-en">🎯 SPOT THE CHANGE!</span><span class="lang-es">🎯 ¡ENCUENTRA EL CAMBIO!</span>';
+            echoLabel.className = 'sim-label phase-tap';
+            echoLabel.style.color = '';
+        }, echoEnd);
+
+        setTimeout(function() {
+            if (epoch !== echoEpoch) return;
+            /* Show the changed cell (pink) */
+            echoCells[newCell].classList.add('echo-changed');
+            echoCells[newCell].textContent = '✗';
+        }, echoEnd + 400);
+
+        setTimeout(function() {
+            if (epoch !== echoEpoch) return;
+            /* Show original cell (dashed gold) */
+            echoCells[original[changePos]].classList.add('echo-original');
+            echoCells[original[changePos]].textContent = changePos + 1;
+            /* Swap changed to correct */
+            echoCells[newCell].classList.remove('echo-changed');
+            echoCells[newCell].classList.add('correct');
+            echoCells[newCell].textContent = '✓';
+        }, echoEnd + 1000);
+
+        /* Phase 4: Celebration */
+        setTimeout(function() {
+            if (epoch !== echoEpoch) return;
+            echoLabel.innerHTML = '<span class="lang-en">✅ SPOTTED!</span><span class="lang-es">✅ ¡ENCONTRADO!</span>';
+            echoLabel.className = 'sim-label phase-done';
+        }, echoEnd + 1400);
+
+        /* Phase 5: Loop */
+        setTimeout(function() { if (epoch === echoEpoch) echoRound(epoch); }, echoEnd + 3200);
+    }
+
+    var echoCard = document.querySelector('.wk-card.echo');
+    createSimObserver(echoCard,
+        function() { echoEpoch++; echoRound(echoEpoch); },
+        function() { echoEpoch++; simReset(echoCells, echoLabel);
+            echoLabel.style.color = '';
+            echoLabel.innerHTML = '<span class="lang-en">WATCH — THEN SPOT WHAT CHANGED IN THE ECHO</span><span class="lang-es">OBSERVA — LUEGO ENCUENTRA EL CAMBIO EN EL ECO</span>';
+        }
+    );
 })();
 </script>
 
