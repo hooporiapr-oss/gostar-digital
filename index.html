@@ -307,6 +307,99 @@ body.es .lang-en { display: none !important; }
     box-shadow: 0 4px 15px rgba(50,205,50,0.3);
 }
 
+/* ============ HOW TO PLAY INSTRUCTIONS ============ */
+.htp-toggle {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-top: 10px; padding: 6px 16px;
+    background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+    border-radius: 20px; cursor: pointer;
+    font-family: 'Outfit', sans-serif; font-size: 0.65rem;
+    font-weight: 600; color: var(--muted); letter-spacing: 0.5px;
+    transition: all 0.25s;
+}
+.htp-toggle:hover, .htp-toggle:active {
+    background: rgba(255,255,255,0.08); color: var(--text);
+    border-color: rgba(255,255,255,0.2);
+}
+.htp-toggle .htp-arrow {
+    font-size: 0.55rem; transition: transform 0.3s;
+}
+.htp-toggle.open .htp-arrow { transform: rotate(180deg); }
+.htp-toggle.open {
+    background: rgba(255,255,255,0.08); color: var(--text);
+    border-color: rgba(255,255,255,0.2);
+}
+.htp-panel {
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.4s ease, opacity 0.3s ease, margin 0.3s ease;
+    opacity: 0; margin-top: 0;
+}
+.htp-panel.open {
+    max-height: 800px; opacity: 1; margin-top: 14px;
+}
+.htp-inner {
+    text-align: left;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+}
+.htp-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.85rem; letter-spacing: 2px;
+    margin-bottom: 12px; text-align: center;
+}
+.wk-card.match .htp-title { color: var(--orange); }
+.wk-card.sequence .htp-title { color: var(--teal); }
+.wk-card.flash .htp-title { color: var(--cyan); }
+.wk-card.pocket .htp-title { color: var(--purple); }
+.wk-card.echo .htp-title { color: var(--lime); }
+
+.htp-step {
+    display: flex; gap: 10px; margin-bottom: 10px;
+    align-items: flex-start;
+}
+.htp-step:last-child { margin-bottom: 0; }
+.htp-step-num {
+    flex-shrink: 0; width: 22px; height: 22px;
+    border-radius: 50%; display: flex;
+    align-items: center; justify-content: center;
+    font-family: 'Bebas Neue', sans-serif; font-size: 0.7rem;
+    color: var(--dark); font-weight: 700; margin-top: 1px;
+}
+.wk-card.match .htp-step-num { background: var(--orange); }
+.wk-card.sequence .htp-step-num { background: var(--teal); }
+.wk-card.flash .htp-step-num { background: var(--cyan); }
+.wk-card.pocket .htp-step-num { background: var(--purple); color: #fff; }
+.wk-card.echo .htp-step-num { background: var(--lime); }
+
+.htp-step-text {
+    font-size: 0.72rem; color: var(--text);
+    line-height: 1.45; flex: 1;
+}
+.htp-step-text strong { color: var(--gold); font-weight: 700; }
+.htp-step-text em { color: var(--muted); font-style: normal; font-size: 0.65rem; }
+
+.htp-section-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.6rem; letter-spacing: 2px;
+    color: var(--muted); margin: 12px 0 8px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+}
+.htp-tip {
+    display: flex; gap: 8px; align-items: flex-start;
+    margin-top: 8px; padding: 8px 10px;
+    background: rgba(255,215,0,0.06);
+    border: 1px solid rgba(255,215,0,0.12);
+    border-radius: 8px;
+}
+.htp-tip-icon { font-size: 0.8rem; flex-shrink: 0; }
+.htp-tip-text {
+    font-size: 0.65rem; color: var(--gold);
+    line-height: 1.4;
+}
+
 /* Pocket sim: watch = purple, target = gold, mixed tap results */
 .sim-cell.watch {
     background: #9B59B6; border-color: #9B59B6;
@@ -829,6 +922,32 @@ body.es .lang-en { display: none !important; }
                     <span class="lang-en">PLAY THE MATCH →</span>
                     <span class="lang-es">JUGAR THE MATCH →</span>
                 </a>
+                <br>
+                <button class="htp-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
+                    <span class="lang-en">📖 HOW TO PLAY</span>
+                    <span class="lang-es">📖 CÓMO JUGAR</span>
+                    <span class="htp-arrow">▼</span>
+                </button>
+                <div class="htp-panel">
+                    <div class="htp-inner">
+                        <div class="htp-title">
+                            <span class="lang-en">🧠 THE MATCH — FULL RULES</span>
+                            <span class="lang-es">🧠 THE MATCH — REGLAS COMPLETAS</span>
+                        </div>
+                        <div class="htp-step"><span class="htp-step-num">1</span><span class="htp-step-text"><span class="lang-en">Choose your <strong>Level</strong> (1–10) and your <strong>Ritnome™ BPM</strong> speed (60 · 90 · 120). Higher levels show more cells. Faster BPM means less time to study.</span><span class="lang-es">Elige tu <strong>Nivel</strong> (1–10) y tu velocidad <strong>Ritnome™ BPM</strong> (60 · 90 · 120). Niveles altos muestran más celdas. BPM rápido significa menos tiempo para estudiar.</span></span></div>
+                        <div class="htp-step"><span class="htp-step-num">2</span><span class="htp-step-text"><span class="lang-en">Tap <strong>LET'S GO</strong>. A group of numbered cells (1, 2, 3...) lights up on the 5×5 grid <strong>all at once</strong>. Recognize their positions AND their numbers.</span><span class="lang-es">Toca <strong>PA'LANTE</strong>. Un grupo de celdas numeradas (1, 2, 3...) se ilumina en la cuadrícula 5×5 <strong>todas a la vez</strong>. Reconoce sus posiciones Y sus números.</span></span></div>
+                        <div class="htp-step"><span class="htp-step-num">3</span><span class="htp-step-text"><span class="lang-en">The cells go dark. Now <strong>tap them back in numerical order</strong> — cell #1 first, then #2, then #3, etc. You must remember both <strong>where</strong> each cell was and <strong>what number</strong> it had.</span><span class="lang-es">Las celdas se apagan. Ahora <strong>tócalas en orden numérico</strong> — celda #1 primero, luego #2, luego #3, etc. Debes recordar <strong>dónde</strong> estaba cada celda y <strong>qué número</strong> tenía.</span></span></div>
+                        <div class="htp-step"><span class="htp-step-num">4</span><span class="htp-step-text"><span class="lang-en">Correct taps turn <strong>teal ✓</strong>. Wrong taps turn <strong>pink ✗</strong> and you lose a life. <em>You have 3 lives per round.</em></span><span class="lang-es">Toques correctos se ponen <strong>verde ✓</strong>. Toques incorrectos se ponen <strong>rosa ✗</strong> y pierdes una vida. <em>Tienes 3 vidas por ronda.</em></span></span></div>
+                        <div class="htp-step"><span class="htp-step-num">5</span><span class="htp-step-text"><span class="lang-en">Complete the full pattern to win the round. <strong>Win 2 rounds to level up.</strong> Progress is saved per BPM speed — each speed has its own level track.</span><span class="lang-es">Completa el patrón completo para ganar la ronda. <strong>Gana 2 rondas para subir de nivel.</strong> El progreso se guarda por velocidad BPM — cada velocidad tiene su propio nivel.</span></span></div>
+                        <div class="htp-section-label"><span class="lang-en">⚙️ GAME FEATURES</span><span class="lang-es">⚙️ CARACTERÍSTICAS</span></div>
+                        <div class="htp-step"><span class="htp-step-num">⛶</span><span class="htp-step-text"><span class="lang-en"><strong>Focus Mode</strong> — hides all UI except the grid and action button. Tap ⛶ to toggle.</span><span class="lang-es"><strong>Modo Enfoque</strong> — oculta toda la interfaz excepto la cuadrícula y el botón. Toca ⛶ para activar.</span></span></div>
+                        <div class="htp-step"><span class="htp-step-num">🔄</span><span class="htp-step-text"><span class="lang-en"><strong>Reset</strong> — restarts the current round without losing your score or level.</span><span class="lang-es"><strong>Reiniciar</strong> — reinicia la ronda actual sin perder tu puntuación o nivel.</span></span></div>
+                        <div class="htp-tip">
+                            <span class="htp-tip-icon">💡</span>
+                            <span class="htp-tip-text"><span class="lang-en">Pro tip: Don't memorize individual cells — try to see the shape of the pattern as a whole. Your visual cortex is faster than your counting brain.</span><span class="lang-es">Consejo pro: No memorices celdas individuales — intenta ver la forma del patrón como un todo. Tu corteza visual es más rápida que tu cerebro contando.</span></span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -855,6 +974,32 @@ body.es .lang-en { display: none !important; }
                     <span class="lang-en">PLAY THE SEQUENCE →</span>
                     <span class="lang-es">JUGAR THE SEQUENCE →</span>
                 </a>
+                <br>
+                <button class="htp-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
+                    <span class="lang-en">📖 HOW TO PLAY</span>
+                    <span class="lang-es">📖 CÓMO JUGAR</span>
+                    <span class="htp-arrow">▼</span>
+                </button>
+                <div class="htp-panel">
+                    <div class="htp-inner">
+                        <div class="htp-title">
+                            <span class="lang-en">🔢 THE SEQUENCE — FULL RULES</span>
+                            <span class="lang-es">🔢 THE SEQUENCE — REGLAS COMPLETAS</span>
+                        </div>
+                        <div class="htp-step"><span class="htp-step-num">1</span><span class="htp-step-text"><span class="lang-en">Choose your <strong>Level</strong> (1–10) and <strong>Ritnome™ BPM</strong> speed. Higher levels = longer sequences. Faster BPM = cells flash faster.</span><span class="lang-es">Elige tu <strong>Nivel</strong> (1–10) y velocidad <strong>Ritnome™ BPM</strong>. Nivel alto = secuencias más largas. BPM rápido = celdas parpadean más rápido.</span></span></div>
+                        <div class="htp-step"><span class="htp-step-num">2</span><span class="htp-step-text"><span class="lang-en">Tap <strong>LET'S GO</strong>. Cells light up <strong>one at a time</strong> in a specific order, each with a different color. Watch carefully — the <strong>order they appear is what matters</strong>.</span><span class="lang-es">Toca <strong>PA'LANTE</strong>. Las celdas se iluminan <strong>una a la vez</strong> en un orden específico, cada una con un color diferente. Observa bien — <strong>el orden de aparición es lo que importa</strong>.</span></span></div>
+                        <div class="htp-step"><span class="htp-step-num">3</span><span class="htp-step-text"><span class="lang-en">The sequence plays <strong>3 times</strong> so you can study it. Labels will say "AGAIN..." and "LAST TIME..." between loops.</span><span class="lang-es">La secuencia se repite <strong>3 veces</strong> para que la estudies. Las etiquetas dirán "OTRA VEZ..." y "ÚLTIMA VEZ..." entre repeticiones.</span></span></div>
+                        <div class="htp-step"><span class="htp-step-num">4</span><span class="htp-step-text"><span class="lang-en">After the countdown (3… 2… 1…), tap the cells back <strong>in the exact order they appeared</strong>. First cell that flashed = first tap, second = second tap, etc.</span><span class="lang-es">Después de la cuenta regresiva (3… 2… 1…), toca las celdas <strong>en el orden exacto en que aparecieron</strong>. Primera celda que parpadeó = primer toque, segunda = segundo toque, etc.</span></span></div>
+                        <div class="htp-step"><span class="htp-step-num">5</span><span class="htp-step-text"><span class="lang-en">Correct taps turn <strong>teal ✓</strong>. Wrong taps turn <strong>pink ✗</strong> and cost a life. <em>3 lives per round.</em> Complete the full sequence to win. <strong>Win 2 rounds to level up.</strong></span><span class="lang-es">Toques correctos se ponen <strong>verde ✓</strong>. Toques incorrectos se ponen <strong>rosa ✗</strong> y pierdes una vida. <em>3 vidas por ronda.</em> Completa la secuencia para ganar. <strong>Gana 2 rondas para subir de nivel.</strong></span></span></div>
+                        <div class="htp-section-label"><span class="lang-en">🆚 MATCH vs. SEQUENCE — WHAT'S THE DIFFERENCE?</span><span class="lang-es">🆚 MATCH vs. SEQUENCE — ¿CUÁL ES LA DIFERENCIA?</span></div>
+                        <div class="htp-step"><span class="htp-step-num">→</span><span class="htp-step-text"><span class="lang-en"><strong>THE MATCH:</strong> All cells flash at once with numbers. You tap them in <strong>numerical order</strong> (1, 2, 3...).</span><span class="lang-es"><strong>THE MATCH:</strong> Todas las celdas parpadean a la vez con números. Las tocas en <strong>orden numérico</strong> (1, 2, 3...).</span></span></div>
+                        <div class="htp-step"><span class="htp-step-num">→</span><span class="htp-step-text"><span class="lang-en"><strong>THE SEQUENCE:</strong> Cells flash one by one. You tap them in the <strong>order they appeared</strong> — no numbers to help you.</span><span class="lang-es"><strong>THE SEQUENCE:</strong> Las celdas parpadean una por una. Las tocas en el <strong>orden en que aparecieron</strong> — sin números que te ayuden.</span></span></div>
+                        <div class="htp-tip">
+                            <span class="htp-tip-icon">💡</span>
+                            <span class="htp-tip-text"><span class="lang-en">Pro tip: Try to "trace a path" with your eyes during the sequence. Connecting cells into a visual route is easier than remembering individual positions.</span><span class="lang-es">Consejo pro: Intenta "trazar un camino" con tus ojos durante la secuencia. Conectar celdas en una ruta visual es más fácil que recordar posiciones individuales.</span></span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -881,6 +1026,31 @@ body.es .lang-en { display: none !important; }
                     <span class="lang-en">PLAY THE FLASH →</span>
                     <span class="lang-es">JUGAR THE FLASH →</span>
                 </a>
+                <br>
+                <button class="htp-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
+                    <span class="lang-en">📖 HOW TO PLAY</span>
+                    <span class="lang-es">📖 CÓMO JUGAR</span>
+                    <span class="htp-arrow">▼</span>
+                </button>
+                <div class="htp-panel">
+                    <div class="htp-inner">
+                        <div class="htp-title">
+                            <span class="lang-en">⚡ THE FLASH — FULL RULES</span>
+                            <span class="lang-es">⚡ THE FLASH — REGLAS COMPLETAS</span>
+                        </div>
+                        <div class="htp-step"><span class="htp-step-num">1</span><span class="htp-step-text"><span class="lang-en">Choose your <strong>Level</strong> (1–10) and <strong>Ritnome™ BPM</strong> speed. Higher levels = more cells to remember. Faster BPM = shorter flash time.</span><span class="lang-es">Elige tu <strong>Nivel</strong> (1–10) y velocidad <strong>Ritnome™ BPM</strong>. Nivel alto = más celdas para recordar. BPM rápido = flash más corto.</span></span></div>
+                        <div class="htp-step"><span class="htp-step-num">2</span><span class="htp-step-text"><span class="lang-en">Tap <strong>LET'S GO</strong>. A group of cells lights up <strong>all at once</strong> — but with <strong>NO numbers</strong>. Just glowing positions. Burn them into your visual field.</span><span class="lang-es">Toca <strong>PA'LANTE</strong>. Un grupo de celdas se ilumina <strong>todas a la vez</strong> — pero <strong>SIN números</strong>. Solo posiciones brillantes. Grábalas en tu campo visual.</span></span></div>
+                        <div class="htp-step"><span class="htp-step-num">3</span><span class="htp-step-text"><span class="lang-en">The flash repeats <strong>3 times</strong> so you can study the positions. Use each repetition to confirm what you saw.</span><span class="lang-es">El flash se repite <strong>3 veces</strong> para que estudies las posiciones. Usa cada repetición para confirmar lo que viste.</span></span></div>
+                        <div class="htp-step"><span class="htp-step-num">4</span><span class="htp-step-text"><span class="lang-en">After the countdown, tap back <strong>all the positions that were lit</strong>. Order doesn't matter — just find them all.</span><span class="lang-es">Después de la cuenta regresiva, toca <strong>todas las posiciones que se iluminaron</strong>. El orden no importa — solo encuéntralas todas.</span></span></div>
+                        <div class="htp-step"><span class="htp-step-num">5</span><span class="htp-step-text"><span class="lang-en">Correct taps turn <strong>teal ✓</strong>. Wrong taps turn <strong>pink ✗</strong> and cost a life. <em>3 lives per round.</em> Find all positions to win. <strong>Win 2 rounds to level up.</strong></span><span class="lang-es">Toques correctos se ponen <strong>verde ✓</strong>. Toques incorrectos se ponen <strong>rosa ✗</strong> y pierdes una vida. <em>3 vidas por ronda.</em> Encuentra todas las posiciones para ganar. <strong>Gana 2 rondas para subir de nivel.</strong></span></span></div>
+                        <div class="htp-section-label"><span class="lang-en">🆚 HOW IS THIS DIFFERENT FROM THE MATCH?</span><span class="lang-es">🆚 ¿EN QUÉ SE DIFERENCIA DE THE MATCH?</span></div>
+                        <div class="htp-step"><span class="htp-step-num">→</span><span class="htp-step-text"><span class="lang-en"><strong>THE MATCH</strong> gives you numbered cells so you know the order. <strong>THE FLASH</strong> strips away all cues — no numbers, no order requirement. Pure position recall from a single visual snapshot.</span><span class="lang-es"><strong>THE MATCH</strong> te da celdas numeradas para que sepas el orden. <strong>THE FLASH</strong> elimina todas las pistas — sin números, sin requisito de orden. Reconocimiento puro de posición desde una sola imagen visual.</span></span></div>
+                        <div class="htp-tip">
+                            <span class="htp-tip-icon">💡</span>
+                            <span class="htp-tip-text"><span class="lang-en">Pro tip: Instead of counting cells, try to see the "constellation" they form — a shape, a letter, a cluster. Spatial memory beats counting at higher levels.</span><span class="lang-es">Consejo pro: En vez de contar celdas, intenta ver la "constelación" que forman — una forma, una letra, un grupo. La percepción espacial gana al conteo en niveles altos.</span></span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -907,6 +1077,31 @@ body.es .lang-en { display: none !important; }
                     <span class="lang-en">PLAY THE POCKET →</span>
                     <span class="lang-es">JUGAR THE POCKET →</span>
                 </a>
+                <br>
+                <button class="htp-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
+                    <span class="lang-en">📖 HOW TO PLAY</span>
+                    <span class="lang-es">📖 CÓMO JUGAR</span>
+                    <span class="htp-arrow">▼</span>
+                </button>
+                <div class="htp-panel">
+                    <div class="htp-inner">
+                        <div class="htp-title">
+                            <span class="lang-en">🎯 THE POCKET — FULL RULES</span>
+                            <span class="lang-es">🎯 THE POCKET — REGLAS COMPLETAS</span>
+                        </div>
+                        <div class="htp-step"><span class="htp-step-num">1</span><span class="htp-step-text"><span class="lang-en">Choose your <strong>Level</strong> (1–10) and <strong>Ritnome™ BPM</strong> speed. Higher levels = more cells in the pattern. Faster BPM = tighter timing windows.</span><span class="lang-es">Elige tu <strong>Nivel</strong> (1–10) y velocidad <strong>Ritnome™ BPM</strong>. Nivel alto = más celdas en el patrón. BPM rápido = ventanas de tiempo más ajustadas.</span></span></div>
+                        <div class="htp-step"><span class="htp-step-num">2</span><span class="htp-step-text"><span class="lang-en">Tap <strong>LET'S GO</strong>. First, the <strong>WATCH phase</strong>: cells light up <strong>one at a time on the beat</strong> (purple glow). Watch the pattern and the rhythm. This plays <strong>3 times</strong>.</span><span class="lang-es">Toca <strong>PA'LANTE</strong>. Primero, la <strong>fase de OBSERVAR</strong>: las celdas se iluminan <strong>una a la vez al ritmo</strong> (brillo púrpura). Observa el patrón y el ritmo. Se repite <strong>3 veces</strong>.</span></span></div>
+                        <div class="htp-step"><span class="htp-step-num">3</span><span class="htp-step-text"><span class="lang-en">After the countdown, the <strong>PLAY phase</strong> begins: cells light up gold <strong>one at a time on the beat</strong> again — but now you must <strong>tap each one as it appears</strong>.</span><span class="lang-es">Después de la cuenta regresiva, comienza la <strong>fase de JUGAR</strong>: las celdas se iluminan doradas <strong>una a la vez al ritmo</strong> — pero ahora debes <strong>tocar cada una cuando aparezca</strong>.</span></span></div>
+                        <div class="htp-step"><span class="htp-step-num">4</span><span class="htp-step-text"><span class="lang-en"><strong>Timing matters!</strong> Tap within the beat window for the best score:<br>• <strong>✨ PERFECT</strong> — tapped within 300ms of the beat (20 pts)<br>• <strong>👍 GOOD</strong> — tapped within 600ms (12 pts)<br>• <strong>💨 MISS</strong> — too slow or wrong cell (lose a life)</span><span class="lang-es"><strong>¡El tiempo importa!</strong> Toca dentro de la ventana del ritmo para mejor puntuación:<br>• <strong>✨ PERFECTO</strong> — tocado dentro de 300ms del pulso (20 pts)<br>• <strong>👍 BIEN</strong> — tocado dentro de 600ms (12 pts)<br>• <strong>💨 FALLO</strong> — muy lento o celda incorrecta (pierdes una vida)</span></span></div>
+                        <div class="htp-step"><span class="htp-step-num">5</span><span class="htp-step-text"><span class="lang-en"><em>3 lives per round.</em> Complete the full pattern to win. <strong>Win 2 rounds to level up.</strong> Your score reflects how precisely you ride the beat.</span><span class="lang-es"><em>3 vidas por ronda.</em> Completa el patrón para ganar. <strong>Gana 2 rondas para subir de nivel.</strong> Tu puntuación refleja qué tan preciso sigues el ritmo.</span></span></div>
+                        <div class="htp-section-label"><span class="lang-en">🆚 WHY IS THIS DIFFERENT?</span><span class="lang-es">🆚 ¿POR QUÉ ES DIFERENTE?</span></div>
+                        <div class="htp-step"><span class="htp-step-num">→</span><span class="htp-step-text"><span class="lang-en">The other games test <strong>recognition & recall</strong> — study a pattern, then reproduce it from scratch. THE POCKET tests <strong>rhythm performance</strong> — the pattern repeats in real-time and you must react <strong>on the beat</strong>. It's not about what you remember — it's about how fast you respond.</span><span class="lang-es">Los otros juegos prueban <strong>reconocimiento y recuerdo</strong> — estudia un patrón, luego reprodúcelo de cero. THE POCKET prueba <strong>rendimiento rítmico</strong> — el patrón se repite en tiempo real y debes reaccionar <strong>al ritmo</strong>. No se trata de lo que recuerdas — sino de qué tan rápido respondes.</span></span></div>
+                        <div class="htp-tip">
+                            <span class="htp-tip-icon">💡</span>
+                            <span class="htp-tip-text"><span class="lang-en">Pro tip: During the WATCH phase, don't just look — tap along on your leg or the table to internalize the rhythm. When PLAY starts, your body already knows the beat.</span><span class="lang-es">Consejo pro: Durante la fase de OBSERVAR, no solo mires — toca con tu pierna o la mesa para internalizar el ritmo. Cuando comience JUGAR, tu cuerpo ya conoce el pulso.</span></span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -933,6 +1128,31 @@ body.es .lang-en { display: none !important; }
                     <span class="lang-en">PLAY THE ECHO →</span>
                     <span class="lang-es">JUGAR THE ECHO →</span>
                 </a>
+                <br>
+                <button class="htp-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
+                    <span class="lang-en">📖 HOW TO PLAY</span>
+                    <span class="lang-es">📖 CÓMO JUGAR</span>
+                    <span class="htp-arrow">▼</span>
+                </button>
+                <div class="htp-panel">
+                    <div class="htp-inner">
+                        <div class="htp-title">
+                            <span class="lang-en">🔊 THE ECHO — FULL RULES</span>
+                            <span class="lang-es">🔊 THE ECHO — REGLAS COMPLETAS</span>
+                        </div>
+                        <div class="htp-step"><span class="htp-step-num">1</span><span class="htp-step-text"><span class="lang-en">Choose your <strong>Level</strong> (1–10) and <strong>Ritnome™ BPM</strong> speed. Higher levels = more cells in each pattern. Faster BPM = patterns flash quicker.</span><span class="lang-es">Elige tu <strong>Nivel</strong> (1–10) y velocidad <strong>Ritnome™ BPM</strong>. Nivel alto = más celdas en cada patrón. BPM rápido = patrones parpadean más rápido.</span></span></div>
+                        <div class="htp-step"><span class="htp-step-num">2</span><span class="htp-step-text"><span class="lang-en">Tap <strong>LET'S GO</strong>. The <strong>ORIGINAL pattern</strong> plays on the beat — numbered cells light up one by one. Study it carefully.</span><span class="lang-es">Toca <strong>PA'LANTE</strong>. El <strong>patrón ORIGINAL</strong> se reproduce al ritmo — celdas numeradas se iluminan una por una. Estúdialo bien.</span></span></div>
+                        <div class="htp-step"><span class="htp-step-num">3</span><span class="htp-step-text"><span class="lang-en">Then <strong>THE ECHO</strong> plays — the same pattern repeats, but <strong>one cell has been swapped</strong> to a different position. Everything else stays the same.</span><span class="lang-es">Luego se reproduce <strong>EL ECO</strong> — el mismo patrón se repite, pero <strong>una celda ha sido cambiada</strong> a una posición diferente. Todo lo demás permanece igual.</span></span></div>
+                        <div class="htp-step"><span class="htp-step-num">4</span><span class="htp-step-text"><span class="lang-en">All Echo cells appear on the grid with their numbers. You have <strong>a timed window</strong> (shown by the timer bar) to <strong>tap the cell that changed</strong> — the one that wasn't in the original pattern.</span><span class="lang-es">Todas las celdas del Eco aparecen en la cuadrícula con sus números. Tienes <strong>un tiempo limitado</strong> (mostrado por la barra de tiempo) para <strong>tocar la celda que cambió</strong> — la que no estaba en el patrón original.</span></span></div>
+                        <div class="htp-step"><span class="htp-step-num">5</span><span class="htp-step-text"><span class="lang-en">Tap the correct changed cell → <strong>teal ✓</strong> and the original position shows as a <strong>dashed gold outline</strong>. Wrong tap or timeout → the answer is revealed. <strong>Win 2 rounds to level up.</strong></span><span class="lang-es">Toca la celda cambiada correcta → <strong>verde ✓</strong> y la posición original se muestra con un <strong>contorno dorado punteado</strong>. Toque incorrecto o tiempo agotado → se revela la respuesta. <strong>Gana 2 rondas para subir de nivel.</strong></span></span></div>
+                        <div class="htp-section-label"><span class="lang-en">🆚 WHY IS THIS THE HARDEST GAME?</span><span class="lang-es">🆚 ¿POR QUÉ ES EL JUEGO MÁS DIFÍCIL?</span></div>
+                        <div class="htp-step"><span class="htp-step-num">→</span><span class="htp-step-text"><span class="lang-en">Other games ask you to recall <strong>what you saw</strong>. THE ECHO asks you to compare <strong>two similar patterns</strong> and detect a subtle difference — under time pressure. It's pattern recognition meets change detection.</span><span class="lang-es">Otros juegos piden que recuerdes <strong>lo que viste</strong>. THE ECHO pide que compares <strong>dos patrones similares</strong> y detectes una diferencia sutil — bajo presión de tiempo. Es reconocimiento de patrones más detección de cambios.</span></span></div>
+                        <div class="htp-tip">
+                            <span class="htp-tip-icon">💡</span>
+                            <span class="htp-tip-text"><span class="lang-en">Pro tip: Focus on the "feel" of the original pattern — its shape and rhythm. When the Echo plays, the changed cell will feel "off" because it breaks the spatial expectation your mind already built.</span><span class="lang-es">Consejo pro: Enfócate en la "sensación" del patrón original — su forma y ritmo. Cuando el Eco se reproduce, la celda cambiada se sentirá "fuera de lugar" porque rompe la expectativa espacial que tu mente ya construyó.</span></span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
