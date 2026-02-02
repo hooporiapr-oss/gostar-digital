@@ -6,11 +6,11 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // ============ PLATFORM VERSION ============
-const PLATFORM_VERSION = '3.0.0';
-const PLATFORM_VERSION_NAME = 'LaughCourt™ - Where Joy Meets The Game';
+const PLATFORM_VERSION = '4.0.0';
+const PLATFORM_VERSION_NAME = 'RITNOME™ — Recognition · Recall · Reflex · React · Rhythm';
 
 // ============ ADMIN SECRET KEY ============
-const ADMIN_SECRET_KEY = process.env.ADMIN_SECRET_KEY || 'LaughCourt2026!';
+const ADMIN_SECRET_KEY = process.env.ADMIN_SECRET_KEY || 'Ritnome2026!';
 
 // ============ SESSION LOCKOUT SYSTEM ============
 const activeSessions = new Map();
@@ -243,7 +243,7 @@ function handleCheckoutComplete(session) {
     
     if (stripe && session.customer) {
         stripe.customers.update(session.customer, {
-            metadata: { laughcourt_pin: pin, plan_type: planType, quantity: String(quantity) }
+            metadata: { ritnome_pin: pin, plan_type: planType, quantity: String(quantity) }
         }).then(function() {
             console.log('✅ PIN saved to Stripe customer metadata:', pin);
         }).catch(function(err) {
@@ -301,7 +301,7 @@ app.post('/api/stripe/checkout', function(req, res) {
     
     if (!priceId) return res.status(400).json({ error: 'Invalid plan type' });
     
-    var baseUrl = process.env.SITE_URL || 'https://laughcourt.com';
+    var baseUrl = process.env.SITE_URL || 'https://ritnome.com';
     
     stripe.checkout.sessions.create({
         mode: 'subscription',
@@ -440,7 +440,7 @@ app.post('/api/forgot-pin', function(req, res) {
         console.log('🔑 PIN recovered for:', email);
         logActivity('pin_recovered', email, null, 'PIN retrieved successfully');
         var isActive = foundSubscriber.status === 'active' || foundSubscriber.status === 'trialing';
-        return res.json({ success: true, found: true, pin: foundSubscriber.pin, email: foundSubscriber.email, status: foundSubscriber.status, isActive: isActive, message: isActive ? 'Welcome back to LaughCourt!' : 'Subscription not active. Please renew.' });
+        return res.json({ success: true, found: true, pin: foundSubscriber.pin, email: foundSubscriber.email, status: foundSubscriber.status, isActive: isActive, message: isActive ? 'Welcome back to RITNOME!' : 'Subscription not active. Please renew.' });
     }
     
     var trialPins = readJSON(TRIAL_PINS_FILE);
@@ -656,20 +656,26 @@ app.get('/faq', function(req, res) { res.sendFile(path.join(__dirname, 'faq.html
 
 // Dashboard & Ritnomes™
 app.get('/dashboard', function(req, res) { res.sendFile(path.join(__dirname, 'dashboard.html')); });
-app.get('/the-match', function(req, res) { res.sendFile(path.join(__dirname, 'the-match.html')); });
-app.get('/the-sequence', function(req, res) { res.sendFile(path.join(__dirname, 'the-sequence.html')); });
-app.get('/the-flash', function(req, res) { res.sendFile(path.join(__dirname, 'the-flash.html')); });
-app.get('/the-pocket', function(req, res) { res.sendFile(path.join(__dirname, 'the-pocket.html')); });
-app.get('/the-reaction', function(req, res) { res.redirect(301, '/the-pocket'); });
-app.get('/the-echo', function(req, res) { res.sendFile(path.join(__dirname, 'the-echo.html')); });
+app.get('/the-recall', function(req, res) { res.sendFile(path.join(__dirname, 'the-recall.html')); });
+app.get('/the-replay', function(req, res) { res.sendFile(path.join(__dirname, 'the-replay.html')); });
+app.get('/the-reflex', function(req, res) { res.sendFile(path.join(__dirname, 'the-reflex.html')); });
+app.get('/the-react', function(req, res) { res.sendFile(path.join(__dirname, 'the-react.html')); });
+// Legacy redirect: /the-reaction → /the-react
+app.get('/the-reaction', function(req, res) { res.redirect(301, '/the-react'); });
+app.get('/the-rhythm', function(req, res) { res.sendFile(path.join(__dirname, 'the-rhythm.html')); });
 
 // Legacy redirects
-app.get('/the-zoo', function(req, res) { res.redirect(301, '/the-echo'); });
+app.get('/the-zoo', function(req, res) { res.redirect(301, '/the-rhythm'); });
 app.get('/play', function(req, res) { res.redirect(301, '/dashboard.html'); });
 app.get('/the-combo', function(req, res) { res.redirect(301, '/dashboard.html'); });
-app.get('/the-reflex', function(req, res) { res.redirect(301, '/dashboard.html'); });
 app.get('/the-starting-five', function(req, res) { res.sendFile(path.join(__dirname, 'the-starting-five.html')); });
 app.get('/the-gotrotters', function(req, res) { res.redirect(301, '/the-starting-five'); });
+// Legacy redirects: old game names → new game names
+app.get('/the-match', function(req, res) { res.redirect(301, '/the-recall'); });
+app.get('/the-sequence', function(req, res) { res.redirect(301, '/the-replay'); });
+app.get('/the-flash', function(req, res) { res.redirect(301, '/the-reflex'); });
+app.get('/the-pocket', function(req, res) { res.redirect(301, '/the-react'); });
+app.get('/the-echo', function(req, res) { res.redirect(301, '/the-rhythm'); });
 app.get('/hub', function(req, res) { res.redirect(301, '/dashboard.html'); });
 
 // ============ SUCCESS PAGE ============
@@ -678,15 +684,15 @@ app.get('/success', function(req, res) {
     var email = req.query.email;
     
     function renderPage(pin, userEmail, found) {
-        var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Welcome! | LaughCourt</title><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet"><style>:root{--gold:#FFD700;--orange:#FF6B35;--teal:#00D9A5;--dark:#0a0a0f;--card:#111118;--text:#FFFFFF;--muted:#8892a0;--border:rgba(255,255,255,0.08)}*{margin:0;padding:0;box-sizing:border-box}body{font-family:"Outfit",sans-serif;background:var(--dark);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}body.es .lang-en{display:none!important}body.en .lang-es{display:none!important}.lang-toggle{position:fixed;top:15px;right:15px;display:flex;gap:4px;background:var(--card);padding:3px;border-radius:8px;border:1px solid var(--border)}.lang-btn{padding:6px 10px;border:none;background:transparent;color:var(--muted);border-radius:6px;font-weight:600;font-size:.7rem;cursor:pointer;font-family:"Outfit",sans-serif;transition:all .2s}.lang-btn.active{background:var(--gold);color:var(--dark)}.container{width:100%;max-width:400px;text-align:center}.logo{font-family:"Bebas Neue",sans-serif;font-size:2.5rem;letter-spacing:4px;margin-bottom:5px}.logo .laugh{color:var(--gold)}.logo .court{color:var(--text)}.tagline{font-size:.7rem;color:var(--gold);letter-spacing:3px;text-transform:uppercase;margin-bottom:30px}.card{background:var(--card);border:2px solid var(--teal);border-radius:20px;padding:40px 30px;box-shadow:0 10px 40px rgba(0,217,165,0.2)}.celebration{font-size:2.5rem;margin-bottom:15px;animation:bounce .6s ease infinite}@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}.card-title{font-family:"Bebas Neue",sans-serif;font-size:1.8rem;letter-spacing:3px;margin-bottom:8px;color:var(--teal)}.card-subtitle{color:var(--muted);font-size:.9rem;margin-bottom:25px;line-height:1.5}.pin-reveal{background:linear-gradient(135deg,rgba(255,215,0,0.1),rgba(255,107,53,0.1));border:3px solid var(--gold);border-radius:16px;padding:25px;margin-bottom:25px;animation:celebrate .5s ease-out}@keyframes celebrate{0%{transform:scale(.8);opacity:0}50%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}.pin-label{font-size:.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:10px}.pin-value{font-family:"Bebas Neue",sans-serif;font-size:3.5rem;letter-spacing:12px;color:var(--gold);text-shadow:0 0 30px rgba(255,215,0,0.5)}.btn{width:100%;padding:18px 30px;border:none;border-radius:50px;font-family:"Bebas Neue",sans-serif;font-size:1.3rem;letter-spacing:3px;cursor:pointer;transition:all .3s;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(135deg,var(--teal),#00CED1);color:var(--dark);box-shadow:0 8px 30px rgba(0,217,165,0.3)}.btn:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,217,165,0.4)}.btn:disabled{opacity:.5;cursor:not-allowed;transform:none!important}.countdown{font-size:.85rem;color:var(--muted);margin-top:15px}.countdown span{color:var(--teal);font-weight:700}.error-card{border-color:#FF1744}.error-card .card-title{color:#FF1744}.btn-primary{background:linear-gradient(135deg,var(--gold),var(--orange));box-shadow:0 8px 30px rgba(255,107,53,0.3)}.footer{margin-top:40px;text-align:center}.footer-logo{font-family:"Bebas Neue",sans-serif;font-size:1.2rem;letter-spacing:3px;margin-bottom:8px}.footer-logo .laugh{color:var(--gold)}.footer-company{font-size:.7rem;color:var(--muted)}.footer-company a{color:var(--gold);text-decoration:none}@media(max-width:480px){.logo{font-size:2rem}.card{padding:30px 20px}.pin-value{font-size:2.8rem;letter-spacing:10px}.btn{font-size:1.1rem;padding:16px 25px}}</style></head><body class="en"><div class="lang-toggle"><button class="lang-btn active" id="btnEn">EN</button><button class="lang-btn" id="btnEs">ES</button></div><div class="container"><div class="logo">🏀 <span class="laugh">LAUGH</span><span class="court">COURT</span></div><div class="tagline"><span class="lang-en">Where Joy Meets The Game</span><span class="lang-es">Donde La Alegría Se Une Al Juego</span></div>';
+        var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Welcome! | RITNOME™</title><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet"><style>:root{--gold:#FFD700;--orange:#FF6B35;--teal:#00D9A5;--dark:#0a0a0f;--card:#111118;--text:#FFFFFF;--muted:#8892a0;--border:rgba(255,255,255,0.08)}*{margin:0;padding:0;box-sizing:border-box}body{font-family:"Outfit",sans-serif;background:var(--dark);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}body.es .lang-en{display:none!important}body.en .lang-es{display:none!important}.lang-toggle{position:fixed;top:15px;right:15px;display:flex;gap:4px;background:var(--card);padding:3px;border-radius:8px;border:1px solid var(--border)}.lang-btn{padding:6px 10px;border:none;background:transparent;color:var(--muted);border-radius:6px;font-weight:600;font-size:.7rem;cursor:pointer;font-family:"Outfit",sans-serif;transition:all .2s}.lang-btn.active{background:var(--gold);color:var(--dark)}.container{width:100%;max-width:400px;text-align:center}.logo{font-family:"Bebas Neue",sans-serif;font-size:2.5rem;letter-spacing:4px;margin-bottom:5px}.logo .rit{color:var(--gold)}.logo .nome{color:var(--text)}.tagline{font-size:.7rem;color:var(--gold);letter-spacing:3px;text-transform:uppercase;margin-bottom:30px}.card{background:var(--card);border:2px solid var(--teal);border-radius:20px;padding:40px 30px;box-shadow:0 10px 40px rgba(0,217,165,0.2)}.celebration{font-size:2.5rem;margin-bottom:15px;animation:bounce .6s ease infinite}@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}.card-title{font-family:"Bebas Neue",sans-serif;font-size:1.8rem;letter-spacing:3px;margin-bottom:8px;color:var(--teal)}.card-subtitle{color:var(--muted);font-size:.9rem;margin-bottom:25px;line-height:1.5}.pin-reveal{background:linear-gradient(135deg,rgba(255,215,0,0.1),rgba(255,107,53,0.1));border:3px solid var(--gold);border-radius:16px;padding:25px;margin-bottom:25px;animation:celebrate .5s ease-out}@keyframes celebrate{0%{transform:scale(.8);opacity:0}50%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}.pin-label{font-size:.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:10px}.pin-value{font-family:"Bebas Neue",sans-serif;font-size:3.5rem;letter-spacing:12px;color:var(--gold);text-shadow:0 0 30px rgba(255,215,0,0.5)}.btn{width:100%;padding:18px 30px;border:none;border-radius:50px;font-family:"Bebas Neue",sans-serif;font-size:1.3rem;letter-spacing:3px;cursor:pointer;transition:all .3s;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(135deg,var(--teal),#00CED1);color:var(--dark);box-shadow:0 8px 30px rgba(0,217,165,0.3)}.btn:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,217,165,0.4)}.btn:disabled{opacity:.5;cursor:not-allowed;transform:none!important}.countdown{font-size:.85rem;color:var(--muted);margin-top:15px}.countdown span{color:var(--teal);font-weight:700}.error-card{border-color:#FF1744}.error-card .card-title{color:#FF1744}.btn-primary{background:linear-gradient(135deg,var(--gold),var(--orange));box-shadow:0 8px 30px rgba(255,107,53,0.3)}.footer{margin-top:40px;text-align:center}.footer-logo{font-family:"Bebas Neue",sans-serif;font-size:1.2rem;letter-spacing:3px;margin-bottom:8px}.footer-logo .rit{color:var(--gold)}.footer-company{font-size:.7rem;color:var(--muted)}.footer-company a{color:var(--gold);text-decoration:none}@media(max-width:480px){.logo{font-size:2rem}.card{padding:30px 20px}.pin-value{font-size:2.8rem;letter-spacing:10px}.btn{font-size:1.1rem;padding:16px 25px}}</style></head><body class="en"><div class="lang-toggle"><button class="lang-btn active" id="btnEn">EN</button><button class="lang-btn" id="btnEs">ES</button></div><div class="container"><div class="logo">🏀 <span class="rit">RIT</span><span class="nome">NOME</span></div><div class="tagline"><span class="lang-en">Recognition · Recall · Reflex · React · Rhythm</span><span class="lang-es">Reconocimiento · Recuerdo · Reflejo · Reacción · Ritmo</span></div>';
         
         if (found && pin) {
-            html += '<div class="card" id="successCard"><div class="celebration">🎉🏀🎉</div><h1 class="card-title"><span class="lang-en">PAYMENT SUCCESSFUL!</span><span class="lang-es">¡PAGO EXITOSO!</span></h1><p class="card-subtitle"><span class="lang-en">Welcome to LaughCourt! Here\'s your PIN!</span><span class="lang-es">¡Bienvenido a LaughCourt! ¡Aquí está tu PIN!</span></p><div class="pin-reveal"><div class="pin-label"><span class="lang-en">YOUR PIN</span><span class="lang-es">TU PIN</span></div><div class="pin-value">' + pin + '</div></div><button class="btn" id="playBtn"><span class="lang-en">🏀 PLAY NOW</span><span class="lang-es">🏀 JUGAR AHORA</span></button><div class="countdown"><span class="lang-en">Auto-login in <span id="countEn">5</span> seconds...</span><span class="lang-es">Ingreso automático en <span id="countEs">5</span> segundos...</span></div></div>';
+            html += '<div class="card" id="successCard"><div class="celebration">🎉🏀🎉</div><h1 class="card-title"><span class="lang-en">PAYMENT SUCCESSFUL!</span><span class="lang-es">¡PAGO EXITOSO!</span></h1><p class="card-subtitle"><span class="lang-en">Welcome to RITNOME! Here\'s your PIN!</span><span class="lang-es">¡¡Bienvenido a RITNOME! ¡Aquí está tu PIN!</span></p><div class="pin-reveal"><div class="pin-label"><span class="lang-en">YOUR PIN</span><span class="lang-es">TU PIN</span></div><div class="pin-value">' + pin + '</div></div><button class="btn" id="playBtn"><span class="lang-en">🏀 PLAY NOW</span><span class="lang-es">🏀 JUGAR AHORA</span></button><div class="countdown"><span class="lang-en">Auto-login in <span id="countEn">5</span> seconds...</span><span class="lang-es">Ingreso automático en <span id="countEs">5</span> segundos...</span></div></div>';
         } else {
             html += '<div class="card error-card"><div class="celebration">😕</div><h1 class="card-title"><span class="lang-en">ALMOST THERE!</span><span class="lang-es">¡CASI LISTO!</span></h1><p class="card-subtitle"><span class="lang-en">Use "Forgot PIN" with your email to get access.</span><span class="lang-es">Usa "Olvidé mi PIN" con tu correo para obtener acceso.</span></p><a href="/login" class="btn btn-primary"><span class="lang-en">GO TO LOGIN</span><span class="lang-es">IR A LOGIN</span></a></div>';
         }
         
-        html += '<footer class="footer"><div class="footer-logo">🏀 <span class="laugh">LAUGH</span><span class="court">COURT</span></div><div class="footer-company">by <a href="https://gostar.digital">GoStar Digital LLC</a> 🇵🇷</div></footer></div><script>(function(){var lang=localStorage.getItem("laughcourt_lang")||"en";document.body.className=lang;document.getElementById("btnEn").className=lang==="en"?"lang-btn active":"lang-btn";document.getElementById("btnEs").className=lang==="es"?"lang-btn active":"lang-btn";document.getElementById("btnEn").onclick=function(){localStorage.setItem("laughcourt_lang","en");document.body.className="en";this.className="lang-btn active";document.getElementById("btnEs").className="lang-btn";};document.getElementById("btnEs").onclick=function(){localStorage.setItem("laughcourt_lang","es");document.body.className="es";this.className="lang-btn active";document.getElementById("btnEn").className="lang-btn";};';
+        html += '<footer class="footer"><div class="footer-logo">🏀 <span class="rit">RIT</span><span class="nome">NOME</span></div><div class="footer-company">by <a href="https://gostar.digital">GoStar Digital LLC</a> 🇵🇷</div></footer></div><script>(function(){var lang=localStorage.getItem("ritnome_lang")||"en";document.body.className=lang;document.getElementById("btnEn").className=lang==="en"?"lang-btn active":"lang-btn";document.getElementById("btnEs").className=lang==="es"?"lang-btn active":"lang-btn";document.getElementById("btnEn").onclick=function(){localStorage.setItem("ritnome_lang","en");document.body.className="en";this.className="lang-btn active";document.getElementById("btnEs").className="lang-btn";};document.getElementById("btnEs").onclick=function(){localStorage.setItem("ritnome_lang","es");document.body.className="es";this.className="lang-btn active";document.getElementById("btnEn").className="lang-btn";};';
         
         if (found && pin) {
             html += 'var pin="' + pin + '";var countdown=5;var interval=setInterval(function(){countdown--;var cEn=document.getElementById("countEn");var cEs=document.getElementById("countEs");if(cEn)cEn.textContent=countdown;if(cEs)cEs.textContent=countdown;if(countdown<=0){clearInterval(interval);doLogin();}},1000);function doLogin(){var btn=document.getElementById("playBtn");if(btn)btn.disabled=true;fetch("/api/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({pin:pin})}).then(function(r){return r.json();}).then(function(data){if(data.success){localStorage.setItem("lc-user",JSON.stringify({pin:pin}));sessionStorage.setItem("lc-pin",pin);sessionStorage.setItem("lc-token",data.token);localStorage.setItem("lc-terms-accepted",new Date().toISOString());window.location.href="/dashboard.html";}else{window.location.href="/login";}}).catch(function(){window.location.href="/login";});}var playBtn=document.getElementById("playBtn");if(playBtn)playBtn.onclick=function(){clearInterval(interval);doLogin();};';
@@ -741,7 +747,7 @@ app.get('/api/platform/version', function(req, res) { res.json({ version: PLATFO
 app.listen(PORT, function() {
     console.log('');
     console.log('🏀 ========================================');
-    console.log('   LAUGHCOURT SERVER v' + PLATFORM_VERSION);
+    console.log('   RITNOME™ SERVER v' + PLATFORM_VERSION);
     console.log('   ' + PLATFORM_VERSION_NAME);
     console.log('==========================================');
     console.log('');
@@ -756,12 +762,12 @@ app.listen(PORT, function() {
     console.log('   /dashboard.html   → Trophy Case');
     console.log('');
     console.log('🏆 5 RITNOMES™:');
-    console.log('   /the-match        → 🧠 THE MATCH (Association)');
-    console.log('   /the-sequence     → 🔢 THE SEQUENCE (Recall)');
-    console.log('   /the-flash        → ⚡ THE FLASH (Recognition)');
-    console.log('   /the-pocket       → 🎯 THE POCKET (Performance)');
-    console.log('   /the-echo         → 🔄 THE ECHO (Comparison)');
+    console.log('   /the-recall       → THE RECALL (Number Recall)');
+    console.log('   /the-replay       → THE REPLAY (Sequence Replay)');
+    console.log('   /the-reflex       → THE REFLEX (Position Reflex)');
+    console.log('   /the-react        → THE REACT (Beat Reaction)');
+    console.log('   /the-rhythm       → THE RHYTHM (Change Detection)');
     console.log('');
-    console.log('🏀 Ready to play! 5 Ritnomes™. $5. 150 Divisions.');
+    console.log('🏀 RITNOME™ — 5 Challenges. 3 Speeds. 1 Grid. $5/mo.');
     console.log('');
 });
