@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>THE POCKET | LaughCourt - Where Joy Meets The Game</title>
+<title>THE REACT | RITNOME™ — Recognition · Recall · Reflex · React · Rhythm</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
@@ -190,7 +190,7 @@ body.es .lang-en{display:none!important}
 <nav class="mini-nav">
 <div class="nav-row">
 <a href="/dashboard.html" class="back-btn">← <span class="lang-en">DASHBOARD</span><span class="lang-es">TABLERO</span></a>
-<div class="nav-title">🎯 THE POCKET</div>
+<div class="nav-title">THE REACT</div>
 <div class="nav-right">
 <div class="nav-lang"><button class="nav-lang-btn active" id="btnEn">EN</button><button class="nav-lang-btn" id="btnEs">ES</button></div>
 <div class="settings-wrapper"><button class="settings-btn" id="settingsBtn">⚙️</button>
@@ -240,7 +240,7 @@ body.es .lang-en{display:none!important}
 
 <div class="overlay" id="levelUpOverlay">
 <div class="overlay-card">
-<div class="overlay-emoji">🎯</div>
+<div class="overlay-emoji">⭐</div>
 <h2 class="overlay-title"><span class="lang-en">LEVEL UP!</span><span class="lang-es">¡SUBISTE!</span></h2>
 <p class="overlay-message" id="levelUpMessage"></p>
 <button class="overlay-btn" id="levelUpBtn"><span class="lang-en">LET'S GO!</span><span class="lang-es">¡VAMOS!</span></button>
@@ -249,7 +249,7 @@ body.es .lang-en{display:none!important}
 
 <div class="overlay" id="upgradeOverlay">
 <div class="overlay-card">
-<div class="overlay-emoji">🔓🎯</div>
+<div class="overlay-emoji">🔓</div>
 <h2 class="overlay-title">UNLOCK ALL RITNOME™</h2>
 <div class="upgrade-speed-preview">
 <span class="upgrade-speed-chip current">✓ 60</span>
@@ -257,7 +257,7 @@ body.es .lang-en{display:none!important}
 <span class="upgrade-speed-chip locked">🔒 120</span>
 </div>
 <div class="upgrade-price">$5<span>/mo</span></div>
-<p class="overlay-message"><span class="lang-en">Get all BPM speeds + all 5 Ritnomes™!</span><span class="lang-es">¡Obtén todas las velocidades + los 5 Ritnomes™!</span></p>
+<p class="overlay-message"><span class="lang-en">Get all BPM speeds + all 5 challenges!</span><span class="lang-es">¡Obtén todas las velocidades + los 5 desafíos!</span></p>
 <a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="overlay-btn" style="display:block;text-decoration:none;margin-bottom:6px;">UPGRADE 🚀</a>
 <button class="overlay-btn secondary" id="upgradeClose">CONTINUE 60</button>
 </div>
@@ -297,7 +297,7 @@ body.es .lang-en{display:none!important}
 
     // ===== AUTH CHECK =====
     var host = window.location.hostname;
-    var isProduction = host.indexOf('laughcourt') > -1 || host.indexOf('github.io') > -1 || host.indexOf('gostardigital') > -1;
+    var isProduction = host.indexOf('ritnome') > -1 || host.indexOf('laughcourt') > -1 || host.indexOf('github.io') > -1 || host.indexOf('gostardigital') > -1;
     if (isProduction) {
         var user = null;
         try { user = JSON.parse(localStorage.getItem('lc-user')); } catch(e) {}
@@ -324,9 +324,9 @@ body.es .lang-en{display:none!important}
     };
 
     // ===== LANGUAGE =====
-    var currentLang = localStorage.getItem('laughcourt_lang') || 'en';
+    var currentLang = localStorage.getItem('lc-lang') || 'en';
     function setLang(l) {
-        currentLang = l; localStorage.setItem('laughcourt_lang', l);
+        currentLang = l; localStorage.setItem('lc-lang', l);
         document.body.className = l + (isFocusMode ? ' focus-mode' : '');
         document.getElementById('btnEn').className = l === 'en' ? 'nav-lang-btn active' : 'nav-lang-btn';
         document.getElementById('btnEs').className = l === 'es' ? 'nav-lang-btn active' : 'nav-lang-btn';
@@ -358,8 +358,8 @@ body.es .lang-en{display:none!important}
     var PERFECT_WINDOW = 300;
     var GOOD_WINDOW = 600;
     var MAX_LIVES = 3;
-    var LAUGH_EMOJIS = ['😂','😆','🤣','😄','😁','🥳','😊','🎯'];
-    var PARTY_EMOJIS = ['🥳','🎉','😂','🤣','✨','💫','🎯','🏆'];
+    var LAUGH_EMOJIS = ['😂','😆','🤣','😄','😁','🥳','😊','🏀'];
+    var PARTY_EMOJIS = ['🥳','🎉','😂','🤣','✨','💫','🏀','🏆'];
 
     // ===== RITNOME PULSE =====
     function updateRitnomePulse(speed) {
@@ -566,7 +566,7 @@ body.es .lang-en{display:none!important}
             if (i < counts.length) { state.beatTimers.push(setTimeout(doCount, interval)); }
             else {
                 state.beatTimers.push(setTimeout(function() {
-                    messageText.innerHTML = '<span class="lang-en">🎯 PLAY IN THE POCKET</span><span class="lang-es">🎯 JUEGA EN EL POCKET</span>';
+                    messageText.innerHTML = '<span class="lang-en">🏀 TAP THE PATTERN</span><span class="lang-es">🏀 TOCA EL PATRÓN</span>';
                     messageText.className = 'message-text go';
                     tickSound();
                     state.beatTimers.push(setTimeout(startPlay, 300));
@@ -742,10 +742,10 @@ body.es .lang-en{display:none!important}
             var isEs = currentLang === 'es';
             if (allPerfect) {
                 messageText.innerHTML = isEs ? '🔥 ¡PERFECCIÓN TOTAL!' : '🔥 ALL PERFECT!';
-                showCoach(isEs ? '🎯 ¡Máquina!' : '🎯 In the pocket!');
+                showCoach(isEs ? '🏀 ¡Máquina!' : '🏀 Locked in!');
             } else {
-                messageText.innerHTML = isEs ? '🔥 ¡EN EL POCKET!' : '🔥 LOCKED IN!';
-                showCoach(state.streak >= 3 ? '🔥 On fire!' : '🎯 Nice!');
+                messageText.innerHTML = isEs ? '🔥 ¡CONECTADO!' : '🔥 LOCKED IN!';
+                showCoach(state.streak >= 3 ? '🔥 On fire!' : '🏀 Nice!');
             }
             messageText.className = 'message-text perfect';
 
@@ -763,7 +763,7 @@ body.es .lang-en{display:none!important}
             updateProgressionStars(); updateStats();
 
             var isEs = currentLang === 'es';
-            messageText.innerHTML = '<span style="color:var(--pink)">' + (reason || (isEs ? 'FUERA DEL POCKET' : 'DROPPED THE POCKET')) + '</span>';
+            messageText.innerHTML = '<span style="color:var(--pink)">' + (reason || (isEs ? 'FUERA DE RITMO' : 'OFF THE BEAT')) + '</span>';
             messageText.className = 'message-text miss';
             showCoach(isEs ? '💪 ¡Otra vez!' : '💪 Try again!');
 
