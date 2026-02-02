@@ -3,1836 +3,205 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>RITNOME™ | Recognition · Recall · Reflex · React · Rhythm</title>
-<meta name="description" content="RITNOME™ — Five challenges on a 5×5 grid. Recognition, Recall, Reflex, React, Rhythm. Three BPM speeds. Earn GoStars. Fill your Trophy Case. 7-day free trial. $5/month.">
+<title>RITNOME™ — Pattern Challenges | Recall · Replay · Reflex · React · Rhythm</title>
+<meta name="description" content="5 pattern challenges. 3 speeds. 1 grid. Train your brain with RITNOME™.">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root {
-    --gold: #FFD700;
-    --orange: #FF6B35;
-    --teal: #00D9A5;
-    --cyan: #00CED1;
-    --purple: #9B59B6;
-    --lime: #32CD32;
-    --dark: #0a0a0f;
-    --darker: #050508;
-    --card: #111118;
-    --text: #FFFFFF;
-    --muted: #8892a0;
-    --border: rgba(255,255,255,0.08);
-    --nav-height: 50px;
-}
+:root{--orange:#FF6B35;--gold:#FFD700;--teal:#00D9A5;--cyan:#00CED1;--purple:#9B59B6;--lime:#32CD32;--dark:#0a0a0f;--darker:#050508;--card:#111118;--text:#FFFFFF;--muted:#8892a0;--border:rgba(255,255,255,0.1)}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{font-family:'Outfit',sans-serif;background:var(--dark);color:var(--text);min-height:100vh;min-height:100dvh;overflow-x:hidden}
+body.en .lang-es{display:none!important}
+body.es .lang-en{display:none!important}
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
-html { width: 100%; overflow-x: hidden; scroll-behavior: smooth; }
+.header{display:flex;justify-content:space-between;align-items:center;padding:15px 20px;background:var(--darker);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:2px;display:flex;align-items:center;gap:8px}
+.logo img{width:32px;height:32px}
+.logo .rit{color:var(--gold)}
+.logo .nome{color:var(--text)}
+.lang-toggle{display:flex;gap:2px;background:var(--card);padding:3px;border-radius:8px;border:1px solid var(--border)}
+.lang-btn{padding:6px 12px;border:none;background:transparent;color:var(--muted);border-radius:5px;font-weight:600;font-size:0.7rem;cursor:pointer;font-family:'Outfit',sans-serif;transition:all 0.2s}
+.lang-btn.active{background:var(--gold);color:var(--dark)}
 
-body {
-    font-family: 'Outfit', sans-serif;
-    background: var(--dark);
-    color: var(--text);
-    min-height: 100vh;
-    width: 100%;
-    overflow-x: hidden;
-    line-height: 1.6;
-}
+.main{max-width:480px;margin:0 auto;padding:30px 20px 40px}
 
-body.en .lang-es { display: none !important; }
-body.es .lang-en { display: none !important; }
+.hero{text-align:center;margin-bottom:30px}
+.hero-icon{font-size:3rem;margin-bottom:10px}
+.hero-title{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;letter-spacing:4px;color:var(--gold);margin-bottom:8px}
+.hero-subtitle{font-size:0.9rem;color:var(--muted);letter-spacing:1px}
 
-/* ============ ANIMATIONS ============ */
-@keyframes heroPulse {
-    0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.6; }
-    50% { transform: scale(1.1) rotate(3deg); opacity: 0.9; }
-}
-@keyframes dot-60 {
-    0%, 100% { transform: scale(0.85); opacity: 0.4; }
-    50% { transform: scale(1); opacity: 1; }
-}
-@keyframes dot-90 {
-    0%, 100% { transform: scale(0.85); opacity: 0.4; }
-    50% { transform: scale(1); opacity: 1; }
-}
-@keyframes dot-120 {
-    0%, 100% { transform: scale(0.85); opacity: 0.4; }
-    50% { transform: scale(1); opacity: 1; }
-}
-@keyframes ring-expand {
-    0% { width: 20px; height: 20px; opacity: 0.6; }
-    100% { width: 70px; height: 70px; opacity: 0; }
-}
-@keyframes glow-breathe {
-    0%, 100% { opacity: 0.5; transform: translate(-50%, -55%) scale(0.9); }
-    50% { opacity: 1; transform: translate(-50%, -55%) scale(1.1); }
-}
-@keyframes fade-up {
-    0% { opacity: 0; transform: translateY(20px); }
-    100% { opacity: 1; transform: translateY(0); }
-}
-@keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(6px); }
-}
+.section-title{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:3px;text-align:center;color:var(--text);margin-bottom:15px;display:flex;align-items:center;justify-content:center;gap:10px}
+.section-title::before,.section-title::after{content:'';height:1px;width:30px;background:var(--border)}
 
-.reveal {
-    opacity: 0;
-    transform: translateY(25px);
-    transition: opacity 0.7s ease-out, transform 0.7s ease-out;
-}
-.reveal.visible { opacity: 1; transform: translateY(0); }
-.reveal-delay-1 { transition-delay: 0.15s; }
-.reveal-delay-2 { transition-delay: 0.3s; }
-.reveal-delay-3 { transition-delay: 0.45s; }
-.reveal-delay-4 { transition-delay: 0.6s; }
+.workout-list{display:flex;flex-direction:column;gap:10px;margin-bottom:30px}
+.workout-card{display:flex;align-items:center;justify-content:space-between;background:var(--card);border:2px solid var(--border);border-radius:14px;padding:15px 18px;transition:all 0.3s}
+.workout-card:active{transform:scale(0.98)}
+.workout-card.recall{border-color:rgba(255,107,53,0.3)}
+.workout-card.replay{border-color:rgba(0,217,165,0.3)}
+.workout-card.reflex{border-color:rgba(0,206,209,0.3)}
+.workout-card.react{border-color:rgba(155,89,182,0.3)}
+.workout-card.rhythm{border-color:rgba(50,205,50,0.3)}
 
-/* ============ NAV ============ */
-.mini-nav {
-    position: fixed; top: 0; left: 0; right: 0; width: 100%;
-    background: rgba(17,17,24,0.95); backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border); z-index: 1000;
-    height: var(--nav-height); display: flex; align-items: center;
-    justify-content: space-between; padding: 0 12px;
-}
-.nav-logo {
-    font-family: 'Bebas Neue', sans-serif; font-size: 1rem;
-    letter-spacing: 1px; text-decoration: none;
-    display: flex; align-items: center; gap: 4px; flex-shrink: 0;
-}
-.nav-logo .icon { width: 22px; height: 22px; }
-.nav-logo .rit { color: var(--gold); }
-.nav-logo .nome { color: var(--text); }
-.nav-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
-.nav-lang { display: flex; gap: 2px; }
-.nav-lang-btn {
-    padding: 4px 6px; border: 1px solid var(--border); background: transparent;
-    color: var(--muted); border-radius: 4px; font-size: 0.55rem;
-    font-weight: 600; cursor: pointer; min-width: 24px; min-height: 24px;
-}
-.nav-lang-btn.active { border-color: var(--gold); color: var(--gold); }
-.nav-login {
-    padding: 4px 10px; background: transparent; border: 1px solid var(--gold);
-    color: var(--gold); border-radius: 15px; font-size: 0.6rem;
-    font-weight: 600; text-decoration: none; letter-spacing: 0.5px;
-}
+.workout-left{display:flex;align-items:center;gap:12px}
+.workout-icon{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;width:40px;text-align:center}
+.workout-card.recall .workout-icon{color:var(--orange)}
+.workout-card.replay .workout-icon{color:var(--teal)}
+.workout-card.reflex .workout-icon{color:var(--cyan)}
+.workout-card.react .workout-icon{color:var(--purple)}
+.workout-card.rhythm .workout-icon{color:var(--lime)}
 
-/* ============ §1 HERO ============ */
-.hero {
-    min-height: 100vh; width: 100%; display: flex; flex-direction: column;
-    align-items: center; justify-content: center; text-align: center;
-    padding: 20px 16px; padding-top: calc(var(--nav-height) + 20px);
-    position: relative; overflow: hidden;
-}
-.hero::before {
-    content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-    background:
-        radial-gradient(circle at 30% 40%, rgba(255,107,53,0.12) 0%, transparent 35%),
-        radial-gradient(circle at 70% 60%, rgba(0,217,165,0.12) 0%, transparent 35%);
-    animation: heroPulse 12s ease-in-out infinite;
-}
-.hero-content { position: relative; z-index: 1; width: 100%; max-width: 100%; display: flex; flex-direction: column; align-items: center; }
-.hero-badge {
-    display: inline-block; background: rgba(255,215,0,0.2); color: var(--gold);
-    padding: 6px 12px; border-radius: 20px; font-size: 0.55rem;
-    font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 16px;
-}
-.hero-logo { font-family: 'Bebas Neue', sans-serif; font-size: 2.8rem; letter-spacing: 4px; margin-bottom: 6px; }
-.hero-logo .rit { color: var(--gold); }
-.hero-logo .nome { color: var(--text); }
-.hero-tagline {
-    font-family: 'Bebas Neue', sans-serif; font-size: 0.85rem;
-    letter-spacing: 3px; color: var(--gold); margin-bottom: 20px;
-}
-.hero-headline {
-    font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem;
-    letter-spacing: 1px; line-height: 1.15; margin-bottom: 16px;
-}
-.hero-headline .highlight-gold { color: var(--gold); }
-.hero-sub { font-size: 0.9rem; color: var(--muted); line-height: 1.5; margin-bottom: 24px; padding: 0 8px; }
-.hero-cta { width: 100%; display: flex; justify-content: center; }
-.btn {
-    display: inline-block; padding: 14px 24px; border-radius: 30px;
-    font-family: 'Bebas Neue', sans-serif; font-size: 0.95rem;
-    letter-spacing: 1.5px; text-decoration: none; text-align: center;
-}
-.btn-primary {
-    background: linear-gradient(135deg, var(--gold), var(--orange));
-    color: var(--dark); box-shadow: 0 8px 30px rgba(255,107,0,0.3);
-}
-.hero-login { margin-top: 16px; font-size: 0.8rem; color: var(--muted); }
-.hero-login a { color: var(--gold); text-decoration: none; }
-.scroll-hint {
-    position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%);
-    color: var(--muted); font-size: 0.7rem; display: flex;
-    flex-direction: column; align-items: center; gap: 4px;
-}
-.scroll-hint span:last-child { animation: bounce 1.5s infinite; }
+.workout-info{display:flex;flex-direction:column;gap:2px}
+.workout-name{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:1px}
+.workout-card.recall .workout-name{color:var(--orange)}
+.workout-card.replay .workout-name{color:var(--teal)}
+.workout-card.reflex .workout-name{color:var(--cyan)}
+.workout-card.react .workout-name{color:var(--purple)}
+.workout-card.rhythm .workout-name{color:var(--lime)}
+.workout-desc{font-size:0.65rem;color:var(--muted)}
 
-/* ============ SHARED SECTION BASE ============ */
-.section { width: 100%; padding: 50px 16px; text-align: center; }
-.section.alt-bg { background: var(--darker); }
-.section-badge {
-    display: inline-block; background: rgba(255,215,0,0.15); color: var(--gold);
-    padding: 5px 12px; border-radius: 15px; font-size: 0.6rem;
-    font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;
-}
-.section-title {
-    font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem;
-    letter-spacing: 2px; margin-bottom: 10px;
-}
-.section-sub { color: var(--muted); font-size: 0.85rem; line-height: 1.5; margin-bottom: 30px; }
+.demo-link{display:flex;align-items:center;gap:5px;padding:8px 14px;background:rgba(255,255,255,0.05);border-radius:20px;text-decoration:none;font-family:'Bebas Neue',sans-serif;font-size:0.7rem;letter-spacing:1px;color:var(--text);transition:all 0.2s}
+.demo-link:active{transform:scale(0.95)}
+.workout-card.recall .demo-link{background:rgba(255,107,53,0.15);color:var(--orange)}
+.workout-card.replay .demo-link{background:rgba(0,217,165,0.15);color:var(--teal)}
+.workout-card.reflex .demo-link{background:rgba(0,206,209,0.15);color:var(--cyan)}
+.workout-card.react .demo-link{background:rgba(155,89,182,0.15);color:var(--purple)}
+.workout-card.rhythm .demo-link{background:rgba(50,205,50,0.15);color:var(--lime)}
 
-/* ============ §2 THE 5 RITNOMES ============ */
-.workouts-full { max-width: 600px; margin: 0 auto; }
-.wk-card {
-    background: var(--card); border: 2px solid var(--border);
-    border-radius: 14px; margin-bottom: 14px; overflow: hidden;
-}
-.wk-card:last-child { margin-bottom: 0; }
-.wk-header {
-    padding: 14px 16px; display: flex; align-items: center; gap: 12px;
-    border-bottom: 1px solid var(--border);
-}
-.wk-info { flex: 1; min-width: 0; }
-.wk-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 2px; }
-.wk-tagline { font-size: 0.7rem; color: var(--muted); }
-.wk-body { padding: 14px 16px; }
-.wk-steps { list-style: none; }
-.wk-step { display: flex; gap: 10px; margin-bottom: 8px; align-items: flex-start; }
-.wk-step:last-child { margin-bottom: 0; }
-.wk-num {
-    width: 20px; height: 20px; min-width: 20px; border-radius: 50%;
-    background: var(--gold); color: var(--dark); display: flex;
-    align-items: center; justify-content: center; font-weight: 700;
-    font-size: 0.65rem; margin-top: 2px;
-}
-.wk-text { font-size: 0.82rem; color: var(--text); line-height: 1.45; }
+.pricing-card{background:linear-gradient(135deg,rgba(255,215,0,0.08),rgba(255,107,53,0.05));border:2px solid rgba(255,215,0,0.3);border-radius:20px;padding:25px 20px;text-align:center;margin-bottom:30px}
+.pricing-amount{font-family:'Bebas Neue',sans-serif;font-size:3rem;color:var(--gold);line-height:1;margin-bottom:5px}
+.pricing-amount span{font-size:1rem;color:var(--muted)}
+.pricing-features{display:flex;flex-direction:column;gap:6px;margin:15px 0 20px}
+.pricing-feature{font-size:0.8rem;color:var(--text);display:flex;align-items:center;justify-content:center;gap:8px}
+.pricing-feature .check{color:var(--teal)}
 
-.wk-card.recall { border-color: rgba(255,107,53,0.3); }
-.wk-card.recall .wk-header { background: rgba(255,107,53,0.05); }
-.wk-card.recall .wk-name { color: var(--orange); }
-.wk-card.replay { border-color: rgba(0,217,165,0.3); }
-.wk-card.replay .wk-header { background: rgba(0,217,165,0.05); }
-.wk-card.replay .wk-name { color: var(--teal); }
-.wk-card.reflex { border-color: rgba(0,206,209,0.3); }
-.wk-card.reflex .wk-header { background: rgba(0,206,209,0.05); }
-.wk-card.reflex .wk-name { color: var(--cyan); }
-.wk-card.react { border-color: rgba(155,89,182,0.3); }
-.wk-card.react .wk-header { background: rgba(155,89,182,0.05); }
-.wk-card.react .wk-name { color: var(--purple); }
-.wk-card.rhythm { border-color: rgba(50,205,50,0.3); }
-.wk-card.rhythm .wk-header { background: rgba(50,205,50,0.05); }
-.wk-card.rhythm .wk-name { color: var(--lime); }
+.cta-btn{display:block;width:100%;padding:16px 24px;border:none;border-radius:12px;font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:3px;cursor:pointer;background:linear-gradient(135deg,var(--gold),#FFA500);color:var(--dark);text-decoration:none;text-align:center;box-shadow:0 4px 20px rgba(255,215,0,0.3);transition:all 0.3s;animation:ctaPulse 2s ease-in-out infinite}
+.cta-btn:active{transform:scale(0.98)}
+@keyframes ctaPulse{0%,100%{box-shadow:0 4px 20px rgba(255,215,0,0.3)}50%{box-shadow:0 4px 35px rgba(255,215,0,0.5)}}
 
-/* ============ GAME SIMULATIONS (in-card) ============ */
-.sim-wrap { padding: 14px 16px; text-align: center; }
-.sim-label {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.7rem; letter-spacing: 2px; color: var(--muted);
-    margin-bottom: 10px; min-height: 1.1em;
-    transition: color 0.3s;
-}
-.sim-label.phase-show { color: var(--gold); }
-.sim-label.phase-tap { color: var(--orange); }
-.sim-label.phase-done { color: var(--teal); }
-.sim-court {
-    display: grid; grid-template-columns: repeat(5, 1fr);
-    gap: 3px; padding: 6px; background: #1a1a24;
-    border-radius: 10px; border: 2px solid var(--sim-border, var(--orange));
-    width: 180px; height: 180px; margin: 0 auto;
-    position: relative;
-}
-.sim-court::before {
-    content: ''; position: absolute; inset: 0;
-    background: rgba(10,10,15,0.55); border-radius: 8px;
-    pointer-events: none; z-index: 0;
-}
-.sim-cell {
-    aspect-ratio: 1; border-radius: 4px;
-    background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.15);
-    display: flex; align-items: center; justify-content: center;
-    position: relative; z-index: 1;
-    font-family: 'Bebas Neue', sans-serif; font-size: 0.8rem;
-    color: transparent; transition: all 0.2s ease;
-}
-.sim-cell.lit {
-    background: var(--sim-flash, var(--orange));
-    border-color: var(--sim-flash-border, var(--gold));
-    box-shadow: 0 0 10px var(--sim-glow, rgba(255,107,53,0.4));
-    color: var(--text); text-shadow: 0 1px 2px rgba(0,0,0,0.5);
-    transform: scale(1.08);
-}
-.sim-cell.correct {
-    background: var(--teal); border-color: var(--teal);
-    box-shadow: 0 0 8px rgba(0,217,165,0.4);
-    color: var(--text); transform: scale(1.08);
-}
-.sim-cell.wrong {
-    background: #FF1493; border-color: #FF1493;
-    box-shadow: 0 0 8px rgba(255,20,147,0.4);
-    color: var(--text);
-}
-.sim-caption {
-    font-size: 0.68rem; color: var(--muted);
-    margin-top: 10px; line-height: 1.4;
-}
-.sim-play {
-    display: inline-block; margin-top: 12px;
-    padding: 10px 24px; border-radius: 25px;
-    font-family: 'Bebas Neue', sans-serif; font-size: 0.85rem;
-    letter-spacing: 2px; text-decoration: none; text-align: center;
-    color: var(--dark); font-weight: 700;
-    transition: transform 0.2s, box-shadow 0.2s;
-}
-.sim-play:active { transform: scale(0.97); }
-.wk-card.recall .sim-play {
-    background: linear-gradient(135deg, var(--orange), #E55A2B);
-    box-shadow: 0 4px 15px rgba(255,107,53,0.3);
-}
-.wk-card.replay .sim-play {
-    background: linear-gradient(135deg, var(--teal), #00B88D);
-    box-shadow: 0 4px 15px rgba(0,217,165,0.3);
-}
-.wk-card.reflex .sim-play {
-    background: linear-gradient(135deg, var(--cyan), #00A8AB);
-    box-shadow: 0 4px 15px rgba(0,206,209,0.3);
-}
-.wk-card.react .sim-play {
-    background: linear-gradient(135deg, var(--purple), #7D3C98);
-    box-shadow: 0 4px 15px rgba(155,89,182,0.3);
-}
-.wk-card.rhythm .sim-play {
-    background: linear-gradient(135deg, var(--lime), #28A428);
-    box-shadow: 0 4px 15px rgba(50,205,50,0.3);
-}
+.login-link{display:block;text-align:center;margin-top:15px;font-size:0.8rem;color:var(--muted)}
+.login-link a{color:var(--gold);text-decoration:none}
+.login-link a:active{text-decoration:underline}
 
-/* ============ HOW TO PLAY INSTRUCTIONS ============ */
-.htp-toggle {
-    display: inline-flex; align-items: center; gap: 6px;
-    margin-top: 10px; padding: 6px 16px;
-    background: rgba(255,255,255,0.05); border: 1px solid var(--border);
-    border-radius: 20px; cursor: pointer;
-    font-family: 'Outfit', sans-serif; font-size: 0.65rem;
-    font-weight: 600; color: var(--muted); letter-spacing: 0.5px;
-    transition: all 0.25s;
-}
-.htp-toggle:hover, .htp-toggle:active {
-    background: rgba(255,255,255,0.08); color: var(--text);
-    border-color: rgba(255,255,255,0.2);
-}
-.htp-toggle .htp-arrow {
-    font-size: 0.55rem; transition: transform 0.3s;
-}
-.htp-toggle.open .htp-arrow { transform: rotate(180deg); }
-.htp-toggle.open {
-    background: rgba(255,255,255,0.08); color: var(--text);
-    border-color: rgba(255,255,255,0.2);
-}
-.htp-panel {
-    max-height: 0; overflow: hidden;
-    transition: max-height 0.4s ease, opacity 0.3s ease, margin 0.3s ease;
-    opacity: 0; margin-top: 0;
-}
-.htp-panel.open {
-    max-height: 800px; opacity: 1; margin-top: 14px;
-}
-.htp-inner {
-    text-align: left;
-    background: rgba(255,255,255,0.03);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px 18px;
-}
-.htp-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.85rem; letter-spacing: 2px;
-    margin-bottom: 12px; text-align: center;
-}
-.wk-card.recall .htp-title { color: var(--orange); }
-.wk-card.replay .htp-title { color: var(--teal); }
-.wk-card.reflex .htp-title { color: var(--cyan); }
-.wk-card.react .htp-title { color: var(--purple); }
-.wk-card.rhythm .htp-title { color: var(--lime); }
+.footer{border-top:1px solid var(--border);padding:25px 20px;text-align:center}
+.footer-links{display:flex;justify-content:center;gap:20px;margin-bottom:15px}
+.footer-link{font-size:0.75rem;color:var(--muted);text-decoration:none;transition:color 0.2s}
+.footer-link:active{color:var(--gold)}
+.footer-copy{font-size:0.65rem;color:var(--muted);margin-bottom:12px}
+.footer-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,215,0,0.05);border:1px solid rgba(255,215,0,0.15);border-radius:20px;padding:8px 16px}
+.footer-badge .pulse-dot{width:8px;height:8px;background:var(--gold);border-radius:50%;animation:pulse 1s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:0.3;transform:scale(0.8)}50%{opacity:1;transform:scale(1.2)}}
+.footer-badge-text{font-size:0.6rem;color:var(--muted)}
+.footer-badge-text span{font-family:'Bebas Neue',sans-serif;font-size:0.85rem;color:var(--gold);letter-spacing:2px}
 
-.htp-step {
-    display: flex; gap: 10px; margin-bottom: 10px;
-    align-items: flex-start;
-}
-.htp-step:last-child { margin-bottom: 0; }
-.htp-step-num {
-    flex-shrink: 0; width: 22px; height: 22px;
-    border-radius: 50%; display: flex;
-    align-items: center; justify-content: center;
-    font-family: 'Bebas Neue', sans-serif; font-size: 0.7rem;
-    color: var(--dark); font-weight: 700; margin-top: 1px;
-}
-.wk-card.recall .htp-step-num { background: var(--orange); }
-.wk-card.replay .htp-step-num { background: var(--teal); }
-.wk-card.reflex .htp-step-num { background: var(--cyan); }
-.wk-card.react .htp-step-num { background: var(--purple); color: #fff; }
-.wk-card.rhythm .htp-step-num { background: var(--lime); }
-
-.htp-step-text {
-    font-size: 0.72rem; color: var(--text);
-    line-height: 1.45; flex: 1;
-}
-.htp-step-text strong { color: var(--gold); font-weight: 700; }
-.htp-step-text em { color: var(--muted); font-style: normal; font-size: 0.65rem; }
-
-.htp-section-label {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.6rem; letter-spacing: 2px;
-    color: var(--muted); margin: 12px 0 8px;
-    padding-top: 10px;
-    border-top: 1px solid var(--border);
-}
-.htp-tip {
-    display: flex; gap: 8px; align-items: flex-start;
-    margin-top: 8px; padding: 8px 10px;
-    background: rgba(255,215,0,0.06);
-    border: 1px solid rgba(255,215,0,0.12);
-    border-radius: 8px;
-}
-.htp-tip-icon { font-size: 0.8rem; flex-shrink: 0; }
-.htp-tip-text {
-    font-size: 0.65rem; color: var(--gold);
-    line-height: 1.4;
-}
-
-/* Pocket sim: watch = purple, target = gold, mixed tap results */
-.sim-cell.watch {
-    background: #9B59B6; border-color: #9B59B6;
-    box-shadow: 0 0 10px rgba(155,89,182,0.5);
-    color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.5);
-    transform: scale(1.08);
-}
-.sim-cell.target {
-    background: #FFD700; border-color: #FFD700;
-    box-shadow: 0 0 12px rgba(255,215,0,0.5);
-    color: var(--dark); font-weight: 700;
-    transform: scale(1.08);
-}
-.sim-cell.good-tap {
-    background: #FF6B35; border-color: #FF6B35;
-    box-shadow: 0 0 10px rgba(255,107,53,0.4);
-    color: #fff; font-weight: 700;
-    transform: scale(1.04);
-}
-.sim-cell.missed {
-    background: #FF1493; border-color: #FF1493;
-    box-shadow: 0 0 10px rgba(255,20,147,0.4);
-    color: #fff; font-weight: 700;
-    transform: scale(1.0);
-}
-.sim-court.beat-pulse {
-    border-color: #9B59B6 !important;
-    box-shadow: 0 0 12px rgba(155,89,182,0.5);
-}
-@keyframes simBeatBorder {
-    0%,100% { border-color: rgba(155,89,182,0.3); box-shadow: none; }
-    50% { border-color: #9B59B6; box-shadow: 0 0 10px rgba(155,89,182,0.4); }
-}
-.sim-court.beating {
-    animation: simBeatBorder 900ms ease-in-out infinite;
-}
-
-/* Echo sim: echo-changed = orange glow, echo-original = dashed gold */
-.sim-cell.echo-lit {
-    background: #FF6B35; border-color: #FF6B35;
-    box-shadow: 0 0 10px rgba(255,107,53,0.5);
-    color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.5);
-    transform: scale(1.08);
-}
-.sim-cell.echo-changed {
-    background: #FF1493; border-color: #FF1493;
-    box-shadow: 0 0 14px rgba(255,20,147,0.5);
-    color: #fff; font-weight: 700;
-    transform: scale(1.12);
-}
-.sim-cell.echo-original {
-    border: 2px dashed #FFD700;
-    box-shadow: 0 0 10px rgba(255,215,0,0.4);
-    background: rgba(255,215,0,0.15);
-    color: #FFD700;
-}
-
-/* Sim theme colors per game */
-.wk-card.recall .sim-court { --sim-border: var(--orange); --sim-flash: var(--orange); --sim-flash-border: var(--gold); --sim-glow: rgba(255,107,53,0.4); }
-.wk-card.replay .sim-court { --sim-border: var(--teal); --sim-flash: var(--teal); --sim-flash-border: #7FFFD4; --sim-glow: rgba(0,217,165,0.4); }
-.wk-card.reflex .sim-court { --sim-border: var(--cyan); --sim-flash: var(--cyan); --sim-flash-border: #7FEFEF; --sim-glow: rgba(0,206,209,0.4); }
-.wk-card.react .sim-court { --sim-border: var(--purple); --sim-flash: var(--purple); --sim-flash-border: #D2A8E0; --sim-glow: rgba(155,89,182,0.4); }
-.wk-card.rhythm .sim-court { --sim-border: var(--lime); --sim-flash: var(--lime); --sim-flash-border: #90EE90; --sim-glow: rgba(50,205,50,0.4); }
-
-@media (min-width: 600px) {
-    .sim-court { width: 210px; height: 210px; }
-    .sim-cell { font-size: 0.9rem; }
-}
-
-/* ============ MID-PAGE CTA ============ */
-.mid-cta {
-    text-align: center; padding: 30px 16px 40px;
-    border-top: 1px solid var(--border);
-}
-.mid-cta-text {
-    font-size: 0.85rem; color: var(--muted); margin-bottom: 16px;
-    line-height: 1.5; max-width: 400px; margin-left: auto; margin-right: auto;
-}
-.btn-sm { padding: 10px 20px; font-size: 0.85rem; }
-
-/* ============ ETYMOLOGY LEAD-IN ============ */
-.etym-lead {
-    font-size: 0.95rem; color: var(--text); font-weight: 500;
-    margin-bottom: 20px; padding-top: 30px;
-}
-
-@media (min-width: 600px) {
-    .mid-cta-text { font-size: 0.9rem; }
-}
-
-/* ============ PRICING VALUE ============ */
-.pricing-value {
-    font-size: 0.7rem; color: var(--muted); letter-spacing: 0.3px;
-    margin-bottom: 14px;
-}
-
-/* ============ §3 ETYMOLOGY ============ */
-.etymology { padding: 50px 16px; text-align: center; position: relative; }
-.etymology::before {
-    content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-    width: 1px; height: 60px; background: linear-gradient(to bottom, transparent, rgba(255,215,0,0.3));
-}
-.etym-equation {
-    display: flex; align-items: center; justify-content: center;
-    gap: 14px; flex-wrap: wrap; margin-bottom: 20px; padding-top: 30px;
-}
-.etym-word {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(1.6rem, 5vw, 2.8rem); letter-spacing: 3px; color: var(--text);
-}
-.etym-word span { color: var(--gold); }
-.etym-equals { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; color: var(--gold); }
-.etym-result {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(1.8rem, 6vw, 3.2rem); letter-spacing: 5px; color: var(--gold);
-}
-.etym-desc {
-    color: var(--muted); font-size: 0.9rem; max-width: 500px;
-    margin: 0 auto; line-height: 1.7;
-}
-
-/* ============ §4 THREE SPEEDS ============ */
-.tiers { padding: 50px 16px; text-align: center; position: relative; }
-.tiers::before {
-    content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-    width: 1px; height: 60px; background: linear-gradient(to bottom, transparent, rgba(255,215,0,0.3));
-}
-.tier-cards {
-    display: grid; grid-template-columns: 1fr; gap: 16px;
-    max-width: 320px; margin: 0 auto;
-}
-.tier-card {
-    background: linear-gradient(145deg, var(--card) 0%, var(--darker) 100%);
-    border: 1px solid var(--border); border-radius: 20px;
-    padding: 30px 20px; text-align: center; position: relative;
-    overflow: hidden; transition: all 0.4s;
-}
-.tier-card::before {
-    content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-    background: radial-gradient(circle, var(--glow) 0%, transparent 70%);
-    pointer-events: none; opacity: 0; transition: opacity 0.4s;
-}
-.tier-card:hover::before { opacity: 1; }
-.tier-card:hover { border-color: rgba(255,215,0,0.2); transform: translateY(-3px); }
-
-.tier-dot-wrap {
-    position: relative; display: inline-flex; align-items: center;
-    justify-content: center; width: 50px; height: 50px; margin-bottom: 16px;
-}
-.tier-dot { width: 18px; height: 18px; border-radius: 50%; position: relative; z-index: 2; }
-.tier-ring {
-    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    width: 18px; height: 18px; border-radius: 50%; z-index: 1;
-}
-
-.tier-training { --glow: rgba(0,217,165,0.06); }
-.tier-training .tier-dot { background: var(--teal); box-shadow: 0 0 20px rgba(0,217,165,0.4); animation: dot-60 1s ease-in-out infinite; }
-.tier-training .tier-ring { border: 1px solid rgba(0,217,165,0.15); animation: ring-expand 2.5s ease-out infinite; }
-.tier-training .tier-bpm { color: var(--teal); }
-.tier-training .tier-name { color: var(--teal); }
-
-.tier-tempo { --glow: rgba(255,107,53,0.06); }
-.tier-tempo .tier-dot { background: var(--orange); box-shadow: 0 0 20px rgba(255,107,53,0.4); animation: dot-90 0.667s ease-in-out infinite; }
-.tier-tempo .tier-ring { border: 1px solid rgba(255,107,53,0.15); animation: ring-expand 1.8s ease-out infinite; }
-.tier-tempo .tier-bpm { color: var(--orange); }
-.tier-tempo .tier-name { color: var(--orange); }
-
-.tier-elite { --glow: rgba(255,215,0,0.06); }
-.tier-elite .tier-dot { background: var(--gold); box-shadow: 0 0 20px rgba(255,215,0,0.4); animation: dot-120 0.5s ease-in-out infinite; }
-.tier-elite .tier-ring { border: 1px solid rgba(255,215,0,0.15); animation: ring-expand 1.2s ease-out infinite; }
-.tier-elite .tier-bpm { color: var(--gold); }
-.tier-elite .tier-name { color: var(--gold); }
-
-.tier-bpm { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; letter-spacing: 2px; line-height: 1; margin-bottom: 2px; }
-.tier-bpm-unit { font-size: 0.9rem; letter-spacing: 3px; color: var(--muted); }
-.tier-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 3px; margin-bottom: 10px; }
-.tier-tagline { color: var(--text); font-size: 0.9rem; font-weight: 500; font-style: italic; margin-bottom: 6px; }
-.tier-desc { color: var(--muted); font-size: 0.78rem; line-height: 1.6; }
-.tier-free-badge {
-    display: inline-block; margin-top: 8px; padding: 2px 10px;
-    background: rgba(0,217,165,0.15); color: var(--teal);
-    border-radius: 8px; font-size: 0.6rem; font-weight: 700; letter-spacing: 1px;
-}
-
-/* ============ §5 TROPHY CASE ============ */
-.trophy-section {
-    width: 100%; background: linear-gradient(180deg, var(--darker) 0%, var(--dark) 100%);
-    padding: 50px 16px; text-align: center;
-}
-.trophy-badge {
-    display: inline-block; background: rgba(255,215,0,0.2); color: var(--gold);
-    padding: 5px 12px; border-radius: 15px; font-size: 0.6rem;
-    font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;
-}
-.trophy-title {
-    font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem;
-    letter-spacing: 2px; margin-bottom: 12px; line-height: 1.1;
-}
-.trophy-title .gold { color: var(--gold); }
-.trophy-desc { color: var(--muted); font-size: 0.85rem; line-height: 1.5; margin-bottom: 20px; }
-.trophy-features { list-style: none; margin-bottom: 24px; }
-.trophy-features li {
-    padding: 6px 0; color: var(--text); font-size: 0.85rem;
-    display: flex; align-items: center; justify-content: center; gap: 8px;
-}
-.trophy-features .star { color: var(--gold); font-size: 0.9rem; }
-.trophy-preview {
-    background: var(--card); border: 1px solid var(--border);
-    border-radius: 14px; padding: 16px 12px; width: 100%;
-    max-width: 280px; margin: 0 auto;
-}
-.trophy-preview-title {
-    font-size: 0.55rem; color: var(--muted); text-transform: uppercase;
-    letter-spacing: 1px; margin-bottom: 10px;
-}
-.trophy-preview-game {
-    font-family: 'Bebas Neue', sans-serif; font-size: 1rem;
-    letter-spacing: 1px; color: var(--orange); margin-bottom: 6px;
-}
-.trophy-preview-stars { font-size: 1.3rem; letter-spacing: 2px; margin-bottom: 6px; }
-.trophy-preview-label {
-    font-family: 'Bebas Neue', sans-serif; font-size: 0.85rem;
-    color: var(--gold); margin-bottom: 12px;
-}
-.trophy-preview-speeds {
-    display: flex; justify-content: space-around;
-    border-top: 1px solid var(--border); padding-top: 10px;
-}
-.trophy-speed { text-align: center; flex: 1; }
-.trophy-speed-name { font-size: 0.5rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px; }
-.trophy-speed-level { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; color: var(--orange); }
-.trophy-speed-cells { font-size: 0.5rem; color: var(--muted); }
-
-/* ============ §6 WHO IT'S FOR ============ */
-.audience-wrapper { width: 100%; max-width: 320px; margin: 0 auto; }
-.audience-card {
-    background: var(--card); border-radius: 12px; padding: 20px 16px;
-    text-align: center; border: 1px solid var(--border); margin-bottom: 12px;
-}
-.audience-card:last-child { margin-bottom: 0; }
-.audience-icon { font-size: 1.8rem; margin-bottom: 10px; }
-.audience-title {
-    font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem;
-    letter-spacing: 1px; margin-bottom: 6px; color: var(--teal);
-}
-.audience-text { color: var(--muted); font-size: 0.8rem; line-height: 1.4; }
-
-/* ============ §7 PRICING ============ */
-.pricing-card {
-    background: var(--card); border: 2px solid var(--gold);
-    border-radius: 16px; padding: 24px 16px; width: 100%;
-    max-width: 300px; margin: 0 auto 20px; text-align: center;
-}
-.pricing-trial {
-    font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem;
-    letter-spacing: 1px; color: var(--teal); margin-bottom: 6px;
-}
-.pricing-then { color: var(--muted); font-size: 0.8rem; margin-bottom: 6px; }
-.pricing-amount {
-    font-family: 'Bebas Neue', sans-serif; font-size: 3rem;
-    color: var(--gold); line-height: 1;
-}
-.pricing-period { font-size: 0.9rem; color: var(--muted); margin-bottom: 16px; }
-.pricing-features { list-style: none; text-align: left; margin-bottom: 20px; }
-.pricing-features li {
-    padding: 7px 0; border-bottom: 1px solid var(--border);
-    color: var(--text); font-size: 0.8rem; display: flex; align-items: center; gap: 8px;
-}
-.pricing-features li:last-child { border-bottom: none; }
-.pricing-features .check { color: var(--teal); font-size: 0.9rem; }
-.pricing-cta {
-    display: block; width: 100%; padding: 14px 16px;
-    background: linear-gradient(135deg, var(--gold), var(--orange));
-    color: var(--dark); border-radius: 30px; font-family: 'Bebas Neue', sans-serif;
-    font-size: 1rem; letter-spacing: 1.5px; text-decoration: none; text-align: center;
-}
-.facilities-callout {
-    background: rgba(0,217,165,0.1); border: 1px solid var(--teal);
-    border-radius: 12px; padding: 16px 14px; width: 100%;
-    max-width: 300px; margin: 0 auto;
-}
-.facilities-title {
-    font-family: 'Bebas Neue', sans-serif; font-size: 0.9rem;
-    letter-spacing: 1px; color: var(--teal); margin-bottom: 6px;
-}
-.facilities-text { color: var(--muted); font-size: 0.75rem; line-height: 1.4; }
-.facilities-text strong { color: var(--text); }
-
-/* ============ §8 FINAL CTA ============ */
-.final-cta { width: 100%; padding: 50px 16px; text-align: center; position: relative; overflow: hidden; }
-.final-cta::before {
-    content: ''; position: absolute; top: 50%; left: 50%;
-    transform: translate(-50%, -50%); width: 300px; height: 300px;
-    background: radial-gradient(circle, rgba(255,215,0,0.1) 0%, transparent 60%);
-    pointer-events: none;
-}
-.final-cta-content { position: relative; z-index: 1; width: 100%; }
-.final-icon { font-size: 3rem; margin-bottom: 12px; }
-.final-title {
-    font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem;
-    letter-spacing: 2px; margin-bottom: 10px; line-height: 1.1;
-}
-.final-sub { color: var(--muted); font-size: 0.85rem; margin-bottom: 24px; }
-.final-buttons { width: 100%; max-width: 280px; margin: 0 auto 20px; }
-.cta-btn {
-    display: block; width: 100%; padding: 14px 16px; border-radius: 30px;
-    font-family: 'Bebas Neue', sans-serif; font-size: 0.95rem;
-    letter-spacing: 1.5px; text-decoration: none; text-align: center; margin-bottom: 10px;
-}
-.cta-btn:last-child { margin-bottom: 0; }
-.cta-btn.primary { background: linear-gradient(135deg, var(--gold), var(--orange)); color: var(--dark); }
-.cta-btn.secondary { background: transparent; color: var(--text); border: 2px solid rgba(255,255,255,0.2); }
-.final-note { color: var(--muted); font-size: 0.8rem; }
-.final-note a { color: var(--gold); text-decoration: none; }
-
-/* ============ POWERED BADGE (inline) ============ */
-.powered-inline {
-    display: inline-flex; align-items: center; gap: 10px;
-    background: rgba(5,5,8,0.9); border: 1px solid rgba(255,215,0,0.2);
-    border-radius: 25px; padding: 8px 20px 8px 14px; margin-bottom: 20px;
-}
-.powered-inline .p-dot {
-    width: 10px; height: 10px; background: var(--gold); border-radius: 50%;
-    animation: dot-60 1s ease-in-out infinite; box-shadow: 0 0 10px rgba(255,215,0,0.4);
-}
-.powered-inline .p-label { font-size: 0.45rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); font-weight: 600; }
-.powered-inline .p-name { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 2px; color: var(--gold); }
-.powered-inline .p-text { display: flex; flex-direction: column; line-height: 1; }
-
-/* ============ FOOTER ============ */
-.footer {
-    width: 100%; text-align: center; padding: 30px 16px;
-    border-top: 1px solid rgba(255,255,255,0.05); background: var(--darker);
-}
-.footer-logo {
-    font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem;
-    letter-spacing: 2px; margin-bottom: 5px;
-    display: flex; align-items: center; justify-content: center; gap: 6px;
-}
-.footer-logo .icon { width: 28px; height: 28px; }
-.footer-logo .rit { color: var(--gold); }
-.footer-logo .nome { color: var(--text); }
-.footer-tagline {
-    font-size: 0.55rem; letter-spacing: 1.5px; color: var(--gold);
-    text-transform: uppercase; margin-bottom: 10px;
-}
-.footer-links { margin-bottom: 8px; font-size: 0.65rem; }
-.footer-links a { color: var(--muted); text-decoration: none; margin: 0 6px; }
-.footer-company { font-size: 0.65rem; color: var(--muted); }
-.footer-trademarks {
-    font-size: 0.5rem; color: var(--muted); margin-top: 10px;
-    line-height: 1.4; opacity: 0.7;
-}
-
-/* ============ TABLET (600px+) ============ */
-@media (min-width: 600px) {
-    .mini-nav { padding: 0 20px; }
-    .nav-logo { font-size: 1.15rem; }
-    .hero { padding: 30px 24px; padding-top: calc(var(--nav-height) + 30px); }
-    .hero-logo { font-size: 4rem; letter-spacing: 6px; }
-    .hero-tagline { font-size: 1.1rem; letter-spacing: 4px; }
-    .hero-headline { font-size: 2.2rem; }
-    .hero-sub { font-size: 1rem; }
-    .btn { padding: 16px 32px; font-size: 1.05rem; }
-
-    .section { padding: 70px 24px; }
-    .section-title { font-size: 2.2rem; }
-
-    .workouts-full { max-width: 700px; }
-    .wk-header { padding: 18px 20px; }
-    .wk-body { padding: 18px 20px; }
-    .wk-name { font-size: 1.4rem; }
-
-    .etymology { padding: 80px 24px; }
-    .etym-desc { font-size: 1rem; }
-
-    .tiers { padding: 80px 24px; }
-    .tier-cards { grid-template-columns: repeat(3, 1fr); max-width: 900px; gap: 20px; }
-    .tier-bpm { font-size: 3.5rem; }
-
-    .trophy-section { padding: 70px 24px; }
-    .trophy-title { font-size: 2.2rem; }
-    .trophy-preview { max-width: 320px; }
-
-    .audience-wrapper { max-width: 700px; display: flex; gap: 16px; }
-    .audience-card { flex: 1; margin-bottom: 0; }
-
-    .pricing-card { max-width: 360px; padding: 30px 24px; }
-    .facilities-callout { max-width: 360px; }
-
-    .final-title { font-size: 2.4rem; }
-    .final-buttons { max-width: 320px; }
-}
-
-/* ============ DESKTOP (900px+) ============ */
-@media (min-width: 900px) {
-    .hero-logo { font-size: 5rem; letter-spacing: 8px; }
-    .hero-tagline { font-size: 1.4rem; letter-spacing: 6px; }
-    .hero-headline { font-size: 2.6rem; }
-    .section-title { font-size: 2.6rem; }
-    .trophy-title { font-size: 2.6rem; }
-    .tier-cards { max-width: 1000px; gap: 28px; }
-    .final-title { font-size: 2.8rem; }
-    .workouts-full { max-width: 800px; }
-}
-
-/* ============ TINY (≤374px) ============ */
-@media (max-width: 374px) {
-    .hero-logo { font-size: 2.2rem; letter-spacing: 2px; }
-    .hero-tagline { font-size: 0.7rem; letter-spacing: 2px; }
-    .hero-headline { font-size: 1.3rem; }
-    .section-title { font-size: 1.4rem; }
-    .trophy-title { font-size: 1.4rem; }
-    .etym-word { font-size: 1.3rem; }
-    .etym-result { font-size: 1.5rem; }
-    .tier-bpm { font-size: 2.4rem; }
-    .wk-name { font-size: 1rem; }
-    .wk-text { font-size: 0.78rem; }
-    .wk-num { width: 18px; height: 18px; min-width: 18px; font-size: 0.6rem; }
-}
+@media(min-width:400px){.hero-title{font-size:2.5rem}.workout-card{padding:18px 20px}.workout-icon{font-size:2rem}.workout-name{font-size:1.1rem}.pricing-amount{font-size:3.5rem}}
 </style>
 </head>
 <body class="en">
 
-<!-- ============ NAV ============ -->
-<nav class="mini-nav">
-    <a href="/" class="nav-logo">
-        <img src="/icon.png" alt="Ritnome" class="icon">
-        <span class="rit">RIT</span><span class="nome">NOME</span>
-    </a>
-    <div class="nav-right">
-        <div class="nav-lang">
-            <button class="nav-lang-btn active" id="btnEn">EN</button>
-            <button class="nav-lang-btn" id="btnEs">ES</button>
-        </div>
-        <a href="/login" class="nav-login">
-            <span class="lang-en">LOGIN</span>
-            <span class="lang-es">ENTRAR</span>
-        </a>
-    </div>
-</nav>
+<header class="header">
+<div class="logo"><img src="/icon.png" alt="Ritnome"><span class="rit">RIT</span><span class="nome">NOME</span></div>
+<div class="lang-toggle"><button class="lang-btn active" id="btnEn">EN</button><button class="lang-btn" id="btnEs">ES</button></div>
+</header>
 
-<!-- ============ §1 HERO ============ -->
-<section class="hero">
-    <div class="hero-content">
-        <div class="hero-badge">
-            <span class="lang-en">🏆 THE FIVE R's</span>
-            <span class="lang-es">🏆 LAS CINCO R's</span>
-        </div>
-        <div class="hero-logo">
-            <span class="rit">RIT</span><span class="nome">NOME</span>
-        </div>
-        <div class="hero-tagline">
-            <span class="lang-en">RECOGNITION · RECALL · REFLEX · REACT · RHYTHM</span>
-            <span class="lang-es">RECONOCIMIENTO · RECUERDO · REFLEJO · REACCIÓN · RITMO</span>
-        </div>
-        <h1 class="hero-headline">
-            <span class="lang-en">FIVE GAMES. THREE SPEEDS.<br><span class="highlight-gold">ONE GRID. YOUR MOVE.</span></span>
-            <span class="lang-es">CINCO JUEGOS. TRES VELOCIDADES.<br><span class="highlight-gold">UNA CUADRÍCULA. TU TURNO.</span></span>
-        </h1>
-        <p class="hero-sub">
-            <span class="lang-en">Recognition, recall, reflex, reaction, and rhythm — all challenged on a 5×5 grid at precise beats per minute.</span>
-            <span class="lang-es">Reconocimiento, recuerdo, reflejo, reacción y ritmo — todo en una cuadrícula 5×5 a pulsos precisos por minuto.</span>
-        </p>
-        <div class="hero-cta">
-            <a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="btn btn-primary">
-                <span class="lang-en">START FREE TRIAL →</span>
-                <span class="lang-es">COMENZAR GRATIS →</span>
-            </a>
-        </div>
-        <p class="hero-login">
-            <span class="lang-en">Already a member? <a href="/login">Login</a></span>
-            <span class="lang-es">¿Ya eres miembro? <a href="/login">Entrar</a></span>
-        </p>
-    </div>
-    <div class="scroll-hint">
-        <span class="lang-en">See it in action</span>
-        <span class="lang-es">Míralo en acción</span>
-        <span>↓</span>
-    </div>
-</section>
+<main class="main">
 
-<!-- ============ §2 THE 5 GAMES ============ -->
-<section class="section reveal" id="workouts">
-    <div class="section-badge">
-        <span class="lang-en">🏋️ Five Ways to Play</span>
-        <span class="lang-es">🏋️ Cinco Formas de Jugar</span>
-    </div>
-    <h2 class="section-title">
-        <span class="lang-en">SAME GRID. FIVE CHALLENGES.</span>
-        <span class="lang-es">MISMA CUADRÍCULA. CINCO DESAFÍOS.</span>
-    </h2>
-    <p class="section-sub">
-        <span class="lang-en">One 5×5 grid. Five games that each test a different skill. All running at real beats per minute.</span>
-        <span class="lang-es">Una cuadrícula 5×5. Cinco juegos que entrenan habilidades diferentes. Todos a pulsos reales por minuto.</span>
-    </p>
-
-    <div class="workouts-full">
-
-        <!-- THE RECALL -->
-        <div class="wk-card recall reveal">
-            <div class="wk-header">
-                <div class="wk-info">
-                    <h3 class="wk-name">THE RECALL</h3>
-                    <p class="wk-tagline"><span class="lang-en">Spatial Patterns — Position + Numbers</span><span class="lang-es">Patrones Espaciales — Posición + Números</span></p>
-                </div>
-            </div>
-            <div class="sim-wrap">
-                <div class="sim-label" id="simMatchLabel">
-                    <span class="lang-en">NUMBERED CELLS FLASH — RECALL IN ORDER</span>
-                    <span class="lang-es">CELDAS NUMERADAS — RECUERDA EN ORDEN</span>
-                </div>
-                <div class="sim-court" id="simMatchCourt"></div>
-                <p class="sim-caption">
-                    <span class="lang-en">All cells flash <strong>at once</strong> with numbers — tap back 1, 2, 3...</span>
-                    <span class="lang-es">Todas las celdas parpadean <strong>a la vez</strong> con números — repite 1, 2, 3...</span>
-                </p>
-                <a href="/the-recall.html" class="sim-play">
-                    <span class="lang-en">PLAY THE RECALL →</span>
-                    <span class="lang-es">JUGAR THE RECALL →</span>
-                </a>
-                <br>
-                <button class="htp-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
-                    <span class="lang-en">📖 HOW TO PLAY</span>
-                    <span class="lang-es">📖 CÓMO JUGAR</span>
-                    <span class="htp-arrow">▼</span>
-                </button>
-                <div class="htp-panel">
-                    <div class="htp-inner">
-                        <div class="htp-title">
-                            <span class="lang-en">THE RECALL — FULL RULES</span>
-                            <span class="lang-es">THE RECALL — REGLAS COMPLETAS</span>
-                        </div>
-                        <div class="htp-step"><span class="htp-step-num">1</span><span class="htp-step-text"><span class="lang-en">Choose your <strong>Level</strong> (1–10) and your <strong>Ritnome™ BPM</strong> speed (60 · 90 · 120). Higher levels show more cells. Faster BPM means less time to study.</span><span class="lang-es">Elige tu <strong>Nivel</strong> (1–10) y tu velocidad <strong>Ritnome™ BPM</strong> (60 · 90 · 120). Niveles altos muestran más celdas. BPM rápido significa menos tiempo para estudiar.</span></span></div>
-                        <div class="htp-step"><span class="htp-step-num">2</span><span class="htp-step-text"><span class="lang-en">Tap <strong>LET'S GO</strong>. A group of numbered cells (1, 2, 3...) lights up on the 5×5 grid <strong>all at once</strong>. Recognize their positions AND their numbers.</span><span class="lang-es">Toca <strong>PA'LANTE</strong>. Un grupo de celdas numeradas (1, 2, 3...) se ilumina en la cuadrícula 5×5 <strong>todas a la vez</strong>. Reconoce sus posiciones Y sus números.</span></span></div>
-                        <div class="htp-step"><span class="htp-step-num">3</span><span class="htp-step-text"><span class="lang-en">The cells go dark. Now <strong>tap them back in numerical order</strong> — cell #1 first, then #2, then #3, etc. You must remember both <strong>where</strong> each cell was and <strong>what number</strong> it had.</span><span class="lang-es">Las celdas se apagan. Ahora <strong>tócalas en orden numérico</strong> — celda #1 primero, luego #2, luego #3, etc. Debes recordar <strong>dónde</strong> estaba cada celda y <strong>qué número</strong> tenía.</span></span></div>
-                        <div class="htp-step"><span class="htp-step-num">4</span><span class="htp-step-text"><span class="lang-en">Correct taps turn <strong>teal ✓</strong>. Wrong taps turn <strong>pink ✗</strong> and you lose a life. <em>You have 3 lives per round.</em></span><span class="lang-es">Toques correctos se ponen <strong>verde ✓</strong>. Toques incorrectos se ponen <strong>rosa ✗</strong> y pierdes una vida. <em>Tienes 3 vidas por ronda.</em></span></span></div>
-                        <div class="htp-step"><span class="htp-step-num">5</span><span class="htp-step-text"><span class="lang-en">Complete the full pattern to win the round. <strong>Win 2 rounds to level up.</strong> Progress is saved per BPM speed — each speed has its own level track.</span><span class="lang-es">Completa el patrón completo para ganar la ronda. <strong>Gana 2 rondas para subir de nivel.</strong> El progreso se guarda por velocidad BPM — cada velocidad tiene su propio nivel.</span></span></div>
-                        <div class="htp-section-label"><span class="lang-en">⚙️ GAME FEATURES</span><span class="lang-es">⚙️ CARACTERÍSTICAS</span></div>
-                        <div class="htp-step"><span class="htp-step-num">⛶</span><span class="htp-step-text"><span class="lang-en"><strong>Focus Mode</strong> — hides all UI except the grid and action button. Tap ⛶ to toggle.</span><span class="lang-es"><strong>Modo Enfoque</strong> — oculta toda la interfaz excepto la cuadrícula y el botón. Toca ⛶ para activar.</span></span></div>
-                        <div class="htp-step"><span class="htp-step-num">🔄</span><span class="htp-step-text"><span class="lang-en"><strong>Reset</strong> — restarts the current round without losing your score or level.</span><span class="lang-es"><strong>Reiniciar</strong> — reinicia la ronda actual sin perder tu puntuación o nivel.</span></span></div>
-                        <div class="htp-tip">
-                            <span class="htp-tip-icon">💡</span>
-                            <span class="htp-tip-text"><span class="lang-en">Pro tip: Don't memorize individual cells — try to see the shape of the pattern as a whole. Your eyes are faster than counting one by one.</span><span class="lang-es">Consejo pro: No memorices celdas individuales — intenta ver la forma del patrón como un todo. Tus ojos son más rápidos que contar una por una.</span></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- THE REPLAY -->
-        <div class="wk-card replay reveal">
-            <div class="wk-header">
-                <div class="wk-info">
-                    <h3 class="wk-name">THE REPLAY</h3>
-                    <p class="wk-tagline"><span class="lang-en">Sequential Patterns — Order Matters</span><span class="lang-es">Patrones Secuenciales — El Orden Importa</span></p>
-                </div>
-            </div>
-            <div class="sim-wrap">
-                <div class="sim-label" id="simSeqLabel">
-                    <span class="lang-en">CELLS FLASH ONE BY ONE — RECALL THE ORDER</span>
-                    <span class="lang-es">CELDAS UNA POR UNA — RECUERDA EL ORDEN</span>
-                </div>
-                <div class="sim-court" id="simSeqCourt"></div>
-                <p class="sim-caption">
-                    <span class="lang-en">Cells light up <strong>one at a time</strong> — tap back in the <strong>same sequence</strong></span>
-                    <span class="lang-es">Las celdas se iluminan <strong>una a la vez</strong> — repite en la <strong>misma secuencia</strong></span>
-                </p>
-                <a href="/the-replay.html" class="sim-play">
-                    <span class="lang-en">PLAY THE REPLAY →</span>
-                    <span class="lang-es">JUGAR THE REPLAY →</span>
-                </a>
-                <br>
-                <button class="htp-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
-                    <span class="lang-en">📖 HOW TO PLAY</span>
-                    <span class="lang-es">📖 CÓMO JUGAR</span>
-                    <span class="htp-arrow">▼</span>
-                </button>
-                <div class="htp-panel">
-                    <div class="htp-inner">
-                        <div class="htp-title">
-                            <span class="lang-en">THE REPLAY — FULL RULES</span>
-                            <span class="lang-es">THE REPLAY — REGLAS COMPLETAS</span>
-                        </div>
-                        <div class="htp-step"><span class="htp-step-num">1</span><span class="htp-step-text"><span class="lang-en">Choose your <strong>Level</strong> (1–10) and <strong>Ritnome™ BPM</strong> speed. Higher levels = longer sequences. Faster BPM = cells flash faster.</span><span class="lang-es">Elige tu <strong>Nivel</strong> (1–10) y velocidad <strong>Ritnome™ BPM</strong>. Nivel alto = secuencias más largas. BPM rápido = celdas parpadean más rápido.</span></span></div>
-                        <div class="htp-step"><span class="htp-step-num">2</span><span class="htp-step-text"><span class="lang-en">Tap <strong>LET'S GO</strong>. Cells light up <strong>one at a time</strong> in a specific order, each with a different color. Watch carefully — the <strong>order they appear is what matters</strong>.</span><span class="lang-es">Toca <strong>PA'LANTE</strong>. Las celdas se iluminan <strong>una a la vez</strong> en un orden específico, cada una con un color diferente. Observa bien — <strong>el orden de aparición es lo que importa</strong>.</span></span></div>
-                        <div class="htp-step"><span class="htp-step-num">3</span><span class="htp-step-text"><span class="lang-en">The sequence plays <strong>3 times</strong> so you can study it. Labels will say "AGAIN..." and "LAST TIME..." between loops.</span><span class="lang-es">La secuencia se repite <strong>3 veces</strong> para que la estudies. Las etiquetas dirán "OTRA VEZ..." y "ÚLTIMA VEZ..." entre repeticiones.</span></span></div>
-                        <div class="htp-step"><span class="htp-step-num">4</span><span class="htp-step-text"><span class="lang-en">After the countdown (3… 2… 1…), tap the cells back <strong>in the exact order they appeared</strong>. First cell that flashed = first tap, second = second tap, etc.</span><span class="lang-es">Después de la cuenta regresiva (3… 2… 1…), toca las celdas <strong>en el orden exacto en que aparecieron</strong>. Primera celda que parpadeó = primer toque, segunda = segundo toque, etc.</span></span></div>
-                        <div class="htp-step"><span class="htp-step-num">5</span><span class="htp-step-text"><span class="lang-en">Correct taps turn <strong>teal ✓</strong>. Wrong taps turn <strong>pink ✗</strong> and cost a life. <em>3 lives per round.</em> Complete the full sequence to win. <strong>Win 2 rounds to level up.</strong></span><span class="lang-es">Toques correctos se ponen <strong>verde ✓</strong>. Toques incorrectos se ponen <strong>rosa ✗</strong> y pierdes una vida. <em>3 vidas por ronda.</em> Completa la secuencia para ganar. <strong>Gana 2 rondas para subir de nivel.</strong></span></span></div>
-                        <div class="htp-section-label"><span class="lang-en">🆚 RECALL vs. REPLAY — WHAT'S THE DIFFERENCE?</span><span class="lang-es">🆚 RECALL vs. REPLAY — ¿CUÁL ES LA DIFERENCIA?</span></div>
-                        <div class="htp-step"><span class="htp-step-num">→</span><span class="htp-step-text"><span class="lang-en"><strong>THE RECALL:</strong> All cells flash at once with numbers. You tap them in <strong>numerical order</strong> (1, 2, 3...).</span><span class="lang-es"><strong>THE RECALL:</strong> Todas las celdas parpadean a la vez con números. Las tocas en <strong>orden numérico</strong> (1, 2, 3...).</span></span></div>
-                        <div class="htp-step"><span class="htp-step-num">→</span><span class="htp-step-text"><span class="lang-en"><strong>THE REPLAY:</strong> Cells flash one by one. You tap them in the <strong>order they appeared</strong> — no numbers to help you.</span><span class="lang-es"><strong>THE REPLAY:</strong> Las celdas parpadean una por una. Las tocas en el <strong>orden en que aparecieron</strong> — sin números que te ayuden.</span></span></div>
-                        <div class="htp-tip">
-                            <span class="htp-tip-icon">💡</span>
-                            <span class="htp-tip-text"><span class="lang-en">Pro tip: Try to "trace a path" with your eyes during the sequence. Connecting cells into a visual route is easier than remembering individual positions.</span><span class="lang-es">Consejo pro: Intenta "trazar un camino" con tus ojos durante la secuencia. Conectar celdas en una ruta visual es más fácil que recordar posiciones individuales.</span></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- THE REFLEX -->
-        <div class="wk-card reflex reveal">
-            <div class="wk-header">
-                <div class="wk-info">
-                    <h3 class="wk-name">THE REFLEX</h3>
-                    <p class="wk-tagline"><span class="lang-en">Pure Position Recall — No Numbers</span><span class="lang-es">Reconocimiento Puro — Sin Números</span></p>
-                </div>
-            </div>
-            <div class="sim-wrap">
-                <div class="sim-label" id="simFlashLabel">
-                    <span class="lang-en">POSITIONS FLASH — NO NUMBERS, NO ORDER</span>
-                    <span class="lang-es">POSICIONES PARPADEAN — SIN NÚMEROS, SIN ORDEN</span>
-                </div>
-                <div class="sim-court" id="simFlashCourt"></div>
-                <p class="sim-caption">
-                    <span class="lang-en">Cells flash <strong>without numbers</strong> — tap back the <strong>positions</strong> (any order)</span>
-                    <span class="lang-es">Las celdas parpadean <strong>sin números</strong> — toca las <strong>posiciones</strong> (cualquier orden)</span>
-                </p>
-                <a href="/the-reflex.html" class="sim-play">
-                    <span class="lang-en">PLAY THE REFLEX →</span>
-                    <span class="lang-es">JUGAR THE REFLEX →</span>
-                </a>
-                <br>
-                <button class="htp-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
-                    <span class="lang-en">📖 HOW TO PLAY</span>
-                    <span class="lang-es">📖 CÓMO JUGAR</span>
-                    <span class="htp-arrow">▼</span>
-                </button>
-                <div class="htp-panel">
-                    <div class="htp-inner">
-                        <div class="htp-title">
-                            <span class="lang-en">THE REFLEX — FULL RULES</span>
-                            <span class="lang-es">THE REFLEX — REGLAS COMPLETAS</span>
-                        </div>
-                        <div class="htp-step"><span class="htp-step-num">1</span><span class="htp-step-text"><span class="lang-en">Choose your <strong>Level</strong> (1–10) and <strong>Ritnome™ BPM</strong> speed. Higher levels = more cells to remember. Faster BPM = shorter flash time.</span><span class="lang-es">Elige tu <strong>Nivel</strong> (1–10) y velocidad <strong>Ritnome™ BPM</strong>. Nivel alto = más celdas para recordar. BPM rápido = flash más corto.</span></span></div>
-                        <div class="htp-step"><span class="htp-step-num">2</span><span class="htp-step-text"><span class="lang-en">Tap <strong>LET'S GO</strong>. A group of cells lights up <strong>all at once</strong> — but with <strong>NO numbers</strong>. Just glowing positions. Burn them into your visual field.</span><span class="lang-es">Toca <strong>PA'LANTE</strong>. Un grupo de celdas se ilumina <strong>todas a la vez</strong> — pero <strong>SIN números</strong>. Solo posiciones brillantes. Grábalas en tu campo visual.</span></span></div>
-                        <div class="htp-step"><span class="htp-step-num">3</span><span class="htp-step-text"><span class="lang-en">The flash repeats <strong>3 times</strong> so you can study the positions. Use each repetition to confirm what you saw.</span><span class="lang-es">El flash se repite <strong>3 veces</strong> para que estudies las posiciones. Usa cada repetición para confirmar lo que viste.</span></span></div>
-                        <div class="htp-step"><span class="htp-step-num">4</span><span class="htp-step-text"><span class="lang-en">After the countdown, tap back <strong>all the positions that were lit</strong>. Order doesn't matter — just find them all.</span><span class="lang-es">Después de la cuenta regresiva, toca <strong>todas las posiciones que se iluminaron</strong>. El orden no importa — solo encuéntralas todas.</span></span></div>
-                        <div class="htp-step"><span class="htp-step-num">5</span><span class="htp-step-text"><span class="lang-en">Correct taps turn <strong>teal ✓</strong>. Wrong taps turn <strong>pink ✗</strong> and cost a life. <em>3 lives per round.</em> Find all positions to win. <strong>Win 2 rounds to level up.</strong></span><span class="lang-es">Toques correctos se ponen <strong>verde ✓</strong>. Toques incorrectos se ponen <strong>rosa ✗</strong> y pierdes una vida. <em>3 vidas por ronda.</em> Encuentra todas las posiciones para ganar. <strong>Gana 2 rondas para subir de nivel.</strong></span></span></div>
-                        <div class="htp-section-label"><span class="lang-en">🆚 HOW IS THIS DIFFERENT FROM THE RECALL?</span><span class="lang-es">🆚 ¿EN QUÉ SE DIFERENCIA DE THE RECALL?</span></div>
-                        <div class="htp-step"><span class="htp-step-num">→</span><span class="htp-step-text"><span class="lang-en"><strong>THE RECALL</strong> gives you numbered cells so you know the order. <strong>THE REFLEX</strong> strips away all cues — no numbers, no order requirement. Pure position recall from a single visual snapshot.</span><span class="lang-es"><strong>THE RECALL</strong> te da celdas numeradas para que sepas el orden. <strong>THE REFLEX</strong> elimina todas las pistas — sin números, sin requisito de orden. Reconocimiento puro de posición desde una sola imagen visual.</span></span></div>
-                        <div class="htp-tip">
-                            <span class="htp-tip-icon">💡</span>
-                            <span class="htp-tip-text"><span class="lang-en">Pro tip: Instead of counting cells, try to see the "constellation" they form — a shape, a letter, a cluster. Spatial memory beats counting at higher levels.</span><span class="lang-es">Consejo pro: En vez de contar celdas, intenta ver la "constelación" que forman — una forma, una letra, un grupo. La percepción espacial gana al conteo en niveles altos.</span></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- THE REACT -->
-        <div class="wk-card react reveal">
-            <div class="wk-header">
-                <div class="wk-info">
-                    <h3 class="wk-name">THE REACT</h3>
-                    <p class="wk-tagline"><span class="lang-en">Rhythm Performance — Beat the Clock</span><span class="lang-es">Rendimiento Rítmico — Contra el Reloj</span></p>
-                </div>
-            </div>
-            <div class="sim-wrap">
-                <div class="sim-label" id="simPocketLabel">
-                    <span class="lang-en">WATCH THE BEAT — THEN TAP ON TIME</span>
-                    <span class="lang-es">MIRA EL RITMO — LUEGO TOCA A TIEMPO</span>
-                </div>
-                <div class="sim-court" id="simPocketCourt"></div>
-                <p class="sim-caption">
-                    <span class="lang-en">Watch the pattern on the beat — then <strong>tap each cell in rhythm</strong></span>
-                    <span class="lang-es">Observa el patrón en el ritmo — luego <strong>toca cada celda al compás</strong></span>
-                </p>
-                <a href="/the-react.html" class="sim-play">
-                    <span class="lang-en">PLAY THE REACT →</span>
-                    <span class="lang-es">JUGAR THE REACT →</span>
-                </a>
-                <br>
-                <button class="htp-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
-                    <span class="lang-en">📖 HOW TO PLAY</span>
-                    <span class="lang-es">📖 CÓMO JUGAR</span>
-                    <span class="htp-arrow">▼</span>
-                </button>
-                <div class="htp-panel">
-                    <div class="htp-inner">
-                        <div class="htp-title">
-                            <span class="lang-en">THE REACT — FULL RULES</span>
-                            <span class="lang-es">THE REACT — REGLAS COMPLETAS</span>
-                        </div>
-                        <div class="htp-step"><span class="htp-step-num">1</span><span class="htp-step-text"><span class="lang-en">Choose your <strong>Level</strong> (1–10) and <strong>Ritnome™ BPM</strong> speed. Higher levels = more cells in the pattern. Faster BPM = tighter timing windows.</span><span class="lang-es">Elige tu <strong>Nivel</strong> (1–10) y velocidad <strong>Ritnome™ BPM</strong>. Nivel alto = más celdas en el patrón. BPM rápido = ventanas de tiempo más ajustadas.</span></span></div>
-                        <div class="htp-step"><span class="htp-step-num">2</span><span class="htp-step-text"><span class="lang-en">Tap <strong>LET'S GO</strong>. First, the <strong>WATCH phase</strong>: cells light up <strong>one at a time on the beat</strong> (purple glow). Watch the pattern and the rhythm. This plays <strong>3 times</strong>.</span><span class="lang-es">Toca <strong>PA'LANTE</strong>. Primero, la <strong>fase de OBSERVAR</strong>: las celdas se iluminan <strong>una a la vez al ritmo</strong> (brillo púrpura). Observa el patrón y el ritmo. Se repite <strong>3 veces</strong>.</span></span></div>
-                        <div class="htp-step"><span class="htp-step-num">3</span><span class="htp-step-text"><span class="lang-en">After the countdown, the <strong>PLAY phase</strong> begins: cells light up gold <strong>one at a time on the beat</strong> again — but now you must <strong>tap each one as it appears</strong>.</span><span class="lang-es">Después de la cuenta regresiva, comienza la <strong>fase de JUGAR</strong>: las celdas se iluminan doradas <strong>una a la vez al ritmo</strong> — pero ahora debes <strong>tocar cada una cuando aparezca</strong>.</span></span></div>
-                        <div class="htp-step"><span class="htp-step-num">4</span><span class="htp-step-text"><span class="lang-en"><strong>Timing matters!</strong> Tap within the beat window for the best score:<br>• <strong>✨ PERFECT</strong> — tapped within 300ms of the beat (20 pts)<br>• <strong>👍 GOOD</strong> — tapped within 600ms (12 pts)<br>• <strong>💨 MISS</strong> — too slow or wrong cell (lose a life)</span><span class="lang-es"><strong>¡El tiempo importa!</strong> Toca dentro de la ventana del ritmo para mejor puntuación:<br>• <strong>✨ PERFECTO</strong> — tocado dentro de 300ms del pulso (20 pts)<br>• <strong>👍 BIEN</strong> — tocado dentro de 600ms (12 pts)<br>• <strong>💨 FALLO</strong> — muy lento o celda incorrecta (pierdes una vida)</span></span></div>
-                        <div class="htp-step"><span class="htp-step-num">5</span><span class="htp-step-text"><span class="lang-en"><em>3 lives per round.</em> Complete the full pattern to win. <strong>Win 2 rounds to level up.</strong> Your score reflects how precisely you ride the beat.</span><span class="lang-es"><em>3 vidas por ronda.</em> Completa el patrón para ganar. <strong>Gana 2 rondas para subir de nivel.</strong> Tu puntuación refleja qué tan preciso sigues el ritmo.</span></span></div>
-                        <div class="htp-section-label"><span class="lang-en">🆚 WHY IS THIS DIFFERENT?</span><span class="lang-es">🆚 ¿POR QUÉ ES DIFERENTE?</span></div>
-                        <div class="htp-step"><span class="htp-step-num">→</span><span class="htp-step-text"><span class="lang-en">The other games test <strong>recognition & recall</strong> — study a pattern, then reproduce it from scratch. THE REACT tests <strong>rhythm performance</strong> — the pattern repeats in real-time and you must react <strong>on the beat</strong>. It's not about what you remember — it's about how fast you respond.</span><span class="lang-es">Los otros juegos prueban <strong>reconocimiento y recuerdo</strong> — estudia un patrón, luego reprodúcelo de cero. THE REACT prueba <strong>rendimiento rítmico</strong> — el patrón se repite en tiempo real y debes reaccionar <strong>al ritmo</strong>. No se trata de lo que recuerdas — sino de qué tan rápido respondes.</span></span></div>
-                        <div class="htp-tip">
-                            <span class="htp-tip-icon">💡</span>
-                            <span class="htp-tip-text"><span class="lang-en">Pro tip: During the WATCH phase, don't just look — tap along on your leg or the table to internalize the rhythm. When PLAY starts, your body already knows the beat.</span><span class="lang-es">Consejo pro: Durante la fase de OBSERVAR, no solo mires — toca con tu pierna o la mesa para internalizar el ritmo. Cuando comience JUGAR, tu cuerpo ya conoce el pulso.</span></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- THE RHYTHM -->
-        <div class="wk-card rhythm reveal">
-            <div class="wk-header">
-                <div class="wk-info">
-                    <h3 class="wk-name">THE RHYTHM</h3>
-                    <p class="wk-tagline"><span class="lang-en">Pattern Comparison — Spot the Change</span><span class="lang-es">Comparación de Patrones — Encuentra el Cambio</span></p>
-                </div>
-            </div>
-            <div class="sim-wrap">
-                <div class="sim-label" id="simEchoLabel">
-                    <span class="lang-en">WATCH — THEN SPOT WHAT CHANGED IN THE RHYTHM</span>
-                    <span class="lang-es">OBSERVA — LUEGO ENCUENTRA EL CAMBIO EN EL RITMO</span>
-                </div>
-                <div class="sim-court" id="simEchoCourt"></div>
-                <p class="sim-caption">
-                    <span class="lang-en">Watch a pattern — then the <strong>Echo replays with one change</strong>. Spot it!</span>
-                    <span class="lang-es">Observa un patrón — luego el <strong>Eco repite con un cambio</strong>. ¡Encuéntralo!</span>
-                </p>
-                <a href="/the-rhythm.html" class="sim-play">
-                    <span class="lang-en">PLAY THE RHYTHM →</span>
-                    <span class="lang-es">JUGAR THE RHYTHM →</span>
-                </a>
-                <br>
-                <button class="htp-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
-                    <span class="lang-en">📖 HOW TO PLAY</span>
-                    <span class="lang-es">📖 CÓMO JUGAR</span>
-                    <span class="htp-arrow">▼</span>
-                </button>
-                <div class="htp-panel">
-                    <div class="htp-inner">
-                        <div class="htp-title">
-                            <span class="lang-en">THE RHYTHM — FULL RULES</span>
-                            <span class="lang-es">THE RHYTHM — REGLAS COMPLETAS</span>
-                        </div>
-                        <div class="htp-step"><span class="htp-step-num">1</span><span class="htp-step-text"><span class="lang-en">Choose your <strong>Level</strong> (1–10) and <strong>Ritnome™ BPM</strong> speed. Higher levels = more cells in each pattern. Faster BPM = patterns flash quicker.</span><span class="lang-es">Elige tu <strong>Nivel</strong> (1–10) y velocidad <strong>Ritnome™ BPM</strong>. Nivel alto = más celdas en cada patrón. BPM rápido = patrones parpadean más rápido.</span></span></div>
-                        <div class="htp-step"><span class="htp-step-num">2</span><span class="htp-step-text"><span class="lang-en">Tap <strong>LET'S GO</strong>. The <strong>ORIGINAL pattern</strong> plays on the beat — numbered cells light up one by one. Study it carefully.</span><span class="lang-es">Toca <strong>PA'LANTE</strong>. El <strong>patrón ORIGINAL</strong> se reproduce al ritmo — celdas numeradas se iluminan una por una. Estúdialo bien.</span></span></div>
-                        <div class="htp-step"><span class="htp-step-num">3</span><span class="htp-step-text"><span class="lang-en">Then <strong>THE RHYTHM</strong> plays — the same pattern repeats, but <strong>one cell has been swapped</strong> to a different position. Everything else stays the same.</span><span class="lang-es">Luego se reproduce <strong>EL RITMO</strong> — el mismo patrón se repite, pero <strong>una celda ha sido cambiada</strong> a una posición diferente. Todo lo demás permanece igual.</span></span></div>
-                        <div class="htp-step"><span class="htp-step-num">4</span><span class="htp-step-text"><span class="lang-en">All Echo cells appear on the grid with their numbers. You have <strong>a timed window</strong> (shown by the timer bar) to <strong>tap the cell that changed</strong> — the one that wasn't in the original pattern.</span><span class="lang-es">Todas las celdas del Eco aparecen en la cuadrícula con sus números. Tienes <strong>un tiempo limitado</strong> (mostrado por la barra de tiempo) para <strong>tocar la celda que cambió</strong> — la que no estaba en el patrón original.</span></span></div>
-                        <div class="htp-step"><span class="htp-step-num">5</span><span class="htp-step-text"><span class="lang-en">Tap the correct changed cell → <strong>teal ✓</strong> and the original position shows as a <strong>dashed gold outline</strong>. Wrong tap or timeout → the answer is revealed. <strong>Win 2 rounds to level up.</strong></span><span class="lang-es">Toca la celda cambiada correcta → <strong>verde ✓</strong> y la posición original se muestra con un <strong>contorno dorado punteado</strong>. Toque incorrecto o tiempo agotado → se revela la respuesta. <strong>Gana 2 rondas para subir de nivel.</strong></span></span></div>
-                        <div class="htp-section-label"><span class="lang-en">🆚 WHY IS THIS THE HARDEST GAME?</span><span class="lang-es">🆚 ¿POR QUÉ ES EL JUEGO MÁS DIFÍCIL?</span></div>
-                        <div class="htp-step"><span class="htp-step-num">→</span><span class="htp-step-text"><span class="lang-en">Other games ask you to recall <strong>what you saw</strong>. THE RHYTHM asks you to compare <strong>two similar patterns</strong> and detect a subtle difference — under time pressure. It's pattern recognition meets change detection.</span><span class="lang-es">Otros juegos piden que recuerdes <strong>lo que viste</strong>. THE RHYTHM pide que compares <strong>dos patrones similares</strong> y detectes una diferencia sutil — bajo presión de tiempo. Es reconocimiento de patrones más detección de cambios.</span></span></div>
-                        <div class="htp-tip">
-                            <span class="htp-tip-icon">💡</span>
-                            <span class="htp-tip-text"><span class="lang-en">Pro tip: Focus on the "feel" of the original pattern — its shape and rhythm. When the Echo plays, the changed cell will feel "off" because it breaks the spatial expectation your mind already built.</span><span class="lang-es">Consejo pro: Enfócate en la "sensación" del patrón original — su forma y ritmo. Cuando el Eco se reproduce, la celda cambiada se sentirá "fuera de lugar" porque rompe la expectativa espacial que tu mente ya construyó.</span></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</section>
-
-<!-- ============ MID-PAGE CTA ============ -->
-<div class="mid-cta reveal">
-    <p class="mid-cta-text">
-        <span class="lang-en">No pseudoscience. No ads. No upsells. Just five pattern challenges running on real rhythm.</span>
-        <span class="lang-es">Sin pseudociencia. Sin anuncios. Sin sorpresas. Cinco desafíos de patrones a ritmo real.</span>
-    </p>
-    <a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="btn btn-primary btn-sm">
-        <span class="lang-en">TRY IT FREE →</span>
-        <span class="lang-es">PRUÉBALO GRATIS →</span>
-    </a>
+<div class="hero">
+<div class="hero-icon">🧠</div>
+<h1 class="hero-title"><span class="lang-en">PATTERN CHALLENGES</span><span class="lang-es">DESAFÍOS DE PATRONES</span></h1>
+<p class="hero-subtitle"><span class="lang-en">5 Workouts · 3 Speeds · 1 Grid</span><span class="lang-es">5 Ejercicios · 3 Velocidades · 1 Cuadrícula</span></p>
 </div>
 
-<!-- ============ §3 RITMO → RITNOME™ ============ -->
-<section class="etymology reveal">
-    <p class="etym-lead">
-        <span class="lang-en">Every challenge runs on rhythm. That rhythm has a name.</span>
-        <span class="lang-es">Cada desafío se mueve al ritmo. Ese ritmo tiene nombre.</span>
-    </p>
-    <div class="powered-inline">
-        <div class="p-dot"></div>
-        <div class="p-text">
-            <span class="p-label">THE ORIGIN</span>
-            <span class="p-name">RITNOME™</span>
-        </div>
-    </div>
-    <div class="etym-equation">
-        <div class="etym-word"><span>RIT</span>MO</div>
-        <div class="etym-equals">=</div>
-        <div class="etym-result">RITNOME™</div>
-    </div>
-    <p class="etym-desc">
-        <span class="lang-en">Born from <em>ritmo</em> — the Spanish word for rhythm. RITNOME™ is the pattern and reflex challenge platform by GoStar Digital LLC. Five challenges. Three speeds. One 5×5 grid — all driven by precise beats per minute. Recognition. Recall. Reflex. React. Rhythm.</span>
-        <span class="lang-es">Nacido de <em>ritmo</em> — la palabra en español para ritmo. RITNOME™ es la plataforma de desafíos de patrones y reflejos de GoStar Digital LLC. Cinco desafíos. Tres velocidades. Una cuadrícula 5×5 — todo impulsado por pulsos precisos por minuto. Reconocimiento. Recuerdo. Reflejo. Reacción. Ritmo.</span>
-    </p>
-</section>
+<div class="section-title"><span class="lang-en">RITNOME™ WORKOUTS</span><span class="lang-es">EJERCICIOS RITNOME™</span></div>
 
-<!-- ============ §4 THE THREE SPEEDS ============ -->
-<section class="tiers">
-    <div class="section-badge reveal">
-        <span class="lang-en">Three Precision Settings</span>
-        <span class="lang-es">Tres Configuraciones de Precisión</span>
-    </div>
-    <h2 class="section-title reveal">
-        <span class="lang-en">THE RITNOME™ TIERS</span>
-        <span class="lang-es">LOS NIVELES RITNOME™</span>
-    </h2>
-    <div class="tier-cards">
-        <!-- TRAINING 60 -->
-        <div class="tier-card tier-training reveal reveal-delay-1">
-            <div class="tier-dot-wrap">
-                <div class="tier-dot"></div>
-                <div class="tier-ring"></div>
-            </div>
-            <div class="tier-bpm">60 <span class="tier-bpm-unit">BPM</span></div>
-            <div class="tier-name">TRAINING</div>
-            <div class="tier-tagline">
-                <span class="lang-en">"Find your rhythm."</span>
-                <span class="lang-es">"Encuentra tu ritmo."</span>
-            </div>
-            <p class="tier-desc">
-                <span class="lang-en">One beat per second. Build your foundation and establish your baseline.</span>
-                <span class="lang-es">Un pulso por segundo. Construye tu base y establece tu línea base.</span>
-            </p>
-            <div class="tier-free-badge">
-                <span class="lang-en">FREE</span>
-                <span class="lang-es">GRATIS</span>
-            </div>
-        </div>
-        <!-- TEMPO 90 -->
-        <div class="tier-card tier-tempo reveal reveal-delay-2">
-            <div class="tier-dot-wrap">
-                <div class="tier-dot"></div>
-                <div class="tier-ring"></div>
-            </div>
-            <div class="tier-bpm">90 <span class="tier-bpm-unit">BPM</span></div>
-            <div class="tier-name">TEMPO</div>
-            <div class="tier-tagline">
-                <span class="lang-en">"Feel the pressure."</span>
-                <span class="lang-es">"Siente la presión."</span>
-            </div>
-            <p class="tier-desc">
-                <span class="lang-en">Patterns flash faster, reaction windows tighten. Where good becomes sharp.</span>
-                <span class="lang-es">Los patrones aparecen más rápido, las ventanas se estrechan. Donde lo bueno se vuelve preciso.</span>
-            </p>
-        </div>
-        <!-- ELITE 120 -->
-        <div class="tier-card tier-elite reveal reveal-delay-3">
-            <div class="tier-dot-wrap">
-                <div class="tier-dot"></div>
-                <div class="tier-ring"></div>
-            </div>
-            <div class="tier-bpm">120 <span class="tier-bpm-unit">BPM</span></div>
-            <div class="tier-name">ELITE</div>
-            <div class="tier-tagline">
-                <span class="lang-en">"Match the beat or miss the play."</span>
-                <span class="lang-es">"Iguala el ritmo o pierde la jugada."</span>
-            </div>
-            <p class="tier-desc">
-                <span class="lang-en">Two beats per second. Maximum tempo. Where GoStars™ are truly earned.</span>
-                <span class="lang-es">Dos pulsos por segundo. Tempo máximo. Donde los GoStars™ realmente se ganan.</span>
-            </p>
-        </div>
-    </div>
-</section>
+<div class="workout-list">
+<div class="workout-card recall">
+<div class="workout-left">
+<div class="workout-icon">R</div>
+<div class="workout-info">
+<div class="workout-name">THE RECALL</div>
+<div class="workout-desc"><span class="lang-en">Number Recall</span><span class="lang-es">Recuerdo Numérico</span></div>
+</div>
+</div>
+<a href="/the-recall.html" class="demo-link"><span class="lang-en">FREE DEMO</span><span class="lang-es">DEMO GRATIS</span> →</a>
+</div>
 
-<!-- ============ §5 GOSTAR TROPHY CASE ============ -->
-<section class="trophy-section reveal">
-    <div class="trophy-badge">
-        <span class="lang-en">⭐ Your Progress</span>
-        <span class="lang-es">⭐ Tu Progreso</span>
-    </div>
-    <h2 class="trophy-title">
-        <span class="lang-en">YOUR <span class="gold">GOSTAR</span><br>TROPHY CASE</span>
-        <span class="lang-es">TU VITRINA DE<br><span class="gold">GOSTARS</span></span>
-    </h2>
-    <p class="trophy-desc">
-        <span class="lang-en">Every level you conquer earns a GoStar™. Track progress across all five challenges and three Ritnome™ settings.</span>
-        <span class="lang-es">Cada nivel que conquistas gana un GoStar™. Sigue tu progreso en los cinco desafíos y tres configuraciones Ritnome™.</span>
-    </p>
-    <ul class="trophy-features">
-        <li><span class="star">⭐</span><span class="lang-en">Level up = Earn a GoStar</span><span class="lang-es">Sube de nivel = Gana un GoStar</span></li>
-        <li><span class="star">⭐</span><span class="lang-en">15 paths (5 challenges × 3 Ritnome™)</span><span class="lang-es">15 caminos (5 desafíos × 3 Ritnome™)</span></li>
-        <li><span class="star">⭐</span><span class="lang-en">150 total divisions to master</span><span class="lang-es">150 divisiones para dominar</span></li>
-    </ul>
-    <div class="trophy-preview">
-        <div class="trophy-preview-title">
-            <span class="lang-en">SAMPLE TROPHY CASE</span>
-            <span class="lang-es">EJEMPLO DE VITRINA</span>
-        </div>
-        <div class="trophy-preview-game">THE RECALL · TRAINING</div>
-        <div class="trophy-preview-stars">⭐⭐⭐⭐⭐☆☆☆☆☆</div>
-        <div class="trophy-preview-label">5 / 10 GoStars</div>
-        <div class="trophy-preview-speeds">
-            <div class="trophy-speed">
-                <div class="trophy-speed-name">TRAINING</div>
-                <div class="trophy-speed-level">L5</div>
-                <div class="trophy-speed-cells">9 cells</div>
-            </div>
-            <div class="trophy-speed">
-                <div class="trophy-speed-name">TEMPO</div>
-                <div class="trophy-speed-level">L3</div>
-                <div class="trophy-speed-cells">7 cells</div>
-            </div>
-            <div class="trophy-speed">
-                <div class="trophy-speed-name">ELITE</div>
-                <div class="trophy-speed-level">L2</div>
-                <div class="trophy-speed-cells">6 cells</div>
-            </div>
-        </div>
-    </div>
-</section>
+<div class="workout-card replay">
+<div class="workout-left">
+<div class="workout-icon">R</div>
+<div class="workout-info">
+<div class="workout-name">THE REPLAY</div>
+<div class="workout-desc"><span class="lang-en">Sequence Replay</span><span class="lang-es">Repetición de Secuencia</span></div>
+</div>
+</div>
+<a href="/the-replay.html" class="demo-link"><span class="lang-en">FREE DEMO</span><span class="lang-es">DEMO GRATIS</span> →</a>
+</div>
 
-<!-- ============ §6 WHO IT'S FOR ============ -->
-<section class="section alt-bg reveal">
-    <div class="section-badge">
-        <span class="lang-en">👥 For Everyone</span>
-        <span class="lang-es">👥 Para Todos</span>
-    </div>
-    <h2 class="section-title">
-        <span class="lang-en">WHO IT'S FOR</span>
-        <span class="lang-es">PARA QUIÉN ES</span>
-    </h2>
-    <div class="audience-wrapper">
-        <div class="audience-card">
-            <div class="audience-icon">👴👵</div>
-            <div class="audience-title"><span class="lang-en">SENIORS</span><span class="lang-es">ADULTOS MAYORES</span></div>
-            <p class="audience-text"><span class="lang-en">Daily recognition & recall that feels like a game, not homework. Start at 60 BPM and build at your pace.</span><span class="lang-es">Reconocimiento y recuerdo diario que se siente como un juego, no como tarea. Empieza a 60 BPM y avanza a tu ritmo.</span></p>
-        </div>
-        <div class="audience-card">
-            <div class="audience-icon">🏥</div>
-            <div class="audience-title"><span class="lang-en">FACILITIES</span><span class="lang-es">CENTROS</span></div>
-            <p class="audience-text"><span class="lang-en">Give your members a Trophy Case they actually want to fill. One PIN per seat. Progress tracking built in.</span><span class="lang-es">Dale a tus miembros una Vitrina que realmente quieran llenar. Un PIN por asiento. Seguimiento de progreso incluido.</span></p>
-        </div>
-        <div class="audience-card">
-            <div class="audience-icon">🎮</div>
-            <div class="audience-title"><span class="lang-en">EVERYONE</span><span class="lang-es">TODOS</span></div>
-            <p class="audience-text"><span class="lang-en">If you've ever lost your keys, blanked on a name, or missed a beat — this is for you. Train the skills you actually use.</span><span class="lang-es">Si alguna vez perdiste tus llaves, olvidaste un nombre, o perdiste el ritmo — esto es para ti. Entrena las habilidades que realmente usas.</span></p>
-        </div>
-    </div>
-</section>
+<div class="workout-card reflex">
+<div class="workout-left">
+<div class="workout-icon">R</div>
+<div class="workout-info">
+<div class="workout-name">THE REFLEX</div>
+<div class="workout-desc"><span class="lang-en">Position Reflex</span><span class="lang-es">Reflejo de Posición</span></div>
+</div>
+</div>
+<a href="/the-reflex.html" class="demo-link"><span class="lang-en">FREE DEMO</span><span class="lang-es">DEMO GRATIS</span> →</a>
+</div>
 
-<!-- ============ §7 PRICING ============ -->
-<section class="section reveal">
-    <h2 class="section-title">
-        <span class="lang-en">SIMPLE PRICING</span>
-        <span class="lang-es">PRECIO SIMPLE</span>
-    </h2>
-    <p class="section-sub">
-        <span class="lang-en">One plan. Full access. Cancel anytime.</span>
-        <span class="lang-es">Un plan. Acceso completo. Cancela cuando quieras.</span>
-    </p>
-    <div class="pricing-card">
-        <div class="pricing-trial"><span class="lang-en">7-DAY FREE TRIAL</span><span class="lang-es">7 DÍAS GRATIS</span></div>
-        <div class="pricing-then"><span class="lang-en">then</span><span class="lang-es">después</span></div>
-        <div class="pricing-amount">$5</div>
-        <div class="pricing-period"><span class="lang-en">per month</span><span class="lang-es">por mes</span></div>
-        <div class="pricing-value"><span class="lang-en">5 games · 3 speeds · 150 levels — less than a coffee</span><span class="lang-es">5 juegos · 3 velocidades · 150 niveles — menos que un café</span></div>
-        <ul class="pricing-features">
-            <li><span class="check">✓</span><span class="lang-en">Your GoStar™ Trophy Case</span><span class="lang-es">Tu Vitrina de GoStars™</span></li>
-            <li><span class="check">✓</span><span class="lang-en">All 3 Ritnome™ settings</span><span class="lang-es">Los 3 configuraciones Ritnome™</span></li>
-            <li><span class="check">✓</span><span class="lang-en">All 5 challenges</span><span class="lang-es">Los 5 desafíos</span></li>
-            <li><span class="check">✓</span><span class="lang-en">150 divisions to master</span><span class="lang-es">150 divisiones para dominar</span></li>
-            <li><span class="check">✓</span><span class="lang-en">Cancel anytime</span><span class="lang-es">Cancela cuando quieras</span></li>
-        </ul>
-        <a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="pricing-cta"><span class="lang-en">START FREE TRIAL →</span><span class="lang-es">COMENZAR GRATIS →</span></a>
-    </div>
-    <div class="facilities-callout">
-        <div class="facilities-title"><span class="lang-en">🏥 FACILITIES & GROUPS</span><span class="lang-es">🏥 FACILIDADES Y GRUPOS</span></div>
-        <p class="facilities-text"><span class="lang-en">Need multiple seats? Purchase quantity at checkout. <strong>One PIN, multiple devices.</strong></span><span class="lang-es">¿Necesitas múltiples asientos? Compra la cantidad al pagar. <strong>Un PIN, múltiples dispositivos.</strong></span></p>
-    </div>
-</section>
+<div class="workout-card react">
+<div class="workout-left">
+<div class="workout-icon">R</div>
+<div class="workout-info">
+<div class="workout-name">THE REACT</div>
+<div class="workout-desc"><span class="lang-en">Beat Reaction</span><span class="lang-es">Reacción al Ritmo</span></div>
+</div>
+</div>
+<a href="/the-react.html" class="demo-link"><span class="lang-en">FREE DEMO</span><span class="lang-es">DEMO GRATIS</span> →</a>
+</div>
 
-<!-- ============ §8 FINAL CTA ============ -->
-<section class="final-cta reveal">
-    <div class="final-cta-content">
-        <div class="final-icon">🏆</div>
-        <h2 class="final-title"><span class="lang-en">START YOUR<br>TROPHY CASE</span><span class="lang-es">COMIENZA TU<br>VITRINA</span></h2>
-        <p class="final-sub"><span class="lang-en">Five games. Three speeds. 150 levels. One grid. Your move.</span><span class="lang-es">Cinco juegos. Tres velocidades. 150 niveles. Una cuadrícula. Tu turno.</span></p>
-        <div class="final-buttons">
-            <a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="cta-btn primary"><span class="lang-en">🆕 START FREE TRIAL</span><span class="lang-es">🆕 COMENZAR GRATIS</span></a>
-            <a href="/login" class="cta-btn secondary"><span class="lang-en">🔑 ALREADY HAVE A PIN</span><span class="lang-es">🔑 YA TENGO UN PIN</span></a>
-        </div>
-        <p class="final-note"><span class="lang-en">Questions? <a href="/faq">Visit our FAQ</a></span><span class="lang-es">¿Preguntas? <a href="/faq">FAQ</a></span></p>
-    </div>
-</section>
+<div class="workout-card rhythm">
+<div class="workout-left">
+<div class="workout-icon">R</div>
+<div class="workout-info">
+<div class="workout-name">THE RHYTHM</div>
+<div class="workout-desc"><span class="lang-en">Change Detection</span><span class="lang-es">Detección de Cambios</span></div>
+</div>
+</div>
+<a href="/the-rhythm.html" class="demo-link"><span class="lang-en">FREE DEMO</span><span class="lang-es">DEMO GRATIS</span> →</a>
+</div>
+</div>
 
-<!-- ============ FOOTER ============ -->
+<div class="pricing-card">
+<div class="pricing-amount">$5<span>/mo</span></div>
+<div class="pricing-features">
+<div class="pricing-feature"><span class="check">✓</span><span class="lang-en">All 5 Workouts</span><span class="lang-es">Los 5 Ejercicios</span></div>
+<div class="pricing-feature"><span class="check">✓</span><span class="lang-en">All 3 Speeds (60 · 90 · 120 BPM)</span><span class="lang-es">Las 3 Velocidades (60 · 90 · 120 BPM)</span></div>
+<div class="pricing-feature"><span class="check">✓</span><span class="lang-en">Track Your Progress</span><span class="lang-es">Sigue Tu Progreso</span></div>
+</div>
+<a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="cta-btn"><span class="lang-en">▶ START 7-DAY FREE TRIAL</span><span class="lang-es">▶ PRUEBA GRATIS 7 DÍAS</span></a>
+<p class="login-link"><span class="lang-en">Already have a PIN? <a href="/login">Login</a></span><span class="lang-es">¿Ya tienes PIN? <a href="/login">Entrar</a></span></p>
+</div>
+
+</main>
+
 <footer class="footer">
-    <div class="footer-logo"><img src="/icon.png" alt="Ritnome" class="icon"> <span class="rit">RIT</span><span class="nome">NOME</span></div>
-    <div class="footer-tagline"><span class="lang-en">Recognition · Recall · Reflex · React · Rhythm</span><span class="lang-es">Reconocimiento · Recuerdo · Reflejo · Reacción · Ritmo</span></div>
-    <div class="footer-links">
-        <a href="/login"><span class="lang-en">Login</span><span class="lang-es">Entrar</span></a>
-        <a href="/faq">FAQ</a>
-        <a href="/privacy.html"><span class="lang-en">Privacy</span><span class="lang-es">Privacidad</span></a>
-        <a href="/terms.html"><span class="lang-en">Terms</span><span class="lang-es">Términos</span></a>
-        <a href="https://ritnome.com">Ritnome™</a>
-    </div>
-    <div class="footer-company">by GoStar Digital LLC 🇵🇷</div>
-    <div class="footer-trademarks">RITNOME™, The Starting Five™, GoStars™ are trademarks of GoStar Digital LLC. © 2026 All rights reserved.</div>
+<nav class="footer-links">
+<a href="/faq" class="footer-link">FAQ</a>
+<a href="/privacy.html" class="footer-link"><span class="lang-en">Privacy</span><span class="lang-es">Privacidad</span></a>
+<a href="/terms.html" class="footer-link"><span class="lang-en">Terms</span><span class="lang-es">Términos</span></a>
+</nav>
+<p class="footer-copy">© 2025 GoStar Digital LLC</p>
+<div class="footer-badge"><div class="pulse-dot"></div><div class="footer-badge-text"><span class="lang-en">Powered by</span><span class="lang-es">Impulsado por</span> <span>RITNOME™</span></div></div>
 </footer>
 
 <script>
-(function() {
-    var currentLang = localStorage.getItem('lc-lang') || 'en';
-
-    function setLang(lang) {
-        currentLang = lang;
-        localStorage.setItem('lc-lang', lang);
-        document.body.className = lang;
-        document.getElementById('btnEn').className = lang === 'en' ? 'nav-lang-btn active' : 'nav-lang-btn';
-        document.getElementById('btnEs').className = lang === 'es' ? 'nav-lang-btn active' : 'nav-lang-btn';
-    }
-
-    document.getElementById('btnEn').onclick = function() { setLang('en'); };
-    document.getElementById('btnEs').onclick = function() { setLang('es'); };
-    setLang(currentLang);
-
-    /* Scroll Reveal */
-    var reveals = document.querySelectorAll('.reveal');
-    function checkReveal() {
-        var trigger = window.innerHeight * 0.88;
-        for (var i = 0; i < reveals.length; i++) {
-            if (reveals[i].getBoundingClientRect().top < trigger) {
-                reveals[i].classList.add('visible');
-            }
-        }
-    }
-    window.addEventListener('scroll', checkReveal);
-    window.addEventListener('load', checkReveal);
-    checkReveal();
-
-    /* ============ GAME SIMULATION ENGINE ============ */
-    function buildSimGrid(courtId, count) {
-        var court = document.getElementById(courtId);
-        if (!court) return [];
-        court.innerHTML = '';
-        var cells = [];
-        for (var i = 0; i < count; i++) {
-            var c = document.createElement('div');
-            c.className = 'sim-cell';
-            c.dataset.si = i;
-            court.appendChild(c);
-            cells.push(c);
-        }
-        return cells;
-    }
-
-    function simReset(cells, label) {
-        cells.forEach(function(c) { c.className = 'sim-cell'; c.textContent = ''; });
-        if (label) { label.className = 'sim-label'; }
-    }
-
-    function randomPattern(total, count) {
-        var avail = [];
-        for (var i = 0; i < total; i++) avail.push(i);
-        for (var j = avail.length - 1; j > 0; j--) {
-            var k = Math.floor(Math.random() * (j + 1));
-            var t = avail[j]; avail[j] = avail[k]; avail[k] = t;
-        }
-        return avail.slice(0, count);
-    }
-
-    /* ============ THE RECALL SIMULATION ============ */
-    var matchCells = buildSimGrid('simMatchCourt', 25);
-    var matchLabel = document.getElementById('simMatchLabel');
-    var matchEpoch = 0;
-
-    function matchRound(epoch) {
-        if (epoch !== matchEpoch) return;
-        var pattern = randomPattern(25, 5);
-        simReset(matchCells, matchLabel);
-
-        setTimeout(function() {
-            if (epoch !== matchEpoch) return;
-            matchLabel.innerHTML = '<span class="lang-en">RECOGNIZE!</span><span class="lang-es">¡RECONOCE!</span>';
-            matchLabel.className = 'sim-label phase-show';
-            pattern.forEach(function(idx, num) {
-                matchCells[idx].classList.add('lit');
-                matchCells[idx].textContent = num + 1;
-            });
-        }, 500);
-
-        setTimeout(function() {
-            if (epoch !== matchEpoch) return;
-            pattern.forEach(function(idx) {
-                matchCells[idx].classList.remove('lit');
-                matchCells[idx].textContent = '';
-            });
-            matchLabel.innerHTML = '<span class="lang-en">RECALL IN ORDER!</span><span class="lang-es">¡RECUERDA EN ORDEN!</span>';
-            matchLabel.className = 'sim-label phase-tap';
-        }, 2800);
-
-        pattern.forEach(function(idx, i) {
-            setTimeout(function() {
-                if (epoch !== matchEpoch) return;
-                matchCells[idx].classList.add('correct');
-                matchCells[idx].textContent = '✓';
-            }, 3300 + (i * 350));
-        });
-
-        setTimeout(function() {
-            if (epoch !== matchEpoch) return;
-            matchLabel.innerHTML = '<span class="lang-en">✅ PERFECT!</span><span class="lang-es">✅ ¡PERFECTO!</span>';
-            matchLabel.className = 'sim-label phase-done';
-        }, 5200);
-
-        setTimeout(function() { if (epoch === matchEpoch) matchRound(epoch); }, 7000);
-    }
-
-    /* Visibility observer for all sims */
-    function createSimObserver(element, startFn, stopFn) {
-        if (!element) return;
-        var running = false;
-        function check() {
-            var rect = element.getBoundingClientRect();
-            var vis = rect.top < window.innerHeight && rect.bottom > 0;
-            if (vis && !running) { running = true; startFn(); }
-            else if (!vis && running) { running = false; stopFn(); }
-        }
-        window.addEventListener('scroll', check);
-        window.addEventListener('load', check);
-        check();
-    }
-
-    var matchCard = document.querySelector('.wk-card.recall');
-    createSimObserver(matchCard,
-        function() { matchEpoch++; matchRound(matchEpoch); },
-        function() { matchEpoch++; simReset(matchCells, matchLabel);
-            matchLabel.innerHTML = '<span class="lang-en">NUMBERED CELLS FLASH — RECALL IN ORDER</span><span class="lang-es">CELDAS NUMERADAS — RECUERDA EN ORDEN</span>';
-        }
-    );
-
-    /* ============ THE REPLAY SIMULATION ============ */
-    var seqCells = buildSimGrid('simSeqCourt', 25);
-    var seqLabel = document.getElementById('simSeqLabel');
-    var seqEpoch = 0;
-    var SEQ_COLORS = ['#FFD700', '#00D9A5', '#FF6B35', '#FF1493'];
-
-    function seqResetStyles() {
-        seqCells.forEach(function(c) { c.style.background = ''; c.style.borderColor = ''; c.style.boxShadow = ''; c.style.color = 'transparent'; c.style.transform = ''; });
-    }
-
-    function seqRound(epoch) {
-        if (epoch !== seqEpoch) return;
-        var pattern = randomPattern(25, 5);
-        simReset(seqCells, seqLabel);
-        seqResetStyles();
-
-        setTimeout(function() {
-            if (epoch !== seqEpoch) return;
-            seqLabel.innerHTML = '<span class="lang-en">WATCH THE ORDER!</span><span class="lang-es">¡MIRA EL ORDEN!</span>';
-            seqLabel.className = 'sim-label phase-show';
-        }, 400);
-
-        pattern.forEach(function(idx, i) {
-            setTimeout(function() {
-                if (epoch !== seqEpoch) return;
-                var color = SEQ_COLORS[i % SEQ_COLORS.length];
-                seqCells[idx].style.background = color;
-                seqCells[idx].style.borderColor = color;
-                seqCells[idx].style.boxShadow = '0 0 10px ' + color;
-                seqCells[idx].style.color = '#fff';
-                seqCells[idx].style.transform = 'scale(1.08)';
-                seqCells[idx].textContent = i + 1;
-            }, 600 + (i * 500));
-            setTimeout(function() {
-                if (epoch !== seqEpoch) return;
-                seqCells[idx].style.background = '';
-                seqCells[idx].style.borderColor = '';
-                seqCells[idx].style.boxShadow = '';
-                seqCells[idx].style.color = 'transparent';
-                seqCells[idx].style.transform = '';
-                seqCells[idx].textContent = '';
-            }, 600 + (i * 500) + 400);
-        });
-
-        var seqShowEnd = 600 + (5 * 500) + 200;
-        setTimeout(function() {
-            if (epoch !== seqEpoch) return;
-            seqLabel.innerHTML = '<span class="lang-en">REPLAY THE SEQUENCE!</span><span class="lang-es">¡REPITE LA SECUENCIA!</span>';
-            seqLabel.className = 'sim-label phase-tap';
-        }, seqShowEnd);
-
-        pattern.forEach(function(idx, i) {
-            setTimeout(function() {
-                if (epoch !== seqEpoch) return;
-                seqCells[idx].classList.add('correct');
-                seqCells[idx].textContent = '✓';
-            }, seqShowEnd + 400 + (i * 350));
-        });
-
-        setTimeout(function() {
-            if (epoch !== seqEpoch) return;
-            seqLabel.innerHTML = '<span class="lang-en">✅ PERFECT!</span><span class="lang-es">✅ ¡PERFECTO!</span>';
-            seqLabel.className = 'sim-label phase-done';
-        }, seqShowEnd + 400 + (5 * 350) + 200);
-
-        setTimeout(function() { if (epoch === seqEpoch) seqRound(epoch); }, seqShowEnd + 400 + (5 * 350) + 2000);
-    }
-
-    var seqCard = document.querySelector('.wk-card.replay');
-    createSimObserver(seqCard,
-        function() { seqEpoch++; seqRound(seqEpoch); },
-        function() { seqEpoch++; simReset(seqCells, seqLabel); seqResetStyles();
-            seqLabel.innerHTML = '<span class="lang-en">CELLS FLASH ONE BY ONE — RECALL THE ORDER</span><span class="lang-es">CELDAS UNA POR UNA — RECUERDA EL ORDEN</span>';
-        }
-    );
-
-    /* ============ THE REFLEX SIMULATION ============ */
-    var flashCells = buildSimGrid('simFlashCourt', 25);
-    var flashLabel = document.getElementById('simFlashLabel');
-    var flashEpoch = 0;
-
-    function flashRound(epoch) {
-        if (epoch !== flashEpoch) return;
-        var pattern = randomPattern(25, 5);
-        simReset(flashCells, flashLabel);
-
-        /* Phase 1: All cells flash cyan simultaneously — NO numbers */
-        setTimeout(function() {
-            if (epoch !== flashEpoch) return;
-            flashLabel.innerHTML = '<span class="lang-en">REFLEX!</span><span class="lang-es">¡REFLEX!</span>';
-            flashLabel.className = 'sim-label phase-show';
-            pattern.forEach(function(idx) {
-                flashCells[idx].classList.add('lit');
-            });
-        }, 500);
-
-        /* Phase 2: Go dark */
-        setTimeout(function() {
-            if (epoch !== flashEpoch) return;
-            pattern.forEach(function(idx) { flashCells[idx].classList.remove('lit'); });
-            flashLabel.innerHTML = '<span class="lang-en">FIND THEM!</span><span class="lang-es">¡ENCUÉNTRALOS!</span>';
-            flashLabel.className = 'sim-label phase-tap';
-        }, 2200);
-
-        /* Phase 3: Tap correct (any order — slight stagger) */
-        pattern.forEach(function(idx, i) {
-            setTimeout(function() {
-                if (epoch !== flashEpoch) return;
-                flashCells[idx].classList.add('correct');
-                flashCells[idx].textContent = '✓';
-            }, 2700 + (i * 250));
-        });
-
-        /* Phase 4: Celebration */
-        setTimeout(function() {
-            if (epoch !== flashEpoch) return;
-            flashLabel.innerHTML = '<span class="lang-en">✅ ALL FOUND!</span><span class="lang-es">✅ ¡TODOS!</span>';
-            flashLabel.className = 'sim-label phase-done';
-        }, 2700 + (5 * 250) + 200);
-
-        /* Phase 5: Loop */
-        setTimeout(function() { if (epoch === flashEpoch) flashRound(epoch); }, 2700 + (5 * 250) + 2000);
-    }
-
-    var flashCard = document.querySelector('.wk-card.reflex');
-    createSimObserver(flashCard,
-        function() { flashEpoch++; flashRound(flashEpoch); },
-        function() { flashEpoch++; simReset(flashCells, flashLabel);
-            flashLabel.innerHTML = '<span class="lang-en">POSITIONS FLASH — NO NUMBERS, NO ORDER</span><span class="lang-es">POSICIONES PARPADEAN — SIN NÚMEROS, SIN ORDEN</span>';
-        }
-    );
-
-    /* ============ THE REACT SIMULATION ============ */
-    var pocketCells = buildSimGrid('simPocketCourt', 25);
-    var pocketLabel = document.getElementById('simPocketLabel');
-    var pocketCourt = document.getElementById('simPocketCourt');
-    var pocketEpoch = 0;
-
-    function pocketRound(epoch) {
-        if (epoch !== pocketEpoch) return;
-        var pattern = randomPattern(25, 5);
-        simReset(pocketCells, pocketLabel);
-        pocketCourt.classList.remove('beating');
-
-        var beatMs = 900;
-        /* Pre-assign tap results: mix of perfect, good */
-        var results = ['correct', 'correct', 'good-tap', 'correct', 'good-tap'];
-        var labels  = ['✨', '✨', '👍', '✨', '👍'];
-
-        /* Phase 1: GET READY + start beat pulse */
-        setTimeout(function() {
-            if (epoch !== pocketEpoch) return;
-            pocketLabel.innerHTML = '<span class="lang-en">TAP EACH CELL ON THE BEAT</span><span class="lang-es">TOCA CADA CELDA AL RITMO</span>';
-            pocketLabel.className = 'sim-label phase-tap';
-            pocketCourt.classList.add('beating');
-        }, 300);
-
-        /* Phase 2: Each beat — gold target appears, holds, then gets "tapped" */
-        pattern.forEach(function(idx, i) {
-            /* Gold target appears on the beat */
-            setTimeout(function() {
-                if (epoch !== pocketEpoch) return;
-                pocketCells[idx].classList.add('target');
-                pocketCells[idx].textContent = '●';
-            }, 600 + (i * beatMs));
-
-            /* "Tap" reaction — gold → result after visible hold */
-            setTimeout(function() {
-                if (epoch !== pocketEpoch) return;
-                pocketCells[idx].classList.remove('target');
-                pocketCells[idx].classList.add(results[i]);
-                pocketCells[idx].textContent = labels[i];
-            }, 600 + (i * beatMs) + 420);
-        });
-
-        var playEnd = 600 + (5 * beatMs) + 200;
-
-        /* Phase 3: Score summary */
-        setTimeout(function() {
-            if (epoch !== pocketEpoch) return;
-            pocketCourt.classList.remove('beating');
-            pocketLabel.innerHTML = '<span class="lang-en">✅ 3 PERFECT · 2 GOOD — IN THE REACT!</span><span class="lang-es">✅ 3 PERFECTO · 2 BIEN — ¡EN LA ZONA!</span>';
-            pocketLabel.className = 'sim-label phase-done';
-        }, playEnd);
-
-        /* Phase 4: Loop */
-        setTimeout(function() { if (epoch === pocketEpoch) pocketRound(epoch); }, playEnd + 2200);
-    }
-
-    var pocketCard = document.querySelector('.wk-card.react');
-    createSimObserver(pocketCard,
-        function() { pocketEpoch++; pocketRound(pocketEpoch); },
-        function() { pocketEpoch++; simReset(pocketCells, pocketLabel);
-            if (pocketCourt) pocketCourt.classList.remove('beating');
-            pocketLabel.innerHTML = '<span class="lang-en">WATCH THE BEAT — THEN TAP ON TIME</span><span class="lang-es">MIRA EL RITMO — LUEGO TOCA A TIEMPO</span>';
-        }
-    );
-
-    /* ============ THE RHYTHM SIMULATION ============ */
-    var echoCells = buildSimGrid('simEchoCourt', 25);
-    var echoLabel = document.getElementById('simEchoLabel');
-    var echoEpoch = 0;
-
-    function echoRound(epoch) {
-        if (epoch !== echoEpoch) return;
-        /* Generate original pattern + echo with one swap */
-        var original = randomPattern(25, 4);
-        var changePos = Math.floor(Math.random() * 4);
-        var echo = original.slice();
-        var newCell;
-        do { newCell = Math.floor(Math.random() * 25); } while (original.indexOf(newCell) !== -1);
-        echo[changePos] = newCell;
-
-        simReset(echoCells, echoLabel);
-        var beatMs = 550;
-
-        /* Phase 1: WATCH — orange cells one by one */
-        setTimeout(function() {
-            if (epoch !== echoEpoch) return;
-            echoLabel.innerHTML = '<span class="lang-en">WATCH</span><span class="lang-es">OBSERVA</span>';
-            echoLabel.className = 'sim-label phase-show';
-        }, 300);
-
-        original.forEach(function(idx, i) {
-            setTimeout(function() {
-                if (epoch !== echoEpoch) return;
-                echoCells[idx].classList.add('echo-lit');
-                echoCells[idx].textContent = i + 1;
-            }, 500 + (i * beatMs));
-            setTimeout(function() {
-                if (epoch !== echoEpoch) return;
-                echoCells[idx].classList.remove('echo-lit');
-                echoCells[idx].textContent = '';
-            }, 500 + (i * beatMs) + (beatMs * 0.55));
-        });
-
-        var watchEnd = 500 + (4 * beatMs) + 300;
-
-        /* Phase 2: ECHO — replay with one cell different */
-        setTimeout(function() {
-            if (epoch !== echoEpoch) return;
-            echoLabel.innerHTML = '<span class="lang-en">THE RHYTHM...</span><span class="lang-es">EL RITMO...</span>';
-            echoLabel.className = 'sim-label';
-            echoLabel.style.color = '#FF6B35';
-        }, watchEnd);
-
-        echo.forEach(function(idx, i) {
-            setTimeout(function() {
-                if (epoch !== echoEpoch) return;
-                echoCells[idx].classList.add('echo-lit');
-                echoCells[idx].textContent = i + 1;
-            }, watchEnd + 200 + (i * beatMs));
-            setTimeout(function() {
-                if (epoch !== echoEpoch) return;
-                echoCells[idx].classList.remove('echo-lit');
-                echoCells[idx].textContent = '';
-            }, watchEnd + 200 + (i * beatMs) + (beatMs * 0.55));
-        });
-
-        var echoEnd = watchEnd + 200 + (4 * beatMs) + 400;
-
-        /* Phase 3: SPOT IT — highlight the changed cell pink, show original dashed */
-        setTimeout(function() {
-            if (epoch !== echoEpoch) return;
-            echoLabel.innerHTML = '<span class="lang-en">SPOT THE CHANGE!</span><span class="lang-es">¡ENCUENTRA EL CAMBIO!</span>';
-            echoLabel.className = 'sim-label phase-tap';
-            echoLabel.style.color = '';
-        }, echoEnd);
-
-        setTimeout(function() {
-            if (epoch !== echoEpoch) return;
-            /* Show the changed cell (pink) */
-            echoCells[newCell].classList.add('echo-changed');
-            echoCells[newCell].textContent = '✗';
-        }, echoEnd + 400);
-
-        setTimeout(function() {
-            if (epoch !== echoEpoch) return;
-            /* Show original cell (dashed gold) */
-            echoCells[original[changePos]].classList.add('echo-original');
-            echoCells[original[changePos]].textContent = changePos + 1;
-            /* Swap changed to correct */
-            echoCells[newCell].classList.remove('echo-changed');
-            echoCells[newCell].classList.add('correct');
-            echoCells[newCell].textContent = '✓';
-        }, echoEnd + 1000);
-
-        /* Phase 4: Celebration */
-        setTimeout(function() {
-            if (epoch !== echoEpoch) return;
-            echoLabel.innerHTML = '<span class="lang-en">✅ SPOTTED!</span><span class="lang-es">✅ ¡ENCONTRADO!</span>';
-            echoLabel.className = 'sim-label phase-done';
-        }, echoEnd + 1400);
-
-        /* Phase 5: Loop */
-        setTimeout(function() { if (epoch === echoEpoch) echoRound(epoch); }, echoEnd + 3200);
-    }
-
-    var echoCard = document.querySelector('.wk-card.rhythm');
-    createSimObserver(echoCard,
-        function() { echoEpoch++; echoRound(echoEpoch); },
-        function() { echoEpoch++; simReset(echoCells, echoLabel);
-            echoLabel.style.color = '';
-            echoLabel.innerHTML = '<span class="lang-en">WATCH — THEN SPOT WHAT CHANGED IN THE RHYTHM</span><span class="lang-es">OBSERVA — LUEGO ENCUENTRA EL CAMBIO EN EL RITMO</span>';
-        }
-    );
+(function(){
+var lang=localStorage.getItem('lc-lang')||'en';
+function set(l){lang=l;localStorage.setItem('lc-lang',l);document.body.className=l;document.getElementById('btnEn').className=l==='en'?'lang-btn active':'lang-btn';document.getElementById('btnEs').className=l==='es'?'lang-btn active':'lang-btn'}
+document.getElementById('btnEn').onclick=function(){set('en')};
+document.getElementById('btnEs').onclick=function(){set('es')};
+set(lang);
 })();
 </script>
-
 </body>
 </html>
