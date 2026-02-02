@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>THE SEQUENCE | LaughCourt - Where Joy Meets The Game</title>
+<title>THE REPLAY | RITNOME™ — Recognition · Recall · Reflex · React · Rhythm</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
@@ -152,7 +152,7 @@ body.es .lang-en{display:none!important}
 <nav class="mini-nav">
 <div class="nav-row">
 <a href="/dashboard.html" class="back-btn">← <span class="lang-en">DASHBOARD</span><span class="lang-es">TABLERO</span></a>
-<div class="nav-title">🔢 THE SEQUENCE</div>
+<div class="nav-title">THE REPLAY</div>
 <div class="nav-right">
 <div class="nav-lang"><button class="nav-lang-btn active" id="btnEn">EN</button><button class="nav-lang-btn" id="btnEs">ES</button></div>
 <div class="settings-wrapper"><button class="settings-btn" id="settingsBtn">⚙️</button>
@@ -192,7 +192,7 @@ body.es .lang-en{display:none!important}
 <button class="action-btn" id="actionBtn"><span class="lang-en">LET'S GO</span><span class="lang-es">PA'LANTE</span></button>
 </div>
 <div class="overlay" id="tierupOverlay"><div class="overlay-card"><div class="overlay-emoji">⭐</div><h2 class="overlay-title"><span class="lang-en">⭐ GOSTAR EARNED!</span><span class="lang-es">⭐ ¡GOSTAR GANADO!</span></h2><p class="overlay-message" id="tierupMessage"></p><button class="overlay-btn" id="tierupBtn"><span class="lang-en">LET'S GO!</span><span class="lang-es">¡VAMOS!</span></button></div></div>
-<div class="overlay" id="upgradeOverlay"><div class="overlay-card"><div class="overlay-emoji">🔓🔢</div><h2 class="overlay-title">UNLOCK ALL RITNOME™</h2><div class="upgrade-speed-preview"><span class="upgrade-speed-chip current">✓ 60</span><span class="upgrade-speed-chip locked">🔒 90</span><span class="upgrade-speed-chip locked">🔒 120</span></div><div class="upgrade-price">$5<span>/mo</span></div><p class="overlay-message"><span class="lang-en">Get all BPM speeds + all 5 Ritnomes™!</span><span class="lang-es">¡Obtén todas las velocidades + los 5 Ritnomes™!</span></p><a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="overlay-btn" style="display:block;text-decoration:none;margin-bottom:6px;">UPGRADE 🚀</a><button class="overlay-btn secondary" id="upgradeClose">CONTINUE 60</button></div></div>
+<div class="overlay" id="upgradeOverlay"><div class="overlay-card"><div class="overlay-emoji">🔓</div><h2 class="overlay-title">UNLOCK ALL RITNOME™</h2><div class="upgrade-speed-preview"><span class="upgrade-speed-chip current">✓ 60</span><span class="upgrade-speed-chip locked">🔒 90</span><span class="upgrade-speed-chip locked">🔒 120</span></div><div class="upgrade-price">$5<span>/mo</span></div><p class="overlay-message"><span class="lang-en">Get all BPM speeds + all 5 challenges!</span><span class="lang-es">¡Obtén todas las velocidades + los 5 desafíos!</span></p><a href="https://buy.stripe.com/9B6bJ2c9i1qy0Qrbqh00005" class="overlay-btn" style="display:block;text-decoration:none;margin-bottom:6px;">UPGRADE 🚀</a><button class="overlay-btn secondary" id="upgradeClose">CONTINUE 60</button></div></div>
 <div class="coach-message" id="coachMessage"></div>
 <script>
 (function(){
@@ -203,7 +203,7 @@ body.es .lang-en{display:none!important}
     focusBtn.onclick = toggleFocusMode;
     applyFocusMode();
     var host = window.location.hostname;
-    var isProduction = host.indexOf('laughcourt') > -1 || host.indexOf('github.io') > -1 || host.indexOf('gostardigital') > -1;
+    var isProduction = host.indexOf('ritnome') > -1 || host.indexOf('laughcourt') > -1 || host.indexOf('github.io') > -1 || host.indexOf('gostardigital') > -1;
     if (isProduction) {
         var user = null;
         try { user = JSON.parse(localStorage.getItem('lc-user')); } catch(e) {}
@@ -254,8 +254,8 @@ body.es .lang-en{display:none!important}
     var TOTAL_CELLS = 25, ROUNDS_PER_TIER = 3, TOTAL_TIERS = 10;
     var LEVEL_BASE = {1:5,2:6,3:7,4:8,5:9,6:10,7:11,8:12,9:13,10:14};
     var SPEED_CFG = { slow: {show:800,gap:300}, med: {show:500,gap:200}, fast: {show:300,gap:150} };
-    var LAUGH_EMOJIS = ['😂','😆','🤣','😄','😁','🥳','😊','🔢'];
-    var PARTY_EMOJIS = ['🥳','🎉','😂','🤣','✨','💫','🔢','🏆'];
+    var LAUGH_EMOJIS = ['😂','😆','🤣','😄','😁','🥳','😊','🏀'];
+    var PARTY_EMOJIS = ['🥳','🎉','😂','🤣','✨','💫','🏀','🏆'];
     var FLASH_COLORS = ['#FFD700','#00D9A5','#FF6B35','#FF1493'];
     var colorIndex = 0;
     function getNextColor() { var color = FLASH_COLORS[colorIndex]; colorIndex = (colorIndex + 1) % FLASH_COLORS.length; return color; }
@@ -318,7 +318,7 @@ body.es .lang-en{display:none!important}
     }
     function roundComplete(success) {
         if (!state.isPlaying && !state.roundEnded) return; state.isPlaying = false; state.canTap = false;
-        if (success) { var pts = state.sequence.length * 10 * state.level * (state.speed === 'fast' ? 3 : state.speed === 'med' ? 2 : 1); state.score += pts; state.streak++; state.roundsCompleted++; saveSpeedState(state.speed, state.level, state.tier, state.roundsCompleted, state.score, state.streak); var intensity = state.streak >= 5 ? 'party' : state.streak >= 3 ? 'big' : 'medium'; var msgs = state.streak >= 5 ? ['🔢 LEGEND!', '🏆 WOW!'] : state.streak >= 3 ? ['😂 FIRE!', '🤣 AMAZING!'] : ['😄 NICE!', '😊 GREAT!']; playSuccess(); laughCelebration(intensity); showCoach(msgs[Math.floor(Math.random() * msgs.length)]); updateStats(); if (state.roundsCompleted >= ROUNDS_PER_TIER) { setGameTimeout(function() { state.tier < TOTAL_TIERS ? tierUp() : maxTier(); }, 800); } else { setGameTimeout(resetRound, 1000); } }
+        if (success) { var pts = state.sequence.length * 10 * state.level * (state.speed === 'fast' ? 3 : state.speed === 'med' ? 2 : 1); state.score += pts; state.streak++; state.roundsCompleted++; saveSpeedState(state.speed, state.level, state.tier, state.roundsCompleted, state.score, state.streak); var intensity = state.streak >= 5 ? 'party' : state.streak >= 3 ? 'big' : 'medium'; var msgs = state.streak >= 5 ? ['🏆 LEGEND!', '🏆 WOW!'] : state.streak >= 3 ? ['🔥 FIRE!', '🤣 AMAZING!'] : ['😄 NICE!', '😊 GREAT!']; playSuccess(); laughCelebration(intensity); showCoach(msgs[Math.floor(Math.random() * msgs.length)]); updateStats(); if (state.roundsCompleted >= ROUNDS_PER_TIER) { setGameTimeout(function() { state.tier < TOTAL_TIERS ? tierUp() : maxTier(); }, 800); } else { setGameTimeout(resetRound, 1000); } }
         else { state.streak = 0; saveSpeedState(state.speed, state.level, state.tier, state.roundsCompleted, state.score, state.streak); updateStats(); messageText.innerHTML = '<span class="lang-en">WRONG!</span><span class="lang-es">¡ERROR!</span>'; messageText.className = 'message-text error'; setGameTimeout(resetRound, 1500); }
     }
     function tierUp() {
