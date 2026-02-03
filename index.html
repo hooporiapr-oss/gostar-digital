@@ -72,6 +72,12 @@ body.es .lang-en{display:none!important}
 .workout-card.react .demo-link{background:rgba(155,89,182,0.15);color:var(--purple)}
 .workout-card.rhythm .demo-link{background:rgba(50,205,50,0.15);color:var(--lime)}
 
+body.logged-in .workout-card.recall .demo-link{background:linear-gradient(135deg,var(--orange),#E55A2B);color:var(--dark)}
+body.logged-in .workout-card.replay .demo-link{background:linear-gradient(135deg,var(--teal),#00B894);color:var(--dark)}
+body.logged-in .workout-card.reflex .demo-link{background:linear-gradient(135deg,var(--cyan),#00B8B8);color:var(--dark)}
+body.logged-in .workout-card.react .demo-link{background:linear-gradient(135deg,var(--purple),#8E44AD);color:var(--text)}
+body.logged-in .workout-card.rhythm .demo-link{background:linear-gradient(135deg,var(--lime),#28B828);color:var(--dark)}
+
 .pricing-card{background:linear-gradient(135deg,rgba(255,215,0,0.08),rgba(255,107,53,0.05));border:2px solid rgba(255,215,0,0.3);border-radius:20px;padding:25px 20px;text-align:center;margin-bottom:30px}
 .pricing-amount{font-family:'Bebas Neue',sans-serif;font-size:3rem;color:var(--gold);line-height:1;margin-bottom:5px}
 .pricing-amount span{font-size:1rem;color:var(--muted)}
@@ -169,7 +175,7 @@ body.es .lang-en{display:none!important}
 <div class="workout-desc"><span class="lang-en">Number Recall</span><span class="lang-es">Recuerdo Numérico</span></div>
 </div>
 </div>
-<a href="/the-recall.html" class="demo-link"><span class="lang-en">FREE DEMO</span><span class="lang-es">DEMO GRATIS</span> →</a>
+<a href="/the-recall.html" class="demo-link play-link"><span class="link-text-en lang-en">FREE DEMO</span><span class="link-text-es lang-es">DEMO GRATIS</span> →</a>
 </div>
 
 <div class="workout-card replay">
@@ -180,7 +186,7 @@ body.es .lang-en{display:none!important}
 <div class="workout-desc"><span class="lang-en">Sequence Replay</span><span class="lang-es">Repetición de Secuencia</span></div>
 </div>
 </div>
-<a href="/the-replay.html" class="demo-link"><span class="lang-en">FREE DEMO</span><span class="lang-es">DEMO GRATIS</span> →</a>
+<a href="/the-replay.html" class="demo-link play-link"><span class="link-text-en lang-en">FREE DEMO</span><span class="link-text-es lang-es">DEMO GRATIS</span> →</a>
 </div>
 
 <div class="workout-card reflex">
@@ -191,7 +197,7 @@ body.es .lang-en{display:none!important}
 <div class="workout-desc"><span class="lang-en">Position Reflex</span><span class="lang-es">Reflejo de Posición</span></div>
 </div>
 </div>
-<a href="/the-reflex.html" class="demo-link"><span class="lang-en">FREE DEMO</span><span class="lang-es">DEMO GRATIS</span> →</a>
+<a href="/the-reflex.html" class="demo-link play-link"><span class="link-text-en lang-en">FREE DEMO</span><span class="link-text-es lang-es">DEMO GRATIS</span> →</a>
 </div>
 
 <div class="workout-card react">
@@ -202,7 +208,7 @@ body.es .lang-en{display:none!important}
 <div class="workout-desc"><span class="lang-en">Beat Reaction</span><span class="lang-es">Reacción al Ritmo</span></div>
 </div>
 </div>
-<a href="/the-react.html" class="demo-link"><span class="lang-en">FREE DEMO</span><span class="lang-es">DEMO GRATIS</span> →</a>
+<a href="/the-react.html" class="demo-link play-link"><span class="link-text-en lang-en">FREE DEMO</span><span class="link-text-es lang-es">DEMO GRATIS</span> →</a>
 </div>
 
 <div class="workout-card rhythm">
@@ -213,7 +219,7 @@ body.es .lang-en{display:none!important}
 <div class="workout-desc"><span class="lang-en">Change Detection</span><span class="lang-es">Detección de Cambios</span></div>
 </div>
 </div>
-<a href="/the-rhythm.html" class="demo-link"><span class="lang-en">FREE DEMO</span><span class="lang-es">DEMO GRATIS</span> →</a>
+<a href="/the-rhythm.html" class="demo-link play-link"><span class="link-text-en lang-en">FREE DEMO</span><span class="link-text-es lang-es">DEMO GRATIS</span> →</a>
 </div>
 </div>
 
@@ -244,7 +250,14 @@ body.es .lang-en{display:none!important}
 (function(){
 /* Language */
 var lang=localStorage.getItem('lc-lang')||'en';
-function setLang(l){lang=l;localStorage.setItem('lc-lang',l);document.body.className=l;document.getElementById('btnEn').className=l==='en'?'lang-btn active':'lang-btn';document.getElementById('btnEs').className=l==='es'?'lang-btn active':'lang-btn'}
+function setLang(l){
+    lang=l;
+    localStorage.setItem('lc-lang',l);
+    document.body.classList.remove('en','es');
+    document.body.classList.add(l);
+    document.getElementById('btnEn').className=l==='en'?'lang-btn active':'lang-btn';
+    document.getElementById('btnEs').className=l==='es'?'lang-btn active':'lang-btn';
+}
 document.getElementById('btnEn').onclick=function(){setLang('en')};
 document.getElementById('btnEs').onclick=function(){setLang('es')};
 setLang(lang);
@@ -263,26 +276,43 @@ function checkAuth(){
     var speedAccess={allSpeeds:false};
     try{var sa=localStorage.getItem('lc-speed-access');if(sa)speedAccess=JSON.parse(sa)}catch(e){}
     
+    var linkTextsEn=document.querySelectorAll('.link-text-en');
+    var linkTextsEs=document.querySelectorAll('.link-text-es');
+    var pricingCard=document.querySelector('.pricing-card');
+    
     if(pin){
+        document.body.classList.add('logged-in');
         accountBtn.classList.add('logged-in');
         accountBtn.textContent=pin.charAt(0).toUpperCase();
         accountLoggedIn.style.display='block';
         accountLoggedOut.style.display='none';
         accountPin.textContent=pin.toUpperCase();
         
+        /* Update workout buttons to PLAY */
+        linkTextsEn.forEach(function(el){el.textContent='PLAY'});
+        linkTextsEs.forEach(function(el){el.textContent='JUGAR'});
+        
         if(speedAccess.allSpeeds){
             accountStatus.className='account-status pro';
             accountStatus.innerHTML='✓ PRO';
+            if(pricingCard)pricingCard.style.display='none';
         }else{
             accountStatus.className='account-status trial';
             accountStatus.innerHTML='<span class="lang-en">FREE TRIAL</span><span class="lang-es">PRUEBA GRATIS</span>';
             setLang(lang);
+            if(pricingCard)pricingCard.style.display='block';
         }
     }else{
+        document.body.classList.remove('logged-in');
         accountBtn.classList.remove('logged-in');
         accountBtn.textContent='👤';
         accountLoggedIn.style.display='none';
         accountLoggedOut.style.display='block';
+        
+        /* Reset workout buttons to FREE DEMO */
+        linkTextsEn.forEach(function(el){el.textContent='FREE DEMO'});
+        linkTextsEs.forEach(function(el){el.textContent='DEMO GRATIS'});
+        if(pricingCard)pricingCard.style.display='block';
     }
 }
 
