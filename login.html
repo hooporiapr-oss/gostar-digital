@@ -890,7 +890,7 @@
                         sessionStorage.setItem('lc-pin', pin);
                         sessionStorage.setItem('lc-token', data.token);
                         localStorage.setItem('lc-terms-accepted', new Date().toISOString());
-                        window.location.href = '/dashboard.html';
+                        window.location.href = '/';
                     } else {
                         loginError.textContent = data.error || 'Invalid PIN';
                         loginError.classList.add('show');
@@ -979,7 +979,7 @@
                         localStorage.setItem('lc-user', JSON.stringify({ pin: recoveredData.pin }));
                         sessionStorage.setItem('lc-pin', recoveredData.pin);
                         sessionStorage.setItem('lc-token', data.token);
-                        window.location.href = '/dashboard.html';
+                        window.location.href = '/';
                     } else {
                         alert(data.error || 'Login failed. Please try again.');
                         playNowBtn.disabled = false;
