@@ -890,7 +890,18 @@
                         sessionStorage.setItem('lc-pin', pin);
                         sessionStorage.setItem('lc-token', data.token);
                         localStorage.setItem('lc-terms-accepted', new Date().toISOString());
-                        window.location.href = '/';
+                        
+                        // Fetch subscription status before redirect
+                        fetch('/api/user/speed-access/' + pin)
+                            .then(function(r) { return r.json(); })
+                            .then(function(speedData) {
+                                localStorage.setItem('lc-speed-access', JSON.stringify(speedData));
+                                window.location.href = '/';
+                            })
+                            .catch(function() {
+                                // Even if fetch fails, redirect anyway
+                                window.location.href = '/';
+                            });
                     } else {
                         loginError.textContent = data.error || 'Invalid PIN';
                         loginError.classList.add('show');
@@ -979,7 +990,17 @@
                         localStorage.setItem('lc-user', JSON.stringify({ pin: recoveredData.pin }));
                         sessionStorage.setItem('lc-pin', recoveredData.pin);
                         sessionStorage.setItem('lc-token', data.token);
-                        window.location.href = '/';
+                        
+                        // Fetch subscription status before redirect
+                        fetch('/api/user/speed-access/' + recoveredData.pin)
+                            .then(function(r) { return r.json(); })
+                            .then(function(speedData) {
+                                localStorage.setItem('lc-speed-access', JSON.stringify(speedData));
+                                window.location.href = '/';
+                            })
+                            .catch(function() {
+                                window.location.href = '/';
+                            });
                     } else {
                         alert(data.error || 'Login failed. Please try again.');
                         playNowBtn.disabled = false;
