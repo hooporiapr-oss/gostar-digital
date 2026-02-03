@@ -98,7 +98,29 @@ body.es .lang-en{display:none!important}
 .footer-badge-text{font-size:0.6rem;color:var(--muted)}
 .footer-badge-text span{font-family:'Bebas Neue',sans-serif;font-size:0.85rem;color:var(--gold);letter-spacing:2px}
 
-@media(min-width:400px){.hero-title{font-size:2.5rem}.workout-card{padding:18px 20px}.workout-icon{font-size:2rem}.workout-name{font-size:1.1rem}.pricing-amount{font-size:3.5rem}.logo-mark{width:40px;height:40px}.logo-mark::after{font-size:1.5rem}.logo-text{font-size:1.8rem}}
+.header-right{display:flex;align-items:center;gap:10px}
+.account-wrap{position:relative}
+.account-btn{width:36px;height:36px;border-radius:50%;border:2px solid var(--gold);background:rgba(255,215,0,0.1);color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.3s}
+.account-btn:active{transform:scale(0.95)}
+.account-btn.logged-in{background:linear-gradient(135deg,var(--gold),var(--orange));color:var(--dark);border-color:transparent}
+.account-dropdown{position:absolute;top:calc(100% + 10px);right:0;width:200px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:15px;display:none;z-index:200;box-shadow:0 10px 40px rgba(0,0,0,0.5)}
+.account-dropdown.show{display:block;animation:dropIn 0.2s ease-out}
+@keyframes dropIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+.account-dropdown::before{content:'';position:absolute;top:-6px;right:14px;width:12px;height:12px;background:var(--card);border-left:1px solid var(--border);border-top:1px solid var(--border);transform:rotate(45deg)}
+.account-pin{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:2px;color:var(--gold);text-align:center;margin-bottom:8px}
+.account-status{display:flex;align-items:center;justify-content:center;gap:6px;padding:6px 12px;border-radius:20px;font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}
+.account-status.pro{background:rgba(0,217,165,0.15);color:var(--teal)}
+.account-status.trial{background:rgba(255,215,0,0.15);color:var(--gold)}
+.account-status.expired{background:rgba(255,107,53,0.15);color:var(--orange)}
+.account-divider{height:1px;background:var(--border);margin:12px 0}
+.logout-btn{width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;background:transparent;color:var(--muted);font-family:'Outfit',sans-serif;font-size:0.75rem;font-weight:600;cursor:pointer;transition:all 0.2s}
+.logout-btn:active{background:rgba(255,107,53,0.1);border-color:var(--orange);color:var(--orange)}
+.login-prompt{text-align:center}
+.login-prompt-text{font-size:0.75rem;color:var(--muted);margin-bottom:10px}
+.login-prompt-btn{display:block;width:100%;padding:10px;border:none;border-radius:8px;background:linear-gradient(135deg,var(--gold),var(--orange));color:var(--dark);font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:1px;cursor:pointer;text-decoration:none;text-align:center}
+.login-prompt-btn:active{transform:scale(0.98)}
+
+@media(min-width:400px){.hero-title{font-size:2.5rem}.workout-card{padding:18px 20px}.workout-icon{font-size:2rem}.workout-name{font-size:1.1rem}.pricing-amount{font-size:3.5rem}.logo-mark{width:40px;height:40px}.logo-mark::after{font-size:1.5rem}.logo-text{font-size:1.8rem}.account-btn{width:40px;height:40px}}
 </style>
 </head>
 <body class="en">
@@ -108,7 +130,24 @@ body.es .lang-en{display:none!important}
 <div class="logo-mark"></div>
 <span class="logo-text">RITNOME</span><span class="logo-tm">™</span>
 </a>
+<div class="header-right">
 <div class="lang-toggle"><button class="lang-btn active" id="btnEn">EN</button><button class="lang-btn" id="btnEs">ES</button></div>
+<div class="account-wrap">
+<button class="account-btn" id="accountBtn">👤</button>
+<div class="account-dropdown" id="accountDropdown">
+<div id="accountLoggedIn" style="display:none">
+<div class="account-pin" id="accountPin">••••</div>
+<div class="account-status pro" id="accountStatus">✓ PRO</div>
+<div class="account-divider"></div>
+<button class="logout-btn" id="logoutBtn"><span class="lang-en">Log Out</span><span class="lang-es">Cerrar Sesión</span></button>
+</div>
+<div id="accountLoggedOut" class="login-prompt">
+<p class="login-prompt-text"><span class="lang-en">Track your progress</span><span class="lang-es">Rastrea tu progreso</span></p>
+<a href="/login.html" class="login-prompt-btn"><span class="lang-en">LOG IN</span><span class="lang-es">ENTRAR</span></a>
+</div>
+</div>
+</div>
+</div>
 </header>
 
 <main class="main">
@@ -203,11 +242,69 @@ body.es .lang-en{display:none!important}
 
 <script>
 (function(){
+/* Language */
 var lang=localStorage.getItem('lc-lang')||'en';
-function set(l){lang=l;localStorage.setItem('lc-lang',l);document.body.className=l;document.getElementById('btnEn').className=l==='en'?'lang-btn active':'lang-btn';document.getElementById('btnEs').className=l==='es'?'lang-btn active':'lang-btn'}
-document.getElementById('btnEn').onclick=function(){set('en')};
-document.getElementById('btnEs').onclick=function(){set('es')};
-set(lang);
+function setLang(l){lang=l;localStorage.setItem('lc-lang',l);document.body.className=l;document.getElementById('btnEn').className=l==='en'?'lang-btn active':'lang-btn';document.getElementById('btnEs').className=l==='es'?'lang-btn active':'lang-btn'}
+document.getElementById('btnEn').onclick=function(){setLang('en')};
+document.getElementById('btnEs').onclick=function(){setLang('es')};
+setLang(lang);
+
+/* Account Dropdown */
+var accountBtn=document.getElementById('accountBtn');
+var accountDropdown=document.getElementById('accountDropdown');
+var accountLoggedIn=document.getElementById('accountLoggedIn');
+var accountLoggedOut=document.getElementById('accountLoggedOut');
+var accountPin=document.getElementById('accountPin');
+var accountStatus=document.getElementById('accountStatus');
+var logoutBtn=document.getElementById('logoutBtn');
+
+function checkAuth(){
+    var pin=localStorage.getItem('lc-pin');
+    var speedAccess={allSpeeds:false};
+    try{var sa=localStorage.getItem('lc-speed-access');if(sa)speedAccess=JSON.parse(sa)}catch(e){}
+    
+    if(pin){
+        accountBtn.classList.add('logged-in');
+        accountBtn.textContent=pin.charAt(0).toUpperCase();
+        accountLoggedIn.style.display='block';
+        accountLoggedOut.style.display='none';
+        accountPin.textContent=pin.toUpperCase();
+        
+        if(speedAccess.allSpeeds){
+            accountStatus.className='account-status pro';
+            accountStatus.innerHTML='✓ PRO';
+        }else{
+            accountStatus.className='account-status trial';
+            accountStatus.innerHTML='<span class="lang-en">FREE TRIAL</span><span class="lang-es">PRUEBA GRATIS</span>';
+            setLang(lang);
+        }
+    }else{
+        accountBtn.classList.remove('logged-in');
+        accountBtn.textContent='👤';
+        accountLoggedIn.style.display='none';
+        accountLoggedOut.style.display='block';
+    }
+}
+
+accountBtn.onclick=function(e){
+    e.stopPropagation();
+    accountDropdown.classList.toggle('show');
+};
+
+document.addEventListener('click',function(e){
+    if(!accountDropdown.contains(e.target)&&e.target!==accountBtn){
+        accountDropdown.classList.remove('show');
+    }
+});
+
+logoutBtn.onclick=function(){
+    localStorage.removeItem('lc-pin');
+    localStorage.removeItem('lc-speed-access');
+    accountDropdown.classList.remove('show');
+    checkAuth();
+};
+
+checkAuth();
 })();
 </script>
 </body>
