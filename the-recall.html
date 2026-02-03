@@ -243,7 +243,7 @@ body.es .lang-en{display:none!important}
 <!-- NAV -->
 <nav class="mini-nav">
 <div class="nav-row">
-<a href="/dashboard.html" class="back-btn" id="backBtn">← <span class="lang-en">BACK</span><span class="lang-es">ATRÁS</span></a>
+<a href="/" class="back-btn" id="backBtn">← <span class="lang-en">BACK</span><span class="lang-es">ATRÁS</span></a>
 <div class="nav-title">THE RECALL</div>
 <div class="nav-right">
 <div class="nav-lang">
@@ -533,7 +533,7 @@ function showScreen(name){
 
 function updateBackBtn(){
     var btn=$('backBtn');
-    if(currentScreen==='demo'){btn.href='/dashboard.html'}
+    if(currentScreen==='demo'){btn.href='/'}
     else if(currentScreen==='trophy'){btn.href='#';btn.onclick=function(e){e.preventDefault();showScreen('demo');startDemo()}}
     else if(currentScreen==='play'){btn.href='#';btn.onclick=function(e){e.preventDefault();showScreen('trophy');stopGame()}}
 }
