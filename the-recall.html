@@ -10,7 +10,7 @@
 <style>
 :root{--orange:#FF6B35;--gold:#FFD700;--teal:#00D9A5;--pink:#FF1493;--purple:#9B59B6;--lime:#32CD32;--dark:#0a0a0f;--darker:#050508;--card:#111118;--text:#FFFFFF;--muted:#8892a0;--border:rgba(255,255,255,0.1);--nav-height:50px;--flash-color:#FF6B35}
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background:var(--dark);color:var(--text);touch-action:manipulation;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
+html,body{height:100%;overflow-x:hidden;overflow-y:auto;font-family:'Outfit',sans-serif;background:var(--dark);color:var(--text);touch-action:manipulation;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
 body.en .lang-es{display:none!important}
 body.es .lang-en{display:none!important}
 
@@ -30,34 +30,34 @@ body.es .lang-en{display:none!important}
 .screen.active{display:block}
 
 /* ==================== SCREEN 1: DEMO (PUBLIC) ==================== */
-#screen-demo{background:var(--dark)}
-.demo-container{max-width:420px;margin:0 auto;padding:15px 15px 40px;display:flex;flex-direction:column;align-items:center}
-.demo-header{text-align:center;margin-bottom:12px}
-.demo-badge{display:inline-block;background:rgba(255,107,53,0.15);color:var(--orange);padding:5px 14px;border-radius:15px;font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px}
-.demo-title{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:3px;color:var(--orange);margin-bottom:4px}
-.demo-subtitle{font-size:0.75rem;color:var(--muted)}
+#screen-demo{background:var(--dark);min-height:calc(100dvh - var(--nav-height) - env(safe-area-inset-top))}
+.demo-container{max-width:420px;margin:0 auto;padding:10px 15px 20px;display:flex;flex-direction:column;align-items:center}
+.demo-header{text-align:center;margin-bottom:8px}
+.demo-badge{display:inline-block;background:rgba(255,107,53,0.15);color:var(--orange);padding:4px 12px;border-radius:15px;font-size:0.55rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px}
+.demo-title{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:3px;color:var(--orange);margin-bottom:2px}
+.demo-subtitle{font-size:0.7rem;color:var(--muted)}
 
-.demo-court-wrap{position:relative;margin:15px 0}
-.demo-label{position:absolute;top:-28px;left:50%;transform:translateX(-50%);font-family:'Bebas Neue',sans-serif;font-size:0.75rem;letter-spacing:2px;color:var(--gold);background:rgba(0,0,0,0.85);padding:5px 14px;border-radius:12px;white-space:nowrap;z-index:10;border:1px solid rgba(255,215,0,0.3);transition:all 0.3s}
+.demo-court-wrap{position:relative;margin:10px 0}
+.demo-label{position:absolute;top:-24px;left:50%;transform:translateX(-50%);font-family:'Bebas Neue',sans-serif;font-size:0.7rem;letter-spacing:2px;color:var(--gold);background:rgba(0,0,0,0.85);padding:4px 12px;border-radius:10px;white-space:nowrap;z-index:10;border:1px solid rgba(255,215,0,0.3);transition:all 0.3s}
 .demo-label.phase-watch{color:var(--gold);border-color:rgba(255,215,0,0.4)}
 .demo-label.phase-recall{color:var(--orange);border-color:rgba(255,107,53,0.4)}
 .demo-label.phase-success{color:var(--teal);border-color:rgba(0,217,165,0.4)}
 
-.demo-court{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:8px;background:#1a1a24;border-radius:14px;border:3px solid var(--orange);width:240px;height:240px;position:relative}
-.demo-court::before{content:'';position:absolute;inset:0;background:rgba(10,10,15,0.5);border-radius:11px;pointer-events:none}
-.demo-cell{aspect-ratio:1;border-radius:5px;background:rgba(255,255,255,0.08);border:2px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;position:relative;z-index:1;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:transparent;transition:all 0.15s}
+.demo-court{display:grid;grid-template-columns:repeat(5,1fr);gap:3px;padding:6px;background:#1a1a24;border-radius:12px;border:3px solid var(--orange);width:200px;height:200px;position:relative}
+.demo-court::before{content:'';position:absolute;inset:0;background:rgba(10,10,15,0.5);border-radius:9px;pointer-events:none}
+.demo-cell{aspect-ratio:1;border-radius:4px;background:rgba(255,255,255,0.08);border:2px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;position:relative;z-index:1;font-family:'Bebas Neue',sans-serif;font-size:1rem;color:transparent;transition:all 0.15s}
 .demo-cell.lit{background:var(--orange);border-color:var(--gold);box-shadow:0 0 15px rgba(255,107,53,0.6);color:#fff;transform:scale(1.05)}
 .demo-cell.correct{background:var(--teal);border-color:var(--teal);box-shadow:0 0 12px rgba(0,217,165,0.5);color:#fff}
 .demo-court.joy-pulse{animation:joyPulse 0.5s ease-out}
 @keyframes joyPulse{0%{box-shadow:0 0 0 0 rgba(255,107,53,0.7)}50%{box-shadow:0 0 25px 8px rgba(255,107,53,0.4)}100%{box-shadow:none}}
 
 /* HOW TO PLAY SECTION */
-.htp-section{width:100%;max-width:380px;margin:20px 0}
-.htp-toggle{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:14px 20px;background:linear-gradient(135deg,rgba(255,215,0,0.08),rgba(255,107,53,0.05));border:1px solid rgba(255,215,0,0.2);border-radius:12px;cursor:pointer;transition:all 0.3s}
+.htp-section{width:100%;max-width:380px;margin:12px 0}
+.htp-toggle{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px 16px;background:linear-gradient(135deg,rgba(255,215,0,0.08),rgba(255,107,53,0.05));border:1px solid rgba(255,215,0,0.2);border-radius:10px;cursor:pointer;transition:all 0.3s}
 .htp-toggle:active{transform:scale(0.98);border-color:var(--gold)}
-.htp-toggle-icon{font-size:1.2rem}
-.htp-toggle-text{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;color:var(--gold)}
-.htp-toggle-arrow{color:var(--gold);font-size:0.8rem;transition:transform 0.3s}
+.htp-toggle-icon{font-size:1.1rem}
+.htp-toggle-text{font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:2px;color:var(--gold)}
+.htp-toggle-arrow{color:var(--gold);font-size:0.75rem;transition:transform 0.3s}
 .htp-toggle.open .htp-toggle-arrow{transform:rotate(180deg)}
 
 .htp-content{max-height:0;overflow:hidden;transition:max-height 0.5s ease-out}
@@ -77,21 +77,21 @@ body.es .lang-en{display:none!important}
 .htp-tip-text{font-size:0.7rem;color:var(--muted);line-height:1.4}
 
 /* CTA BUTTONS */
-.demo-cta{width:100%;max-width:320px;margin-top:20px}
-.play-now-btn{width:100%;padding:16px 24px;border:none;border-radius:12px;font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:4px;cursor:pointer;background:linear-gradient(135deg,var(--orange),#E55A2B);color:var(--text);box-shadow:0 4px 20px rgba(255,107,53,0.4);transition:all 0.3s;animation:demoPulse 2s ease-in-out infinite}
+.demo-cta{width:100%;max-width:320px;margin-top:12px}
+.play-now-btn{width:100%;padding:14px 20px;border:none;border-radius:10px;font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:4px;cursor:pointer;background:linear-gradient(135deg,var(--orange),#E55A2B);color:var(--text);box-shadow:0 4px 20px rgba(255,107,53,0.4);transition:all 0.3s;animation:demoPulse 2s ease-in-out infinite}
 .play-now-btn:active{transform:scale(0.98)}
 @keyframes demoPulse{0%,100%{box-shadow:0 4px 20px rgba(255,107,53,0.4)}50%{box-shadow:0 4px 30px rgba(255,107,53,0.7)}}
 
-.login-link{display:block;text-align:center;margin-top:15px;font-size:0.75rem;color:var(--muted)}
+.login-link{display:block;text-align:center;margin-top:10px;font-size:0.7rem;color:var(--muted)}
 .login-link a{color:var(--gold);text-decoration:none}
 .login-link a:active{text-decoration:underline}
 
 /* Ritnome Badge */
-.ritnome-promo{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:25px;padding:10px 16px;background:rgba(255,215,0,0.05);border:1px solid rgba(255,215,0,0.15);border-radius:20px}
-.ritnome-promo .pulse-dot{width:8px;height:8px;background:var(--gold);border-radius:50%;animation:pulseDot 1s ease-in-out infinite}
+.ritnome-promo{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:15px;padding:8px 14px;background:rgba(255,215,0,0.05);border:1px solid rgba(255,215,0,0.15);border-radius:20px}
+.ritnome-promo .pulse-dot{width:6px;height:6px;background:var(--gold);border-radius:50%;animation:pulseDot 1s ease-in-out infinite}
 @keyframes pulseDot{0%,100%{opacity:0.3;transform:scale(0.8)}50%{opacity:1;transform:scale(1.2)}}
-.ritnome-promo-text{font-size:0.6rem;color:var(--muted);letter-spacing:1px}
-.ritnome-promo-text span{font-family:'Bebas Neue',sans-serif;color:var(--gold);font-size:0.8rem;letter-spacing:2px}
+.ritnome-promo-text{font-size:0.55rem;color:var(--muted);letter-spacing:1px}
+.ritnome-promo-text span{font-family:'Bebas Neue',sans-serif;color:var(--gold);font-size:0.7rem;letter-spacing:2px}
 
 /* ==================== SCREEN 2: TROPHY ROOM (AUTH) ==================== */
 #screen-trophy{background:var(--dark)}
