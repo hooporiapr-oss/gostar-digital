@@ -272,7 +272,13 @@ var accountStatus=document.getElementById('accountStatus');
 var logoutBtn=document.getElementById('logoutBtn');
 
 function checkAuth(){
-    var pin=localStorage.getItem('lc-pin');
+    var pin=null;
+    try{
+        var user=localStorage.getItem('lc-user');
+        if(user){pin=JSON.parse(user).pin}
+    }catch(e){}
+    if(!pin)pin=sessionStorage.getItem('lc-pin');
+    
     var speedAccess={allSpeeds:false};
     try{var sa=localStorage.getItem('lc-speed-access');if(sa)speedAccess=JSON.parse(sa)}catch(e){}
     
@@ -328,8 +334,9 @@ document.addEventListener('click',function(e){
 });
 
 logoutBtn.onclick=function(){
-    localStorage.removeItem('lc-pin');
+    localStorage.removeItem('lc-user');
     localStorage.removeItem('lc-speed-access');
+    sessionStorage.removeItem('lc-pin');
     accountDropdown.classList.remove('show');
     checkAuth();
 };
