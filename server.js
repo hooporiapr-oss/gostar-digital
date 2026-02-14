@@ -828,7 +828,7 @@ app.post('/api/subscribe/:plan', function(req, res) {
         res.json({ url: session.url });
     }).catch(function(err) {
         console.log('❌ Stripe error:', err.message);
-        res.status(500).json({ error: 'Error creando suscripción: ' + err.message });
+        res.status(500).json({ error: 'Error creando suscripción' });
     });
 });
 
