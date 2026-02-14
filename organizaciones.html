@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Hey Bori™ para Organizaciones — Gratis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F8F7F4;--card:#FFFFFF;--text:#111827;--muted:#5A6172;--light:#9CA3AF;--green:#10B981;--gold:#B8860B;--purple:#7C3AED;--red:#EF4444;--head:'Bebas Neue',sans-serif;--body:'Outfit',sans-serif;--radius:18px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--body);background:var(--bg);color:var(--text);-webkit-tap-highlight-color:transparent}
+
+/* Hero */
+.hero{background:linear-gradient(135deg,#1A0A2E,#2D1052,#1A0A3E);padding:60px 20px 50px;text-align:center;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:6px;display:flex}
+.hero-flag{position:absolute;bottom:0;left:0;right:0;height:6px;display:flex}
+.hero-flag div{flex:1}
+.hero-flag .r{background:#ED0000}.hero-flag .w{background:#FFF}.hero-flag .b{background:#0050F0}
+.hero-badge{display:inline-block;background:rgba(16,185,129,.15);color:var(--green);font-size:12px;font-weight:800;letter-spacing:2px;padding:6px 18px;border-radius:100px;margin-bottom:16px;text-transform:uppercase}
+.hero-title{font-family:var(--head);font-size:2.8rem;color:white;letter-spacing:4px;line-height:1;margin-bottom:12px}
+.hero-title span{background:linear-gradient(135deg,#FFD700,#FF8C42);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{color:rgba(255,255,255,.6);font-size:16px;line-height:1.6;max-width:500px;margin:0 auto 28px}
+.hero-cta{display:inline-block;padding:16px 40px;background:linear-gradient(135deg,#FFD700,#FF8C42);color:#1A0A2E;font-family:var(--head);font-size:1.2rem;letter-spacing:3px;border-radius:100px;text-decoration:none;box-shadow:0 6px 24px rgba(255,215,0,.3);transition:all .2s}
+.hero-cta:active{transform:scale(.97)}
+.hero-free{color:rgba(255,255,255,.4);font-size:13px;margin-top:14px;font-weight:600}
+
+/* Container */
+.container{max-width:600px;margin:0 auto;padding:0 16px}
+
+/* Section */
+.section{padding:40px 0}
+.section-label{font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--purple);margin-bottom:8px}
+.section-title{font-family:var(--head);font-size:1.8rem;letter-spacing:3px;margin-bottom:8px}
+.section-sub{color:var(--muted);font-size:15px;line-height:1.6;margin-bottom:24px}
+
+/* Value cards */
+.value-card{background:var(--card);border-radius:var(--radius);padding:24px;box-shadow:0 2px 12px rgba(26,29,43,.06);border:1px solid rgba(26,29,43,.06);margin-bottom:14px;display:flex;gap:16px;align-items:flex-start}
+.value-icon{font-size:32px;flex-shrink:0;width:44px;text-align:center}
+.value-title{font-family:var(--head);font-size:1.1rem;letter-spacing:2px;margin-bottom:4px}
+.value-desc{font-size:14px;color:var(--muted);line-height:1.5}
+
+/* Stats strip */
+.stats-strip{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:24px 0}
+.stat-box{background:var(--card);border-radius:14px;padding:20px 12px;text-align:center;box-shadow:0 2px 12px rgba(26,29,43,.06);border:1px solid rgba(26,29,43,.06)}
+.stat-big{font-family:var(--head);font-size:2rem;letter-spacing:2px;color:var(--purple)}
+.stat-label{font-size:11px;font-weight:600;color:var(--muted);margin-top:2px}
+
+/* How it works */
+.step{display:flex;gap:16px;align-items:flex-start;margin-bottom:24px}
+.step-num{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--purple),#9333EA);color:white;font-family:var(--head);font-size:1.1rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.step-content{flex:1}
+.step-title{font-weight:800;font-size:15px;margin-bottom:3px}
+.step-desc{font-size:14px;color:var(--muted);line-height:1.5}
+
+/* Games showcase */
+.games-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.game-card{background:var(--card);border-radius:14px;padding:16px;text-align:center;box-shadow:0 2px 12px rgba(26,29,43,.06);border:1px solid rgba(26,29,43,.06)}
+.game-emoji{font-size:28px;margin-bottom:6px}
+.game-name{font-family:var(--head);font-size:1rem;letter-spacing:2px}
+.game-desc{font-size:12px;color:var(--muted);margin-top:2px}
+.game-card.full{grid-column:1/-1}
+
+/* Testimonial style quote */
+.quote-card{background:linear-gradient(135deg,#F5F3FF,#EDE9FE);border-radius:var(--radius);padding:28px 24px;margin:24px 0;border-left:4px solid var(--purple)}
+.quote-text{font-size:16px;font-style:italic;line-height:1.6;color:var(--text);margin-bottom:8px}
+.quote-attr{font-size:13px;font-weight:700;color:var(--purple)}
+
+/* CTA section */
+.cta-section{background:linear-gradient(135deg,#1A0A2E,#2D1052);padding:40px 20px;text-align:center;margin-top:20px}
+.cta-title{font-family:var(--head);font-size:2rem;color:white;letter-spacing:3px;margin-bottom:8px}
+.cta-sub{color:rgba(255,255,255,.6);font-size:15px;margin-bottom:24px;line-height:1.5}
+.cta-btn{display:inline-block;padding:16px 40px;background:linear-gradient(135deg,#FFD700,#FF8C42);color:#1A0A2E;font-family:var(--head);font-size:1.1rem;letter-spacing:3px;border-radius:100px;text-decoration:none;box-shadow:0 6px 24px rgba(255,215,0,.3)}
+.cta-btn:active{transform:scale(.97)}
+.cta-free{color:rgba(255,255,255,.35);font-size:13px;margin-top:14px;font-weight:600}
+
+/* Footer */
+.footer{text-align:center;padding:30px 20px;font-size:11px;color:var(--light)}
+.footer a{color:var(--purple);text-decoration:none;font-weight:600}
+
+/* Who list */
+.who-list{display:flex;flex-direction:column;gap:10px;margin-bottom:24px}
+.who-item{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:12px;padding:14px 16px;box-shadow:0 2px 8px rgba(26,29,43,.04);border:1px solid rgba(26,29,43,.06)}
+.who-icon{font-size:24px;flex-shrink:0}
+.who-text{font-size:14px;font-weight:600}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+    <div class="hero-badge">100% Gratis para Organizaciones</div>
+    <div class="hero-title">HEY BORI™ PARA<br><span>ORGANIZACIONES</span></div>
+    <div class="hero-sub">Juegos cognitivos, compañera digital 24/7, y un dashboard para monitorear la actividad de sus participantes. Todo en español boricua. Todo gratis.</div>
+    <a href="/facility" class="hero-cta">REGISTRAR MI ORGANIZACIÓN</a>
+    <div class="hero-free">Sin costo · Sin contrato · Sin límites · Para siempre</div>
+    <div class="hero-flag"><div class="r"></div><div class="w"></div><div class="b"></div><div class="w"></div><div class="r"></div></div>
+</div>
+
+<div class="container">
+
+<!-- WHAT THEY GET -->
+<div class="section">
+    <div class="section-label">¿Qué recibe su organización?</div>
+    <div class="section-title">TODO ESTO. GRATIS.</div>
+    <div class="section-sub">Sin pagos. Sin contratos. Sin periodo de prueba. Gratis para siempre.</div>
+
+    <div class="value-card">
+        <div class="value-icon">💬</div>
+        <div>
+            <div class="value-title">BORI — COMPAÑERA DIGITAL</div>
+            <div class="value-desc">Una compañera boricua que conversa con sus participantes en español puertorriqueño. Escucha, acompaña, y hace reír. Disponible 24/7.</div>
+        </div>
+    </div>
+
+    <div class="value-card">
+        <div class="value-icon">🧠</div>
+        <div>
+            <div class="value-title">8 JUEGOS COGNITIVOS</div>
+            <div class="value-desc">Conga, Sopa de Letras, Dominó Math, y 5 juegos Ritnome™ — todos diseñados para entrenar memoria, velocidad de reacción, coordinación, y reconocimiento de patrones.</div>
+        </div>
+    </div>
+
+    <div class="value-card">
+        <div class="value-icon">📊</div>
+        <div>
+            <div class="value-title">DASHBOARD DE ACTIVIDAD</div>
+            <div class="value-desc">Vea cuántos participantes están activos, qué juegos son los más populares, el estado de ánimo general, y tendencias semanales. Todo en tiempo real.</div>
+        </div>
+    </div>
+
+    <div class="value-card">
+        <div class="value-icon">🇵🇷</div>
+        <div>
+            <div class="value-title">100% EN ESPAÑOL BORICUA</div>
+            <div class="value-desc">No es español traducido. Es español de Puerto Rico — con los modismos, el humor, y el calor que nuestros mayores entienden y disfrutan.</div>
+        </div>
+    </div>
+</div>
+
+<!-- GAMES -->
+<div class="section" style="padding-top:0">
+    <div class="section-label">Plataforma cognitiva completa</div>
+    <div class="section-title">8 JUEGOS. 1 COMPAÑERA.</div>
+    <div class="section-sub">Cada juego entrena una habilidad diferente. Juntos cubren las áreas clave del entrenamiento cognitivo.</div>
+
+    <div class="games-grid">
+        <div class="game-card">
+            <div class="game-emoji">🥁</div>
+            <div class="game-name">CONGA</div>
+            <div class="game-desc">Ritmo · Coordinación · Memoria</div>
+        </div>
+        <div class="game-card">
+            <div class="game-emoji">🔤</div>
+            <div class="game-name">SOPA DE LETRAS</div>
+            <div class="game-desc">Vocabulario · Atención visual</div>
+        </div>
+        <div class="game-card">
+            <div class="game-emoji">🁃</div>
+            <div class="game-name">DOMINÓ MATH</div>
+            <div class="game-desc">Cálculo · Lógica numérica</div>
+        </div>
+        <div class="game-card">
+            <div class="game-emoji">🧠</div>
+            <div class="game-name">RECALL</div>
+            <div class="game-desc">Memoria a corto plazo</div>
+        </div>
+        <div class="game-card">
+            <div class="game-emoji">⚡</div>
+            <div class="game-name">REACT</div>
+            <div class="game-desc">Velocidad de reacción</div>
+        </div>
+        <div class="game-card">
+            <div class="game-emoji">👁️</div>
+            <div class="game-name">REFLEX</div>
+            <div class="game-desc">Reflejos visuales</div>
+        </div>
+        <div class="game-card">
+            <div class="game-emoji">🎵</div>
+            <div class="game-name">REPLAY</div>
+            <div class="game-desc">Reconocimiento de patrones</div>
+        </div>
+        <div class="game-card">
+            <div class="game-emoji">👂</div>
+            <div class="game-name">RITMO</div>
+            <div class="game-desc">Percepción auditiva</div>
+        </div>
+    </div>
+    <div class="game-card full" style="text-align:center;background:linear-gradient(135deg,#F5F3FF,#EDE9FE);border:2px solid rgba(124,58,237,.1)">
+        <div class="game-emoji">💬</div>
+        <div class="game-name">BORI — COMPAÑERA 24/7</div>
+        <div class="game-desc">Conversación · Compañía · Bienestar emocional</div>
+    </div>
+</div>
+
+<!-- WHO IS IT FOR -->
+<div class="section" style="padding-top:0">
+    <div class="section-label">¿Para quién es?</div>
+    <div class="section-title">PARA TODOS LOS QUE SIRVEN</div>
+    <div class="section-sub">Si su organización trabaja con adultos mayores, Hey Bori es para usted.</div>
+
+    <div class="who-list">
+        <div class="who-item"><div class="who-icon">🏥</div><div class="who-text">Hogares de cuido y envejecientes</div></div>
+        <div class="who-item"><div class="who-icon">🏋️</div><div class="who-text">Centros de rehabilitación</div></div>
+        <div class="who-item"><div class="who-icon">🚐</div><div class="who-text">Programas de rehabilitación ambulatoria</div></div>
+        <div class="who-item"><div class="who-icon">🏘️</div><div class="who-text">Centros comunitarios</div></div>
+        <div class="who-item"><div class="who-icon">⛪</div><div class="who-text">Programas de iglesias y parroquias</div></div>
+        <div class="who-item"><div class="who-icon">🏠</div><div class="who-text">Servicios de cuidado en el hogar</div></div>
+        <div class="who-item"><div class="who-icon">🎓</div><div class="who-text">Programas de día para adultos</div></div>
+        <div class="who-item"><div class="who-icon">💼</div><div class="who-text">Organizaciones sin fines de lucro</div></div>
+    </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="section" style="padding-top:0">
+    <div class="section-label">Fácil de empezar</div>
+    <div class="section-title">3 PASOS. 2 MINUTOS.</div>
+
+    <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+            <div class="step-title">Registre su organización</div>
+            <div class="step-desc">Solo necesita el nombre y un número de teléfono. Le damos un código único al instante.</div>
+        </div>
+    </div>
+
+    <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+            <div class="step-title">Comparta el código</div>
+            <div class="step-desc">Los participantes entran el código en heybori.com y quedan conectados a su organización automáticamente.</div>
+        </div>
+    </div>
+
+    <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+            <div class="step-title">Vea la actividad en su dashboard</div>
+            <div class="step-desc">Participantes activos, juegos jugados, estados de ánimo, tendencias semanales — todo en tiempo real desde su teléfono.</div>
+        </div>
+    </div>
+</div>
+
+<!-- QUOTE -->
+<div class="quote-card">
+    <div class="quote-text">"La persona que juega no es la persona que paga. Los juegos son gratis para sus participantes. Las familias pagan por la tranquilidad de saber que mamá está bien."</div>
+    <div class="quote-attr">— El modelo Hey Bori</div>
+</div>
+
+<!-- WHY FREE -->
+<div class="section">
+    <div class="section-label">¿Por qué gratis?</div>
+    <div class="section-title">PORQUE USTEDES SON EL PUENTE</div>
+    <div class="section-sub">Su organización conecta a Hey Bori con las familias. Cuando la hija en Orlando ve que mamá está jugando y conversando con Bori todos los días, ella se suscribe al dashboard familiar para ver su actividad. Eso es lo que monetizamos. No a ustedes. Nunca a ustedes.</div>
+</div>
+
+</div>
+
+<!-- BOTTOM CTA -->
+<div class="cta-section">
+    <div class="cta-title">EMPIECE HOY.<br>GRATIS. PARA SIEMPRE.</div>
+    <div class="cta-sub">2 minutos. Sin tarjeta. Sin contrato.<br>Sus participantes juegan mañana.</div>
+    <a href="/facility" class="cta-btn">REGISTRAR MI ORGANIZACIÓN</a>
+    <div class="cta-free">heybori.com/facility</div>
+</div>
+
+<div class="footer">
+    <a href="/">← Volver a Hey Bori</a><br><br>
+    Hey Bori™ · Ritnome™<br>
+    © 2026 GoStar Digital LLC. All Rights Reserved.
+</div>
+
+</body>
+</html>
