@@ -672,6 +672,18 @@ app.get('/api/activity/list', adminKeyAuth, function(req, res) {
 });
 
 // ============ STATIC ROUTES ============
+app.get('/api/health', function(req, res) {
+    res.json({
+        status: 'ok',
+        stripe: !!stripe,
+        prices: {
+            plus: !!STRIPE_PRICES.plus,
+            familia: !!STRIPE_PRICES.familia,
+            individual: !!STRIPE_PRICES.individual_monthly
+        }
+    });
+});
+
 app.get('/', function(req, res) { res.sendFile(path.join(__dirname, 'index.html')); });
 app.get('/trial-pin', function(req, res) { res.sendFile(path.join(__dirname, 'trial-pin.html')); });
 app.get('/how-to-play', function(req, res) { res.sendFile(path.join(__dirname, 'how-to-play.html')); });
