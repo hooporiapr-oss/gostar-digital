@@ -1281,7 +1281,7 @@
                 document.getElementById('chatInput').placeholder = 'Transcribiendo... 🎤';
                 try{
                     var formData = new FormData();
-                    formData.append('audio', audioBlob, 'recording.webm');
+                    var ext = (mediaRecorder.mimeType || '').indexOf('mp4') > -1 ? 'mp4' : 'webm'; formData.append('audio', audioBlob, 'recording.' + ext);
                     var resp = await fetch('/api/voice/transcribe', {method:'POST', body:formData});
                     if(!resp.ok) throw new Error('Transcription failed');
                     var data = await resp.json();
