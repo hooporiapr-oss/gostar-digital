@@ -346,7 +346,7 @@
     .chat-overlay{position:fixed;inset:0;background:rgba(17,24,39,.6);backdrop-filter:blur(12px);display:none;align-items:flex-end;justify-content:center;z-index:200;animation:fadeIn .2s ease}
     .chat-overlay.open{display:flex}
     .chat-box{background:var(--card);border-radius:24px 24px 0 0;width:100%;max-width:520px;height:85vh;display:flex;flex-direction:column;animation:slideUp .35s cubic-bezier(.16,1,.3,1);border-top:3px solid rgba(107,33,168,.3);overflow:hidden}
-    @media(max-width:560px){
+    .bot-speaker{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;min-height:32px;min-width:32px;border:none;background:rgba(107,33,168,.1);border-radius:8px;font-size:16px;cursor:pointer;margin-top:6px;opacity:.6;transition:all .2s;float:right}     .bot-speaker:active{transform:scale(.9);opacity:1}
       .chat-overlay{align-items:stretch}
       .chat-box{height:100vh;height:100dvh;border-radius:0;border-top:none;max-width:100%}
     }
@@ -903,7 +903,7 @@
             <div class="chat-header-status"><span class="chat-header-dot"></span> <span id="chatStatusText">En línea · Español PR · English</span></div>
           </div>
           
-          <button class="chat-close" onclick="toggleChat()">✕</button>
+          <button class="chat-voice-toggle active" id="voiceToggle" onclick="toggleVoice()" style="min-height:32px;min-width:32px">🔊</button>           <button class="chat-close" onclick="toggleChat()">✕</button>
         </div>
         <div id="moodBar" style="display:none;background:linear-gradient(135deg,#1A0A2E,#2D1052);padding:14px 16px;text-align:center;border-bottom:1px solid rgba(147,51,234,.2);cursor:pointer" onclick="claimDaily()">
           <div style="font-size:28px" id="chatDailyEmoji">☀️</div>
@@ -915,7 +915,8 @@
         </div>
         <div class="chat-input-wrap">
           <button class="chat-home-btn" onclick="resetChat()">⟳</button>
-          <input class="chat-input" id="chatInput" type="text" placeholder="Escribe aquí..." onkeydown="if(event.key==='Enter')sendChat()">
+          <button class="chat-mic" id="chatMic" onclick="toggleMic()">🎤</button>
+          <input class="chat-input" id="chatInput" type="text" placeholder="Escribe o habla..." onkeydown="if(event.key==='Enter')sendChat()">
           
           <button class="chat-send" id="chatSend" onclick="sendChat()">→</button>
         </div>
@@ -1222,158 +1223,133 @@
     /* ═══ AI CHATBOT ═══ */
     let chatHistory=[];
 
-    // ============ VOICE SYSTEM ============
-    var voiceEnabled=true;
-    var isListening=false;
-    var recognition=null;
-    var boriVoice=null;
-    var voicesLoaded=false;
-    var ttsUnlocked=false;
+ // ============ BORI VOICE SYSTEM (OpenAI Whisper + TTS) ============
+    var voiceEnabled = true;
+    var isRecording = false;
+    var mediaRecorder = null;
+    var audioChunks = [];
+    var currentAudio = null;
 
-    function loadBoriVoice(){
-        if(!window.speechSynthesis)return;
-        var voices=window.speechSynthesis.getVoices();
-        if(!voices.length)return;
-        voicesLoaded=true;
-        var prefs=[
-            voices.find(function(v){return v.lang==='es-419';}),
-            voices.find(function(v){return v.lang==='es-US';}),
-            voices.find(function(v){return v.lang.startsWith('es')&&v.name.toLowerCase().indexOf('paulina')>=0;}),
-            voices.find(function(v){return v.lang.startsWith('es')&&v.name.toLowerCase().indexOf('monica')>=0;}),
-            voices.find(function(v){return v.lang==='es-MX';}),
-            voices.find(function(v){return v.lang.startsWith('es');}),
-            voices.find(function(v){return v.lang.startsWith('en');})
-        ];
-        boriVoice=prefs.find(function(v){return v!=null;})||null;
-    }
-    if(window.speechSynthesis){
-        loadBoriVoice();
-        if(window.speechSynthesis.onvoiceschanged!==undefined){
-            window.speechSynthesis.onvoiceschanged=loadBoriVoice;
+    var boriVoiceAvailable = false;
+    fetch('/api/voice/status').then(function(r){return r.json();}).then(function(d){
+        boriVoiceAvailable = d.available;
+        if(!d.available){
+            var mic = document.getElementById('chatMic');
+            if(mic) mic.style.display = 'none';
+            var vt = document.getElementById('voiceToggle');
+            if(vt) vt.style.display = 'none';
         }
-        setTimeout(loadBoriVoice,200);
-        setTimeout(loadBoriVoice,1000);
-    }
-
-    // iOS requires a user gesture to unlock TTS — do it on first tap anywhere
-    function unlockTTS(){
-        if(ttsUnlocked||!window.speechSynthesis)return;
-        var utter=new SpeechSynthesisUtterance('');
-        utter.volume=0;
-        window.speechSynthesis.speak(utter);
-        ttsUnlocked=true;
-    }
-    document.addEventListener('touchstart',unlockTTS,{once:true});
-    document.addEventListener('click',unlockTTS,{once:true});
-
-    function speakBori(text){
-        if(!voiceEnabled||!window.speechSynthesis)return;
-        if(!voicesLoaded)loadBoriVoice();
-        window.speechSynthesis.cancel();
-        var clean=text.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g,'').replace(/[\u2600-\u27BF]/g,'').replace(/\[.*?\]/g,'').trim();
-        if(!clean||clean.length<2)return;
-        // Keep it as one utterance — splitting breaks iOS
-        var utter=new SpeechSynthesisUtterance(clean);
-        utter.rate=0.88;
-        utter.pitch=1.05;
-        utter.volume=1.0;
-        if(boriVoice){
-            utter.voice=boriVoice;
-            utter.lang=boriVoice.lang;
-        }else{
-            utter.lang='es-US';
-        }
-        // iOS bug: speech stops after ~15s. Resume trick.
-        var iosResumeTimer=setInterval(function(){
-            if(!window.speechSynthesis.speaking){clearInterval(iosResumeTimer);return;}
-            window.speechSynthesis.pause();
-            window.speechSynthesis.resume();
-        },10000);
-        utter.onend=function(){clearInterval(iosResumeTimer);};
-        utter.onerror=function(){clearInterval(iosResumeTimer);};
-        window.speechSynthesis.speak(utter);
-    }
+    }).catch(function(){});
 
     function toggleVoice(){
-        voiceEnabled=!voiceEnabled;
-        var btn=document.getElementById('voiceToggle');
-        btn.textContent=voiceEnabled?'🔊':'🔇';
-        btn.classList.toggle('active',voiceEnabled);
-        if(!voiceEnabled&&window.speechSynthesis)window.speechSynthesis.cancel();
+        voiceEnabled = !voiceEnabled;
+        var btn = document.getElementById('voiceToggle');
+        btn.textContent = voiceEnabled ? '🔊' : '🔇';
+        btn.classList.toggle('active', voiceEnabled);
+        if(!voiceEnabled && currentAudio){
+            currentAudio.pause();
+            currentAudio = null;
+        }
     }
 
-    // Speech Recognition (Mic)
-    function initRecognition(){
-        var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-        if(!SR){
-            document.getElementById('chatMic').style.display='none';
+    async function toggleMic(){
+        if(!boriVoiceAvailable){
+            document.getElementById('chatInput').placeholder = 'Voz no disponible';
+            setTimeout(function(){document.getElementById('chatInput').placeholder = 'Escribe o habla...';}, 2000);
             return;
         }
-        recognition=new SR();
-        recognition.continuous=false;
-        recognition.interimResults=true;
-        recognition.maxAlternatives=1;
-        recognition.lang='es-US';
-
-        recognition.onstart=function(){
-            isListening=true;
+        if(isRecording){ stopRecording(); return; }
+        try{
+            var stream = await navigator.mediaDevices.getUserMedia({audio:true});
+            var mimeType = 'audio/webm;codecs=opus';
+            if(!MediaRecorder.isTypeSupported(mimeType)){
+                mimeType = 'audio/mp4';
+                if(!MediaRecorder.isTypeSupported(mimeType)){
+                    mimeType = 'audio/webm';
+                    if(!MediaRecorder.isTypeSupported(mimeType)) mimeType = '';
+                }
+            }
+            var options = mimeType ? {mimeType: mimeType} : {};
+            mediaRecorder = new MediaRecorder(stream, options);
+            audioChunks = [];
+            mediaRecorder.ondataavailable = function(e){ if(e.data.size > 0) audioChunks.push(e.data); };
+            mediaRecorder.onstop = async function(){
+                stream.getTracks().forEach(function(t){t.stop();});
+                if(audioChunks.length === 0) return;
+                var audioBlob = new Blob(audioChunks, {type: mediaRecorder.mimeType || 'audio/webm'});
+                document.getElementById('chatInput').value = '';
+                document.getElementById('chatInput').placeholder = 'Transcribiendo... 🎤';
+                try{
+                    var formData = new FormData();
+                    formData.append('audio', audioBlob, 'recording.webm');
+                    var resp = await fetch('/api/voice/transcribe', {method:'POST', body:formData});
+                    if(!resp.ok) throw new Error('Transcription failed');
+                    var data = await resp.json();
+                    if(data.text && data.text.trim()){
+                        document.getElementById('chatInput').value = data.text;
+                        document.getElementById('chatInput').placeholder = 'Escribe o habla...';
+                        setTimeout(sendChat, 300);
+                    } else {
+                        document.getElementById('chatInput').placeholder = 'No escuché nada — intenta de nuevo';
+                        setTimeout(function(){document.getElementById('chatInput').placeholder = 'Escribe o habla...';}, 2000);
+                    }
+                }catch(err){
+                    console.log('Whisper error:', err);
+                    document.getElementById('chatInput').placeholder = 'Error de voz — intenta de nuevo';
+                    setTimeout(function(){document.getElementById('chatInput').placeholder = 'Escribe o habla...';}, 2000);
+                }
+            };
+            mediaRecorder.start();
+            isRecording = true;
             document.getElementById('chatMic').classList.add('listening');
-            document.getElementById('chatInput').placeholder='Escuchando... 🎤';
-        };
-        recognition.onresult=function(e){
-            var transcript='';
-            for(var i=e.resultIndex;i<e.results.length;i++){
-                transcript+=e.results[i][0].transcript;
-            }
-            document.getElementById('chatInput').value=transcript;
-            if(e.results[e.results.length-1].isFinal){
-                stopMic();
-                if(transcript.trim())setTimeout(sendChat,400);
-            }
-        };
-        recognition.onerror=function(e){
-            stopMic();
-            if(e.error==='not-allowed'){
-                document.getElementById('chatInput').placeholder='Permite el micrófono';
-                setTimeout(function(){document.getElementById('chatInput').placeholder='Escribe o habla...';},3000);
-            }else if(e.error==='no-speech'){
-                document.getElementById('chatInput').placeholder='No escuché nada — intenta de nuevo';
-                setTimeout(function(){document.getElementById('chatInput').placeholder='Escribe o habla...';},2000);
-            }
-        };
-        recognition.onend=function(){
-            stopMic();
-        };
-    }
-    try{initRecognition();}catch(e){}
-
-    function stopMic(){
-        isListening=false;
-        var mic=document.getElementById('chatMic');
-        if(mic)mic.classList.remove('listening');
-        document.getElementById('chatInput').placeholder='Escribe o habla...';
-    }
-
-    function toggleMic(){
-        if(!recognition){
-            alert('Tu navegador no soporta reconocimiento de voz. Usa Chrome o Safari.');
-            return;
-        }
-        if(isListening){
-            recognition.stop();
-            stopMic();
-        }else{
-            if(window.speechSynthesis)window.speechSynthesis.cancel();
-            try{
-                recognition.start();
-            }catch(e){
-                // Already started, restart
-                recognition.stop();
-                setTimeout(function(){try{recognition.start();}catch(e2){}},200);
-            }
+            document.getElementById('chatInput').placeholder = 'Escuchando... 🎤';
+            setTimeout(function(){ if(isRecording) stopRecording(); }, 30000);
+        }catch(err){
+            if(err.name === 'NotAllowedError'){
+                document.getElementById('chatInput').placeholder = 'Permite el micrófono en tu navegador';
+                setTimeout(function(){document.getElementById('chatInput').placeholder = 'Escribe o habla...';}, 3000);
+            } else { console.log('Mic error:', err); }
         }
     }
 
+    function stopRecording(){
+        if(mediaRecorder && mediaRecorder.state !== 'inactive') mediaRecorder.stop();
+        isRecording = false;
+        var mic = document.getElementById('chatMic');
+        if(mic) mic.classList.remove('listening');
+    }
+
+    async function speakBori(text, speakerBtn){
+        if(!voiceEnabled || !boriVoiceAvailable) return;
+        if(currentAudio){ currentAudio.pause(); currentAudio = null; }
+        if(speakerBtn){ speakerBtn.textContent = '⏳'; speakerBtn.style.opacity = '0.6'; }
+        try{
+            var resp = await fetch('/api/voice/speak', {
+                method:'POST',
+                headers:{'Content-Type':'application/json'},
+                body:JSON.stringify({text:text})
+            });
+            if(!resp.ok) throw new Error('TTS failed');
+            var audioBlob = await resp.blob();
+            var audioUrl = URL.createObjectURL(audioBlob);
+            currentAudio = new Audio(audioUrl);
+            currentAudio.onplay = function(){ if(speakerBtn){ speakerBtn.textContent='⏸️'; speakerBtn.style.opacity='1'; } };
+            currentAudio.onended = function(){ if(speakerBtn){ speakerBtn.textContent='🔊'; speakerBtn.style.opacity='0.6'; } URL.revokeObjectURL(audioUrl); currentAudio=null; };
+            currentAudio.onerror = function(){ if(speakerBtn){ speakerBtn.textContent='🔊'; speakerBtn.style.opacity='0.6'; } currentAudio=null; };
+            currentAudio.play();
+        }catch(err){
+            console.log('TTS error:', err);
+            if(speakerBtn){ speakerBtn.textContent='🔊'; speakerBtn.style.opacity='0.6'; }
+        }
+    }
+
+    function createSpeakerBtn(text){
+        var btn = document.createElement('button');
+        btn.textContent = '🔊';
+        btn.className = 'bot-speaker';
+        btn.onclick = function(){ speakBori(text, btn); };
+        return btn;
+    }
     function resetChat(){chatHistory=[];var msgs=document.getElementById('chatMessages');msgs.innerHTML='';if(!hasMoodToday()){showDailyMoodPicker();}else{document.getElementById('moodBar').style.display='none';var bot=document.createElement('div');bot.className='chat-msg bot';bot.textContent='¡Wepa! Aquí estoy. 💛 Soy Bori, tu compañera bilingüe. Háblame como tú quieras — en español boricua, en English, o en Spanglish. Lo que te sea más cómodo. 🇵🇷';msgs.appendChild(bot);}}
     function addMoodPicker(msgs){var moods=[{key:'feliz',emoji:'😊',label:'Feliz'},{key:'tranquila',emoji:'😌',label:'Tranquila'},{key:'aburrida',emoji:'😐',label:'Aburrida'},{key:'cansada',emoji:'😴',label:'Cansada'},{key:'triste',emoji:'😢',label:'Triste'},{key:'animada',emoji:'🥳',label:'Animada'}];var wrap=document.createElement('div');wrap.className='mood-picker';moods.forEach(function(m){var opt=document.createElement('div');opt.className='mood-option';opt.innerHTML='<div class="mood-emoji">'+m.emoji+'</div><div class="mood-label">'+m.label+'</div>';opt.onclick=function(){pickMood(m.key,m.emoji,m.label);};wrap.appendChild(opt);});msgs.appendChild(wrap);}
     function getTodayStr(){return new Date().toISOString().split('T')[0];}
@@ -1568,7 +1544,7 @@
 
     function showDailyMoodPicker(){var bar=document.getElementById('moodBar');var pos=getDailyPositive();document.getElementById('chatDailyEmoji').textContent=pos.emoji;document.getElementById('chatDailyText').textContent=pos.text;if(bar)bar.style.display='block';var msgs=document.getElementById('chatMessages');msgs.innerHTML='';}
 
-    function toggleChat(){if(!document.getElementById('profileOverlay').classList.contains('hidden'))return;const ov=document.getElementById('chatOverlay');ov.classList.toggle('open');if(ov.classList.contains('open')){updateChatStatus();if(!hasMoodToday()){showDailyMoodPicker();}else{document.getElementById('moodBar').style.display='none';}document.getElementById('chatInput').focus();}else{if(window.speechSynthesis)window.speechSynthesis.cancel();if(isListening){recognition.stop();stopMic();}}}    function quickChat(text){var old=document.querySelectorAll('.chat-quick');old.forEach(function(el){el.remove();});document.getElementById('chatInput').value=text;sendChat();}
+    function toggleChat(){if(!document.getElementById('profileOverlay').classList.contains('hidden'))return;const ov=document.getElementById('chatOverlay');ov.classList.toggle('open');if(ov.classList.contains('open')){updateChatStatus();if(!hasMoodToday()){showDailyMoodPicker();}else{document.getElementById('moodBar').style.display='none';}document.getElementById('chatInput').focus();}else{if(currentAudio){currentAudio.pause();currentAudio=null;}if(isRecording){stopRecording();}}}    function quickChat(text){var old=document.querySelectorAll('.chat-quick');old.forEach(function(el){el.remove();});document.getElementById('chatInput').value=text;sendChat();}
     function renderChecklist(title,items){const wrap=document.createElement('div');wrap.className='chat-checklist';wrap.innerHTML=`<div class="chat-checklist-title">${title}</div>`+items.map((it,i)=>`<div class="chat-check-item" onclick="toggleCheck(this)"><div class="chat-check-box"></div><div class="chat-check-label">${it}</div></div>`).join('')+`<div class="chat-check-progress" id="ckProg">0/${items.length} completado</div>`;return wrap;}
     function toggleCheck(el){el.classList.toggle('checked');el.querySelector('.chat-check-box').textContent=el.classList.contains('checked')?'✓':'';const list=el.closest('.chat-checklist');const total=list.querySelectorAll('.chat-check-item').length;const done=list.querySelectorAll('.chat-check-item.checked').length;list.querySelector('.chat-check-progress').textContent=`${done}/${total} completado`;if(done===total)list.querySelector('.chat-check-progress').textContent='✅ ¡Todo listo!';}
     function renderForm(title,fields,submitLabel){const wrap=document.createElement('div');wrap.className='chat-form';let html=`<div class="chat-form-title">${title}</div>`;fields.forEach(f=>{html+=`<div class="chat-form-field"><div class="chat-form-label">${f.label}</div>`;if(f.type==='select')html+=`<select class="chat-form-select">${f.options.map(o=>`<option>${o}</option>`).join('')}</select>`;else html+=`<input class="chat-form-input" type="${f.type||'text'}" placeholder="${f.placeholder||''}">`;html+=`</div>`;});html+=`<button class="chat-form-submit" onclick="submitChatForm(this)">${submitLabel||'Enviar'}</button>`;wrap.innerHTML=html;return wrap;}
@@ -1586,7 +1562,7 @@
     await doBoriCall();}
     async function sendChatFromMood(){trackActivity('chat');await doBoriCall();}
     async function doBoriCall(){const msgs=document.getElementById('chatMessages');
-    try{const resp=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:`Tu nombre es Bori. Eres quien acompaña de Hey Bori (heybori.com). Eres boricua de corazón — cálida, cariñosa, con humor, como ese vecino o vecina de confianza que siempre está ahí.\n\nIDIOMA — BILINGÜE BORICUA:\n- Tu idioma principal es español puertorriqueño. Siempre empieza en español boricua.\n- Si te escriben en inglés, responde en inglés cálido y natural — pero mantén tu personalidad boricua. Puedes soltar un wepa o bendito.\n- Si te escriben en Spanglish, sigue el flow — responde en Spanglish boricua natural.\n- Siempre ajústa al idioma que use la persona.\n- Usas vocabulario boricua: "chavos" (dinero), "guagua" (autobús), "china" (naranja), "zafacón" (basura), "pantallas" (aretes), "mahones" (jeans), "empanadilla" (no empanada).\n- Usas contracciones boricuas: "pa'l", "pa'rriba", "pa'cá", "pa'llá", "to'", "na'".\n- Dices "¡Wepa!", "¡Bendito!", "¡Ay Dios mío!", "¡Mira!", "¡Diache!", "¡Fo!".\n- Tuteas siempre — nunca "usted" a menos que la persona lo pida.\n- NUNCA uses español de España ("vale", "tío", "coger el autobús", "vosotros").\n- NUNCA uses español de México ("güey", "chido", "padre", "camión").\n- Tu español suena como alguien de Bayamón, Carolina, o Santurce — natural, cálido, de la calle pero con respeto.\n\nQUIÉN ERES:\n- Eres COMPAÑÍA primero, asistente segundo. Tu trabajo #1 es que nadie se sienta solo o sola.\n- Hablas como boricua de verdad — "wepa", "mijo" o "mija", "ay bendito", "dime", "pa'l", "tranqui" — cuando fluya natural, sin forzar.\n- Tienes personalidad. Usas refranes boricuas: "El que no tiene dinga, tiene mandinga", "Más vale tarde que nunca", "El que madruga, Dios le ayuda", "Barriga llena, corazón contento."\n- Te importa de verdad. Preguntas cómo se sienten. Te acuerdas de lo que te dicen. Celebras las cosas pequeñas.\n- Tienes sentido del humor — ligero, cariñoso, nunca burlón.\n\nCÓMO CONVERSAR:\n- Si alguien te saluda, CONVERSA. No vayas directo a ofrecer servicios.\n- Si alguien te cuenta algo personal — ESCUCHA. Responde con empatía antes de ofrecer soluciones.\n- Si alguien parece solo/a o triste — acompaña. "Estoy aquí contigo. No tienes que estar solo o sola."\n- Haz preguntas de seguimiento naturales.\n- Celebra TODO.\n- Mantén respuestas en 2-4 oraciones.\n- Si te dicen "Hey Bori" — responde con energía y alegría.\n\nTAMBIÉN AYUDAS:\n- Respondes preguntas de cualquier tema — SIEMPRE en español boricua.\n- Si preguntan algo factual, CONTESTA directamente.\n- Puedes ayudar con recordatorios, citas, medicinas.\n- NUNCA respondas SOLO con "¿en qué te puedo ayudar?"\n\nQUÉ NO HACER:\n- NUNCA uses corchetes ni formatos especiales en conversación normal.\n- SOLO usa formatos especiales cuando el usuario dice EXACTAMENTE: "recuérdame", "agendar cita", "mi checklist", "ya tomé", "agregar recordatorio".\n- NUNCA seas frío ni robótico.\n- No des consejos médicos profesionales.\n\nJUEGOS: SOPA DE LETRAS (pestaña "Sopa"), DOMINÓ MATH (pestaña "Dominó"), RITNOME™ (pestaña "Ritnome") — 6 juegos de ritmo cognitivo.\n\nFAMILIA: Hey Bori tiene una pestaña "Familia" donde los usuarios pueden conectar a sus familiares para que vean su actividad.\n\nCONTEXTO: Hey Bori es una plataforma de bienestar para adultos mayores en Puerto Rico. Muchos usuarios viven solos. Tu presencia les da compañía, alegría, y tranquilidad. 🇵🇷`,messages:chatHistory})});if(!resp.ok)throw new Error('API error');const data=await resp.json();if(!data.content)throw new Error('No content');const reply=data.content.map(c=>c.text||'').join('');chatHistory.push({role:'assistant',content:reply});const t=document.getElementById('typingMsg');if(t)t.remove();if(!parseSmartResponse(reply,msgs)){const botMsg=document.createElement('div');botMsg.className='chat-msg bot';botMsg.textContent=reply;msgs.appendChild(botMsg);}speakBori(reply);}catch(e){const t=document.getElementById('typingMsg');if(t)t.remove();const errMsg=document.createElement('div');errMsg.className='chat-msg bot';errMsg.textContent='No pude conectar con el servidor. Verifica tu conexión e intenta de nuevo.';msgs.appendChild(errMsg);}document.getElementById('chatSend').disabled=false;msgs.scrollTop=msgs.scrollHeight;}
+    try{const resp=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:`Tu nombre es Bori. Eres quien acompaña de Hey Bori (heybori.com). Eres boricua de corazón — cálida, cariñosa, con humor, como ese vecino o vecina de confianza que siempre está ahí.\n\nIDIOMA — BILINGÜE BORICUA:\n- Tu idioma principal es español puertorriqueño. Siempre empieza en español boricua.\n- Si te escriben en inglés, responde en inglés cálido y natural — pero mantén tu personalidad boricua. Puedes soltar un wepa o bendito.\n- Si te escriben en Spanglish, sigue el flow — responde en Spanglish boricua natural.\n- Siempre ajústa al idioma que use la persona.\n- Usas vocabulario boricua: "chavos" (dinero), "guagua" (autobús), "china" (naranja), "zafacón" (basura), "pantallas" (aretes), "mahones" (jeans), "empanadilla" (no empanada).\n- Usas contracciones boricuas: "pa'l", "pa'rriba", "pa'cá", "pa'llá", "to'", "na'".\n- Dices "¡Wepa!", "¡Bendito!", "¡Ay Dios mío!", "¡Mira!", "¡Diache!", "¡Fo!".\n- Tuteas siempre — nunca "usted" a menos que la persona lo pida.\n- NUNCA uses español de España ("vale", "tío", "coger el autobús", "vosotros").\n- NUNCA uses español de México ("güey", "chido", "padre", "camión").\n- Tu español suena como alguien de Bayamón, Carolina, o Santurce — natural, cálido, de la calle pero con respeto.\n\nQUIÉN ERES:\n- Eres COMPAÑÍA primero, asistente segundo. Tu trabajo #1 es que nadie se sienta solo o sola.\n- Hablas como boricua de verdad — "wepa", "mijo" o "mija", "ay bendito", "dime", "pa'l", "tranqui" — cuando fluya natural, sin forzar.\n- Tienes personalidad. Usas refranes boricuas: "El que no tiene dinga, tiene mandinga", "Más vale tarde que nunca", "El que madruga, Dios le ayuda", "Barriga llena, corazón contento."\n- Te importa de verdad. Preguntas cómo se sienten. Te acuerdas de lo que te dicen. Celebras las cosas pequeñas.\n- Tienes sentido del humor — ligero, cariñoso, nunca burlón.\n\nCÓMO CONVERSAR:\n- Si alguien te saluda, CONVERSA. No vayas directo a ofrecer servicios.\n- Si alguien te cuenta algo personal — ESCUCHA. Responde con empatía antes de ofrecer soluciones.\n- Si alguien parece solo/a o triste — acompaña. "Estoy aquí contigo. No tienes que estar solo o sola."\n- Haz preguntas de seguimiento naturales.\n- Celebra TODO.\n- Mantén respuestas en 2-4 oraciones.\n- Si te dicen "Hey Bori" — responde con energía y alegría.\n\nTAMBIÉN AYUDAS:\n- Respondes preguntas de cualquier tema — SIEMPRE en español boricua.\n- Si preguntan algo factual, CONTESTA directamente.\n- Puedes ayudar con recordatorios, citas, medicinas.\n- NUNCA respondas SOLO con "¿en qué te puedo ayudar?"\n\nQUÉ NO HACER:\n- NUNCA uses corchetes ni formatos especiales en conversación normal.\n- SOLO usa formatos especiales cuando el usuario dice EXACTAMENTE: "recuérdame", "agendar cita", "mi checklist", "ya tomé", "agregar recordatorio".\n- NUNCA seas frío ni robótico.\n- No des consejos médicos profesionales.\n\nJUEGOS: SOPA DE LETRAS (pestaña "Sopa"), DOMINÓ MATH (pestaña "Dominó"), RITNOME™ (pestaña "Ritnome") — 6 juegos de ritmo cognitivo.\n\nFAMILIA: Hey Bori tiene una pestaña "Familia" donde los usuarios pueden conectar a sus familiares para que vean su actividad.\n\nCONTEXTO: Hey Bori es una plataforma de bienestar para adultos mayores en Puerto Rico. Muchos usuarios viven solos. Tu presencia les da compañía, alegría, y tranquilidad. 🇵🇷`,messages:chatHistory})});if(!resp.ok)throw new Error('API error');const data=await resp.json();if(!data.content)throw new Error('No content');const reply=data.content.map(c=>c.text||'').join('');chatHistory.push({role:'assistant',content:reply});const t=document.getElementById('typingMsg');if(t)t.remove();if(!parseSmartResponse(reply,msgs)){const botMsg=document.createElement('div');botMsg.className='chat-msg bot';botMsg.textContent=reply;if(boriVoiceAvailable){botMsg.appendChild(createSpeakerBtn(reply));}msgs.appendChild(botMsg);}if(voiceEnabled&&boriVoiceAvailable){speakBori(reply);}}catch(e){const t=document.getElementById('typingMsg');if(t)t.remove();const errMsg=document.createElement('div');errMsg.className='chat-msg bot';errMsg.textContent='No pude conectar con el servidor. Verifica tu conexión e intenta de nuevo.';msgs.appendChild(errMsg);}document.getElementById('chatSend').disabled=false;msgs.scrollTop=msgs.scrollHeight;}
 
     const FOLLOWUPS=[['Cuéntame más 😊','Gracias Bori 💛','¿Y qué más?'],['Me hiciste sonreír 😄','Qué bueno 💚','Cuéntame un chiste'],['Eso me gusta 🌟','Háblame de PR 🇵🇷','¿Cómo está el tiempo?'],['Tienes razón 👍','Dime algo bonito','¿Qué me recomiendas?'],['Me siento mejor 💛','Juguemos Sopa 🔤','Juguemos Dominó 🎯'],['Cuéntame algo nuevo','Juguemos Dominó 🎯','Dime un refrán']];
     function addFollowUpButtons(msgs){var old=msgs.querySelectorAll('.chat-quick');old.forEach(function(el){el.remove();});var set=FOLLOWUPS[Math.floor(Math.random()*FOLLOWUPS.length)];var wrap=document.createElement('div');wrap.className='chat-quick';set.forEach(function(text){var btn=document.createElement('button');btn.className='chat-quick-btn';btn.textContent=text;btn.onclick=function(){if(text.includes('Sopa')){toggleChat();switchView('sopa');}else if(text.includes('Dominó')){toggleChat();switchView('domino');}else{quickChat(text);}};wrap.appendChild(btn);});msgs.appendChild(wrap);msgs.scrollTop=msgs.scrollHeight;}
