@@ -429,6 +429,17 @@
     .footer-b{font-family:var(--head);font-size:16px;font-weight:700;color:var(--muted);letter-spacing:4px}
     .footer-s{font-family:var(--accent);font-size:12px;font-style:italic;color:var(--light);margin-top:4px}
 
+    /* ═══ IN-APP BROWSER BANNER ═══ */
+    .iab-banner{position:fixed;top:0;left:0;right:0;z-index:9999;background:linear-gradient(135deg,#1A0A2E 0%,#2D1052 100%);border-bottom:3px solid #FFD700;padding:20px 16px;text-align:center;animation:slideDown .4s ease;box-shadow:0 4px 24px rgba(0,0,0,.4)}
+    @keyframes slideDown{from{transform:translateY(-100%)}to{transform:translateY(0)}}
+    .iab-banner-emoji{font-size:32px;margin-bottom:8px}
+    .iab-banner-title{font-family:var(--head);font-size:20px;font-weight:700;color:white;margin-bottom:4px}
+    .iab-banner-text{font-size:13px;color:rgba(255,255,255,.7);font-weight:600;line-height:1.5;margin-bottom:14px;max-width:360px;margin-left:auto;margin-right:auto}
+    .iab-banner-btn{display:inline-block;padding:14px 32px;border-radius:100px;background:linear-gradient(135deg,#FFD700,#FF8C42);color:#1A0A2E;font-family:var(--body);font-size:16px;font-weight:800;text-decoration:none;box-shadow:0 4px 20px rgba(255,215,0,.4);transition:all .2s;border:none;cursor:pointer}
+    .iab-banner-btn:active{transform:scale(.96)}
+    .iab-banner-dismiss{display:block;margin-top:10px;font-size:12px;color:rgba(255,255,255,.35);font-weight:600;background:none;border:none;cursor:pointer;font-family:var(--body)}
+    .iab-banner-dismiss:active{color:rgba(255,255,255,.5)}
+    .iab-mic-disabled{opacity:.4!important;pointer-events:none!important}
     @media(max-width:560px){
       .brand-title .ak{font-size:42px;letter-spacing:5px}
       .brand-title .wk{font-size:18px;letter-spacing:12px}
@@ -439,6 +450,14 @@
   </style>
 </head>
 <body>
+  <!-- ═══ IN-APP BROWSER DETECTION BANNER ═══ -->
+  <div class="iab-banner" id="iabBanner" style="display:none">
+    <div class="iab-banner-emoji">🇵🇷</div>
+    <div class="iab-banner-title">¡Abre Hey Bori en tu navegador!</div>
+    <div class="iab-banner-text">Para usar el micrófono y tener la mejor experiencia, abre Hey Bori en Safari o Chrome.</div>
+    <button class="iab-banner-btn" id="iabOpenBtn" onclick="openInBrowser()">Abrir en Safari ↗</button>
+    <button class="iab-banner-dismiss" onclick="dismissIAB()">Continuar sin micrófono →</button>
+  </div>
   <!-- ═══ PROFILE SELECTOR ═══ -->
   <style>
     .profile-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:linear-gradient(160deg,#0D0620 0%,#1A0A2E 30%,#2D1052 70%,#1A0A3E 100%);z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;animation:moodFadeIn .4s ease}
@@ -933,7 +952,7 @@
   </div>
 
   <script>
-    let soundOn=true,currentView='servicios';
+    let soundOn=true,currentView='servicios';      /* ═══ IN-APP BROWSER DETECTION ═══ */     var isInAppBrowser = (function(){       var ua = navigator.userAgent || navigator.vendor || window.opera || '';       return (ua.indexOf('FBAN') > -1) || (ua.indexOf('FBAV') > -1) ||               (ua.indexOf('Instagram') > -1) || (ua.indexOf('FB_IAB') > -1) ||              (ua.indexOf('FBIOS') > -1) || (ua.indexOf('FB4A') > -1);     })();      if(isInAppBrowser){       document.addEventListener('DOMContentLoaded', function(){         var banner = document.getElementById('iabBanner');         if(banner) banner.style.display = 'block';         var mic = document.getElementById('chatMic');         if(mic){           mic.classList.add('iab-mic-disabled');           mic.title = 'Micrófono no disponible — abre en Safari';         }         var btn = document.getElementById('iabOpenBtn');         if(btn){           var isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);           btn.textContent = isIOS ? 'Abrir en Safari ↗' : 'Abrir en Chrome ↗';         }       });     }      function openInBrowser(){       var url = window.location.href;       var isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);       if(isIOS){         window.location.href = url;         setTimeout(function(){ window.open(url, '_blank'); }, 300);       } else {         try {           window.location.href = 'intent://' + url.replace(/^https?:\/\//, '') + '#Intent;scheme=https;package=com.android.chrome;end';         } catch(e) {           window.open(url, '_blank');         }       }     }      function dismissIAB(){       document.getElementById('iabBanner').style.display = 'none';     }
 
     /* ═══ CONSENT BANNER ═══ */
     (function(){if(!localStorage.getItem('boriConsent')){document.getElementById('consentBanner').style.display='flex';}})();
@@ -1252,7 +1271,12 @@
         }
     }
 
-    async function toggleMic(){
+async function toggleMic(){
+        if(isInAppBrowser){
+            document.getElementById('chatInput').placeholder = 'Abre en Safari para usar el micrófono';
+            setTimeout(function(){document.getElementById('chatInput').placeholder = 'Escribe o habla...';}, 3000);
+            return;
+        }
         if(!boriVoiceAvailable){
             document.getElementById('chatInput').placeholder = 'Voz no disponible';
             setTimeout(function(){document.getElementById('chatInput').placeholder = 'Escribe o habla...';}, 2000);
