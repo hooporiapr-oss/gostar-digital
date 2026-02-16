@@ -1277,9 +1277,9 @@ async function toggleMic(){
             setTimeout(function(){document.getElementById('chatInput').placeholder = 'Escribe o habla...';}, 3000);
             return;
         }
-        if(!boriVoiceAvailable){
-            document.getElementById('chatInput').placeholder = 'Voz no disponible';
-            setTimeout(function(){document.getElementById('chatInput').placeholder = 'Escribe o habla...';}, 2000);
+        if(isInAppBrowser){
+            document.getElementById('chatInput').placeholder = 'Abre en Safari para usar el micrófono';
+            setTimeout(function(){document.getElementById('chatInput').placeholder = 'Escribe o habla...';}, 3000);
             return;
         }
         if(isRecording){ stopRecording(); return; }
