@@ -440,6 +440,14 @@
     .iab-banner-dismiss{display:block;margin-top:10px;font-size:12px;color:rgba(255,255,255,.35);font-weight:600;background:none;border:none;cursor:pointer;font-family:var(--body)}
     .iab-banner-dismiss:active{color:rgba(255,255,255,.5)}
     .iab-mic-disabled{opacity:.4!important;pointer-events:none!important}
+    .chat-mic.voice-active{background:linear-gradient(135deg,#7C3AED,#9333EA);color:white;animation:voicePulse 1.5s ease infinite}
+    @keyframes voicePulse{0%,100%{box-shadow:0 0 0 0 rgba(124,58,237,.4)}50%{box-shadow:0 0 0 12px rgba(124,58,237,0)}}
+    .chat-mic.voice-connecting{background:rgba(255,165,0,.2);color:#FFA500;animation:blink 1s ease infinite}
+    .voice-status-bar{display:none;background:linear-gradient(135deg,#1A0A2E,#2D1052);padding:8px 16px;text-align:center;border-bottom:1px solid rgba(147,51,234,.2);font-size:12px;font-weight:700;color:rgba(255,255,255,.6);letter-spacing:1px}
+    .voice-status-bar.active{display:block}
+    .voice-status-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:middle}
+    .voice-status-dot.live{background:#10B981;animation:pulse 2s infinite}
+    .voice-status-dot.connecting{background:#FFA500;animation:blink 1s infinite}
     @media(max-width:560px){
       .brand-title .ak{font-size:42px;letter-spacing:5px}
       .brand-title .wk{font-size:18px;letter-spacing:12px}
@@ -922,7 +930,7 @@
             <div class="chat-header-status"><span class="chat-header-dot"></span> <span id="chatStatusText">En línea · Español PR · English</span></div>
           </div>
           
-          <button class="chat-voice-toggle active" id="voiceToggle" onclick="toggleVoice()" style="min-height:32px;min-width:32px">🔊</button>           <button class="chat-close" onclick="toggleChat()">✕</button>
+          <button class="chat-voice-toggle active" id="voiceToggle" onclick="toggleVoice()" style="min-height:32px;min-width:32px">🔊</button>           <button class="chat-close" onclick="toggleChat()">✕</button>         </div>         <div class="voice-status-bar" id="voiceStatusBar">           <span class="voice-status-dot" id="voiceStatusDot"></span>           <span id="voiceStatusText">Conectando voz...</span>
         </div>
         <div id="moodBar" style="display:none;background:linear-gradient(135deg,#1A0A2E,#2D1052);padding:14px 16px;text-align:center;border-bottom:1px solid rgba(147,51,234,.2);cursor:pointer" onclick="claimDaily()">
           <div style="font-size:28px" id="chatDailyEmoji">☀️</div>
@@ -1242,136 +1250,268 @@
     /* ═══ AI CHATBOT ═══ */
     let chatHistory=[];
 
- // ============ BORI VOICE SYSTEM (OpenAI Whisper + TTS) ============
+// ============ BORI VOICE SYSTEM (WebRTC Realtime) ============
     var voiceEnabled = true;
-    var isRecording = false;
-    var mediaRecorder = null;
-    var audioChunks = [];
     var currentAudio = null;
-
     var boriVoiceAvailable = false;
+
+    // WebRTC Realtime state
+    var rtcPeerConnection = null;
+    var rtcDataChannel = null;
+    var rtcAudioEl = null;
+    var rtcActive = false;
+    var rtcConnecting = false;
+
+    // Check voice availability
     fetch('/api/voice/status').then(function(r){return r.json();}).then(function(d){
         boriVoiceAvailable = d.available;
         if(!d.available){
-            var mic = document.getElementById('chatMic');
-            if(mic) mic.style.display = 'none';
             var vt = document.getElementById('voiceToggle');
             if(vt) vt.style.display = 'none';
         }
     }).catch(function(){});
 
-    function toggleVoice(){
+    function setVoiceStatus(state, text) {
+        var bar = document.getElementById('voiceStatusBar');
+        var dot = document.getElementById('voiceStatusDot');
+        var txt = document.getElementById('voiceStatusText');
+        if (!bar) return;
+        if (state === 'off') {
+            bar.classList.remove('active');
+        } else {
+            bar.classList.add('active');
+            dot.className = 'voice-status-dot ' + (state === 'live' ? 'live' : 'connecting');
+            txt.textContent = text || '';
+        }
+    }
+
+    async function startRealtimeVoice() {
+        if (rtcActive || rtcConnecting) return;
+        if (isInAppBrowser) {
+            document.getElementById('chatInput').placeholder = 'Abre en Safari para usar voz';
+            setTimeout(function(){document.getElementById('chatInput').placeholder = 'Escribe o habla...';}, 3000);
+            return;
+        }
+        rtcConnecting = true;
+        var micBtn = document.getElementById('chatMic');
+        micBtn.classList.add('voice-connecting');
+        micBtn.classList.remove('voice-active', 'listening');
+        setVoiceStatus('connecting', 'Conectando voz...');
+
+        try {
+            // 1. Get ephemeral token from our server
+            var tokenResp = await fetch('/api/realtime/session', { method: 'POST' });
+            if (!tokenResp.ok) throw new Error('Failed to get session');
+            var tokenData = await tokenResp.json();
+            var ephemeralKey = tokenData.client_secret && tokenData.client_secret.value
+                ? tokenData.client_secret.value
+                : (typeof tokenData.client_secret === 'string' ? tokenData.client_secret : null);
+            if (!ephemeralKey) throw new Error('No ephemeral key received');
+
+            // 2. Create peer connection
+            rtcPeerConnection = new RTCPeerConnection();
+
+            // 3. Set up audio output
+            rtcAudioEl = document.createElement('audio');
+            rtcAudioEl.autoplay = true;
+            rtcPeerConnection.ontrack = function(e) {
+                rtcAudioEl.srcObject = e.streams[0];
+            };
+
+            // 4. Get microphone and add to connection
+            var stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            stream.getTracks().forEach(function(track) {
+                rtcPeerConnection.addTrack(track, stream);
+            });
+
+            // 5. Set up data channel for events
+            rtcDataChannel = rtcPeerConnection.createDataChannel('oai-events');
+            rtcDataChannel.onopen = function() {
+                console.log('🎙️ Realtime data channel open');
+            };
+            rtcDataChannel.onmessage = function(e) {
+                try {
+                    var event = JSON.parse(e.data);
+                    handleRealtimeEvent(event);
+                } catch(err) {}
+            };
+
+            // 6. Create and set local SDP offer
+            var offer = await rtcPeerConnection.createOffer();
+            await rtcPeerConnection.setLocalDescription(offer);
+
+            // 7. Send offer to OpenAI and get answer
+            var sdpResp = await fetch('https://api.openai.com/v1/realtime?model=gpt-4o-realtime-preview', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + ephemeralKey,
+                    'Content-Type': 'application/sdp'
+                },
+                body: offer.sdp
+            });
+            if (!sdpResp.ok) throw new Error('SDP exchange failed: ' + sdpResp.status);
+            var answerSdp = await sdpResp.text();
+            await rtcPeerConnection.setRemoteDescription({ type: 'answer', sdp: answerSdp });
+
+            // Connected!
+            rtcActive = true;
+            rtcConnecting = false;
+            micBtn.classList.remove('voice-connecting');
+            micBtn.classList.add('voice-active');
+            setVoiceStatus('live', '🎙️ Voz activa — habla con Bori');
+
+            // Track activity
+            trackActivity('voice_start');
+
+            // Handle connection close
+            rtcPeerConnection.oniceconnectionstatechange = function() {
+                if (rtcPeerConnection.iceConnectionState === 'disconnected' || 
+                    rtcPeerConnection.iceConnectionState === 'failed' ||
+                    rtcPeerConnection.iceConnectionState === 'closed') {
+                    stopRealtimeVoice();
+                }
+            };
+
+        } catch (err) {
+            console.log('❌ Realtime voice error:', err);
+            rtcConnecting = false;
+            micBtn.classList.remove('voice-connecting');
+            setVoiceStatus('off');
+
+            // Fallback message
+            if (err.name === 'NotAllowedError') {
+                document.getElementById('chatInput').placeholder = 'Permite el micrófono en tu navegador';
+            } else {
+                document.getElementById('chatInput').placeholder = 'Voz no disponible — escribe tu mensaje';
+            }
+            setTimeout(function(){document.getElementById('chatInput').placeholder = 'Escribe o habla...';}, 3000);
+        }
+    }
+
+    function stopRealtimeVoice() {
+        if (rtcPeerConnection) {
+            rtcPeerConnection.getSenders().forEach(function(sender) {
+                if (sender.track) sender.track.stop();
+            });
+            rtcPeerConnection.close();
+            rtcPeerConnection = null;
+        }
+        if (rtcAudioEl) {
+            rtcAudioEl.srcObject = null;
+            rtcAudioEl = null;
+        }
+        rtcDataChannel = null;
+        rtcActive = false;
+        rtcConnecting = false;
+        var micBtn = document.getElementById('chatMic');
+        if (micBtn) {
+            micBtn.classList.remove('voice-active', 'voice-connecting', 'listening');
+        }
+        setVoiceStatus('off');
+    }
+
+    function handleRealtimeEvent(event) {
+        // Show transcription of what user said
+        if (event.type === 'conversation.item.input_audio_transcription.completed') {
+            if (event.transcript && event.transcript.trim()) {
+                var msgs = document.getElementById('chatMessages');
+                var userMsg = document.createElement('div');
+                userMsg.className = 'chat-msg user';
+                userMsg.textContent = event.transcript;
+                msgs.appendChild(userMsg);
+                msgs.scrollTop = msgs.scrollHeight;
+                trackActivity('chat');
+                incrementProgress('chat');
+            }
+        }
+        // Show what Bori said as text
+        if (event.type === 'response.audio_transcript.done') {
+            if (event.transcript && event.transcript.trim()) {
+                var msgs = document.getElementById('chatMessages');
+                var botMsg = document.createElement('div');
+                botMsg.className = 'chat-msg bot';
+                botMsg.textContent = event.transcript;
+                msgs.appendChild(botMsg);
+                msgs.scrollTop = msgs.scrollHeight;
+            }
+        }
+        // Show typing indicator while generating
+        if (event.type === 'response.created') {
+            var msgs = document.getElementById('chatMessages');
+            var existing = document.getElementById('rtcTyping');
+            if (!existing) {
+                var typing = document.createElement('div');
+                typing.className = 'chat-msg typing';
+                typing.id = 'rtcTyping';
+                typing.textContent = 'Bori está hablando...';
+                msgs.appendChild(typing);
+                msgs.scrollTop = msgs.scrollHeight;
+            }
+        }
+        if (event.type === 'response.done') {
+            var typing = document.getElementById('rtcTyping');
+            if (typing) typing.remove();
+        }
+    }
+
+    async function toggleMic() {
+        if (isInAppBrowser) {
+            document.getElementById('chatInput').placeholder = 'Abre en Safari para usar el micrófono';
+            setTimeout(function(){document.getElementById('chatInput').placeholder = 'Escribe o habla...';}, 3000);
+            return;
+        }
+        // Toggle realtime voice
+        if (rtcActive) {
+            stopRealtimeVoice();
+        } else {
+            await startRealtimeVoice();
+        }
+    }
+
+    function toggleVoice() {
         voiceEnabled = !voiceEnabled;
         var btn = document.getElementById('voiceToggle');
         btn.textContent = voiceEnabled ? '🔊' : '🔇';
         btn.classList.toggle('active', voiceEnabled);
-        if(!voiceEnabled && currentAudio){
-            currentAudio.pause();
-            currentAudio = null;
-        }
-    }
-
-async function toggleMic(){
-        if(isInAppBrowser){
-            document.getElementById('chatInput').placeholder = 'Abre en Safari para usar el micrófono';
-            setTimeout(function(){document.getElementById('chatInput').placeholder = 'Escribe o habla...';}, 3000);
-            return;
-        }
-        if(isInAppBrowser){
-            document.getElementById('chatInput').placeholder = 'Abre en Safari para usar el micrófono';
-            setTimeout(function(){document.getElementById('chatInput').placeholder = 'Escribe o habla...';}, 3000);
-            return;
-        }
-        if(isRecording){ stopRecording(); return; }
-        try{
-            var stream = await navigator.mediaDevices.getUserMedia({audio:true});
-            var mimeType = 'audio/webm;codecs=opus';
-            if(!MediaRecorder.isTypeSupported(mimeType)){
-                mimeType = 'audio/mp4';
-                if(!MediaRecorder.isTypeSupported(mimeType)){
-                    mimeType = 'audio/webm';
-                    if(!MediaRecorder.isTypeSupported(mimeType)) mimeType = '';
-                }
+        if (!voiceEnabled) {
+            stopRealtimeVoice();
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio = null;
             }
-            var options = mimeType ? {mimeType: mimeType} : {};
-            mediaRecorder = new MediaRecorder(stream, options);
-            audioChunks = [];
-            mediaRecorder.ondataavailable = function(e){ if(e.data.size > 0) audioChunks.push(e.data); };
-            mediaRecorder.onstop = async function(){
-                stream.getTracks().forEach(function(t){t.stop();});
-                if(audioChunks.length === 0) return;
-                var audioBlob = new Blob(audioChunks, {type: mediaRecorder.mimeType || 'audio/webm'});
-                document.getElementById('chatInput').value = '';
-                document.getElementById('chatInput').placeholder = 'Transcribiendo... 🎤';
-                try{
-                    var formData = new FormData();
-                    var ext = (mediaRecorder.mimeType || '').indexOf('mp4') > -1 ? 'mp4' : 'webm'; formData.append('audio', audioBlob, 'recording.' + ext);
-                    var resp = await fetch('/api/voice/transcribe', {method:'POST', body:formData});
-                    if(!resp.ok) throw new Error('Transcription failed');
-                    var data = await resp.json();
-                    if(data.text && data.text.trim()){
-                        document.getElementById('chatInput').value = data.text;
-                        document.getElementById('chatInput').placeholder = 'Escribe o habla...';
-                        setTimeout(sendChat, 300);
-                    } else {
-                        document.getElementById('chatInput').placeholder = 'No escuché nada — intenta de nuevo';
-                        setTimeout(function(){document.getElementById('chatInput').placeholder = 'Escribe o habla...';}, 2000);
-                    }
-                }catch(err){
-                    console.log('Whisper error:', err);
-                    document.getElementById('chatInput').placeholder = 'Error de voz — intenta de nuevo';
-                    setTimeout(function(){document.getElementById('chatInput').placeholder = 'Escribe o habla...';}, 2000);
-                }
-            };
-            mediaRecorder.start();
-            isRecording = true;
-            document.getElementById('chatMic').classList.add('listening');
-            document.getElementById('chatInput').placeholder = 'Escuchando... 🎤';
-            setTimeout(function(){ if(isRecording) stopRecording(); }, 30000);
-        }catch(err){
-            if(err.name === 'NotAllowedError'){
-                document.getElementById('chatInput').placeholder = 'Permite el micrófono en tu navegador';
-                setTimeout(function(){document.getElementById('chatInput').placeholder = 'Escribe o habla...';}, 3000);
-            } else { console.log('Mic error:', err); }
         }
     }
 
-    function stopRecording(){
-        if(mediaRecorder && mediaRecorder.state !== 'inactive') mediaRecorder.stop();
-        isRecording = false;
-        var mic = document.getElementById('chatMic');
-        if(mic) mic.classList.remove('listening');
-    }
-
-    async function speakBori(text, speakerBtn){
-        if(!voiceEnabled || !boriVoiceAvailable) return;
-        if(currentAudio){ currentAudio.pause(); currentAudio = null; }
-        if(speakerBtn){ speakerBtn.textContent = '⏳'; speakerBtn.style.opacity = '0.6'; }
-        try{
+    // TTS fallback for text chat responses
+    async function speakBori(text, speakerBtn) {
+        if (!voiceEnabled || !boriVoiceAvailable || rtcActive) return;
+        if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+        if (speakerBtn) { speakerBtn.textContent = '⏳'; speakerBtn.style.opacity = '0.6'; }
+        try {
             var resp = await fetch('/api/voice/speak', {
-                method:'POST',
-                headers:{'Content-Type':'application/json'},
-                body:JSON.stringify({text:text})
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({text: text})
             });
-            if(!resp.ok) throw new Error('TTS failed');
+            if (!resp.ok) throw new Error('TTS failed');
             var audioBlob = await resp.blob();
             var audioUrl = URL.createObjectURL(audioBlob);
             currentAudio = new Audio(audioUrl);
-            currentAudio.onplay = function(){ if(speakerBtn){ speakerBtn.textContent='⏸️'; speakerBtn.style.opacity='1'; } };
-            currentAudio.onended = function(){ if(speakerBtn){ speakerBtn.textContent='🔊'; speakerBtn.style.opacity='0.6'; } URL.revokeObjectURL(audioUrl); currentAudio=null; };
-            currentAudio.onerror = function(){ if(speakerBtn){ speakerBtn.textContent='🔊'; speakerBtn.style.opacity='0.6'; } currentAudio=null; };
+            currentAudio.onplay = function() { if (speakerBtn) { speakerBtn.textContent = '⏸️'; speakerBtn.style.opacity = '1'; } };
+            currentAudio.onended = function() { if (speakerBtn) { speakerBtn.textContent = '🔊'; speakerBtn.style.opacity = '0.6'; } URL.revokeObjectURL(audioUrl); currentAudio = null; };
+            currentAudio.onerror = function() { if (speakerBtn) { speakerBtn.textContent = '🔊'; speakerBtn.style.opacity = '0.6'; } currentAudio = null; };
             currentAudio.play();
-        }catch(err){
+        } catch(err) {
             console.log('TTS error:', err);
-            if(speakerBtn){ speakerBtn.textContent='🔊'; speakerBtn.style.opacity='0.6'; }
+            if (speakerBtn) { speakerBtn.textContent = '🔊'; speakerBtn.style.opacity = '0.6'; }
         }
     }
 
-    function createSpeakerBtn(text){
+    function createSpeakerBtn(text) {
         var btn = document.createElement('button');
         btn.textContent = '🔊';
         btn.className = 'bot-speaker';
-        btn.onclick = function(){ speakBori(text, btn); };
+        btn.onclick = function() { speakBori(text, btn); };
         return btn;
     }
     function resetChat(){chatHistory=[];var msgs=document.getElementById('chatMessages');msgs.innerHTML='';if(!hasMoodToday()){showDailyMoodPicker();}else{document.getElementById('moodBar').style.display='none';var bot=document.createElement('div');bot.className='chat-msg bot';bot.textContent='¡Wepa! Aquí estoy. 💛 Soy Bori, tu compañera bilingüe. Háblame como tú quieras — en español boricua, en English, o en Spanglish. Lo que te sea más cómodo. 🇵🇷';msgs.appendChild(bot);}}
@@ -1568,7 +1708,7 @@ async function toggleMic(){
 
     function showDailyMoodPicker(){var bar=document.getElementById('moodBar');var pos=getDailyPositive();document.getElementById('chatDailyEmoji').textContent=pos.emoji;document.getElementById('chatDailyText').textContent=pos.text;if(bar)bar.style.display='block';var msgs=document.getElementById('chatMessages');msgs.innerHTML='';}
 
-    function toggleChat(){if(!document.getElementById('profileOverlay').classList.contains('hidden'))return;const ov=document.getElementById('chatOverlay');ov.classList.toggle('open');if(ov.classList.contains('open')){updateChatStatus();if(!hasMoodToday()){showDailyMoodPicker();}else{document.getElementById('moodBar').style.display='none';}document.getElementById('chatInput').focus();}else{if(currentAudio){currentAudio.pause();currentAudio=null;}if(isRecording){stopRecording();}}}    function quickChat(text){var old=document.querySelectorAll('.chat-quick');old.forEach(function(el){el.remove();});document.getElementById('chatInput').value=text;sendChat();}
+    function toggleChat(){if(!document.getElementById('profileOverlay').classList.contains('hidden'))return;const ov=document.getElementById('chatOverlay');ov.classList.toggle('open');if(ov.classList.contains('open')){updateChatStatus();if(!hasMoodToday()){showDailyMoodPicker();}else{document.getElementById('moodBar').style.display='none';}document.getElementById('chatInput').focus();}else{if(currentAudio){currentAudio.pause();currentAudio=null;}stopRealtimeVoice();}}    function quickChat(text){var old=document.querySelectorAll('.chat-quick');old.forEach(function(el){el.remove();});document.getElementById('chatInput').value=text;sendChat();}
     function renderChecklist(title,items){const wrap=document.createElement('div');wrap.className='chat-checklist';wrap.innerHTML=`<div class="chat-checklist-title">${title}</div>`+items.map((it,i)=>`<div class="chat-check-item" onclick="toggleCheck(this)"><div class="chat-check-box"></div><div class="chat-check-label">${it}</div></div>`).join('')+`<div class="chat-check-progress" id="ckProg">0/${items.length} completado</div>`;return wrap;}
     function toggleCheck(el){el.classList.toggle('checked');el.querySelector('.chat-check-box').textContent=el.classList.contains('checked')?'✓':'';const list=el.closest('.chat-checklist');const total=list.querySelectorAll('.chat-check-item').length;const done=list.querySelectorAll('.chat-check-item.checked').length;list.querySelector('.chat-check-progress').textContent=`${done}/${total} completado`;if(done===total)list.querySelector('.chat-check-progress').textContent='✅ ¡Todo listo!';}
     function renderForm(title,fields,submitLabel){const wrap=document.createElement('div');wrap.className='chat-form';let html=`<div class="chat-form-title">${title}</div>`;fields.forEach(f=>{html+=`<div class="chat-form-field"><div class="chat-form-label">${f.label}</div>`;if(f.type==='select')html+=`<select class="chat-form-select">${f.options.map(o=>`<option>${o}</option>`).join('')}</select>`;else html+=`<input class="chat-form-input" type="${f.type||'text'}" placeholder="${f.placeholder||''}">`;html+=`</div>`;});html+=`<button class="chat-form-submit" onclick="submitChatForm(this)">${submitLabel||'Enviar'}</button>`;wrap.innerHTML=html;return wrap;}
