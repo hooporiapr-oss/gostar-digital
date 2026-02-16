@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="Habla con Bori — Tu Compañera Bilingüe. Chat en español boricua o English. Hey Bori 🇵🇷">
+  <title>Habla con Bori — Hey Bori 🇵🇷</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Sans:wght@400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --serif:'DM Serif Display',serif;--sans:'Instrument Sans',sans-serif;--display:'Bebas Neue',sans-serif;
+      --night:#0B0B14;--surface:#1A1726;--surface2:#211D2E;
+      --purple:#8B5CF6;--purple-deep:#6D28D9;--purple-light:#A78BFA;
+      --gold:#D4A843;--gold-bright:#F0C75E;--teal:#2DD4A8;
+      --text:#EDEBE8;--muted:rgba(237,235,232,.5);--radius:18px
+    }
+    html,body{height:100%;overflow:hidden}
+    body{font-family:var(--sans);background:var(--night);color:var(--text);-webkit-font-smoothing:antialiased;display:flex;flex-direction:column}
+
+    /* ═══ AMBIENT ═══ */
+    .bg{position:fixed;inset:0;pointer-events:none;z-index:0}
+    .bg::before{content:'';position:absolute;top:-20%;left:50%;transform:translateX(-50%);width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(139,92,246,.08) 0%,transparent 60%)}
+
+    /* ═══ HEADER ═══ */
+    .header{display:flex;align-items:center;gap:12px;padding:12px 16px;background:rgba(11,11,20,.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.05);position:relative;z-index:10;flex-shrink:0}
+    .h-back{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:12px;background:var(--surface);border:1px solid rgba(255,255,255,.06);font-size:16px;text-decoration:none;-webkit-tap-highlight-color:transparent;transition:all .15s;flex-shrink:0}
+    .h-back:active{transform:scale(.9)}
+    .h-avatar{width:42px;height:42px;border-radius:50%;object-fit:contain;background:linear-gradient(135deg,rgba(139,92,246,.15),rgba(168,85,247,.1));border:1.5px solid rgba(139,92,246,.2);padding:3px;flex-shrink:0}
+    .h-info{flex:1;min-width:0}
+    .h-name{font-family:var(--display);font-size:18px;letter-spacing:2px;line-height:1}
+    .h-status{display:flex;align-items:center;gap:5px;margin-top:2px}
+    .h-dot{width:7px;height:7px;border-radius:50%;background:#10B981;animation:pulse 2s ease infinite}
+    @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(16,185,129,.4)}50%{box-shadow:0 0 0 4px rgba(16,185,129,0)}}
+    .h-stat{font-size:11px;color:var(--muted);font-weight:600}
+    .h-flag{font-size:22px;flex-shrink:0}
+
+    /* ═══ MESSAGES ═══ */
+    .msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;position:relative;z-index:1;-webkit-overflow-scrolling:touch;scroll-behavior:smooth}
+    .msgs::-webkit-scrollbar{width:3px}
+    .msgs::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:10px}
+
+    /* welcome */
+    .welcome{text-align:center;padding:24px 16px;animation:fadeIn .6s ease}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+    .welcome-av{width:80px;height:80px;object-fit:contain;margin-bottom:12px;filter:drop-shadow(0 4px 20px rgba(139,92,246,.3));animation:float 5s ease-in-out infinite}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+    .welcome-title{font-family:var(--serif);font-size:22px;margin-bottom:4px}
+    .welcome-title em{font-style:italic;color:var(--purple-light)}
+    .welcome-sub{font-size:13px;color:var(--muted);line-height:1.5;max-width:280px;margin:0 auto}
+
+    /* starters */
+    .starters{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:16px}
+    .starter{padding:8px 14px;border-radius:100px;background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.15);font-size:12.5px;font-weight:600;color:var(--purple-light);cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent}
+    .starter:active{transform:scale(.95);background:rgba(139,92,246,.15)}
+
+    /* bubbles */
+    .msg{display:flex;gap:8px;max-width:88%;animation:msgIn .35s cubic-bezier(.22,1,.36,1)}
+    @keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+    .msg-user{align-self:flex-end;flex-direction:row-reverse}
+    .msg-bori{align-self:flex-start}
+
+    .msg-av{width:28px;height:28px;border-radius:50%;flex-shrink:0;margin-top:2px}
+    .msg-av-bori{background:linear-gradient(135deg,rgba(139,92,246,.2),rgba(168,85,247,.1));border:1px solid rgba(139,92,246,.15);display:flex;align-items:center;justify-content:center;font-size:14px;padding:2px}
+    .msg-av-user{background:linear-gradient(135deg,rgba(212,168,67,.15),rgba(212,168,67,.05));border:1px solid rgba(212,168,67,.15);display:flex;align-items:center;justify-content:center;font-size:13px}
+
+    .bubble{padding:10px 14px;border-radius:16px;font-size:14px;line-height:1.55;font-weight:500;word-wrap:break-word;overflow-wrap:break-word}
+    .b-bori{background:var(--surface);border:1px solid rgba(255,255,255,.05);border-bottom-left-radius:4px;color:var(--text)}
+    .b-user{background:linear-gradient(135deg,#7C3AED,#6D28D9);border-bottom-right-radius:4px;color:white}
+
+    /* typing */
+    .typing{display:flex;align-items:center;gap:4px;padding:12px 16px}
+    .typing-dot{width:7px;height:7px;border-radius:50%;background:var(--purple-light);opacity:.4;animation:typeDot 1.4s ease-in-out infinite}
+    .typing-dot:nth-child(2){animation-delay:.2s}
+    .typing-dot:nth-child(3){animation-delay:.4s}
+    @keyframes typeDot{0%,60%,100%{transform:translateY(0);opacity:.4}30%{transform:translateY(-6px);opacity:1}}
+
+    /* ═══ INPUT ═══ */
+    .input-wrap{padding:10px 12px;padding-bottom:max(10px,env(safe-area-inset-bottom));background:rgba(11,11,20,.9);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,.05);position:relative;z-index:10;flex-shrink:0}
+    .input-row{display:flex;gap:8px;align-items:flex-end;max-width:480px;margin:0 auto}
+    .input-field{flex:1;min-height:44px;max-height:120px;padding:10px 14px;border-radius:14px;border:1.5px solid rgba(255,255,255,.08);background:var(--surface);color:var(--text);font-family:var(--sans);font-size:15px;font-weight:500;resize:none;outline:none;line-height:1.4;transition:border-color .2s;-webkit-appearance:none}
+    .input-field::placeholder{color:var(--muted);font-weight:500}
+    .input-field:focus{border-color:rgba(139,92,246,.3)}
+    .send-btn{width:44px;height:44px;border-radius:14px;border:none;background:linear-gradient(135deg,#7C3AED,#9333EA);color:white;font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;-webkit-tap-highlight-color:transparent}
+    .send-btn:active{transform:scale(.9)}
+    .send-btn:disabled{opacity:.3;transform:none}
+    .send-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+
+    @media(max-width:420px){
+      .h-name{font-size:16px}
+      .welcome-av{width:68px;height:68px}
+      .welcome-title{font-size:20px}
+      .bubble{font-size:13.5px}
+    }
+
+    /* keyboard open fix */
+    @media(max-height:500px){
+      .welcome{padding:12px}
+      .welcome-av{width:50px;height:50px}
+      .starters{margin-top:8px}
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg"></div>
+
+  <!-- Header -->
+  <div class="header">
+    <a href="/" class="h-back">←</a>
+    <img src="/icon.png" alt="Bori" class="h-avatar">
+    <div class="h-info">
+      <div class="h-name">BORI</div>
+      <div class="h-status"><span class="h-dot"></span><span class="h-stat">Siempre contigo</span></div>
+    </div>
+    <span class="h-flag">🇵🇷</span>
+  </div>
+
+  <!-- Messages -->
+  <div class="msgs" id="msgs">
+    <div class="welcome" id="welcome">
+      <img src="/icon.png" alt="Bori" class="welcome-av">
+      <div class="welcome-title">Hey <em>Bori</em> 💛</div>
+      <div class="welcome-sub">Soy tu compañera bilingüe. Háblame en español boricua o en English — siempre estoy aquí pa' ti. 🇵🇷</div>
+      <div class="starters">
+        <span class="starter" onclick="sendStarter(this)">¡Hola Bori! 💛</span>
+        <span class="starter" onclick="sendStarter(this)">Talk to me in English</span>
+        <span class="starter" onclick="sendStarter(this)">Me siento solita hoy...</span>
+        <span class="starter" onclick="sendStarter(this)">¿Qué juegos hay?</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Input -->
+  <div class="input-wrap">
+    <div class="input-row">
+      <textarea class="input-field" id="input" rows="1" placeholder="Escríbele a Bori..." enterkeyhint="send"></textarea>
+      <button class="send-btn" id="sendBtn" onclick="send()" disabled>
+        <svg viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2L15 22L11 13L2 9L22 2Z"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    var input=document.getElementById('input');
+    var sendBtn=document.getElementById('sendBtn');
+    var msgs=document.getElementById('msgs');
+    var welcome=document.getElementById('welcome');
+    var history=[];
+    var sending=false;
+
+    /* auto-grow textarea */
+    input.addEventListener('input',function(){
+      this.style.height='auto';
+      this.style.height=Math.min(this.scrollHeight,120)+'px';
+      sendBtn.disabled=!this.value.trim();
+    });
+
+    /* enter to send */
+    input.addEventListener('keydown',function(e){
+      if(e.key==='Enter'&&!e.shiftKey){
+        e.preventDefault();
+        if(!sending&&this.value.trim())send();
+      }
+    });
+
+    function sendStarter(el){
+      input.value=el.textContent;
+      sendBtn.disabled=false;
+      send();
+    }
+
+    function addMsg(role,text){
+      if(welcome)welcome.remove();
+      var wrap=document.createElement('div');
+      wrap.className='msg msg-'+role;
+
+      var av=document.createElement('div');
+      av.className='msg-av msg-av-'+role;
+      av.textContent=role==='bori'?'🇵🇷':'👤';
+
+      var bubble=document.createElement('div');
+      bubble.className='bubble b-'+role;
+      bubble.textContent=text;
+
+      wrap.appendChild(av);
+      wrap.appendChild(bubble);
+      msgs.appendChild(wrap);
+      scroll();
+      return bubble;
+    }
+
+    function addTyping(){
+      if(welcome)welcome.remove();
+      var wrap=document.createElement('div');
+      wrap.className='msg msg-bori';
+      wrap.id='typing';
+
+      var av=document.createElement('div');
+      av.className='msg-av msg-av-bori';
+      av.textContent='🇵🇷';
+
+      var bubble=document.createElement('div');
+      bubble.className='bubble b-bori typing';
+      bubble.innerHTML='<span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>';
+
+      wrap.appendChild(av);
+      wrap.appendChild(bubble);
+      msgs.appendChild(wrap);
+      scroll();
+    }
+
+    function removeTyping(){
+      var t=document.getElementById('typing');
+      if(t)t.remove();
+    }
+
+    function scroll(){
+      msgs.scrollTop=msgs.scrollHeight;
+    }
+
+    async function send(){
+      var text=input.value.trim();
+      if(!text||sending)return;
+
+      sending=true;
+      sendBtn.disabled=true;
+      input.value='';
+      input.style.height='auto';
+
+      addMsg('user',text);
+      history.push({role:'user',content:text});
+
+      addTyping();
+
+      try{
+        var res=await fetch('/api/chat',{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({messages:history})
+        });
+
+        removeTyping();
+
+        if(!res.ok){
+          var err=await res.json().catch(function(){return{error:'Error de conexión'};});
+          addMsg('bori','Ay, tuve un problemita. Intenta de nuevo. 💛');
+          sending=false;
+          sendBtn.disabled=false;
+          return;
+        }
+
+        var data=await res.json();
+        var reply=data.reply||'...';
+
+        addMsg('bori',reply);
+        history.push({role:'assistant',content:reply});
+
+        /* keep history manageable — last 20 turns */
+        if(history.length>40)history=history.slice(-40);
+
+      }catch(e){
+        removeTyping();
+        addMsg('bori','Perdona, no pude conectar. Intenta de nuevo. 💛');
+      }
+
+      sending=false;
+      sendBtn.disabled=!input.value.trim();
+      input.focus();
+    }
+
+    /* focus input on load (desktop) */
+    if(window.innerWidth>600)input.focus();
+  </script>
+</body>
+</html>
