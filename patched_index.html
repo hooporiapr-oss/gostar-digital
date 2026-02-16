@@ -1,0 +1,311 @@
+#!/usr/bin/env python3
+"""
+HEY BORI — Voice Patch Applicator
+===================================
+Applies all 6 OpenAI Whisper/TTS voice patches to index.html
+
+Usage:
+  python3 patch_voice.py index.html
+
+Output:
+  Creates patched_index.html in the same directory
+"""
+
+import sys, os
+
+if len(sys.argv) < 2:
+    print("Usage: python3 patch_voice.py index.html")
+    sys.exit(1)
+
+input_file = sys.argv[1]
+if not os.path.exists(input_file):
+    print(f"ERROR: File not found: {input_file}")
+    sys.exit(1)
+
+with open(input_file, 'r', encoding='utf-8') as f:
+    content = f.read()
+
+original_len = len(content)
+patches_applied = 0
+patches_failed = []
+
+# ═══════════════════════════════════════════════════════
+# PATCH 1: Add bot-speaker CSS before @media query
+# ═══════════════════════════════════════════════════════
+old_css = "    @media(max-width:560px){\n      .brand-title .ak"
+new_css = """    /* bot-speaker button */
+    .bot-speaker{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;min-height:32px;min-width:32px;border:none;background:rgba(107,33,168,.1);border-radius:8px;font-size:16px;cursor:pointer;margin-top:6px;opacity:.6;transition:all .2s;float:right}
+    .bot-speaker:active{transform:scale(.9);opacity:1}
+
+    @media(max-width:560px){
+      .brand-title .ak"""
+
+if old_css in content:
+    content = content.replace(old_css, new_css, 1)
+    patches_applied += 1
+    print("✅ PATCH 1: Bot-speaker CSS added")
+else:
+    patches_failed.append("PATCH 1: Could not find @media marker")
+    print("❌ PATCH 1 FAILED: Could not find @media marker")
+
+# ═══════════════════════════════════════════════════════
+# PATCH 2: Add voice toggle button in chat header
+# ═══════════════════════════════════════════════════════
+old_hdr = '<button class="chat-close" onclick="toggleChat()">✕</button>'
+new_hdr = '<button class="chat-voice-toggle active" id="voiceToggle" onclick="toggleVoice()" style="min-height:32px;min-width:32px">🔊</button>\n          <button class="chat-close" onclick="toggleChat()">✕</button>'
+
+if old_hdr in content:
+    content = content.replace(old_hdr, new_hdr, 1)
+    patches_applied += 1
+    print("✅ PATCH 2: Voice toggle added to chat header")
+else:
+    patches_failed.append("PATCH 2: Could not find chat-close button")
+    print("❌ PATCH 2 FAILED: Could not find chat-close button")
+
+# ═══════════════════════════════════════════════════════
+# PATCH 3: Add mic button + update placeholder
+# Handles both with and without blank line between input and send
+# ═══════════════════════════════════════════════════════
+patch3_done = False
+
+# Try with blank line first (matches the original exactly)
+old_input_a = '<button class="chat-home-btn" onclick="resetChat()">⟳</button>\n          <input class="chat-input" id="chatInput" type="text" placeholder="Escribe aquí..." onkeydown="if(event.key===\'Enter\')sendChat()">\n          \n          <button class="chat-send" id="chatSend" onclick="sendChat()">→</button>'
+
+# Try without blank line
+old_input_b = '<button class="chat-home-btn" onclick="resetChat()">⟳</button>\n          <input class="chat-input" id="chatInput" type="text" placeholder="Escribe aquí..." onkeydown="if(event.key===\'Enter\')sendChat()">\n          <button class="chat-send" id="chatSend" onclick="sendChat()">→</button>'
+
+new_input = '<button class="chat-home-btn" onclick="resetChat()">⟳</button>\n          <button class="chat-mic" id="chatMic" onclick="toggleMic()">🎤</button>\n          <input class="chat-input" id="chatInput" type="text" placeholder="Escribe o habla..." onkeydown="if(event.key===\'Enter\')sendChat()">\n          <button class="chat-send" id="chatSend" onclick="sendChat()">→</button>'
+
+if old_input_a in content:
+    content = content.replace(old_input_a, new_input, 1)
+    patches_applied += 1
+    patch3_done = True
+    print("✅ PATCH 3: Mic button added (variant A - with blank line)")
+elif old_input_b in content:
+    content = content.replace(old_input_b, new_input, 1)
+    patches_applied += 1
+    patch3_done = True
+    print("✅ PATCH 3: Mic button added (variant B - no blank line)")
+
+if not patch3_done:
+    # Fuzzy match: find the home button and inject mic after it
+    home_btn = '<button class="chat-home-btn" onclick="resetChat()">⟳</button>'
+    if home_btn in content:
+        # Find the input after it
+        idx = content.find(home_btn)
+        # Find the placeholder text
+        placeholder_old = 'placeholder="Escribe aquí..."'
+        placeholder_new = 'placeholder="Escribe o habla..."'
+        if placeholder_old in content[idx:idx+500]:
+            content = content.replace(placeholder_old, placeholder_new, 1)
+            # Insert mic button after home button
+            content = content.replace(home_btn, home_btn + '\n          <button class="chat-mic" id="chatMic" onclick="toggleMic()">🎤</button>', 1)
+            patches_applied += 1
+            patch3_done = True
+            print("✅ PATCH 3: Mic button added (fuzzy match)")
+    
+    if not patch3_done:
+        patches_failed.append("PATCH 3: Could not find chat input area")
+        print("❌ PATCH 3 FAILED: Could not find chat input area")
+
+# ═══════════════════════════════════════════════════════
+# PATCH 4: Replace entire old voice system with OpenAI API
+# ═══════════════════════════════════════════════════════
+voice_start = '    // ============ VOICE SYSTEM ============'
+voice_end = '    function resetChat(){'
+
+si = content.find(voice_start)
+ei = content.find(voice_end)
+
+NEW_VOICE = '''    // ============ BORI VOICE SYSTEM (OpenAI Whisper + TTS) ============
+    var voiceEnabled = true;
+    var isRecording = false;
+    var mediaRecorder = null;
+    var audioChunks = [];
+    var currentAudio = null;
+
+    // Check if OpenAI voice endpoints are live
+    var boriVoiceAvailable = false;
+    fetch('/api/voice/status').then(function(r){return r.json();}).then(function(d){
+        boriVoiceAvailable = d.available;
+        if(!d.available){
+            var mic = document.getElementById('chatMic');
+            if(mic) mic.style.display = 'none';
+            var vt = document.getElementById('voiceToggle');
+            if(vt) vt.style.display = 'none';
+        }
+    }).catch(function(){});
+
+    function toggleVoice(){
+        voiceEnabled = !voiceEnabled;
+        var btn = document.getElementById('voiceToggle');
+        btn.textContent = voiceEnabled ? '🔊' : '🔇';
+        btn.classList.toggle('active', voiceEnabled);
+        if(!voiceEnabled && currentAudio){
+            currentAudio.pause();
+            currentAudio = null;
+        }
+    }
+
+    // ---- MIC: Record audio then send to Whisper STT ----
+    async function toggleMic(){
+        if(!boriVoiceAvailable){
+            document.getElementById('chatInput').placeholder = 'Voz no disponible';
+            setTimeout(function(){document.getElementById('chatInput').placeholder = 'Escribe o habla...';}, 2000);
+            return;
+        }
+        if(isRecording){ stopRecording(); return; }
+        try{
+            var stream = await navigator.mediaDevices.getUserMedia({audio:true});
+            var mimeType = 'audio/webm;codecs=opus';
+            if(!MediaRecorder.isTypeSupported(mimeType)){
+                mimeType = 'audio/mp4';
+                if(!MediaRecorder.isTypeSupported(mimeType)){
+                    mimeType = 'audio/webm';
+                    if(!MediaRecorder.isTypeSupported(mimeType)) mimeType = '';
+                }
+            }
+            var options = mimeType ? {mimeType: mimeType} : {};
+            mediaRecorder = new MediaRecorder(stream, options);
+            audioChunks = [];
+            mediaRecorder.ondataavailable = function(e){ if(e.data.size > 0) audioChunks.push(e.data); };
+            mediaRecorder.onstop = async function(){
+                stream.getTracks().forEach(function(t){t.stop();});
+                if(audioChunks.length === 0) return;
+                var audioBlob = new Blob(audioChunks, {type: mediaRecorder.mimeType || 'audio/webm'});
+                document.getElementById('chatInput').value = '';
+                document.getElementById('chatInput').placeholder = 'Transcribiendo... 🎤';
+                try{
+                    var formData = new FormData();
+                    formData.append('audio', audioBlob, 'recording.webm');
+                    var resp = await fetch('/api/voice/transcribe', {method:'POST', body:formData});
+                    if(!resp.ok) throw new Error('Transcription failed');
+                    var data = await resp.json();
+                    if(data.text && data.text.trim()){
+                        document.getElementById('chatInput').value = data.text;
+                        document.getElementById('chatInput').placeholder = 'Escribe o habla...';
+                        setTimeout(sendChat, 300);
+                    } else {
+                        document.getElementById('chatInput').placeholder = 'No escuché nada — intenta de nuevo';
+                        setTimeout(function(){document.getElementById('chatInput').placeholder = 'Escribe o habla...';}, 2000);
+                    }
+                }catch(err){
+                    console.log('Whisper error:', err);
+                    document.getElementById('chatInput').placeholder = 'Error de voz — intenta de nuevo';
+                    setTimeout(function(){document.getElementById('chatInput').placeholder = 'Escribe o habla...';}, 2000);
+                }
+            };
+            mediaRecorder.start();
+            isRecording = true;
+            document.getElementById('chatMic').classList.add('listening');
+            document.getElementById('chatInput').placeholder = 'Escuchando... 🎤';
+            // Auto-stop after 30 seconds
+            setTimeout(function(){ if(isRecording) stopRecording(); }, 30000);
+        }catch(err){
+            if(err.name === 'NotAllowedError'){
+                document.getElementById('chatInput').placeholder = 'Permite el micrófono en tu navegador';
+                setTimeout(function(){document.getElementById('chatInput').placeholder = 'Escribe o habla...';}, 3000);
+            } else { console.log('Mic error:', err); }
+        }
+    }
+
+    function stopRecording(){
+        if(mediaRecorder && mediaRecorder.state !== 'inactive') mediaRecorder.stop();
+        isRecording = false;
+        var mic = document.getElementById('chatMic');
+        if(mic) mic.classList.remove('listening');
+    }
+
+    // ---- SPEAKER: OpenAI TTS (Shimmer voice) ----
+    async function speakBori(text, speakerBtn){
+        if(!voiceEnabled || !boriVoiceAvailable) return;
+        if(currentAudio){ currentAudio.pause(); currentAudio = null; }
+        if(speakerBtn){ speakerBtn.textContent = '⏳'; speakerBtn.style.opacity = '0.6'; }
+        try{
+            var resp = await fetch('/api/voice/speak', {
+                method:'POST',
+                headers:{'Content-Type':'application/json'},
+                body:JSON.stringify({text:text})
+            });
+            if(!resp.ok) throw new Error('TTS failed');
+            var audioBlob = await resp.blob();
+            var audioUrl = URL.createObjectURL(audioBlob);
+            currentAudio = new Audio(audioUrl);
+            currentAudio.onplay = function(){ if(speakerBtn){ speakerBtn.textContent='⏸️'; speakerBtn.style.opacity='1'; } };
+            currentAudio.onended = function(){ if(speakerBtn){ speakerBtn.textContent='🔊'; speakerBtn.style.opacity='0.6'; } URL.revokeObjectURL(audioUrl); currentAudio=null; };
+            currentAudio.onerror = function(){ if(speakerBtn){ speakerBtn.textContent='🔊'; speakerBtn.style.opacity='0.6'; } currentAudio=null; };
+            currentAudio.play();
+        }catch(err){
+            console.log('TTS error:', err);
+            if(speakerBtn){ speakerBtn.textContent='🔊'; speakerBtn.style.opacity='0.6'; }
+        }
+    }
+
+    function createSpeakerBtn(text){
+        var btn = document.createElement('button');
+        btn.textContent = '🔊';
+        btn.className = 'bot-speaker';
+        btn.onclick = function(){ speakBori(text, btn); };
+        return btn;
+    }
+
+'''
+
+if si > -1 and ei > -1 and ei > si:
+    content = content[:si] + NEW_VOICE + '    ' + content[ei:]
+    patches_applied += 1
+    print("✅ PATCH 4: Voice system replaced with OpenAI Whisper/TTS")
+else:
+    patches_failed.append(f"PATCH 4: Voice markers not found (start={si}, end={ei})")
+    print(f"❌ PATCH 4 FAILED: Voice markers not found (start={si}, end={ei})")
+
+# ═══════════════════════════════════════════════════════
+# PATCH 5: Add speaker button + auto-speak in doBoriCall
+# ═══════════════════════════════════════════════════════
+old_bot = "if(!parseSmartResponse(reply,msgs)){const botMsg=document.createElement('div');botMsg.className='chat-msg bot';botMsg.textContent=reply;msgs.appendChild(botMsg);}speakBori(reply);"
+new_bot = "if(!parseSmartResponse(reply,msgs)){const botMsg=document.createElement('div');botMsg.className='chat-msg bot';botMsg.textContent=reply;if(boriVoiceAvailable){botMsg.appendChild(createSpeakerBtn(reply));}msgs.appendChild(botMsg);}if(voiceEnabled&&boriVoiceAvailable){speakBori(reply);}"
+
+if old_bot in content:
+    content = content.replace(old_bot, new_bot, 1)
+    patches_applied += 1
+    print("✅ PATCH 5: Speaker buttons + auto-speak added")
+else:
+    patches_failed.append("PATCH 5: Could not find bot message render line")
+    print("❌ PATCH 5 FAILED: Could not find bot message render line")
+
+# ═══════════════════════════════════════════════════════
+# PATCH 6: Fix toggleChat audio cleanup
+# ═══════════════════════════════════════════════════════
+old_close = "if(window.speechSynthesis)window.speechSynthesis.cancel();if(isListening){recognition.stop();stopMic();}"
+new_close = "if(currentAudio){currentAudio.pause();currentAudio=null;}if(isRecording){stopRecording();}"
+
+if old_close in content:
+    content = content.replace(old_close, new_close, 1)
+    patches_applied += 1
+    print("✅ PATCH 6: toggleChat audio cleanup fixed")
+else:
+    patches_failed.append("PATCH 6: Could not find old toggleChat cleanup")
+    print("❌ PATCH 6 FAILED: Could not find old toggleChat cleanup")
+
+# ═══════════════════════════════════════════════════════
+# WRITE OUTPUT
+# ═══════════════════════════════════════════════════════
+output_dir = os.path.dirname(os.path.abspath(input_file))
+output_file = os.path.join(output_dir, 'patched_index.html')
+
+with open(output_file, 'w', encoding='utf-8') as f:
+    f.write(content)
+
+print(f"\n{'='*50}")
+print(f"PATCHES APPLIED: {patches_applied}/6")
+print(f"Original: {original_len:,} chars")
+print(f"Patched:  {len(content):,} chars")
+print(f"Output:   {output_file}")
+
+if patches_failed:
+    print(f"\n⚠️  FAILED PATCHES:")
+    for fail in patches_failed:
+        print(f"   {fail}")
+else:
+    print(f"\n🎉 ALL 6 PATCHES APPLIED SUCCESSFULLY!")
+    print(f"   Replace your index.html with patched_index.html and push to GitHub.")
