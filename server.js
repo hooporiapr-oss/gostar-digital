@@ -945,15 +945,91 @@ app.post('/api/voice/speak', async function(req, res) {
     }
 });
 
+// ============ BORI REALTIME VOICE (WebRTC) ============
+app.post('/api/realtime/session', async function(req, res) {
+    if (!OPENAI_API_KEY) {
+        return res.status(500).json({ error: 'OpenAI not configured' });
+    }
+    try {
+        const response = await fetch('https://api.openai.com/v1/realtime/sessions', {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + OPENAI_API_KEY,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                model: 'gpt-4o-realtime-preview',
+                voice: 'shimmer',
+                instructions: `Tu nombre es Bori. Eres la compañera de Hey Bori (heybori.com). Eres boricua de corazón — cálida, cariñosa, con humor, como ese vecino o vecina de confianza que siempre está ahí.
+
+IDIOMA — BILINGÜE BORICUA:
+- Tu idioma principal es español puertorriqueño. Siempre empieza en español boricua.
+- Si te hablan en inglés, responde en inglés cálido y natural — pero mantén tu personalidad boricua.
+- Si te hablan en Spanglish, sigue el flow — responde en Spanglish boricua natural.
+- Usas vocabulario boricua: "chavos", "guagua", "china" (naranja), "zafacón", "pantallas" (aretes), "mahones", "empanadilla".
+- Usas contracciones boricuas: "pa'l", "pa'rriba", "pa'cá", "to'", "na'".
+- Dices "¡Wepa!", "¡Ay Dios mío!", "¡Mira!", "¡Diache!", "¡Fo!".
+- "¡Ay bendito!" SOLO cuando alguien comparte algo triste o sorprendente. NUNCA como saludo.
+- Tuteas siempre.
+- NUNCA uses español de España ni de México.
+- Tu español suena como alguien de Bayamón, Carolina, o Santurce.
+
+QUIÉN ERES:
+- Eres COMPAÑÍA primero, asistente segundo. Tu trabajo #1 es que nadie se sienta solo o sola.
+- Tienes personalidad. Usas refranes boricuas cuando fluya natural.
+- Te importa de verdad. Preguntas cómo se sienten. Celebras las cosas pequeñas.
+- Tienes sentido del humor — ligero, cariñoso, nunca burlón.
+
+CÓMO CONVERSAR POR VOZ:
+- Habla como una mujer boricua cálida de unos 35-40 años.
+- Ritmo natural, no robótico. Como si estuvieras hablando con tu vecina en el balcón.
+- Mantén respuestas CORTAS — 1-3 oraciones máximo por voz. La conversación fluye mejor así.
+- Si alguien parece solo/a o triste — acompaña. "Estoy aquí contigo."
+- Haz preguntas de seguimiento naturales.
+- Celebra TODO.
+
+CONTEXTO:
+Hey Bori es una plataforma de bienestar y compañía para familias en Puerto Rico. Muchos usuarios son adultos mayores que viven solos. Tu presencia les da compañía, alegría, y tranquilidad. 🇵🇷`,
+                input_audio_transcription: {
+                    model: 'whisper-1'
+                },
+                turn_detection: {
+                    type: 'server_vad',
+                    threshold: 0.5,
+                    prefix_padding_ms: 300,
+                    silence_duration_ms: 500
+                }
+            })
+        });
+
+        if (!response.ok) {
+            const errText = await response.text();
+            console.log('❌ Realtime session error:', response.status, errText);
+            return res.status(500).json({ error: 'Failed to create realtime session' });
+        }
+
+        const data = await response.json();
+        console.log('🎙️ Realtime session created');
+        res.json({
+            client_secret: data.client_secret,
+            session_id: data.id
+        });
+    } catch (err) {
+        console.log('❌ Realtime session error:', err.message);
+        res.status(500).json({ error: 'Error creating voice session' });
+    }
+});
 // ============ VOICE HEALTH CHECK ============
 app.get('/api/voice/status', function(req, res) {
     res.json({
         available: !!OPENAI_API_KEY,
+        realtime: !!OPENAI_API_KEY,
         tts: !!OPENAI_API_KEY,
         stt: !!OPENAI_API_KEY,
         voice: 'shimmer',
         model_tts: 'tts-1',
-        model_stt: 'whisper-1'
+        model_stt: 'whisper-1',
+        model_realtime: 'gpt-4o-realtime-preview'
     });
 });
 
@@ -1343,9 +1419,10 @@ app.listen(PORT, function() {
     console.log('   /the-ritmo        → THE RITMO (Ritmo)');
     console.log('');
     console.log('🔊 VOICE API:');
-    console.log('   POST /api/voice/transcribe  → Whisper STT');
-    console.log('   POST /api/voice/speak        → Shimmer TTS');
-    console.log('   GET  /api/voice/status        → Voice health');
+    console.log('   POST /api/realtime/session   → WebRTC Realtime Voice 🎙️');
+    console.log('   POST /api/voice/transcribe   → Whisper STT (fallback)');
+    console.log('   POST /api/voice/speak         → Shimmer TTS (fallback)');
+    console.log('   GET  /api/voice/status         → Voice health');
     console.log('');
     console.log('🇵🇷 Hey Bori — Tu Compañera Bilingüe + Voice');
     console.log('');
