@@ -1,13 +1,14 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
+const multer = require('multer');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // ============ PLATFORM VERSION ============
-const PLATFORM_VERSION = '5.1.0';
-const PLATFORM_VERSION_NAME = 'Hey Bori — Tu Compañera Boricua 🇵🇷';
+const PLATFORM_VERSION = '5.2.0';
+const PLATFORM_VERSION_NAME = 'Hey Bori — Tu Compañera Bilingüe 🇵🇷 + Voice';
 
 // ============ ADMIN SECRET KEY ============
 const ADMIN_SECRET_KEY = process.env.ADMIN_SECRET_KEY || 'Ritnome2026!';
@@ -33,6 +34,14 @@ if (ANTHROPIC_API_KEY) {
     console.log('⚠️ Anthropic API not configured - set ANTHROPIC_API_KEY');
 }
 
+// ============ OPENAI API (BORI VOICE) ============
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+if (OPENAI_API_KEY) {
+    console.log('✅ OpenAI API configured (Bori Voice)');
+} else {
+    console.log('⚠️ OpenAI API not configured - set OPENAI_API_KEY for voice features');
+}
+
 let stripe = null;
 if (STRIPE_SECRET_KEY) {
     stripe = require('stripe')(STRIPE_SECRET_KEY);
@@ -40,6 +49,12 @@ if (STRIPE_SECRET_KEY) {
 } else {
     console.log('⚠️ Stripe not configured - set STRIPE_SECRET_KEY');
 }
+
+// ============ MULTER FOR AUDIO UPLOADS ============
+const audioUpload = multer({
+    storage: multer.memoryStorage(),
+    limits: { fileSize: 25 * 1024 * 1024 }
+});
 
 // ============ DATA FILES ============
 const DATA_DIR = path.join(__dirname, 'data');
@@ -678,6 +693,8 @@ app.get('/api/health', function(req, res) {
     res.json({
         status: 'ok',
         stripe: !!stripe,
+        openai: !!OPENAI_API_KEY,
+        anthropic: !!ANTHROPIC_API_KEY,
         prices: {
             plus: !!STRIPE_PRICES.plus,
             familia: !!STRIPE_PRICES.familia,
@@ -809,6 +826,135 @@ app.post('/api/chat', async function(req, res) {
         console.log('❌ Bori AI error:', err.message);
         res.status(500).json({ error: 'Error de conexión con Bori AI' });
     }
+});
+
+// ============ BORI VOICE: SPEECH-TO-TEXT (WHISPER) ============
+app.post('/api/voice/transcribe', audioUpload.single('audio'), async function(req, res) {
+    if (!OPENAI_API_KEY) {
+        return res.status(500).json({ error: 'Voice not configured — set OPENAI_API_KEY' });
+    }
+    if (!req.file) {
+        return res.status(400).json({ error: 'No audio file provided' });
+    }
+    try {
+        // Build multipart form data manually for Node fetch
+        const boundary = '----BoriVoice' + Date.now();
+        const fileBuffer = req.file.buffer;
+        const mimeType = req.file.mimetype || 'audio/webm';
+        const fileName = 'audio.' + (mimeType.includes('mp4') ? 'm4a' : mimeType.includes('wav') ? 'wav' : 'webm');
+
+        // Whisper prompt helps with boricua Spanish recognition
+        const promptText = "Hey Bori, wepa, bendito, mijo, mija, pa'l, pa'rriba, boricua, mofongo, tostones, coquí";
+
+        const parts = [];
+        // model field
+        parts.push('--' + boundary + '\r\n');
+        parts.push('Content-Disposition: form-data; name="model"\r\n\r\n');
+        parts.push('whisper-1\r\n');
+        // prompt field (helps accuracy with boricua vocab)
+        parts.push('--' + boundary + '\r\n');
+        parts.push('Content-Disposition: form-data; name="prompt"\r\n\r\n');
+        parts.push(promptText + '\r\n');
+        // file field
+        parts.push('--' + boundary + '\r\n');
+        parts.push('Content-Disposition: form-data; name="file"; filename="' + fileName + '"\r\n');
+        parts.push('Content-Type: ' + mimeType + '\r\n\r\n');
+
+        const header = Buffer.from(parts.join(''));
+        const footer = Buffer.from('\r\n--' + boundary + '--\r\n');
+        const body = Buffer.concat([header, fileBuffer, footer]);
+
+        const response = await fetch('https://api.openai.com/v1/audio/transcriptions', {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + OPENAI_API_KEY,
+                'Content-Type': 'multipart/form-data; boundary=' + boundary
+            },
+            body: body
+        });
+
+        if (!response.ok) {
+            const errText = await response.text();
+            console.log('❌ Whisper error:', response.status, errText);
+            return res.status(500).json({ error: 'Transcription failed' });
+        }
+
+        const data = await response.json();
+        console.log('🎤 Whisper transcribed:', data.text);
+        res.json({ text: data.text });
+    } catch (err) {
+        console.log('❌ Whisper error:', err.message);
+        res.status(500).json({ error: 'Error transcribing audio' });
+    }
+});
+
+// ============ BORI VOICE: TEXT-TO-SPEECH (TTS) ============
+app.post('/api/voice/speak', async function(req, res) {
+    if (!OPENAI_API_KEY) {
+        return res.status(500).json({ error: 'Voice not configured — set OPENAI_API_KEY' });
+    }
+    const text = req.body.text;
+    if (!text || text.trim().length < 2) {
+        return res.status(400).json({ error: 'No text provided' });
+    }
+    try {
+        // Clean emoji/special chars that TTS can mispronounce
+        const cleanText = text
+            .replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, '')
+            .replace(/[\u2600-\u27BF]/g, '')
+            .replace(/\[.*?\]/g, '')
+            .trim();
+
+        if (cleanText.length < 2) {
+            return res.status(400).json({ error: 'Text too short after cleaning' });
+        }
+
+        const response = await fetch('https://api.openai.com/v1/audio/speech', {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + OPENAI_API_KEY,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                model: 'tts-1',
+                input: cleanText,
+                voice: 'shimmer',
+                response_format: 'mp3',
+                speed: 0.95
+            })
+        });
+
+        if (!response.ok) {
+            const errText = await response.text();
+            console.log('❌ TTS error:', response.status, errText);
+            return res.status(500).json({ error: 'TTS failed' });
+        }
+
+        const arrayBuffer = await response.arrayBuffer();
+        const buffer = Buffer.from(arrayBuffer);
+        res.set({
+            'Content-Type': 'audio/mpeg',
+            'Content-Length': buffer.length,
+            'Cache-Control': 'no-cache'
+        });
+        res.send(buffer);
+        console.log('🔊 TTS generated:', cleanText.substring(0, 50) + '...');
+    } catch (err) {
+        console.log('❌ TTS error:', err.message);
+        res.status(500).json({ error: 'Error generating speech' });
+    }
+});
+
+// ============ VOICE HEALTH CHECK ============
+app.get('/api/voice/status', function(req, res) {
+    res.json({
+        available: !!OPENAI_API_KEY,
+        tts: !!OPENAI_API_KEY,
+        stt: !!OPENAI_API_KEY,
+        voice: 'shimmer',
+        model_tts: 'tts-1',
+        model_stt: 'whisper-1'
+    });
 });
 
 // ============ HEY BORI: SUBSCRIPTION ============
@@ -993,7 +1139,6 @@ app.get('/health', function(req, res) { res.json({ status: 'healthy', timestamp:
 
 app.get('/api/platform/version', function(req, res) { res.json({ version: PLATFORM_VERSION, versionName: PLATFORM_VERSION_NAME, ritnomes: 6, divisions: 150, levels: 10, speeds: ['SLOW', 'MED', 'FAST'] }); });
 
-// ============ START SERVER ============
 // ============ HEY BORI: FACILITY SYSTEM ============
 
 function generateFacilityCode(name) {
@@ -1013,13 +1158,11 @@ app.post('/api/facility/signup', function(req, res) {
         if (!name) return res.json({ error: 'Nombre requerido' });
         if (phone.length < 7) return res.json({ error: 'Número de teléfono requerido' });
         
-        // Check if phone already registered
         if (facilities[phone]) {
             return res.json({ error: 'Este número ya está registrado', existing: true, facilityCode: facilities[phone].code });
         }
         
         var code = generateFacilityCode(name);
-        // Make sure code is unique
         var allCodes = Object.values(facilities).map(function(f) { return f.code; });
         while (allCodes.indexOf(code) >= 0) {
             code = generateFacilityCode(name);
@@ -1042,7 +1185,6 @@ app.post('/api/facility/signup', function(req, res) {
     }
 });
 
-// Facility login — phone only
 app.post('/api/facility/login', function(req, res) {
     try {
         var facilities = JSON.parse(fs.readFileSync(FACILITY_FILE, 'utf8'));
@@ -1059,7 +1201,6 @@ app.post('/api/facility/login', function(req, res) {
     }
 });
 
-// Resident links to facility via code
 app.post('/api/facility/link', function(req, res) {
     try {
         var facilities = JSON.parse(fs.readFileSync(FACILITY_FILE, 'utf8'));
@@ -1069,7 +1210,6 @@ app.post('/api/facility/link', function(req, res) {
         
         if (!code || !residentId) return res.json({ error: 'Código y número requeridos' });
         
-        // Find facility by code
         var facilityPhone = null;
         var keys = Object.keys(facilities);
         for (var i = 0; i < keys.length; i++) {
@@ -1083,7 +1223,6 @@ app.post('/api/facility/link', function(req, res) {
         
         var facility = facilities[facilityPhone];
         
-        // Check if resident already linked
         var exists = facility.residents.find(function(r) { return r.id === residentId; });
         if (!exists) {
             facility.residents.push({
@@ -1101,7 +1240,6 @@ app.post('/api/facility/link', function(req, res) {
     }
 });
 
-// Facility dashboard — aggregate data
 app.post('/api/facility/dashboard', function(req, res) {
     try {
         var facilities = JSON.parse(fs.readFileSync(FACILITY_FILE, 'utf8'));
@@ -1113,7 +1251,6 @@ app.post('/api/facility/dashboard', function(req, res) {
         var activities = readJSON(ACTIVITY_FILE);
         var residentIds = facility.residents.map(function(r) { return r.id; });
         
-        // Filter activities for this facility's residents
         var facActivities = activities.filter(function(a) {
             return residentIds.indexOf(a.userId) >= 0;
         });
@@ -1121,16 +1258,13 @@ app.post('/api/facility/dashboard', function(req, res) {
         var now = new Date();
         var todayStr = now.toISOString().split('T')[0];
         
-        // Today stats
         var todayActs = facActivities.filter(function(a) { return a.timestamp && a.timestamp.startsWith(todayStr); });
         var todayActiveIds = new Set(todayActs.map(function(a) { return a.userId; }));
         var todayGames = todayActs.filter(function(a) { return a.event === 'game'; }).length;
         var todayChats = todayActs.filter(function(a) { return a.event === 'chat'; }).length;
         
-        // Mood summary from today
         var moods = todayActs.filter(function(a) { return a.event === 'mood'; }).map(function(a) { return a.detail; });
         
-        // Weekly data
         var week = [];
         for (var d = 6; d >= 0; d--) {
             var date = new Date(now);
@@ -1146,7 +1280,6 @@ app.post('/api/facility/dashboard', function(req, res) {
             });
         }
         
-        // Game popularity
         var gameCount = {};
         facActivities.filter(function(a) { return a.event === 'game'; }).forEach(function(a) {
             var game = (a.detail && a.detail.game) || 'Unknown';
@@ -1154,7 +1287,6 @@ app.post('/api/facility/dashboard', function(req, res) {
         });
         var popularGames = Object.keys(gameCount).map(function(g) { return { game: g, count: gameCount[g] }; }).sort(function(a, b) { return b.count - a.count; });
         
-        // Total stats
         var allActiveIds = new Set(facActivities.map(function(a) { return a.userId; }));
         
         res.json({
@@ -1184,6 +1316,7 @@ app.post('/api/facility/dashboard', function(req, res) {
     }
 });
 
+// ============ START SERVER ============
 app.listen(PORT, function() {
     console.log('');
     console.log('🇵🇷 ========================================');
@@ -1194,6 +1327,7 @@ app.listen(PORT, function() {
     console.log('📍 Port:', PORT);
     console.log('💳 Stripe:', stripe ? '✅ Configured' : '❌ Not configured');
     console.log('🤖 Bori AI:', ANTHROPIC_API_KEY ? '✅ Configured' : '❌ Not configured');
+    console.log('🔊 Bori Voice:', OPENAI_API_KEY ? '✅ Configured (Shimmer)' : '❌ Not configured');
     console.log('🔐 Admin Key:', ADMIN_SECRET_KEY ? '✅ Set' : '⚠️ Using default');
     console.log('');
     console.log('🏠 HEY BORI:');
@@ -1208,6 +1342,11 @@ app.listen(PORT, function() {
     console.log('   /the-react        → THE REACT (Reacción)');
     console.log('   /the-ritmo        → THE RITMO (Ritmo)');
     console.log('');
-    console.log('🇵🇷 Hey Bori — Tu Compañera Boricua');
+    console.log('🔊 VOICE API:');
+    console.log('   POST /api/voice/transcribe  → Whisper STT');
+    console.log('   POST /api/voice/speak        → Shimmer TTS');
+    console.log('   GET  /api/voice/status        → Voice health');
+    console.log('');
+    console.log('🇵🇷 Hey Bori — Tu Compañera Bilingüe + Voice');
     console.log('');
 });
