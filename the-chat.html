@@ -79,10 +79,6 @@
     .upgrade-btn:active{transform:scale(.95)}
     .upgrade-or{font-size:12px;color:var(--muted);margin-top:10px}
     .upgrade-login{color:var(--purple-light);text-decoration:underline;cursor:pointer;font-weight:600}
-    .upgrade-reset{display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 18px;border-radius:14px;background:rgba(139,92,246,.06);border:1px solid rgba(139,92,246,.15);font-size:13px;color:var(--text);margin-top:14px}
-    .upgrade-reset-time{color:var(--purple-light);font-family:var(--display);font-size:20px;letter-spacing:2px}
-    .upgrade-home{display:flex;align-items:center;justify-content:center;gap:6px;margin:14px auto 0;padding:14px 28px;border:1.5px solid rgba(255,255,255,.15);border-radius:60px;background:rgba(255,255,255,.05);color:var(--text);font-family:var(--sans);font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;text-decoration:none;-webkit-tap-highlight-color:transparent;width:100%;max-width:260px}
-    .upgrade-home:active{transform:scale(.95);background:rgba(255,255,255,.1)}
 
     .login-modal{display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px}
     .login-modal.show{display:flex}
@@ -175,8 +171,6 @@
         <div class="upgrade-desc">Ya usaste tus 5 mensajes gratis de hoy. Con Bori Plus, habla ilimitado todos los días. 🇵🇷</div>
         <a class="upgrade-btn" href="/#planes">💜 BORI PLUS — $9.99/mes</a>
         <div class="upgrade-or">¿Ya tienes PIN? <span class="upgrade-login" onclick="showLogin()">Entra aquí</span></div>
-        <div class="upgrade-reset">🕐 Se renuevan en <span class="upgrade-reset-time" id="resetTimer">--:--:--</span></div>
-        <a class="upgrade-home" href="/">← Volver a Inicio</a>
       </div>
     </div>
   </div>
@@ -223,48 +217,35 @@
     var CHATGPT_BORI_URL='https://chatgpt.com/g/g-69937e6b89148191afdc4d1d0a0acd39-hey-bori-tu-companera-bilingue';
     var input=document.getElementById('input'),sendBtn=document.getElementById('sendBtn'),msgs=document.getElementById('msgs'),welcome=document.getElementById('welcome'),counterEl=document.getElementById('counter'),upgradeEl=document.getElementById('upgrade');
     var voiceFab=document.getElementById('voiceFab'),voiceLabel=document.getElementById('voiceLabel'),voiceUpsell=document.getElementById('voiceUpsell');
-    var history=[],sending=false,FREE_DAILY_LIMIT=5,userPin=null,isPaid=false,resetInterval=null;
+    var history=[],sending=false,FREE_DAILY_LIMIT=5,userPin=null,isPaid=false;
 
     function getTodayKey(){return'bori_msgs_'+new Date().toISOString().split('T')[0]}
     function getTodayCount(){try{var v=localStorage.getItem(getTodayKey());return v?parseInt(v):0}catch(e){return 0}}
     function incrementCount(){try{var k=getTodayKey(),c=getTodayCount()+1;localStorage.setItem(k,String(c));Object.keys(localStorage).forEach(function(x){if(x.startsWith('bori_msgs_')&&x!==k)localStorage.removeItem(x)});return c}catch(e){return 999}}
     function getRemaining(){return isPaid?999:Math.max(0,FREE_DAILY_LIMIT-getTodayCount())}
 
-    /* ═══ COUNTDOWN TO MIDNIGHT ═══ */
-    function getTimeToMidnight(){
-      var now=new Date();
-      var midnight=new Date(now);
-      midnight.setHours(24,0,0,0);
-      var diff=midnight-now;
-      var h=Math.floor(diff/3600000);
-      var m=Math.floor((diff%3600000)/60000);
-      var s=Math.floor((diff%60000)/1000);
-      return String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
-    }
-    function startResetTimer(){
-      var timerEl=document.getElementById('resetTimer');
-      if(!timerEl)return;
-      timerEl.textContent=getTimeToMidnight();
-      resetInterval=setInterval(function(){
-        timerEl.textContent=getTimeToMidnight();
-        if(getRemaining()>0){clearInterval(resetInterval);location.reload();}
-      },1000);
-    }
-
     function updateCounter(){
       if(isPaid){counterEl.className='h-counter paid';counterEl.textContent='∞ PLUS';}
       else{var r=getRemaining();counterEl.className='h-counter free';counterEl.textContent=r+'/'+FREE_DAILY_LIMIT;if(r<=1)counterEl.style.borderColor='rgba(239,68,68,.3)';}
     }
     function canSend(){return isPaid||getRemaining()>0}
+
+    /* ═══ LIMIT REACHED — REPLACE ENTIRE MSGS AREA ═══ */
     function checkLimitReached(){
       if(!canSend()){
-        var w=document.getElementById('welcome');
-        if(w)w.style.display='none';
-        upgradeEl.classList.add('show');
+        msgs.innerHTML='<div style="text-align:center;padding:30px 20px;animation:fadeIn .4s ease">'
+          +'<div style="font-size:40px;margin-bottom:12px">💜</div>'
+          +'<div style="font-family:var(--serif);font-size:20px;margin-bottom:6px">¡Bori quiere seguir hablando!</div>'
+          +'<div style="font-size:13px;color:rgba(237,235,232,.5);line-height:1.6;margin-bottom:8px">Ya usaste tus 5 mensajes gratis de hoy.</div>'
+          +'<div style="font-size:13px;color:rgba(237,235,232,.5);line-height:1.6;margin-bottom:20px">Con Bori Plus, habla ilimitado todos los días. 🇵🇷</div>'
+          +'<div style="display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 18px;border-radius:14px;background:rgba(139,92,246,.06);border:1px solid rgba(139,92,246,.15);font-size:13px;color:#EDEBE8;margin:0 auto 20px;max-width:280px">🕐 Se renuevan a la medianoche</div>'
+          +'<a href="/#planes" style="display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border:none;border-radius:60px;background:linear-gradient(135deg,#7C3AED,#9333EA);color:white;font-family:var(--display);font-size:16px;letter-spacing:2px;text-decoration:none">💜 BORI PLUS — $9.99/mes</a>'
+          +'<div style="font-size:12px;color:rgba(237,235,232,.5);margin-top:10px">¿Ya tienes PIN? <span style="color:#A78BFA;text-decoration:underline;cursor:pointer;font-weight:600" onclick="showLogin()">Entra aquí</span></div>'
+          +'<a href="/" style="display:flex;align-items:center;justify-content:center;gap:6px;margin:18px auto 0;padding:14px 28px;border:1.5px solid rgba(255,255,255,.2);border-radius:60px;background:rgba(255,255,255,.08);color:#EDEBE8;font-size:14px;font-weight:600;text-decoration:none;max-width:260px">← Volver a Inicio</a>'
+          +'</div>';
         input.disabled=true;
         input.placeholder='Mensajes agotados por hoy...';
         sendBtn.disabled=true;
-        try{startResetTimer();}catch(e){}
         return true;
       }
       return false;
@@ -307,7 +288,7 @@
       var pin=pinInput.value.trim();if(pin.length<4)return;
       loginBtn.disabled=true;loginBtn.textContent='...';document.getElementById('loginError').textContent='';
       fetch('/api/stripe/status-pin/'+pin).then(function(r){return r.json()}).then(function(d){
-        if(d.subscribed){userPin=pin;isPaid=true;try{localStorage.setItem('bori_pin',pin)}catch(e){}hideLogin();updateCounter();updateVoiceUI();input.disabled=false;input.placeholder='Escríbele a Bori...';upgradeEl.classList.remove('show');if(resetInterval)clearInterval(resetInterval)}
+        if(d.subscribed){userPin=pin;isPaid=true;try{localStorage.setItem('bori_pin',pin)}catch(e){}hideLogin();updateCounter();updateVoiceUI();input.disabled=false;input.placeholder='Escríbele a Bori...';upgradeEl.classList.remove('show')}
         else{document.getElementById('loginError').textContent=d.status==='canceled'?'Suscripción cancelada':'PIN no válido o inactivo'}
         loginBtn.disabled=false;loginBtn.textContent='ENTRAR';
       }).catch(function(){document.getElementById('loginError').textContent='Error de conexión';loginBtn.disabled=false;loginBtn.textContent='ENTRAR'});
@@ -318,14 +299,14 @@
     function sendStarter(el){if(!canSend()){checkLimitReached();return}input.value=el.textContent;sendBtn.disabled=false;send()}
 
     function addMsg(role,text){
-      if(welcome&&welcome.parentNode)welcome.remove();
+      if(welcome)welcome.remove();
       var w=document.createElement('div');w.className='msg msg-'+role;
       var a=document.createElement('div');a.className='msg-av msg-av-'+role;a.textContent=role==='bori'?'🇵🇷':'👤';
       var b=document.createElement('div');b.className='bubble b-'+role;b.textContent=text;
       w.appendChild(a);w.appendChild(b);msgs.appendChild(w);scroll();return b;
     }
     function addTyping(){
-      if(welcome&&welcome.parentNode)welcome.remove();
+      if(welcome)welcome.remove();
       var w=document.createElement('div');w.className='msg msg-bori';w.id='typing';
       var a=document.createElement('div');a.className='msg-av msg-av-bori';a.textContent='🇵🇷';
       var b=document.createElement('div');b.className='bubble b-bori typing';b.innerHTML='<span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>';
