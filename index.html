@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Hey Bori — Tu Compañera Bilingüe. Habla con Bori en español boricua o English. Voz, texto, juegos cognitivos. Nunca más solo o sola. 🇵🇷">
+  <meta name="description" content="Hey Bori — Tu Compañera Bilingüe. Chat, Voz Premium, juegos cognitivos exclusivos: Conga, LeLoLai Letras, Capicu Math, Ritnome™. Made in Puerto Rico. Pa'lante! 🇵🇷">
   <title>Hey Bori — Tu Compañera Bilingüe 🇵🇷</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Sans:wght@400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
@@ -23,7 +23,6 @@
     body{font-family:var(--sans);background:var(--night);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh}
     a{color:inherit}button{cursor:pointer;font-family:var(--sans)}
 
-    /* ambient */
     .bg{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
     .bg::before{content:'';position:absolute;top:-20%;left:50%;transform:translateX(-50%);width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(139,92,246,.1) 0%,transparent 60%);animation:drift 22s ease-in-out infinite}
     .bg::after{content:'';position:absolute;bottom:-15%;right:-10%;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(212,168,67,.05) 0%,transparent 55%);animation:drift 28s ease-in-out infinite reverse}
@@ -31,14 +30,13 @@
 
     .wrap{max-width:480px;margin:0 auto;padding:0 20px;position:relative;z-index:1}
 
-    /* reveal */
     .r{opacity:0;transform:translateY(18px);animation:up .65s cubic-bezier(.22,1,.36,1) forwards}
     .d1{animation-delay:.1s}.d2{animation-delay:.2s}.d3{animation-delay:.3s}
     .d4{animation-delay:.4s}.d5{animation-delay:.5s}.d6{animation-delay:.6s}
-    .d7{animation-delay:.7s}.d8{animation-delay:.8s}
+    .d7{animation-delay:.7s}.d8{animation-delay:.8s}.d9{animation-delay:.9s}
+    .d10{animation-delay:1s}.d11{animation-delay:1.1s}
     @keyframes up{to{opacity:1;transform:translateY(0)}}
 
-    /* ═══ HERO ═══ */
     .hero{text-align:center;padding:56px 0 0}
     .hero-img{position:relative;display:inline-block;margin-bottom:20px}
     .hero-img img{width:180px;height:180px;object-fit:contain;filter:drop-shadow(0 8px 36px rgba(139,92,246,.35));animation:float 5s ease-in-out infinite}
@@ -46,23 +44,22 @@
     .hero-img::before{content:'';position:absolute;inset:-14px;border-radius:50%;border:1.5px solid rgba(212,168,67,.12);animation:ring 4s ease infinite}
     .hero-img::after{content:'';position:absolute;inset:-30px;border-radius:50%;border:1px solid rgba(139,92,246,.06);animation:ring 4s ease infinite 2s}
     @keyframes ring{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.05);opacity:0}}
-
     .hero h1{font-family:var(--serif);font-size:46px;font-weight:400;line-height:1;letter-spacing:-1px;margin-bottom:6px}
     .hero h1 em{font-style:italic;background:linear-gradient(135deg,var(--gold),var(--gold-bright));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
     .hero-sub{font-size:14px;color:var(--muted);font-weight:500;letter-spacing:.5px}
     .hero-line{width:44px;height:1.5px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:22px auto;border:none}
     .hero-pitch{font-family:var(--serif);font-style:italic;font-size:18px;color:rgba(237,235,232,.65);line-height:1.6;max-width:340px;margin:0 auto 28px}
 
-    /* features strip */
-    .feats{display:flex;justify-content:center;gap:28px;margin-bottom:32px}
-    .feat{display:flex;flex-direction:column;align-items:center;gap:7px}
+    .feats{display:flex;justify-content:center;gap:20px;margin-bottom:32px}
+    .feat{display:flex;flex-direction:column;align-items:center;gap:7px;position:relative}
     .feat-ic{width:50px;height:50px;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:23px}
     .feat:nth-child(1) .feat-ic{background:rgba(139,92,246,.12);border:1px solid rgba(139,92,246,.18)}
     .feat:nth-child(2) .feat-ic{background:rgba(212,168,67,.1);border:1px solid rgba(212,168,67,.18)}
     .feat:nth-child(3) .feat-ic{background:rgba(45,212,168,.08);border:1px solid rgba(45,212,168,.14)}
+    .feat:nth-child(4) .feat-ic{background:rgba(240,199,94,.1);border:1px solid rgba(240,199,94,.2)}
     .feat-lb{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:2px;text-transform:uppercase}
+    .feat-badge{position:absolute;top:-8px;right:-12px;background:linear-gradient(135deg,var(--gold),var(--gold-bright));color:var(--night);font-family:var(--display);font-size:7px;letter-spacing:1.5px;padding:2px 6px;border-radius:20px;white-space:nowrap}
 
-    /* CTA */
     .cta{display:flex;flex-direction:column;gap:12px;max-width:320px;margin:0 auto 14px}
     .cta a{display:flex;align-items:center;justify-content:center;gap:10px;padding:18px 24px;border:none;border-radius:60px;font-family:var(--display);font-size:1.3rem;letter-spacing:3px;text-decoration:none;text-align:center;transition:all .25s;position:relative;overflow:hidden;min-height:56px;-webkit-tap-highlight-color:transparent}
     .cta-v{background:linear-gradient(135deg,#7C3AED,#9333EA,#6D28D9);color:white;box-shadow:0 8px 28px rgba(124,58,237,.4),inset 0 1px 0 rgba(255,255,255,.1)}
@@ -73,13 +70,22 @@
     .cta-t:active{transform:scale(.97);background:rgba(255,255,255,.08);color:white}
     .cta-hint{text-align:center;font-size:12px;color:var(--muted);margin-bottom:52px;letter-spacing:.3px}
 
-    /* divider */
+    .voice-banner{background:linear-gradient(135deg,rgba(212,168,67,.08),rgba(240,199,94,.04));border:1.5px solid rgba(212,168,67,.18);border-radius:var(--radius);padding:24px 22px;margin-bottom:48px;text-align:center;position:relative;overflow:hidden}
+    .voice-banner::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at top,rgba(212,168,67,.06),transparent 70%);pointer-events:none}
+    .vb-icon{font-size:38px;display:block;margin-bottom:10px;animation:float 5s ease-in-out infinite}
+    .vb-title{font-family:var(--serif);font-size:22px;font-weight:400;margin-bottom:4px}
+    .vb-title em{font-style:italic;background:linear-gradient(135deg,var(--gold),var(--gold-bright));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .vb-desc{font-size:13.5px;color:var(--muted);line-height:1.6;max-width:320px;margin:0 auto 16px;font-weight:500}
+    .vb-tag{display:inline-block;background:linear-gradient(135deg,var(--gold),#8A6C2C);color:white;font-family:var(--display);font-size:11px;letter-spacing:2.5px;padding:6px 18px;border-radius:30px}
+
     .div{display:flex;align-items:center;gap:14px;margin:0 0 32px}
     .div-l{flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(212,168,67,.18),transparent)}
     .div-t{font-family:var(--display);font-size:13px;color:var(--gold);letter-spacing:4px}
 
-    /* ═══ GAMES ═══ */
-    .games{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:48px}
+    .games-intro{text-align:center;margin-bottom:22px}
+    .games-intro h2{font-family:var(--serif);font-size:22px;font-weight:400;margin-bottom:4px}
+    .games-intro p{font-size:13px;color:var(--muted);font-style:italic}
+    .games{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
     .gc{background:var(--surface);border:1.5px solid rgba(255,255,255,.05);border-radius:18px;padding:22px 14px;text-align:center;text-decoration:none;transition:all .2s;-webkit-tap-highlight-color:transparent;position:relative;overflow:hidden}
     .gc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--gc,rgba(139,92,246,.3));opacity:0;transition:opacity .2s}
     .gc:active{transform:scale(.96);border-color:rgba(255,255,255,.1)}
@@ -91,16 +97,25 @@
     .g-sopa{--gc:linear-gradient(90deg,#2DD4A8,#2E7D52)}
     .g-dom{--gc:linear-gradient(90deg,#D4A843,#8A6C2C)}
     .g-rit{--gc:linear-gradient(90deg,#8B5CF6,#EC4899)}
+    .games-note{text-align:center;font-size:12px;color:var(--muted);margin-bottom:48px;font-style:italic;letter-spacing:.3px}
 
-    /* ═══ TRUST ═══ */
     .trust{background:var(--surface);border:1.5px solid rgba(255,255,255,.05);border-radius:var(--radius);padding:22px;margin-bottom:48px;display:flex;gap:14px;align-items:flex-start}
     .trust-i{font-size:22px;flex-shrink:0;margin-top:2px}
     .trust-t{font-size:13.5px;color:var(--muted);line-height:1.7;font-weight:500}
 
-    /* ═══ PRICING ═══ */
     .pr-h{text-align:center;margin-bottom:22px}
     .pr-h h2{font-family:var(--serif);font-size:24px;font-weight:400;margin-bottom:4px}
     .pr-h p{font-size:13px;color:var(--muted);font-style:italic}
+    .pc-free{background:var(--surface);border:1.5px solid rgba(255,255,255,.05);border-radius:var(--radius);padding:22px;margin-bottom:14px}
+    .pc-free .pc-tier{color:var(--teal)}
+    .pc-free .pc-price{font-size:32px}
+    .pc-free ul{list-style:none;margin:0 0 14px;padding:0}
+    .pc-free li{padding:5px 0;font-size:13px;font-weight:500;color:rgba(237,235,232,.55);display:flex;align-items:center;gap:9px;border-bottom:1px solid rgba(255,255,255,.03)}
+    .pc-free li:last-child{border-bottom:none}
+    .pc-btn-free{width:100%;padding:14px;border:1.5px solid rgba(255,255,255,.08);border-radius:14px;background:transparent;color:rgba(255,255,255,.5);font-family:var(--display);font-size:15px;letter-spacing:2px;min-height:48px;transition:all .2s;cursor:pointer;text-decoration:none;display:flex;align-items:center;justify-content:center}
+    .pc-btn-free:active{transform:scale(.97);background:rgba(255,255,255,.04);color:white}
+    .pc-lock{color:rgba(237,235,232,.25);font-size:13px;flex-shrink:0}
+
     .pc{background:var(--surface);border:1.5px solid rgba(255,255,255,.05);border-radius:var(--radius);padding:26px 22px;margin-bottom:14px;position:relative;overflow:hidden}
     .pc.ft{border-color:rgba(139,92,246,.25);box-shadow:0 4px 28px rgba(139,92,246,.1)}
     .pc.ft::after{content:'POPULAR';position:absolute;top:14px;right:-30px;background:linear-gradient(135deg,#7C3AED,#9333EA);color:white;font-family:var(--display);font-size:10px;letter-spacing:2px;padding:4px 36px;transform:rotate(45deg)}
@@ -113,14 +128,20 @@
     .pc li{padding:6px 0;font-size:13px;font-weight:500;color:rgba(237,235,232,.7);display:flex;align-items:center;gap:9px;border-bottom:1px solid rgba(255,255,255,.03)}
     .pc li:last-child{border-bottom:none}
     .pc-ck{color:var(--teal);font-size:13px;flex-shrink:0}
+    .pc-new{background:linear-gradient(135deg,var(--gold),var(--gold-bright));color:var(--night);font-family:var(--display);font-size:8px;letter-spacing:1.5px;padding:2px 6px;border-radius:10px;margin-left:4px}
     .pc-btn{width:100%;padding:15px;border:none;border-radius:14px;font-family:var(--display);font-size:16px;letter-spacing:2px;min-height:50px;transition:all .2s}
     .pc-pro{background:linear-gradient(135deg,#7C3AED,#9333EA);color:white;box-shadow:0 4px 18px rgba(139,92,246,.25)}
     .pc-pro:active{transform:scale(.97)}
     .pc-fam{background:linear-gradient(135deg,var(--gold),#8A6C2C);color:white;box-shadow:0 4px 18px rgba(212,168,67,.2)}
     .pc-fam:active{transform:scale(.97)}
-    .pr-note{text-align:center;font-size:12px;color:var(--muted);line-height:1.6;margin-top:6px;margin-bottom:48px}
+    .pr-note{text-align:center;font-size:12px;color:var(--muted);line-height:1.6;margin-top:6px;margin-bottom:48px;letter-spacing:.3px}
 
-    /* ═══ FOOTER ═══ */
+    .made-pr{text-align:center;margin-bottom:48px}
+    .made-pr-flag{font-size:40px;display:block;margin-bottom:10px}
+    .made-pr-title{font-family:var(--display);font-size:24px;letter-spacing:6px;background:linear-gradient(135deg,var(--gold),var(--gold-bright),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:2px}
+    .made-pr-palante{font-family:var(--serif);font-style:italic;font-size:20px;background:linear-gradient(135deg,var(--purple),#A855F7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+    .made-pr-sub{font-size:12px;color:var(--muted);font-style:italic;letter-spacing:.3px;line-height:1.6;max-width:300px;margin:0 auto}
+
     .foot{text-align:center;padding:36px 0 64px;border-top:1px solid rgba(255,255,255,.04)}
     .foot-b{font-family:var(--display);font-size:16px;letter-spacing:5px;color:var(--muted);margin-bottom:4px}
     .foot-s{font-size:11px;color:rgba(237,235,232,.2);font-style:italic}
@@ -129,7 +150,6 @@
     .foot-links a{font-size:12px;color:var(--muted);text-decoration:none;font-weight:500}
     .foot-links a:active{color:var(--gold)}
 
-    /* ═══ FLOATING FAB ═══ */
     .fab{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;align-items:center;gap:10px;background:linear-gradient(135deg,#7C3AED,#9333EA,#A855F7);border:2px solid rgba(255,215,0,.3);border-radius:60px;padding:12px 22px 12px 16px;text-decoration:none;box-shadow:0 4px 24px rgba(124,58,237,.45),0 0 50px rgba(124,58,237,.12);transition:all .25s;-webkit-tap-highlight-color:transparent;animation:fabIn .7s cubic-bezier(.34,1.56,.64,1) both;animation-delay:1.2s}
     @keyframes fabIn{from{transform:scale(0) translateY(28px);opacity:0}to{transform:scale(1) translateY(0);opacity:1}}
     .fab:active{transform:scale(1.04);border-color:var(--gold-bright)}
@@ -145,6 +165,9 @@
       .fab-av{width:30px;height:30px;font-size:15px}
       .fab-tx{font-size:12px}
       .games{gap:10px}
+      .feats{gap:14px}
+      .feat-ic{width:44px;height:44px;font-size:20px}
+      .vb-title{font-size:20px}
     }
   </style>
 </head>
@@ -154,7 +177,7 @@
 
   <div class="wrap">
 
-    <!-- ═══ HERO: BORI IS THE STAR ═══ -->
+    <!-- HERO -->
     <section class="hero">
       <div class="hero-img r d1">
         <img src="/icon.png" alt="Bori — Tu Compañera Bilingüe">
@@ -166,23 +189,37 @@
       <p class="hero-pitch r d4">Pa' que nunca estés solo o sola. Habla con Bori — en español boricua o en English. Te escucha, te acompaña, te hace sonreír. 💛</p>
 
       <div class="feats r d5">
-        <div class="feat"><div class="feat-ic">🎙️</div><span class="feat-lb">Voz</span></div>
         <div class="feat"><div class="feat-ic">💬</div><span class="feat-lb">Chat</span></div>
-        <div class="feat"><div class="feat-ic">🧠</div><span class="feat-lb">Memoria</span></div>
+        <div class="feat"><div class="feat-ic">🎙️<span class="feat-badge">PLUS</span></div><span class="feat-lb">Voz</span></div>
+        <div class="feat"><div class="feat-ic">🧠</div><span class="feat-lb">Juegos</span></div>
+        <div class="feat"><div class="feat-ic">👨‍👩‍👧</div><span class="feat-lb">Familia</span></div>
       </div>
 
       <div class="cta r d6">
-        <a class="cta-v" href="/the-chat.html">🎙️ HABLA CON BORI</a>
-        <a class="cta-t" href="/the-chat.html">💬 ESCRÍBELE A BORI</a>
+        <a class="cta-v" href="/the-chat.html">💬 HABLA CON BORI</a>
+        <a class="cta-t" href="#planes">VER PLANES</a>
       </div>
-      <p class="cta-hint r d7">Voz · Texto · Español · English · Gratis</p>
+      <p class="cta-hint r d7">Chat gratis · Voz Premium · Juegos exclusivos · Español · English</p>
     </section>
 
-    <!-- ═══ GAMES ═══ -->
+    <!-- VOZ PREMIUM -->
+    <div class="voice-banner r d8">
+      <span class="vb-icon">🎙️</span>
+      <div class="vb-title"><em>Habla con Bori</em> — Voz Premium</div>
+      <p class="vb-desc">Bori te escucha y te habla. Conversación real por voz — en español boricua con todo el sabor. Solo para miembros Plus y Familia.</p>
+      <span class="vb-tag">EXCLUSIVO BORI PLUS</span>
+    </div>
+
+    <!-- GAMES -->
     <div class="div r d7">
       <div class="div-l"></div>
-      <span class="div-t">JUEGOS COGNITIVOS</span>
+      <span class="div-t">JUEGOS COGNITIVOS EXCLUSIVOS</span>
       <div class="div-l"></div>
+    </div>
+
+    <div class="games-intro r d8">
+      <h2>Entrena tu mente con sabor boricua.</h2>
+      <p>No hay nada como esto. Solo en Hey Bori. 🇵🇷</p>
     </div>
 
     <div class="games r d8">
@@ -193,12 +230,12 @@
       </a>
       <a href="/the-sopa.html" class="gc g-sopa">
         <span class="gc-i">🔤</span>
-        <div class="gc-n">SOPA</div>
+        <div class="gc-n">LELOLAI LETRAS</div>
         <div class="gc-d">Palabras boricuas escondidas.</div>
       </a>
       <a href="/the-domino.html" class="gc g-dom">
         <span class="gc-i">🁃</span>
-        <div class="gc-n">DOMINÓ</div>
+        <div class="gc-n">CAPICU MATH</div>
         <div class="gc-d">Resuelve con fichas de dominó.</div>
       </a>
       <a href="/the-ritnome.html" class="gc g-rit">
@@ -208,47 +245,70 @@
       </a>
     </div>
 
-    <!-- ═══ TRUST ═══ -->
-    <div class="trust">
+    <p class="games-note r d9">Conga · LeLoLai Letras · Capicu Math · Ritnome™ — Solo en Hey Bori</p>
+
+    <!-- TRUST -->
+    <div class="trust r d9">
       <div class="trust-i">💜</div>
       <p class="trust-t">Bori no es doctor ni enfermera — es tu compañera bilingüe. Te acompaña en español boricua o en English, te organiza, y mantiene a tu familia tranquila. Siempre aquí, siempre contigo.</p>
     </div>
 
-    <!-- ═══ PRICING ═══ -->
-    <div class="div">
+    <!-- PRICING -->
+    <div class="div r d10" id="planes">
       <div class="div-l"></div>
       <span class="div-t">PLANES</span>
       <div class="div-l"></div>
     </div>
 
-    <div class="pr-h">
+    <div class="pr-h r d10">
       <h2>Hey Bori cuida a tu familia.</h2>
       <p>Menos de lo que cuesta un café al día.</p>
     </div>
 
-    <div class="pc ft">
+    <!-- BORI LIBRE -->
+    <div class="pc-free r d10">
+      <div class="pc-tier">GRATIS</div>
+      <div class="pc-name">Bori Libre</div>
+      <div class="pc-price">$0</div>
+      <div class="pc-desc">Conoce a Bori. Empieza hoy, gratis. 🤍</div>
+      <ul>
+        <li><span class="pc-ck">✓</span>💬 5 mensajes de texto al día</li>
+        <li><span class="pc-ck">✓</span>🥁 Conga — 3 tambores</li>
+        <li><span class="pc-ck">✓</span>🔤 LeLoLai Letras — categoría básica</li>
+        <li><span class="pc-ck">✓</span>🁃 Capicu Math — nivel 1</li>
+        <li><span class="pc-lock">🔒</span>🎙️ Voz Premium — solo Plus</li>
+        <li><span class="pc-lock">🔒</span>👨‍👩‍👧 Dashboard familiar — solo Familia</li>
+      </ul>
+      <a href="/the-chat.html" class="pc-btn-free">EMPEZAR GRATIS</a>
+    </div>
+
+    <!-- BORI PLUS -->
+    <div class="pc ft r d11">
       <div class="pc-tier">RECOMENDADO</div>
       <div class="pc-name">Bori Plus</div>
       <div class="pc-price">$9<span>.99/mes</span></div>
       <div class="pc-desc">Tu familia tiene a Bori. Tú tienes tranquilidad. 💜</div>
       <ul>
         <li><span class="pc-ck">✓</span>💬 Bori 24/7 — Siempre Contigo</li>
+        <li><span class="pc-ck">✓</span>🎙️ Voz Premium — Habla con Bori <span class="pc-new">NEW</span></li>
         <li><span class="pc-ck">✓</span>🥁 Conga completa — 5 tambores, 6 ritmos</li>
-        <li><span class="pc-ck">✓</span>🔤 Sopa de Letras — todas las categorías</li>
-        <li><span class="pc-ck">✓</span>🁃 Dominó Math — todos los niveles</li>
+        <li><span class="pc-ck">✓</span>🔤 LeLoLai Letras — todas las categorías</li>
+        <li><span class="pc-ck">✓</span>🁃 Capicu Math — todos los niveles</li>
         <li><span class="pc-ck">✓</span>🎵 5 juegos Ritnome™ — todas las velocidades</li>
         <li><span class="pc-ck">✓</span>👨‍👩‍👧 1 familiar conectado</li>
       </ul>
-      <button class="pc-btn pc-pro" onclick="subscribePlan('plus')">Regálale Bori a Mamá 💜</button>
+      <button class="pc-btn pc-pro" onclick="subscribePlan('plus')">Regálale Bori a Tu Familia 💜</button>
     </div>
 
-    <div class="pc">
+    <!-- BORI FAMILIA -->
+    <div class="pc r d11">
       <div class="pc-tier" style="color:var(--gold)">PARA TODA LA FAMILIA</div>
       <div class="pc-name">Bori Familia</div>
       <div class="pc-price">$19<span>.99/mes</span></div>
       <div class="pc-desc">Toda la familia conectada. Todos tranquilos. 👨‍👩‍👧‍👦</div>
       <ul>
         <li><span class="pc-ck">✓</span>Todo lo de Bori Plus</li>
+        <li><span class="pc-ck">✓</span>🎙️ Voz Premium incluida</li>
         <li><span class="pc-ck">✓</span>👨‍👩‍👧‍👦 Hasta 6 familiares conectados</li>
         <li><span class="pc-ck">✓</span>📊 Dashboard familiar compartido</li>
         <li><span class="pc-ck">✓</span>🔔 Alertas automáticas</li>
@@ -258,9 +318,17 @@
       <button class="pc-btn pc-fam" onclick="subscribePlan('familia')">Conectar a Mi Familia 👨‍👩‍👧</button>
     </div>
 
-    <p class="pr-note">Bori es gratis. Plus y Familia desbloquean Bori 24/7, todos los juegos, y dashboard familiar. Sin contratos. Cancela cuando quieras. 🇵🇷</p>
+    <p class="pr-note">Bori es gratis. Plus y Familia desbloquean Voz Premium, Bori 24/7, todos los juegos, y dashboard familiar. Sin contratos. Cancela cuando quieras. 🇵🇷</p>
 
-    <!-- ═══ FOOTER ═══ -->
+    <!-- MADE IN PUERTO RICO -->
+    <div class="made-pr r d11">
+      <span class="made-pr-flag">🇵🇷</span>
+      <div class="made-pr-title">MADE IN PUERTO RICO</div>
+      <div class="made-pr-palante">Pa'lante!</div>
+      <p class="made-pr-sub">No hay nada como nosotros. Chat con alma boricua, voz premium, y juegos cognitivos que no existen en ningún otro lugar. Hecho con orgullo en la Isla del Encanto.</p>
+    </div>
+
+    <!-- FOOTER -->
     <footer class="foot">
       <div class="foot-b">HEY BORI™</div>
       <div class="foot-s">tu compañera bilingüe 🇵🇷</div>
@@ -273,14 +341,13 @@
     </footer>
   </div>
 
-  <!-- ═══ FLOATING BORI BUTTON ═══ -->
+  <!-- FLOATING BORI BUTTON -->
   <a class="fab" href="/the-chat.html">
     <div class="fab-av">🇵🇷</div>
     <span class="fab-tx">HABLA CON BORI</span>
   </a>
 
   <script>
-    /* Stripe subscription */
     function subscribePlan(plan){
       var btn=event.target;
       btn.textContent='Cargando...';
@@ -292,15 +359,14 @@
       }).then(function(r){return r.json();})
       .then(function(data){
         if(data.url){window.location.href=data.url;}
-        else{alert('Error: '+(data.error||'Intenta de nuevo'));btn.textContent=plan==='plus'?'Regálale Bori a Mamá 💜':'Conectar a Mi Familia 👨‍👩‍👧';btn.style.pointerEvents='auto';}
+        else{alert('Error: '+(data.error||'Intenta de nuevo'));btn.textContent=plan==='plus'?'Regálale Bori a Tu Familia 💜':'Conectar a Mi Familia 👨‍👩‍👧';btn.style.pointerEvents='auto';}
       }).catch(function(){
         alert('Error de conexión. Intenta de nuevo.');
-        btn.textContent=plan==='plus'?'Regálale Bori a Mamá 💜':'Conectar a Mi Familia 👨‍👩‍👧';
+        btn.textContent=plan==='plus'?'Regálale Bori a Tu Familia 💜':'Conectar a Mi Familia 👨‍👩‍👧';
         btn.style.pointerEvents='auto';
       });
     }
 
-    /* Payment return handling */
     (function(){
       var p=new URLSearchParams(window.location.search);
       var payment=p.get('payment');
