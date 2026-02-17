@@ -158,7 +158,7 @@
 
   </div>
 
-  <a class="fab" href="/the-chat.html">
+  <a class="fab" href="/habla.html">
     <div class="fab-av">🇵🇷</div>
     <span class="fab-tx">HABLA CON BORI</span>
   </a>
@@ -258,6 +258,8 @@
 
     function answer(btn,picked,correct){
       if(waiting)return;waiting=true;
+      try{var savedPin=localStorage.getItem('bori_pin');
+      if(savedPin){fetch('/api/activity',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId:savedPin,event:'game',detail:{game:'Capicu Math',level:level}})}).catch(function(){});}}catch(e){}
       document.querySelectorAll('.ans').forEach(function(b){b.style.pointerEvents='none';});
       if(picked===correct){
         btn.classList.add('right');
