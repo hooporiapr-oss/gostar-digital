@@ -234,6 +234,8 @@
 
     /* ═══ COUNTDOWN TO MIDNIGHT ═══ */
     function updateResetTimer(){
+      var el=document.getElementById('resetTimer');
+      if(!el)return;
       var now=new Date();
       var midnight=new Date(now);
       midnight.setHours(24,0,0,0);
@@ -241,7 +243,7 @@
       var h=Math.floor(diff/3600000);
       var m=Math.floor((diff%3600000)/60000);
       var s=Math.floor((diff%60000)/1000);
-      resetTimerEl.textContent=
+      el.textContent=
         String(h).padStart(2,'0')+':'+
         String(m).padStart(2,'0')+':'+
         String(s).padStart(2,'0');
@@ -276,15 +278,16 @@
     function canSend(){return isPaid||getRemaining()>0}
     function checkLimitReached(){
       if(!canSend()){
-        // Hide welcome so upgrade card is visible
-        if(welcome&&welcome.parentNode){welcome.style.display='none'}
-        upgradeEl.classList.add('show');
+        // Force hide welcome, force show upgrade — fresh DOM lookups
+        var wel=document.getElementById('welcome');
+        var upg=document.getElementById('upgrade');
+        if(wel)wel.style.display='none';
+        if(upg){upg.style.display='block'}
         input.disabled=true;
         input.placeholder='Mensajes agotados por hoy...';
         sendBtn.disabled=true;
-        startResetTimer();
-        // Scroll to show upgrade card
-        setTimeout(function(){msgs.scrollTop=msgs.scrollHeight},100);
+        try{startResetTimer()}catch(e){console.error('Timer error:',e)}
+        setTimeout(function(){msgs.scrollTop=msgs.scrollHeight},150);
         return true;
       }
       return false;
@@ -312,7 +315,7 @@
     function checkSavedPin(){try{var s=localStorage.getItem('bori_pin');if(s)verifyPin(s)}catch(e){}updateCounter();updateVoiceUI()}
     function verifyPin(pin){
       fetch('/api/stripe/status-pin/'+pin).then(function(r){return r.json()}).then(function(d){
-        if(d.subscribed){userPin=pin;isPaid=true;try{localStorage.setItem('bori_pin',pin)}catch(e){}updateCounter();updateVoiceUI();input.disabled=false;input.placeholder='Escríbele a Bori...';upgradeEl.classList.remove('show')}
+        if(d.subscribed){userPin=pin;isPaid=true;try{localStorage.setItem('bori_pin',pin)}catch(e){}updateCounter();updateVoiceUI();input.disabled=false;input.placeholder='Escríbele a Bori...';upgradeEl.classList.remove('show');upgradeEl.style.display=''}
         else{try{localStorage.removeItem('bori_pin')}catch(e){}isPaid=false;updateCounter();updateVoiceUI()}
       }).catch(function(){updateCounter();updateVoiceUI()});
     }
@@ -327,7 +330,7 @@
       var pin=pinInput.value.trim();if(pin.length<4)return;
       loginBtn.disabled=true;loginBtn.textContent='...';document.getElementById('loginError').textContent='';
       fetch('/api/stripe/status-pin/'+pin).then(function(r){return r.json()}).then(function(d){
-        if(d.subscribed){userPin=pin;isPaid=true;try{localStorage.setItem('bori_pin',pin)}catch(e){}hideLogin();updateCounter();updateVoiceUI();input.disabled=false;input.placeholder='Escríbele a Bori...';upgradeEl.classList.remove('show');if(resetInterval)clearInterval(resetInterval)}
+        if(d.subscribed){userPin=pin;isPaid=true;try{localStorage.setItem('bori_pin',pin)}catch(e){}hideLogin();updateCounter();updateVoiceUI();input.disabled=false;input.placeholder='Escríbele a Bori...';upgradeEl.classList.remove('show');upgradeEl.style.display='';if(resetInterval)clearInterval(resetInterval)}
         else{document.getElementById('loginError').textContent=d.status==='canceled'?'Suscripción cancelada':'PIN no válido o inactivo'}
         loginBtn.disabled=false;loginBtn.textContent='ENTRAR';
       }).catch(function(){document.getElementById('loginError').textContent='Error de conexión';loginBtn.disabled=false;loginBtn.textContent='ENTRAR'});
