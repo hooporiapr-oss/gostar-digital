@@ -105,8 +105,36 @@
     .send-btn:disabled{opacity:.3;transform:none}
     .send-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
 
+    /* ═══ VOICE BUTTON — PREMIUM ONLY ═══ */
+    .voice-fab{display:none;position:fixed;bottom:80px;right:16px;z-index:20;width:56px;height:56px;border-radius:50%;border:none;background:linear-gradient(135deg,var(--gold),var(--gold-bright));color:var(--night);font-size:24px;cursor:pointer;box-shadow:0 4px 20px rgba(212,168,67,.4),0 0 0 0 rgba(212,168,67,.3);transition:all .3s;-webkit-tap-highlight-color:transparent;align-items:center;justify-content:center}
+    .voice-fab.show{display:flex;animation:fabIn .5s cubic-bezier(.22,1,.36,1)}
+    .voice-fab:active{transform:scale(.9)}
+    .voice-fab:hover{box-shadow:0 6px 28px rgba(212,168,67,.5)}
+    @keyframes fabIn{from{opacity:0;transform:scale(.5) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+    .voice-fab-pulse{animation:fabPulse 2s ease infinite}
+    @keyframes fabPulse{0%,100%{box-shadow:0 4px 20px rgba(212,168,67,.4),0 0 0 0 rgba(212,168,67,.3)}50%{box-shadow:0 4px 20px rgba(212,168,67,.4),0 0 0 10px rgba(212,168,67,0)}}
+    .voice-label{display:none;position:fixed;bottom:142px;right:10px;z-index:20;background:var(--surface);border:1px solid rgba(212,168,67,.25);border-radius:12px;padding:8px 14px;font-size:12px;font-weight:600;color:var(--gold);white-space:nowrap;pointer-events:none;box-shadow:0 4px 16px rgba(0,0,0,.4)}
+    .voice-label.show{display:block;animation:fadeIn .4s ease}
+    .voice-label::after{content:'';position:absolute;bottom:-6px;right:24px;width:12px;height:12px;background:var(--surface);border-right:1px solid rgba(212,168,67,.25);border-bottom:1px solid rgba(212,168,67,.25);transform:rotate(45deg)}
+
+    /* ═══ VOICE UPSELL — FREE USERS ═══ */
+    .voice-upsell{display:none;position:fixed;bottom:80px;right:16px;z-index:20;width:56px;height:56px;border-radius:50%;border:1.5px solid rgba(255,255,255,.1);background:var(--surface2);color:var(--muted);font-size:22px;cursor:pointer;align-items:center;justify-content:center;transition:all .2s;-webkit-tap-highlight-color:transparent;opacity:.7}
+    .voice-upsell.show{display:flex;animation:fabIn .5s cubic-bezier(.22,1,.36,1)}
+    .voice-upsell:active{transform:scale(.9)}
+
+    .upsell-modal{display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px}
+    .upsell-modal.show{display:flex}
+    .upsell-box{background:var(--surface);border:1.5px solid rgba(212,168,67,.2);border-radius:var(--radius);padding:28px 24px;width:100%;max-width:340px;text-align:center;animation:fadeIn .3s ease}
+    .upsell-icon{font-size:40px;margin-bottom:12px}
+    .upsell-title{font-family:var(--serif);font-size:20px;margin-bottom:6px;color:var(--gold)}
+    .upsell-desc{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:20px}
+    .upsell-cta{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border:none;border-radius:60px;background:linear-gradient(135deg,var(--gold),var(--gold-bright));color:var(--night);font-family:var(--display);font-size:16px;letter-spacing:2px;cursor:pointer;transition:all .2s;text-decoration:none;-webkit-tap-highlight-color:transparent;font-weight:700}
+    .upsell-cta:active{transform:scale(.95)}
+    .upsell-close{margin-top:14px;font-size:13px;color:var(--muted);cursor:pointer}
+
     @media(max-width:420px){.h-name{font-size:16px}.welcome-av{width:68px;height:68px}.welcome-title{font-size:20px}.bubble{font-size:13.5px}}
     @media(max-height:500px){.welcome{padding:12px}.welcome-av{width:50px;height:50px}.starters{margin-top:8px}}
+    @media(min-width:600px){.voice-fab,.voice-upsell{bottom:90px;right:24px}.voice-label{bottom:152px;right:18px}}
   </style>
 </head>
 <body>
@@ -147,6 +175,24 @@
     </div>
   </div>
 
+  <!-- PREMIUM: Voice FAB (paid users only) -->
+  <div class="voice-label" id="voiceLabel">🎤 Habla con Bori</div>
+  <button class="voice-fab voice-fab-pulse" id="voiceFab" onclick="openVoiceBori()">🎤</button>
+
+  <!-- FREE: Locked mic upsell -->
+  <button class="voice-upsell" id="voiceUpsell" onclick="showUpsell()">🔒</button>
+
+  <!-- Upsell Modal -->
+  <div class="upsell-modal" id="upsellModal">
+    <div class="upsell-box">
+      <div class="upsell-icon">🎤💛</div>
+      <div class="upsell-title">Habla con Bori por Voz</div>
+      <div class="upsell-desc">Con Bori Plus, puedes hablar con Bori usando tu voz — como si fuera una llamada con tu mejor amiga boricua. Ilimitado, todos los días. 🇵🇷</div>
+      <a class="upsell-cta" href="/#planes">BORI PLUS — $9.99/mes</a>
+      <div class="upsell-close" onclick="hideUpsell()">Ahora no</div>
+    </div>
+  </div>
+
   <div class="input-wrap">
     <div class="input-row">
       <textarea class="input-field" id="input" rows="1" placeholder="Escríbele a Bori..." enterkeyhint="send"></textarea>
@@ -168,7 +214,9 @@
   </div>
 
   <script>
+    var CHATGPT_BORI_URL='https://chatgpt.com/g/g-69937e6b89148191afdc4d1d0a0acd39-hey-bori-tu-companera-bilingue';
     var input=document.getElementById('input'),sendBtn=document.getElementById('sendBtn'),msgs=document.getElementById('msgs'),welcome=document.getElementById('welcome'),counterEl=document.getElementById('counter'),upgradeEl=document.getElementById('upgrade');
+    var voiceFab=document.getElementById('voiceFab'),voiceLabel=document.getElementById('voiceLabel'),voiceUpsell=document.getElementById('voiceUpsell');
     var history=[],sending=false,FREE_DAILY_LIMIT=5,userPin=null,isPaid=false;
 
     function getTodayKey(){return'bori_msgs_'+new Date().toISOString().split('T')[0]}
@@ -186,12 +234,32 @@
       return false;
     }
 
-    function checkSavedPin(){try{var s=localStorage.getItem('bori_pin');if(s)verifyPin(s)}catch(e){}updateCounter()}
+    /* ═══ VOICE BUTTON LOGIC ═══ */
+    function updateVoiceUI(){
+      if(isPaid){
+        voiceFab.classList.add('show');
+        voiceLabel.classList.add('show');
+        voiceUpsell.classList.remove('show');
+        // Hide label after 4 seconds
+        setTimeout(function(){voiceLabel.classList.remove('show')},4000);
+      } else {
+        voiceFab.classList.remove('show');
+        voiceLabel.classList.remove('show');
+        voiceUpsell.classList.add('show');
+      }
+    }
+    function openVoiceBori(){
+      window.open(CHATGPT_BORI_URL,'_blank');
+    }
+    function showUpsell(){document.getElementById('upsellModal').classList.add('show')}
+    function hideUpsell(){document.getElementById('upsellModal').classList.remove('show')}
+
+    function checkSavedPin(){try{var s=localStorage.getItem('bori_pin');if(s)verifyPin(s)}catch(e){}updateCounter();updateVoiceUI()}
     function verifyPin(pin){
       fetch('/api/stripe/status-pin/'+pin).then(function(r){return r.json()}).then(function(d){
-        if(d.subscribed){userPin=pin;isPaid=true;try{localStorage.setItem('bori_pin',pin)}catch(e){}updateCounter();input.disabled=false;input.placeholder='Escríbele a Bori...';upgradeEl.classList.remove('show')}
-        else{try{localStorage.removeItem('bori_pin')}catch(e){}isPaid=false;updateCounter()}
-      }).catch(function(){updateCounter()});
+        if(d.subscribed){userPin=pin;isPaid=true;try{localStorage.setItem('bori_pin',pin)}catch(e){}updateCounter();updateVoiceUI();input.disabled=false;input.placeholder='Escríbele a Bori...';upgradeEl.classList.remove('show')}
+        else{try{localStorage.removeItem('bori_pin')}catch(e){}isPaid=false;updateCounter();updateVoiceUI()}
+      }).catch(function(){updateCounter();updateVoiceUI()});
     }
 
     function showLogin(){document.getElementById('loginModal').classList.add('show');document.getElementById('pinInput').value='';document.getElementById('loginError').textContent='';document.getElementById('pinInput').focus()}
@@ -204,7 +272,7 @@
       var pin=pinInput.value.trim();if(pin.length<4)return;
       loginBtn.disabled=true;loginBtn.textContent='...';document.getElementById('loginError').textContent='';
       fetch('/api/stripe/status-pin/'+pin).then(function(r){return r.json()}).then(function(d){
-        if(d.subscribed){userPin=pin;isPaid=true;try{localStorage.setItem('bori_pin',pin)}catch(e){}hideLogin();updateCounter();input.disabled=false;input.placeholder='Escríbele a Bori...';upgradeEl.classList.remove('show')}
+        if(d.subscribed){userPin=pin;isPaid=true;try{localStorage.setItem('bori_pin',pin)}catch(e){}hideLogin();updateCounter();updateVoiceUI();input.disabled=false;input.placeholder='Escríbele a Bori...';upgradeEl.classList.remove('show')}
         else{document.getElementById('loginError').textContent=d.status==='canceled'?'Suscripción cancelada':'PIN no válido o inactivo'}
         loginBtn.disabled=false;loginBtn.textContent='ENTRAR';
       }).catch(function(){document.getElementById('loginError').textContent='Error de conexión';loginBtn.disabled=false;loginBtn.textContent='ENTRAR'});
