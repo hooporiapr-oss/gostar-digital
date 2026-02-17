@@ -35,7 +35,6 @@
     .h-flag{font-size:22px;flex-shrink:0}
     .h-counter{display:flex;align-items:center;gap:4px;padding:4px 10px;border-radius:100px;font-size:10px;font-weight:700;letter-spacing:.5px;flex-shrink:0}
     .h-counter.free{background:rgba(212,168,67,.1);border:1px solid rgba(212,168,67,.2);color:var(--gold)}
-    .h-counter.spent{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:#EF4444}
     .h-counter.paid{background:rgba(45,212,168,.1);border:1px solid rgba(45,212,168,.2);color:var(--teal)}
 
     .msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;position:relative;z-index:1;-webkit-overflow-scrolling:touch;scroll-behavior:smooth}
@@ -75,14 +74,14 @@
     .upgrade-card{background:linear-gradient(135deg,rgba(139,92,246,.08),rgba(212,168,67,.06));border:1.5px solid rgba(139,92,246,.2);border-radius:var(--radius);padding:24px 20px}
     .upgrade-icon{font-size:32px;margin-bottom:8px}
     .upgrade-title{font-family:var(--serif);font-size:18px;margin-bottom:4px}
-    .upgrade-desc{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:12px}
-    .upgrade-reset{display:flex;align-items:center;justify-content:center;gap:6px;padding:10px 18px;border-radius:14px;background:rgba(139,92,246,.06);border:1px solid rgba(139,92,246,.15);font-size:13px;color:var(--text);margin-bottom:18px}
-    .upgrade-reset-time{color:var(--purple-light);font-family:var(--display);font-size:20px;letter-spacing:2px;font-weight:700}
+    .upgrade-desc{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:16px}
     .upgrade-btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border:none;border-radius:60px;background:linear-gradient(135deg,#7C3AED,#9333EA);color:white;font-family:var(--display);font-size:16px;letter-spacing:2px;cursor:pointer;transition:all .2s;text-decoration:none;-webkit-tap-highlight-color:transparent}
     .upgrade-btn:active{transform:scale(.95)}
     .upgrade-or{font-size:12px;color:var(--muted);margin-top:10px}
     .upgrade-login{color:var(--purple-light);text-decoration:underline;cursor:pointer;font-weight:600}
-    .upgrade-home{display:flex;align-items:center;justify-content:center;gap:6px;margin:16px auto 0;padding:14px 28px;border:1.5px solid rgba(255,255,255,.15);border-radius:60px;background:rgba(255,255,255,.05);color:var(--text);font-family:var(--sans);font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;text-decoration:none;-webkit-tap-highlight-color:transparent;width:100%;max-width:260px}
+    .upgrade-reset{display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 18px;border-radius:14px;background:rgba(139,92,246,.06);border:1px solid rgba(139,92,246,.15);font-size:13px;color:var(--text);margin-top:14px}
+    .upgrade-reset-time{color:var(--purple-light);font-family:var(--display);font-size:20px;letter-spacing:2px}
+    .upgrade-home{display:flex;align-items:center;justify-content:center;gap:6px;margin:14px auto 0;padding:14px 28px;border:1.5px solid rgba(255,255,255,.15);border-radius:60px;background:rgba(255,255,255,.05);color:var(--text);font-family:var(--sans);font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;text-decoration:none;-webkit-tap-highlight-color:transparent;width:100%;max-width:260px}
     .upgrade-home:active{transform:scale(.95);background:rgba(255,255,255,.1)}
 
     .login-modal{display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px}
@@ -174,9 +173,9 @@
         <div class="upgrade-icon">💜</div>
         <div class="upgrade-title">¡Bori quiere seguir hablando!</div>
         <div class="upgrade-desc">Ya usaste tus 5 mensajes gratis de hoy. Con Bori Plus, habla ilimitado todos los días. 🇵🇷</div>
-        <div class="upgrade-reset">🕐 Se renuevan en <span class="upgrade-reset-time" id="resetTimer">--:--:--</span></div>
         <a class="upgrade-btn" href="/#planes">💜 BORI PLUS — $9.99/mes</a>
         <div class="upgrade-or">¿Ya tienes PIN? <span class="upgrade-login" onclick="showLogin()">Entra aquí</span></div>
+        <div class="upgrade-reset">🕐 Se renuevan en <span class="upgrade-reset-time" id="resetTimer">--:--:--</span></div>
         <a class="upgrade-home" href="/">← Volver a Inicio</a>
       </div>
     </div>
@@ -224,7 +223,6 @@
     var CHATGPT_BORI_URL='https://chatgpt.com/g/g-69937e6b89148191afdc4d1d0a0acd39-hey-bori-tu-companera-bilingue';
     var input=document.getElementById('input'),sendBtn=document.getElementById('sendBtn'),msgs=document.getElementById('msgs'),welcome=document.getElementById('welcome'),counterEl=document.getElementById('counter'),upgradeEl=document.getElementById('upgrade');
     var voiceFab=document.getElementById('voiceFab'),voiceLabel=document.getElementById('voiceLabel'),voiceUpsell=document.getElementById('voiceUpsell');
-    var resetTimerEl=document.getElementById('resetTimer');
     var history=[],sending=false,FREE_DAILY_LIMIT=5,userPin=null,isPaid=false,resetInterval=null;
 
     function getTodayKey(){return'bori_msgs_'+new Date().toISOString().split('T')[0]}
@@ -233,9 +231,7 @@
     function getRemaining(){return isPaid?999:Math.max(0,FREE_DAILY_LIMIT-getTodayCount())}
 
     /* ═══ COUNTDOWN TO MIDNIGHT ═══ */
-    function updateResetTimer(){
-      var el=document.getElementById('resetTimer');
-      if(!el)return;
+    function getTimeToMidnight(){
       var now=new Date();
       var midnight=new Date(now);
       midnight.setHours(24,0,0,0);
@@ -243,51 +239,32 @@
       var h=Math.floor(diff/3600000);
       var m=Math.floor((diff%3600000)/60000);
       var s=Math.floor((diff%60000)/1000);
-      el.textContent=
-        String(h).padStart(2,'0')+':'+
-        String(m).padStart(2,'0')+':'+
-        String(s).padStart(2,'0');
+      return String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
     }
     function startResetTimer(){
-      updateResetTimer();
-      if(resetInterval)clearInterval(resetInterval);
+      var timerEl=document.getElementById('resetTimer');
+      if(!timerEl)return;
+      timerEl.textContent=getTimeToMidnight();
       resetInterval=setInterval(function(){
-        updateResetTimer();
-        // Auto-refresh at midnight
-        if(getRemaining()>0){
-          clearInterval(resetInterval);
-          location.reload();
-        }
+        timerEl.textContent=getTimeToMidnight();
+        if(getRemaining()>0){clearInterval(resetInterval);location.reload();}
       },1000);
     }
 
     function updateCounter(){
       if(isPaid){counterEl.className='h-counter paid';counterEl.textContent='∞ PLUS';}
-      else{
-        var r=getRemaining();
-        if(r===0){
-          counterEl.className='h-counter spent';
-          counterEl.textContent='0/'+FREE_DAILY_LIMIT;
-        } else {
-          counterEl.className='h-counter free';
-          counterEl.textContent=r+'/'+FREE_DAILY_LIMIT;
-          if(r<=1)counterEl.style.borderColor='rgba(239,68,68,.3)';
-        }
-      }
+      else{var r=getRemaining();counterEl.className='h-counter free';counterEl.textContent=r+'/'+FREE_DAILY_LIMIT;if(r<=1)counterEl.style.borderColor='rgba(239,68,68,.3)';}
     }
     function canSend(){return isPaid||getRemaining()>0}
     function checkLimitReached(){
       if(!canSend()){
-        // Force hide welcome, force show upgrade — fresh DOM lookups
-        var wel=document.getElementById('welcome');
-        var upg=document.getElementById('upgrade');
-        if(wel)wel.style.display='none';
-        if(upg){upg.style.display='block'}
+        var w=document.getElementById('welcome');
+        if(w)w.style.display='none';
+        upgradeEl.classList.add('show');
         input.disabled=true;
         input.placeholder='Mensajes agotados por hoy...';
         sendBtn.disabled=true;
-        try{startResetTimer()}catch(e){console.error('Timer error:',e)}
-        setTimeout(function(){msgs.scrollTop=msgs.scrollHeight},150);
+        try{startResetTimer();}catch(e){}
         return true;
       }
       return false;
@@ -315,7 +292,7 @@
     function checkSavedPin(){try{var s=localStorage.getItem('bori_pin');if(s)verifyPin(s)}catch(e){}updateCounter();updateVoiceUI()}
     function verifyPin(pin){
       fetch('/api/stripe/status-pin/'+pin).then(function(r){return r.json()}).then(function(d){
-        if(d.subscribed){userPin=pin;isPaid=true;try{localStorage.setItem('bori_pin',pin)}catch(e){}updateCounter();updateVoiceUI();input.disabled=false;input.placeholder='Escríbele a Bori...';upgradeEl.classList.remove('show');upgradeEl.style.display=''}
+        if(d.subscribed){userPin=pin;isPaid=true;try{localStorage.setItem('bori_pin',pin)}catch(e){}updateCounter();updateVoiceUI();input.disabled=false;input.placeholder='Escríbele a Bori...';upgradeEl.classList.remove('show')}
         else{try{localStorage.removeItem('bori_pin')}catch(e){}isPaid=false;updateCounter();updateVoiceUI()}
       }).catch(function(){updateCounter();updateVoiceUI()});
     }
@@ -330,7 +307,7 @@
       var pin=pinInput.value.trim();if(pin.length<4)return;
       loginBtn.disabled=true;loginBtn.textContent='...';document.getElementById('loginError').textContent='';
       fetch('/api/stripe/status-pin/'+pin).then(function(r){return r.json()}).then(function(d){
-        if(d.subscribed){userPin=pin;isPaid=true;try{localStorage.setItem('bori_pin',pin)}catch(e){}hideLogin();updateCounter();updateVoiceUI();input.disabled=false;input.placeholder='Escríbele a Bori...';upgradeEl.classList.remove('show');upgradeEl.style.display='';if(resetInterval)clearInterval(resetInterval)}
+        if(d.subscribed){userPin=pin;isPaid=true;try{localStorage.setItem('bori_pin',pin)}catch(e){}hideLogin();updateCounter();updateVoiceUI();input.disabled=false;input.placeholder='Escríbele a Bori...';upgradeEl.classList.remove('show');if(resetInterval)clearInterval(resetInterval)}
         else{document.getElementById('loginError').textContent=d.status==='canceled'?'Suscripción cancelada':'PIN no válido o inactivo'}
         loginBtn.disabled=false;loginBtn.textContent='ENTRAR';
       }).catch(function(){document.getElementById('loginError').textContent='Error de conexión';loginBtn.disabled=false;loginBtn.textContent='ENTRAR'});
@@ -341,14 +318,14 @@
     function sendStarter(el){if(!canSend()){checkLimitReached();return}input.value=el.textContent;sendBtn.disabled=false;send()}
 
     function addMsg(role,text){
-      if(welcome)welcome.remove();
+      if(welcome&&welcome.parentNode)welcome.remove();
       var w=document.createElement('div');w.className='msg msg-'+role;
       var a=document.createElement('div');a.className='msg-av msg-av-'+role;a.textContent=role==='bori'?'🇵🇷':'👤';
       var b=document.createElement('div');b.className='bubble b-'+role;b.textContent=text;
       w.appendChild(a);w.appendChild(b);msgs.appendChild(w);scroll();return b;
     }
     function addTyping(){
-      if(welcome)welcome.remove();
+      if(welcome&&welcome.parentNode)welcome.remove();
       var w=document.createElement('div');w.className='msg msg-bori';w.id='typing';
       var a=document.createElement('div');a.className='msg-av msg-av-bori';a.textContent='🇵🇷';
       var b=document.createElement('div');b.className='bubble b-bori typing';b.innerHTML='<span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>';
