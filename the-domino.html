@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Dominó Math — Resuelve y empareja con fichas de dominó. Juego cognitivo de Hey Bori. 🇵🇷">
-  <title>Dominó Math — Hey Bori 🇵🇷</title>
+  <meta name="description" content="Capicu Math — Resuelve y empareja con fichas de dominó. Juego cognitivo de Hey Bori. 🇵🇷">
+  <title>Capicu Math — Hey Bori 🇵🇷</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Sans:wght@400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
   <style>
@@ -35,13 +35,11 @@
     .hero h1 em{font-style:italic;background:linear-gradient(135deg,var(--gold),var(--gold-bright));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
     .hero-sub{font-size:13px;color:var(--muted);font-weight:500}
 
-    /* stats */
     .stats{display:flex;justify-content:center;gap:24px;padding:14px 0 18px}
     .stat{text-align:center}
     .stat-val{font-family:var(--display);font-size:28px;letter-spacing:1px}
     .stat-lb{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-top:2px}
 
-    /* levels */
     .levels{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
     .levels.hide{display:none}
     .lvl{display:flex;align-items:center;gap:12px;padding:16px;border-radius:16px;background:var(--surface);border:1.5px solid rgba(255,255,255,.05);transition:all .2s;-webkit-tap-highlight-color:transparent}
@@ -53,14 +51,12 @@
     .lvl-desc{font-size:12px;color:var(--muted);font-weight:500;margin-top:1px}
     .lvl-go{font-size:14px;color:var(--muted)}
 
-    /* game area */
     .game{display:none}
     .game.on{display:block}
 
     .lvl-badge{display:inline-block;padding:6px 16px;border-radius:100px;font-family:var(--display);font-size:13px;letter-spacing:2px;color:white;margin-bottom:16px}
     .lb1{background:#2DD4A8}.lb2{background:#D4A843}.lb3{background:#F97316}.lb4{background:#EF4444}
 
-    /* domino tile */
     .tile-wrap{display:flex;justify-content:center;margin-bottom:24px}
     .tile{display:inline-flex;border-radius:14px;border:3px solid rgba(255,255,255,.15);overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.3)}
     .tile-half{padding:20px 24px;display:flex;align-items:center;justify-content:center;min-width:75px}
@@ -69,7 +65,6 @@
     .tile-eq{font-family:var(--display);font-size:28px;letter-spacing:2px}
     .tile-q{font-family:var(--display);font-size:34px;color:var(--purple)}
 
-    /* answers */
     .answers{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:300px;margin:0 auto 16px}
     .ans{display:flex;align-items:center;justify-content:center;background:var(--surface);border:2.5px solid rgba(255,255,255,.08);border-radius:14px;padding:20px;font-family:var(--display);font-size:28px;letter-spacing:1px;transition:all .15s;-webkit-tap-highlight-color:transparent}
     .ans:active{transform:scale(.94)}
@@ -82,14 +77,12 @@
     .streak{display:none;justify-content:center;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--gold);margin-bottom:12px}
     .streak.on{display:flex}
 
-    /* badges */
     .badges{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:16px}
     .badge{padding:5px 10px;border-radius:100px;font-size:11px;font-weight:800;color:white;opacity:.25;transition:all .3s}
     .badge.earned{opacity:1}
     .badge.pop{animation:bpop .5s ease}
     @keyframes bpop{0%{transform:scale(.5);opacity:0}50%{transform:scale(1.2)}100%{transform:scale(1);opacity:1}}
 
-    /* badge popup */
     .badge-popup{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(26,23,38,.95);border:2.5px solid var(--gold);border-radius:20px;padding:28px 32px;text-align:center;z-index:300;animation:bpopup .5s ease;box-shadow:0 16px 60px rgba(0,0,0,.5)}
     .badge-popup-i{font-size:48px;margin-bottom:8px}
     .badge-popup-t{font-family:var(--display);font-size:22px;letter-spacing:2px;color:var(--gold);margin-bottom:3px}
@@ -133,7 +126,7 @@
 
     <section class="hero">
       <span class="hero-icon">🁃</span>
-      <h1>Dominó <em>Math</em></h1>
+      <h1>Capicu <em>Math</em></h1>
       <p class="hero-sub">Resuelve y empareja · Entrena tu mente 🇵🇷</p>
     </section>
 
@@ -143,7 +136,6 @@
       <div class="stat"><div class="stat-val" id="dBest">0</div><div class="stat-lb">Racha</div></div>
     </div>
 
-    <!-- Level select -->
     <div class="levels" id="levels">
       <button class="lvl on" onclick="pickLvl(1,this)"><span class="lvl-i">🟢</span><div class="lvl-body"><div class="lvl-name">FÁCIL</div><div class="lvl-desc">Suma · 1 al 15</div></div><span class="lvl-go">→</span></button>
       <button class="lvl" onclick="pickLvl(2,this)"><span class="lvl-i">🟡</span><div class="lvl-body"><div class="lvl-name">MEDIO</div><div class="lvl-desc">Suma y Resta · 1 al 25</div></div><span class="lvl-go">→</span></button>
@@ -151,7 +143,6 @@
       <button class="lvl" onclick="pickLvl(4,this)"><span class="lvl-i">🔴</span><div class="lvl-body"><div class="lvl-name">EXPERTO</div><div class="lvl-desc">Todo + División · Números grandes</div></div><span class="lvl-go">→</span></button>
     </div>
 
-    <!-- Game -->
     <div class="game" id="game">
       <div style="text-align:center"><span class="lvl-badge lb1" id="lvlBadge">🟢 FÁCIL</span></div>
       <div class="tile-wrap"><div class="tile"><div class="tile-half tile-left"><span class="tile-eq" id="eq">3 + 4</span></div><div class="tile-half tile-right"><span class="tile-q">?</span></div></div></div>
@@ -167,7 +158,7 @@
 
   </div>
 
-  <a class="fab" href="https://chatgpt.com/g/g-69937e6b89148191afdc4d1d0a0acd39-hey-bori-tu-companera-bilingue" target="_blank">
+  <a class="fab" href="/the-chat.html">
     <div class="fab-av">🇵🇷</div>
     <span class="fab-tx">HABLA CON BORI</span>
   </a>
