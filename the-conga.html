@@ -717,7 +717,7 @@ function getRank(){for(var i=ranks.length-1;i>=0;i--){if(ps.xp>=ranks[i].xp)retu
 function getNextRank(){var ci=ranks.findIndex(function(r){return r.name===getRank().name});return ci<ranks.length-1?ranks[ci+1]:null}
 function addXP(a){var old=getRank();ps.xp+=a;var nw=getRank();if(nw.name!==old.name){showMilestone('🎉 '+nw.name+' '+nw.icon);playCongaRoll();launchConfetti()}saveStats()}
 function trackTap(perf){ps.totalTaps++;ps.weeklyTaps++;if(perf){ps.totalPerfects++;addXP(3)}else{addXP(1)}checkAchievements();saveStats()}
-function trackGame(){ps.gamesPlayed++;ps.weeklySessions++;addXP(5);saveStats()}
+function trackGame(){ps.gamesPlayed++;ps.weeklySessions++;addXP(5);saveStats(); try{var savedPin=localStorage.getItem('bori_pin'); if(savedPin){fetch('/api/activity',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId:savedPin,event:'game',detail:{game:'Conga'}})}).catch(function(){});}}catch(e){}}
 function trackStreak(s){if(s>ps.bestStreak)ps.bestStreak=s;if(s>ps.weeklyBest)ps.weeklyBest=s;checkAchievements();saveStats()}
 function trackSurvivalWin(){ps.survivalWins++;addXP(20);checkAchievements();saveStats()}
 function checkAchievements(){achievements.forEach(function(a){if(ps.unlockedAchievements.indexOf(a.id)===-1&&a.cond(ps)){ps.unlockedAchievements.push(a.id);addXP(10);var pi=document.getElementById('achievementPopupIcon');var pn=document.getElementById('achievementPopupName');var pp=document.getElementById('achievementPopup');pi.textContent=a.icon;pn.textContent=a.name;pp.classList.add('show');playCoqui();setTimeout(function(){pp.classList.remove('show')},3000);saveStats()}})}
