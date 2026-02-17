@@ -138,7 +138,7 @@
 
   </div>
 
-  <a class="fab" href="/the-chat.html">
+  <a class="fab" href="/habla.html">
     <div class="fab-av">🇵🇷</div>
     <span class="fab-tx">HABLA CON BORI</span>
   </a>
@@ -277,10 +277,13 @@
         renderWords();
         document.getElementById('sFound').textContent=found.length;
         playTone();
-        if(found.length===wordList.length){
+       if(found.length===wordList.length){
           document.getElementById('doneMsg').style.display='block';
           clearInterval(timer);
           playWin();
+          try{var savedPin=localStorage.getItem('bori_pin');
+          if(savedPin){fetch('/api/activity',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId:savedPin,event:'game',detail:{game:'LeLoLai Letras',category:cat}})}).catch(function(){});}}catch(e){}
+        }
         }
       }
     }
