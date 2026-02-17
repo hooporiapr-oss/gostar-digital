@@ -3,486 +3,635 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Hey Bori™ — Dashboard de Organización</title>
+<title>Dashboard — Hey Bori 🇵🇷</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Sans:wght@400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#F8F7F4;--card:#FFFFFF;--text:#111827;--muted:#5A6172;--light:#9CA3AF;--green:#10B981;--gold:#B8860B;--purple:#7C3AED;--red:#EF4444;--border:1px solid rgba(26,29,43,.08);--shadow:0 2px 12px rgba(26,29,43,.06);--radius:18px;--head:'Bebas Neue',sans-serif;--body:'Outfit',sans-serif}
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:var(--body);background:var(--bg);color:var(--text);min-height:100vh;-webkit-tap-highlight-color:transparent}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --serif:'DM Serif Display',serif;--sans:'Instrument Sans',sans-serif;--display:'Bebas Neue',sans-serif;
+  --night:#0B0B14;--surface:#1A1726;--surface2:#211D2E;
+  --purple:#8B5CF6;--purple-deep:#6D28D9;--gold:#D4A843;--gold-bright:#F0C75E;
+  --green:#2DD4A8;--red:#EF4444;--teal:#2DD4A8;
+  --text:#EDEBE8;--muted:rgba(237,235,232,.5);--radius:18px
+}
+body{font-family:var(--sans);background:var(--night);color:var(--text);-webkit-font-smoothing:antialiased;min-height:100vh;-webkit-tap-highlight-color:transparent}
 
-/* Nav */
-.nav{background:white;border-bottom:var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
-.nav-brand{font-family:var(--head);font-size:1.3rem;letter-spacing:3px;color:var(--purple)}
-.nav-badge{font-size:10px;font-weight:700;color:white;background:var(--green);padding:3px 10px;border-radius:100px;letter-spacing:1px}
+.bg{position:fixed;inset:0;pointer-events:none;z-index:0}
+.bg::before{content:'';position:absolute;top:-15%;left:50%;transform:translateX(-50%);width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(139,92,246,.07) 0%,transparent 60%)}
 
-/* Container */
-.container{max-width:600px;margin:0 auto;padding:20px 16px}
+.wrap{max-width:480px;margin:0 auto;padding:0 16px;position:relative;z-index:1}
 
-/* Auth screens */
-.auth-screen{display:none}
-.auth-screen.active{display:block}
-.auth-hero{text-align:center;padding:40px 0 20px}
-.auth-icon{font-size:48px;margin-bottom:12px}
-.auth-title{font-family:var(--head);font-size:2rem;letter-spacing:3px;color:var(--text)}
-.auth-sub{color:var(--muted);font-size:14px;margin-top:6px;line-height:1.5}
+/* nav */
+.nav{display:flex;align-items:center;gap:12px;padding:16px 0}
+.nav-back{display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:12px;background:var(--surface);border:1px solid rgba(255,255,255,.06);font-size:18px;text-decoration:none;-webkit-tap-highlight-color:transparent;transition:all .15s;flex-shrink:0}
+.nav-back:active{transform:scale(.92)}
+.nav-title{font-family:var(--display);font-size:16px;letter-spacing:3px;color:var(--muted)}
+.nav-flag{margin-left:auto;font-size:20px}
 
-.auth-card{background:var(--card);border-radius:var(--radius);padding:28px 24px;box-shadow:var(--shadow);border:var(--border);margin-top:20px}
-.auth-label{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
-.auth-input{width:100%;padding:14px 16px;border:2px solid rgba(26,29,43,.1);border-radius:12px;font-family:var(--body);font-size:16px;font-weight:600;color:var(--text);outline:none;transition:border .2s;margin-bottom:16px}
-.auth-input:focus{border-color:var(--purple)}
-.auth-input::placeholder{color:var(--light);font-weight:400}
+/* screens */
+.screen{display:none}.screen.on{display:block}
 
-.auth-btn{width:100%;padding:16px;border:none;border-radius:14px;font-family:var(--body);font-size:17px;font-weight:700;cursor:pointer;transition:all .2s;margin-top:4px}
-.auth-btn-primary{background:linear-gradient(135deg,var(--purple),#9333EA);color:white;box-shadow:0 4px 20px rgba(107,33,168,.25)}
-.auth-btn-primary:active{transform:scale(.98)}
-.auth-btn-secondary{background:rgba(17,24,39,.05);color:var(--text);margin-top:12px}
+/* auth */
+.auth-hero{text-align:center;padding:32px 0 20px}
+.auth-icon{font-size:44px;margin-bottom:10px}
+.auth-title{font-family:var(--serif);font-size:26px;font-weight:400}
+.auth-title em{font-style:italic;background:linear-gradient(135deg,var(--purple),#A78BFA);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.auth-sub{font-size:13px;color:var(--muted);line-height:1.6;margin-top:6px;max-width:340px;margin-left:auto;margin-right:auto}
 
-.auth-switch{text-align:center;margin-top:20px;font-size:14px;color:var(--muted)}
-.auth-switch a{color:var(--purple);font-weight:700;text-decoration:none}
+/* choice buttons */
+.choice{display:flex;flex-direction:column;gap:10px;margin-top:24px}
+.choice-btn{display:flex;align-items:center;gap:14px;padding:18px 16px;border-radius:16px;background:var(--surface);border:1.5px solid rgba(255,255,255,.06);cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent;text-align:left}
+.choice-btn:active{transform:scale(.97);border-color:rgba(139,92,246,.2)}
+.choice-icon{font-size:28px;flex-shrink:0}
+.choice-body{flex:1}
+.choice-name{font-family:var(--display);font-size:17px;letter-spacing:2px}
+.choice-desc{font-size:11.5px;color:var(--muted);font-weight:500;margin-top:1px}
+.choice-arr{font-size:14px;color:var(--muted)}
 
-.auth-msg{text-align:center;padding:10px;border-radius:10px;font-size:14px;font-weight:600;margin-top:12px;display:none}
-.auth-msg.error{display:block;background:rgba(239,68,68,.1);color:var(--red)}
-.auth-msg.success{display:block;background:rgba(16,185,129,.1);color:var(--green)}
+/* form card */
+.form-card{background:var(--surface);border:1.5px solid rgba(255,255,255,.06);border-radius:var(--radius);padding:24px 20px;margin-top:20px}
+.form-label{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px}
+.form-input{width:100%;padding:13px 14px;border:1.5px solid rgba(255,255,255,.08);border-radius:12px;background:var(--surface2);color:var(--text);font-family:var(--sans);font-size:15px;font-weight:600;outline:none;transition:border .2s;margin-bottom:14px;-webkit-appearance:none}
+.form-input:focus{border-color:rgba(139,92,246,.3)}
+.form-input::placeholder{color:var(--muted);font-weight:400}
+.form-input.pin{font-family:var(--display);font-size:28px;letter-spacing:10px;text-align:center}
 
-/* Dashboard */
-.dash{display:none}
-.dash.active{display:block}
+.form-btn{width:100%;padding:15px;border:none;border-radius:14px;font-family:var(--display);font-size:16px;letter-spacing:2px;cursor:pointer;transition:all .2s;margin-top:4px}
+.form-btn:active{transform:scale(.97)}
+.form-btn-primary{background:linear-gradient(135deg,#7C3AED,#9333EA);color:white;box-shadow:0 4px 18px rgba(124,58,237,.3)}
+.form-btn-gold{background:linear-gradient(135deg,var(--gold),#8A6C2C);color:white;box-shadow:0 4px 18px rgba(212,168,67,.25)}
 
-.dash-header{background:linear-gradient(135deg,var(--purple),#6D28D9);border-radius:var(--radius);padding:24px;color:white;margin-bottom:16px;position:relative;overflow:hidden}
-.dash-header::after{content:'';position:absolute;top:-20px;right:-20px;width:120px;height:120px;background:rgba(255,255,255,.06);border-radius:50%}
-.dash-name{font-family:var(--head);font-size:1.6rem;letter-spacing:3px}
-.dash-code-row{display:flex;align-items:center;gap:10px;margin-top:8px}
-.dash-code{font-family:var(--head);font-size:1.2rem;letter-spacing:4px;background:rgba(255,255,255,.15);padding:6px 14px;border-radius:8px}
-.dash-code-label{font-size:12px;opacity:.7}
-.dash-residents{font-size:13px;opacity:.7;margin-top:8px}
+.form-switch{text-align:center;margin-top:18px;font-size:13px;color:var(--muted)}
+.form-switch a{color:var(--purple);font-weight:700;text-decoration:none}
 
-/* Stats cards */
-.stats-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px}
-.stat-card{background:var(--card);border-radius:14px;padding:16px 12px;text-align:center;box-shadow:var(--shadow);border:var(--border)}
-.stat-num{font-family:var(--head);font-size:2rem;letter-spacing:2px}
-.stat-label{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.5px;margin-top:2px}
-.stat-num.green{color:var(--green)}
-.stat-num.purple{color:var(--purple)}
-.stat-num.gold{color:var(--gold)}
+.form-msg{text-align:center;padding:10px;border-radius:10px;font-size:13px;font-weight:600;margin-top:10px;display:none}
+.form-msg.error{display:block;background:rgba(239,68,68,.08);color:var(--red);border:1px solid rgba(239,68,68,.15)}
+.form-msg.success{display:block;background:rgba(45,212,168,.08);color:var(--green);border:1px solid rgba(45,212,168,.15)}
 
-/* Section card */
-.section{background:var(--card);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);border:var(--border);margin-bottom:16px}
-.section-title{font-family:var(--head);font-size:1.1rem;letter-spacing:2px;color:var(--text);margin-bottom:14px}
+/* success code */
+.code-reveal{background:linear-gradient(135deg,rgba(212,168,67,.08),rgba(212,168,67,.03));border:1.5px solid rgba(212,168,67,.2);border-radius:var(--radius);padding:24px 20px;text-align:center;margin-top:20px}
+.code-label{font-size:11px;font-weight:700;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px}
+.code-value{font-family:var(--display);font-size:40px;letter-spacing:8px;color:var(--gold-bright)}
+.code-desc{font-size:12px;color:var(--muted);line-height:1.5;margin-top:8px}
+.code-copy{margin-top:12px;padding:10px 24px;border:1.5px solid rgba(212,168,67,.25);border-radius:100px;background:transparent;font-family:var(--sans);font-size:12px;font-weight:700;color:var(--gold);cursor:pointer;transition:all .2s}
+.code-copy:active{background:rgba(212,168,67,.1)}
 
-/* Week chart */
-.week-chart{display:flex;gap:6px;align-items:flex-end;height:120px}
-.week-bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
-.week-bar{width:100%;border-radius:8px 8px 4px 4px;min-height:4px;transition:height .4s}
+/* ═══ DASHBOARD ═══ */
+.dash-header{background:linear-gradient(135deg,#7C3AED,#6D28D9,#5B21B6);border-radius:var(--radius);padding:22px;color:white;margin-bottom:14px;position:relative;overflow:hidden}
+.dash-header::after{content:'';position:absolute;top:-20px;right:-20px;width:100px;height:100px;background:rgba(255,255,255,.05);border-radius:50%}
+.dash-type{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;opacity:.6;margin-bottom:4px}
+.dash-name{font-family:var(--display);font-size:22px;letter-spacing:3px}
+.dash-meta{display:flex;align-items:center;gap:10px;margin-top:8px}
+.dash-code{font-family:var(--display);font-size:14px;letter-spacing:3px;background:rgba(255,255,255,.12);padding:4px 12px;border-radius:8px}
+.dash-count{font-size:12px;opacity:.6}
+
+/* stats */
+.stats-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px}
+.stat{background:var(--surface);border:1.5px solid rgba(255,255,255,.05);border-radius:14px;padding:14px 10px;text-align:center}
+.stat-val{font-family:var(--display);font-size:28px;letter-spacing:1px}
+.stat-val.green{color:var(--green)}
+.stat-val.purple{color:var(--purple)}
+.stat-val.gold{color:var(--gold)}
+.stat-lb{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:2px}
+
+/* section */
+.section{background:var(--surface);border:1.5px solid rgba(255,255,255,.05);border-radius:var(--radius);padding:18px;margin-bottom:14px}
+.section-title{font-family:var(--display);font-size:14px;letter-spacing:2px;color:var(--muted);margin-bottom:12px}
+
+/* week chart */
+.week-chart{display:flex;gap:6px;align-items:flex-end;height:100px}
+.week-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
+.week-bar{width:100%;border-radius:6px 6px 3px 3px;min-height:3px;transition:height .4s}
 .week-bar.games{background:linear-gradient(to top,var(--purple),#A78BFA)}
 .week-bar.chats{background:linear-gradient(to top,var(--green),#6EE7B7)}
-.week-day{font-size:10px;font-weight:700;color:var(--light);letter-spacing:.5px}
-.week-legend{display:flex;gap:16px;margin-top:12px;justify-content:center}
-.legend-item{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--muted)}
-.legend-dot{width:10px;height:10px;border-radius:3px}
-.legend-dot.games{background:var(--purple)}
-.legend-dot.chats{background:var(--green)}
+.week-day{font-size:9px;font-weight:700;color:rgba(237,235,232,.25);letter-spacing:.5px}
+.week-legend{display:flex;gap:14px;margin-top:10px;justify-content:center}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:600;color:var(--muted)}
+.legend-dot{width:8px;height:8px;border-radius:3px}
+.legend-dot.g{background:var(--purple)}.legend-dot.c{background:var(--green)}
 
-/* Popular games */
-.game-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(26,29,43,.05)}
+/* game rows */
+.game-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04)}
 .game-row:last-child{border-bottom:none}
-.game-rank{font-family:var(--head);font-size:1.2rem;color:var(--light);width:24px;text-align:center}
-.game-name{flex:1;font-weight:600;font-size:14px}
-.game-count{font-family:var(--head);font-size:1rem;color:var(--purple);letter-spacing:1px}
+.game-rank{font-family:var(--display);font-size:16px;color:rgba(237,235,232,.2);width:20px;text-align:center}
+.game-name{flex:1;font-weight:600;font-size:13px}
+.game-ct{font-family:var(--display);font-size:14px;color:var(--purple);letter-spacing:1px}
 
-/* Mood summary */
-.mood-row{display:flex;gap:8px;flex-wrap:wrap}
-.mood-chip{padding:6px 14px;border-radius:100px;font-size:13px;font-weight:600;background:rgba(26,29,43,.04)}
+/* mood */
+.mood-row{display:flex;gap:6px;flex-wrap:wrap}
+.mood-chip{padding:5px 12px;border-radius:100px;font-size:12px;font-weight:600;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06)}
 
-/* Code share card */
-.code-share{background:linear-gradient(135deg,#FEF3C7,#FDE68A);border-radius:var(--radius);padding:20px;text-align:center;margin-bottom:16px;border:2px solid rgba(184,134,11,.15)}
-.code-share-title{font-family:var(--head);font-size:1rem;letter-spacing:2px;color:var(--gold);margin-bottom:6px}
-.code-share-code{font-family:var(--head);font-size:2.2rem;letter-spacing:6px;color:var(--text);margin:8px 0}
-.code-share-desc{font-size:12px;color:var(--muted);line-height:1.5}
-.code-copy-btn{margin-top:12px;padding:10px 24px;border:2px solid var(--gold);border-radius:100px;background:white;font-family:var(--body);font-size:13px;font-weight:700;color:var(--gold);cursor:pointer}
-.code-copy-btn:active{background:var(--gold);color:white}
+/* streak for familia */
+.streak-row{display:flex;align-items:center;gap:10px;padding:12px 0}
+.streak-fire{font-size:28px}
+.streak-info{flex:1}
+.streak-num{font-family:var(--display);font-size:22px;letter-spacing:1px;color:var(--gold)}
+.streak-lb{font-size:11px;color:var(--muted);font-weight:600}
 
-/* Logout */
-.logout-btn{width:100%;padding:14px;border:2px solid rgba(26,29,43,.08);border-radius:14px;background:transparent;font-family:var(--body);font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;margin-top:8px;margin-bottom:40px}
+/* actions */
+.dash-actions{display:flex;flex-direction:column;gap:8px;margin-bottom:32px}
+.dash-btn{width:100%;padding:14px;border-radius:14px;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent}
+.dash-btn:active{transform:scale(.97)}
+.dash-btn-logout{background:transparent;border:1.5px solid rgba(255,255,255,.06);color:var(--muted)}
 
-/* Footer */
-.footer{text-align:center;padding:20px 0 30px;font-size:11px;color:var(--light);letter-spacing:.5px}
-.footer a{color:var(--purple);text-decoration:none;font-weight:600}
+/* footer */
+.foot{text-align:center;padding:20px 0 40px}
+.foot-brand{font-family:var(--display);font-size:14px;letter-spacing:4px;color:var(--muted);margin-bottom:3px}
+.foot-copy{font-size:10px;color:rgba(237,235,232,.15)}
 
-/* Loading */
-.loading{text-align:center;padding:40px;color:var(--muted);font-size:14px}
+/* fab */
+.fab{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;align-items:center;gap:10px;background:linear-gradient(135deg,#7C3AED,#9333EA,#A855F7);border:2px solid rgba(255,215,0,.3);border-radius:60px;padding:12px 22px 12px 16px;text-decoration:none;box-shadow:0 4px 24px rgba(124,58,237,.45);transition:all .25s;-webkit-tap-highlight-color:transparent}
+.fab:active{transform:scale(1.04);border-color:#F0C75E}
+.fab-av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#D4A843,#FF6B35);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;position:relative}
+.fab-av::after{content:'';position:absolute;top:-2px;right:-2px;width:11px;height:11px;border-radius:50%;background:#10B981;border:2.5px solid #7C3AED;animation:pulse 2s ease infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(16,185,129,.5)}50%{box-shadow:0 0 0 5px rgba(16,185,129,0)}}
+.fab-tx{font-family:var(--display);font-size:14px;letter-spacing:2px;color:white}
+
+@media(max-width:420px){
+  .auth-title{font-size:22px}
+  .code-value{font-size:32px;letter-spacing:6px}
+  .dash-name{font-size:18px}
+  .fab{bottom:20px;right:16px;padding:10px 18px 10px 12px}
+  .fab-av{width:30px;height:30px;font-size:15px}.fab-tx{font-size:12px}
+}
 </style>
 </head>
 <body>
 
+<div class="bg"></div>
+
+<div class="wrap">
+
 <nav class="nav">
-    <div class="nav-brand">HEY BORI™ ORGANIZACIONES</div>
-    <div class="nav-badge">GRATIS</div>
+  <a href="/" class="nav-back">←</a>
+  <span class="nav-title">HEY BORI</span>
+  <span class="nav-flag">🇵🇷</span>
 </nav>
 
-<div class="container">
-
-<!-- WELCOME / CHOICE SCREEN -->
-<div class="auth-screen active" id="welcomeScreen">
-    <div class="auth-hero">
-        <div class="auth-icon">🤝</div>
-        <div class="auth-title">DASHBOARD DE ORGANIZACIÓN</div>
-        <div class="auth-sub">Monitoreo de actividad cognitiva para sus participantes. Hogares de cuido, centros de rehabilitación, programas comunitarios, iglesias — todos bienvenidos. Totalmente gratis.</div>
+<!-- ═══ WELCOME SCREEN ═══ -->
+<div class="screen on" id="welcomeScreen">
+  <div class="auth-hero">
+    <div class="auth-icon">📊</div>
+    <div class="auth-title">Dashboard <em>Familiar</em></div>
+    <div class="auth-sub">Mira la actividad de tu familia o tu organización. Juegos, conversaciones, estado de ánimo — todo en un solo lugar.</div>
+  </div>
+  <div class="choice">
+    <div class="choice-btn" onclick="showScreen('familiaLogin')">
+      <span class="choice-icon">👨‍👩‍👧</span>
+      <div class="choice-body">
+        <div class="choice-name">FAMILIA</div>
+        <div class="choice-desc">Entra con tu PIN de Bori Plus o Familia</div>
+      </div>
+      <span class="choice-arr">→</span>
     </div>
-    <div class="auth-card">
-        <button class="auth-btn auth-btn-primary" onclick="showScreen('loginScreen')">Ya tengo cuenta</button>
-        <button class="auth-btn auth-btn-secondary" onclick="showScreen('signupScreen')">Registrar mi organización</button>
+    <div class="choice-btn" onclick="showScreen('orgChoice')">
+      <span class="choice-icon">🏥</span>
+      <div class="choice-body">
+        <div class="choice-name">ORGANIZACIÓN</div>
+        <div class="choice-desc">Hogares de cuido, centros, iglesias</div>
+      </div>
+      <span class="choice-arr">→</span>
     </div>
+  </div>
 </div>
 
-<!-- SIGNUP SCREEN -->
-<div class="auth-screen" id="signupScreen">
-    <div class="auth-hero">
-        <div class="auth-icon">📋</div>
-        <div class="auth-title">REGISTRAR ORGANIZACIÓN</div>
-        <div class="auth-sub">Solo necesitamos el nombre de su organización y un número de contacto.</div>
-    </div>
-    <div class="auth-card">
-        <div class="auth-label">Nombre de la Organización</div>
-        <input class="auth-input" id="signupName" type="text" placeholder="Ej: Centro Vida Plena, Hogar Santa María...">
-        <div class="auth-label">Teléfono de Contacto</div>
-        <input class="auth-input" id="signupPhone" type="tel" placeholder="787-555-1234">
-        <button class="auth-btn auth-btn-primary" onclick="doSignup()">Registrar Organización</button>
-        <div class="auth-msg" id="signupMsg"></div>
-    </div>
-    <div class="auth-switch"><a href="#" onclick="event.preventDefault();showScreen('loginScreen')">¿Ya tiene cuenta? Entrar →</a></div>
+<!-- ═══ FAMILIA LOGIN ═══ -->
+<div class="screen" id="familiaLogin">
+  <div class="auth-hero">
+    <div class="auth-icon">👨‍👩‍👧</div>
+    <div class="auth-title">Dashboard <em>Familia</em></div>
+    <div class="auth-sub">Entra con tu PIN para ver la actividad de tu familia.</div>
+  </div>
+  <div class="form-card">
+    <div class="form-label">Tu PIN</div>
+    <input class="form-input pin" id="famPin" type="tel" maxlength="4" placeholder="PIN" inputmode="numeric" autocomplete="off">
+    <div class="form-label">PIN Familiar (4 dígitos)</div>
+    <input class="form-input pin" id="famFamilyPin" type="tel" maxlength="4" placeholder="PIN" inputmode="numeric" autocomplete="off">
+    <button class="form-btn form-btn-primary" onclick="doFamiliaLogin()">VER DASHBOARD</button>
+    <div class="form-msg" id="famMsg"></div>
+  </div>
+  <div class="form-switch"><a href="#" onclick="event.preventDefault();showScreen('welcomeScreen')">← Volver</a></div>
 </div>
 
-<!-- LOGIN SCREEN -->
-<div class="auth-screen" id="loginScreen">
-    <div class="auth-hero">
-        <div class="auth-icon">🔑</div>
-        <div class="auth-title">ACCEDER</div>
-        <div class="auth-sub">Entre con el número de teléfono registrado.</div>
+<!-- ═══ ORG CHOICE ═══ -->
+<div class="screen" id="orgChoice">
+  <div class="auth-hero">
+    <div class="auth-icon">🏥</div>
+    <div class="auth-title">Dashboard <em>Organización</em></div>
+    <div class="auth-sub">Monitoreo de actividad cognitiva para participantes. Hogares de cuido, centros, iglesias — todos bienvenidos. Totalmente gratis.</div>
+  </div>
+  <div class="choice">
+    <div class="choice-btn" onclick="showScreen('orgLogin')">
+      <span class="choice-icon">🔑</span>
+      <div class="choice-body">
+        <div class="choice-name">YA TENGO CUENTA</div>
+        <div class="choice-desc">Entrar con mi número</div>
+      </div>
+      <span class="choice-arr">→</span>
     </div>
-    <div class="auth-card">
-        <div class="auth-label">Teléfono de Contacto</div>
-        <input class="auth-input" id="loginPhone" type="tel" placeholder="787-555-1234">
-        <button class="auth-btn auth-btn-primary" onclick="doLogin()">Entrar</button>
-        <div class="auth-msg" id="loginMsg"></div>
+    <div class="choice-btn" onclick="showScreen('orgSignup')">
+      <span class="choice-icon">📋</span>
+      <div class="choice-body">
+        <div class="choice-name">REGISTRAR ORGANIZACIÓN</div>
+        <div class="choice-desc">Crear cuenta nueva gratis</div>
+      </div>
+      <span class="choice-arr">→</span>
     </div>
-    <div class="auth-switch"><a href="#" onclick="event.preventDefault();showScreen('signupScreen')">¿Nueva organización? Registrarse →</a></div>
+  </div>
+  <div class="form-switch" style="margin-top:16px"><a href="#" onclick="event.preventDefault();showScreen('welcomeScreen')">← Volver</a></div>
 </div>
 
-<!-- SIGNUP SUCCESS -->
-<div class="auth-screen" id="successScreen">
-    <div class="auth-hero">
-        <div class="auth-icon">🎉</div>
-        <div class="auth-title">¡ORGANIZACIÓN REGISTRADA!</div>
-        <div class="auth-sub">Este es el código de su organización. Los participantes lo usan para conectarse.</div>
-    </div>
-    <div class="code-share">
-        <div class="code-share-title">CÓDIGO DE ORGANIZACIÓN</div>
-        <div class="code-share-code" id="successCode">---</div>
-        <div class="code-share-desc">Comparta este código con los participantes o sus familias.<br>Ellos lo entran en heybori.com para conectarse a su organización.</div>
-        <button class="code-copy-btn" onclick="copyCode()">📋 Copiar Código</button>
-    </div>
-    <div class="auth-card">
-        <button class="auth-btn auth-btn-primary" onclick="loadDashboard()">Ver Mi Dashboard →</button>
-    </div>
+<!-- ═══ ORG SIGNUP ═══ -->
+<div class="screen" id="orgSignup">
+  <div class="auth-hero">
+    <div class="auth-icon">📋</div>
+    <div class="auth-title">Registrar <em>Organización</em></div>
+    <div class="auth-sub">Solo necesitamos nombre y teléfono de contacto.</div>
+  </div>
+  <div class="form-card">
+    <div class="form-label">Nombre de la Organización</div>
+    <input class="form-input" id="signupName" type="text" placeholder="Ej: Centro Vida Plena">
+    <div class="form-label">Teléfono de Contacto</div>
+    <input class="form-input" id="signupPhone" type="tel" placeholder="787-555-1234">
+    <button class="form-btn form-btn-gold" onclick="doOrgSignup()">REGISTRAR ORGANIZACIÓN</button>
+    <div class="form-msg" id="signupMsg"></div>
+  </div>
+  <div class="form-switch"><a href="#" onclick="event.preventDefault();showScreen('orgChoice')">← Volver</a></div>
 </div>
 
-<!-- DASHBOARD -->
-<div class="dash" id="dashboard">
-    
-    <div class="dash-header">
-        <div class="dash-name" id="dashName">---</div>
-        <div class="dash-code-row">
-            <div class="dash-code-label">Código:</div>
-            <div class="dash-code" id="dashCode">---</div>
-        </div>
-        <div class="dash-residents" id="dashResidents">0 participantes conectados</div>
-    </div>
+<!-- ═══ ORG LOGIN ═══ -->
+<div class="screen" id="orgLogin">
+  <div class="auth-hero">
+    <div class="auth-icon">🔑</div>
+    <div class="auth-title">Acceder <em>Organización</em></div>
+    <div class="auth-sub">Entre con el número de teléfono registrado.</div>
+  </div>
+  <div class="form-card">
+    <div class="form-label">Teléfono de Contacto</div>
+    <input class="form-input" id="loginPhone" type="tel" placeholder="787-555-1234">
+    <button class="form-btn form-btn-primary" onclick="doOrgLogin()">ENTRAR</button>
+    <div class="form-msg" id="loginMsg"></div>
+  </div>
+  <div class="form-switch"><a href="#" onclick="event.preventDefault();showScreen('orgChoice')">← Volver</a></div>
+</div>
 
-    <div class="stats-row">
-        <div class="stat-card">
-            <div class="stat-num green" id="statActive">0</div>
-            <div class="stat-label">Activos Hoy</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-num purple" id="statGames">0</div>
-            <div class="stat-label">Juegos Hoy</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-num gold" id="statChats">0</div>
-            <div class="stat-label">Chats Hoy</div>
-        </div>
-    </div>
+<!-- ═══ ORG SIGNUP SUCCESS ═══ -->
+<div class="screen" id="orgSuccess">
+  <div class="auth-hero">
+    <div class="auth-icon">🎉</div>
+    <div class="auth-title">¡Registrada!</div>
+    <div class="auth-sub">Este es el código de su organización. Los participantes lo usan para conectarse.</div>
+  </div>
+  <div class="code-reveal">
+    <div class="code-label">CÓDIGO DE ORGANIZACIÓN</div>
+    <div class="code-value" id="successCode">---</div>
+    <div class="code-desc">Comparta este código con participantes o familias.<br>Ellos lo entran en heybori.com para conectarse.</div>
+    <button class="code-copy" onclick="copyCode()">📋 Copiar Código</button>
+  </div>
+  <div class="form-card">
+    <button class="form-btn form-btn-primary" onclick="loadOrgDashboard()">VER MI DASHBOARD →</button>
+  </div>
+</div>
 
-    <div class="section" id="moodSection" style="display:none">
-        <div class="section-title">ESTADO DE ÁNIMO HOY</div>
-        <div class="mood-row" id="moodRow"></div>
-    </div>
+<!-- ═══ DASHBOARD (shared by both) ═══ -->
+<div class="screen" id="dashboard">
 
-    <div class="section">
-        <div class="section-title">ACTIVIDAD SEMANAL</div>
-        <div class="week-chart" id="weekChart"></div>
-        <div class="week-legend">
-            <div class="legend-item"><div class="legend-dot games"></div>Juegos</div>
-            <div class="legend-item"><div class="legend-dot chats"></div>Conversaciones</div>
-        </div>
+  <div class="dash-header">
+    <div class="dash-type" id="dashType">ORGANIZACIÓN</div>
+    <div class="dash-name" id="dashName">---</div>
+    <div class="dash-meta">
+      <div class="dash-code" id="dashCode" style="display:none">---</div>
+      <div class="dash-count" id="dashCount">---</div>
     </div>
+  </div>
 
-    <div class="section" id="gamesSection" style="display:none">
-        <div class="section-title">JUEGOS MÁS POPULARES</div>
-        <div id="gamesList"></div>
+  <div class="stats-row">
+    <div class="stat"><div class="stat-val green" id="statActive">0</div><div class="stat-lb">Activos Hoy</div></div>
+    <div class="stat"><div class="stat-val purple" id="statGames">0</div><div class="stat-lb">Juegos Hoy</div></div>
+    <div class="stat"><div class="stat-val gold" id="statChats">0</div><div class="stat-lb">Chats Hoy</div></div>
+  </div>
+
+  <!-- Streak (familia only) -->
+  <div class="section" id="streakSection" style="display:none">
+    <div class="streak-row">
+      <div class="streak-fire">🔥</div>
+      <div class="streak-info">
+        <div class="streak-num" id="streakVal">0 días</div>
+        <div class="streak-lb">Racha de actividad</div>
+      </div>
     </div>
+  </div>
 
-    <div class="section">
-        <div class="section-title">TOTALES</div>
-        <div class="stats-row" style="margin-bottom:0">
-            <div class="stat-card">
-                <div class="stat-num purple" id="totalGames">0</div>
-                <div class="stat-label">Juegos Total</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-num gold" id="totalChats">0</div>
-                <div class="stat-label">Chats Total</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-num green" id="totalResidents">0</div>
-                <div class="stat-label">Participantes</div>
-            </div>
-        </div>
+  <div class="section" id="moodSection" style="display:none">
+    <div class="section-title">ESTADO DE ÁNIMO HOY</div>
+    <div class="mood-row" id="moodRow"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">ACTIVIDAD SEMANAL</div>
+    <div class="week-chart" id="weekChart"></div>
+    <div class="week-legend">
+      <div class="legend-item"><div class="legend-dot g"></div>Juegos</div>
+      <div class="legend-item"><div class="legend-dot c"></div>Conversaciones</div>
     </div>
+  </div>
 
-    <div class="code-share">
-        <div class="code-share-title">CÓDIGO PARA PARTICIPANTES</div>
-        <div class="code-share-code" id="dashShareCode">---</div>
-        <div class="code-share-desc">Comparta este código con participantes o imprima para el área de actividades.</div>
-        <button class="code-copy-btn" onclick="copyCode()">📋 Copiar Código</button>
+  <div class="section" id="gamesSection" style="display:none">
+    <div class="section-title">JUEGOS MÁS POPULARES</div>
+    <div id="gamesList"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">TOTALES</div>
+    <div class="stats-row" style="margin-bottom:0">
+      <div class="stat"><div class="stat-val purple" id="totalGames">0</div><div class="stat-lb">Juegos</div></div>
+      <div class="stat"><div class="stat-val gold" id="totalChats">0</div><div class="stat-lb">Chats</div></div>
+      <div class="stat"><div class="stat-val green" id="totalDays">0</div><div class="stat-lb">Días Activos</div></div>
     </div>
+  </div>
 
-    <button class="logout-btn" onclick="doLogout()">Cerrar Sesión</button>
-
-    <div class="footer">
-        <a href="/">← Volver a Hey Bori</a><br><br>
-        Hey Bori™ · Ritnome™<br>
-        © 2026 GoStar Digital LLC. All Rights Reserved.
+  <!-- Code share (org only) -->
+  <div id="codeShareSection" style="display:none">
+    <div class="code-reveal">
+      <div class="code-label">CÓDIGO PARA PARTICIPANTES</div>
+      <div class="code-value" id="dashShareCode">---</div>
+      <div class="code-desc">Comparta este código con participantes.</div>
+      <button class="code-copy" onclick="copyCode()">📋 Copiar Código</button>
     </div>
+  </div>
+
+  <div class="dash-actions">
+    <button class="dash-btn dash-btn-logout" onclick="doLogout()">Cerrar Sesión</button>
+  </div>
+
+  <footer class="foot">
+    <div class="foot-brand">HEY BORI™</div>
+    <div class="foot-copy">Ritnome™ · © 2026 GoStar Digital LLC</div>
+  </footer>
 </div>
 
 </div>
+
+<!-- Bori FAB -->
+<a class="fab" href="/the-chat.html">
+  <div class="fab-av">🇵🇷</div>
+  <span class="fab-tx">HABLA CON BORI</span>
+</a>
 
 <script>
-var DAY_NAMES = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
-var facilityPhone = localStorage.getItem('boriFacilityPhone') || '';
-var facilityCode = '';
+var DAYS=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+var mode='';// 'familia' or 'org'
+var orgPhone='';
+var orgCode='';
+var famUserId='';
+var famFamilyPin='';
 
-function showScreen(id) {
-    document.querySelectorAll('.auth-screen').forEach(function(s) { s.classList.remove('active'); });
-    document.getElementById('dashboard').classList.remove('active');
-    document.getElementById(id).classList.add('active');
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('on')});
+  document.getElementById(id).classList.add('on');
 }
 
-function showMsg(elId, msg, type) {
-    var el = document.getElementById(elId);
-    el.textContent = msg;
-    el.className = 'auth-msg ' + type;
+function showMsg(elId,msg,type){
+  var el=document.getElementById(elId);
+  el.textContent=msg;el.className='form-msg '+type;
 }
 
-function cleanPhone(p) { return (p || '').replace(/[^0-9]/g, ''); }
+function cleanPhone(p){return(p||'').replace(/[^0-9]/g,'')}
 
-function doSignup() {
-    var name = document.getElementById('signupName').value.trim();
-    var phone = cleanPhone(document.getElementById('signupPhone').value);
-    if (!name) { showMsg('signupMsg', 'Escriba el nombre de la organización', 'error'); return; }
-    if (phone.length < 7) { showMsg('signupMsg', 'Número de teléfono inválido', 'error'); return; }
+// ═══ FAMILIA LOGIN ═══
+function doFamiliaLogin(){
+  var pin=document.getElementById('famPin').value.trim();
+  var fpin=document.getElementById('famFamilyPin').value.trim();
+  if(pin.length<4){showMsg('famMsg','PIN requerido (4 dígitos)','error');return}
+  if(fpin.length<4){showMsg('famMsg','PIN familiar requerido (4 dígitos)','error');return}
 
-    fetch('/api/facility/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: name, phone: phone })
-    })
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-        if (data.ok) {
-            facilityPhone = phone;
-            facilityCode = data.code;
-            localStorage.setItem('boriFacilityPhone', phone);
-            document.getElementById('successCode').textContent = data.code;
-            showScreen('successScreen');
-        } else if (data.existing) {
-            facilityPhone = phone;
-            facilityCode = data.facilityCode;
-            localStorage.setItem('boriFacilityPhone', phone);
-            showMsg('signupMsg', 'Este número ya está registrado. Código: ' + data.facilityCode, 'success');
-        } else {
-            showMsg('signupMsg', data.error || 'Error', 'error');
-        }
-    })
-    .catch(function() { showMsg('signupMsg', 'Error de conexión', 'error'); });
+  fetch('/api/family/dashboard',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({userId:pin,familyPin:fpin})
+  }).then(function(r){return r.json()}).then(function(data){
+    if(data.error){showMsg('famMsg',data.error,'error');return}
+    mode='familia';famUserId=pin;famFamilyPin=fpin;
+    try{localStorage.setItem('boriFamUser',pin);localStorage.setItem('boriFamPin',fpin)}catch(e){}
+    renderFamiliaDashboard(data);
+  }).catch(function(){showMsg('famMsg','Error de conexión','error')});
 }
 
-function doLogin() {
-    var phone = cleanPhone(document.getElementById('loginPhone').value);
-    if (phone.length < 7) { showMsg('loginMsg', 'Número de teléfono inválido', 'error'); return; }
+function renderFamiliaDashboard(data){
+  showScreen('dashboard');
+  document.getElementById('dashType').textContent='FAMILIA';
+  document.getElementById('dashName').textContent=data.name||'Mi Familia';
+  document.getElementById('dashCode').style.display='none';
+  document.getElementById('dashCount').textContent='';
+  document.getElementById('codeShareSection').style.display='none';
 
-    fetch('/api/facility/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone: phone })
-    })
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-        if (data.ok) {
-            facilityPhone = phone;
-            facilityCode = data.code;
-            localStorage.setItem('boriFacilityPhone', phone);
-            loadDashboard();
-        } else {
-            showMsg('loginMsg', data.error || 'Error', 'error');
-        }
-    })
-    .catch(function() { showMsg('loginMsg', 'Error de conexión', 'error'); });
-}
+  // streak
+  if(data.streak>0){
+    document.getElementById('streakSection').style.display='block';
+    document.getElementById('streakVal').textContent=data.streak+' día'+(data.streak!==1?'s':'');
+  }else{document.getElementById('streakSection').style.display='none'}
 
-function loadDashboard() {
-    document.querySelectorAll('.auth-screen').forEach(function(s) { s.classList.remove('active'); });
-    var dash = document.getElementById('dashboard');
-    dash.classList.add('active');
+  // today
+  var todayActive=data.today.active?1:0;
+  document.getElementById('statActive').textContent=todayActive;
+  document.getElementById('statGames').textContent=data.today.games;
+  document.getElementById('statChats').textContent=data.today.chats;
 
-    fetch('/api/facility/dashboard', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone: facilityPhone })
-    })
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-        if (data.error) { doLogout(); return; }
-        renderDashboard(data);
-    })
-    .catch(function() { });
-}
-
-function renderDashboard(data) {
-    var f = data.facility;
-    facilityCode = f.code;
-    
-    document.getElementById('dashName').textContent = f.name;
-    document.getElementById('dashCode').textContent = f.code;
-    document.getElementById('dashResidents').textContent = f.totalResidents + ' participante' + (f.totalResidents !== 1 ? 's' : '') + ' conectado' + (f.totalResidents !== 1 ? 's' : '');
-    document.getElementById('dashShareCode').textContent = f.code;
-
-    // Today stats
-    document.getElementById('statActive').textContent = data.today.activeResidents;
-    document.getElementById('statGames').textContent = data.today.games;
-    document.getElementById('statChats').textContent = data.today.chats;
-
-    // Moods
-    if (data.today.moods && data.today.moods.length > 0) {
-        document.getElementById('moodSection').style.display = 'block';
-        var moodRow = document.getElementById('moodRow');
-        moodRow.innerHTML = '';
-        var moodMap = {};
-        data.today.moods.forEach(function(m) {
-            var label = (m && m.mood) || m || 'desconocido';
-            moodMap[label] = (moodMap[label] || 0) + 1;
-        });
-        Object.keys(moodMap).forEach(function(mood) {
-            var chip = document.createElement('div');
-            chip.className = 'mood-chip';
-            chip.textContent = mood + ' (' + moodMap[mood] + ')';
-            moodRow.appendChild(chip);
-        });
-    }
-
-    // Week chart
-    var weekChart = document.getElementById('weekChart');
-    weekChart.innerHTML = '';
-    var maxVal = 1;
-    data.week.forEach(function(d) {
-        var total = d.games + d.chats;
-        if (total > maxVal) maxVal = total;
+  // moods
+  if(data.today.badges&&data.today.badges.length>0){
+    document.getElementById('moodSection').style.display='block';
+    var mr=document.getElementById('moodRow');mr.innerHTML='';
+    data.today.badges.forEach(function(b){
+      var c=document.createElement('div');c.className='mood-chip';
+      c.textContent=(b&&b.name)||JSON.stringify(b);mr.appendChild(c);
     });
-    data.week.forEach(function(d) {
-        var dt = new Date(d.date + 'T12:00:00');
-        var dayName = DAY_NAMES[dt.getDay()];
-        var gamesH = Math.max(4, (d.games / maxVal) * 80);
-        var chatsH = Math.max(4, (d.chats / maxVal) * 80);
-        if (d.games === 0) gamesH = 4;
-        if (d.chats === 0) chatsH = 4;
+  }else{document.getElementById('moodSection').style.display='none'}
 
-        var col = document.createElement('div');
-        col.className = 'week-bar-col';
-        col.innerHTML = '<div class="week-bar chats" style="height:' + chatsH + 'px"></div>' +
-            '<div class="week-bar games" style="height:' + gamesH + 'px"></div>' +
-            '<div class="week-day">' + dayName + '</div>';
-        weekChart.appendChild(col);
+  // week
+  renderWeekChart(data.week);
+
+  // games section hidden for familia (no game breakdown)
+  document.getElementById('gamesSection').style.display='none';
+
+  // totals
+  document.getElementById('totalGames').textContent=data.totals.games;
+  document.getElementById('totalChats').textContent=data.totals.chats;
+  document.getElementById('totalDays').textContent=data.totals.daysActive;
+}
+
+// ═══ ORG SIGNUP ═══
+function doOrgSignup(){
+  var name=document.getElementById('signupName').value.trim();
+  var phone=cleanPhone(document.getElementById('signupPhone').value);
+  if(!name){showMsg('signupMsg','Escriba el nombre','error');return}
+  if(phone.length<7){showMsg('signupMsg','Número inválido','error');return}
+
+  fetch('/api/facility/signup',{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({name:name,phone:phone})
+  }).then(function(r){return r.json()}).then(function(data){
+    if(data.ok){
+      orgPhone=phone;orgCode=data.code;mode='org';
+      try{localStorage.setItem('boriOrgPhone',phone)}catch(e){}
+      document.getElementById('successCode').textContent=data.code;
+      showScreen('orgSuccess');
+    }else if(data.existing){
+      orgPhone=phone;orgCode=data.facilityCode;mode='org';
+      try{localStorage.setItem('boriOrgPhone',phone)}catch(e){}
+      showMsg('signupMsg','Ya registrado. Código: '+data.facilityCode,'success');
+    }else{showMsg('signupMsg',data.error||'Error','error')}
+  }).catch(function(){showMsg('signupMsg','Error de conexión','error')});
+}
+
+// ═══ ORG LOGIN ═══
+function doOrgLogin(){
+  var phone=cleanPhone(document.getElementById('loginPhone').value);
+  if(phone.length<7){showMsg('loginMsg','Número inválido','error');return}
+
+  fetch('/api/facility/login',{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({phone:phone})
+  }).then(function(r){return r.json()}).then(function(data){
+    if(data.ok){
+      orgPhone=phone;orgCode=data.code;mode='org';
+      try{localStorage.setItem('boriOrgPhone',phone)}catch(e){}
+      loadOrgDashboard();
+    }else{showMsg('loginMsg',data.error||'Error','error')}
+  }).catch(function(){showMsg('loginMsg','Error de conexión','error')});
+}
+
+function loadOrgDashboard(){
+  fetch('/api/facility/dashboard',{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({phone:orgPhone})
+  }).then(function(r){return r.json()}).then(function(data){
+    if(data.error){doLogout();return}
+    renderOrgDashboard(data);
+  }).catch(function(){});
+}
+
+function renderOrgDashboard(data){
+  showScreen('dashboard');
+  var f=data.facility;orgCode=f.code;
+  document.getElementById('dashType').textContent='ORGANIZACIÓN';
+  document.getElementById('dashName').textContent=f.name;
+  document.getElementById('dashCode').textContent=f.code;
+  document.getElementById('dashCode').style.display='inline-block';
+  document.getElementById('dashCount').textContent=f.totalResidents+' participante'+(f.totalResidents!==1?'s':'');
+  document.getElementById('codeShareSection').style.display='block';
+  document.getElementById('dashShareCode').textContent=f.code;
+  document.getElementById('streakSection').style.display='none';
+
+  document.getElementById('statActive').textContent=data.today.activeResidents;
+  document.getElementById('statGames').textContent=data.today.games;
+  document.getElementById('statChats').textContent=data.today.chats;
+
+  // moods
+  if(data.today.moods&&data.today.moods.length>0){
+    document.getElementById('moodSection').style.display='block';
+    var mr=document.getElementById('moodRow');mr.innerHTML='';
+    var mm={};
+    data.today.moods.forEach(function(m){var l=(m&&m.mood)||m||'';mm[l]=(mm[l]||0)+1});
+    Object.keys(mm).forEach(function(k){
+      var c=document.createElement('div');c.className='mood-chip';c.textContent=k+' ('+mm[k]+')';mr.appendChild(c);
     });
+  }else{document.getElementById('moodSection').style.display='none'}
 
-    // Popular games
-    if (data.popularGames && data.popularGames.length > 0) {
-        document.getElementById('gamesSection').style.display = 'block';
-        var list = document.getElementById('gamesList');
-        list.innerHTML = '';
-        data.popularGames.slice(0, 5).forEach(function(g, i) {
-            var row = document.createElement('div');
-            row.className = 'game-row';
-            row.innerHTML = '<div class="game-rank">' + (i + 1) + '</div>' +
-                '<div class="game-name">' + g.game + '</div>' +
-                '<div class="game-count">' + g.count + '</div>';
-            list.appendChild(row);
-        });
-    }
+  renderWeekChart(data.week);
 
-    // Totals
-    document.getElementById('totalGames').textContent = data.totals.totalGames;
-    document.getElementById('totalChats').textContent = data.totals.totalChats;
-    document.getElementById('totalResidents').textContent = data.totals.activeResidents;
+  // popular games
+  if(data.popularGames&&data.popularGames.length>0){
+    document.getElementById('gamesSection').style.display='block';
+    var gl=document.getElementById('gamesList');gl.innerHTML='';
+    data.popularGames.slice(0,5).forEach(function(g,i){
+      var r=document.createElement('div');r.className='game-row';
+      r.innerHTML='<div class="game-rank">'+(i+1)+'</div><div class="game-name">'+g.game+'</div><div class="game-ct">'+g.count+'</div>';
+      gl.appendChild(r);
+    });
+  }else{document.getElementById('gamesSection').style.display='none'}
+
+  document.getElementById('totalGames').textContent=data.totals.totalGames;
+  document.getElementById('totalChats').textContent=data.totals.totalChats;
+  document.getElementById('totalDays').textContent=data.totals.activeResidents;
 }
 
-function copyCode() {
-    var code = facilityCode;
-    if (navigator.clipboard) {
-        navigator.clipboard.writeText(code).then(function() {
-            var btns = document.querySelectorAll('.code-copy-btn');
-            btns.forEach(function(b) { b.textContent = '✅ ¡Copiado!'; });
-            setTimeout(function() { btns.forEach(function(b) { b.textContent = '📋 Copiar Código'; }); }, 2000);
-        });
-    }
+// ═══ SHARED HELPERS ═══
+function renderWeekChart(week){
+  var wc=document.getElementById('weekChart');wc.innerHTML='';
+  var mx=1;
+  week.forEach(function(d){var t=(d.games||0)+(d.chats||0);if(t>mx)mx=t});
+  week.forEach(function(d){
+    var dt=new Date(d.date+'T12:00:00');var dn=DAYS[dt.getDay()];
+    var gh=Math.max(3,((d.games||0)/mx)*70);
+    var ch=Math.max(3,((d.chats||0)/mx)*70);
+    if(!d.games)gh=3;if(!d.chats)ch=3;
+    var col=document.createElement('div');col.className='week-col';
+    col.innerHTML='<div class="week-bar chats" style="height:'+ch+'px"></div><div class="week-bar games" style="height:'+gh+'px"></div><div class="week-day">'+dn+'</div>';
+    wc.appendChild(col);
+  });
 }
 
-function doLogout() {
-    facilityPhone = '';
-    facilityCode = '';
-    localStorage.removeItem('boriFacilityPhone');
-    document.getElementById('dashboard').classList.remove('active');
-    showScreen('welcomeScreen');
+function copyCode(){
+  var code=orgCode;
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(code).then(function(){
+      document.querySelectorAll('.code-copy').forEach(function(b){b.textContent='✅ ¡Copiado!'});
+      setTimeout(function(){document.querySelectorAll('.code-copy').forEach(function(b){b.textContent='📋 Copiar Código'})},2000);
+    });
+  }
 }
 
-// Auto-login if saved
-if (facilityPhone) {
-    fetch('/api/facility/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone: facilityPhone })
-    })
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-        if (data.ok) {
-            facilityCode = data.code;
-            loadDashboard();
-        } else {
-            showScreen('welcomeScreen');
-        }
-    })
-    .catch(function() { showScreen('welcomeScreen'); });
-} else {
-    showScreen('welcomeScreen');
+function doLogout(){
+  mode='';orgPhone='';orgCode='';famUserId='';famFamilyPin='';
+  try{localStorage.removeItem('boriOrgPhone');localStorage.removeItem('boriFamUser');localStorage.removeItem('boriFamPin')}catch(e){}
+  showScreen('welcomeScreen');
 }
 
-// Auto-refresh every 60 seconds
-setInterval(function() {
-    if (facilityPhone && document.getElementById('dashboard').classList.contains('active')) {
-        loadDashboard();
-    }
-}, 60000);
+// ═══ AUTO-LOGIN ═══
+(function(){
+  // Try familia auto-login
+  var savedFamUser=null,savedFamPin=null;
+  try{savedFamUser=localStorage.getItem('boriFamUser');savedFamPin=localStorage.getItem('boriFamPin')}catch(e){}
+  if(savedFamUser&&savedFamPin){
+    fetch('/api/family/dashboard',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({userId:savedFamUser,familyPin:savedFamPin})
+    }).then(function(r){return r.json()}).then(function(data){
+      if(!data.error){mode='familia';famUserId=savedFamUser;famFamilyPin=savedFamPin;renderFamiliaDashboard(data)}
+      else{tryOrgAutoLogin()}
+    }).catch(function(){tryOrgAutoLogin()});
+    return;
+  }
+  tryOrgAutoLogin();
+})();
+
+function tryOrgAutoLogin(){
+  var savedPhone=null;
+  try{savedPhone=localStorage.getItem('boriOrgPhone')}catch(e){}
+  if(savedPhone){
+    fetch('/api/facility/login',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({phone:savedPhone})
+    }).then(function(r){return r.json()}).then(function(data){
+      if(data.ok){orgPhone=savedPhone;orgCode=data.code;mode='org';loadOrgDashboard()}
+      else{showScreen('welcomeScreen')}
+    }).catch(function(){showScreen('welcomeScreen')});
+  }else{showScreen('welcomeScreen')}
+}
+
+// Auto-refresh every 60s
+setInterval(function(){
+  if(mode==='org'&&orgPhone)loadOrgDashboard();
+  if(mode==='familia'&&famUserId&&famFamilyPin){
+    fetch('/api/family/dashboard',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({userId:famUserId,familyPin:famFamilyPin})
+    }).then(function(r){return r.json()}).then(function(data){
+      if(!data.error)renderFamiliaDashboard(data);
+    }).catch(function(){});
+  }
+},60000);
 </script>
 </body>
 </html>
