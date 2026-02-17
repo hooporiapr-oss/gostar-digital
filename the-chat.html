@@ -298,15 +298,23 @@
     input.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();if(!sending&&this.value.trim()&&canSend())send()}});
     function sendStarter(el){if(!canSend()){checkLimitReached();return}input.value=el.textContent;sendBtn.disabled=false;send()}
 
+    /* ═══ SAFE WELCOME REMOVAL ═══ */
+    function removeWelcome(){
+      try{
+        var w=document.getElementById('welcome');
+        if(w&&w.parentNode)w.parentNode.removeChild(w);
+      }catch(e){}
+    }
+
     function addMsg(role,text){
-      if(welcome)welcome.remove();
+      removeWelcome();
       var w=document.createElement('div');w.className='msg msg-'+role;
       var a=document.createElement('div');a.className='msg-av msg-av-'+role;a.textContent=role==='bori'?'🇵🇷':'👤';
       var b=document.createElement('div');b.className='bubble b-'+role;b.textContent=text;
       w.appendChild(a);w.appendChild(b);msgs.appendChild(w);scroll();return b;
     }
     function addTyping(){
-      if(welcome)welcome.remove();
+      removeWelcome();
       var w=document.createElement('div');w.className='msg msg-bori';w.id='typing';
       var a=document.createElement('div');a.className='msg-av msg-av-bori';a.textContent='🇵🇷';
       var b=document.createElement('div');b.className='bubble b-bori typing';b.innerHTML='<span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>';
@@ -315,21 +323,38 @@
     function removeTyping(){var t=document.getElementById('typing');if(t)t.remove()}
     function scroll(){msgs.scrollTop=msgs.scrollHeight}
 
+    /* ═══ SEND WITH 15s TIMEOUT ═══ */
     async function send(){
       var text=input.value.trim();if(!text||sending)return;
       if(checkLimitReached())return;
       sending=true;sendBtn.disabled=true;input.value='';input.style.height='auto';
-      addMsg('user',text);history.push({role:'user',content:text});
-      if(!isPaid){incrementCount();updateCounter()}
+      addMsg('user',text);
+      history.push({role:'user',content:text});
+      if(!isPaid){incrementCount();updateCounter();}
       addTyping();
       try{
-        var res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:history})});
+        var controller=new AbortController();
+        var timeout=setTimeout(function(){controller.abort();},15000);
+        var res=await fetch('/api/chat',{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({messages:history}),
+          signal:controller.signal
+        });
+        clearTimeout(timeout);
         removeTyping();
         if(!res.ok){addMsg('bori','Ay, tuve un problemita. Intenta de nuevo. 💛');sending=false;sendBtn.disabled=false;return}
         var data=await res.json();var reply=data.reply||'...';
         addMsg('bori',reply);history.push({role:'assistant',content:reply});
         if(history.length>40)history=history.slice(-40);
-      }catch(e){removeTyping();addMsg('bori','Perdona, no pude conectar. Intenta de nuevo. 💛')}
+      }catch(e){
+        removeTyping();
+        if(e.name==='AbortError'){
+          addMsg('bori','Perdona, tardé mucho en responder. Intenta de nuevo. 💛');
+        }else{
+          addMsg('bori','Perdona, no pude conectar. Intenta de nuevo. 💛');
+        }
+      }
       sending=false;
       if(checkLimitReached())return;
       sendBtn.disabled=!input.value.trim();input.focus();
