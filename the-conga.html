@@ -539,7 +539,7 @@ html,body{height:100%;overflow-x:hidden;font-family:'Outfit',sans-serif;backgrou
 <div class="drum-upsell-drums">🥁🥁🥁🥁🥁</div>
 <div class="drum-upsell-title">5 Tambores</div>
 <div class="drum-upsell-text">Más tambores, más ritmo, más diversión.<br>Disponible con Hey Bori Plus 💛</div>
-<a href="/#familia" class="drum-upsell-btn">Ver Planes</a>
+<a href="/#planes" class="drum-upsell-btn">Ver Planes</a>
 <button class="drum-upsell-skip" id="upsellSkip">Seguir con 3 🥁</button>
 </div>
 </div>
@@ -548,7 +548,7 @@ html,body{height:100%;overflow-x:hidden;font-family:'Outfit',sans-serif;backgrou
 <div class="family-nudge-close" id="nudgeClose">✕</div>
 <div class="family-nudge-emoji" id="nudgeEmoji">💛</div>
 <div class="family-nudge-text" id="nudgeText">¿Tu familia sabe lo bien que juegas?</div>
-<a href="/#familia" class="family-nudge-btn">Conecta con tu familia →</a>
+<a href="/#planes" class="family-nudge-btn">Conecta con tu familia →</a>
 </div>
 
 <div class="powered-strip"><span>Hey Bori™ · Ritnome™</span><br><span style="font-size:0.55rem;opacity:0.6;letter-spacing:1px">© 2026 GoStar Digital LLC. All Rights Reserved.</span></div>
@@ -897,9 +897,12 @@ var isSubscriber=false;
 
 (function checkAccess(){
 try{
-var user=JSON.parse(localStorage.getItem('lc-user')||'null');
-var speed=JSON.parse(localStorage.getItem('lc-speed-access')||'null');
-if(user&&user.pin&&speed&&speed.allSpeeds){isSubscriber=true;drumLock.style.display='none';drum5Btn.classList.add('unlocked')}
+var savedPin=localStorage.getItem('bori_pin');
+if(savedPin){
+fetch('/api/stripe/status-pin/'+savedPin).then(function(r){return r.json()}).then(function(d){
+if(d.subscribed){isSubscriber=true;drumLock.style.display='none';drum5Btn.classList.add('unlocked')}
+}).catch(function(){});
+}
 }catch(e){}
 })();
 
