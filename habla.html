@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="Habla con Bori — Tu Compañera Bilingüe 🇵🇷 Hey Bori">
+  <title>Habla con Bori — Hey Bori 🇵🇷</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Sans:wght@400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --serif:'DM Serif Display',serif;
+      --sans:'Instrument Sans',sans-serif;
+      --display:'Bebas Neue',sans-serif;
+      --night:#0B0B14;--surface:#1A1726;--surface2:#211D2E;
+      --purple:#8B5CF6;--purple-deep:#6D28D9;--purple-light:#A78BFA;
+      --gold:#D4A843;--gold-bright:#F0C75E;--teal:#2DD4A8;
+      --text:#EDEBE8;--muted:rgba(237,235,232,.5);--radius:18px;
+      --red:#EF4444
+    }
+    html,body{height:100%;overflow:hidden}
+    body{font-family:var(--sans);background:var(--night);color:var(--text);-webkit-font-smoothing:antialiased;display:flex;flex-direction:column}
+
+    /* ═══ AMBIENT BG ═══ */
+    .bg{position:fixed;inset:0;pointer-events:none;z-index:0}
+    .bg::before{content:'';position:absolute;top:-20%;left:50%;transform:translateX(-50%);width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(139,92,246,.08) 0%,transparent 60%)}
+
+    /* ═══ HEADER ═══ */
+    .hdr{display:flex;align-items:center;gap:12px;padding:12px 16px;background:rgba(11,11,20,.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.05);position:relative;z-index:10;flex-shrink:0}
+    .hdr-back{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:12px;background:var(--surface);border:1px solid rgba(255,255,255,.06);font-size:16px;text-decoration:none;color:var(--text);-webkit-tap-highlight-color:transparent;transition:all .15s;flex-shrink:0}
+    .hdr-back:active{transform:scale(.9)}
+    .hdr-av{width:42px;height:42px;border-radius:50%;object-fit:contain;background:linear-gradient(135deg,rgba(139,92,246,.15),rgba(168,85,247,.1));border:1.5px solid rgba(139,92,246,.2);padding:3px;flex-shrink:0}
+    .hdr-info{flex:1;min-width:0}
+    .hdr-name{font-family:var(--display);font-size:18px;letter-spacing:2px;line-height:1}
+    .hdr-status{display:flex;align-items:center;gap:5px;margin-top:2px}
+    .hdr-dot{width:7px;height:7px;border-radius:50%;background:#10B981;animation:pulse 2s ease infinite}
+    @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(16,185,129,.4)}50%{box-shadow:0 0 0 4px rgba(16,185,129,0)}}
+    .hdr-stat{font-size:11px;color:var(--muted);font-weight:600}
+    .hdr-flag{font-size:22px;flex-shrink:0}
+    .hdr-badge{padding:4px 10px;border-radius:100px;font-size:10px;font-weight:700;letter-spacing:.5px;flex-shrink:0}
+    .badge-free{background:rgba(212,168,67,.1);border:1px solid rgba(212,168,67,.2);color:var(--gold)}
+    .badge-empty{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:var(--red)}
+    .badge-paid{background:rgba(45,212,168,.1);border:1px solid rgba(45,212,168,.2);color:var(--teal)}
+
+    /* ═══ CHAT AREA ═══ */
+    .chat{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;position:relative;z-index:1;-webkit-overflow-scrolling:touch;scroll-behavior:smooth}
+    .chat::-webkit-scrollbar{width:3px}
+    .chat::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:10px}
+
+    /* ═══ WELCOME ═══ */
+    .hero{text-align:center;padding:24px 16px;animation:fadeUp .6s ease}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+    .hero-av{width:80px;height:80px;object-fit:contain;margin-bottom:12px;filter:drop-shadow(0 4px 20px rgba(139,92,246,.3));animation:bob 5s ease-in-out infinite}
+    @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+    .hero-title{font-family:var(--serif);font-size:22px;margin-bottom:4px}
+    .hero-title em{font-style:italic;color:var(--purple-light)}
+    .hero-sub{font-size:13px;color:var(--muted);line-height:1.5;max-width:280px;margin:0 auto}
+    .chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:16px}
+    .chip{padding:8px 14px;border-radius:100px;background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.15);font-size:12.5px;font-weight:600;color:var(--purple-light);cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent}
+    .chip:active{transform:scale(.95);background:rgba(139,92,246,.15)}
+
+    /* ═══ LIMIT SCREEN ═══ */
+    .limit{text-align:center;padding:30px 20px;animation:fadeUp .4s ease}
+    .limit-icon{font-size:40px;margin-bottom:12px}
+    .limit-title{font-family:var(--serif);font-size:20px;margin-bottom:6px}
+    .limit-desc{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:8px}
+    .limit-timer{display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 18px;border-radius:14px;background:rgba(139,92,246,.06);border:1px solid rgba(139,92,246,.15);font-size:13px;color:var(--text);margin:0 auto 20px;max-width:280px}
+    .limit-timer span{color:var(--purple-light);font-family:var(--display);font-size:20px;letter-spacing:2px}
+    .limit-cta{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border:none;border-radius:60px;background:linear-gradient(135deg,#7C3AED,#9333EA);color:white;font-family:var(--display);font-size:16px;letter-spacing:2px;text-decoration:none;-webkit-tap-highlight-color:transparent;transition:all .2s}
+    .limit-cta:active{transform:scale(.95)}
+    .limit-pin{font-size:12px;color:var(--muted);margin-top:10px}
+    .limit-pin a{color:var(--purple-light);text-decoration:underline;cursor:pointer;font-weight:600}
+    .limit-home{display:flex;align-items:center;justify-content:center;gap:6px;margin:18px auto 0;padding:14px 28px;border:1.5px solid rgba(255,255,255,.2);border-radius:60px;background:rgba(255,255,255,.08);color:var(--text);font-size:14px;font-weight:600;text-decoration:none;max-width:260px;-webkit-tap-highlight-color:transparent;transition:all .2s}
+    .limit-home:active{transform:scale(.95);background:rgba(255,255,255,.12)}
+
+    /* ═══ MESSAGES ═══ */
+    .row{display:flex;gap:8px;max-width:88%;animation:msgPop .35s cubic-bezier(.22,1,.36,1)}
+    @keyframes msgPop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+    .row-user{align-self:flex-end;flex-direction:row-reverse}
+    .row-bori{align-self:flex-start}
+    .av{width:28px;height:28px;border-radius:50%;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center}
+    .av-bori{background:linear-gradient(135deg,rgba(139,92,246,.2),rgba(168,85,247,.1));border:1px solid rgba(139,92,246,.15);font-size:14px;padding:2px}
+    .av-user{background:linear-gradient(135deg,rgba(212,168,67,.15),rgba(212,168,67,.05));border:1px solid rgba(212,168,67,.15);font-size:13px}
+    .bub{padding:10px 14px;border-radius:16px;font-size:14px;line-height:1.55;font-weight:500;word-wrap:break-word;overflow-wrap:break-word}
+    .bub-bori{background:var(--surface);border:1px solid rgba(255,255,255,.05);border-bottom-left-radius:4px;color:var(--text)}
+    .bub-user{background:linear-gradient(135deg,#7C3AED,#6D28D9);border-bottom-right-radius:4px;color:white}
+    .bub-err{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.15);border-bottom-left-radius:4px;color:#FCA5A5}
+    .dots{display:flex;align-items:center;gap:4px;padding:12px 16px}
+    .dot{width:7px;height:7px;border-radius:50%;background:var(--purple-light);opacity:.4;animation:bounce 1.4s ease-in-out infinite}
+    .dot:nth-child(2){animation-delay:.2s}
+    .dot:nth-child(3){animation-delay:.4s}
+    @keyframes bounce{0%,60%,100%{transform:translateY(0);opacity:.4}30%{transform:translateY(-6px);opacity:1}}
+
+    /* ═══ INPUT ═══ */
+    .bar{padding:10px 12px;padding-bottom:max(10px,env(safe-area-inset-bottom));background:rgba(11,11,20,.9);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,.05);position:relative;z-index:10;flex-shrink:0}
+    .bar-row{display:flex;gap:8px;align-items:flex-end;max-width:480px;margin:0 auto}
+    .bar-input{flex:1;min-height:44px;max-height:120px;padding:10px 14px;border-radius:14px;border:1.5px solid rgba(255,255,255,.08);background:var(--surface);color:var(--text);font-family:var(--sans);font-size:15px;font-weight:500;resize:none;outline:none;line-height:1.4;transition:border-color .2s;-webkit-appearance:none}
+    .bar-input::placeholder{color:var(--muted);font-weight:500}
+    .bar-input:focus{border-color:rgba(139,92,246,.3)}
+    .bar-input:disabled{opacity:.4}
+    .bar-send{width:44px;height:44px;border-radius:14px;border:none;background:linear-gradient(135deg,#7C3AED,#9333EA);color:white;font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;-webkit-tap-highlight-color:transparent;cursor:pointer}
+    .bar-send:active{transform:scale(.9)}
+    .bar-send:disabled{opacity:.3;transform:none;cursor:default}
+    .bar-send svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+
+    /* ═══ VOICE FAB ═══ */
+    .vfab{display:none;position:fixed;bottom:80px;right:16px;z-index:20;width:56px;height:56px;border-radius:50%;border:none;background:linear-gradient(135deg,var(--gold),var(--gold-bright));color:var(--night);font-size:24px;cursor:pointer;box-shadow:0 4px 20px rgba(212,168,67,.4);transition:all .3s;-webkit-tap-highlight-color:transparent;align-items:center;justify-content:center}
+    .vfab.on{display:flex;animation:fabIn .5s cubic-bezier(.22,1,.36,1)}
+    .vfab:active{transform:scale(.9)}
+    @keyframes fabIn{from{opacity:0;transform:scale(.5) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+    .vlock{display:none;position:fixed;bottom:80px;right:16px;z-index:20;width:56px;height:56px;border-radius:50%;border:1.5px solid rgba(255,255,255,.1);background:var(--surface2);color:var(--muted);font-size:22px;cursor:pointer;align-items:center;justify-content:center;opacity:.7;-webkit-tap-highlight-color:transparent}
+    .vlock.on{display:flex;animation:fabIn .5s cubic-bezier(.22,1,.36,1)}
+    .vlock:active{transform:scale(.9)}
+
+    /* ═══ UPSELL MODAL ═══ */
+    .modal-bg{display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px}
+    .modal-bg.on{display:flex}
+    .modal{background:var(--surface);border:1.5px solid rgba(255,255,255,.08);border-radius:var(--radius);padding:28px 24px;width:100%;max-width:340px;text-align:center;animation:fadeUp .3s ease}
+    .modal-gold{border-color:rgba(212,168,67,.2)}
+    .modal-icon{font-size:40px;margin-bottom:12px}
+    .modal-title{font-family:var(--serif);font-size:20px;margin-bottom:6px}
+    .modal-title-gold{color:var(--gold)}
+    .modal-desc{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:20px}
+    .modal-cta{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border:none;border-radius:60px;font-family:var(--display);font-size:16px;letter-spacing:2px;cursor:pointer;transition:all .2s;text-decoration:none;-webkit-tap-highlight-color:transparent}
+    .modal-cta-gold{background:linear-gradient(135deg,var(--gold),var(--gold-bright));color:var(--night);font-weight:700}
+    .modal-cta-purple{background:linear-gradient(135deg,#7C3AED,#9333EA);color:white}
+    .modal-cta:active{transform:scale(.95)}
+    .modal-close{margin-top:14px;font-size:13px;color:var(--muted);cursor:pointer}
+    .modal-sub{font-size:13px;color:var(--muted);margin-bottom:20px}
+    .modal-pin{width:100%;padding:14px;border-radius:14px;border:1.5px solid rgba(255,255,255,.08);background:var(--surface2);color:var(--text);font-family:var(--display);font-size:28px;letter-spacing:10px;text-align:center;outline:none;-webkit-appearance:none}
+    .modal-pin:focus{border-color:rgba(139,92,246,.3)}
+    .modal-pin::placeholder{font-family:var(--sans);font-size:14px;letter-spacing:1px;color:var(--muted)}
+    .modal-btn{width:100%;margin-top:12px;padding:14px;border:none;border-radius:14px;background:linear-gradient(135deg,#7C3AED,#9333EA);color:white;font-family:var(--display);font-size:16px;letter-spacing:2px;cursor:pointer}
+    .modal-btn:disabled{opacity:.4}
+    .modal-err{font-size:12px;color:var(--red);margin-top:8px;min-height:18px}
+
+    /* ═══ DEBUG BAR (hidden by default, shows on error) ═══ */
+    .dbg{display:none;position:fixed;top:0;left:0;right:0;z-index:200;padding:6px 12px;font-size:10px;font-family:monospace;text-align:center;animation:fadeUp .3s ease}
+    .dbg.on{display:block}
+    .dbg-ok{background:rgba(16,185,129,.15);color:#6EE7B7;border-bottom:1px solid rgba(16,185,129,.2)}
+    .dbg-err{background:rgba(239,68,68,.15);color:#FCA5A5;border-bottom:1px solid rgba(239,68,68,.2)}
+
+    @media(max-width:420px){.hdr-name{font-size:16px}.hero-av{width:68px;height:68px}.hero-title{font-size:20px}.bub{font-size:13.5px}}
+    @media(max-height:500px){.hero{padding:12px}.hero-av{width:50px;height:50px}.chips{margin-top:8px}}
+    @media(min-width:600px){.vfab,.vlock{bottom:90px;right:24px}}
+  </style>
+</head>
+<body>
+  <div class="bg"></div>
+
+  <!-- ═══ HEADER ═══ -->
+  <div class="hdr">
+    <a href="/" class="hdr-back">←</a>
+    <img src="/icon.png" alt="Bori" class="hdr-av">
+    <div class="hdr-info">
+      <div class="hdr-name">BORI</div>
+      <div class="hdr-status"><span class="hdr-dot"></span><span class="hdr-stat">Siempre contigo</span></div>
+    </div>
+    <div class="hdr-badge badge-free" id="badge">5/5</div>
+    <span class="hdr-flag">🇵🇷</span>
+  </div>
+
+  <!-- ═══ CHAT AREA ═══ -->
+  <div class="chat" id="chat"></div>
+
+  <!-- ═══ VOICE BUTTONS ═══ -->
+  <button class="vfab" id="vfab" onclick="window.open('https://chatgpt.com/g/g-69937e6b89148191afdc4d1d0a0acd39-hey-bori-tu-companera-bilingue','_blank')">🎤</button>
+  <button class="vlock" id="vlock" onclick="openModal('upsell')">🔒</button>
+
+  <!-- ═══ INPUT BAR ═══ -->
+  <div class="bar">
+    <div class="bar-row">
+      <textarea class="bar-input" id="inp" rows="1" placeholder="Escríbele a Bori..." enterkeyhint="send"></textarea>
+      <button class="bar-send" id="sendBtn" onclick="doSend()" disabled>
+        <svg viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2L15 22L11 13L2 9L22 2Z"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ═══ UPSELL MODAL ═══ -->
+  <div class="modal-bg" id="modal-upsell">
+    <div class="modal modal-gold">
+      <div class="modal-icon">🎤💛</div>
+      <div class="modal-title modal-title-gold">Habla con Bori por Voz</div>
+      <div class="modal-desc">Con Bori Plus, puedes hablar con Bori usando tu voz — como si fuera una llamada con tu mejor amiga boricua. Ilimitado, todos los días. 🇵🇷</div>
+      <a class="modal-cta modal-cta-gold" href="/#planes">BORI PLUS — $9.99/mes</a>
+      <div class="modal-close" onclick="closeModal('upsell')">Ahora no</div>
+    </div>
+  </div>
+
+  <!-- ═══ LOGIN MODAL ═══ -->
+  <div class="modal-bg" id="modal-login">
+    <div class="modal">
+      <div class="hdr-name" style="font-size:22px;margin-bottom:4px">ENTRA CON TU PIN</div>
+      <div class="modal-sub">Tu PIN de Bori Plus o Familia</div>
+      <input class="modal-pin" id="pinVal" type="tel" maxlength="4" placeholder="PIN" inputmode="numeric" autocomplete="off">
+      <div class="modal-err" id="pinErr"></div>
+      <button class="modal-btn" id="pinBtn" onclick="doPin()" disabled>ENTRAR</button>
+      <div class="modal-close" onclick="closeModal('login')">Cancelar</div>
+    </div>
+  </div>
+
+  <!-- ═══ DEBUG BAR ═══ -->
+  <div class="dbg" id="dbg"></div>
+
+  <script>
+  (function(){
+    /* ═══ DOM ═══ */
+    var chat=document.getElementById('chat');
+    var inp=document.getElementById('inp');
+    var sendBtn=document.getElementById('sendBtn');
+    var badge=document.getElementById('badge');
+    var dbg=document.getElementById('dbg');
+    var pinVal=document.getElementById('pinVal');
+    var pinBtn=document.getElementById('pinBtn');
+    var pinErr=document.getElementById('pinErr');
+
+    /* ═══ STATE ═══ */
+    var LIMIT=5;
+    var hist=[];
+    var busy=false;
+    var paid=false;
+    var pin=null;
+    var timerID=null;
+
+    /* ═══ DEBUG ═══ */
+    function debug(msg,ok){
+      dbg.textContent=msg;
+      dbg.className='dbg on '+(ok?'dbg-ok':'dbg-err');
+      if(ok)setTimeout(function(){dbg.classList.remove('on')},3000);
+    }
+
+    /* ═══ COUNTER (localStorage) ═══ */
+    function dayKey(){return'hb_'+new Date().toISOString().split('T')[0]}
+    function getCount(){try{return parseInt(localStorage.getItem(dayKey()))||0}catch(e){return 0}}
+    function addCount(){try{var k=dayKey(),c=getCount()+1;localStorage.setItem(k,String(c));return c}catch(e){return 99}}
+    function remain(){return paid?999:Math.max(0,LIMIT-getCount())}
+    function canSend(){return paid||remain()>0}
+
+    function showBadge(){
+      if(paid){badge.className='hdr-badge badge-paid';badge.textContent='∞ PLUS';}
+      else{
+        var r=remain();
+        if(r===0){badge.className='hdr-badge badge-empty';badge.textContent='0/'+LIMIT;}
+        else{badge.className='hdr-badge badge-free';badge.textContent=r+'/'+LIMIT;}
+      }
+    }
+
+    /* ═══ MIDNIGHT TIMER ═══ */
+    function midnight(){
+      var n=new Date(),m=new Date(n);m.setHours(24,0,0,0);
+      var d=m-n,h=Math.floor(d/36e5),mi=Math.floor(d%36e5/6e4),s=Math.floor(d%6e4/1e3);
+      return String(h).padStart(2,'0')+':'+String(mi).padStart(2,'0')+':'+String(s).padStart(2,'0');
+    }
+    function startTimer(){
+      var el=document.getElementById('timer');
+      if(!el)return;
+      el.textContent=midnight();
+      if(timerID)clearInterval(timerID);
+      timerID=setInterval(function(){
+        el.textContent=midnight();
+        if(remain()>0){clearInterval(timerID);location.reload();}
+      },1000);
+    }
+
+    /* ═══ SCREENS ═══ */
+    function showWelcome(){
+      chat.innerHTML=
+        '<div class="hero">'
+        +'<img src="/icon.png" alt="Bori" class="hero-av">'
+        +'<div class="hero-title">Hey <em>Bori</em> 💛</div>'
+        +'<div class="hero-sub">Soy tu compañera bilingüe. Háblame en español boricua o en English — siempre estoy aquí pa\' ti. 🇵🇷</div>'
+        +'<div class="chips">'
+        +'<span class="chip" onclick="tapChip(this)">¡Hola Bori! 💛</span>'
+        +'<span class="chip" onclick="tapChip(this)">Talk to me in English</span>'
+        +'<span class="chip" onclick="tapChip(this)">Me siento solita hoy...</span>'
+        +'<span class="chip" onclick="tapChip(this)">¿Qué juegos hay?</span>'
+        +'</div></div>';
+    }
+
+    function showLimit(){
+      chat.innerHTML=
+        '<div class="limit">'
+        +'<div class="limit-icon">💜</div>'
+        +'<div class="limit-title">¡Bori quiere seguir hablando!</div>'
+        +'<div class="limit-desc">Ya usaste tus 5 mensajes gratis de hoy.</div>'
+        +'<div class="limit-desc">Con Bori Plus, habla ilimitado todos los días. 🇵🇷</div>'
+        +'<div class="limit-timer">🕐 Se renuevan en <span id="timer">--:--:--</span></div>'
+        +'<a class="limit-cta" href="/#planes">💜 BORI PLUS — $9.99/mes</a>'
+        +'<div class="limit-pin">¿Ya tienes PIN? <a onclick="openModal(\'login\')">Entra aquí</a></div>'
+        +'<a class="limit-home" href="/">← Volver a Inicio</a>'
+        +'</div>';
+      inp.disabled=true;
+      inp.placeholder='Mensajes agotados por hoy...';
+      sendBtn.disabled=true;
+      showBadge();
+      startTimer();
+    }
+
+    /* ═══ MESSAGES ═══ */
+    function clearHero(){
+      var h=chat.querySelector('.hero');
+      if(h)h.remove();
+    }
+
+    function addBub(who,text,isErr){
+      clearHero();
+      var r=document.createElement('div');
+      r.className='row row-'+who;
+      var a=document.createElement('div');
+      a.className='av av-'+who;
+      a.textContent=who==='bori'?'🇵🇷':'👤';
+      var b=document.createElement('div');
+      b.className='bub '+(isErr?'bub-err':('bub-'+who));
+      b.textContent=text;
+      r.appendChild(a);r.appendChild(b);
+      chat.appendChild(r);
+      chat.scrollTop=chat.scrollHeight;
+    }
+
+    function addDots(){
+      clearHero();
+      var r=document.createElement('div');
+      r.className='row row-bori';r.id='dots';
+      var a=document.createElement('div');
+      a.className='av av-bori';a.textContent='🇵🇷';
+      var b=document.createElement('div');
+      b.className='bub bub-bori dots';
+      b.innerHTML='<span class="dot"></span><span class="dot"></span><span class="dot"></span>';
+      r.appendChild(a);r.appendChild(b);
+      chat.appendChild(r);
+      chat.scrollTop=chat.scrollHeight;
+    }
+    function killDots(){var d=document.getElementById('dots');if(d)d.remove();}
+
+    /* ═══ VOICE UI ═══ */
+    function showVoice(){
+      if(paid){
+        document.getElementById('vfab').classList.add('on');
+        document.getElementById('vlock').classList.remove('on');
+      }else{
+        document.getElementById('vfab').classList.remove('on');
+        document.getElementById('vlock').classList.add('on');
+      }
+    }
+
+    /* ═══ MODALS ═══ */
+    window.openModal=function(id){document.getElementById('modal-'+id).classList.add('on');if(id==='login'){pinVal.value='';pinErr.textContent='';pinVal.focus();}};
+    window.closeModal=function(id){document.getElementById('modal-'+id).classList.remove('on');};
+
+    /* ═══ PIN ═══ */
+    pinVal.addEventListener('input',function(){pinBtn.disabled=this.value.length<4;});
+    pinVal.addEventListener('keydown',function(e){if(e.key==='Enter'&&this.value.length>=4)doPin();});
+
+    function checkPin(){
+      try{var s=localStorage.getItem('bori_pin');if(s)verifyPin(s);}catch(e){}
+    }
+    function verifyPin(p){
+      fetch('/api/stripe/status-pin/'+p).then(function(r){return r.json();}).then(function(d){
+        if(d.subscribed){pin=p;paid=true;try{localStorage.setItem('bori_pin',p);}catch(e){}showBadge();showVoice();inp.disabled=false;inp.placeholder='Escríbele a Bori...';}
+        else{try{localStorage.removeItem('bori_pin');}catch(e){}paid=false;showBadge();showVoice();}
+      }).catch(function(){showBadge();showVoice();});
+    }
+    window.doPin=function(){
+      var p=pinVal.value.trim();if(p.length<4)return;
+      pinBtn.disabled=true;pinBtn.textContent='...';pinErr.textContent='';
+      fetch('/api/stripe/status-pin/'+p).then(function(r){return r.json();}).then(function(d){
+        if(d.subscribed){pin=p;paid=true;try{localStorage.setItem('bori_pin',p);}catch(e){}closeModal('login');showBadge();showVoice();inp.disabled=false;inp.placeholder='Escríbele a Bori...';if(!canSend()){}else{showWelcome();}}
+        else{pinErr.textContent=d.status==='canceled'?'Suscripción cancelada':'PIN no válido o inactivo';}
+        pinBtn.disabled=false;pinBtn.textContent='ENTRAR';
+      }).catch(function(){pinErr.textContent='Error de conexión';pinBtn.disabled=false;pinBtn.textContent='ENTRAR';});
+    };
+
+    /* ═══ INPUT ═══ */
+    inp.addEventListener('input',function(){
+      this.style.height='auto';
+      this.style.height=Math.min(this.scrollHeight,120)+'px';
+      sendBtn.disabled=!this.value.trim()||!canSend();
+    });
+    inp.addEventListener('keydown',function(e){
+      if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();if(!busy&&this.value.trim()&&canSend())doSend();}
+    });
+
+    window.tapChip=function(el){
+      if(!canSend()){showLimit();return;}
+      inp.value=el.textContent;
+      sendBtn.disabled=false;
+      doSend();
+    };
+
+    /* ═══ SEND ═══ */
+    window.doSend=async function(){
+      var text=inp.value.trim();
+      if(!text||busy)return;
+      if(!canSend()){showLimit();return;}
+
+      busy=true;
+      sendBtn.disabled=true;
+      inp.value='';
+      inp.style.height='auto';
+
+      /* Show user message */
+      addBub('user',text);
+      hist.push({role:'user',content:text});
+
+      /* Count IMMEDIATELY */
+      if(!paid){addCount();showBadge();}
+
+      /* Show typing */
+      addDots();
+
+      /* Call API with timeout */
+      try{
+        debug('Llamando a Bori...',true);
+        var ctrl=new AbortController();
+        var tmout=setTimeout(function(){ctrl.abort();},15000);
+
+        var res=await fetch('/api/chat',{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({messages:hist}),
+          signal:ctrl.signal
+        });
+
+        clearTimeout(tmout);
+        killDots();
+
+        if(!res.ok){
+          var errText='HTTP '+res.status;
+          try{var errData=await res.json();errText=errData.error||errText;}catch(e){}
+          debug('Error: '+errText,false);
+          addBub('bori','Ay, tuve un problemita ('+errText+'). Intenta de nuevo. 💛',true);
+          busy=false;sendBtn.disabled=false;return;
+        }
+
+        var data=await res.json();
+        var reply=data.reply||'...';
+        debug('✅ Bori respondió',true);
+        addBub('bori',reply);
+        hist.push({role:'assistant',content:reply});
+        if(hist.length>40)hist=hist.slice(-40);
+
+      }catch(e){
+        killDots();
+        if(e.name==='AbortError'){
+          debug('Timeout — 15s sin respuesta',false);
+          addBub('bori','Perdona, tardé mucho. Intenta de nuevo. 💛',true);
+        }else{
+          debug('Error: '+e.message,false);
+          addBub('bori','No pude conectar ('+e.message+'). Intenta de nuevo. 💛',true);
+        }
+      }
+
+      busy=false;
+
+      /* Check limit after send */
+      if(!canSend()){showLimit();return;}
+      sendBtn.disabled=!inp.value.trim();
+      inp.focus();
+    };
+
+    /* ═══ BOOT ═══ */
+    checkPin();
+    showBadge();
+    showVoice();
+    if(!canSend()){showLimit();}
+    else{showWelcome();}
+    if(canSend()&&window.innerWidth>600)inp.focus();
+
+  })();
+  </script>
+</body>
+</html>
