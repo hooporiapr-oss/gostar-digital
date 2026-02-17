@@ -726,7 +726,7 @@ app.get('/api/health', function(req, res) {
 });
 
 app.get('/', function(req, res) { res.sendFile(path.join(__dirname, 'index.html')); });
-app.get('/the-chat.html', function(req, res) { res.sendFile(path.join(__dirname, 'the-chat.html')); });
+app.get('/the-chat.html', function(req, res) { res.redirect(301, '/habla'); });
 app.get('/facility', function(req, res) { res.sendFile(path.join(__dirname, 'facility.html')); });
 app.get('/organizaciones', function(req, res) { res.sendFile(path.join(__dirname, 'organizaciones.html')); });
 app.get('/trial-pin', function(req, res) { res.sendFile(path.join(__dirname, 'trial-pin.html')); });
