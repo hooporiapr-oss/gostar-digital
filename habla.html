@@ -438,7 +438,9 @@
         var reply=data.reply||'...';
         debug('✅ Bori respondió',true);
         addBub('bori',reply);
-        hist.push({role:'assistant',content:reply});
+        hist.push({role:'assistant',content:reply});/* Log chat activity for dashboard */
+try{var savedPin=localStorage.getItem('bori_pin');
+if(savedPin){fetch('/api/activity',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId:savedPin,event:'chat',detail:{message:text.substring(0,50)}})}).catch(function(){});}}catch(e){}
         if(hist.length>40)hist=hist.slice(-40);
 
       }catch(e){
