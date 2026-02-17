@@ -240,7 +240,7 @@ app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), funct
 // ============ MIDDLEWARE ============
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(__dirname));
+// Force fresh serve for chat page (bypass CDN/browser cache) app.get('/the-chat.html', function(req, res) {     res.set('Cache-Control', 'no-store, no-cache, must-revalidate');     res.set('Pragma', 'no-cache');     res.set('Expires', '0');     res.sendFile(path.join(__dirname, 'the-chat.html')); }); app.use(express.static(__dirname));
 
 // ============ STRIPE HANDLERS ============
 function handleCheckoutComplete(session) {
