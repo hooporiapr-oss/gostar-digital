@@ -76,14 +76,14 @@
     .upgrade-icon{font-size:32px;margin-bottom:8px}
     .upgrade-title{font-family:var(--serif);font-size:18px;margin-bottom:4px}
     .upgrade-desc{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:12px}
-    .upgrade-reset{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:100px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);font-size:12px;color:var(--muted);margin-bottom:16px}
-    .upgrade-reset-time{color:var(--purple-light);font-weight:700}
+    .upgrade-reset{display:flex;align-items:center;justify-content:center;gap:6px;padding:10px 18px;border-radius:14px;background:rgba(139,92,246,.06);border:1px solid rgba(139,92,246,.15);font-size:13px;color:var(--text);margin-bottom:18px}
+    .upgrade-reset-time{color:var(--purple-light);font-family:var(--display);font-size:20px;letter-spacing:2px;font-weight:700}
     .upgrade-btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border:none;border-radius:60px;background:linear-gradient(135deg,#7C3AED,#9333EA);color:white;font-family:var(--display);font-size:16px;letter-spacing:2px;cursor:pointer;transition:all .2s;text-decoration:none;-webkit-tap-highlight-color:transparent}
     .upgrade-btn:active{transform:scale(.95)}
     .upgrade-or{font-size:12px;color:var(--muted);margin-top:10px}
     .upgrade-login{color:var(--purple-light);text-decoration:underline;cursor:pointer;font-weight:600}
-    .upgrade-home{display:inline-flex;align-items:center;gap:6px;margin-top:14px;padding:12px 24px;border:1.5px solid rgba(255,255,255,.1);border-radius:60px;background:transparent;color:var(--text);font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;text-decoration:none;-webkit-tap-highlight-color:transparent}
-    .upgrade-home:active{transform:scale(.95);background:rgba(255,255,255,.05)}
+    .upgrade-home{display:flex;align-items:center;justify-content:center;gap:6px;margin:16px auto 0;padding:14px 28px;border:1.5px solid rgba(255,255,255,.15);border-radius:60px;background:rgba(255,255,255,.05);color:var(--text);font-family:var(--sans);font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;text-decoration:none;-webkit-tap-highlight-color:transparent;width:100%;max-width:260px}
+    .upgrade-home:active{transform:scale(.95);background:rgba(255,255,255,.1)}
 
     .login-modal{display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px}
     .login-modal.show{display:flex}
@@ -276,11 +276,15 @@
     function canSend(){return isPaid||getRemaining()>0}
     function checkLimitReached(){
       if(!canSend()){
+        // Hide welcome so upgrade card is visible
+        if(welcome&&welcome.parentNode){welcome.style.display='none'}
         upgradeEl.classList.add('show');
         input.disabled=true;
         input.placeholder='Mensajes agotados por hoy...';
         sendBtn.disabled=true;
         startResetTimer();
+        // Scroll to show upgrade card
+        setTimeout(function(){msgs.scrollTop=msgs.scrollHeight},100);
         return true;
       }
       return false;
