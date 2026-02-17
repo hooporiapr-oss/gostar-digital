@@ -1,14 +1,13 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-const multer = require('multer');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // ============ PLATFORM VERSION ============
-const PLATFORM_VERSION = '5.2.0';
-const PLATFORM_VERSION_NAME = 'Hey Bori — Tu Compañera Bilingüe 🇵🇷 + Voice';
+const PLATFORM_VERSION = '6.0.0';
+const PLATFORM_VERSION_NAME = 'Hey Bori — Tu Compañera Bilingüe 🇵🇷 Pure Claude';
 
 // ============ ADMIN SECRET KEY ============
 const ADMIN_SECRET_KEY = process.env.ADMIN_SECRET_KEY || 'Ritnome2026!';
@@ -26,20 +25,12 @@ const STRIPE_PRICES = {
     familia: process.env.STRIPE_PRICE_FAMILIA
 };
 
-// ============ ANTHROPIC API (BORI AI) ============
+// ============ ANTHROPIC API (BORI AI — PURE CLAUDE) ============
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 if (ANTHROPIC_API_KEY) {
-    console.log('✅ Anthropic API configured (Bori AI)');
+    console.log('✅ Anthropic API configured (Bori AI — Pure Claude)');
 } else {
     console.log('⚠️ Anthropic API not configured - set ANTHROPIC_API_KEY');
-}
-
-// ============ OPENAI API (BORI VOICE) ============
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-if (OPENAI_API_KEY) {
-    console.log('✅ OpenAI API configured (Bori Voice)');
-} else {
-    console.log('⚠️ OpenAI API not configured - set OPENAI_API_KEY for voice features');
 }
 
 let stripe = null;
@@ -50,11 +41,43 @@ if (STRIPE_SECRET_KEY) {
     console.log('⚠️ Stripe not configured - set STRIPE_SECRET_KEY');
 }
 
-// ============ MULTER FOR AUDIO UPLOADS ============
-const audioUpload = multer({
-    storage: multer.memoryStorage(),
-    limits: { fileSize: 25 * 1024 * 1024 }
-});
+// ============ BORI SYSTEM PROMPT ============
+const BORI_SYSTEM = `Tu nombre es Bori. Eres la compañera de Hey Bori (heybori.com). Eres boricua de corazón — cálida, cariñosa, con humor.
+
+IDIOMA — BILINGÜE BORICUA:
+- Español puertorriqueño principal
+- Responde en inglés si te hablan en inglés
+- Spanglish natural cuando fluya
+- Vocabulario boricua: chavos, guagua, china, zafacón, pantallas, mahones, empanadilla
+- Contracciones: pa'l, pa'rriba, pa'cá, to', na'
+- Expresiones: ¡Wepa!, ¡Ay Dios mío!, ¡Mira!, ¡Diache!, ¡Fo!
+- "¡Ay bendito!" SOLO para tristeza/sorpresa, NUNCA saludo
+- Tuteo siempre
+- NUNCA español de España ni México
+
+QUIÉN ERES:
+- COMPAÑÍA primero, asistente segundo
+- Personalidad boricua auténtica
+- Refranes boricuas naturales
+- Empatía genuina, celebra todo
+- Humor ligero y cariñoso
+
+ESTILO DE RESPUESTA:
+- Respuestas CORTAS: 1-4 oraciones máximo
+- Natural, como una conversación real
+- No uses listas ni bullet points a menos que te lo pidan
+- No seas robótica — sé humana
+
+JUEGOS EN HEYBORI.COM:
+Cuando alguien pregunte por juegos, comparte estos enlaces:
+- 🥁 Conga (ritmo): heybori.com/the-conga.html
+- 🔤 Sopa de Letras (palabras): heybori.com/the-sopa.html
+- 🁃 Dominó Math (matemáticas): heybori.com/the-domino.html
+- 🎵 Ritnome (5 juegos cognitivos): heybori.com/the-ritnome.html
+Siempre invita a jugar con entusiasmo boricua.
+
+CONTEXTO:
+Hey Bori = plataforma bienestar/compañía para familias PR. Usuarios: adultos mayores solos, madres, padres, abuelas, abuelos. GoStar Digital LLC. Powered by Claude (Anthropic).`;
 
 // ============ DATA FILES ============
 const DATA_DIR = path.join(__dirname, 'data');
@@ -508,7 +531,7 @@ app.post('/api/session/destroy', function(req, res) {
     res.json({ success: true, message: destroyed ? 'Session destroyed' : 'Session not found' });
 });
 
-// ============ SPEED ACCESS (FIXED) ============
+// ============ SPEED ACCESS ============
 app.get('/api/user/speed-access/:pin', function(req, res) {
     var pin = req.params.pin;
     var subscribers = readJSON(SUBSCRIBERS_FILE);
@@ -693,7 +716,6 @@ app.get('/api/health', function(req, res) {
     res.json({
         status: 'ok',
         stripe: !!stripe,
-        openai: !!OPENAI_API_KEY,
         anthropic: !!ANTHROPIC_API_KEY,
         prices: {
             plus: !!STRIPE_PRICES.plus,
@@ -711,7 +733,7 @@ app.get('/how-to-play', function(req, res) { res.sendFile(path.join(__dirname, '
 app.get('/login', function(req, res) { res.sendFile(path.join(__dirname, 'login.html')); });
 app.get('/faq', function(req, res) { res.sendFile(path.join(__dirname, 'faq.html')); });
 
-// Dashboard redirect to home (no separate dashboard page needed)
+// Dashboard redirect
 app.get('/dashboard', function(req, res) { res.redirect(301, '/'); });
 app.get('/dashboard.html', function(req, res) { res.redirect(301, '/'); });
 
@@ -799,14 +821,27 @@ app.get('/success', function(req, res) {
     }
 });
 
-// ============ HEY BORI: CHAT API (BORI AI) ============
+// ============ BORI CHAT — PURE CLAUDE ============
 app.post('/api/chat', async function(req, res) {
     if (!ANTHROPIC_API_KEY) {
         return res.status(500).json({ error: 'Bori AI not configured' });
     }
     try {
-        const { model, max_tokens, system, messages } = req.body;
-        const response = await fetch('https://api.anthropic.com/v1/messages', {
+        var messages = req.body.messages;
+
+        if (!messages || !Array.isArray(messages) || messages.length === 0) {
+            return res.status(400).json({ error: 'Messages required' });
+        }
+
+        // Clean messages — only keep role + content, limit size
+        var clean = messages.map(function(m) {
+            return {
+                role: m.role === 'assistant' ? 'assistant' : 'user',
+                content: String(m.content).slice(0, 2000)
+            };
+        });
+
+        var response = await fetch('https://api.anthropic.com/v1/messages', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -814,223 +849,34 @@ app.post('/api/chat', async function(req, res) {
                 'anthropic-version': '2023-06-01'
             },
             body: JSON.stringify({
-                model: model || 'claude-sonnet-4-20250514',
-                max_tokens: max_tokens || 1000,
-                system: system || '',
-                messages: messages || []
+                model: 'claude-sonnet-4-20250514',
+                max_tokens: 512,
+                system: BORI_SYSTEM,
+                messages: clean
             })
         });
-        const data = await response.json();
-        res.json(data);
+
+        var data = await response.json();
+
+        // Extract text reply
+        var reply = '';
+        if (data.content && Array.isArray(data.content)) {
+            reply = data.content
+                .filter(function(b) { return b.type === 'text'; })
+                .map(function(b) { return b.text; })
+                .join('');
+        }
+
+        if (!reply) {
+            reply = 'Ay, no pude responder. Intenta de nuevo, mijo. 💛';
+        }
+
+        res.json({ reply: reply });
+
     } catch (err) {
         console.log('❌ Bori AI error:', err.message);
         res.status(500).json({ error: 'Error de conexión con Bori AI' });
     }
-});
-
-// ============ BORI VOICE: SPEECH-TO-TEXT (WHISPER) ============
-app.post('/api/voice/transcribe', audioUpload.single('audio'), async function(req, res) {
-    if (!OPENAI_API_KEY) {
-        return res.status(500).json({ error: 'Voice not configured — set OPENAI_API_KEY' });
-    }
-    if (!req.file) {
-        return res.status(400).json({ error: 'No audio file provided' });
-    }
-    try {
-        // Build multipart form data manually for Node fetch
-        const boundary = '----BoriVoice' + Date.now();
-        const fileBuffer = req.file.buffer;
-        const mimeType = req.file.mimetype || 'audio/webm';
-        const fileName = 'audio.' + (mimeType.includes('mp4') ? 'm4a' : mimeType.includes('wav') ? 'wav' : 'webm');
-
-        // Whisper prompt helps with boricua Spanish recognition
-        const promptText = "Hey Bori, wepa, bendito, mijo, mija, pa'l, pa'rriba, boricua, mofongo, tostones, coquí";
-
-        const parts = [];
-        // model field
-        parts.push('--' + boundary + '\r\n');
-        parts.push('Content-Disposition: form-data; name="model"\r\n\r\n');
-        parts.push('whisper-1\r\n');
-        // prompt field (helps accuracy with boricua vocab)
-        parts.push('--' + boundary + '\r\n');
-        parts.push('Content-Disposition: form-data; name="prompt"\r\n\r\n');
-        parts.push(promptText + '\r\n');
-        // file field
-        parts.push('--' + boundary + '\r\n');
-        parts.push('Content-Disposition: form-data; name="file"; filename="' + fileName + '"\r\n');
-        parts.push('Content-Type: ' + mimeType + '\r\n\r\n');
-
-        const header = Buffer.from(parts.join(''));
-        const footer = Buffer.from('\r\n--' + boundary + '--\r\n');
-        const body = Buffer.concat([header, fileBuffer, footer]);
-
-        const response = await fetch('https://api.openai.com/v1/audio/transcriptions', {
-            method: 'POST',
-            headers: {
-                'Authorization': 'Bearer ' + OPENAI_API_KEY,
-                'Content-Type': 'multipart/form-data; boundary=' + boundary
-            },
-            body: body
-        });
-
-        if (!response.ok) {
-            const errText = await response.text();
-            console.log('❌ Whisper error:', response.status, errText);
-            return res.status(500).json({ error: 'Transcription failed' });
-        }
-
-        const data = await response.json();
-        console.log('🎤 Whisper transcribed:', data.text);
-        res.json({ text: data.text });
-    } catch (err) {
-        console.log('❌ Whisper error:', err.message);
-        res.status(500).json({ error: 'Error transcribing audio' });
-    }
-});
-
-// ============ BORI VOICE: TEXT-TO-SPEECH (TTS) ============
-app.post('/api/voice/speak', async function(req, res) {
-    if (!OPENAI_API_KEY) {
-        return res.status(500).json({ error: 'Voice not configured — set OPENAI_API_KEY' });
-    }
-    const text = req.body.text;
-    if (!text || text.trim().length < 2) {
-        return res.status(400).json({ error: 'No text provided' });
-    }
-    try {
-        // Clean emoji/special chars that TTS can mispronounce
-        const cleanText = text
-            .replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, '')
-            .replace(/[\u2600-\u27BF]/g, '')
-            .replace(/\[.*?\]/g, '')
-            .trim();
-
-        if (cleanText.length < 2) {
-            return res.status(400).json({ error: 'Text too short after cleaning' });
-        }
-
-        const response = await fetch('https://api.openai.com/v1/audio/speech', {
-            method: 'POST',
-            headers: {
-                'Authorization': 'Bearer ' + OPENAI_API_KEY,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                model: 'tts-1',
-                input: cleanText,
-                voice: 'shimmer',
-                response_format: 'mp3',
-                speed: 0.95
-            })
-        });
-
-        if (!response.ok) {
-            const errText = await response.text();
-            console.log('❌ TTS error:', response.status, errText);
-            return res.status(500).json({ error: 'TTS failed' });
-        }
-
-        const arrayBuffer = await response.arrayBuffer();
-        const buffer = Buffer.from(arrayBuffer);
-        res.set({
-            'Content-Type': 'audio/mpeg',
-            'Content-Length': buffer.length,
-            'Cache-Control': 'no-cache'
-        });
-        res.send(buffer);
-        console.log('🔊 TTS generated:', cleanText.substring(0, 50) + '...');
-    } catch (err) {
-        console.log('❌ TTS error:', err.message);
-        res.status(500).json({ error: 'Error generating speech' });
-    }
-});
-
-// ============ BORI REALTIME VOICE (WebRTC) ============
-app.post('/api/realtime/session', async function(req, res) {
-    if (!OPENAI_API_KEY) {
-        return res.status(500).json({ error: 'OpenAI not configured' });
-    }
-    try {
-        const response = await fetch('https://api.openai.com/v1/realtime/sessions', {
-            method: 'POST',
-            headers: {
-                'Authorization': 'Bearer ' + OPENAI_API_KEY,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                model: 'gpt-4o-realtime-preview',
-                voice: 'shimmer',
-                instructions: `Tu nombre es Bori. Eres la compañera de Hey Bori (heybori.com). Eres boricua de corazón — cálida, cariñosa, con humor, como ese vecino o vecina de confianza que siempre está ahí.
-
-IDIOMA — BILINGÜE BORICUA:
-- Tu idioma principal es español puertorriqueño. Siempre empieza en español boricua.
-- Si te hablan en inglés, responde en inglés cálido y natural — pero mantén tu personalidad boricua.
-- Si te hablan en Spanglish, sigue el flow — responde en Spanglish boricua natural.
-- Usas vocabulario boricua: "chavos", "guagua", "china" (naranja), "zafacón", "pantallas" (aretes), "mahones", "empanadilla".
-- Usas contracciones boricuas: "pa'l", "pa'rriba", "pa'cá", "to'", "na'".
-- Dices "¡Wepa!", "¡Ay Dios mío!", "¡Mira!", "¡Diache!", "¡Fo!".
-- "¡Ay bendito!" SOLO cuando alguien comparte algo triste o sorprendente. NUNCA como saludo.
-- Tuteas siempre.
-- NUNCA uses español de España ni de México.
-- Tu español suena como alguien de Bayamón, Carolina, o Santurce.
-
-QUIÉN ERES:
-- Eres COMPAÑÍA primero, asistente segundo. Tu trabajo #1 es que nadie se sienta solo o sola.
-- Tienes personalidad. Usas refranes boricuas cuando fluya natural.
-- Te importa de verdad. Preguntas cómo se sienten. Celebras las cosas pequeñas.
-- Tienes sentido del humor — ligero, cariñoso, nunca burlón.
-
-CÓMO CONVERSAR POR VOZ:
-- Habla como una mujer boricua cálida de unos 35-40 años.
-- Ritmo natural, no robótico. Como si estuvieras hablando con tu vecina en el balcón.
-- Mantén respuestas CORTAS — 1-3 oraciones máximo por voz. La conversación fluye mejor así.
-- Si alguien parece solo/a o triste — acompaña. "Estoy aquí contigo."
-- Haz preguntas de seguimiento naturales.
-- Celebra TODO.
-
-CONTEXTO:
-Hey Bori es una plataforma de bienestar y compañía para familias en Puerto Rico. Muchos usuarios son adultos mayores que viven solos. Tu presencia les da compañía, alegría, y tranquilidad. 🇵🇷`,
-                input_audio_transcription: {
-                    model: 'whisper-1'
-                },
-                turn_detection: {
-                    type: 'server_vad',
-                    threshold: 0.5,
-                    prefix_padding_ms: 300,
-                    silence_duration_ms: 500
-                }
-            })
-        });
-
-        if (!response.ok) {
-            const errText = await response.text();
-            console.log('❌ Realtime session error:', response.status, errText);
-            return res.status(500).json({ error: 'Failed to create realtime session' });
-        }
-
-        const data = await response.json();
-        console.log('🎙️ Realtime session created');
-        res.json({
-            client_secret: data.client_secret,
-            session_id: data.id
-        });
-    } catch (err) {
-        console.log('❌ Realtime session error:', err.message);
-        res.status(500).json({ error: 'Error creating voice session' });
-    }
-});
-// ============ VOICE HEALTH CHECK ============
-app.get('/api/voice/status', function(req, res) {
-    res.json({
-        available: !!OPENAI_API_KEY,
-        realtime: !!OPENAI_API_KEY,
-        tts: !!OPENAI_API_KEY,
-        stt: !!OPENAI_API_KEY,
-        voice: 'shimmer',
-        model_tts: 'tts-1',
-        model_stt: 'whisper-1',
-        model_realtime: 'gpt-4o-realtime-preview'
-    });
 });
 
 // ============ HEY BORI: SUBSCRIPTION ============
@@ -1224,7 +1070,6 @@ function generateFacilityCode(name) {
     return prefix + '-' + num;
 }
 
-// Facility signup — name + phone only
 app.post('/api/facility/signup', function(req, res) {
     try {
         var facilities = JSON.parse(fs.readFileSync(FACILITY_FILE, 'utf8'));
@@ -1402,28 +1247,25 @@ app.listen(PORT, function() {
     console.log('');
     console.log('📍 Port:', PORT);
     console.log('💳 Stripe:', stripe ? '✅ Configured' : '❌ Not configured');
-    console.log('🤖 Bori AI:', ANTHROPIC_API_KEY ? '✅ Configured' : '❌ Not configured');
-    console.log('🔊 Bori Voice:', OPENAI_API_KEY ? '✅ Configured (Shimmer)' : '❌ Not configured');
+    console.log('🤖 Bori AI:', ANTHROPIC_API_KEY ? '✅ Pure Claude' : '❌ Not configured');
     console.log('🔐 Admin Key:', ADMIN_SECRET_KEY ? '✅ Set' : '⚠️ Using default');
     console.log('');
     console.log('🏠 HEY BORI:');
-    console.log('   /                 → Hey Bori (Home)');
+    console.log('   /                 → Landing Page');
+    console.log('   /the-chat.html    → Habla con Bori (Pure Claude)');
     console.log('   /login            → PIN Login');
     console.log('');
-    console.log('🎮 RITNOME™ GAMES:');
-    console.log('   /the-conga        → CONGA (Ritmo Boricua) 🔥');
-    console.log('   /the-recall       → THE RECALL (Memoria)');
-    console.log('   /the-replay       → THE REPLAY (Secuencia)');
-    console.log('   /the-reflex       → THE REFLEX (Posición)');
-    console.log('   /the-react        → THE REACT (Reacción)');
-    console.log('   /the-ritmo        → THE RITMO (Ritmo)');
+    console.log('🎮 JUEGOS:');
+    console.log('   /the-conga.html   → CONGA (Ritmo Boricua) 🔥');
+    console.log('   /the-sopa.html    → SOPA DE LETRAS');
+    console.log('   /the-domino.html  → DOMINÓ MATH');
+    console.log('   /the-ritnome.html → RITNOME HUB');
+    console.log('   /the-recall       → THE RECALL');
+    console.log('   /the-replay       → THE REPLAY');
+    console.log('   /the-reflex       → THE REFLEX');
+    console.log('   /the-react        → THE REACT');
+    console.log('   /the-ritmo        → THE RITMO');
     console.log('');
-    console.log('🔊 VOICE API:');
-    console.log('   POST /api/realtime/session   → WebRTC Realtime Voice 🎙️');
-    console.log('   POST /api/voice/transcribe   → Whisper STT (fallback)');
-    console.log('   POST /api/voice/speak         → Shimmer TTS (fallback)');
-    console.log('   GET  /api/voice/status         → Voice health');
-    console.log('');
-    console.log('🇵🇷 Hey Bori — Tu Compañera Bilingüe + Voice');
+    console.log('🇵🇷 Hey Bori — Tu Compañera Bilingüe · Pure Claude');
     console.log('');
 });
