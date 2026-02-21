@@ -1004,6 +1004,7 @@ app.post('/api/subscribe/:plan', function(req, res) {
     
     stripe.checkout.sessions.create({
         mode: 'subscription',
+        payment_method_types: ['card', 'link'],
         line_items: [{ price: priceId, quantity: 1 }],
         success_url: baseUrl + '/?payment=success&plan=' + plan,
         cancel_url: baseUrl + '/?payment=cancel',
