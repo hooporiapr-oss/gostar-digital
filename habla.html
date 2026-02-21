@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="description" content="Habla con Bori — Tu Compañera Bilingüe 🇵🇷 Hey Bori">
+  <meta name="description" content="Habla con Bori — Tu Digital Concierge 🇵🇷 Hey Bori">
   <title>Habla con Bori — Hey Bori 🇵🇷</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Sans:wght@400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
@@ -276,11 +276,11 @@
         +'<div class="hero-sub">Tu Digital Concierge 🇵🇷 Compañera, guía, y amiga bilingüe — pregúntame lo que quieras sobre Puerto Rico.</div>'
         +'<div class="chips">'
         +'<span class="chip" onclick="tapChip(this)">¡Hola Bori! 💛</span>'
-+'<span class="chip" onclick="tapChip(this)">Talk to me in English</span>'
-+'<span class="chip" onclick="tapChip(this)">Me siento solita hoy...</span>'
-+'<span class="chip" onclick="tapChip(this)">¿Dónde como hoy?</span>'
-+'<span class="chip" onclick="tapChip(this)">Best beaches near me?</span>'
-+'<span class="chip" onclick="tapChip(this)">¿Qué juegos hay?</span>'
+        +'<span class="chip" onclick="tapChip(this)">Talk to me in English</span>'
+        +'<span class="chip" onclick="tapChip(this)">Me siento solita hoy...</span>'
+        +'<span class="chip" onclick="tapChip(this)">¿Dónde como hoy?</span>'
+        +'<span class="chip" onclick="tapChip(this)">Best beaches near me?</span>'
+        +'<span class="chip" onclick="tapChip(this)">¿Qué juegos hay?</span>'
         +'</div></div>';
     }
 
@@ -443,9 +443,10 @@
         var reply=data.reply||'...';
         debug('✅ Bori respondió',true);
         addBub('bori',reply);
-        hist.push({role:'assistant',content:reply});/* Log chat activity for dashboard */
-try{var savedPin=localStorage.getItem('bori_pin');
-if(savedPin){fetch('/api/activity',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId:savedPin,event:'chat',detail:{message:text.substring(0,50)}})}).catch(function(){});}}catch(e){}
+        hist.push({role:'assistant',content:reply});
+        /* Log chat activity for dashboard */
+        try{var savedPin=localStorage.getItem('bori_pin');
+        if(savedPin){fetch('/api/activity',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId:savedPin,event:'chat',detail:{message:text.substring(0,50)}})}).catch(function(){});}}catch(e){}
         if(hist.length>40)hist=hist.slice(-40);
 
       }catch(e){
@@ -467,14 +468,6 @@ if(savedPin){fetch('/api/activity',{method:'POST',headers:{'Content-Type':'appli
       inp.focus();
     };
 
-    /* ═══ BOOT ═══ */
-    checkPin();
-    showBadge();
-    showVoice();
-    if(!canSend()){showLimit();}
-    else{showWelcome();}
-    if(canSend()&&window.innerWidth>600)inp.focus();
-
     /* ═══ SHARE ═══ */
     window.shareBori=function(){
       var shareData={title:'Hey Bori — Your Digital Concierge 🇵🇷',text:'Talk to Bori — she knows everything about Puerto Rico!',url:'https://heybori.com'};
@@ -482,7 +475,13 @@ if(savedPin){fetch('/api/activity',{method:'POST',headers:{'Content-Type':'appli
       else{navigator.clipboard.writeText('Hey Bori — Your Digital Concierge 🇵🇷 https://heybori.com').then(function(){var b=document.getElementById('shareBtn');b.textContent='✓';b.style.color='var(--teal)';setTimeout(function(){b.textContent='↗';b.style.color='';},2000);}).catch(function(){});}
     };
 
-  })();
+    /* ═══ BOOT ═══ */
+    checkPin();
+    showBadge();
+    showVoice();
+    if(!canSend()){showLimit();}
+    else{showWelcome();}
+    if(canSend()&&window.innerWidth>600)inp.focus();
 
   })();
   </script>
