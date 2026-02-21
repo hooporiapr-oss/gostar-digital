@@ -38,6 +38,8 @@
     @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(16,185,129,.4)}50%{box-shadow:0 0 0 4px rgba(16,185,129,0)}}
     .hdr-stat{font-size:11px;color:var(--muted);font-weight:600}
     .hdr-flag{font-size:22px;flex-shrink:0}
+    .hdr-share{width:34px;height:34px;border-radius:10px;border:1px solid rgba(255,255,255,.06);background:var(--surface);color:var(--muted);font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all .15s;flex-shrink:0}
+    .hdr-share:active{transform:scale(.9);color:var(--gold)}
     .hdr-badge{padding:4px 10px;border-radius:100px;font-size:10px;font-weight:700;letter-spacing:.5px;flex-shrink:0}
     .badge-free{background:rgba(212,168,67,.1);border:1px solid rgba(212,168,67,.2);color:var(--gold)}
     .badge-empty{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:var(--red)}
@@ -158,6 +160,7 @@
       <div class="hdr-status"><span class="hdr-dot"></span><span class="hdr-stat">Siempre contigo</span></div>
     </div>
     <div class="hdr-badge badge-free" id="badge">5/5</div>
+    <button class="hdr-share" id="shareBtn" onclick="shareBori()">↗</button>
     <span class="hdr-flag">🇵🇷</span>
   </div>
 
@@ -471,6 +474,15 @@ if(savedPin){fetch('/api/activity',{method:'POST',headers:{'Content-Type':'appli
     if(!canSend()){showLimit();}
     else{showWelcome();}
     if(canSend()&&window.innerWidth>600)inp.focus();
+
+    /* ═══ SHARE ═══ */
+    window.shareBori=function(){
+      var shareData={title:'Hey Bori — Your Digital Concierge 🇵🇷',text:'Talk to Bori — she knows everything about Puerto Rico!',url:'https://heybori.com'};
+      if(navigator.share){navigator.share(shareData).catch(function(){});}
+      else{navigator.clipboard.writeText('Hey Bori — Your Digital Concierge 🇵🇷 https://heybori.com').then(function(){var b=document.getElementById('shareBtn');b.textContent='✓';b.style.color='var(--teal)';setTimeout(function(){b.textContent='↗';b.style.color='';},2000);}).catch(function(){});}
+    };
+
+  })();
 
   })();
   </script>
