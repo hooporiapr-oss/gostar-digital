@@ -50,7 +50,7 @@
 
     .grid-wrap{background:var(--surface);border:1.5px solid rgba(255,255,255,.05);border-radius:var(--radius);padding:14px;margin-bottom:14px}
     .grid{display:grid;gap:3px;user-select:none;-webkit-user-select:none;touch-action:manipulation}
-    .cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:clamp(15px,4.2vw,20px);letter-spacing:1px;color:var(--text);background:var(--surface2);border-radius:6px;cursor:pointer;transition:all .12s;-webkit-tap-highlight-color:transparent}
+    .cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:clamp(15px,4.2vw,20px);letter-spacing:1px;color:var(--text);background:var(--surface2);border-radius:6px;cursor:pointer;transition:all .12s;-webkit-tap-highlight-color:transparent;touch-action:manipulation;-webkit-user-select:none;user-select:none}
     .cell.sel{background:var(--purple);color:white;transform:scale(1.1);box-shadow:0 0 12px rgba(139,92,246,.5);z-index:2;position:relative}
     .cell.f0{background:#2DD4A8;color:var(--night)}
     .cell.f1{background:#3B82F6;color:white}
@@ -222,7 +222,7 @@
         cell.className='cell';
         cell.textContent=grid[r][c];
         cell.dataset.r=r;cell.dataset.c=c;
-        cell.addEventListener('click',tap);
+        cell.addEventListener('pointerdown',tap);
         el.appendChild(cell);
       }
     }
