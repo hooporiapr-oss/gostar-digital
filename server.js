@@ -1498,7 +1498,6 @@ app.get('/api/fortune', async function(req, res) {
     }
     res.json({ fortune: fortune });
 });
-});
 // ============ START SERVER ============
 app.listen(PORT, function() {
     console.log('');
