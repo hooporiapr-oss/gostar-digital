@@ -27,6 +27,20 @@
     .hero{text-align:center;padding:52px 0 0}.hero-img{position:relative;display:inline-block;margin-bottom:18px}.hero-img img{width:160px;height:160px;object-fit:contain;filter:drop-shadow(0 8px 36px rgba(139,92,246,.35));animation:float 5s ease-in-out infinite}@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}.hero-img::before{content:'';position:absolute;inset:-14px;border-radius:50%;border:1.5px solid rgba(212,168,67,.12);animation:ring 4s ease infinite}.hero-img::after{content:'';position:absolute;inset:-30px;border-radius:50%;border:1px solid rgba(139,92,246,.06);animation:ring 4s ease infinite 2s}@keyframes ring{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.05);opacity:0}}
     .hero h1{font-family:var(--serif);font-size:44px;font-weight:400;line-height:1.05;letter-spacing:-1px;margin-bottom:6px}.hero h1 em{font-style:italic;background:linear-gradient(135deg,var(--gold),var(--gold-bright));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}.hero-tag{font-family:var(--display);font-size:14px;letter-spacing:4px;color:var(--teal);margin-bottom:6px;display:block}.hero-sub{font-size:13.5px;color:var(--muted);font-weight:500;letter-spacing:.3px}.hero-line{width:44px;height:1.5px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:20px auto;border:none}.hero-pitch{font-family:var(--serif);font-style:italic;font-size:17px;color:rgba(237,235,232,.65);line-height:1.65;max-width:340px;margin:0 auto 28px}
 
+    /* ═══ JUMBOTRON ═══ */
+    .jumbotron{background:linear-gradient(135deg,rgba(139,92,246,.06),rgba(212,168,67,.06));border:1.5px solid rgba(212,168,67,.15);border-radius:var(--radius);padding:22px 24px;margin-bottom:28px;text-align:center;position:relative;overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all .3s;min-height:100px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+    .jumbotron:active{transform:scale(.98);border-color:rgba(212,168,67,.3)}
+    .jumbotron::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at top left,rgba(139,92,246,.05),transparent 60%);pointer-events:none}
+    .jumbotron::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at bottom right,rgba(212,168,67,.04),transparent 60%);pointer-events:none}
+    .jt-label{font-family:var(--display);font-size:10px;letter-spacing:3px;color:var(--gold);margin-bottom:10px;display:block;position:relative;z-index:1}
+    .jt-rhyme{font-family:var(--serif);font-style:italic;font-size:18px;color:rgba(237,235,232,.85);line-height:1.6;position:relative;z-index:1;transition:opacity .4s ease}
+    .jt-rhyme.fade{opacity:0}
+    .jt-tap{font-size:10px;color:var(--muted);margin-top:10px;font-weight:600;letter-spacing:1px;position:relative;z-index:1}
+    .jt-emoji{font-size:22px;position:absolute;opacity:.12;pointer-events:none}
+    .jt-e1{top:8px;left:12px;animation:float 6s ease-in-out infinite}
+    .jt-e2{bottom:8px;right:14px;animation:float 7s ease-in-out infinite 1.5s}
+    @media(max-width:420px){.jt-rhyme{font-size:16px}}
+
     /* ═══ WHO CARDS ═══ */
     .who{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:28px}.who-card{background:var(--surface);border:1.5px solid rgba(255,255,255,.05);border-radius:16px;padding:18px 14px;text-align:center;transition:all .2s}.who-card:active{transform:scale(.97);border-color:rgba(255,255,255,.1)}.who-ic{font-size:28px;margin-bottom:6px;display:block}.who-label{font-family:var(--display);font-size:13px;letter-spacing:2px;margin-bottom:3px}.who-desc{font-size:11px;color:var(--muted);line-height:1.4;font-weight:500}
 
@@ -92,6 +106,17 @@
       <p class="hero-pitch r d5 en">Ask me anything — restaurants, beaches, music, culture, or just someone to talk to. I'm here for you, always. 💛</p>
       <p class="hero-pitch r d5 es">Dime lo que necesitas — restaurantes, playas, música, cultura, o simplemente alguien que te escuche. Siempre estoy aquí pa' ti. 💛</p>
     </section>
+
+    <!-- ═══ 🏟️ JUMBOTRON ═══ -->
+    <div class="jumbotron r d5" id="jumbotron" onclick="nextRhyme()">
+      <span class="jt-emoji jt-e1">🇵🇷</span>
+      <span class="jt-emoji jt-e2">💛</span>
+      <span class="jt-label en">BORI SAYS</span>
+      <span class="jt-label es">BORI DICE</span>
+      <div class="jt-rhyme" id="jtRhyme"></div>
+      <div class="jt-tap en">TAP FOR ANOTHER ✨</div>
+      <div class="jt-tap es">TOCA PA' OTRA ✨</div>
+    </div>
 
     <!-- ═══ WHO IS BORI ═══ -->
     <div class="who r d5">
@@ -255,11 +280,90 @@
       document.getElementById('btnEn').className=lang==='en'?'lang-btn active':'lang-btn';
       document.getElementById('btnEs').className=lang==='es'?'lang-btn active':'lang-btn';
       try{localStorage.setItem('hb-lang',lang);}catch(e){}
+      showRhyme();
     }
     (function(){
       var saved;try{saved=localStorage.getItem('hb-lang');}catch(e){}
       setLang(saved||'en');
     })();
+
+    /* ═══ 🏟️ JUMBOTRON RHYMES ═══ */
+    var rhymes={
+      morning:{
+        en:[
+          "Coffee in hand, sun on the sand — that's a Puerto Rican morning, planned. ☕🌅",
+          "Rise with the coquí, shine like the sea — buenos días, come vibe with me. 🐸✨",
+          "Palm trees waving, ocean breeze — morning in Borinquen is a masterpiece. 🌴🎨",
+          "Sun comes up over El Yunque tall — Bori's here, good morning to all. ☀️🌿",
+          "First ray of light, café con leche right — that's how boricuas start the fight. ☕💪",
+          "Roosters crow, the plaza glows — another beautiful día, and Bori knows. 🐓🌺",
+          "Mallorca warm, café with charm — nothing beats a boricua morning calm. 🥐☕"
+        ],
+        es:[
+          "Café en mano, corazón sano — así empieza un día boricuano. ☕💛",
+          "Sale el sol, canta el coquí — buenos días, estoy aquí pa' ti. 🐸☀️",
+          "Amanecer en Borinquen, qué belleza — con Bori al lado, no hay tristeza. 🌅💛",
+          "Palmas bailando, brisa llegando — otro día bonito va empezando. 🌴🎶",
+          "Primer rayito, café calentito — así empieza el día más bonito. ☕✨",
+          "El gallo canta, la plaza encanta — buenos días, Bori se levanta. 🐓🌺",
+          "Mallorca caliente, café excelente — buenos días, mi gente. 🥐☕"
+        ]
+      },
+      afternoon:{
+        en:[
+          "Arroz con gandules on the plate, afternoon vibes — life is great. 🍚🎶",
+          "Sun up high, playa nearby — that's the boricua afternoon, no lie. 🏖️☀️",
+          "Belly full, heart at ease — that's the island afternoon breeze. 🌊💛",
+          "Piragua cold, stories told — afternoons in PR are pure gold. 🍧✨",
+          "Dominoes on the table, salsa on the speaker — every afternoon gets a little sweeter. 🁃🎵",
+          "Chinchorreo calling, mofongo falling — into my plate, no time for stalling. 🍽️🏝️",
+          "Limber in hand, feet in the sand — afternoon plans? Bori understands. 🍋🏖️"
+        ],
+        es:[
+          "Arroz con gandules en la mesa — en esta casa no hay tristeza. 🍚💛",
+          "Sol caliente, brisa en la frente — buenas tardes, mi gente. ☀️🌊",
+          "Barriga llena, corazón contento — así se vive cada momento. 🍽️🎶",
+          "Piragua fría, qué maravilla — la tarde boricua siempre brilla. 🍧✨",
+          "Dominó en la mesa, salsa que no cesa — así es la tarde boricuesa. 🁃🎵",
+          "Chinchorreo va, mofongo vendrá — la tarde en PR no tiene rival. 🍽️🏝️",
+          "Limber en mano, paseo liviano — así se goza un tarde de verano. 🍋🌴"
+        ]
+      },
+      night:{
+        en:[
+          "Stars above Borinquen shine — buenas noches, rest that beautiful mind. 🌙✨",
+          "Coquí singing, night is bringing — peace and calm, the island is swinging. 🐸🌙",
+          "Moon over the plaza, gentle and bright — buenas noches, Puerto Rico, goodnight. 🌕💛",
+          "Day is done, battles won — tomorrow the sun brings another one. 🌅💪",
+          "Bolero playing, palm trees swaying — goodnight boricua, no more delaying. 🎵🌴",
+          "After the storm always comes the sun — rest tonight, tomorrow we run. 🌙☀️",
+          "Close your eyes, feel the breeze — island nights bring island peace. 🌊🌙"
+        ],
+        es:[
+          "Coquí cantando, luna brillando — buenas noches, Bori te está cuidando. 🐸🌙",
+          "Después de la tormenta, sale el sol — descansa tranquilo, que Dios es amor. 🌙💛",
+          "Noche boricua, estrellas en el mar — cierra los ojos, es hora de soñar. ⭐🌊",
+          "Bolero suave, brisa que sabe — buenas noches, que la paz no acabe. 🎵🌙",
+          "Se fue el sol, quedó la calma — buenas noches pa' el cuerpo y el alma. 🌅💛",
+          "Luna sobre el Morro, brillando bonito — descansa, que mañana hay otro ratito. 🌕✨",
+          "Día cumplido, corazón agradecido — buenas noches, que sueñes conmigo. 🌙🇵🇷"
+        ]
+      }
+    };
+    var lastIdx=-1;
+    function getTimeBlock(){var h=new Date().getHours();if(h>=5&&h<12)return'morning';if(h>=12&&h<18)return'afternoon';return'night';}
+    function showRhyme(){
+      var lang=document.body.className||'en';
+      var block=getTimeBlock();
+      var pool=rhymes[block][lang]||rhymes[block].en;
+      var idx;
+      do{idx=Math.floor(Math.random()*pool.length);}while(idx===lastIdx&&pool.length>1);
+      lastIdx=idx;
+      var el=document.getElementById('jtRhyme');
+      el.classList.add('fade');
+      setTimeout(function(){el.textContent=pool[idx];el.classList.remove('fade');},300);
+    }
+    function nextRhyme(){showRhyme();}
 
     function subscribePlan(plan){var btn=event.target;btn.textContent='Loading...';btn.style.pointerEvents='none';fetch('/api/subscribe/'+plan,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({})}).then(function(r){return r.json();}).then(function(data){if(data.url){window.location.href=data.url;}else{alert('Error: '+(data.error||'Try again'));btn.textContent=plan==='plus'?'GET BORI PLUS 💜':'GET BORI FAMILIA 👨‍👩‍👧';btn.style.pointerEvents='auto';}}).catch(function(){alert('Connection error. Try again.');btn.textContent=plan==='plus'?'GET BORI PLUS 💜':'GET BORI FAMILIA 👨‍👩‍👧';btn.style.pointerEvents='auto';});}
     (function(){var p=new URLSearchParams(window.location.search);var payment=p.get('payment');if(payment==='success'){var plan=p.get('plan')||'plus';setTimeout(function(){alert('Welcome to Bori '+(plan==='familia'?'Familia':'Plus')+'! 💜');},500);window.history.replaceState({},document.title,window.location.pathname);}else if(payment==='cancel'){setTimeout(function(){alert('No worries — subscribe anytime. 💜');},500);window.history.replaceState({},document.title,window.location.pathname);}})();
