@@ -1447,6 +1447,59 @@ app.get('/api/horoscope/:sign', async function(req, res) {
 });
 
 app.get('/the-horoscope', function(req, res) { res.sendFile(path.join(__dirname, 'the-horoscope.html')); });
+// ============ FORTUNE COCO ENGINE ============
+const fortuneCache = new Map();
+
+const FORTUNE_SYSTEM = `Eres Bori, la creadora de fortunas diarias de Hey Bori. Creas UNA fortuna corta por día con alma puertorriqueña — positiva, esperanzadora, cultural, cariñosa.
+
+REGLAS:
+- UNA oración. Máximo 2 oraciones. CORTA y poderosa.
+- Siempre positiva y esperanzadora
+- Usa referencias boricuas naturalmente (comida, playa, música, familia, naturaleza)
+- Cada fortuna debe sentirse como un abrazo de una abuela boricua
+- NO menciones signos zodiacales (eso es el horóscopo, no la fortuna)
+- Responde SOLO con el texto de la fortuna, nada más. Sin comillas, sin JSON, solo el texto.`;
+
+async function generateFortune(lang) {
+    var today = new Date().toISOString().split('T')[0];
+    var key = 'fortune_' + lang + '_' + today;
+    if (fortuneCache.has(key)) return fortuneCache.get(key);
+    fortuneCache.forEach(function(val, k) { if (!k.endsWith(today)) fortuneCache.delete(k); });
+    var dateStr = new Date().toLocaleDateString('en-US', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+    var prompt = lang === 'es'
+        ? 'Genera la fortuna del coco de hoy (' + dateStr + '). Una frase corta, positiva, boricua. Solo el texto.'
+        : 'Generate today\'s coconut fortune (' + dateStr + '). One short, positive, Puerto Rican-flavored sentence. Just the text.';
+    try {
+        var response = await fetch('https://api.anthropic.com/v1/messages', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
+            body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 150, system: FORTUNE_SYSTEM, messages: [{ role: 'user', content: prompt }] })
+        });
+        var data = await response.json();
+        var text = '';
+        if (data.content && Array.isArray(data.content)) {
+            text = data.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('').trim();
+        }
+        if (text) {
+            fortuneCache.set(key, text);
+            console.log('🥥 Fortune generated:', lang);
+        }
+        return text || null;
+    } catch (err) {
+        console.log('❌ Fortune error:', err.message);
+        return null;
+    }
+}
+
+app.get('/api/fortune', async function(req, res) {
+    if (!ANTHROPIC_API_KEY) return res.status(500).json({ error: 'AI not configured' });
+    var lang = req.query.lang === 'es' ? 'es' : 'en';
+    var fortune = await generateFortune(lang);
+    if (!fortune) {
+        fortune = lang === 'es' ? 'Hoy el universo conspira a tu favor. Déjate llevar. 🥥💛' : 'Today the universe is on your side. Let it flow. 🥥💛';
+    }
+    res.json({ fortune: fortune });
+});
 // ============ START SERVER ============
 app.listen(PORT, function() {
     console.log('');
