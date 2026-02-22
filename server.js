@@ -1450,30 +1450,28 @@ app.get('/the-horoscope', function(req, res) { res.sendFile(path.join(__dirname,
 // ============ FORTUNE COCO ENGINE ============
 const fortuneCache = new Map();
 
-const FORTUNE_SYSTEM = `Eres Bori, la creadora de fortunas diarias de Hey Bori. Creas UNA fortuna corta por día con alma puertorriqueña — positiva, esperanzadora, cultural, cariñosa.
-
-REGLAS:
-- UNA oración. Máximo 2 oraciones. CORTA y poderosa.
-- Siempre positiva y esperanzadora
-- Usa referencias boricuas naturalmente (comida, playa, música, familia, naturaleza)
-- Cada fortuna debe sentirse como un abrazo de una abuela boricua
-- NO menciones signos zodiacales (eso es el horóscopo, no la fortuna)
-- Responde SOLO con el texto de la fortuna, nada más. Sin comillas, sin JSON, solo el texto.`;
-
 async function generateFortune(lang) {
     var today = new Date().toISOString().split('T')[0];
     var key = 'fortune_' + lang + '_' + today;
     if (fortuneCache.has(key)) return fortuneCache.get(key);
     fortuneCache.forEach(function(val, k) { if (!k.endsWith(today)) fortuneCache.delete(k); });
     var dateStr = new Date().toLocaleDateString('en-US', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
-    var prompt = lang === 'es'
-        ? 'Genera la fortuna del coco de hoy (' + dateStr + '). Una frase corta, positiva, boricua. Solo el texto.'
-        : 'Generate today\'s coconut fortune (' + dateStr + '). One short, positive, Puerto Rican-flavored sentence. Just the text.';
+
+    var systemPrompt, userPrompt;
+
+    if (lang === 'es') {
+        systemPrompt = 'Eres Bori, creadora de fortunas diarias con alma puertorriqueña. REGLAS: UNA oración máximo 2. Siempre positiva y esperanzadora. Usa referencias boricuas (comida, playa, música, familia, naturaleza). Responde SOLO con el texto de la fortuna en ESPAÑOL BORICUA. Nada más — sin comillas, sin JSON, sin explicación.';
+        userPrompt = 'Genera la fortuna del coco de hoy (' + dateStr + '). Solo el texto en español boricua.';
+    } else {
+        systemPrompt = 'You are Bori, creator of daily fortunes with Puerto Rican soul. RULES: ONE sentence, max 2. Always positive and hopeful. Use Puerto Rican cultural references (food, beach, music, family, nature). Respond ONLY with the fortune text in ENGLISH. Nothing else — no quotes, no JSON, no explanation.';
+        userPrompt = 'Generate today\'s coconut fortune (' + dateStr + '). Just the text in English with Puerto Rican flavor.';
+    }
+
     try {
         var response = await fetch('https://api.anthropic.com/v1/messages', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
-            body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 150, system: FORTUNE_SYSTEM, messages: [{ role: 'user', content: prompt }] })
+            body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 150, system: systemPrompt, messages: [{ role: 'user', content: userPrompt }] })
         });
         var data = await response.json();
         var text = '';
@@ -1499,6 +1497,7 @@ app.get('/api/fortune', async function(req, res) {
         fortune = lang === 'es' ? 'Hoy el universo conspira a tu favor. Déjate llevar. 🥥💛' : 'Today the universe is on your side. Let it flow. 🥥💛';
     }
     res.json({ fortune: fortune });
+});
 });
 // ============ START SERVER ============
 app.listen(PORT, function() {
