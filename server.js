@@ -1348,7 +1348,105 @@ app.post('/api/facility/dashboard', function(req, res) {
         res.json({ error: 'Error cargando dashboard' });
     }
 });
+// ============ BORI HOROSCOPE ENGINE ============
+const horoscopeCache = new Map();
+const HOROSCOPE_SIGNS = ['aries','taurus','gemini','cancer','leo','virgo','libra','scorpio','sagittarius','capricorn','aquarius','pisces'];
 
+const HOROSCOPE_SYSTEM = `Eres Bori, la astrologa boricua de Hey Bori. Creas horóscopos diarios con alma puertorriqueña — cálidos, positivos, culturales, y llenos de esperanza. Tu estilo recuerda la calidez de Walter Mercado, pero eres única: eres Bori, joven, moderna, y 100% boricua.
+
+REGLAS:
+- Siempre positiva y esperanzadora — NUNCA negativa, NUNCA amenazante
+- Usa referencias culturales boricuas naturalmente (comida, música, playas, familia, fe)
+- Tono cariñoso y personal — como si le hablaras a un familiar querido
+- NUNCA menciones a Walter Mercado por nombre
+- Responde SOLO en formato JSON válido, sin markdown, sin backticks
+- Cada lectura debe ser ÚNICA para ese signo y ese día
+
+Formato de respuesta JSON:
+{
+  "reading": "Lectura principal (3-4 oraciones, inspiradora, boricua)",
+  "love": "Mini lectura de amor (1 oración)",
+  "work": "Mini lectura de trabajo (1 oración)",
+  "health": "Mini lectura de salud (1 oración)",
+  "spirit": "Mini lectura espiritual (1 oración)",
+  "luckyNumber": "número entre 1-99",
+  "luckyColor": "un color",
+  "energy": "emoji que capture la energía del día"
+}`;
+
+function getHoroscopeCacheKey(sign, lang) {
+    var today = new Date().toISOString().split('T')[0];
+    return sign + '_' + lang + '_' + today;
+}
+
+async function generateHoroscope(sign, lang) {
+    var key = getHoroscopeCacheKey(sign, lang);
+    if (horoscopeCache.has(key)) {
+        return horoscopeCache.get(key);
+    }
+    var today = new Date().toISOString().split('T')[0];
+    horoscopeCache.forEach(function(val, k) {
+        if (!k.endsWith(today)) horoscopeCache.delete(k);
+    });
+    var signNames = {
+        aries:{en:'Aries',es:'Aries'},taurus:{en:'Taurus',es:'Tauro'},
+        gemini:{en:'Gemini',es:'Géminis'},cancer:{en:'Cancer',es:'Cáncer'},
+        leo:{en:'Leo',es:'Leo'},virgo:{en:'Virgo',es:'Virgo'},
+        libra:{en:'Libra',es:'Libra'},scorpio:{en:'Scorpio',es:'Escorpio'},
+        sagittarius:{en:'Sagittarius',es:'Sagitario'},capricorn:{en:'Capricorn',es:'Capricornio'},
+        aquarius:{en:'Aquarius',es:'Acuario'},pisces:{en:'Pisces',es:'Piscis'}
+    };
+    var name = signNames[sign] ? signNames[sign][lang] || signNames[sign].en : sign;
+    var dateStr = new Date().toLocaleDateString('en-US', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+    var prompt = lang === 'es'
+        ? 'Genera el horóscopo de hoy (' + dateStr + ') para ' + name + '. Responde completamente en español boricua. Solo JSON, sin backticks.'
+        : 'Generate today\'s horoscope (' + dateStr + ') for ' + name + '. Respond completely in English with Puerto Rican cultural flavor. Only JSON, no backticks.';
+    try {
+        var response = await fetch('https://api.anthropic.com/v1/messages', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-api-key': ANTHROPIC_API_KEY,
+                'anthropic-version': '2023-06-01'
+            },
+            body: JSON.stringify({
+                model: 'claude-sonnet-4-20250514',
+                max_tokens: 512,
+                system: HOROSCOPE_SYSTEM,
+                messages: [{ role: 'user', content: prompt }]
+            })
+        });
+        var data = await response.json();
+        var text = '';
+        if (data.content && Array.isArray(data.content)) {
+            text = data.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('');
+        }
+        text = text.replace(/```json|```/g, '').trim();
+        var parsed = JSON.parse(text);
+        horoscopeCache.set(key, parsed);
+        console.log('✨ Horoscope generated:', sign, lang);
+        return parsed;
+    } catch (err) {
+        console.log('❌ Horoscope error:', err.message);
+        return null;
+    }
+}
+
+app.get('/api/horoscope/:sign', async function(req, res) {
+    if (!ANTHROPIC_API_KEY) return res.status(500).json({ error: 'AI not configured' });
+    var sign = req.params.sign.toLowerCase();
+    if (HOROSCOPE_SIGNS.indexOf(sign) === -1) {
+        return res.status(400).json({ error: 'Invalid sign' });
+    }
+    var lang = req.query.lang === 'es' ? 'es' : 'en';
+    var result = await generateHoroscope(sign, lang);
+    if (!result) {
+        return res.status(500).json({ error: 'Could not generate horoscope' });
+    }
+    res.json(result);
+});
+
+app.get('/the-horoscope', function(req, res) { res.sendFile(path.join(__dirname, 'the-horoscope.html')); });
 // ============ START SERVER ============
 app.listen(PORT, function() {
     console.log('');
