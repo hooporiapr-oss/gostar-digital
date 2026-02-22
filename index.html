@@ -32,10 +32,10 @@
     .jumbotron:active{transform:scale(.98);border-color:rgba(212,168,67,.3)}
     .jumbotron::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at top left,rgba(139,92,246,.05),transparent 60%);pointer-events:none}
     .jumbotron::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at bottom right,rgba(212,168,67,.04),transparent 60%);pointer-events:none}
-    .jt-label{font-family:var(--display);font-size:10px;letter-spacing:3px;color:var(--gold);margin-bottom:10px;display:block;position:relative;z-index:1}
-    .jt-rhyme{font-family:var(--serif);font-style:italic;font-size:18px;color:rgba(237,235,232,.85);line-height:1.6;position:relative;z-index:1;transition:opacity .4s ease}
+    .jt-label{font-family:var(--display);font-size:10px;letter-spacing:3px;color:var(--gold);margin-bottom:10px;display:block;position:relative;z-index:1;pointer-events:none}
+    .jt-rhyme{font-family:var(--serif);font-style:italic;font-size:18px;color:rgba(237,235,232,.85);line-height:1.6;position:relative;z-index:1;transition:opacity .4s ease;pointer-events:none}
     .jt-rhyme.fade{opacity:0}
-    .jt-tap{font-size:10px;color:var(--muted);margin-top:10px;font-weight:600;letter-spacing:1px;position:relative;z-index:1}
+    .jt-tap{font-size:10px;color:var(--muted);margin-top:10px;font-weight:600;letter-spacing:1px;position:relative;z-index:1;pointer-events:none}
     .jt-emoji{font-size:22px;position:absolute;opacity:.12;pointer-events:none}
     .jt-e1{top:8px;left:12px;animation:float 6s ease-in-out infinite}
     .jt-e2{bottom:8px;right:14px;animation:float 7s ease-in-out infinite 1.5s}
@@ -108,7 +108,7 @@
     </section>
 
     <!-- ═══ 🏟️ JUMBOTRON ═══ -->
-    <div class="jumbotron r d5" id="jumbotron" onclick="nextRhyme()">
+    <div class="jumbotron r d5" id="jumbotron">
       <span class="jt-emoji jt-e1">🇵🇷</span>
       <span class="jt-emoji jt-e2">💛</span>
       <span class="jt-label en">BORI SAYS</span>
@@ -350,7 +350,7 @@
         ]
       }
     };
-    var lastIdx=-1;
+    var lastIdx=-1,firstLoad=true;
     function getTimeBlock(){var h=new Date().getHours();if(h>=5&&h<12)return'morning';if(h>=12&&h<18)return'afternoon';return'night';}
     function showRhyme(){
       var lang=document.body.className||'en';
@@ -360,10 +360,13 @@
       do{idx=Math.floor(Math.random()*pool.length);}while(idx===lastIdx&&pool.length>1);
       lastIdx=idx;
       var el=document.getElementById('jtRhyme');
+      if(!el)return;
+      if(firstLoad){el.textContent=pool[idx];firstLoad=false;return;}
       el.classList.add('fade');
       setTimeout(function(){el.textContent=pool[idx];el.classList.remove('fade');},300);
     }
     function nextRhyme(){showRhyme();}
+    document.getElementById('jumbotron').addEventListener('click',nextRhyme);
 
     function subscribePlan(plan){var btn=event.target;btn.textContent='Loading...';btn.style.pointerEvents='none';fetch('/api/subscribe/'+plan,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({})}).then(function(r){return r.json();}).then(function(data){if(data.url){window.location.href=data.url;}else{alert('Error: '+(data.error||'Try again'));btn.textContent=plan==='plus'?'GET BORI PLUS 💜':'GET BORI FAMILIA 👨‍👩‍👧';btn.style.pointerEvents='auto';}}).catch(function(){alert('Connection error. Try again.');btn.textContent=plan==='plus'?'GET BORI PLUS 💜':'GET BORI FAMILIA 👨‍👩‍👧';btn.style.pointerEvents='auto';});}
     (function(){var p=new URLSearchParams(window.location.search);var payment=p.get('payment');if(payment==='success'){var plan=p.get('plan')||'plus';setTimeout(function(){alert('Welcome to Bori '+(plan==='familia'?'Familia':'Plus')+'! 💜');},500);window.history.replaceState({},document.title,window.location.pathname);}else if(payment==='cancel'){setTimeout(function(){alert('No worries — subscribe anytime. 💜');},500);window.history.replaceState({},document.title,window.location.pathname);}})();
