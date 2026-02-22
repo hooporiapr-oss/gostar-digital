@@ -280,12 +280,8 @@
       document.getElementById('btnEn').className=lang==='en'?'lang-btn active':'lang-btn';
       document.getElementById('btnEs').className=lang==='es'?'lang-btn active':'lang-btn';
       try{localStorage.setItem('hb-lang',lang);}catch(e){}
-      showRhyme();
+      if(typeof showRhyme==='function')showRhyme();
     }
-    (function(){
-      var saved;try{saved=localStorage.getItem('hb-lang');}catch(e){}
-      setLang(saved||'en');
-    })();
 
     /* ═══ 🏟️ JUMBOTRON RHYMES ═══ */
     var rhymes={
@@ -367,6 +363,12 @@
     }
     function nextRhyme(){showRhyme();}
     document.getElementById('jumbotron').addEventListener('click',nextRhyme);
+
+    /* ═══ BOOT ═══ */
+    (function(){
+      var saved;try{saved=localStorage.getItem('hb-lang');}catch(e){}
+      setLang(saved||'en');
+    })();
 
     function subscribePlan(plan){var btn=event.target;btn.textContent='Loading...';btn.style.pointerEvents='none';fetch('/api/subscribe/'+plan,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({})}).then(function(r){return r.json();}).then(function(data){if(data.url){window.location.href=data.url;}else{alert('Error: '+(data.error||'Try again'));btn.textContent=plan==='plus'?'GET BORI PLUS 💜':'GET BORI FAMILIA 👨‍👩‍👧';btn.style.pointerEvents='auto';}}).catch(function(){alert('Connection error. Try again.');btn.textContent=plan==='plus'?'GET BORI PLUS 💜':'GET BORI FAMILIA 👨‍👩‍👧';btn.style.pointerEvents='auto';});}
     (function(){var p=new URLSearchParams(window.location.search);var payment=p.get('payment');if(payment==='success'){var plan=p.get('plan')||'plus';setTimeout(function(){alert('Welcome to Bori '+(plan==='familia'?'Familia':'Plus')+'! 💜');},500);window.history.replaceState({},document.title,window.location.pathname);}else if(payment==='cancel'){setTimeout(function(){alert('No worries — subscribe anytime. 💜');},500);window.history.replaceState({},document.title,window.location.pathname);}})();
