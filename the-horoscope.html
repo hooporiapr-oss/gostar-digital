@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="Bori Horóscopo — Tu lectura diaria con sabor boricua. Gratis, todos los días. 🇵🇷✨">
+  <title>Bori Horóscopo — Hey Bori 🇵🇷✨</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Sans:wght@400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--serif:'DM Serif Display',serif;--sans:'Instrument Sans',sans-serif;--display:'Bebas Neue',sans-serif;--night:#0B0B14;--surface:#1A1726;--surface2:#211D2E;--gold:#D4A843;--gold-bright:#F0C75E;--purple:#8B5CF6;--purple-deep:#6D28D9;--teal:#2DD4A8;--text:#EDEBE8;--muted:rgba(237,235,232,.5);--radius:20px}
+    html{scroll-behavior:smooth}body{font-family:var(--sans);background:var(--night);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh}
+    body.en .es{display:none!important}body.es .en{display:none!important}
+    a{color:inherit;text-decoration:none}button{cursor:pointer;font-family:var(--sans)}
+
+    /* LANG TOGGLE */
+    .lang-toggle{position:fixed;top:14px;right:14px;z-index:9999;display:flex;gap:3px;background:var(--surface);padding:3px;border-radius:10px;border:1px solid rgba(255,255,255,.06)}
+    .lang-btn{padding:6px 12px;border:none;background:transparent;color:var(--muted);border-radius:8px;font-family:var(--display);font-size:11px;letter-spacing:2px;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent}
+    .lang-btn.active{background:var(--gold);color:var(--night)}
+
+    /* AMBIENT */
+    .bg{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+    .bg::before{content:'';position:absolute;top:-20%;left:50%;transform:translateX(-50%);width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(212,168,67,.08) 0%,transparent 60%);animation:drift 22s ease-in-out infinite}
+    .bg::after{content:'';position:absolute;bottom:-15%;right:-10%;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(139,92,246,.06) 0%,transparent 55%);animation:drift 28s ease-in-out infinite reverse}
+    @keyframes drift{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-45%) translateY(-25px)}}
+
+    .wrap{max-width:480px;margin:0 auto;padding:0 20px;position:relative;z-index:1}
+
+    /* ANIMATIONS */
+    .r{opacity:0;transform:translateY(18px);animation:up .65s cubic-bezier(.22,1,.36,1) forwards}
+    .d1{animation-delay:.1s}.d2{animation-delay:.2s}.d3{animation-delay:.3s}.d4{animation-delay:.4s}.d5{animation-delay:.5s}
+    @keyframes up{to{opacity:1;transform:translateY(0)}}
+
+    /* HEADER */
+    .hdr{display:flex;align-items:center;gap:12px;padding:16px 0 0}
+    .hdr-back{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:12px;background:var(--surface);border:1px solid rgba(255,255,255,.06);font-size:16px;text-decoration:none;color:var(--text);-webkit-tap-highlight-color:transparent;transition:all .15s;flex-shrink:0}
+    .hdr-back:active{transform:scale(.9)}
+
+    /* HERO */
+    .hero{text-align:center;padding:32px 0 24px}
+    .hero-stars{font-size:36px;display:block;margin-bottom:12px;animation:twinkle 3s ease-in-out infinite}
+    @keyframes twinkle{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.7;transform:scale(1.05)}}
+    .hero h1{font-family:var(--serif);font-size:36px;font-weight:400;line-height:1.1;margin-bottom:6px}
+    .hero h1 em{font-style:italic;background:linear-gradient(135deg,var(--gold),var(--gold-bright));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .hero-tag{font-family:var(--display);font-size:12px;letter-spacing:3px;color:var(--gold);display:block;margin-bottom:8px}
+    .hero-sub{font-size:13px;color:var(--muted);font-weight:500;line-height:1.5;max-width:320px;margin:0 auto}
+    .hero-date{font-family:var(--display);font-size:14px;letter-spacing:2px;color:var(--teal);margin-top:12px}
+
+    /* SIGN GRID */
+    .signs-label{text-align:center;font-family:var(--display);font-size:12px;letter-spacing:3px;color:var(--muted);margin-bottom:14px}
+    .signs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:28px}
+    .sign{background:var(--surface);border:1.5px solid rgba(255,255,255,.05);border-radius:14px;padding:14px 6px;text-align:center;cursor:pointer;transition:all .25s;-webkit-tap-highlight-color:transparent;position:relative}
+    .sign:active{transform:scale(.95)}
+    .sign.active{border-color:rgba(212,168,67,.4);background:linear-gradient(135deg,rgba(212,168,67,.08),rgba(212,168,67,.03));box-shadow:0 4px 20px rgba(212,168,67,.15)}
+    .sign-icon{font-size:28px;display:block;margin-bottom:4px}
+    .sign-name{font-family:var(--display);font-size:11px;letter-spacing:1.5px;color:var(--muted)}
+    .sign.active .sign-name{color:var(--gold)}
+    .sign-dates{font-size:8px;color:rgba(237,235,232,.25);margin-top:2px;font-weight:600}
+
+    /* READING CARD */
+    .reading{display:none;background:linear-gradient(135deg,rgba(212,168,67,.06),rgba(139,92,246,.04));border:1.5px solid rgba(212,168,67,.15);border-radius:var(--radius);padding:28px 22px;margin-bottom:28px;text-align:center;position:relative;overflow:hidden;animation:cardIn .5s cubic-bezier(.22,1,.36,1)}
+    .reading.show{display:block}
+    @keyframes cardIn{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+    .reading::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at top,rgba(212,168,67,.05),transparent 60%);pointer-events:none}
+    .rd-sign{font-size:48px;display:block;margin-bottom:8px;position:relative;z-index:1}
+    .rd-name{font-family:var(--display);font-size:24px;letter-spacing:3px;color:var(--gold);margin-bottom:2px;position:relative;z-index:1}
+    .rd-dates{font-size:11px;color:var(--muted);margin-bottom:16px;position:relative;z-index:1}
+    .rd-text{font-family:var(--serif);font-style:italic;font-size:17px;color:rgba(237,235,232,.85);line-height:1.7;position:relative;z-index:1;min-height:80px}
+    .rd-loading{display:flex;align-items:center;justify-content:center;gap:8px;padding:20px;color:var(--muted);font-size:14px}
+    .rd-loading .spinner{width:18px;height:18px;border:2px solid rgba(212,168,67,.2);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* SECTIONS */
+    .rd-sections{margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:8px;position:relative;z-index:1}
+    .rd-sec{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);border-radius:12px;padding:12px 10px;text-align:center}
+    .rd-sec-icon{font-size:18px;display:block;margin-bottom:3px}
+    .rd-sec-label{font-size:9px;font-weight:700;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:3px}
+    .rd-sec-text{font-size:12px;color:rgba(237,235,232,.7);line-height:1.4;font-weight:500}
+
+    /* LUCKY */
+    .rd-lucky{margin-top:16px;display:flex;justify-content:center;gap:16px;position:relative;z-index:1}
+    .rd-lucky-item{text-align:center}
+    .rd-lucky-label{font-size:9px;font-weight:700;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px}
+    .rd-lucky-val{font-family:var(--display);font-size:20px;letter-spacing:2px;color:var(--gold-bright)}
+
+    /* SHARE */
+    .rd-share{margin-top:18px;position:relative;z-index:1}
+    .rd-share-btn{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border:1.5px solid rgba(212,168,67,.2);border-radius:60px;background:transparent;color:var(--gold);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent}
+    .rd-share-btn:active{transform:scale(.95);background:rgba(212,168,67,.08)}
+
+    /* CTA */
+    .cta-box{background:var(--surface);border:1.5px solid rgba(139,92,246,.15);border-radius:var(--radius);padding:22px;text-align:center;margin-bottom:28px}
+    .cta-box-title{font-family:var(--serif);font-size:18px;margin-bottom:6px}
+    .cta-box-desc{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:14px}
+    .cta-btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border:none;border-radius:60px;background:linear-gradient(135deg,#7C3AED,#9333EA);color:white;font-family:var(--display);font-size:16px;letter-spacing:2px;text-decoration:none;-webkit-tap-highlight-color:transparent;transition:all .2s}
+    .cta-btn:active{transform:scale(.95)}
+
+    /* FOOTER */
+    .foot{text-align:center;padding:24px 0 64px}
+    .foot-b{font-family:var(--display);font-size:14px;letter-spacing:4px;color:var(--muted);margin-bottom:4px}
+    .foot-s{font-size:10px;color:rgba(237,235,232,.2);font-style:italic}
+    .foot-walter{font-family:var(--serif);font-style:italic;font-size:13px;color:rgba(212,168,67,.3);margin-top:14px}
+
+    @media(max-width:420px){.hero h1{font-size:30px}.signs{gap:6px}.sign{padding:10px 4px}.sign-icon{font-size:24px}.sign-name{font-size:10px}.rd-text{font-size:15px}}
+  </style>
+</head>
+<body class="en">
+  <div class="bg"></div>
+
+  <div class="lang-toggle">
+    <button class="lang-btn active" id="btnEn" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" id="btnEs" onclick="setLang('es')">ES</button>
+  </div>
+
+  <div class="wrap">
+
+    <div class="hdr r d1">
+      <a href="/" class="hdr-back">←</a>
+    </div>
+
+    <section class="hero r d2">
+      <span class="hero-stars">✨🔮✨</span>
+      <h1 class="en">Bori <em>Horóscopo</em></h1>
+      <h1 class="es">Bori <em>Horóscopo</em></h1>
+      <span class="hero-tag en">YOUR DAILY READING WITH BORICUA SOUL</span>
+      <span class="hero-tag es">TU LECTURA DIARIA CON ALMA BORICUA</span>
+      <p class="hero-sub en">Every morning, Bori reads the stars for you — with the warmth, humor, and cariño that only a boricua can give. Free, every day. 🇵🇷</p>
+      <p class="hero-sub es">Cada mañana, Bori lee las estrellas pa' ti — con la calidez, el humor, y el cariño que solo una boricua te puede dar. Gratis, todos los días. 🇵🇷</p>
+      <div class="hero-date" id="todayDate"></div>
+    </section>
+
+    <div class="signs-label r d3 en">PICK YOUR SIGN</div>
+    <div class="signs-label r d3 es">ESCOGE TU SIGNO</div>
+
+    <div class="signs r d3" id="signGrid"></div>
+
+    <div class="reading" id="reading">
+      <span class="rd-sign" id="rdSign"></span>
+      <div class="rd-name" id="rdName"></div>
+      <div class="rd-dates" id="rdDates"></div>
+      <div class="rd-text" id="rdText"></div>
+      <div class="rd-sections" id="rdSections"></div>
+      <div class="rd-lucky" id="rdLucky"></div>
+      <div class="rd-share">
+        <button class="rd-share-btn" onclick="shareReading()">
+          <span class="en">↗ SHARE MY READING</span>
+          <span class="es">↗ COMPARTE MI LECTURA</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="cta-box r d4">
+      <div class="cta-box-title en">Want Bori to go deeper? 💬</div>
+      <div class="cta-box-title es">¿Quieres que Bori profundice? 💬</div>
+      <div class="cta-box-desc en">Ask Bori anything about your sign, your day, or your life. She's your compañera — always here.</div>
+      <div class="cta-box-desc es">Pregúntale a Bori lo que quieras sobre tu signo, tu día, o tu vida. Es tu compañera — siempre aquí.</div>
+      <a class="cta-btn" href="/habla.html"><span class="en">💬 TALK TO BORI</span><span class="es">💬 HABLA CON BORI</span></a>
+    </div>
+
+    <footer class="foot">
+      <div class="foot-b">HEY BORI™</div>
+      <div class="foot-s">your digital concierge 🇵🇷</div>
+      <div class="foot-walter en">With love and light. Mucho mucho amor. ✨</div>
+      <div class="foot-walter es">Con amor y luz. Mucho mucho amor. ✨</div>
+    </footer>
+  </div>
+
+  <script>
+  (function(){
+    var SIGNS=[
+      {id:'aries',icon:'♈',en:'Aries',es:'Aries',dates:'Mar 21 – Apr 19'},
+      {id:'taurus',icon:'♉',en:'Taurus',es:'Tauro',dates:'Apr 20 – May 20'},
+      {id:'gemini',icon:'♊',en:'Gemini',es:'Géminis',dates:'May 21 – Jun 20'},
+      {id:'cancer',icon:'♋',en:'Cancer',es:'Cáncer',dates:'Jun 21 – Jul 22'},
+      {id:'leo',icon:'♌',en:'Leo',es:'Leo',dates:'Jul 23 – Aug 22'},
+      {id:'virgo',icon:'♍',en:'Virgo',es:'Virgo',dates:'Aug 23 – Sep 22'},
+      {id:'libra',icon:'♎',en:'Libra',es:'Libra',dates:'Sep 23 – Oct 22'},
+      {id:'scorpio',icon:'♏',en:'Scorpio',es:'Escorpio',dates:'Oct 23 – Nov 21'},
+      {id:'sagittarius',icon:'♐',en:'Sagittarius',es:'Sagitario',dates:'Nov 22 – Dec 21'},
+      {id:'capricorn',icon:'♑',en:'Capricorn',es:'Capricornio',dates:'Dec 22 – Jan 19'},
+      {id:'aquarius',icon:'♒',en:'Aquarius',es:'Acuario',dates:'Jan 20 – Feb 18'},
+      {id:'pisces',icon:'♓',en:'Pisces',es:'Piscis',dates:'Feb 19 – Mar 20'}
+    ];
+
+    var grid=document.getElementById('signGrid');
+    var reading=document.getElementById('reading');
+    var currentSign=null;
+    var cache={};
+
+    // Build grid
+    SIGNS.forEach(function(s){
+      var el=document.createElement('div');
+      el.className='sign';
+      el.setAttribute('data-sign',s.id);
+      el.innerHTML='<span class="sign-icon">'+s.icon+'</span>'
+        +'<div class="sign-name en">'+s.en+'</div>'
+        +'<div class="sign-name es">'+s.es+'</div>'
+        +'<div class="sign-dates">'+s.dates+'</div>';
+      el.onclick=function(){pickSign(s);};
+      grid.appendChild(el);
+    });
+
+    // Today's date
+    function formatDate(){
+      var d=new Date();
+      var months_en=['January','February','March','April','May','June','July','August','September','October','November','December'];
+      var months_es=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+      var lang=document.body.className||'en';
+      var months=lang==='es'?months_es:months_en;
+      return months[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear();
+    }
+    document.getElementById('todayDate').textContent=formatDate();
+
+    // Check saved sign
+    try{
+      var saved=localStorage.getItem('bori-sign');
+      if(saved){
+        var s=SIGNS.find(function(x){return x.id===saved;});
+        if(s)pickSign(s);
+      }
+    }catch(e){}
+
+    function pickSign(s){
+      // Highlight
+      var all=grid.querySelectorAll('.sign');
+      all.forEach(function(el){el.classList.remove('active');});
+      var el=grid.querySelector('[data-sign="'+s.id+'"]');
+      if(el)el.classList.add('active');
+
+      currentSign=s;
+      try{localStorage.setItem('bori-sign',s.id);}catch(e){}
+
+      // Show reading
+      var lang=document.body.className||'en';
+      document.getElementById('rdSign').textContent=s.icon;
+      document.getElementById('rdName').textContent=lang==='es'?s.es:s.en;
+      document.getElementById('rdDates').textContent=s.dates;
+      reading.classList.add('show');
+
+      // Check cache
+      var cacheKey=s.id+'_'+lang+'_'+new Date().toISOString().split('T')[0];
+      if(cache[cacheKey]){
+        renderReading(cache[cacheKey]);
+        return;
+      }
+
+      // Show loading
+      document.getElementById('rdText').innerHTML='<div class="rd-loading"><div class="spinner"></div><span class="en">Bori is reading the stars...</span><span class="es">Bori está leyendo las estrellas...</span></div>';
+      document.getElementById('rdSections').innerHTML='';
+      document.getElementById('rdLucky').innerHTML='';
+
+      // Fetch from server
+      fetch('/api/horoscope/'+s.id+'?lang='+lang)
+        .then(function(r){return r.json();})
+        .then(function(data){
+          if(data.error){
+            document.getElementById('rdText').textContent=lang==='es'?'Las estrellas están tímidas hoy. Intenta de nuevo. 🌙':'The stars are shy today. Try again. 🌙';
+            return;
+          }
+          cache[cacheKey]=data;
+          renderReading(data);
+        })
+        .catch(function(){
+          document.getElementById('rdText').textContent=lang==='es'?'No pude conectar con las estrellas. Intenta de nuevo. ✨':'Couldn\'t connect to the stars. Try again. ✨';
+        });
+
+      // Scroll to reading
+      setTimeout(function(){reading.scrollIntoView({behavior:'smooth',block:'nearest'});},100);
+    }
+
+    function renderReading(data){
+      document.getElementById('rdText').textContent=data.reading||data.message||'';
+
+      var secHTML='';
+      if(data.love){
+        var lang=document.body.className||'en';
+        secHTML+='<div class="rd-sec"><span class="rd-sec-icon">💛</span><div class="rd-sec-label">'+(lang==='es'?'AMOR':'LOVE')+'</div><div class="rd-sec-text">'+data.love+'</div></div>';
+      }
+      if(data.work){
+        var lang=document.body.className||'en';
+        secHTML+='<div class="rd-sec"><span class="rd-sec-icon">💼</span><div class="rd-sec-label">'+(lang==='es'?'TRABAJO':'WORK')+'</div><div class="rd-sec-text">'+data.work+'</div></div>';
+      }
+      if(data.health){
+        var lang=document.body.className||'en';
+        secHTML+='<div class="rd-sec"><span class="rd-sec-icon">🌿</span><div class="rd-sec-label">'+(lang==='es'?'SALUD':'HEALTH')+'</div><div class="rd-sec-text">'+data.health+'</div></div>';
+      }
+      if(data.spirit){
+        var lang=document.body.className||'en';
+        secHTML+='<div class="rd-sec"><span class="rd-sec-icon">✨</span><div class="rd-sec-label">'+(lang==='es'?'ESPÍRITU':'SPIRIT')+'</div><div class="rd-sec-text">'+data.spirit+'</div></div>';
+      }
+      document.getElementById('rdSections').innerHTML=secHTML;
+
+      var luckyHTML='';
+      if(data.luckyNumber){
+        var lang=document.body.className||'en';
+        luckyHTML+='<div class="rd-lucky-item"><div class="rd-lucky-label">'+(lang==='es'?'NÚMERO':'NUMBER')+'</div><div class="rd-lucky-val">'+data.luckyNumber+'</div></div>';
+      }
+      if(data.luckyColor){
+        var lang=document.body.className||'en';
+        luckyHTML+='<div class="rd-lucky-item"><div class="rd-lucky-label">'+(lang==='es'?'COLOR':'COLOR')+'</div><div class="rd-lucky-val">'+data.luckyColor+'</div></div>';
+      }
+      if(data.energy){
+        var lang=document.body.className||'en';
+        luckyHTML+='<div class="rd-lucky-item"><div class="rd-lucky-label">'+(lang==='es'?'ENERGÍA':'ENERGY')+'</div><div class="rd-lucky-val">'+data.energy+'</div></div>';
+      }
+      document.getElementById('rdLucky').innerHTML=luckyHTML;
+    }
+
+    // Share
+    window.shareReading=function(){
+      if(!currentSign)return;
+      var lang=document.body.className||'en';
+      var name=lang==='es'?currentSign.es:currentSign.en;
+      var text=document.getElementById('rdText').textContent;
+      var shareData={
+        title:'Bori Horóscopo — '+name+' '+currentSign.icon,
+        text:currentSign.icon+' '+name+': '+text.substring(0,120)+'... — heybori.com/the-horoscope.html',
+        url:'https://heybori.com/the-horoscope.html'
+      };
+      if(navigator.share){navigator.share(shareData).catch(function(){});}
+      else{
+        navigator.clipboard.writeText(shareData.text).then(function(){
+          var btn=document.querySelector('.rd-share-btn');
+          var orig=btn.innerHTML;
+          btn.innerHTML='✓ Copied!';
+          setTimeout(function(){btn.innerHTML=orig;},2000);
+        }).catch(function(){});
+      }
+    };
+
+    // Lang
+    window.setLang=function(lang){
+      document.body.className=lang;
+      document.getElementById('btnEn').className=lang==='en'?'lang-btn active':'lang-btn';
+      document.getElementById('btnEs').className=lang==='es'?'lang-btn active':'lang-btn';
+      try{localStorage.setItem('hb-lang',lang);}catch(e){}
+      document.getElementById('todayDate').textContent=formatDate();
+      if(currentSign)pickSign(currentSign);
+    };
+    var saved;try{saved=localStorage.getItem('hb-lang');}catch(e){}
+    setLang(saved||'en');
+  })();
+  </script>
+</body>
+</html>
