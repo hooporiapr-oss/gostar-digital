@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Dominó Boricua — Hey Bori™</title>
+<title>La Marquesina™ — Hey Bori™</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -509,7 +509,7 @@ body {
 <div class="welcome-overlay" id="welcomeScreen">
   <div class="welcome-content">
     <div class="welcome-dominos">🁣 🁫 🂃</div>
-    <h1>Dominó Boricua</h1>
+    <h1>La Marquesina™</h1>
     <p class="subtitle" id="welcomeSub">La mesa está servida. ¿Te atreves?</p>
     <button class="start-btn" id="startBtn" onclick="startGame()">¡DALE!</button>
     <div class="lang-toggle">
@@ -526,7 +526,7 @@ body {
 <div class="game-container" id="gameContainer">
   <!-- Top Bar -->
   <div class="top-bar">
-    <div class="title">Dominó Boricua</div>
+    <div class="title">La Marquesina™</div>
     <div class="scores">
       <div class="score-item">
         <span class="label" id="lblYou">Tú</span>
@@ -607,7 +607,7 @@ body {
 
 <script>
 // ═══════════════════════════════════════
-// DOMINÓ BORICUA — Hey Bori™
+// LA MARQUESINA™ — Hey Bori™
 // ═══════════════════════════════════════
 
 // --- LANGUAGE ---
@@ -702,7 +702,7 @@ let allTiles = [];
 let boneyard = [];
 let playerHand = [];
 let aiHand = [];
-let chain = []; // array of {a, b} — chain[0] left end exposed, chain[last] right end exposed
+let chain = [];
 let leftEnd = -1;
 let rightEnd = -1;
 let playerScore = 0;
@@ -732,7 +732,6 @@ function shuffle(arr) {
 
 function startGame() {
   initAudio();
-  // Hide modals
   document.getElementById('welcomeScreen').classList.add('hiding');
   document.getElementById('gameOverOverlay').classList.remove('show');
   document.getElementById('sidePickerOverlay').classList.remove('show');
@@ -741,7 +740,6 @@ function startGame() {
     document.getElementById('welcomeScreen').style.display = 'none';
   }, 500);
 
-  // Reset
   allTiles = createAllTiles();
   shuffle(allTiles);
   playerHand = allTiles.splice(0, 7);
@@ -754,13 +752,11 @@ function startGame() {
   selectedTile = null;
   gameActive = true;
 
-  // Update labels
   document.getElementById('lblYou').textContent = t('you');
   document.getElementById('handLabel').textContent = t('hand');
   document.getElementById('lblPass').textContent = t('pass');
   document.getElementById('lblDraw').textContent = t('draw');
   
-  // Determine who goes first (highest double, or highest tile)
   let firstPlayer = determineFirstPlayer();
   isPlayerTurn = firstPlayer === 'player';
 
@@ -773,13 +769,12 @@ function startGame() {
 }
 
 function determineFirstPlayer() {
-  // Highest double goes first
   for (let d = 6; d >= 0; d--) {
     const pIdx = playerHand.findIndex(t => t.a === d && t.b === d);
     const aIdx = aiHand.findIndex(t => t.a === d && t.b === d);
     if (pIdx !== -1 && aIdx === -1) return 'player';
     if (aIdx !== -1 && pIdx === -1) return 'ai';
-    if (pIdx !== -1 && aIdx !== -1) return 'player'; // both have it, player goes
+    if (pIdx !== -1 && aIdx !== -1) return 'player';
   }
   return 'player';
 }
@@ -793,7 +788,6 @@ function canPlay(tile) {
 }
 
 function canPlayAnySide(tile) {
-  // Returns which sides this tile can be played on
   const sides = [];
   if (chain.length === 0) return ['first'];
   if (tile.a === leftEnd || tile.b === leftEnd) sides.push('left');
@@ -864,8 +858,6 @@ function createDominoSVG(tile, w = 42, h = 74, faceDown = false) {
 }
 
 function createHorizontalDominoSVG(tile, w = 74, h = 42) {
-  // For board display — horizontal orientation
-  // left half = a, right half = b
   function dotPosH(n, xOff) {
     const cx = 16 + xOff, cy = 16, s = 7;
     const pos = {
@@ -909,7 +901,6 @@ function showTrashTalk(text) {
 
 // --- RENDER ---
 function render() {
-  // Opponent hand (face down)
   const oppEl = document.getElementById('opponentHand');
   oppEl.innerHTML = '';
   aiHand.forEach(() => {
@@ -918,10 +909,8 @@ function render() {
     oppEl.appendChild(div);
   });
 
-  // Board
   renderBoard();
 
-  // Player hand
   const phEl = document.getElementById('playerHand');
   phEl.innerHTML = '';
   playerHand.forEach((tile, idx) => {
@@ -937,15 +926,12 @@ function render() {
     phEl.appendChild(div);
   });
 
-  // Boneyard
   document.getElementById('boneyardInfo').textContent = t('boneyard')(boneyard.length);
 
-  // Buttons
   const hasPlayable = playerHand.some(t => canPlay(t));
   document.getElementById('drawBtn').disabled = !(isPlayerTurn && gameActive && !hasPlayable && boneyard.length > 0);
   document.getElementById('passBtn').disabled = !(isPlayerTurn && gameActive && !hasPlayable && boneyard.length === 0);
 
-  // Hand label
   if (gameActive) {
     document.getElementById('handLabel').textContent = isPlayerTurn ? t('yourTurn') : t('boriTurn');
   }
@@ -961,16 +947,13 @@ function renderBoard() {
     if (idx === chain.length - 1) div.classList.add('slap-in');
     
     if (isDouble(tile)) {
-      // Doubles render vertically (standing up)
       div.innerHTML = createDominoSVG(tile, 32, 56);
     } else {
-      // Non-doubles render horizontally
       div.innerHTML = createHorizontalDominoSVG(tile, 56, 32);
     }
     container.appendChild(div);
   });
 
-  // Auto-scroll to see latest play
   const board = document.getElementById('boardArea');
   board.scrollLeft = board.scrollWidth;
 }
@@ -985,15 +968,12 @@ function handleTileClick(idx) {
   const sides = canPlayAnySide(tile);
   
   if (chain.length === 0) {
-    // First tile — just play it
     executePlayerPlay(idx, 'first');
   } else if (sides.length === 1) {
     executePlayerPlay(idx, sides[0]);
   } else if (sides.length === 2 && leftEnd === rightEnd) {
-    // Both sides same value, doesn't matter
     executePlayerPlay(idx, 'left');
   } else if (sides.length === 2) {
-    // Must pick a side
     selectedTile = idx;
     showSidePicker(tile);
   }
@@ -1021,13 +1001,10 @@ function executePlayerPlay(idx, side) {
   consecutivePasses = 0;
   selectedTile = null;
 
-  // Check for special calls
   if (playerHand.length === 0) {
-    // Check capicú
     if (chain.length > 1 && leftEnd === rightEnd) {
       showTrashTalk(t('capicu'));
     }
-    // Check chuchazo (last tile is a double)
     if (isDouble(tile)) {
       showTrashTalk(t('chuchazo'));
     }
@@ -1046,7 +1023,6 @@ function playerDraw() {
   playerHand.push(tile);
   playSlap();
   
-  // AI trash talks when you draw
   if (Math.random() > 0.5) {
     showTrashTalk(randFrom(t('trashDraw')));
   }
@@ -1072,7 +1048,6 @@ let aiDrawCount = 0;
 function aiTurn() {
   if (!gameActive) return;
 
-  // Find playable tiles
   const playable = [];
   aiHand.forEach((tile, idx) => {
     const sides = canPlayAnySide(tile);
@@ -1082,17 +1057,14 @@ function aiTurn() {
   });
 
   if (playable.length === 0) {
-    // Must draw or pass
     if (boneyard.length > 0) {
       const drawn = boneyard.pop();
       aiHand.push(drawn);
       aiDrawCount++;
       render();
-      // Keep drawing until can play or boneyard empty (with delay per draw)
       setTimeout(() => aiTurn(), 400);
       return;
     } else {
-      // Pass
       aiDrawCount = 0;
       consecutivePasses++;
       if (consecutivePasses >= 2) {
@@ -1106,15 +1078,9 @@ function aiTurn() {
   }
   aiDrawCount = 0;
 
-  // AI Strategy: 
-  // 1. Play doubles first when possible
-  // 2. Play highest value tile
-  // 3. Prefer to match the side that keeps more options open
   playable.sort((a, b) => {
-    // Doubles first
     if (isDouble(a.tile) && !isDouble(b.tile)) return -1;
     if (!isDouble(a.tile) && isDouble(b.tile)) return 1;
-    // Higher value
     return tileSum(b.tile) - tileSum(a.tile);
   });
 
@@ -1127,7 +1093,6 @@ function aiTurn() {
   } else if (chosen.sides.length === 1) {
     side = chosen.sides[0];
   } else {
-    // Pick strategically — count remaining tiles that match each end
     const afterLeft = tile.a === leftEnd ? tile.b : tile.a;
     const afterRight = tile.a === rightEnd ? tile.b : tile.a;
     const leftMatches = aiHand.filter(t => t.a === afterLeft || t.b === afterLeft).length;
@@ -1139,7 +1104,6 @@ function aiTurn() {
   consecutivePasses = 0;
   playSlap();
 
-  // Trash talk
   if (aiHand.length === 0) {
     showTrashTalk(randFrom(t('trashWin')));
   } else if (Math.random() > 0.6) {
@@ -1167,7 +1131,6 @@ function checkWin() {
 
 function endGameWin(winner) {
   gameActive = false;
-  // Score = sum of loser's tiles
   const loserSum = winner === 'player' 
     ? aiHand.reduce((s, t) => s + tileSum(t), 0)
     : playerHand.reduce((s, t) => s + tileSum(t), 0);
